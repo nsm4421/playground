@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -26,6 +26,16 @@ def JsonTest(username):
         userDict = {"성" : username[0], \
             '이름' : username[1:]}
         return jsonify(userDict)
+
+@app.route("/login")
+def login():
+    user_id = request.args.get("user_id")
+    password = request.args.get('password')
+    if user_id=="Karma":
+        return_data = {'auth' : 'success'}
+    else:
+        return_data = {'auth' : 'failure'}
+    return jsonify(return_data)
 
 
 if __name__=='__main__':
