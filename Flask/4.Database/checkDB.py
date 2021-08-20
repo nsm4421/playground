@@ -17,7 +17,7 @@ conn_mongo = pymongo.MongoClient(f'mongodb://{MONGO_HOST}')
 
 
 # MySQL
-def conn_mysql():
+def conn_mysqldb():
     if not conn_mysql.open:     # 연결이 안된 경우
         conn_mysql.ping(reconnect = True)   # 재연결
     return conn_mysql
