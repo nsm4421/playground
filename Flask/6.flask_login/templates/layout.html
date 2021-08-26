@@ -8,6 +8,17 @@
 
   </head>
   <body>
+    <div>
+      <a href="/myApp/register">회원가입</a>
+      <a href="/myApp/login">로그인</a>
+      <a href="/myApp/logout">로그아웃</a>
+      <a href="/myApp/delete">회원탈퇴</a>
+    </div>
+
+    {% if current_user != null %}
+      {{current_user.id}} 
+    {% endif %}
+
 
     <div class="container">
       {% block content%}

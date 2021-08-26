@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form action="/myApp/registerAction" method="POST">
+
+    <legned class="border-bottom mb-4">회원가입 화면</legned>
+
+    <input type='text' class="form-control" name='user_id' placeholder="아이디">
+
+    <input type='password' class="form-control" name='user_pw' placeholder="비밀번호">
+
+    <input type='text' class="form-control" name='user_name' placeholder="닉네임">
+
+    <input type='email' class="form-control" name='user_email' placeholder="이메일">
+
+    <input type='text' class="form-control" name='user_tier' placeholder="티어">
+
+    <input type='submit' class="btn btn-outline-info"></input>
+
+
+    </form>
+  </div>  
+ 
+{% endblock content %}
