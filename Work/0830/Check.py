@@ -56,7 +56,7 @@ if __name__ =='__main__':
                 isError = True
         for s in range(n-1):
             if int(my_tWx[s]) != int(tWx_given[s]):
-                logger.error(msg=f"{t+1}번째 경우- 환급금 V({s})오류 - 내 값 : {my_tWx[s]} / 정답 : {tWx_given[s]}")
+                logger.error(msg=f"{t+1}번째 경우- 환급금 W({s})오류 - 내 값 : {my_tWx[s]} / 정답 : {tWx_given[s]}")
                 isError = True
         if not isError:
             logger.info(msg=f"{t+1}번째 경우 - OK")
