@@ -7,6 +7,7 @@ class MyPV:
         sht_rate = pd.read_excel(excel_file, sheet_name="위험률", header=1)
         sht_code = pd.read_excel(excel_file, sheet_name="코드", header=1)
         sht_expense = pd.read_excel(excel_file, sheet_name="사업비", header=1)
+        sht_comb = pd.read_excel(excel_file, sheet_name="결합위험률", header=1)
         
         # 전처리
         self.fillNa = fillNa        
@@ -17,6 +18,9 @@ class MyPV:
         self.sht_expense = sht_expense[['KEY', 'sex', 'x', 'n', 'm', 'mPrime',\
             'AMT', 'S', 'alpha1', 'alpha2', 'beta1', 'beta2','betaPrime', \
                 'beta5', 'ce', 'gamma']].fillna(self.fillNa)
+        self.sht_comb = sht_comb[['CombRiskKey', 'Operation', 'RiskKey(1)', 'RiskKey(2)',\
+            'RiskKey(3)', 'RiskKey(4)', 'RiskKey(5)', 'RiskKey(6)', 'RiskKey(7)', 'RiskKey(8)']]\
+                .fillna(self.fillNa)
 
         # 공시이율
         self.i = 0.0225
@@ -24,6 +28,30 @@ class MyPV:
 
         # 계약 시점에 가입자 수
         self.l0 = 100000
+
+    def makeCombRate(self):
+        for row in self.sht_comb.values:
+            combRiskKey, operation = row[:2]
+            rKeys = row[2:]            
+            if operation == 1:
+                qx_male, qx_female = np.zeros(120), np.zeros(120)
+                for rKey in rKeys:
+                    qx_male += self.getQx(rKey, sex = 1, start = 0) 
+                    qx_female += self.getQx(rKey, sex = 2, start = 0) 
+            elif operation == 2:
+                qx1_male = self.getQx(rKeys[0], sex = 1, start = 0) 
+                qx1_female = self.getQx(rKeys[0], sex = 2, start = 0) 
+                qx2_male = self.getQx(rKeys[1], sex = 1, start = 0) 
+                qx2_female = self.getQx(rKeys[1], sex = 2, start = 0) 
+                qx_male = qx1_male+qx2_male - qx1_male*qx2_male/2
+                qx_female = qx1_female+qx2_female - qx2_female*qx2_female/2
+            else:
+                continue            
+            df = pd.DataFrame({'RiskKey' : [combRiskKey]*120, 'x' : np.arange(120),\
+                'Male' : qx_male, 'Female' : qx_female})
+            self.sht_rate = self.sht_rate.append(df)
+            print(f"{combRiskKey} appended")
+
 
     def setArgs(self, KEY : str, sex : int, x : int,\
         n : int, m : int, mPrime : int, AMT : int, S : float,\
@@ -65,24 +93,25 @@ class MyPV:
         row = self.sht_expense.values[i]  
         self.setArgs(*row)
 
-    def getQx(self, riskKey : str, sex : int = None):
+    def getQx(self, riskKey : str, sex : int = None, start : int = None):
         if sex == None:sex = self.sex
+        if start == None:start = self.x
         df = self.sht_rate.copy(deep=True)
         df = df.loc[df['RiskKey'] == riskKey]
         if sex==1:df = df[['x', 'Male']]
         else:df = df[['x', 'Female']]
-        qx = np.zeros(self.w)
-        for row in df.values:
-            try:         
-                age, rate = row
-                qx[int(age)] = rate
-                
-            except:
-                pass
-                # self.logger.error(msg=f"{int(age)}세 {riskKey} 위험률  실패")
-        return qx[self.x:]
+        qx = np.zeros(120)
+        for row in df.values:   
+            age, rate = row
+            qx[int(age)] = rate
+        return qx[start:]
+    
 
     def Calc(self, returnSample : bool = False):
+
+        # 결합위험률생성
+        self.makeCombRate()
+
         df = self.sht_code.copy(deep=True)
         df = df.loc[df['KEY'] == self.KEY]
 
