@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트</title>
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    
+    <div id="app">
+        <!-- 이벤트수신 -->
+        <child-component v-on:로그보여줘="printLog"></child-component>
+    </div>
+
+
+    <script>
+        Vue.component('child-component',{
+            template : '<button v-on:click="showLog">로그보기</button>',
+            // 하위컴퍼넌트 메써드
+            methods: {
+                // 이벤트 발생
+                showLog : function(){                    
+                    this.$emit('로그보여줘');
+                }
+            }
+        });
+
+        var app = new Vue({
+            el : '#app',
+            methods : {
+                // 상위컴퍼넌트 메써드
+                printLog : function(){
+                    console.log("이벤트 발생했다");
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

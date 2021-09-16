@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트버스</title>
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <child-component></child-component>
+    </div>
+
+    <script>
+        // 이벤트 버스 생성
+        var eventBus = new Vue();
+
+        // 하위 컴퍼넌트
+        Vue.component(
+            'child-component',{
+                template : '<div>하위컴퍼넌트 영역이다. <button v-on:click="showLog"> 로그찍기 </button> </div>',
+                methods : {
+                    showLog : function(){
+                        // 이벤트버스ㄱㄱ 라는 이벤트 발생
+                        // eventBus에 데이터 100 전달
+                        eventBus.$emit('이벤트', 100);
+                    }
+                }
+            });
+
+        var app = new Vue({
+            el : "#app",
+            created : function(){
+                eventBus.$on('이벤트', function(값){
+                    console.log("이벤트버스로부터 받은 값 ---> ", 값);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

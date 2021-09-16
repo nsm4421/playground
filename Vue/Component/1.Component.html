@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퍼넌트 실습</title>
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+    
+    <div id="app">
+        <global-comp></global-comp>
+        <br>    
+        <local-comp></local-comp>
+    </div>    
+    <br>
+    <div id="app2">
+        <global-comp></global-comp>
+        <br>    
+        <local-comp></local-comp>
+    </div>
+
+
+    <!-- Script -->
+    <script>
+        // 전역 컴퍼넌트
+        Vue.component('global-comp', {
+            template : '<div><h1>전역 컴퍼넌트다!</h1></div>'
+        });
+        new Vue ({
+            el : "#app"
+        });
+        new Vue ({
+            el : "#app2"
+        });
+
+        // 지역 컴퍼넌트
+        var 지역컴퍼넌트 = {
+            template : "<div><h1>지역 컴퍼넌트다!</h1></div>"
+        };
+        new Vue({
+            el : "#app",
+            components : {
+                'local-comp' : 지역컴퍼넌트
+            }
+        });
+
+
+    </script>
+
+</body>
+</html>
