@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>라우터</title>
+
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js">
+    </script>
+    <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.js">
+    </script>
+</head>
+<body>
+    <div id="app">
+        <h1>라우터 예제</h1>
+        <!-- URL에 따라 갱신되는 부분 -->
+        <router-view></router-view>
+    </div>
+
+    <!-- Script -->
+    <script>
+        // 메인 컴퍼넌트
+        var Main = {template : '<h2>Main 컴퍼넌트</h2>'};
+        // 로그인 컴퍼넌트
+        var Login = {template : '<h2>Login 컴퍼넌트</h2>'};
+        // 경로
+        var routes = [
+            {path : '/main', component : Main},
+            {path : '/login', component : Login},
+        ];
+        // 라우터
+        var router = new VueRouter({
+            // 경로
+            routes
+        });
+        // 뷰 인스턴스 생성에 라우터 추가
+        var app = new Vue({
+            router
+        }).$mount("#app");  
+
+    </script>
+    
+</body>
+</html>
