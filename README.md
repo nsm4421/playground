@@ -22,7 +22,13 @@
 
 > PV
 
+## Vue
 
+> ToDoList
+
+  https://blog.naver.com/nsm4421/222511570227
+  
+  https://blog.naver.com/nsm4421/222511617188
 
 
 
@@ -41,4 +47,6 @@ pip install pyinstaller
 ```
 pyinstaller -w -F Qt.py
 ```
+  https://blog.naver.com/nsm4421/222357171331
 
+  https://blog.naver.com/nsm4421/222467844930
