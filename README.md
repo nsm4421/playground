@@ -22,7 +22,7 @@
 
 > PV
 
-  https://blog.naver.com/nsm4421
+  https://blog.naver.com/nsm4421/222443995707
   
   https://blog.naver.com/nsm4421/222478505643
   
