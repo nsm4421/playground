@@ -36,14 +36,6 @@
   
   https://blog.naver.com/nsm4421/222511742962
 
-## Vue
-
-> ToDoList
-
-  https://blog.naver.com/nsm4421/222511570227
-  
-  https://blog.naver.com/nsm4421/222511617188
-
 
 
 ## YouTube Downloader
@@ -64,3 +56,16 @@ pyinstaller -w -F Qt.py
   https://blog.naver.com/nsm4421/222357171331
 
   https://blog.naver.com/nsm4421/222467844930
+  
+  
+  
+# JavaScript
+  
+## Vue
+
+> ToDoList
+
+  https://blog.naver.com/nsm4421/222511570227
+  
+  https://blog.naver.com/nsm4421/222511617188
+
