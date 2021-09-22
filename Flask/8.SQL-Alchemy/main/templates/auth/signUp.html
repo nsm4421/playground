@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- flash 오류 -->
+{% for message in get_flashed_messages() %}
+<div class="alert alert-danger" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+
+<!-- Form -->
+<div class="container my-3">
+    <form method="post" class="post-form">
+        {{ form.csrf_token }}
+
+        <div class="form-group">
+            <label for="user_id">아이디</label>
+            <input type="text" class="form-control" name="user_id" id="user_id"
+                   value="">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" class="form-control" name="password" id="password"
+                   value="">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="password_re">비밀번호 확인</label>
+            <input type="password" class="form-control" name="password_re" id="password_re"
+                   value="">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" class="form-control" name="email" id="email"
+                   value="">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="tier">티어</label>
+            <input type="text" class="form-control" name="tier" id="tier"
+                   value="">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="lol_id">롤아이디</label>
+            <input type="text" class="form-control" name="lol_id" id="lol_id"
+                   value="">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="nick_name">닉네임</label>
+            <input type="text" class="form-control" name="nick_name" id="nick_name" 
+                   value="">
+        </div>
+
+        <br>
+        
+        <button type="submit" class="btn btn-primary">회원가입</button>
+    </form>
+</div>
+
+
+<!-- 오류메세지 -->
+{% for field, errors in form.errors.items() %}
+<div class="alert alert-danger" role="alert">
+    <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+
+{% endblock %}
