@@ -22,7 +22,19 @@
 
 > PV
 
-
+  https://blog.naver.com/nsm4421/222443995707
+  
+  https://blog.naver.com/nsm4421/222478505643
+  
+  https://blog.naver.com/nsm4421/222488108324
+  
+  https://blog.naver.com/nsm4421/222499302049
+  
+> VBA
+  
+  텍스트 파일 읽기
+  
+  https://blog.naver.com/nsm4421/222511742962
 
 
 
@@ -41,4 +53,19 @@ pip install pyinstaller
 ```
 pyinstaller -w -F Qt.py
 ```
+  https://blog.naver.com/nsm4421/222357171331
+
+  https://blog.naver.com/nsm4421/222467844930
+  
+  
+  
+# JavaScript
+  
+## Vue
+
+> ToDoList
+
+  https://blog.naver.com/nsm4421/222511570227
+  
+  https://blog.naver.com/nsm4421/222511617188
 
