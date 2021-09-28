@@ -16,6 +16,8 @@
 > 6. flask_login
   https://blog.naver.com/nsm4421/222483876894
   https://blog.naver.com/nsm4421/222485043608
+> 7. SQL-Alchemy
+  https://blog.naver.com/nsm4421/222513449230
 
 
 ## Work
