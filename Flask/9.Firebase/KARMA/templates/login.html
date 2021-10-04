@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="content-section">
+    <form action="{{url_for('loginAction')}}" method="POST">
+      <legned class="border-bottom mb-4">로그인 화면</legned>
+      <input type='text' class="form-control" name='user_id' placeholder="아이디">
+      <input type='password' class="form-control" name='password' placeholder="비밀번호">
+      <input type='submit' class="btn btn-outline-info"></input>
+    </form>
+  </div>   
+{% endblock content %}
+
