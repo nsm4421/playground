@@ -1,0 +1,5 @@
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1221@localhost/LOL?charset=utf8'
+SQLALCHEMY_ECHO = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SECRET_KEY = 'KARMA'
+
