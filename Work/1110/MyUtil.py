@@ -62,8 +62,8 @@ class MyUtil:
         if returnDataFrame:                                     
             result = {}
             # qx_exit
-            for idx in range(num_benefit+2):
-                result[f"qx_exit({idx if idx<num_benefit+1 else 99})"] = qx_exit[idx]
+            for idx in range(num_benefit+1):
+                result[f"qx_exit({idx if idx<num_benefit else 99})"] = qx_exit[idx]
             for idx in range(num_benefit):
                 result[f"qx_benefit({idx})"] = qx_benefit[idx]
             # lx
