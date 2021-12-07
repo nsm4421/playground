@@ -1,0 +1,313 @@
+import numpy as np
+import pandas as pd
+
+
+class MyUtil:
+    def __init__(self, excel_file : str, fillNa : str = "^"):
+
+        # read excel sheets
+        self.df_Qx = self.readQxSheet(excel_file=excel_file, fillNa=fillNa)
+        self.df_Code = self.readCodeSheet(excel_file=excel_file, fillNa=fillNa)
+        self.df_Comb = self.readCombSheet(excel_file=excel_file, fillNa=fillNa)
+
+    def setArgs(self, sex : int = None, x : int = None, n : int = None, m : int = None, \
+        coverageKey : str = None, injure : int = None, driver : int = None, AMT : int = None):
+        if sex!=None:self.sex=sex
+        if x!=None:self.x=x
+        if n!=None:self.n=n
+        if m!=None:self.m=m
+        if coverageKey!=None:self.coverageKey=coverageKey
+        if injure!=None:self.injure=injure
+        if driver!=None:self.driver=driver
+        if AMT!=None:self.AMT=AMT
+        
+    def QxMapping(self, riskCode : str, riskType : str):
+        return self.getQxWithCodeAndType(riskCode=riskCode, riskType=riskType, df_Qx=self.df_Qx, \
+            sex=self.sex, combQxDict=self.combQxDict, injure=self.injure, driver=self.driver)[self.x:self.x+self.n+1]
+        
+    def setCombQxDict(self, coverageKey : str):
+        self.combQxDict = {}
+        df = self.df_Comb.loc[self.df_Comb['CoverageKey'] == coverageKey]
+        if df.shape[0] == 0:
+            pass
+        else:
+            for row in df.values:
+                combRiskCode, operation, numRiskKey = row[1:4]            
+                qx = np.zeros(shape=(numRiskKey, self.n+1))
+                rKeys = row[4:4+numRiskKey]
+                periods = row[12:12+numRiskKey]    
+                for i in range(numRiskKey):
+                    if rKeys[i] in self.combQxDict.keys():
+                        qx[i] = self.combQxDict[rKeys[i]]
+                    else:
+                        qx[i] = self.getQxWithRiskKey(riskKey = rKeys[i], sex=self.sex)[self.x:self.x+self.n+1]
+                kx = np.array([p/12 for p in periods])
+                if operation == 1:
+                    self.combQxDict[combRiskCode] = self.sumQx(qx=qx, kx=kx, x=self.x)
+                elif operation == 2:
+                    self.combQxDict[combRiskCode] = self.productQx(qx=qx, kx=kx, x=self.x)
+                else:
+                    raise Exception(f"ERR : operation 코드가 {operation}로 들어옴")
+
+    # 기수식계산
+    def calculateSymbol(self):
+        # 담보 정보
+        NumBenefit, ExitCode, ExitType, NonCov, \
+            BenefitCode, BenefitType, PayRate, ReduceRate, ReducePeriod, \
+                GrantCode, GrantType, InvalidPeriod = self.coverageInfoMapping(df_Code=self.df_Code, coverageKey=self.coverageKey)
+        
+        # Qx mapping
+        Ex=[[0.]*(self.n+1)]*(NumBenefit+1)
+        for i in range(NumBenefit+1):
+            Ex[i] = self.QxMapping(riskCode=ExitCode[i], riskType=ExitType[i])
+
+        Bx=[[0.]*(self.n+1)]*(NumBenefit+1)
+        for i in range(1, NumBenefit+1):
+            Bx[i] = self.QxMapping(riskCode=BenefitCode[i], riskType=BenefitType[i])
+        
+        Gx = self.QxMapping(riskCode=GrantCode, riskType=GrantType)
+
+        return self.getSymbolsDict(NumBenefit=NumBenefit, Ex=Ex, NonCov=NonCov, \
+            Bx=Bx, PayRate=PayRate, ReduceRate=ReduceRate, ReducePeriod=ReducePeriod, \
+                Gx=Gx, InvalidPeriod=InvalidPeriod)
+
+
+    ##------------------------- Static Methods ---------------##
+    
+    #=============== Excel Sheet 읽기 ===============#
+
+    # 위험률시트
+    @staticmethod
+    def readQxSheet(excel_file : str, sheet_name : str = "위험률", header = 2, fillNa : str = "^"):
+        # read excel sheet
+        sht_rate = pd.read_excel(excel_file, sheet_name=sheet_name, header = header).fillna(fillNa)
+        sht_rate = sht_rate[['RiskKey', 'RiskCode', 'Injure', 'Driver', 'x', 'Male', 'Female']]
+        sht_rate['Injure'] = sht_rate['Injure'].apply(lambda x:fillNa if x in (0, '0', fillNa) else x)
+        sht_rate['Driver'] = sht_rate['Driver'].apply(lambda x:fillNa if x in (0, '0', fillNa)  else x)
+        return sht_rate
+
+    # 코드시트
+    @staticmethod
+    def readCodeSheet(excel_file : str, sheet_name : str = "코드", header = 2, fillNa : str = "^"):
+        sht_code = pd.read_excel(excel_file, sheet_name=sheet_name, header = header).fillna(fillNa)
+        sht_code = sht_code[['CoverageKey', 'BenefitNum', 'ExitCode', 'ExitType', 'NonCov',\
+            'BenefitCode', 'BenefitType', 'PayRate', 'ReduceRate', 'ReducePeriod',\
+                'GrantCode', 'GrantType', 'InvalidPeriod']]
+        sht_code['NonCov'] = sht_code['NonCov'].apply(lambda x:0 if x==fillNa else int(x))
+        sht_code['PayRate'] = sht_code['PayRate'].apply(lambda x:0. if x==fillNa else float(x))
+        sht_code['ReduceRate'] = sht_code['ReduceRate'].apply(lambda x:0. if x==fillNa else float(x))
+        sht_code['ReducePeriod'] = sht_code['ReducePeriod'].apply(lambda x:0 if x==fillNa else int(x))
+        sht_code['InvalidPeriod'] = sht_code['InvalidPeriod'].apply(lambda x:0 if x==fillNa else int(x))
+        return sht_code
+
+    # 결합위험률시트
+    @staticmethod
+    def readCombSheet(excel_file : str, sheet_name : str = "결합위험률", header = 2, fillNa : str = "^"):
+        sht_comb = pd.read_excel(excel_file, sheet_name=sheet_name, header=header).fillna(fillNa)
+        sht_comb = sht_comb[['CoverageKey', 'CombRiskKey', 'Operation', 'NumRiskKey'] \
+            + [f"RiskKey({i})" for i in range(1, 8+1)] + [f"Period({i})" for i in range(1, 8+1)]]
+        sht_comb['Operation'] = sht_comb['Operation'].apply(lambda x:int(x))
+        sht_comb['NumRiskKey'] = sht_comb['NumRiskKey'].apply(lambda x:int(x))
+        for i in range(1, 8+1):
+            sht_comb[f"Period({i})"] = sht_comb[f"Period({i})"].apply(lambda x:0 if x==fillNa else int(x))
+        return sht_comb 
+
+
+    #=============== 담보 정보 (탈퇴, 급부, 납면) ===============#
+
+    @staticmethod
+    def coverageInfoMapping(df_Code : pd.DataFrame, coverageKey : str):
+        df = df_Code.loc[df_Code['CoverageKey'] == coverageKey]
+        NumBenefit = df.shape[0] - 2
+        # 탈퇴 정보 (exit)        
+        ExitCode = [None]*(NumBenefit+1)
+        ExitType = [None]*(NumBenefit+1)
+        NonCov = [0]*(NumBenefit+1)
+        # 급부 정보 (benefit)
+        BenefitCode = [None]*(NumBenefit+1)
+        BenefitType = [None]*(NumBenefit+1)
+        PayRate = [0]*(NumBenefit+1)
+        ReduceRate = [0.]*(NumBenefit+1)
+        ReducePeriod = [0]*(NumBenefit+1)
+        # 납면 (grant)
+        GrantCode = None
+        GrantType = None
+        InvalidPeriod = 0
+
+        for row in df.values:
+            # unpack
+            _, bNum, eCode, eType, nCov, \
+                bCode, bType, pRate, rRate, rPeriod, \
+                    gCode, gType, iPeriod = row
+            
+            bNum = int(bNum)
+
+            # 납면
+            if bNum == 99:
+                GrantCode = gCode 
+                GrantType = gType
+                InvalidPeriod = iPeriod
+            else:
+                # 급부지급
+                if bNum!=0:
+                    BenefitCode[bNum] = bCode
+                    BenefitType[bNum] = bType
+                    PayRate[bNum] = pRate
+                    ReduceRate[bNum] = rRate
+                    ReducePeriod[bNum] = rPeriod
+                
+                # 탈퇴
+                ExitCode[bNum] = eCode
+                ExitType[bNum] = eType
+                NonCov[bNum] = nCov
+
+        return NumBenefit, ExitCode, ExitType, NonCov, \
+            BenefitCode, BenefitType, PayRate, ReduceRate, ReducePeriod, \
+                GrantCode, GrantType, InvalidPeriod 
+
+
+    #=============== Qx ===============#
+
+    @staticmethod
+    def getQxWithCodeAndType(riskCode : str == None, riskType : str, df_Qx : pd.DataFrame, sex : int, combQxDict : dict = {},\
+        injure : int = None, driver : int = None, w : int = 120):
+        
+        if riskCode == None:
+            return [0.]*w
+        else:
+            if riskType == "I":     # 상해급수
+                riskKey = f"{riskCode}_{injure}"
+            elif riskType == "D":   # 운전자급수
+                riskKey = f"{riskCode}_{driver}"
+            elif riskType != "C":
+                riskKey = riskCode
+            else:
+                return combQxDict[riskCode]
+        
+        df = df_Qx.loc[df_Qx['RiskKey'] == riskKey]
+        if sex == 1:
+            df = df[['x', 'Male']]
+        else:
+            df = df[['x', 'Female']]
+        
+        qx = [0.]*w
+        for (t,q) in df.values:
+            # 단일률
+            if t == "ZZ":
+                return [q]*w
+            else:
+                qx[t] = q
+        return qx
+
+
+    @staticmethod
+    def getQxWithRiskKey(riskKey : str, df_Qx : pd.DataFrame, sex : int, w : int = 120):
+                
+        df = df_Qx.loc[df_Qx['RiskKey'] == riskKey]
+        if sex == 1:
+            df = df[['x', 'Male']]
+        else:
+            df = df[['x', 'Female']]
+
+        qx = [0.]*w
+        for (t,q) in df.values:
+            # 단일률
+            if t == "ZZ":
+                return [q]*w
+            else:
+                qx[t] = q
+        return qx
+
+
+    #=============== 결합위험률 ===============#
+
+    # q_comb = (1-k1) q1 + (1-k2) q2 + ....
+    @staticmethod
+    def sumQx(qx : np.array, kx : np.array, x : int):
+        qx[:, x] *= 1 - kx
+        return np.sum(qx, axis = 0)
+
+    # q_comb = 1 - (1-k1 x q1) x (1-k2 x q2) x ....
+    @staticmethod
+    def productQx(qx : np.array, kx : np.array, x : int):       
+        qx[:, x] *= 1 - kx      
+        product = np.product(1-qx, axis = 0)      
+        return 1-product
+
+
+    #=============== 기수식 ===============#
+
+    @staticmethod
+    def getSymbolsDict(NumBenefit : int, Ex : list, NonCov : list, \
+        Bx : list, PayRate : list, ReduceRate : list, ReducePeriod : list, \
+            Gx : list, InvalidPeriod : int, \
+                n : int, v:float) -> dict:
+        
+        proj = n+1
+        
+        # lx
+        lx = [[0.]*proj]*(NumBenefit+1)
+        for i in range(NumBenefit+1):
+            for t in range(n):
+                if t==0:
+                    lx[i][t+1] = lx[i][t] * (1-Ex[i][t]*(1-NonCov[i]/12))
+                else:
+                    lx[i][t+1] = lx[i][t] * (1-Ex[i][t])
+        # l'x
+        lxPrime = [0.]*proj
+        for t in range(n):
+            if t==0:
+                lxPrime[t+1] = lxPrime[t] * (1-Gx[t]*(1-InvalidPeriod/12)) 
+            else:
+                lxPrime[t+1] = lxPrime[t] * (1-Gx[t])
+
+        # Dx
+        Dx = [0.]*proj
+        for t in range(proj):
+            Dx[t] = lx[0][t]*(v**t)
+        
+        # D'x
+        DxPrime = [0.]*proj
+        for t in range(proj):
+            DxPrime[t] = lxPrime[t]*(v**t)
+
+        # Cx
+        Cx = [[0.]*proj]*(NumBenefit+1)
+        for i in range(1, NumBenefit+1):
+            for t in range(proj):
+                Cx[i][t] = lx[i][t]*Bx[i][t]*(v**(t+0.5))
+        
+        # Nx
+        Nx = [0.]*proj
+        Nx[-1] = Dx[-1]
+        for t in range(n)[::-1]:
+            Nx[t] = Nx[t+1]+Dx[t]
+        
+        # N'x
+        NxPrime = [0.]*proj
+        NxPrime[-1] = Dx[-1]
+        for t in range(n)[::-1]:
+            NxPrime[t] = NxPrime[t+1]+DxPrime[t]
+
+        # Mx
+        Mx = [[0.]*proj]*(NumBenefit+1)
+        for i in range(1, NumBenefit+1):
+            Mx[i][-1] = Cx[i][-1]
+            for t in range(n)[::-1]:
+                Mx[i][t] = Mx[i][t+1]+Cx[i][t]
+
+        # SUMx
+        SUMx = [0.]*proj
+        for i in range(1, NumBenefit+1):
+            for t in range(proj):
+                if t<ReducePeriod[i]:
+                    SUMx[t] += PayRate[i] * ((1-ReduceRate[i])*(Mx[i][t]-Mx[i][ReducePeriod[i]])\
+                        +(Mx[i][ReducePeriod[i]]-Mx[i][n]))
+                else:
+                    SUMx[t] += PayRate[i] * (Mx[i][t]-Mx[i][n])
+
+        symbolsDict = {'lx' : lx, "l'x" : lxPrime, "Dx" : Dx, "D'x" : Dx,\
+            "Cx" : Cx, "Mx" : Mx, "SUMx" : SUMx, "Nx" : Nx, "N'x" : NxPrime}
+
+        return symbolsDict
+        
