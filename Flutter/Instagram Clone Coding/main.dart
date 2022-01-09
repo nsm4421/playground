@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './style.dart' as custom_style;
 
 import 'package:http/http.dart' as http;
@@ -6,17 +7,63 @@ import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:provider/provider.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(MaterialApp(
-    theme: custom_style.theme,
-    initialRoute: '/',
-    routes: {
-      '/a' : (context)=>Text('HI')
-    },
-    home : MyApp()
-  ));
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context)=>Store1()),
+          ChangeNotifierProvider(create: (context)=>Store2())
+        ],
+        child : MaterialApp(
+            theme: custom_style.theme,
+            initialRoute: '/',
+            routes: {
+          },
+            home : MyApp()
+        )
+      )
+      );
+}
+
+class Store1 extends ChangeNotifier {
+
+  var numFollowers = 0;
+  var isFollowd = false;
+  var profileImages = [];
+
+  getData() async{
+    var result = await http.get(Uri.parse('http://codingapple1.github.io/app/profile.json'));
+    var result2 = jsonDecode(result.body);
+    profileImages = result2;
+    notifyListeners();
+  }
+
+  following(){
+    isFollowd = true;
+    numFollowers +=1 ;
+    notifyListeners();
+  }
+
+  unFollowing(){
+    isFollowd = false;
+    numFollowers -=1 ;
+    notifyListeners();
+  }
+}
+
+class Store2 extends ChangeNotifier{
+  var userName = "Karma";
 }
 
 
@@ -38,8 +85,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     getData();
   }
+
+
 
   getData() async {
     // get 요청 보내기
@@ -253,7 +303,19 @@ class _PostingState extends State<Posting> {
                     Text(widget.numLike.toString()),
                   ],
                 ),
-                Text('Author : ${widget.author}'),
+                GestureDetector(
+    child : Text('Author : ${widget.author}'),
+    onTap: (){
+      Navigator.push(context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => Profile(),
+        transitionDuration: Duration(microseconds: 10000),
+        transitionsBuilder : (context, animation1, animation2, child) =>
+            FadeTransition(opacity: animation1, child : child),
+      ));
+    },
+    )
+                ,
                 Text('Date : ${widget.date}'),
                 Text(widget.posting)
               ],
@@ -298,3 +360,62 @@ class UploadPosting extends StatelessWidget {
   }
 }
 
+class Profile extends StatelessWidget {
+  const Profile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title : Text(context.watch<Store2>().userName)),
+      body : CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: ProfileHeader(),
+          ),
+          SliverGrid(delegate:
+            SliverChildBuilderDelegate(
+                (context, index)=> Image.network(
+                  context.watch<Store1>().profileImages[index],
+                ),
+              childCount:context.watch<Store1>().profileImages.length
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2
+            ) ,)
+
+        ],
+      )
+    );
+  }
+}
+
+class ProfileHeader extends StatelessWidget {
+  const ProfileHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          CircleAvatar(
+            child:Image.asset('./asset/sample.jpg'),
+            radius: 30,
+            backgroundColor: Colors.grey,
+          ),
+          Text('Followers : ${context.watch<Store1>().numFollowers}'),
+          context.watch<Store1>().isFollowd
+              ? ElevatedButton(onPressed: (){
+            context.read<Store1>().unFollowing();
+          }, child: Text("Un Follow"))
+              : ElevatedButton(onPressed: (){
+            context.read<Store1>().following();
+          }, child: Text("Follow")),
+          ElevatedButton(onPressed: (){
+            context.read<Store1>().getData();
+          }, child: Text("Get Photo"))
+        ],
+      ),
+    );
+  }
+}
