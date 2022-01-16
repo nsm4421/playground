@@ -164,33 +164,17 @@ class Util_Qx(Util_Dict):
 
     def calcCombQx(self, comb_dict : dict) -> list:
         oper = comb_dict['Operation']
-        nRiskKey = comb_dict['NumRiskKey']
         periods = comb_dict['Periods']
         qx = comb_dict['Qx'][self.sex]
 
         if oper == 1:
-            qx_comb = np.zeros(120)
-            for i in range(nRiskKey):
-                for t in range(self.x, self.x+self.n+1):
-                    if t == self.x:
-                        qx_comb[t] += qx[i,t] * (1-periods[i]/12)
-                    else:
-                        qx_comb[t] += qx[i,t]
+            return self.CombOperation1(qx, periods, self.x, self.n)
 
         elif oper == 2:
-            qx_comb = np.ones(120)
-            
-            for i in range(nRiskKey):
-                for t in range(self.x, self.x+self.n+1):
-                    if t == self.x:
-                        qx_comb[t] *= 1-qx[i][t] * (1-periods[i]/12)
-                    else:
-                        qx_comb[t] *= 1-qx[i][t]
+            return self.CombOperation2(qx, periods, self.x, self.n)
 
-            qx_comb = 1- np.array(qx_comb)
-                
-        return qx_comb
-
+        else:
+            raise Exception(f'결합위험률 계산방법이 {oper}로 들어옴')
 
     def setUpQx(self):
         cov_dict = self.CovDict[self.coverage]
@@ -228,3 +212,34 @@ class Util_Qx(Util_Dict):
                 self.Gx = combQxDict[GxKey]           
 
 
+    # q_comb = (1-k1) q1 + (1-k2) q2 + ....
+    @staticmethod
+    def CombOperation1(qx : np.array, periods : np.array, x:int, n:int):
+        qx_comb = np.zeros(120)
+        l = len(periods)
+        assert qx.shape[0] == l
+        
+        for i in range(l):
+            for t in range(x, x+n+1):
+                if t == x:
+                    qx_comb[t] += qx[i, t] * (1-periods[i]/12)
+                else:
+                    qx_comb[t] += qx[i, t]
+
+        return qx_comb
+
+    # q_comb = (1-k1) q1 + (1-k2) q2 + ....
+    @staticmethod
+    def CombOperation2(qx : np.array, periods : np.array, x:int, n:int):
+        qx_comb = np.ones(120)
+        l = len(periods)
+        assert qx.shape[0] == l
+
+        for i in range(l):
+            for t in range(x, x+n+1):
+                if t == x:
+                    qx_comb[t] *= (1 - qx[i, t] * (1-periods[i]/12))
+                else:
+                    qx_comb[t] *= (1 - qx[i, t])
+
+        return 1-qx_comb

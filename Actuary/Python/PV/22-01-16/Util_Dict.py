@@ -43,7 +43,7 @@ class Util_Dict:
             
                 if x == "ZZ":   # 단일률
                     qx_male = [male for _ in range(120)]
-                    qx_female = [male for _ in range(120)]
+                    qx_female = [female for _ in range(120)]
                     break
 
                 else:           # 연령율
@@ -191,8 +191,8 @@ class Util_Dict:
                 oper = int(oper)
                 nRiskKey = int(nRiskKey)
                 rCodes = row[6:6+nRiskKey][:nRiskKey]
-                periods = [int(p) for p in row[14:14+nRiskKey]]
-                rTypes = row[22:22+nRiskKey]
+                rTypes = row[14:14+nRiskKey]
+                periods = [int(p) for p in row[22:22+nRiskKey]]
 
                 riskKeys = []
                 for rCode, rType in zip(rCodes, rTypes):
