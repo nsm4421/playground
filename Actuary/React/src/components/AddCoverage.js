@@ -1,17 +1,17 @@
-import {Table} from 'react-bootstrap';
-import RowBenefit0 from './Util_AddCoverage/RowBenefit0';
-import RowBenefit from './Util_AddCoverage/RowBenefit';
-import RowBenefit99 from './Util_AddCoverage/RowBenefit99';
-import { useState } from 'react';
-import AddCovButton from './Util_AddCoverage/AddCovButton';
-import DeleteCovButton from './Util_AddCoverage/DeleteCovButton';
+import RowCovInfo0 from "./utils/RowCovInfo0";
+import RowCovInfo99 from "./utils/RowCovInfo99";
+import RowCovInfo from "./utils/RowCovInfo";
+import { useState } from "react";
+import { Table } from "react-bootstrap";
+import axios from 'axios';
 
-function AddCoverage(){
+
+export default function AddCoverage(props){
 
     const MaxBenefitNum = 10;
     
 
-    let [coverageObj, changeCoverageObj] = useState({
+    let [covObj, changeCovObj] = useState({
 
         Coverage : "",      // 담보키                                
         NumBenefit : 1,     // 급부개수
@@ -32,28 +32,62 @@ function AddCoverage(){
 
     return (
         <>
+
             <div>
 
-                <h1>담보키 : <input onChange={(event)=>{
-                    let newObj = {... coverageObj};
+                <h1>담보코드 : <input onChange={(event)=>{
+                    let newObj = {... covObj};
                     newObj.Coverage = event.target.value;
-                    changeCoverageObj(event.target.value);
+                    changeCovObj(newObj);
                 }}/></h1>
 
-                <AddCovButton coverageObj={coverageObj} changeCoverageObj={changeCoverageObj}/>
-                <DeleteCovButton coverageObj={coverageObj} changeCoverageObj={changeCoverageObj}/>
+                <button type="button" className="btn btn-info" onClick={()=>{
+                    if (covObj.NumBenefit<MaxBenefitNum) {
+                        let newObj = {...covObj};
+                        newObj.NumBenefit = newObj.NumBenefit+1;
+                        changeCovObj(newObj);
+                    } else {
+                        let msg = `급부개수는 최大 ${MaxBenefitNum}개`;
+                        alert(msg);
+                    }
+                }}> 급부추가 </button>
 
-                <button onClick={()=>{
-                    console.log(coverageObj);
+                <button type="button" className="btn btn-info" onClick={()=>{
+                    if (covObj.NumBenefit===1) {
+                        let msg = `급부개수는 최小 1개`;
+                        alert(msg);
+                    } else {
+                        let newObj = {...covObj};
+                        newObj.NumBenefit = newObj.NumBenefit-1;
+                        changeCovObj(newObj);
+                    }
+                }}> 급부삭제 </button>
+
+
+                <button type="button" className="btn btn-danger" onClick={()=>{
+                    const url = `http://127.0.0.1:${props.port}/api/${props.address}`;
+                    axios.post(url, covObj).then((response) => {
+                        if (response.data.status == true){
+                            alert('잘 도착함')
+                        } else {
+                            console.log(response)
+                            alert('실패함')
+                        }
+                    })
+                    }}>담보 Object 보내기</button>
+
+                <button className="btn btn-success" onClick={()=>{
+                    console.log(covObj);
                 }}> 콘솔에 담보 Object 로그 찍기 </button>
 
-                <p>급부개수 : {coverageObj.NumBenefit} 개</p>
+                <p>급부개수 : {covObj.NumBenefit} 개</p>
+
             </div>
 
             <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
-                    <th>담보번호</th>
+                    <th>급부번호</th>
                     <th>탈퇴율코드</th>
                     <th>부담보기간</th>
                     <th>급부율코드</th>
@@ -65,24 +99,20 @@ function AddCoverage(){
                     </tr>
                 </thead>
                 <tbody>
+                
+                    <RowCovInfo0 benefitNum={0} covObj={covObj} changeCovObj={changeCovObj}/>   
                     
-                    <RowBenefit0 coverageObj={coverageObj} changeCoverageObj={changeCoverageObj}/>
-                    
-                    {
-                        [...Array(coverageObj.NumBenefit)].map((_, i) => <RowBenefit 
-                        bNum={i+1} coverageObj={coverageObj} changeCoverageObj={changeCoverageObj}/>)
-                    }
-           
-                    <RowBenefit99 coverageObj={coverageObj} changeCoverageObj={changeCoverageObj}/>
+                    {[...Array(covObj.NumBenefit)].map((_, i) => 
+                        <RowCovInfo benefitNum = {i+1} covObj={covObj} changeCovObj={changeCovObj}/>
+                    )}
 
+                    <RowCovInfo99 benefitNum={99} covObj={covObj} changeCovObj={changeCovObj}/>        
+            
                 </tbody>
-            </Table>    
-
-        
+            </Table>
         </>
     )
+
+
 }
 
-
-
-export default AddCoverage;
