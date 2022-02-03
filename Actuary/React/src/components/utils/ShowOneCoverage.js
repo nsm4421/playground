@@ -1,14 +1,7 @@
-import RowCovInfo0 from "./RowCovInfo0";
-import RowCovInfo99 from "./RowCovInfo99";
-import RowCovInfo from "./RowCovInfo";
-import { useState } from "react";
 import { Table } from "react-bootstrap";
 
 export default function ShowOneCoverage(props){
     
-
-    let [covObj, changeCovObj] = useState(props.covObj);
-
 
     return (
         <>
@@ -32,19 +25,72 @@ export default function ShowOneCoverage(props){
                 </thead>
                 <tbody>
                 
-                    <RowCovInfo0 benefitNum={0} covObj={covObj} changeCovObj={changeCovObj}/>   
+                    <RowCovInfo0_ covObj={props.covObj}/>   
                     
-                    {[...Array(covObj.NumBenefit)].map((_, i) => 
-                        <RowCovInfo benefitNum = {i+1} covObj={covObj} changeCovObj={changeCovObj}/>
+                    {[...Array(props.covObj.NumBenefit)].map((_, i) => 
+                        <RowCovInfo_ bNum = {i+1} covObj={props.covObj}/>
                     )}
 
-                    <RowCovInfo99 benefitNum={99} covObj={covObj} changeCovObj={changeCovObj}/>        
+                    <RowCovInfo99_ covObj={props.covObj}/>        
             
                 </tbody>
             </Table>
         </>
     )
-
-
 }
 
+function RowCovInfo0_(props){
+    return(
+        <>
+            <tr>
+            <th>0</th>
+            <th>{props.covObj.ExCode[0]}</th>
+            <th>{props.covObj.NonCov[0]}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            </tr>
+        </>
+    )
+}
+
+
+function RowCovInfo_(props){
+    return(
+        <>
+            <tr>
+            <th>{props.bNum}</th>
+            <th>{props.covObj.ExCode[props.bNum]}</th>
+            <th>{props.covObj.NonCov[props.bNum]}</th>
+            <th>{props.covObj.PayRate[props.bNum]}</th>
+            <th>{props.covObj.ReduceRate[props.bNum]}</th>
+            <th>{props.covObj.ReducePeriod[props.bNum]}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            </tr>
+        </>
+    )
+}
+
+
+function RowCovInfo99_(props){
+    return(
+        <>
+            <tr>
+            <th>99</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{props.covObj.GxCode}</th>
+            <th>{props.covObj.InvalidPeriod}</th>
+            </tr>
+        </>
+    )
+}

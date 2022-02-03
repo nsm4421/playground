@@ -1,7 +1,6 @@
 import axios from 'axios';
 import ShowOneCoverage from './utils/ShowOneCoverage';
 import { useState } from 'react';
-import AddCoverage from './AddCoverage';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 export default function ShowCoverage(props){
@@ -46,4 +45,3 @@ export default function ShowCoverage(props){
         </div>
     )
 }
-
