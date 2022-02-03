@@ -4,13 +4,13 @@ import RowCovInfo from "./utils/RowCovInfo";
 import { useState } from "react";
 import { Table } from "react-bootstrap";
 import axios from 'axios';
-
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 export default function AddCoverage(props){
 
     const MaxBenefitNum = 10;
     
-
+    let history = useHistory();
     let [covObj, changeCovObj] = useState({
 
         Coverage : "",      // 담보키                                
@@ -66,12 +66,16 @@ export default function AddCoverage(props){
 
                 <button type="button" className="btn btn-danger" onClick={()=>{
                     const url = `http://127.0.0.1:${props.port}/api/${props.address}`;
+                    if (covObj.Coverage.trim() === "") {
+                        alert('담보코드가 입력되지 않음')
+                        return;
+                    }
                     axios.post(url, covObj).then((response) => {
                         if (response.data.status == true){
-                            alert('잘 도착함')
+                            alert(response.data.message);
                         } else {
-                            console.log(response)
-                            alert('실패함')
+                            console.log(response);
+                            alert(response.data.message);
                         }
                     })
                     }}>담보 Object 보내기</button>
@@ -79,6 +83,11 @@ export default function AddCoverage(props){
                 <button className="btn btn-success" onClick={()=>{
                     console.log(covObj);
                 }}> 콘솔에 담보 Object 로그 찍기 </button>
+
+                
+            <button type="button" className="btn btn-warning" onClick={()=>{
+                   history.goBack();
+                }}> 담보정보화면으로 빡구 </button>
 
                 <p>급부개수 : {covObj.NumBenefit} 개</p>
 
