@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a2490e66-f92e-40aa-ae5d-33899d7be365": {
+      "ProjectGuid": "a2490e66-f92e-40aa-ae5d-33899d7be365",
+      "DisplayName": "TextViewer",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
