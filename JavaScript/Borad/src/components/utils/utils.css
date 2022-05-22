@@ -1,0 +1,69 @@
+.register__inner__box {
+    display: inline-flex;
+    font-size: 3vmin;
+    width: 80%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.register__inner__label {
+    color: white;
+    margin: 1vmin;
+    padding: 1vmin;
+    width: 20%;
+    font-weight: 800;
+}
+
+.register__inner__input {
+    margin: 1vmin;
+    padding: 1vmin;
+    width: 70%;
+    font-size: 3vmin;
+    outline: none;
+    border-radius: 10px;
+}
+
+.register__inner__input:focus {
+    color: orange;
+}
+
+.register__inner__stick {
+    background-color: white;
+    height: 6vmin;
+    width: 1px;
+}
+
+.text__area {
+    width: 90%;
+    display: inline-block;
+    padding: 1.5vmin;   
+    font-size: 3vmin;
+    min-height: 5vmax;
+    border-radius: 10px;
+    background-color: rgb(44, 42, 42);
+    color: rgb(232, 224, 224);
+    outline: none;
+    resize: none;
+    overflow-y: visible;
+    border: 1px dotted;
+    border-color: rgb(151, 151, 173);
+}
+
+.text__area__length {
+    color: gainsboro;
+    text-align: right;
+    margin-right: 5%;
+}
+
+.custom__button {
+    background-color: gray;
+    padding: 1vmin;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 2vmin;
+}
+
+.custom__button:hover{
+    color: #61dafb;
+}

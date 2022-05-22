@@ -1,0 +1,17 @@
+.alert__msg {
+    margin-right: 1vmin;
+    margin-left: 1vmin;
+    width: 100%;
+}
+
+.alert__msg:hover {
+    color: orange;
+}
+
+.register__container h2 {
+    margin-bottom: 5vmin;
+}
+
+.submit__button {
+    background-color: aquamarine;
+}

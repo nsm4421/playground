@@ -1,0 +1,54 @@
+.nav__container {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    margin-bottom: 1vmin;
+}
+
+.nav__logo {
+    width: 8vmin;
+    height: 8vmin;
+    display: flex;
+    align-items: center;
+}
+
+.nav__logo h3 a {
+  text-decoration: none;
+  color : #61dafb;
+}
+
+.nav__logo h3 a:hover{
+  color : orange;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .nav__logo img {
+      animation: nav__logo infinite 20s linear;
+    }
+}
+
+@keyframes nav__logo {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+}
+
+.nav__banner {
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+
+.nav__banner li a{
+    margin-left: 3vmin;
+    margin-right: 3vmin;
+    text-decoration: none;
+    color: white;
+}
+
+.nav__banner li a:hover {
+  color: orange;
+}
