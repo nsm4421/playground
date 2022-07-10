@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Tutorial</title>
+</head>
+<body>
+    
+    <h1>WebSocket Chat</h1>
+
+    <form onsubmit="handleSubmit(event)">
+        <input type="text" id="nickname" placeholder="nickname"/>
+        <br/>
+        <input type="text" id="msgToSend" placeholder="message"/>
+        <button>Submit</button>
+    </form>
+
+    <ul id='msgList'></ul>
+
+    <script>
+        var ws = new WebSocket("ws://localhost:8080/ws");
+        
+        ws.onmessage = (e)=>{
+            var msgList = document.getElementById('msgList'); 
+            var newLiTag = document.createElement('li');
+            var newMsg = document.createTextNode(e.data);
+            newLiTag.appendChild(newMsg);
+            msgList.appendChild(newLiTag)
+        }
+
+        const handleSubmit = (e)=>{
+            var nickname = document.getElementById('nickname');
+            var msgToSend = document.getElementById('msgToSend');
+            ws.send(
+                JSON.stringify({nickname:nickname.value, msg:msgToSend.value})
+            );
+            msgToSend.value = ''
+            e.preventDefault();
+        }
+        
+    </script>
+
+</body>
+</html>
