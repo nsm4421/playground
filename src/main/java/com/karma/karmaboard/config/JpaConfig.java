@@ -10,7 +10,6 @@ import java.util.Optional;
 @EnableJpaAuditing
 @Configuration
 public class JpaConfig {
-
     @Bean
     public AuditorAware<String> auditorAware(){
         return ()-> Optional.of("karma");   // TODO 인증기능 구현 시 수정
