@@ -3,35 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 <body>
 
-    <header>Header</header>
+<!--Header-->
+    <header class="p-3 bg-dark text-white" style="display: flex;justify-content: space-between;align-items: center">
+        <h3>Spring Board Demo</h3>
+        <ul style="display: flex;list-style: none">
+            <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Login</button></li>
+            <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Sign Up</button></li>
+        </ul>
+    </header>
 
-    <main>
+    <main class="container">
+<!--Search bar-->
         <form>
-            <label for="search-type">Search type</label>
-            <select id="search-type" name="search-type">
-                <option>Title</option>
-                <option>Content</option>
-                <option>ID</option>
-                <option>Nickname</option>
-                <option>HashTag</option>
-            </select>
-
             <br/>
-            <label for="search-bar">Search bar</label>
-            <input placeholder="Search..." name="search-bar" id="search-bar"/>
-            <button type="submit">Submit</button>
+            <div class="row">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <form class="card card-sm">
+                        <div class="card-body row no-gutters align-items-center" >
+                            <div class="col-auto">
+                                <i class="fas fa-search h4 text-body"></i>
+                            </div>
+                            <div class="col" style="display: flex" >
+                                <div class="col-4" style="margin-right: 10px">
+                                    <select class="form-control form-control-lg" name="search-type">
+                                        <option>Title</option>
+                                        <option>Content</option>
+                                        <option>ID</option>
+                                        <option>Nickname</option>
+                                        <option>HashTag</option>
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search.....">
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-lg btn-success" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </form>
+        <br/>
 
-        <table>
+<!--Article-->
+        <table class="table">
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Hashtag</th>
-                    <th>CreatedBy</th>
-                    <th>CreateAt</th>
+                    <th class="col-6">Title</th>
+                    <th class="col-2">Hashtag</th>
+                    <th class="col">CreatedBy</th>
+                    <th class="col">CreateAt</th>
                 </tr>
             </thead>
 
@@ -51,22 +79,29 @@
             </tbody>
         </table>
 
-        <nav>
-            <table>
-                <tr>
-                    <td>previous</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>next</td>
-                </tr>
-            </table>
+<!--Pagination-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
         </nav>
 
     </main>
 
-    <footer>Footer</footer>
+<!--Footer-->
+    <footer>
+        <hr/>
+        <div class="container p-3 bg-white text-black-50 d-flex justify-content-between">
+            <p>Karma's demo</p>
+            <p><a style="text-decoration: none" class="text-black-50"
+                  href="http://blog.naver.com/nsm4421">Go To My Blog</a></p>
+        </div>
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 </body>
 </html>
