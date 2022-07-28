@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+</head>
+<body>
+
+    <header>Header</header>
+
+    <main>
+        <form>
+            <label for="search-type">Search type</label>
+            <select id="search-type" name="search-type">
+                <option>Title</option>
+                <option>Content</option>
+                <option>ID</option>
+                <option>Nickname</option>
+                <option>HashTag</option>
+            </select>
+
+            <br/>
+            <label for="search-bar">Search bar</label>
+            <input placeholder="Search..." name="search-bar" id="search-bar"/>
+            <button type="submit">Submit</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Hashtag</th>
+                    <th>CreatedBy</th>
+                    <th>CreateAt</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Test Title</td>
+                    <td>Test Hashtag</td>
+                    <td>Test CreatedBy</td>
+                    <td>Test CreateAt</td>
+                </tr>
+                <tr>
+                    <td>Test Title</td>
+                    <td>Test Hashtag</td>
+                    <td>Test CreatedBy</td>
+                    <td>Test CreateAt</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <nav>
+            <table>
+                <tr>
+                    <td>previous</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>next</td>
+                </tr>
+            </table>
+        </nav>
+
+    </main>
+
+    <footer>Footer</footer>
+
+</body>
+</html>
