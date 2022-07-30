@@ -64,17 +64,13 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>Test Title</td>
-                    <td>Test Hashtag</td>
-                    <td>Test CreatedBy</td>
-                    <td>Test CreateAt</td>
-                </tr>
-                <tr>
-                    <td>Test Title</td>
-                    <td>Test Hashtag</td>
-                    <td>Test CreatedBy</td>
-                    <td>Test CreateAt</td>
+                <tr th:each="article : ${articles}">
+                    <td>
+                        <a th:text="${article.title}"  th:href="@{'/articles/' + ${article.id}}">title</a>
+                    </td>
+                    <td th:text="${article.hashtag}"/>
+                    <td th:text="${article.nickname}"/>
+                    <td th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yyyy-mm-dd')}"/>
                 </tr>
             </tbody>
         </table>
