@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Table(
         indexes = {
                 @Index(columnList = "comment"),
@@ -22,30 +22,26 @@ import java.util.Objects;
         }
 )
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class ArticleComment {
+public class ArticleComment extends AuditingFields{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Setter @ManyToOne(optional = false) private Article article;
     @Setter @Column(nullable = false, length = 500) private String comment;
-
-    @CreatedDate @Column(nullable = false)  private LocalDateTime createdAt;
-    @CreatedDate @Column(nullable = false) private LocalDateTime modifiedAt;
-    @CreatedBy @Column(nullable = false, length = 100) private String createdBy;
-    @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy;
+    @Setter @ManyToOne(optional = false) private UserAccount userAccount;
 
     protected ArticleComment(){
     }
 
-    public ArticleComment(Article article, String comment) {
+    public ArticleComment(UserAccount userAccount, Article article, String comment) {
+        this.userAccount = userAccount;
         this.article = article;
         this.comment = comment;
     }
 
-    public static ArticleComment of(Article article, String comment) {
-        return new ArticleComment(article, comment);
+    public static ArticleComment of(UserAccount userAccount, Article article, String comment) {
+        return new ArticleComment(userAccount, article, comment);
     }
 
     @Override

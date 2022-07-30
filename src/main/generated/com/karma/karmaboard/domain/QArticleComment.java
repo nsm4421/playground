@@ -22,19 +22,27 @@ public class QArticleComment extends EntityPathBase<ArticleComment> {
 
     public static final QArticleComment articleComment = new QArticleComment("articleComment");
 
+    public final QAuditingFields _super = new QAuditingFields(this);
+
     public final QArticle article;
 
     public final StringPath comment = createString("comment");
 
-    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final StringPath createdBy = createString("createdBy");
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final DateTimePath<java.time.LocalDateTime> modifiedAt = createDateTime("modifiedAt", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
-    public final StringPath modifiedBy = createString("modifiedBy");
+    //inherited
+    public final StringPath modifiedBy = _super.modifiedBy;
+
+    public final QUserAccount userAccount;
 
     public QArticleComment(String variable) {
         this(ArticleComment.class, forVariable(variable), INITS);
@@ -54,7 +62,8 @@ public class QArticleComment extends EntityPathBase<ArticleComment> {
 
     public QArticleComment(Class<? extends ArticleComment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.article = inits.isInitialized("article") ? new QArticle(forProperty("article")) : null;
+        this.article = inits.isInitialized("article") ? new QArticle(forProperty("article"), inits.get("article")) : null;
+        this.userAccount = inits.isInitialized("userAccount") ? new QUserAccount(forProperty("userAccount")) : null;
     }
 
 }
