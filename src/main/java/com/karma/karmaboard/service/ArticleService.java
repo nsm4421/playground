@@ -15,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
+<<<<<<< HEAD
+=======
+// TODO
+>>>>>>> 87de0747cf93fa3bce34cdb2b954a9b732cfd3c9
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -27,7 +31,11 @@ public class ArticleService {
         public Page<ArticleDto> searchArticlePage(SearchType searchType, String search_keyword, Pageable pageable){
     //      Page<Article>
             Page<Article> articlePage;
+<<<<<<< HEAD
             if (search_keyword == null || search_keyword.isBlank()){
+=======
+            if (search_keyword.isEmpty() | search_keyword.isBlank()){
+>>>>>>> 87de0747cf93fa3bce34cdb2b954a9b732cfd3c9
                 articlePage = articleRepository.findAll(pageable);
             } else {
                 articlePage = switch (searchType){

@@ -10,7 +10,8 @@
 
 <!--Header-->
 <header class="p-3 bg-dark text-white" style="display: flex;justify-content: space-between;align-items: center">
-    <h3>Spring Board Demo</h3>
+    <h3><a th:href="@{'/articles/'}" th:text="${'Spring Board Demo'}"
+    style="text-decoration: none"></a></h3>
     <ul style="display: flex;list-style: none">
         <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Login</button></li>
         <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Sign Up</button></li>
@@ -19,14 +20,21 @@
 
 <main class="container">
 
-    <div class="p-4 p-md-5 mb-4 rounded text-bg-dark mt-1">
-        <div class="col-md-6 px-0">
-            <h2 class="display-4 fst-italic d-inline col-8" style="margin-right:50%">Title</h2>
-            <span class="fst-italic" style="color:gray">Create by</span>
-            <span class="fst-italic" style="color:gray">Create At</span>
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-dark mt-1" th:object="${article}">
+        <div>
+            <h3 class="display-4 fst-italic d-inline-block"
+            th:text="${article.title()}"/>
+            <br/>
+            <span class="fst-italic mt-auto" style="color:gray"
+            th:text="${article.nickname()}"/>
+            <br/>
+            <span class="fst-italic mt-auto" style="color:gray"
+                  th:datetime="${article.createdAt()}" th:text="${#temporals.format(article.createdAt, 'yyyy-mm-dd hh:mm:ss')}"/>
 
-            <p class="lead my-3">Content</p>
-            <span class="mb-0"><a href="#" class="text-white fw-bold">Hash tag</a></span>
+            <p class="lead my-3" th:text="${article.content()}"></p>
+            <span class="mb-0"><a href="#" class="text-white fw-bold" th:text="${article.hashtag()}"></a></span>
+            <span class="mb-0"><a href="#" class="text-white fw-bold"
+                                  ></a></span>
         </div>
     </div>
 
@@ -41,27 +49,14 @@
     </form>
 
 <!--See Comment-->
-    <div>
+    <div th:object="${articleComments}">
         <ul>
-            <li>
+            <li th:each="comment:${articleComments}">
                 <div>
-                    <span>CreatedBy</span>
-                    <span>CreatedAt</span>
-                    <p>Comments</p>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>CreatedBy</span>
-                    <span>CreatedAt</span>
-                    <p>Comments</p>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>CreatedBy</span>
-                    <span>CreatedAt</span>
-                    <p>Comments</p>
+                    <p th:text="${comment.comment()}"/>
+                    <span th:text="${comment.nickname()}" style="color: gray"/>
+                    <span style="color: gray" th:datetime="${article.createdAt()}" th:text="${#temporals.format(article.createdAt, 'yyyy-mm-dd hh:mm:ss')}"/>
+                    <hr/>
                 </div>
             </li>
         </ul>

@@ -20,7 +20,11 @@ public record ArticleResponse(
 
     public static ArticleResponse from(ArticleDto dto) {
         String nickname = dto.userAccountDto().nickname();
+<<<<<<< HEAD
         if (nickname == null || nickname.isBlank()) {
+=======
+        if (nickname == null || nickname.isBlank() | nickname.isEmpty()) {
+>>>>>>> 87de0747cf93fa3bce34cdb2b954a9b732cfd3c9
             nickname = dto.userAccountDto().userId();
         }
 
