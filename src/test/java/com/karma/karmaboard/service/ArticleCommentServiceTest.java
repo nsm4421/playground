@@ -34,15 +34,15 @@ class ArticleCommentServiceTest {
     @Mock private ArticleCommentRepository articleCommentRepository;
 
     // 검색기능
-    @Test
-    @DisplayName("[Service] Search article comments by article id")
-    void searchArticleCommentsTest(){
-        Long articleId = 1L;
-        Article article = Article.of("test title", "test content", "test hashtag");
-        given(articleRepository.findById(articleId))
-                .willReturn(Optional.of(article));
-        List<ArticleCommentDto> articleCommentsDto = sut.getArticleCommentsByArticleId(articleId);
-        assertThat(articleCommentsDto).isNotNull();
-        then(articleRepository).should().findById(articleId);
-    }
+//    @Test
+//    @DisplayName("[Service] Search article comments by article id")
+//    void searchArticleCommentsTest(){
+//        Long articleId = 1L;
+//        Article article = Article.of("test title", "test content", "test hashtag");
+//        given(articleRepository.findById(articleId))
+//                .willReturn(Optional.of(article));
+//        List<ArticleCommentDto> articleCommentsDto = sut.getArticleCommentsByArticleId(articleId);
+//        assertThat(articleCommentsDto).isNotNull();
+//        then(articleRepository).should().findById(articleId);
+//    }
 }

@@ -19,30 +19,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class JpaRepositoryTest {
 
-
-    private final ArticleRepository articleRepository;
-    private final ArticleCommentRepository articleCommentRepository;
-
-    public JpaRepositoryTest(@Autowired ArticleRepository articleRepository,  @Autowired ArticleCommentRepository articleCommentRepository) {
-        this.articleRepository = articleRepository;
-        this.articleCommentRepository = articleCommentRepository;
-    }
-
-    @DisplayName("Select Query Test")
-    @Test
-    void select_query_test(){
-        List<Article> articleList = articleRepository.findAll();
-        assertThat(articleList).isNotNull().hasSize(1000);
-        List<ArticleComment> articleCommentList = articleCommentRepository.findAll();
-        assertThat(articleCommentList).isNotNull().hasSize(1000);
-    }
-    @Disabled("ToDo : 왜 어러나지...???")
-    @DisplayName("Insert Query Test")
-    @Test
-    void insert_query_test(){
-        long previousCnt = articleRepository.count();
-        Article newArticle = Article.of("new article", "new content", "test");
-        articleRepository.save(newArticle);
-        assertThat(articleRepository.count()).isEqualTo(previousCnt+1);
-    }
+//
+//    private final ArticleRepository articleRepository;
+//    private final ArticleCommentRepository articleCommentRepository;
+//
+//    public JpaRepositoryTest(@Autowired ArticleRepository articleRepository,  @Autowired ArticleCommentRepository articleCommentRepository) {
+//        this.articleRepository = articleRepository;
+//        this.articleCommentRepository = articleCommentRepository;
+//    }
+//
+//    @DisplayName("Select Query Test")
+//    @Test
+//    void select_query_test(){
+//        List<Article> articleList = articleRepository.findAll();
+//        assertThat(articleList).isNotNull().hasSize(1000);
+//        List<ArticleComment> articleCommentList = articleCommentRepository.findAll();
+//        assertThat(articleCommentList).isNotNull().hasSize(1000);
+//    }
+//    @Disabled("ToDo : 왜 어러나지...???")
+//    @DisplayName("Insert Query Test")
+//    @Test
+//    void insert_query_test(){
+//        long previousCnt = articleRepository.count();
+//        Article newArticle = Article.of("new article", "new content", "test");
+//        articleRepository.save(newArticle);
+//        assertThat(articleRepository.count()).isEqualTo(previousCnt+1);
+//    }
 }
