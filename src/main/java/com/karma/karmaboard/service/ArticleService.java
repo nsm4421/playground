@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
+// TODO
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -23,30 +24,30 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-        @Transactional(readOnly = true)
-        public Page<ArticleDto> searchArticlePage(SearchType searchType, String search_keyword, Pageable pageable){
-    //      Page<Article>
-            Page<Article> articlePage;
-            if (search_keyword == null || search_keyword.isBlank()){
-                articlePage = articleRepository.findAll(pageable);
-            } else {
-                articlePage = switch (searchType){
-                    case ID -> articleRepository.findByUserAccount_UserIdContaining(search_keyword, pageable);
-                    case TITLE -> articleRepository.findByTitleContaining(search_keyword, pageable);
-                    case CONTENT -> articleRepository.findByContentContaining(search_keyword, pageable);
-                    case HASHTAG -> articleRepository.findByHashtag(search_keyword, pageable);
-                };
-            }
-    //      Page<Article> -> Page<ArticleDto>
-            return articlePage.map(ArticleDto::from);
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> searchArticlePage(SearchType searchType, String search_keyword, Pageable pageable){
+        //      Page<Article>
+        Page<Article> articlePage;
+        if (search_keyword==null || search_keyword.isBlank()){
+            articlePage = articleRepository.findAll(pageable);
+        } else {
+            articlePage = switch (searchType){
+                case ID -> articleRepository.findByUserAccount_UserIdContaining(search_keyword, pageable);
+                case TITLE -> articleRepository.findByTitleContaining(search_keyword, pageable);
+                case CONTENT -> articleRepository.findByContentContaining(search_keyword, pageable);
+                case HASHTAG -> articleRepository.findByHashtag(search_keyword, pageable);
+            };
         }
-        @Transactional(readOnly = true)
-        public ArticleWithCommentsDto searchArticleById(Long articleId) {
-            return articleRepository
-                    .findById(articleId)
-                    .map(ArticleWithCommentsDto::from)
-                    .orElseThrow(()-> new EntityNotFoundException("ERROR - NO ARTICLE"));
-        }
+        //      Page<Article> -> Page<ArticleDto>
+        return articlePage.map(ArticleDto::from);
+    }
+    @Transactional(readOnly = true)
+    public ArticleWithCommentsDto searchArticleById(Long articleId) {
+        return articleRepository
+                .findById(articleId)
+                .map(ArticleWithCommentsDto::from)
+                .orElseThrow(()-> new EntityNotFoundException("ERROR - NO ARTICLE"));
+    }
 
     public void saveArticle(ArticleDto articleDto) {
         articleRepository.save(articleDto.toEntity());

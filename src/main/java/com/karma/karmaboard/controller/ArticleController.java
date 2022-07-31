@@ -1,11 +1,11 @@
 package com.karma.karmaboard.controller;
 
 import com.karma.karmaboard.domain.type.SearchType;
-import com.karma.karmaboard.repository.ArticleRepository;
 import com.karma.karmaboard.service.ArticleService;
 import dto.response.ArticleCommentResponse;
 import dto.response.ArticleResponse;
 import dto.response.ArticleWithCommentsResponse;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

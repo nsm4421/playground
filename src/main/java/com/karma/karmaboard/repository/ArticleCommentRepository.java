@@ -1,7 +1,6 @@
 package com.karma.karmaboard.repository;
 
 import com.karma.karmaboard.domain.ArticleComment;
-import com.karma.karmaboard.domain.QArticle;
 import com.karma.karmaboard.domain.QArticleComment;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
