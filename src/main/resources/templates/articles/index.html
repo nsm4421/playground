@@ -19,27 +19,26 @@
 
     <main class="container">
 <!--Search bar-->
-        <form>
+        <form th:object="${searchTypes}">
             <br/>
             <div class="row">
                 <div class="col-12 col-md-10 col-lg-8">
-                    <form class="card card-sm">
+                    <form class="card card-sm" action="/articles" method="get">
                         <div class="card-body row no-gutters align-items-center" >
                             <div class="col-auto">
                                 <i class="fas fa-search h4 text-body"></i>
                             </div>
                             <div class="col" style="display: flex" >
                                 <div class="col-4" style="margin-right: 10px">
-                                    <select class="form-control form-control-lg" name="search-type">
-                                        <option>Title</option>
-                                        <option>Content</option>
-                                        <option>ID</option>
-                                        <option>Nickname</option>
-                                        <option>HashTag</option>
+                                    <select class="form-control form-control-lg" name="searchType">
+                                        <option th:each="searchType:${searchTypes}" th:text="${searchType.description}"
+                                                th:value="${searchType.name}"/>
                                     </select>
+
                                 </div>
                                 <div class="col-8">
-                                    <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search.....">
+                                    <input class="form-control form-control-lg form-control-borderless"
+                                           type="search" placeholder="Search....." name="searchKeyword">
                                 </div>
                             </div>
                             <div class="col-auto">

@@ -48,6 +48,7 @@ public class ArticleController {
 
         map.addAttribute("articles", articleResponsePage);
         map.addAttribute("pageList", pageList);
+        map.addAttribute("searchTypes", SearchType.values());
 
         return "articles/index";
     }

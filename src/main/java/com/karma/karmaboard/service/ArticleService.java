@@ -25,17 +25,17 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     @Transactional(readOnly = true)
-    public Page<ArticleDto> searchArticlePage(SearchType searchType, String search_keyword, Pageable pageable){
+    public Page<ArticleDto> searchArticlePage(SearchType searchType, String searchKeyword, Pageable pageable){
         //      Page<Article>
         Page<Article> articlePage;
-        if (search_keyword==null || search_keyword.isBlank()){
+        if (searchKeyword==null || searchKeyword.isBlank()){
             articlePage = articleRepository.findAll(pageable);
         } else {
             articlePage = switch (searchType){
-                case ID -> articleRepository.findByUserAccount_UserIdContaining(search_keyword, pageable);
-                case TITLE -> articleRepository.findByTitleContaining(search_keyword, pageable);
-                case CONTENT -> articleRepository.findByContentContaining(search_keyword, pageable);
-                case HASHTAG -> articleRepository.findByHashtag(search_keyword, pageable);
+                case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable);
+                case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable);
+                case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable);
+                case HASHTAG -> articleRepository.findByHashtag(searchKeyword, pageable);
             };
         }
         //      Page<Article> -> Page<ArticleDto>
