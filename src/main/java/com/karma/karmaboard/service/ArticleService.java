@@ -3,6 +3,7 @@ package com.karma.karmaboard.service;
 import com.karma.karmaboard.domain.Article;
 import com.karma.karmaboard.domain.type.SearchType;
 import com.karma.karmaboard.repository.ArticleRepository;
+import com.karma.karmaboard.repository.querydsl.ArticleRepositoryCustomImpl;
 import dto.ArticleDto;
 import dto.ArticleUpdateDto;
 import dto.ArticleWithCommentsDto;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 // TODO
 @Slf4j
@@ -75,6 +77,19 @@ public class ArticleService {
 
     public long getArticleCount() {
         return articleRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> searchArticleViaHashtag(String hashtag, Pageable pageable){
+        if (hashtag==null || hashtag.isBlank()){
+            return Page.empty(pageable);
+        }
+        return articleRepository.findByHashtag(hashtag,pageable).map(ArticleDto::from);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getAllHashtags(){
+        return articleRepository.findAllDistinctHashtag();
     }
 
 }

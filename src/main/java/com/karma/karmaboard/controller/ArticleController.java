@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,4 +63,24 @@ public class ArticleController {
         map.addAttribute("totalArticleCount",totalArticleCount);
         return "articles/detail";
     }
+
+    @GetMapping("/search-hashtag")
+    public String searchArticleHashtag(
+            @RequestParam(required = false) String searchKeyword,
+            @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            ModelMap map){
+        Page<ArticleResponse> articles = articleService.searchArticleViaHashtag(
+                searchKeyword, pageable
+        ).map(ArticleResponse::from);
+        List<Integer> pageList = paginationService.getPagination(
+                pageable.getPageSize(), articles.getTotalPages()
+        );
+        List<String> hashtags = articleService.getAllHashtags();
+        map.addAttribute("searchType",SearchType.HASHTAG);
+        map.addAttribute("articles",articles);
+        map.addAttribute("hashtags",hashtags);
+        map.addAttribute("pageList", pageList);
+        return "articles/search-hashtag";
+    }
+
 }

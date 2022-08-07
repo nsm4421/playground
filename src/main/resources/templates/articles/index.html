@@ -10,8 +10,11 @@
 
 <!--Header-->
     <header class="p-3 bg-dark text-white" style="display: flex;justify-content: space-between;align-items: center">
-        <h3>Spring Board Demo</h3>
+        <h3 class="mr-4">Spring Board Demo</h3>
         <ul style="display: flex;list-style: none">
+            <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">
+                <a th:href="${'/articles/search-hashtag'}" th:text="${'#hashtag'}"></a>
+            </button></li>
             <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Login</button></li>
             <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Sign Up</button></li>
         </ul>
