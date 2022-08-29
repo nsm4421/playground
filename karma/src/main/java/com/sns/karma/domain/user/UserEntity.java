@@ -13,7 +13,8 @@ import java.time.Instant;
 @Entity
 @Table(name="users",
         indexes = {
-        @Index(columnList = "username")
+                @Index(columnList = "username"),
+                @Index(columnList = "state")
 })
 @NoArgsConstructor
 public class UserEntity {
@@ -60,10 +61,11 @@ public class UserEntity {
     }
 
     // DTO → Entity
-    public static UserEntity of(String username, String encodedPwd) {
+    public static UserEntity of(String username, String password, OAuthProviderEnum provider) {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(username);
-        userEntity.setPassword(encodedPwd);
+        userEntity.setPassword(password);
+        userEntity.setProvider(provider);
         return userEntity;
     }
 }
