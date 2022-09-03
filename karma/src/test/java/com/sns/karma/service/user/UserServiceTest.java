@@ -1,10 +1,7 @@
 package com.sns.karma.service.user;
 
 import com.sns.karma.domain.user.OAuthProviderEnum;
-import com.sns.karma.domain.user.UserEntity;
 import com.sns.karma.exception.CustomException;
-import com.sns.karma.exception.ErrorCodeEnum;
-import com.sns.karma.fixture.UserEntityFixture;
 import com.sns.karma.repository.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,15 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import javax.transaction.Transactional;
 
 @SpringBootTest
+@Transactional
 class UserServiceTest {
     @Autowired UserService userService;
     @Autowired UserRepository userRepository;
@@ -31,12 +23,7 @@ class UserServiceTest {
         String username="test_username";
         String password="test_password";
         OAuthProviderEnum provider = OAuthProviderEnum.NONE;
-
-        when(userRepository.findByUsername(username))
-                .thenReturn(Optional.empty());
-        when(userRepository.save(any()))
-                .thenReturn(Optional.of(mock(UserEntity.class)));
-
+        // 회원가입
         Assertions.assertDoesNotThrow(()->userService.register(username,password,provider));
     }
 
@@ -46,13 +33,9 @@ class UserServiceTest {
         String username="test_username";
         String password="test_password";
         OAuthProviderEnum provider = OAuthProviderEnum.NONE;
-        UserEntity userEntityFixture = UserEntityFixture.getUserEntityFixture(username, password);
-
-        when(userRepository.findByUsername(username))
-                .thenReturn(Optional.of(mock(UserEntity.class)));
-        when(userRepository.save(any()))
-                .thenReturn(Optional.of(userEntityFixture));
-
+        // 회원가입
+        Assertions.assertDoesNotThrow(()->userService.register(username,password,provider));
+        // 동일한 정보로 회원가입
         Assertions.assertThrows(CustomException.class, ()->userService.register(username,password,provider));
     }
 
@@ -62,11 +45,10 @@ class UserServiceTest {
         String username="test_username";
         String password="test_password";
         OAuthProviderEnum provider = OAuthProviderEnum.NONE;
-
-        UserEntity userEntityFixture = UserEntityFixture.getUserEntityFixture(username, password);
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(userEntityFixture));
-        Assertions.assertThrows(CustomException.class, ()->userService.login(username,password,provider));
+        // 회원가입
+        Assertions.assertDoesNotThrow(()->userService.register(username,password,provider));
+        // 로그인
+        Assertions.assertDoesNotThrow(()->userService.login(username,password,provider));
     }
 
     @Test
@@ -75,8 +57,7 @@ class UserServiceTest {
         String username="test_username";
         String password="test_password";
         OAuthProviderEnum provider = OAuthProviderEnum.NONE;
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        // 로그인
         Assertions.assertThrows(CustomException.class, ()->userService.login(username,password,provider));
     }
 
@@ -87,14 +68,9 @@ class UserServiceTest {
         String password="test_password";
         String wrongPassword="test_wrong_password";
         OAuthProviderEnum provider = OAuthProviderEnum.NONE;
-
-        UserEntity userEntityFixture = UserEntityFixture.getUserEntityFixture(username, password);
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(userEntityFixture));
-
+        // 회원가입
+        Assertions.assertDoesNotThrow(()->userService.register(username,password,provider));
+        // 잘못된 비밀번호로 로그인
         Assertions.assertThrows(CustomException.class, ()->userService.login(username,wrongPassword,provider));
     }
-
-
-
 }
