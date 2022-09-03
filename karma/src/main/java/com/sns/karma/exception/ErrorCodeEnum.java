@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCodeEnum {
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"),
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Invalid password"),
+    INVALID_AUTH_INFO(HttpStatus.UNAUTHORIZED, "Invalid username or password"),
     DUPLICATED_USER_NAME(HttpStatus.CONFLICT, "Duplicated user name"),
     INVALID_PROVIDER(HttpStatus.CONFLICT, "Oauth provider is not valid");
 

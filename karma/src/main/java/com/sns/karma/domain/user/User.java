@@ -1,13 +1,16 @@
 package com.sns.karma.domain.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 
-@Getter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Long id;
     private String username;
@@ -21,18 +24,18 @@ public class User {
     private Timestamp deletedAt;
 
     // Entity → DTO
-    public static User from(UserEntity e) {
+    public static User from(UserEntity userEntity) {
         return new User(
-                e.getId(),
-                e.getUsername(),
-                e.getPassword(),
-                e.getEmail(),
-                e.getRole(),
-                e.getProvider(),
-                e.getState(),
-                e.getRegisteredAt(),
-                e.getUpdatedAt(),
-                e.getDeletedAt()
+                userEntity.getId(),
+                userEntity.getUsername(),
+                userEntity.getPassword(),
+                userEntity.getEmail(),
+                userEntity.getRole(),
+                userEntity.getProvider(),
+                userEntity.getState(),
+                userEntity.getRegisteredAt(),
+                userEntity.getUpdatedAt(),
+                userEntity.getRemovedAt()
         );
     }
 }
