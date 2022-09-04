@@ -2,7 +2,6 @@ package com.sns.karma.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
@@ -21,7 +20,7 @@ public class User {
     private UserStateEnum state;
     private Timestamp registeredAt;
     private Timestamp updatedAt;
-    private Timestamp deletedAt;
+    private Timestamp removedAt;
 
     // Entity → DTO
     public static User from(UserEntity userEntity) {

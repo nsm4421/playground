@@ -10,13 +10,11 @@ import lombok.Getter;
 public class UserRegisterResponse {
     private Long id;
     private String username;
-    private UserRoleEnum role;
 
     public static UserRegisterResponse from(User user){
         return new UserRegisterResponse(
                 user.getId(),
-                user.getUsername(),
-                user.getRole()
+                user.getUsername()
         );
     }
 }

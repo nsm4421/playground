@@ -13,6 +13,6 @@ spring.jpa:
   show-sql: true
 
 jwt:
-  secret-key: "1221"
+  secret-key: "<--- JWT 인증토큰 생성 시 사용할 인증 키 <----"
   # 30 days
-  token.expired-time-ms: 2592000000
+  duration: 2592000000

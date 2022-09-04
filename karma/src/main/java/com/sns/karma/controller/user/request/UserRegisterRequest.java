@@ -12,9 +12,7 @@ public class UserRegisterRequest {
 
     private String username;
     private String password;
-//    TODO
-//    private String email;
-//    private UserRoleEnum role;
+    private String email;
     private OAuthProviderEnum provider;
 
 }
