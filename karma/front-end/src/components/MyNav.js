@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { Navbar, Container, Nav} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 
@@ -9,16 +10,16 @@ const links = [
         HREF:"/"
     },
     {
-        LABEL:"PAGE1",
-        HREF:"/page1"
+        LABEL:"Feed",
+        HREF:"/feed"
     },
     {
-        LABEL:"PAGE2",
-        HREF:"/page2"
+        LABEL:"Register",
+        HREF:"/register"
     },
     {
-        LABEL:"PAGE3",
-        HREF:"/page3"
+        LABEL:"Login",
+        HREF:"/login"
     },
     {
         LABEL:"PAGE4",
@@ -37,6 +38,15 @@ const MyNav = () => {
         setSelected(i);
         navigator(links[i].HREF);
     }
+
+    useEffect(()=>{
+        const currentHref = window.location.href;
+        links.map((l, i)=>{
+            if (currentHref.toUpperCase().includes(l.HREF.toUpperCase())){
+                setSelected(i);
+            }
+        })
+    }, [])
 
     return (
         <div>
