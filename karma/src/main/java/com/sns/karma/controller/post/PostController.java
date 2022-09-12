@@ -1,6 +1,7 @@
 package com.sns.karma.controller.post;
 
 import com.sns.karma.controller.CustomResponse;
+import com.sns.karma.model.post.Post;
 import com.sns.karma.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -13,12 +14,44 @@ public class PostController {
 
     private final PostService postService;
 
+    // 게시글 작성
     @PostMapping("/write")
-    public CustomResponse<Void> writePost(@RequestBody WritePostRequest writePostRequest, Authentication authentication){
+    public CustomResponse<WritePostResponse> writePost(@RequestBody WritePostRequest writePostRequest, Authentication authentication){
+        // 요청 parsing
         String title = writePostRequest.getTitle();
         String body = writePostRequest.getBody();
         String author = authentication.getName();
-        postService.writePost(title, body, author);
+
+        // 게시글 작성
+        Post post = postService.writePost(title, body, author);
+
+        // 응답 반환
+        return CustomResponse.success(WritePostResponse.fromPost(post));
+    }
+
+    // 게시글 수정
+    @PutMapping("/{postId}")
+    public CustomResponse<ModifyPostResponse> modifyPost(@PathVariable Long postId,
+                           @RequestBody ModifyPostRequest modifyPostRequest,
+                           Authentication authentication){
+        // 요청 parsing
+        String title = modifyPostRequest.getTitle();
+        String body = modifyPostRequest.getBody();
+        String author = authentication.getName();
+
+        // 게시글 수정
+        Post post = postService.modifyPost(title, body, author, postId);
+
+        // 응답 반환
+        return CustomResponse.success(ModifyPostResponse.fromPost(post));
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/{postId}")
+    public CustomResponse<Void> deletePost(@PathVariable Long postId,
+                                           Authentication authentication){
+        String author = authentication.getName();
+        postService.deletePost(author, postId);
         return CustomResponse.success();
     }
 }

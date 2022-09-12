@@ -2,21 +2,15 @@ package com.sns.karma.service;
 
 import com.sns.karma.exception.CustomException;
 import com.sns.karma.exception.ErrorCode;
+import com.sns.karma.model.post.Post;
 import com.sns.karma.model.post.PostEntity;
-import com.sns.karma.model.user.Provider;
-import com.sns.karma.model.user.User;
 import com.sns.karma.model.user.UserEntity;
 import com.sns.karma.repository.PostEntityRepository;
 import com.sns.karma.repository.UserEntityRepository;
-import com.sns.karma.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,17 +24,50 @@ public class PostService {
     @Value("${jwt.duration}") private Long duration;
 
     // 게시글 작성
-    public void writePost(String title, String body, String author){
+    public Post writePost(String title, String body, String author){
         // 존재하는 유저명인지 확인
-        UserEntity userEntity = userEntityRepository.findByUserName(author)
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND, null));
+        UserEntity userEntity = ifExistUserNameThenUserEntityElseError(author);
         // post entity 생성
         PostEntity postEntity = PostEntity.of(title, body, userEntity);
         // 저장
-        postEntityRepository.save(postEntity);
+        return Post.fromEntity(postEntityRepository.save(postEntity));
     }
 
+    // 게시글 수정
+    public Post modifyPost(String title, String body, String author, Long postId){
+        // 존재하는 유저명인지 확인
+        UserEntity userEntity = ifExistUserNameThenUserEntityElseError(author);
+        // 존재하는 포스팅인지 확인
+        PostEntity postEntity = ifExistPostIdThenPostEntityElseError(postId);
+        // 로그인한 유저와 포스팅을 작성한 유저가 동일한지 확인
+        if (!postEntity.getUser().equals(userEntity)){
+            throw new CustomException(ErrorCode.PERMISSION_DENIED, null);
+        }
+        // post entity 수정
+        postEntity.setTitle(title);
+        postEntity.setBody(body);
+        // 저장
+        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity));
+    };
 
-
-
+    public void deletePost(String author, Long postId){
+        // 존재하는 유저명인지 확인
+        UserEntity userEntity = ifExistUserNameThenUserEntityElseError(author);
+        // 존재하는 포스팅인지 확인
+        PostEntity postEntity = ifExistPostIdThenPostEntityElseError(postId);
+        // 로그인한 유저와 포스팅을 작성한 유저가 동일한지 확인
+        if (!postEntity.getUser().equals(userEntity)){
+            throw new CustomException(ErrorCode.PERMISSION_DENIED, null);
+        }
+        // 삭제
+        postEntityRepository.delete(postEntity);
+    }
+    private UserEntity ifExistUserNameThenUserEntityElseError(String username){
+        return userEntityRepository.findByUserName(username)
+                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND, null));
+    }
+    private PostEntity ifExistPostIdThenPostEntityElseError(Long postId){
+        return postEntityRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND, null));
+    }
 }
