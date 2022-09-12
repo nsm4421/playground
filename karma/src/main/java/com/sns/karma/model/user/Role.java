@@ -1,10 +1,11 @@
-package com.sns.karma.domain.user;
+package com.sns.karma.model.user;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum UserRoleEnum {
-    USER("일반유저"),
+public enum Role {
+    USER("유저"),
     ADMIN("관리자");
+
     private final String name;
 }

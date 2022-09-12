@@ -1,51 +1,51 @@
 package com.sns.karma.controller.user;
 
-import com.sns.karma.controller.Response;
-import com.sns.karma.controller.user.request.UserLoginRequest;
-import com.sns.karma.controller.user.request.UserRegisterRequest;
-import com.sns.karma.controller.user.response.UserLoginResponse;
-import com.sns.karma.controller.user.response.UserRegisterResponse;
-import com.sns.karma.domain.user.OAuthProviderEnum;
-import com.sns.karma.domain.user.User;
-import com.sns.karma.repository.user.UserRepository;
-import com.sns.karma.service.user.UserService;
+import com.sns.karma.controller.CustomResponse;
+import com.sns.karma.model.user.Provider;
+import com.sns.karma.model.user.User;
+import com.sns.karma.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
-     private final UserService userService;
+    private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    // 이메일 회원가입
     @PostMapping("/register")
-    public Response<UserRegisterResponse> register(@RequestBody UserRegisterRequest userRegisterRequest){
-        // Parsing Request
+    public CustomResponse<UserRegisterResponse> register(@RequestBody UserRegisterRequest userRegisterRequest){
+        // 회원가입 요청 parsing
+        String email = userRegisterRequest.getEmail();
         String username = userRegisterRequest.getUsername();
         String password = userRegisterRequest.getPassword();
-        String email = userRegisterRequest.getEmail();
-        OAuthProviderEnum provider = userRegisterRequest.getProvider();
 
-        // 회원가입 시도
-        User user = userService.register(username, password, email, provider);
+        // 회원가입
+        User user = userService.register(email, username, password, Provider.EMAIL);
 
-        // Response
+        // 응답 반환
         UserRegisterResponse userRegisterResponse = UserRegisterResponse.from(user);
-        return Response.success(userRegisterResponse);
+        return CustomResponse.success(userRegisterResponse);
     }
 
+    // 유저명 & 비밀번호 로그인
     @PostMapping("/login")
-    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
-        // Parsing Request
+    public CustomResponse<UserLoginResponse>login(@RequestBody UserLoginRequest userLoginRequest){
+        // 로그인 요청 parsing
         String username = userLoginRequest.getUsername();
         String password = userLoginRequest.getPassword();
-        OAuthProviderEnum provider = userLoginRequest.getProvider();
 
-        // 인증토큰 반환
-        String token = userService.login(username, password, provider);
-        return Response.success(new UserLoginResponse(token));
+        // 로그인
+        String authToken = userService.login(username, password);
+        
+        // 응답 반환
+        return CustomResponse.success(new UserLoginResponse(authToken));
     }
+
 }

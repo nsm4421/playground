@@ -10,19 +10,46 @@ import java.security.Key;
 import java.util.Date;
 
 public class JwtUtil {
-    public static String generateToken(String username, String key, long duration){
+    public static Boolean validate(String token, String userName, String key) {
+        String usernameByToken = getUsername(token, key);
+        return usernameByToken.equals(userName) && !isTokenExpired(token, key);
+    }
+
+    public static Claims extractAllClaims(String token, String key) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey(key))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public static String getUsername(String token, String key) {
+        return extractAllClaims(token, key).get("username", String.class);
+    }
+
+    private static Key getSigningKey(String secretKey) {
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public static Boolean isTokenExpired(String token, String key) {
+        Date expiration = extractAllClaims(token, key).getExpiration();
+        return expiration.before(new Date());
+    }
+
+    public static String generateAccessToken(String username, String key, long duration) {
+        return doGenerateToken(username, duration, key);
+    }
+
+    private static String doGenerateToken(String username, long duration, String key) {
         Claims claims = Jwts.claims();
-        claims.put(key, username);
-        Long currentTimeMillis = System.currentTimeMillis();
+        claims.put("username", username);
+
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(new Date(currentTimeMillis))               // 발행일자
-                .setExpiration(new Date(currentTimeMillis+duration))    // 만료일자
-                .signWith(generateKey(key) ,SignatureAlgorithm.HS256)   // 키 & 암호화 알고리즘
-                .compact();                                             // toString
-    }
-    private static Key generateKey(String key){
-        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + duration))
+                .signWith(getSigningKey(key), SignatureAlgorithm.HS256)
+                .compact();
     }
 }

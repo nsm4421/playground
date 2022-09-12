@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CustomException extends RuntimeException{
-    private ErrorCodeEnum errorCode;
+    private ErrorCode errorCode;
     private String message = null;
 
 
@@ -15,7 +15,7 @@ public class CustomException extends RuntimeException{
         if (message == null) {
             return errorCode.getMessage();
         } else {
-            return String.format("Error Code : %s | Error message : %s", errorCode.getMessage(), message);
+            return String.format("Error Code : %s \n Error message : %s", errorCode.getMessage(), message);
         }
     }
 }
