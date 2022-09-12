@@ -9,6 +9,9 @@ import com.sns.karma.repository.PostEntityRepository;
 import com.sns.karma.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +53,7 @@ public class PostService {
         return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity));
     };
 
+    // 게시글 삭제
     public void deletePost(String author, Long postId){
         // 존재하는 유저명인지 확인
         UserEntity userEntity = ifExistUserNameThenUserEntityElseError(author);
@@ -62,6 +66,18 @@ public class PostService {
         // 삭제
         postEntityRepository.delete(postEntity);
     }
+
+    // 전체 게시글 목록
+    public Page<Post> getAllPost(Pageable pageable){
+        return postEntityRepository.findAll(pageable).map(Post::fromEntity);
+    }
+
+    // 특정 유저의 게시글 목록
+    public Page<Post> getMyPost(Pageable pageable, String username){
+        UserEntity userEntity = ifExistUserNameThenUserEntityElseError(username);
+        return postEntityRepository.findAllByUser(userEntity, pageable).map(Post::fromEntity);
+    }
+
     private UserEntity ifExistUserNameThenUserEntityElseError(String username){
         return userEntityRepository.findByUserName(username)
                 .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND, null));
