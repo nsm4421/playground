@@ -1,4 +1,4 @@
-package com.sns.karma.controller.post;
+package com.sns.karma.controller.post.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

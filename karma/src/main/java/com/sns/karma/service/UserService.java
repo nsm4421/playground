@@ -29,6 +29,15 @@ public class UserService {
                 .orElseThrow(()->{throw new CustomException(ErrorCode.USER_NOT_FOUND, null);});
     }
 
+    // 유저명 중복여부
+    public boolean isExistUsername(String username){
+        return userEntityRepository.findByUserName(username).isPresent();
+    }
+    // 유저명 중복여부
+    public boolean isExistEmail(String email){
+        return userEntityRepository.findByUserName(email).isPresent();
+    }
+
     // 이메일 회원가입
     public User register(String email, String username, String password, Provider provider){
         // 이미 사용중인 유저명 확인

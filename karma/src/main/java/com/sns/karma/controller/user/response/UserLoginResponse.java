@@ -1,4 +1,4 @@
-package com.sns.karma.controller.user;
+package com.sns.karma.controller.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

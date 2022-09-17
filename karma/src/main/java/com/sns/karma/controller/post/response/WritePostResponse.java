@@ -1,8 +1,6 @@
-package com.sns.karma.controller.post;
+package com.sns.karma.controller.post.response;
 
-import com.sns.karma.controller.user.UserResponse;
 import com.sns.karma.model.post.Post;
-import com.sns.karma.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

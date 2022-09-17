@@ -28,8 +28,8 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                // 회원가입&로그인 페이지는 JWT 확인 x
-                .antMatchers("/api/*/user/register", "/api/*/user/login").permitAll()
+                // 회원가입&로그인 관련 페이지는 JWT 확인 x
+                .antMatchers("/api/*/user/register", "/api/*/user/login","/api/*/user/check/*").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
                 .and()

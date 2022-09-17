@@ -5,79 +5,138 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const Btn = ({onClick, label, isLoading, variant})=>{
+    return <Button variant={variant??"primary"} style={{width:'100px'}} disabled={isLoading} onClick={onClick}>{label}</Button>
+}
+
 const RegisterWithUsernameAndPassoword = () => {
     
-    const Btn = ({onClick, label})=>{
-        return <Button variant="success" style={{width:'100px'}} onClick={onClick}>{label}</Button>
-    }
-    const baseUrl = "api/v1/user";
+    const baseUrl = "http://localhost:8080/api/v1/user";
     const navigator = useNavigate();
+    
+    // 유저가 입력한 정보
     const [userInput, setUserInput] = useState({
         email:"",
-        isValidEmail:false,
         username:"",
-        isValidUsername:false,
         password:"",
         confirmPassword:"",
-        showPassword:false
+        validEmail:"",                          // 서버로부터 사용 가능한 이메일라고 확인 받은 이메일 저장
+        validUsername:""                        // 서버로부터 사용 가능한 유저명이라고 확인 받은 유저명 저장
     });
+    
+    
+    const [controlls, setControlls] = useState({
+        isValidEmail:false,                     // 이메일 유효 여부
+        isValidUsername:false,                  // 유저명 유효 여부
+        isValidPassword:false,                  // 비밀번호 유효 여부
+        showPassword:false,                     // 비밀번호 보이기 여부
+        loadingEmailButton:false,               // 이메일 유효성 로딩중 여부
+        loadingUsernameButton:false,            // 유저명 유효성 로딩중 여부
+        loadingSubmit:false                     // 제출 후 로딩중 여부
+    })
+    
+    // 이메일 유효성 여부
+    useEffect(()=>{
+        handleControllButtons("isValidEmail")(userInput.email !== "" & userInput.email !== userInput.validEmail);
+    }, [userInput.email]);
 
+    // 유저명 유효성 여부
+    useEffect(()=>{
+        handleControllButtons("isValidUsername")(userInput.username !== "" & userInput.username !== userInput.validUsername);
+    }, [userInput.username]);
+
+    // 비밀번호 유효성 여부
+    useEffect(()=>{
+        handleControllButtons("isValidPassword")((userInput.password !== "") & (userInput.password === userInput.confirmPassword));
+    }, [userInput.password, userInput.confirmPassword]);
+    
+
+    // userInput object 다루는 함수
     const handleUserInput = (key) => (newValue) => {
         setUserInput({...userInput, [key]:newValue})
     };
 
+    // controlls object 다루는 함수
+    const handleControllButtons = (key) => (newValue) => {
+        setControlls({...controlls, [key]:newValue})
+    };
+
+    // 이메일 유효성 검사 버튼 동작
     const handleClickEmailValidateButton = (e)=>{
-        const requestUrl = `${baseUrl}/~~~`
+        // 로딩중 버튼 못 누르게 만들기
+        handleControllButtons('loadingEmailButton')(true);
+        // 요청 보낼 주소 & 데이터
+        const requestUrl = `${baseUrl}/check/is-exist-email`
+        const data = {email:userInput.email}
         e.preventDefault();
-        // TODO : API 개발
-        // axios.get(requestUrl)
-        // .then((res)=>{
-        //     handleUserInput('isValidUsername')(res.result);
-        // })
-        // .catch((e)=>{
-        //     console.log(e);
-        //     alert("ERROR");
-        // })
-        handleUserInput('isValidEmail')(true);
+        // 요청 보내기
+        axios.post(requestUrl, data)
+        .then((res)=>{
+            if (res.result === true){
+                handleUserInput('validEmail')(userInput.email);
+        }})
+        .catch((e)=>{
+            console.log(e);
+            alert("ERROR");
+        })
+        .finally(()=>{
+            handleControllButtons('loadingEmailButton')(false);
+        })
     }
 
+    // 유저명 유효성 검사 버튼 동작
     const handleClickUsernameValidation = (e)=>{
-        const requestUrl = `${baseUrl}/~~~`
+        // 로딩중 버튼 못 누르게 만들기
+        handleControllButtons('loadingUsernameButton')(true);
+        // 요청 보낼 주소 & 데이터
+        const requestUrl = `${baseUrl}/check/is-exist-username`
+        const data = {username:userInput.username}
         e.preventDefault();
-        // TODO : API 개발
-        // axios.get(requestUrl)
-        // .then((res)=>{
-        //     handleUserInput('isValidUsername')(res.result);
-        // })
-        // .catch((e)=>{
-        //     console.log(e);
-        //     alert("ERROR");
-        // })
-        handleUserInput('isValidUsername')(true);
+        // 요청 보내기
+        axios.post(requestUrl, data)
+        .then((res)=>{
+            if (res.result === true){handleControllButtons('loadingUsernameButton')(true)};
+            handleUserInput('validUsername')(userInput.username);
+        })
+        .catch((e)=>{
+            console.log(e);
+            alert("ERROR");
+        })
+        .finally(()=>{
+            // 버튼 살리기
+            handleControllButtons('loadingUsernameButton')(false);
+        })
     }
 
+    // 제출후 유효성 검사 버튼 동작
     const handleSubmit = (e)=>{
-        const requestUrl = `${baseUrl}/~~~`
-        // e.preventDefault();
-        // TODO : API 개발
-        // axios.post({
-            // username:userInput.username,
-            // passowrd:userInput.password,
-            // email:userInput.email,
-            // provider:"NONE"
-        // })
-        // .then((res)=>{
-        // alert("Sign Up Success");
-        //     navigate("/login");
-        // })
-        // .catch((e)=>{
-        //     console.log(e);
-        //     alert("ERROR");
-        // })
+        // 로딩중 버튼 못 누르게 만들기
+        handleControllButtons("loadingSubmit")(true);
+        // 요청 보낼 주소 & 데이터
+        const requestUrl = `${baseUrl}/register`
+        const data = {email:userInput.email, username:userInput.username, password:userInput.password, provider:"NONE"}
+        e.preventDefault();
+        // 요청 보내기
+        axios.post(requestUrl, data)
+        .then((res)=>{
+            if (res.resultCode === "SUCCESS"){
+                alert(`Sign Up Succeed ~ ${res.result.username}`);
+                navigator("/login");
+            } else {
+                alert(`Sign Up Failed ~ !`);
+            }
+        })
+        .catch((e)=>{
+            console.log(e);
+            alert("ERROR");
+        })
+        .finally(()=>{
+            handleControllButtons("loadingSubmit")(false);
+        })
     }
 
     const handleClickShowPassoword = ()=>{
-        handleUserInput('showPassword')(!userInput.showPassword);
+        handleUserInput('showPassword')(!controlls.showPassword);
     }
 
     useEffect(()=>{
@@ -100,11 +159,13 @@ const RegisterWithUsernameAndPassoword = () => {
                             style={{textAlign:'left'}} type="email" placeholder="Email Address..."/>
                     </Col>
                     <Col sm={2}>
-                        {userInput.isValidEmail?null:<Btn label={"Check"} onClick={handleClickEmailValidateButton}/>}
+                        {controlls.isValidEmail
+                        ?null
+                        :<Btn isLoading={controlls.loadingEmailButton} label={"Check"} onClick={handleClickEmailValidateButton}/>}
                     </Col>                    
                 </Row>
                 <Form.Text className="text-muted d-flex">
-                    {(userInput.isValidEmail & userInput.email != "" )?"You may use this email":"Check email validation"}
+                    {controlls.isValidEmail?"You may use this email":"Check email validation"}
                 </Form.Text>
             </Form.Group>
 
@@ -118,11 +179,11 @@ const RegisterWithUsernameAndPassoword = () => {
                             style={{textAlign:'left'}} type="text" placeholder="Username..."/>
                     </Col>
                     <Col sm={2}>
-                        {userInput.isValidUsername?null:<Btn label={"Check"} onClick={handleClickUsernameValidation}/>}
+                        <Btn isLoading={controlls.loadingUsernameButton} label={"Check"} onClick={handleClickUsernameValidation}/>
                     </Col>                    
                 </Row>
                 <Form.Text className="text-muted d-flex">
-                    {(userInput.isValidUsername & userInput.username != "" )?"You may use this username":"Check username validation"}
+                    {controlls.isValidUsername?"You may use this username":"Check username validation"}
                 </Form.Text>
             </Form.Group>
 
@@ -135,11 +196,11 @@ const RegisterWithUsernameAndPassoword = () => {
                         <Form.Control
                             onChange={e=>handleUserInput('password')(e.target.value)}
                             style={{textAlign:'left'}} 
-                            type={userInput.showPassword ? null : "password"} 
+                            type={controlls.showPassword ? null : "password"} 
                             placeholder="Password..."/>
                     </Col>
                     <Col sm={2}>
-                        <Btn label={userInput.showPassword?"Hide":"Show"} onClick={handleClickShowPassoword}/>
+                        <Btn label={controlls.showPassword?"Hide":"Show"} onClick={handleClickShowPassoword}/>
                     </Col>                    
                 </Row>
             </Form.Group>
@@ -152,16 +213,16 @@ const RegisterWithUsernameAndPassoword = () => {
                         <Form.Control
                             onChange={e=>handleUserInput('passwordConfirm')(e.target.value)}
                             style={{textAlign:'left'}} 
-                            type={userInput.showPassword ? null : "password"} 
+                            type={controlls.showPassword ? null : "password"} 
                             placeholder="Password Confirm..."/>
                     </Col>            
                 </Row>
                 <Form.Text className="text-muted d-flex">
-                    {(userInput.password != userInput.confirmPassword )?"password and confirm password is not matched":null}
+                    {controlls.isValidPassword?"password and confirm password is not matched":null}
                 </Form.Text>
             </Form.Group>
 
-            <Button variant="primary" type="submit" onClick={handleSubmit}>Submit</Button>
+            <Btn variant={"success"} label={"Submit"} isLoading={controlls.loadingSubmit} onClick={handleSubmit}>Submit</Btn>
 
       </Form>
     );
