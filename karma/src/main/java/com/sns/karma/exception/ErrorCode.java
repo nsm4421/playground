@@ -16,7 +16,8 @@ public enum ErrorCode {
     DB_ERROR_ON_USER_SERVICE(HttpStatus.CONFLICT, "User Servide에서 DB 에러가 발생했습니다."),
     INVALID_PROVIDER(HttpStatus.CONFLICT, "Provider가 유효하지 않습니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "포스팅이 존재하지 않습니다."),
-    PERMISSION_DENIED(HttpStatus.UNAUTHORIZED, "인증이 거부당했습니다.")
+    PERMISSION_DENIED(HttpStatus.UNAUTHORIZED, "인증이 거부당했습니다."),
+    ALREADY_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 눌렀습니다.")
     ;
 
     private final HttpStatus status;
