@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/post/like")
+@RequestMapping("/api/v1/post")
 public class LikeController {
 
     private final LikeService likeService;
 
     // 좋아요 개수
-    @GetMapping("/{postId}")
+    @GetMapping("/{postId}/like")
     public CustomResponse<Long> getLikeNum(@PathVariable Long postId){
         return CustomResponse.success(likeService.getLikeNum(postId));
     }
 
     // 좋아요
-    @PostMapping("/{postId}")
+    @PostMapping("/{postId}/like")
     public CustomResponse<Void> likePost(@PathVariable Long postId, Authentication authentication){
         likeService.addLike(postId, authentication.getName());
         return CustomResponse.success();

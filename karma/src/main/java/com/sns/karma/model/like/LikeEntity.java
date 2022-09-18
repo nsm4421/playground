@@ -15,17 +15,15 @@ import java.time.Instant;
 @Setter
 @Getter
 @Entity
-@Table(name = "\"like\"")
-@SQLDelete(sql = "UPDATE \"EVALUATION\" SET removed_at = NOW() WHERE id=?")
+@Table(name = "\"like\"",
+    indexes = {@Index(name = "index_likeTable_onPostId", columnList = "post_id")})
+@SQLDelete(sql = "UPDATE \"like\" SET removed_at = NOW() WHERE id=?")
 @Where(clause = "removed_at is NULL")
 @NoArgsConstructor
 public class LikeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = null;
-
-    @Column(name = "body", columnDefinition = "TEXT", nullable = false)
-    private String body;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
