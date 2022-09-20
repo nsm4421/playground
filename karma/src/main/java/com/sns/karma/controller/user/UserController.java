@@ -1,17 +1,21 @@
 package com.sns.karma.controller.user;
 
 import com.sns.karma.controller.CustomResponse;
+import com.sns.karma.controller.user.response.GetNotificationResponse;
 import com.sns.karma.controller.user.request.IsExistEmailRequest;
 import com.sns.karma.controller.user.request.IsExistUsernameRequest;
 import com.sns.karma.controller.user.request.UserLoginRequest;
 import com.sns.karma.controller.user.request.UserRegisterRequest;
 import com.sns.karma.controller.user.response.UserLoginResponse;
 import com.sns.karma.controller.user.response.UserRegisterResponse;
+import com.sns.karma.model.notification.Notification;
 import com.sns.karma.model.user.Provider;
 import com.sns.karma.model.user.User;
 import com.sns.karma.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
     // 유저명 중복여부
     @PostMapping("/check/is-exist-username")
     public CustomResponse<Boolean> isExistUsername(@RequestBody IsExistUsernameRequest isExistUsernameRequest){
@@ -67,4 +69,14 @@ public class UserController {
         return CustomResponse.success(new UserLoginResponse(authToken));
     }
 
+    // 알림 가져오기
+    @GetMapping("/notification")
+    public CustomResponse<Page<GetNotificationResponse>> getNotification(
+            Pageable pageable, Authentication authentication){
+        String username = authentication.getName();
+        Page<GetNotificationResponse> getNotificationResponses = userService
+                .getNotification(username, pageable)
+                .map(GetNotificationResponse::fromDto);
+        return CustomResponse.success(getNotificationResponses);
+    }
 }

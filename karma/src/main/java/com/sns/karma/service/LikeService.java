@@ -3,10 +3,14 @@ package com.sns.karma.service;
 import com.sns.karma.exception.CustomException;
 import com.sns.karma.exception.ErrorCode;
 import com.sns.karma.model.like.LikeEntity;
+import com.sns.karma.model.notification.NotificationArgs;
+import com.sns.karma.model.notification.NotificationEntity;
+import com.sns.karma.model.notification.NotificationType;
 import com.sns.karma.model.post.Post;
 import com.sns.karma.model.post.PostEntity;
 import com.sns.karma.model.user.UserEntity;
 import com.sns.karma.repository.LikeEntityRepository;
+import com.sns.karma.repository.NotificationEntityRepository;
 import com.sns.karma.repository.PostEntityRepository;
 import com.sns.karma.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,7 @@ public class LikeService {
     private final UserEntityRepository userEntityRepository;
     private final PostEntityRepository postEntityRepository;
     private final LikeEntityRepository likeEntityRepository;
+    private final NotificationEntityRepository notificationEntityRepository;
 
     // 좋아요
     @Transactional
@@ -31,7 +36,13 @@ public class LikeService {
         UserEntity userEntity = ifExistUserNameThenUserEntityElseError(username);
         PostEntity postEntity = ifExistPostIdThenPostEntityElseError(postId);
         LikeEntity likeEntity = ifExistLikeEntityElseError(userEntity, postEntity);
+        // 좋아요
         likeEntityRepository.save(likeEntity);
+        // 알림
+        NotificationArgs args = new NotificationArgs(userEntity.getId(), postId);
+        NotificationEntity notificationEntity = NotificationEntity
+                .of(userEntity, NotificationType.NEW_LIKE_ON_POST, args);
+        notificationEntityRepository.save(notificationEntity);
     }
 
     // 좋아요 개수

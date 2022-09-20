@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +19,6 @@ public class PostService {
 
     private final UserEntityRepository userEntityRepository;
     private final PostEntityRepository postEntityRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;  // password encoder
 
     @Value("${jwt.secret-key}") private String secretKey;
     @Value("${jwt.duration}") private Long duration;
