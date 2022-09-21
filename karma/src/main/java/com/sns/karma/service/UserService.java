@@ -38,16 +38,14 @@ public class UserService {
     // 유저명 중복여부
     public boolean isExistUsername(String username){ return userEntityRepository.findByUserName(username).isPresent();}
     // 이메일 중복여부
-    public boolean isExistEmail(String email){
-        return userEntityRepository.findByUserName(email).isPresent();
-    }
+    public boolean isExistEmail(String email){ return userEntityRepository.findByEmail(email).isPresent(); }
 
     // 이메일 회원가입
     public User register(String email, String username, String password, Provider provider){
         // 이미 사용중인 유저명 확인
-        ifExistUserNameThenUserEntityElseError(username);
+        if(isExistUsername(username)){throw new CustomException(ErrorCode.DUPLICATED_USER_NAME, null);};
         // 이미 사용중인 이메일인지 확인
-        ifExistEmailThenUserEntityElseError(email);
+        if(isExistEmail(email)){throw new CustomException(ErrorCode.DUPLICATED_EMAIL, null);};
         // 패스워드 Encoding
         String encodedPassword = bCryptPasswordEncoder.encode(password);
         // 유저정보 저장

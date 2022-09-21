@@ -13,41 +13,35 @@ const LoginWithUsernameAndPassword = () => {
     
     const baseUrl = "http://localhost:8080/api/v1/user";
     const navigator = useNavigate();
-    
-    // 유저가 입력한 정보
+
     const [userInput, setUserInput] = useState({
         username:"",
         password:"",
     });
         
     const [controlls, setControlls] = useState({
-        showPassword:false,                     // 비밀번호 보이기 여부
-        loadingSubmit:false                     // 제출 후 로딩중 여부
+        showPassword:false,                   
+        isLoading:false                    
     })
     
-    // userInput object 다루는 함수
     const handleUserInput = (key) => (newValue) => {
         setUserInput({...userInput, [key]:newValue})
     };
 
-    // controlls object 다루는 함수
     const handleControllButtons = (key) => (newValue) => {
         setControlls({...controlls, [key]:newValue})
     };
 
-    // 제출후 유효성 검사 버튼 동작
     const handleSubmit = (e)=>{
-        // 로딩중 버튼 못 누르게 만들기
-        handleControllButtons("loadingSubmit")(true);
-        // 요청 보낼 주소 & 데이터
+        handleControllButtons("isLoading")(true);
         const requestUrl = `${baseUrl}/login`
         const data = {username:userInput.username, password:userInput.password}
         e.preventDefault();
-        // 요청 보내기
         axios.post(requestUrl, data)
         .then((res)=>{
-            if (res.resultCode === "SUCCESS"){
-                const authToken = res.result.authToken??""
+            console.log(res)
+            if (res.data.resultCode === "SUCCESS"){
+                const authToken = res.data.result.authToken??""
                 localStorage.setItem("karma-token", authToken);
                 navigator("/")
             } else {
@@ -55,16 +49,15 @@ const LoginWithUsernameAndPassword = () => {
             }
         })
         .catch((e)=>{
-            console.log(e);
-            alert("ERROR");
+            alert(`Error : ${e.response.data.resultCode}`);
         })
         .finally(()=>{
-            handleControllButtons("loadingSubmit")(false);
+            handleControllButtons("isLoading")(false);
         })
     }
 
     const handleClickShowPassoword = ()=>{
-        handleUserInput('showPassword')(!controlls.showPassword);
+        handleControllButtons('showPassword')(!controlls.showPassword);
     }
 
     return (
@@ -99,7 +92,7 @@ const LoginWithUsernameAndPassword = () => {
                 </Row>
             </Form.Group>
 
-            <Btn variant={"success"} label={"Submit"} isLoading={controlls.loadingSubmit} onClick={handleSubmit}/>
+            <Btn variant={"success"} label={"Submit"} isLoading={controlls.isLoading} onClick={handleSubmit}/>
 
       </Form>
     );

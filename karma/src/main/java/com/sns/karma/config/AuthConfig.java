@@ -29,8 +29,13 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 // 회원가입&로그인 관련 페이지는 JWT 확인 x
-                .antMatchers("/api/*/user/register", "/api/*/user/login","/api/*/user/check/*").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/*/user/register",
+                        "/api/*/user/login",
+                        "/api/*/user/check/is-exist-username",
+                        "/api/*/user/check/is-exist-email")
+                .permitAll()
+                .antMatchers("/api/**")
+                .authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
