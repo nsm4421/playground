@@ -22,7 +22,7 @@ public class PostController {
     private final PostService postService;
 
     // 게시글 작성
-    @PostMapping("/{postId}")
+    @PostMapping
     public CustomResponse<WritePostResponse> writePost(@RequestBody WritePostRequest writePostRequest,
                                                        Authentication authentication) {
         // 요청 parsing

@@ -66,7 +66,7 @@ public class UserController {
         String authToken = userService.login(username, password);
         
         // 응답 반환
-        return CustomResponse.success(new UserLoginResponse(authToken));
+        return CustomResponse.success(new UserLoginResponse(username, authToken));
     }
 
     // 알림 가져오기

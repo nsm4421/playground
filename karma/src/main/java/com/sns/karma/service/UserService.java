@@ -26,7 +26,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserEntityRepository userEntityRepository;
-    private final PostEntityRepository postEntityRepository;
     private final NotificationEntityRepository notificationEntityRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;  // password encoder
 
@@ -38,14 +37,26 @@ public class UserService {
     // 유저명 중복여부
     public boolean isExistUsername(String username){ return userEntityRepository.findByUserName(username).isPresent();}
     // 이메일 중복여부
-    public boolean isExistEmail(String email){ return userEntityRepository.findByEmail(email).isPresent(); }
+    public boolean isExistEmail(String email){
+        return userEntityRepository.findByUserName(email).isPresent();
+    }
 
     // 이메일 회원가입
     public User register(String email, String username, String password, Provider provider){
         // 이미 사용중인 유저명 확인
-        if(isExistUsername(username)){throw new CustomException(ErrorCode.DUPLICATED_USER_NAME, null);};
+        if (isExistUsername(username)){
+            throw new CustomException(
+                    ErrorCode.DUPLICATED_USER_NAME,
+                    String.format("username %s is already exists")
+            );
+        }
         // 이미 사용중인 이메일인지 확인
-        if(isExistEmail(email)){throw new CustomException(ErrorCode.DUPLICATED_EMAIL, null);};
+        if (isExistEmail(email)){
+            throw new CustomException(
+                    ErrorCode.DUPLICATED_EMAIL,
+                    String.format("Email %s is already exists")
+            );
+        }
         // 패스워드 Encoding
         String encodedPassword = bCryptPasswordEncoder.encode(password);
         // 유저정보 저장
