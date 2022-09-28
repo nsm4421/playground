@@ -1,6 +1,5 @@
 package com.karma.hipgora.model.music;
 
-import com.karma.hipgora.model.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,37 +36,48 @@ public class MusicEntity {
     @Column(length = 1000)
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+//    TODO
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    @Setter
+//    private UserEntity userEntity;
+
     @Setter
-    private UserEntity userEntity;
+    @Column(nullable = false)
+    private String musicFilename;
+
+    @Setter
+    @Column(length = 1000, nullable = false)
+    private String musicFilePath;
 
     @Setter
     @Column
-    private String filename;
+    private String thumbnailFilename;
 
     @Setter
     @Column(length = 1000)
-    private String filePath;
+    private String thumbnailFilePath;
 
-    @Setter
-    @ElementCollection(fetch = FetchType.LAZY)
-    @Column(name = "hashtags")
-    private Set<String> hashtags = new HashSet<String>();
+    // TODO
+//    @Setter
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    @Column(name = "hashtags")
+//    private Set<String> hashtags = new HashSet<String>();
 
     @Column(name = "registered_at")  private Timestamp registeredAt;
     @Column(name = "updated_at") private Timestamp updatedAt;
     @Column(name = "removed_at") private Timestamp removedAt;
 
-    public static MusicEntity of(String title, String description, UserEntity userEntity,
-                                 String filename, String filePath, Set<String> hashtags){
+    public static MusicEntity of(String title, String description,
+                                 String musicFilename, String musicFilePath,
+                                 String thumbnailFilename, String thumbnailFilePath){
         MusicEntity musicEntity = new MusicEntity();
         musicEntity.setTitle(title);
         musicEntity.setDescription(description);
-        musicEntity.setUserEntity(userEntity);
-        musicEntity.setFilename(filename);
-        musicEntity.setFilePath(filePath);
-        musicEntity.setHashtags(hashtags);
+        musicEntity.setMusicFilename(musicFilename);
+        musicEntity.setMusicFilePath(musicFilePath);
+        musicEntity.setThumbnailFilename(thumbnailFilename);
+        musicEntity.setThumbnailFilePath(thumbnailFilePath);
         return musicEntity;
     }
 
