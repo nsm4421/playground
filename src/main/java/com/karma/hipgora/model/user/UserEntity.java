@@ -1,5 +1,6 @@
 package com.karma.hipgora.model.user;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,8 +10,10 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 
 @Getter
+@Data
 @ToString(callSuper = true)
 @Table(name = "\"user\"",
         indexes = {
@@ -37,6 +40,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private State state = State.ACTIVE;
 
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
+
     @Column(name = "registered_at")  private Timestamp registeredAt;
     @Column(name = "updated_at") private Timestamp updatedAt;
     @Column(name = "removed_at") private Timestamp removedAt;
@@ -49,5 +55,18 @@ public class UserEntity {
     @PreUpdate
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
