@@ -1,6 +1,6 @@
 import UploadForm from "./UploadForm";
 
-const UploadPage = () => {
+const Index = () => {
     return(
         <div>
             <UploadForm/>
@@ -8,4 +8,4 @@ const UploadPage = () => {
     );
 };
 
-export default UploadPage;
+export default Index;

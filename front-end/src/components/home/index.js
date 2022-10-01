@@ -1,4 +1,4 @@
-const HomePage = () => {
+const Index = () => {
     return(
         <div>
             <h1>Home</h1>
@@ -6,4 +6,4 @@ const HomePage = () => {
     )
 }
 
-export default HomePage;
+export default Index;
