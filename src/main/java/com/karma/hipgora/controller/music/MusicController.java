@@ -13,9 +13,10 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/music")
 public class MusicController {
     private final MusicService musicService;
-    @PostMapping(value="/api/v1/music")
+    @PostMapping
     public MyResponse<Void> uploadMusic(
             @RequestParam("title") String title,
             @RequestParam("description") String description,

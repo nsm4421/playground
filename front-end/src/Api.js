@@ -14,6 +14,10 @@ const Api = {
     "login":{
         URL:"/api/v1/user/login",
         METHOD:"post"
+    },
+    "uploadPost":{
+        URL:"/api/v1/post",
+        METHOD:"post"    
     }
 }
 
