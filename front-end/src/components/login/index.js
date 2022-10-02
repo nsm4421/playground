@@ -37,8 +37,11 @@ const Index = () => {
         await axios
             .post(Api.login.URL, {username, password})
             .then((res)=>{
+                console.log(res);
                 // TODO
                 if (res.data.resultCode === "SUCCESS"){
+                    const token = res.data.result.token;
+                    localStorage.setItem("token", token);
                     alert("로그인에 성공하였습니다.");
                     navigator("/");
                     return;

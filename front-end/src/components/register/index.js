@@ -2,7 +2,6 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "../../Api";
-import Validate from "./Validate";
 
 const Index = () => {
 
@@ -47,7 +46,7 @@ const Index = () => {
             .then((res)=>{
                 if (res.data.resultCode === "SUCCESS"){
                     alert("회원가입에 성공하였습니다");
-                    // navigator("/login");
+                    navigator("/login");
                     return;
                 }
                 alert("회원가입에 실패하였습니다. - 서버 에러")
@@ -58,6 +57,9 @@ const Index = () => {
                 alert(`회원가입에 실패하였습니다. - 에러코드 : ${errCode}`)
                 console.log(err);
                 return;
+            })
+            .finally(()=>{
+                setIsLoading(false);
             });
     }
 

@@ -1,5 +1,6 @@
 package com.karma.hipgora.model.music;
 
+import com.karma.hipgora.model.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,11 +37,10 @@ public class MusicEntity {
     @Column(length = 1000)
     private String description;
 
-//    TODO
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    @Setter
-//    private UserEntity userEntity;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @Setter
+    private UserEntity userEntity;
 
     @Setter
     @Column(nullable = false)
@@ -58,22 +58,22 @@ public class MusicEntity {
     @Column(length = 1000)
     private String thumbnailFilePath;
 
-    // TODO
-//    @Setter
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @Column(name = "hashtags")
-//    private Set<String> hashtags = new HashSet<String>();
+    @Setter
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Column(name = "hashtags")
+    private Set<String> hashtags = new HashSet<String>();
 
     @Column(name = "registered_at")  private Timestamp registeredAt;
     @Column(name = "updated_at") private Timestamp updatedAt;
     @Column(name = "removed_at") private Timestamp removedAt;
 
-    public static MusicEntity of(String title, String description,
+    public static MusicEntity of(String title, String description, Set<String> hashtags,
                                  String musicFilename, String musicFilePath,
                                  String thumbnailFilename, String thumbnailFilePath){
         MusicEntity musicEntity = new MusicEntity();
         musicEntity.setTitle(title);
         musicEntity.setDescription(description);
+        musicEntity.setHashtags(hashtags);
         musicEntity.setMusicFilename(musicFilename);
         musicEntity.setMusicFilePath(musicFilePath);
         musicEntity.setThumbnailFilename(thumbnailFilename);

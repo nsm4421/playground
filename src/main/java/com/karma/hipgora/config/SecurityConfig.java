@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
 
-                .antMatchers("/api/*/user/register", "/api/*/user/login","/api/*/user/check/*")
+                .antMatchers("/api/*/user/register", "/api/*/user/login","/api/*/music")
                 .permitAll()
 
                 .antMatchers("/api/**")
