@@ -47,6 +47,16 @@ public class UserEntity {
     @Column(name = "updated_at") private Timestamp updatedAt;
     @Column(name = "removed_at") private Timestamp removedAt;
 
+    public static UserEntity of(String username, String password, String email, State state, Role role){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(username);
+        userEntity.setPassword(password);
+        userEntity.setEmail(email);
+        userEntity.setState(state);
+        userEntity.setRole(role);
+        return userEntity;
+    }
+
     @PrePersist
     void registeredAt() {
         this.registeredAt = Timestamp.from(Instant.now());

@@ -1,77 +1,56 @@
 package com.karma.hipgora.config;
 
-import com.karma.hipgora.exception.ErrorCode;
-import com.karma.hipgora.exception.MyException;
-import com.karma.hipgora.model.security.MyPrincipal;
-import com.karma.hipgora.model.user.User;
-import com.karma.hipgora.repository.UserEntityRepository;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import com.karma.hipgora.service.user.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-public class SecurityConfig {
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity
-                .authorizeHttpRequests(auth->auth
-                        // static(css, js) 파일 허용
-                        .requestMatchers(
-                                PathRequest
-                                        .toStaticResources()
-                                        .atCommonLocations()
-                        )
-                        .permitAll()
-                        // GET 요청 허용
-                        .mvcMatchers(
-                                HttpMethod.GET,
-                                "/home", "music"
-                        ).permitAll()
-                        .anyRequest()
-                        .authenticated()
-                )
-                // 폼 로그인
-                .formLogin()
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserService userService;
+    @Value("${jwt.secret-key}") private String secretKey;
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().regexMatchers("^(?!/api/).*");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                .disable()
+                .authorizeRequests()
+
+                .antMatchers("/api/*/user/register", "/api/*/user/login","/api/*/user/check/*")
+                .permitAll()
+
+                .antMatchers("/api/**")
+                .authenticated()
+
+                .anyRequest()
+                .permitAll()
                 .and()
-                // 로그아웃 설정
-                .logout()
-                .logoutSuccessUrl("/login")
+
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // 빌드
-                .build();
+
+                .exceptionHandling()
+                .authenticationEntryPoint(new MyAuthenticationEntryPoint())
+                .and()
+
+                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web)->web
-                .ignoring()
-                .requestMatchers(
-                        PathRequest
-                                .toStaticResources()
-                                .atCommonLocations()
-                );
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(UserEntityRepository userEntityRepository){
-        return username -> userEntityRepository
-                .findByUsername(username)
-                .map(User::from)
-                .map(MyPrincipal::from)
-                .orElseThrow(()->new MyException(
-                        ErrorCode.USER_NOT_FOUND,
-                        String.format("유저명을 찾을 수 없습니다 - %s", username)));
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 }
