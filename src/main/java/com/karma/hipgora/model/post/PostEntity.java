@@ -19,8 +19,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Table(name = "\"post\"",
         indexes = {
-                @Index(columnList="title"),
-                @Index(columnList="username")
+                @Index(columnList="title")
         })
 @Entity
 @SQLDelete(sql = "UPDATE \"post\" SET removed_at = NOW() WHERE id=?")

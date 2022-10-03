@@ -26,8 +26,8 @@ public class PostService {
     }
 
     public Page<Post> getAllMyPost(Pageable pageable, String username){
-        Long userId = findByUsernameOrElseThrowError(username).getId();
-        return postEntityRepository.findAllByUserId(userId, pageable).map(Post::from);
+        UserEntity userEntity = findByUsernameOrElseThrowError(username);
+        return postEntityRepository.findAllByUserEntity(userEntity, pageable).map(Post::from);
     }
 
     public void writePost(String title, String body, Set<String> hashtags, String username){
