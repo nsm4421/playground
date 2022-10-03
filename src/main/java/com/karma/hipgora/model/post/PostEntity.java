@@ -1,6 +1,8 @@
 package com.karma.hipgora.model.post;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.karma.hipgora.model.AuditingFields;
 import com.karma.hipgora.model.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +12,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -25,7 +26,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE \"post\" SET removed_at = NOW() WHERE id=?")
 @Where(clause = "removed_at is NULL")
 @NoArgsConstructor
-public class PostEntity {
+public class PostEntity extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,13 +45,9 @@ public class PostEntity {
     private UserEntity userEntity;
 
     @Setter
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "hashtags")
     private Set<String> hashtags = new HashSet<String>();
-
-    @Column(name = "registered_at")  private Timestamp registeredAt;
-    @Column(name = "updated_at") private Timestamp updatedAt;
-    @Column(name = "removed_at") private Timestamp removedAt;
 
     public static PostEntity of(String title, String body, UserEntity userEntity, Set<String> hashtags){
         PostEntity postEntity = new PostEntity();
@@ -60,14 +57,16 @@ public class PostEntity {
         postEntity.setHashtags(hashtags);
         return postEntity;
     }
-
-    @PrePersist
-    void registeredAt() {
-        this.registeredAt = Timestamp.from(Instant.now());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PostEntity that = (PostEntity) o;
+        return id.equals(that.id);
     }
 
-    @PreUpdate
-    void updatedAt() {
-        this.updatedAt = Timestamp.from(Instant.now());
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

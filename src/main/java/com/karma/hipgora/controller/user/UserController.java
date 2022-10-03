@@ -2,12 +2,14 @@ package com.karma.hipgora.controller.user;
 
 import com.karma.hipgora.controller.MyResponse;
 import com.karma.hipgora.controller.requests.LoginRequest;
+import com.karma.hipgora.controller.responses.GetUsernameResponse;
 import com.karma.hipgora.controller.responses.LoginResponse;
 import com.karma.hipgora.controller.requests.RegisterRequest;
 import com.karma.hipgora.controller.responses.RegisterResponse;
 import com.karma.hipgora.model.user.User;
 import com.karma.hipgora.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @PostMapping
+    public MyResponse<GetUsernameResponse> getUsername(Authentication authentication){
+        String username = authentication.getName();
+        return MyResponse.success(GetUsernameResponse.of(username));
+    }
 
     @PostMapping("/register")
     public MyResponse<RegisterResponse> register(@RequestBody RegisterRequest registerRequest){

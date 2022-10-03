@@ -9,8 +9,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,13 +57,9 @@ public class MusicEntity {
     private String thumbnailFilePath;
 
     @Setter
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "hashtags")
     private Set<String> hashtags = new HashSet<String>();
-
-    @Column(name = "registered_at")  private Timestamp registeredAt;
-    @Column(name = "updated_at") private Timestamp updatedAt;
-    @Column(name = "removed_at") private Timestamp removedAt;
 
     public static MusicEntity of(String title, String description, Set<String> hashtags,
                                  String musicFilename, String musicFilePath,
@@ -79,15 +73,5 @@ public class MusicEntity {
         musicEntity.setThumbnailFilename(thumbnailFilename);
         musicEntity.setThumbnailFilePath(thumbnailFilePath);
         return musicEntity;
-    }
-
-    @PrePersist
-    void registeredAt() {
-        this.registeredAt = Timestamp.from(Instant.now());
-    }
-
-    @PreUpdate
-    void updatedAt() {
-        this.updatedAt = Timestamp.from(Instant.now());
     }
 }

@@ -21,13 +21,13 @@ public class PostService {
     private final UserEntityRepository userEntityRepository;
     private final PostEntityRepository postEntityRepository;
 
-    public Page<Post> getAllPost(Pageable pageable){
-        return postEntityRepository.findAll(pageable).map(Post::from);
+    public Page<PostEntity> getAllPost(Pageable pageable){
+        return postEntityRepository.findAll(pageable);
     }
 
-    public Page<Post> getAllMyPost(Pageable pageable, String username){
+    public Page<PostEntity> getAllMyPost(Pageable pageable, String username){
         UserEntity userEntity = findByUsernameOrElseThrowError(username);
-        return postEntityRepository.findAllByUserEntity(userEntity, pageable).map(Post::from);
+        return postEntityRepository.findAllByUserEntity(userEntity, pageable);
     }
 
     public void writePost(String title, String body, Set<String> hashtags, String username){

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -15,9 +16,9 @@ public class Post {
     private String body;
     private User user;
     private Set<String> hashtags;
-    private Timestamp registeredAt;
-    private Timestamp updatedAt;
-    private Timestamp removedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private LocalDateTime removedAt;
 
     public static Post from(PostEntity postEntity){
         Post post = new Post();
@@ -26,8 +27,8 @@ public class Post {
         post.setBody(postEntity.getBody());
         post.setUser(User.from(postEntity.getUserEntity()));
         post.setHashtags(post.getHashtags());
-        post.setRegisteredAt(post.getRegisteredAt());
-        post.setUpdatedAt(post.getUpdatedAt());
+        post.setCreatedAt(post.getCreatedAt());
+        post.setModifiedAt(post.getModifiedAt());
         post.setRemovedAt(post.getRemovedAt());
         return post;
     }

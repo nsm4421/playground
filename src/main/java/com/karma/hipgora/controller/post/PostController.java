@@ -5,6 +5,7 @@ import com.karma.hipgora.controller.requests.ModifyPostRequest;
 import com.karma.hipgora.controller.requests.WritePostRequest;
 import com.karma.hipgora.controller.responses.GetPostResponse;
 import com.karma.hipgora.model.post.Post;
+import com.karma.hipgora.model.post.PostEntity;
 import com.karma.hipgora.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,16 +24,16 @@ public class PostController {
 
     @GetMapping
     public MyResponse<Page<GetPostResponse>> getAllPost(Pageable pageable){
-        Page<Post> posts = postService.getAllPost(pageable);
-        Page<GetPostResponse> getAllPostResponses = posts.map(GetPostResponse::from);
+        Page<PostEntity> postEntities = postService.getAllPost(pageable);
+        Page<GetPostResponse> getAllPostResponses = postEntities.map(GetPostResponse::from);
         return MyResponse.success(getAllPostResponses);
     }
 
     @GetMapping("/my-post")
     public MyResponse<Page<GetPostResponse>> getMyPost(Pageable pageable, Authentication authentication) {
         String username = authentication.getName();
-        Page<Post> posts = postService.getAllMyPost(pageable, username);
-        Page<GetPostResponse> getAllPostResponses = posts.map(GetPostResponse::from);
+        Page<PostEntity> postEntities = postService.getAllMyPost(pageable, username);
+        Page<GetPostResponse> getAllPostResponses = postEntities.map(GetPostResponse::from);
         return MyResponse.success(getAllPostResponses);
     }
 

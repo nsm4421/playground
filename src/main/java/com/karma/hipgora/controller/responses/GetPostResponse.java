@@ -1,10 +1,11 @@
 package com.karma.hipgora.controller.responses;
 
 import com.karma.hipgora.model.post.Post;
+import com.karma.hipgora.model.post.PostEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -15,20 +16,16 @@ public class GetPostResponse {
     private String body;
     private String username;
     private Set<String> hashtags;
-    private Timestamp registerAt;
-    private Timestamp updatedAt;
-    private Timestamp removedAt;
+    private LocalDateTime createdAt;
 
-    public static GetPostResponse from(Post post){
+    public static GetPostResponse from(PostEntity postEntity){
         return new GetPostResponse(
-                post.getId(),
-                post.getTitle(),
-                post.getBody(),
-                post.getUser().getUsername(),
-                post.getHashtags(),
-                post.getRegisteredAt(),
-                post.getUpdatedAt(),
-                post.getRemovedAt()
+                postEntity.getId(),
+                postEntity.getTitle(),
+                postEntity.getBody(),
+                postEntity.getUserEntity().getUsername(),
+                postEntity.getHashtags(),
+                postEntity.getCreatedAt()
         );
     }
 }

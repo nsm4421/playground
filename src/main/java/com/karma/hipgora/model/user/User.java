@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -19,9 +19,9 @@ public class User implements UserDetails {
     private String email;
     private State state = State.ACTIVE;
     private Role role;
-    private Timestamp registeredAt;
-    private Timestamp updatedAt;
-    private Timestamp removedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private LocalDateTime removedAt;
 
     public static User of(String username, String password, String email, State state, Role role){
         return new User(username, password, email, state, role, null, null, null);
@@ -34,9 +34,7 @@ public class User implements UserDetails {
                 userEntity.getEmail(),
                 userEntity.getState(),
                 userEntity.getRole(),
-                userEntity.getRegisteredAt(),
-                userEntity.getUpdatedAt(),
-                userEntity.getRemovedAt());
+                null,null, null);
     }
 
     @Override
