@@ -18,6 +18,14 @@ const Api = {
     "uploadPost":{
         URL:"/api/v1/post",
         METHOD:"post"    
+    },
+    "getPost":{
+        URL:"/api/v1/post",
+        METHOD:"get"
+    },
+    "getUsername":{
+        URL:"/api/v1/user",
+        METHOD:"post"
     }
 }
 

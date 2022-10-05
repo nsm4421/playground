@@ -19,7 +19,7 @@ const Index = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault();
         setIsLoading(true);
-        const token = localStorage.getItem("token");
+        const token = `Bearer ${localStorage.getItem("token")}`;
         if (token==null){
             alert("로그인을 해야 합니다.");
             setIsLoading(false);
@@ -34,9 +34,10 @@ const Index = () => {
                 }
             })
             .then((res)=>{
-                console.log(res);
+                res.data.resultCode === "SUCCESS"?alert("포스트가 업로드 되었습니다."):alert("포스팅 업로드에 실패하였습니다.");
             })
             .catch((err)=>{
+                alert("포스팅 업로드에 실패하였습니다.");
                 console.log(err);
             })
             .finally(()=>{
