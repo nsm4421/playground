@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import {Button} from "react-bootstrap";
-import Api from "../../Api";
+import Api from "../../../utils/Api";
 import { BiUserCircle }  from '@react-icons/all-files/bi/BiUserCircle';
 import { FiKey }  from '@react-icons/all-files/fi/FiKey';
 import { AiOutlineEyeInvisible }  from '@react-icons/all-files/ai/AiOutlineEyeInvisible';
 import { AiOutlineEye }  from '@react-icons/all-files/ai/AiOutlineEye';
+import textUtil from "../../../utils/textUtil";
 
 const LoginForm = () => {
 
@@ -18,8 +19,8 @@ const LoginForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleUsername = (e)=>{setUsername(e.target.value);}
-    const handlePassword = (e)=>{setPassword(e.target.value);}
+    const handleUsername = textUtil(30, setUsername);
+    const handlePassword = textUtil(30, setPassword);
 
     const handleVisibility = (e) =>{
         setIsPasswordVisible(!isPasswordVisible);        

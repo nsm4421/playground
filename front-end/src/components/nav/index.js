@@ -3,8 +3,29 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { FiBox } from '@react-icons/all-files/fi/FiBox';
+import Api from '../../utils/Api';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-const NavBar = ({username}) => {
+const NavBar = () => {
+
+  const [username, setUsername] = useState("");
+  
+  useEffect(()=> {
+    const token = `Bearer ${localStorage.getItem("token")}`;
+    axios
+      .post(Api.getUsername.URL, {}, {
+        headers:{
+          Authorization:token
+        }
+      })
+      .then((res)=>{
+          if (res.data.resultCode === "SUCCESS"){
+              setUsername(res.data.result.username);
+          }
+          console.log(res);
+      })
+    }, [])
 
   return (
       <Navbar bg="light" expand="lg">
@@ -16,13 +37,11 @@ const NavBar = ({username}) => {
           <Nav className="me-auto">
 
             <Nav.Link href="/">홈화면</Nav.Link>
-            <Nav.Link href="/register">회원가입</Nav.Link>
-            {
-              username
-              ? <Nav.Link href="/logout">로그아웃</Nav.Link>
-              : <Nav.Link href="/login">로그인</Nav.Link>
-            }            
 
+            {username == ""? <Nav.Link href="/register">회원가입</Nav.Link>: null}
+            {username !== ""? <Nav.Link href="/logout">로그아웃</Nav.Link>: null}
+            {username == ""? <Nav.Link href="/login">로그인</Nav.Link>: null}
+                   
             <NavDropdown title="포스트">
               <NavDropdown.Item href="/post">게시글</NavDropdown.Item>
               <NavDropdown.Item href="/post/write">쓰기</NavDropdown.Item>

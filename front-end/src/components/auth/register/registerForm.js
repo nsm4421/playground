@@ -4,12 +4,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import {Button} from "react-bootstrap";
-import Api from "../../Api";
+import Api from "../../../utils/Api";
 import { FiMail }  from '@react-icons/all-files/fi/FiMail';
 import { BiUserCircle }  from '@react-icons/all-files/bi/BiUserCircle';
 import { FiKey }  from '@react-icons/all-files/fi/FiKey';
 import { AiOutlineEyeInvisible }  from '@react-icons/all-files/ai/AiOutlineEyeInvisible';
 import { AiOutlineEye }  from '@react-icons/all-files/ai/AiOutlineEye';
+import textUtil from "../../../utils/textUtil";
 
 const RegisterForm = () => {
 
@@ -21,10 +22,10 @@ const RegisterForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleUsername = (e)=>{setUsername(e.target.value);};
-    const handlePassword = (e)=>{setPassword(e.target.value);};
-    const handlePasswordConfirm = (e)=>{setPasswordConfirm(e.target.value);};
-    const handleEmail= (e)=>{setEmail(e.target.value);};
+    const handleUsername = textUtil(30, setUsername);
+    const handlePassword = textUtil(30, setPassword);
+    const handlePasswordConfirm = textUtil(30, setPasswordConfirm);
+    const handleEmail= textUtil(30, setEmail);
 
     const handleVisibility = (e) =>{
         setIsPasswordVisible(!isPasswordVisible);        

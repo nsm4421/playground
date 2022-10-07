@@ -1,68 +1,43 @@
-import axios from "axios";
-import { useState } from "react";
-import Api from "../../../Api";
+import { useState } from 'react';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import { GrCheckboxSelected } from '@react-icons/all-files/gr/GrCheckboxSelected';
+import { Container } from 'react-bootstrap';
+import Feed from './feed/index';
+import Music from './music/index';
 
 const Index = () => {
+  
+    const labels = ["피드", "음악"];
+    const tabs = [<Feed/>, <Music/>];
+    const [selected, setSelected] = useState(labels[0]);
 
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    
-    const handleTitle = (e)=>{setTitle(e.target.value);};
-    const handleBody = (e)=>{
-        let v = e.target.value;
-        if (v.length > 3000){
-            v = v.slice(0, Math.min(v.length, 3000));
-        }
-        setBody(v);
-    };
-    const handleSubmit = async (e) =>{
-        e.preventDefault();
-        setIsLoading(true);
-        const token = `Bearer ${localStorage.getItem("token")}`;
-        if (token==null){
-            alert("로그인을 해야 합니다.");
-            setIsLoading(false);
-            return;
-        }
-        await axios
-            .post(Api.uploadPost.URL,{
-                title, body
-            },{
-                headers:{
-                    Authorization:token
-                }
-            })
-            .then((res)=>{
-                res.data.resultCode === "SUCCESS"?alert("포스트가 업로드 되었습니다."):alert("포스팅 업로드에 실패하였습니다.");
-            })
-            .catch((err)=>{
-                alert("포스팅 업로드에 실패하였습니다.");
-                console.log(err);
-            })
-            .finally(()=>{
-                setIsLoading(false);
-            })
-    };
+    const Header = ({idx}) => {
+        const text = labels[idx];
+        if (text === selected){
+            return (
+                <span><GrCheckboxSelected className="mr-3"/>{text}</span>    
+            )
+        } 
+        return <span>{text}</span>
+    }
 
     return (
-        <div>
-            <h1>포스팅 업로드</h1>
-
-            <label>제목</label>
-            <br/>
-            <input onChange={handleTitle} value={title}></input>
-            <br/>
-
-            <label>본문</label>
-            <br/>
-            <textarea onChange={handleBody} value={body}></textarea>
-            <p>{body.length}/3000</p>
-            <br/>
-
-            <button onClick={handleSubmit} disabled={isLoading}>업로드</button>
-        </div>
-    );
-};
+        <Container>
+            <Tabs defaultActiveKey="포스팅" activeKey={selected} onSelect={s=>setSelected(s)} className="mb-3 mt-3">
+                        
+                        {
+                            labels.map((t, i) =>{
+                                return (
+                                    <Tab key={i} eventKey={t} title={<Header idx={i}/>} >
+                                        {tabs[i]}
+                                    </Tab>
+                                )
+                            })
+                        }
+                    </Tabs>
+        </Container>
+);
+}
 
 export default Index;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Api from "../../../Api";
+import Api from "../../../utils/Api";
 import Pagination from "./pagination";
 
 const Page = () => {
