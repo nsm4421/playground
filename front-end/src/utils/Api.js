@@ -1,32 +1,32 @@
 const Api = {
-    "uploadMusic":{
+    uploadMusic:{
         URL:"/api/v1/music",
         METHOD:"post"
     },
-    "register":{
+    register:{
         URL:"/api/v1/user/register",
         METHOD:"post"
     },
-    "checkIsDuplicated":{
+    checkIsDuplicated:{
         URL:"/api/v1/user/check",
         METHOD:"post"
     },
-    "login":{
+    login:{
         URL:"/api/v1/user/login",
         METHOD:"post"
     },
-    "uploadPost":{
+    uploadPost:{
         URL:"/api/v1/post",
         METHOD:"post"    
     },
-    "getPost":{
+    getPost:{
         URL:"/api/v1/post",
         METHOD:"get"
     },
-    "getUsername":{
+    getUsername:{
         URL:"/api/v1/user",
         METHOD:"post"
-    }
+    },
 }
 
 export default Api;  

@@ -2,10 +2,8 @@ package com.karma.hipgora.controller.responses;
 
 import com.karma.hipgora.controller.requests.ReceivePublicChatRequest;
 import com.karma.hipgora.model.chat.Status;
-import com.karma.hipgora.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
 

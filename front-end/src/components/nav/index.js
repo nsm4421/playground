@@ -4,14 +4,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { FiBox } from '@react-icons/all-files/fi/FiBox';
 import Api from '../../utils/Api';
+import logout from '../../utils/logout';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 
-const NavBar = () => {
+const NavBar = ({username, setUsername}) => {
 
-  const [username, setUsername] = useState("");
-  
-  useEffect(()=> {
+  useEffect(() => {
     const token = `Bearer ${localStorage.getItem("token")}`;
     axios
       .post(Api.getUsername.URL, {}, {
@@ -22,10 +21,15 @@ const NavBar = () => {
       .then((res)=>{
           if (res.data.resultCode === "SUCCESS"){
               setUsername(res.data.result.username);
+              return;
           }
-          console.log(res);
+          setUsername("");
+        })
+      .catch((e)=>{
+        setUsername("");
+        console.log(`로그인되지 않음 \n Error : ${e}`);
       })
-    }, [])
+  }, [])
 
   return (
       <Navbar bg="light" expand="lg">
@@ -39,7 +43,7 @@ const NavBar = () => {
             <Nav.Link href="/">홈화면</Nav.Link>
 
             {username == ""? <Nav.Link href="/register">회원가입</Nav.Link>: null}
-            {username !== ""? <Nav.Link href="/logout">로그아웃</Nav.Link>: null}
+            {username !== ""? <Nav.Link href="/" onClick={logout}>로그아웃</Nav.Link>: null}
             {username == ""? <Nav.Link href="/login">로그인</Nav.Link>: null}
                    
             <NavDropdown title="포스트">
@@ -50,8 +54,11 @@ const NavBar = () => {
               <NavDropdown.Item href="/post/my-post">내가 쓴 글</NavDropdown.Item>
             </NavDropdown>
             
+            <Nav.Link href="/chat">채팅방</Nav.Link>
+
           </Nav>
         </Navbar.Collapse>
+            <span>Hi ~ {username}</span>            
       </Container>
     </Navbar>
   );
