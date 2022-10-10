@@ -1,5 +1,6 @@
 package com.karma.hipgora.model.music;
 
+import com.karma.hipgora.model.AuditingFields;
 import com.karma.hipgora.model.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE \"music\" SET removed_at = NOW() WHERE id=?")
 @Where(clause = "removed_at is NULL")
 @NoArgsConstructor
-public class MusicEntity {
+public class MusicEntity extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
