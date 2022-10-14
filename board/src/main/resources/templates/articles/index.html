@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+</head>
+<body>
+
+<!--Header-->
+    <header class="p-3 bg-dark text-white" style="display: flex;justify-content: space-between;align-items: center">
+        <h3 class="mr-4">Spring Board Demo</h3>
+        <ul style="display: flex;list-style: none">
+            <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">
+                <a th:href="${'/articles/search-hashtag'}" th:text="${'#hashtag'}"></a>
+            </button></li>
+            <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Login</button></li>
+            <li style="margin-right: 10px"><button class="btn btn-lg btn-outline-info" type="submit">Sign Up</button></li>
+        </ul>
+    </header>
+
+    <main class="container">
+<!--Search bar-->
+        <form th:object="${searchTypes}">
+            <br/>
+            <div class="row">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <form class="card card-sm" action="/articles" method="get">
+                        <div class="card-body row no-gutters align-items-center" >
+                            <div class="col-auto">
+                                <i class="fas fa-search h4 text-body"></i>
+                            </div>
+                            <div class="col" style="display: flex" >
+                                <div class="col-4" style="margin-right: 10px">
+                                    <select class="form-control form-control-lg" name="searchType">
+                                        <option th:each="searchType:${searchTypes}" th:text="${searchType.description}"
+                                                th:value="${searchType.name}"/>
+                                    </select>
+
+                                </div>
+                                <div class="col-8">
+                                    <input class="form-control form-control-lg form-control-borderless"
+                                           type="search" placeholder="Search....." name="searchKeyword">
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-lg btn-success" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </form>
+        <br/>
+
+<!--Article-->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-6">Title</th>
+                    <th class="col-2">Hashtag</th>
+                    <th class="col">CreatedBy</th>
+                    <th class="col">CreateAt</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="article : ${articles}">
+                    <td>
+                        <a th:text="${article.title}"  th:href="@{'/articles/' + ${article.id}}">title</a>
+                    </td>
+                    <td th:text="${article.hashtag}"/>
+                    <td th:text="${article.nickname}"/>
+                    <td th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yyyy-mm-dd')}"/>
+                </tr>
+            </tbody>
+        </table>
+
+<!--Pagination-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center" th:object="${pageList}">
+                <li>
+                    <a th:class="'page-link' + (${articles.number} <= 0 ? ' disabled' : '')"
+                       th:text="'previous'"
+                       th:href="@{/articles(page=${articles.number - 1})}"></a>
+                </li>
+                <li class="d-flex">
+                    <a th:class="'d-flex page-link' + (${articles.number} == ${page} ?  ' bg-info':'' )"
+                       th:href="@{/articles(page=${page})}"
+                       th:text="${page+1}"
+                       th:each="page:${pageList}"></a>
+                </li>
+                <li>
+                    <a th:class="'page-link' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : '')"
+                       th:text="'next'"
+                       th:href="@{/articles(page=${articles.number + 1})}"></a>
+                </li>
+            </ul>
+        </nav>
+
+    </main>
+
+<!--Footer-->
+    <footer>
+        <hr/>
+        <div class="container p-3 bg-white text-black-50 d-flex justify-content-between">
+            <p>Karma's demo</p>
+            <p><a style="text-decoration: none" class="text-black-50"
+                  href="http://blog.naver.com/nsm4421">Go To My Blog</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</body>
+</html>
