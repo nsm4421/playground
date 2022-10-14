@@ -17,7 +17,8 @@ public enum ErrorCode {
     INVALID_PROVIDER(HttpStatus.CONFLICT, "Provider가 유효하지 않습니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "포스팅이 존재하지 않습니다."),
     PERMISSION_DENIED(HttpStatus.UNAUTHORIZED, "인증이 거부당했습니다."),
-    ALREADY_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 눌렀습니다.")
+    ALREADY_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 눌렀습니다."),
+    INVALID_KEYWORD(HttpStatus.NO_CONTENT, "잘못된 키워드로 검색하였습니다.")
     ;
 
     private final HttpStatus status;

@@ -4,6 +4,7 @@ import com.sns.karma.exception.CustomException;
 import com.sns.karma.exception.ErrorCode;
 import com.sns.karma.model.post.Post;
 import com.sns.karma.model.post.PostEntity;
+import com.sns.karma.model.post.SearchType;
 import com.sns.karma.model.user.UserEntity;
 import com.sns.karma.repository.PostEntityRepository;
 import com.sns.karma.repository.UserEntityRepository;
@@ -69,8 +70,24 @@ public class PostService {
         return postEntityRepository.findAll(pageable).map(Post::fromEntity);
     }
 
+    // 검색된 게시글 목록
+    public Page<Post> getSearchedPost(Pageable pageable, SearchType searchType, String keyword){
+        if (keyword == null || keyword.isBlank()){
+            return getAllPost(pageable);
+        }
+        switch (searchType){
+            case TITLE:
+                postEntityRepository.findByTitleContaining(keyword, pageable);
+            case AUTHOR:
+                UserEntity userEntity = ifExistUserNameThenUserEntityElseError(keyword);
+                postEntityRepository.findAllByUser(userEntity, pageable);
+            default:
+                throw new CustomException(ErrorCode.INVALID_KEYWORD, null);
+        }
+    }
+
     // 특정 유저의 게시글 목록
-    public Page<Post> getMyPost(Pageable pageable, String username){
+    public Page<Post> getUsersPost(Pageable pageable, String username){
         UserEntity userEntity = ifExistUserNameThenUserEntityElseError(username);
         return postEntityRepository.findAllByUser(userEntity, pageable).map(Post::fromEntity);
     }

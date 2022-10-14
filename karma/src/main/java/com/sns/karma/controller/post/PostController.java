@@ -1,16 +1,20 @@
 package com.sns.karma.controller.post;
 
 import com.sns.karma.controller.CustomResponse;
+import com.sns.karma.controller.post.request.GetSearchedPostRequest;
 import com.sns.karma.controller.post.request.ModifyPostRequest;
 import com.sns.karma.controller.post.request.WritePostRequest;
 import com.sns.karma.controller.post.response.GetPostResponse;
 import com.sns.karma.controller.post.response.ModifyPostResponse;
 import com.sns.karma.controller.post.response.WritePostResponse;
 import com.sns.karma.model.post.Post;
+import com.sns.karma.model.post.SearchType;
 import com.sns.karma.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,9 +69,22 @@ public class PostController {
 
     // 전체 게시글 목록
     @GetMapping
-    public CustomResponse<Page<GetPostResponse>> getAllPost(Pageable pageable) {
+    public CustomResponse<Page<GetPostResponse>> getAllPost(
+            @PageableDefault(size = 10, sort = "registeredAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return CustomResponse.success(
                 postService.getAllPost(pageable)
+                        .map(GetPostResponse::fromPost));
+    }
+
+    @GetMapping("/search")
+    public CustomResponse<Page<GetPostResponse>> getSearchedPost(
+            @PageableDefault(size = 10, sort = "registeredAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestBody GetSearchedPostRequest getSearchedPostRequest) {
+
+        String keyword = getSearchedPostRequest.getKeyword();
+        SearchType searchType = getSearchedPostRequest.getSearchType();
+        return CustomResponse.success(
+                postService.getSearchedPost(pageable, searchType, keyword)
                         .map(GetPostResponse::fromPost));
     }
 
@@ -75,7 +92,7 @@ public class PostController {
     @GetMapping("/my-post")
     public CustomResponse<Page<GetPostResponse>> getMyPost(Pageable pageable, Authentication authentication) {
         return CustomResponse.success(
-                postService.getMyPost(pageable, authentication.getName())
+                postService.getUsersPost(pageable, authentication.getName())
                         .map(GetPostResponse::fromPost));
     }
 }

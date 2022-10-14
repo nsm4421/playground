@@ -47,6 +47,8 @@ import Slide from '@mui/material/Slide';
 // Data
 import axios from 'axios';
 
+import SearchAppBar from './components/SearchBar/SearchBar';
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>,
@@ -112,6 +114,7 @@ function Feed() {
 
   return (
     <DashboardLayout>
+      <SearchAppBar/>
       <MDBox pt={3} pb={3}>
         {posts.map((post) => (
           <MDBox pt={2} pb={2} px={3}>
