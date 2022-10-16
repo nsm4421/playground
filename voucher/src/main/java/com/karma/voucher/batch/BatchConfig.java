@@ -1,4 +1,4 @@
-package com.karma.voucher.config.batch;
+package com.karma.voucher.batch;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.context.annotation.Configuration;

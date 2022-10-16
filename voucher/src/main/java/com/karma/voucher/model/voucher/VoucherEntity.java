@@ -20,18 +20,19 @@ public class VoucherEntity extends AuditingFields {
     @Column private Integer programId;
     @Column private String userId;
 
-    @Enumerated(EnumType.STRING) private VoucherStatus voucherStatus = VoucherStatus.NOT_PROGRESSED;
+    @Enumerated(EnumType.STRING) private VoucherStatus status = VoucherStatus.NOT_PROGRESSED;
     @Column private Integer remainingCount;
 
     @Column private LocalDateTime startAt;
     @Column private LocalDateTime endAt;
     @Column private LocalDateTime expiredAt;
 
-    public static VoucherEntity of(Integer programId, String userId, VoucherStatus voucherStatus, Integer remainingCount,
+    public static VoucherEntity of(Integer programId, String userId, VoucherStatus status, Integer remainingCount,
                             LocalDateTime startAt, LocalDateTime endAt, LocalDateTime expiredAt){
         VoucherEntity voucherEntity = new VoucherEntity();
+        voucherEntity.setUserId(userId);
         voucherEntity.setProgramId(programId);
-        voucherEntity.setVoucherStatus(voucherStatus);
+        voucherEntity.setStatus(status);
         voucherEntity.setRemainingCount(remainingCount);
         voucherEntity.setStartAt(startAt);
         voucherEntity.setEndAt(endAt);

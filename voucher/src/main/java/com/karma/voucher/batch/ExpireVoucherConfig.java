@@ -1,4 +1,4 @@
-package com.karma.voucher.config.batch;
+package com.karma.voucher.batch;
 
 import com.karma.voucher.model.voucher.VoucherEntity;
 import com.karma.voucher.model.voucher.VoucherStatus;
@@ -13,7 +13,6 @@ import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -59,7 +58,7 @@ public class ExpireVoucherConfig {
     @Bean
     public ItemProcessor<VoucherEntity, VoucherEntity> expireVoucherItemProcessor(){
         return voucherEntity -> {
-            voucherEntity.setVoucherStatus(VoucherStatus.EXPIRED);
+            voucherEntity.setStatus(VoucherStatus.EXPIRED);
             voucherEntity.setExpiredAt(LocalDateTime.now());
             return voucherEntity;
         };
