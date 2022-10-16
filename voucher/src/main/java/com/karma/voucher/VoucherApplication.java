@@ -21,7 +21,6 @@ public class VoucherApplication {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-
     @Bean
     public Step voucherStep(){
         return stepBuilderFactory
