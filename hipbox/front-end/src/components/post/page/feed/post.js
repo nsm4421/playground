@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Api from "../../../utils/Api";
-import Pagination from "./pagination";
+import Api from "../../../../utils/Api";
+import Pagination from "../pagination";
 
 const Page = () => {
 
@@ -44,8 +44,7 @@ const Page = () => {
     return (
         <div>
             <h3>{pageNum}</h3>
-            <Pagination pageNum={pageNum} setPageNum={setPageNum} totalPageNum={totalPages}/>
-
+       
             {
                 posts.map((post, i) =>{
                     return (

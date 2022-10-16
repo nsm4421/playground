@@ -13,6 +13,7 @@ import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,8 +26,7 @@ import java.util.Map;
 public class ExpireVoucherConfig {
 
     // application.yaml 파일에서 설정한 custom-config
-//    @Value("${custom-config.batch.chunk_size}") private final int chunk_size;
-    private final int chunk_size = 5;
+    @Value("${custom-config.batch.chunk_size}") private final int chunk_size;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;

@@ -23,6 +23,10 @@ const Api = {
         URL:"/api/v1/post",
         METHOD:"get"
     },
+    getMusic:{
+        URL:"/api/v1/music",
+        METHOD:"get"
+    },
     getUsername:{
         URL:"/api/v1/user",
         METHOD:"post"
