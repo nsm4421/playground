@@ -4,8 +4,11 @@ import com.karma.board.domain.dto.UserAccountDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -14,10 +17,9 @@ import java.util.Objects;
 @Table(indexes = {
         @Index(columnList = "email", unique = true),
         @Index(columnList = "username", unique = true),
-        @Index(columnList = "createdAt"),
-        @Index(columnList = "createdBy")
+        @Index(columnList = "createdAt")
 })
-public class UserAccount extends AuditingFields{
+public class UserAccount {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, length = 100) @Setter
@@ -28,6 +30,10 @@ public class UserAccount extends AuditingFields{
     private String password;
     @Column @Setter
     private String description;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column
     private RoleType roleType = RoleType.USER;

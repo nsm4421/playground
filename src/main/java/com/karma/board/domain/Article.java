@@ -17,6 +17,7 @@ import java.util.Set;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
+@EntityListeners(AuditingFields.class)
 public class Article extends AuditingFields{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

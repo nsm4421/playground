@@ -20,14 +20,14 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class AuditingFields {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @CreatedBy @Column(nullable = false, updatable = false, length = 100)
-    private String createdBy;
+    protected String createdBy;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    protected LocalDateTime modifiedAt;
 
-    @LastModifiedBy @Column(nullable = false, length = 100)
-    private String modifiedBy;
+    @LastModifiedBy @Column(length = 100)
+    protected String modifiedBy;
 }
