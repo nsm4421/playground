@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@DisplayName("Controller Test")
+@DisplayName("Rest Data Test")
 class RestDataTest {
 
     private MockMvc mockMvc;

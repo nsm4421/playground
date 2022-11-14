@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public abstract class AuditingFields {
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate @Column(nullable = false, updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate @Column(updatable = false)
     protected LocalDateTime createdAt;
 
-    @CreatedBy @Column(nullable = false, updatable = false, length = 100)
+    @CreatedBy @Column(updatable = false, length = 100)
     protected String createdBy;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @LastModifiedDate
