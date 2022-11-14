@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Article</title>
+</head>
+<body>
+    <header id="header"/>
+    <!--Search Bar-->
+    <form id="search-bar">
+        <label for="search-type" hidden>Type</label>
+        <select id="search-type" name="search-type">
+            <option>Title</option>
+            <option>Author</option>
+            <option>Hashtag</option>
+        </select>
+        <label for="keyword" hidden>Keyword</label>
+        <input type="search" placeholder="keyword..." name="keyword" id="keyword">
+        <button type="submit">Search</button>
+    </form>
+
+    <main>
+        <!--Article-->
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Hashtag</th>
+                <th>Author</th>
+                <th>Written At</th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td>Test Title</td>
+                    <td>Test Hashtag</td>
+                    <td>Test Author</td>
+                    <td>Test Written At</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <nav>
+                    <table>
+                        <tr>
+                            <td>◀</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>▶</td>
+                        </tr>
+                    </table>
+                </nav>
+            </tfoot>
+        </table>
+    </main>
+    <footer id="footer"/>
+</body>
+</html>
