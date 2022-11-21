@@ -1,9 +1,11 @@
 package com.karma.board.domain.dto;
 
 import com.karma.board.domain.Comment;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class CommentDto {
     private String content;
     private LocalDateTime createdAt;
@@ -27,11 +29,7 @@ public class CommentDto {
         return new CommentDto(content, createdAt, createdBy);
     }
 
-    public static CommentDto of(String content){
-        return new CommentDto(content);
-    }
-
-    public CommentDto from(Comment comment){
+    public static CommentDto from(Comment comment){
         return CommentDto.of(
                 comment.getContent(),
                 comment.getCreatedAt(),
