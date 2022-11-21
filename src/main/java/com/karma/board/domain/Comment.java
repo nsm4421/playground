@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -30,8 +31,18 @@ public class Comment extends AuditingFields{
         this.content = content;
     }
 
+    private Comment(Article article, String content, LocalDateTime createdAt, String createdBy) {
+        this.article = article;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+    }
+
     public static Comment of(Article article, String content){
         return new Comment(article, content);
+    }
+    public static Comment of(Article article, String content, LocalDateTime createdAt, String createdBy){
+        return new Comment(article, content, createdAt, createdBy);
     }
 
     @Override

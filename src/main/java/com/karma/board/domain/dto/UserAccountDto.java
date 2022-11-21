@@ -3,8 +3,10 @@ package com.karma.board.domain.dto;
 import com.karma.board.domain.RoleType;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class UserAccountDto {
+public class UserAccountDto implements Serializable {
     private String email;
     private String username;
     private String password;

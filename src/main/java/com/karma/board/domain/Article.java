@@ -1,5 +1,6 @@
 package com.karma.board.domain;
 
+import com.karma.board.domain.dto.ArticleDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +29,7 @@ public class Article extends AuditingFields{
     @Column @Setter
     private String hashtags;
 
-    @ToString.Exclude @OrderBy("id") @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @ToString.Exclude @OrderBy("createdAt DESC") @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<Comment> comments = new LinkedHashSet<>();
 
     protected Article(){}
@@ -41,6 +42,14 @@ public class Article extends AuditingFields{
 
     public static Article of(String title, String content, String hashtags){
         return new Article(title, content, hashtags);
+    }
+
+    // Entity → Dto
+    public static ArticleDto to(Article article){
+        return ArticleDto.of(
+                article.getTitle(), article.getContent(), article.getHashtags(),
+                article.getCreatedAt(), article.getCreatedBy()
+        );
     }
 
     @Override

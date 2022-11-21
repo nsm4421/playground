@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
     @GetMapping("/")
     public String index(){
-        return "/index";
+        return "redirect:/articles";
     }
 }
