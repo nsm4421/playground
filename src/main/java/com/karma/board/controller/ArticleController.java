@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/articles")
 @RequiredArgsConstructor
@@ -31,7 +33,9 @@ public class ArticleController {
             @PageableDefault(size=20, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable,
             ModelMap map){
         Page<ArticleDto> articleDtoPage = articleService.searchArticleDtoPage(searchType, keyword, pageable);
+        List<Integer> pagination = articleService.getPaginationBarNumbers(pageable.getPageNumber(), articleDtoPage.getTotalPages());
         map.addAttribute("articles", articleDtoPage.map(ArticlesResponse::from));
+        map.addAttribute("pagination", pagination);
         return "article/index";
     }
 

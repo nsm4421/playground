@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <thlogic xmlns:th="http://www.thymeleaf.org">
+    <!--Header&Footer-->
     <attr sel="#header" th:replace="header :: #header"/>
     <attr sel="#footer" th:replace="footer :: #footer"/>
+
+    <!--Article Table-->
     <attr sel="#article-table">
         <attr sel="tbody" th:remove="all-but-first">
             <attr sel="tr[0]" th:each="article : ${articles}">
@@ -11,5 +14,26 @@
                 <attr sel="td.created-at" th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yy년 mm월 dd일 hh시 mm분')}"/>
             </attr>
         </attr>
+    </attr>
+
+    <!--Pagination-->
+    <attr sel="#pagination">
+        <attr sel="li[0]/a"
+              th:text="'previous'"
+              th:href="@{/articles(page=${articles.number - 1})}"
+              th:class="'page-link' + (${articles.number} <= 0 ? ' disabled' : '')"
+        />
+        <attr sel="li[1]" th:class="page-item" th:each="page : ${pagination}">
+            <attr sel="a"
+                  th:text="${page + 1}"
+                  th:href="@{/articles(page=${page})}"
+                  th:class="'page-link' + (${page} == ${articles.number} ? ' disabled' : '')"
+            />
+        </attr>
+        <attr sel="li[2]/a"
+              th:text="'next'"
+              th:href="@{/articles(page=${articles.number + 1})}"
+              th:class="'page-link' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : '')"
+        />
     </attr>
 </thlogic>

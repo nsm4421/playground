@@ -16,8 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional
@@ -26,6 +28,7 @@ public class ArticleService {
 
     private final UserAccountRepository userAccountRepository;
     private final ArticleRepository articleRepository;
+    private final static int PAGINATION_BAR_LENGTH=5;
 
     @Transactional(readOnly = true)
     public Page<ArticleDto> searchArticleDtoPage(SearchType searchType, String keyword, Pageable pageable){
@@ -88,5 +91,11 @@ public class ArticleService {
 
     public void deleteArticle(Long articleId){
         articleRepository.delete(findById(articleId));
+    }
+
+    public List<Integer> getPaginationBarNumbers(int currentPage, int totalPage){
+        int startPage = Math.max(0, currentPage-(PAGINATION_BAR_LENGTH/2));
+        int endPage = Math.min(totalPage, startPage+PAGINATION_BAR_LENGTH);
+        return IntStream.range(startPage, endPage).boxed().collect(Collectors.toList());
     }
 }
