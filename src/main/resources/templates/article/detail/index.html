@@ -10,10 +10,10 @@
 
   <main class="container">
     <!--제목-->
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center" id="title-area" name="title-area">
       <ul class="pagination">
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
+          <a class="page-link" id="btn-previous" name="btn-previous">
             <span aria-hidden="true">&laquo; previous</span>
           </a>
         </li>
@@ -21,7 +21,7 @@
       <h1 id="title">Title</h1>
       <ul class="pagination">
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
+          <a class="page-link" id="btn-next" name="btn-next">
             <span aria-hidden="true">next &raquo;</span>
           </a>
         </li>
@@ -32,27 +32,27 @@
       <div class="col">
         <!--본문-->
         <article id="article-content" class="col-md-8 col-lg-8">
-          <pre>Content</pre>
+          <pre id="content" name="content">Content</pre>
         </article>
       </div>
       <!--사이드바(글쓴이/작성시간/해쉬태그)-->
-      <div class="col-2 d-flex align-items-center">
+      <div class="col-2 d-flex align-items-center" id="profile-area" name=id="profile-area">
         <section class="order-md-last">
           <aside>
-            <p id="author">
+            <p>
               <strong>Author</strong>
               <br/>
-              <span>Username</span>
+              <span id="author">Username</span>
             </p>
             <p>
               <strong>Written At</strong>
               <br/>
               <span><time id="created-at" datetime="2022-01-01T00:00:00">2022-01-01</time></span>
             </p>
-            <p id="hashtags">
+            <p>
               <strong>Hashtag</strong>
               <br/>
-              <span>#Board</span>
+              <span id="hashtags">#Board</span>
             </p>
           </aside>
         </section>
@@ -61,7 +61,7 @@
 
     <!--댓글쓰기-->
     <div class="row mt-3">
-      <section>
+      <section id="write-comment-area" name="write-comment-area">
         <form class="row">
           <div class="col form-floating">
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>

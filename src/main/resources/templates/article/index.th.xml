@@ -1,5 +1,15 @@
 <?xml version="1.0"?>
 <thlogic xmlns:th="http://www.thymeleaf.org">
-    <attr sel="#header" th:replace="header :: #header"></attr>
-    <attr sel="#footer" th:replace="footer :: #footer"></attr>
+    <attr sel="#header" th:replace="header :: #header"/>
+    <attr sel="#footer" th:replace="footer :: #footer"/>
+    <attr sel="#article-table">
+        <attr sel="tbody" th:remove="all-but-first">
+            <attr sel="tr[0]" th:each="article : ${articles}">
+                <attr sel="td.title/a" th:text="${article.title}" th:href="@{'/articles/'+${article.id}}"/>
+                <attr sel="td.hashtags" th:text="${article.hashtags}"/>
+                <attr sel="td.author" th:text="${article.author}"/>
+                <attr sel="td.created-at" th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yy년 mm월 dd일 hh시 mm분')}"/>
+            </attr>
+        </attr>
+    </attr>
 </thlogic>
