@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.karma'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "14"
 
 configurations {
     compileOnly {
@@ -61,3 +61,4 @@ sourceSets {
 clean {
     delete file(generated)
 }
+targetCompatibility = JavaVersion.VERSION_14

@@ -9,6 +9,7 @@ import com.karma.board.domain.dto.UserAccountDto;
 import com.karma.board.exception.ErrorCode;
 import com.karma.board.exception.MyException;
 import com.karma.board.repository.ArticleRepository;
+import com.karma.board.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class ArticleService {
+
+    private final UserAccountRepository userAccountRepository;
     private final ArticleRepository articleRepository;
 
     @Transactional(readOnly = true)
@@ -39,7 +42,7 @@ public class ArticleService {
     }
     @Transactional(readOnly = true)
     private Article findById(Long articleId){
-        return  articleRepository
+        return articleRepository
                 .findById(articleId)
                 .orElseThrow(()->{throw new MyException(
                         ErrorCode.ENTITY_NOT_FOUND,
@@ -50,8 +53,21 @@ public class ArticleService {
     public ArticleWithCommentDto getArticleWithCommentDto(Long articleId){
         Article article = findById(articleId);
         ArticleDto articleDto = ArticleDto.from(article);
-        UserAccountDto userAccountDto = UserAccountDto.from(article.getUserAccount());
         Set<CommentDto> commentDtoSet = article.getComments().stream().map(CommentDto::from).collect(Collectors.toSet());
+        UserAccountDto userAccountDto;
+        // Case ⅰ) Article.userAccount == null
+        if (article.getUserAccount() == null){
+            String username = article.getCreatedBy();
+            userAccountDto = UserAccountDto.from(
+                    userAccountRepository
+                            .findByUsername(username)
+                            .orElseThrow(()->{throw new MyException(
+                                    ErrorCode.USER_NOT_FOUND,
+                                    String.format("Username [%s] is not founded", username));}));
+        // Case ⅱ) Article.userAccount != null
+        } else {
+            userAccountDto = UserAccountDto.from(article.getUserAccount());
+        }
         return ArticleWithCommentDto.from(articleDto, userAccountDto, commentDtoSet);
     }
 

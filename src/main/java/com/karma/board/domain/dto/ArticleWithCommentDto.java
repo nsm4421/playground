@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Getter
 public class ArticleWithCommentDto implements Serializable {
+    private Long articleId;
     private String title;
     private String content;
     private String hashtags;
@@ -19,8 +20,9 @@ public class ArticleWithCommentDto implements Serializable {
 
     protected ArticleWithCommentDto(){}
 
-    private ArticleWithCommentDto(String title, String content, String hashtags, UserAccountDto userAccountDto,
+    private ArticleWithCommentDto(Long articleId, String title, String content, String hashtags, UserAccountDto userAccountDto,
                                  LocalDateTime createdAt, String createdBy, Set<CommentDto> comments) {
+        this.articleId = articleId;
         this.title = title;
         this.content = content;
         this.hashtags = hashtags;
@@ -30,14 +32,14 @@ public class ArticleWithCommentDto implements Serializable {
         this.comments = comments;
     }
 
-    public static ArticleWithCommentDto of(String title, String content, String hashtags, UserAccountDto userAccountDto,
+    public static ArticleWithCommentDto of(Long articleId, String title, String content, String hashtags, UserAccountDto userAccountDto,
                                            LocalDateTime createdAt, String createdBy, Set<CommentDto> comments){
-        return new ArticleWithCommentDto(title, content, hashtags, userAccountDto, createdAt, createdBy, comments);
+        return new ArticleWithCommentDto(articleId, title, content, hashtags, userAccountDto, createdAt, createdBy, comments);
     }
 
     public static ArticleWithCommentDto from(ArticleDto articleDto, UserAccountDto userAccountDto, Set<CommentDto> comments){
         return new ArticleWithCommentDto(
-                articleDto.getTitle(), articleDto.getContent(), articleDto.getHashtags(),
+                articleDto.getId(), articleDto.getTitle(), articleDto.getContent(), articleDto.getHashtags(),
                 userAccountDto, articleDto.getCreatedAt(), articleDto.getCreatedBy(), comments
         );
     }

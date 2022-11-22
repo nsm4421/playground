@@ -35,6 +35,8 @@ public class MyPrincipal implements UserDetails {
         return new MyPrincipal(email, username, password, description, authorities);
     }
 
+    protected MyPrincipal(){}
+
     //  Principal → Entity
     public UserAccount to(MyPrincipal myPrincipal){
         return UserAccount.of(

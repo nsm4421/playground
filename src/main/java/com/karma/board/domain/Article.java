@@ -29,6 +29,9 @@ public class Article extends AuditingFields{
     @Column @Setter
     private String hashtags;
 
+    @ToString.Exclude @ManyToOne
+    private UserAccount userAccount;
+
     @ToString.Exclude @OrderBy("createdAt DESC") @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<Comment> comments = new LinkedHashSet<>();
 
@@ -47,7 +50,7 @@ public class Article extends AuditingFields{
     // Entity → Dto
     public static ArticleDto to(Article article){
         return ArticleDto.of(
-                article.getTitle(), article.getContent(), article.getHashtags(),
+                article.getId(), article.getTitle(), article.getContent(), article.getHashtags(),
                 article.getCreatedAt(), article.getCreatedBy()
         );
     }

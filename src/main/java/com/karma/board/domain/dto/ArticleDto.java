@@ -1,11 +1,14 @@
 package com.karma.board.domain.dto;
 
 import com.karma.board.domain.Article;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Getter
 public class ArticleDto implements Serializable {
+    private Long id;
     private String title;
     private String content;
     private String hashtags;
@@ -14,7 +17,8 @@ public class ArticleDto implements Serializable {
 
     protected ArticleDto(){}
 
-    private ArticleDto(String title, String content, String hashtags, LocalDateTime createdAt, String createdBy) {
+    private ArticleDto(Long id, String title, String content, String hashtags, LocalDateTime createdAt, String createdBy) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.hashtags = hashtags;
@@ -22,7 +26,8 @@ public class ArticleDto implements Serializable {
         this.createdBy = createdBy;
     }
 
-    private ArticleDto(String title, String content, String hashtags) {
+    private ArticleDto(Long id, String title, String content, String hashtags) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.hashtags = hashtags;
@@ -30,18 +35,18 @@ public class ArticleDto implements Serializable {
         this.createdBy = null;
     }
 
-    public static ArticleDto of(String title, String content, String hashtags, LocalDateTime createdAt, String createdBy){
-        return new ArticleDto(title, content, hashtags, createdAt, createdBy);
+    public static ArticleDto of(Long id, String title, String content, String hashtags, LocalDateTime createdAt, String createdBy){
+        return new ArticleDto(id, title, content, hashtags, createdAt, createdBy);
     }
 
-    public static ArticleDto of(String title, String content, String hashtags){
-        return new ArticleDto(title, content, hashtags);
+    public static ArticleDto of(Long id, String title, String content, String hashtags){
+        return new ArticleDto(id, title, content, hashtags);
     }
 
     // Entity → Dto
     public static ArticleDto from(Article article){
         return ArticleDto.of(
-                article.getTitle(), article.getContent(), article.getHashtags(),
+                article.getId(), article.getTitle(), article.getContent(), article.getHashtags(),
                 article.getCreatedAt(), article.getCreatedBy()
         );
     }

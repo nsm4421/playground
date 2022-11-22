@@ -1,26 +1,45 @@
 package com.karma.board.controller;
 
+import com.karma.board.controller.response.ArticleResponse;
+import com.karma.board.controller.response.ArticlesResponse;
+import com.karma.board.controller.response.CommentsResponse;
+import com.karma.board.domain.SearchType;
+import com.karma.board.domain.dto.ArticleDto;
+import com.karma.board.domain.dto.ArticleWithCommentDto;
+import com.karma.board.service.ArticleService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/articles")
+@RequiredArgsConstructor
 public class ArticleController {
+    private final ArticleService articleService;
     @GetMapping
-    public String articles(ModelMap map){
-        map.addAttribute("articles", List.of());    // TODO - send pageable of article
+    public String articles(
+            @RequestParam(required = false) SearchType searchType,
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size=20, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable,
+            ModelMap map){
+        Page<ArticleDto> articleDtoPage = articleService.searchArticleDtoPage(searchType, keyword, pageable);
+        map.addAttribute("articles", articleDtoPage.map(ArticlesResponse::from));
         return "article/index";
     }
 
     @GetMapping("/{articleId}")
     public String article(@PathVariable Long articleId, ModelMap map){
-        map.addAttribute("article", null);  // TODO
-        map.addAttribute("comments", List.of());
+        ArticleWithCommentDto dto = articleService.getArticleWithCommentDto(articleId);
+        map.addAttribute("article", ArticleResponse.from(dto));
+        map.addAttribute("comments", CommentsResponse.from(dto));
         return "article/detail/index";
     }
 }
