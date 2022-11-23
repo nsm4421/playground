@@ -6,6 +6,22 @@
 
     <!--Article Table-->
     <attr sel="#article-table">
+        <!--Table Header-->
+        <attr sel="#table-header" th:object="${articles}">
+            <attr sel=".title/a" th:text="Title"
+                  th:href="@{/articles(page=${articles.number},
+                    sort='title' + (*{sort.getOrderFor('title')} != null ? (*{sort.getOrderFor('title').direction.name} != 'DESC' ? ',desc' : '') : ''))}"/>
+            <attr sel=".hashtags/a" th:text="Hashtag"
+                  th:href="@{/articles(page=${articles.number},
+                    sort='hashtags' + (*{sort.getOrderFor('hashtags')} != null ? (*{sort.getOrderFor('hashtags').direction.name} != 'DESC' ? ',desc' : '') : ''))}"/>
+            <attr sel=".author/a" th:text="Author"
+                  th:href="@{/articles(page=${articles.number},
+                    sort='createdBy' + (*{sort.getOrderFor('createdBy')} != null ? (*{sort.getOrderFor('createdBy').direction.name} != 'DESC' ? ',desc' : '') : ''))}"/>
+            <attr sel=".created-at/a" th:text="'Written At'"
+                  th:href="@{/articles(page=${articles.number},
+                    sort='createdAt' + (*{sort.getOrderFor('createdAt')} != null ? (*{sort.getOrderFor('createdAt').direction.name} != 'DESC' ? ',desc' : '') : ''))}"/>
+        </attr>
+        <!--Table Body-->
         <attr sel="tbody" th:remove="all-but-first">
             <attr sel="tr[0]" th:each="article : ${articles}">
                 <attr sel="td.title/a" th:text="${article.title}" th:href="@{'/articles/'+${article.id}}"/>

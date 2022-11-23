@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Article</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <style>
+        #table-header > th > a {
+            text-decoration:none;
+            color:green;
+        };
+    </style>
 </head>
 <body>
     <header id="header"/>
@@ -36,11 +42,11 @@
 
         <!--Article-->
         <table class="table mt-5 table-hover" id="article-table" name="article-table">
-            <tr>
-                <th scope="col" class="col-6 title">Title</th>
-                <th scope="col" class="hashtags">Hashtag</th>
-                <th scope="col" class="author">Author</th>
-                <th scope="col" class="created-at">Written At</th>
+            <tr id="table-header" name="table-header">
+                <th scope="col" class="col-6 title"><a>Title</a></th>
+                <th scope="col" class="hashtags"><a>Hashtag</a></th>
+                <th scope="col" class="author"><a>Author</a></th>
+                <th scope="col" class="created-at"><a>Written At</a></th>
             </tr>
             <tbody>
                 <tr>
