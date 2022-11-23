@@ -7,7 +7,7 @@
     <style>
         #table-header > th > a {
             text-decoration:none;
-            color:green;
+            color:black;
         };
     </style>
 </head>
@@ -17,27 +17,28 @@
     <main class="container">
 
         <div class="row mt-3 mb-3">
-            <div class="input-group justify-content-between">
-                <!--Select Bar-->
-                <div class="w-20">
-                    <select class="form-select" id="search-type" name="search-type">
-                        <option value="title" selected>Title</option>
-                        <option value="author">Author</option>
-                        <option value="hashtag">Hashtag</option>
-                    </select>
+            <form id="search-form" name="searchForm">
+                <div class="input-group justify-content-between" id="search-bar" name="searchBar">
+                    <!--Select Bar-->
+                    <div class="w-20">
+                        <select class="form-select" id="search-type" name="searchType">
+                            <option value="title" selected>Title</option>
+                            <option value="author">Author</option>
+                            <option value="hashtag">Hashtag</option>
+                        </select>
+                    </div>
+                    <!--Search Input-->
+                    <div class="flex-fill">
+                        <input type="search" class="form-control" placeholder="keyword..." name="keyword" id="keyword"/>
+                    </div>
+                    <!--Submit Button-->
+                    <div class="w-20">
+                        <button id="search-button" type="submit" class="btn btn-primary">
+                            <span>Search</span>
+                        </button>
+                    </div>
                 </div>
-                <!--Search Input-->
-                <div class="flex-fill">
-                    <input type="search" class="form-control" placeholder="keyword..." name="keyword" id="keyword"/>
-                </div>
-                <!--Submit Button-->
-                <div class="w-20">
-                    <button id="search-button" type="button" class="btn btn-primary" name="btn-submit">
-                        <span>Search</span>
-                    </button>
-                </div>
-            </div>
-
+            </form>
         </div>
 
         <!--Article-->
