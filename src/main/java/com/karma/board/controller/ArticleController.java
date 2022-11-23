@@ -52,8 +52,8 @@ public class ArticleController {
         return "article/write/index";
     }
     @PostMapping("/write")
-    public String saveArticle(@RequestParam String title, @RequestParam String content, @RequestParam String hashtags){
-        Article article = WriteArticleRequest.to(WriteArticleRequest.of(title, content, hashtags));
+    public String saveArticle(WriteArticleRequest req){
+        Article article = WriteArticleRequest.to(req);
         articleService.saveArticle(article);
         return "redirect:/articles";
     }
