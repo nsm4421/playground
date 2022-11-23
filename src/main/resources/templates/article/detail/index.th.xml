@@ -18,7 +18,7 @@
     <!--Profile-->
     <attr sel="#profile-area" th:object="${article}">
         <attr sel="#author" th:text="*{author}"/>
-        <attr sel="#created-at" th:datetime="*{createdAt}" th:text="${#temporals.format(article.createdAt, 'yy년 mm월 dd일 hh시 mm분')}"/>
+        <attr sel="#created-at" th:datetime="*{createdAt}" th:text="${#temporals.format(article.createdAt, 'yy년 MM월 dd일 hh시 mm분')}"/>
         <attr sel="#hashtags" th:text="*{hashtags}"/>
     </attr>
 

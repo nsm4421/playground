@@ -19,23 +19,35 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
     ) throws Exception {
+        http.csrf().disable();
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .mvcMatchers(
-                            HttpMethod.GET,
-                            "/",
-                            "/articles",
-                            "/articles/**",     // TODO : 제거 (테스트를 위해 열어놓음)ㄴ
-                            "/articles/search-hashtag")
-                        .permitAll()
                         .anyRequest()
-                        .authenticated()
+                        .permitAll()
                 )
                 .formLogin(withDefaults())
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .build();
+        // TODO : 테스트를 위해 임시로 주석처리
+//        return http
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+//                        .permitAll()
+//                        .mvcMatchers(
+//                            HttpMethod.GET,
+//                            "/",
+//                            "/articles",
+//                            "/articles/**",     // TODO : 제거 (테스트를 위해 열어놓음)ㄴ
+//                            "/articles/search-hashtag")
+//                        .permitAll()
+//                        .anyRequest()
+//                        .authenticated()
+//                )
+//                .formLogin(withDefaults())
+//                .logout(logout -> logout.logoutSuccessUrl("/"))
+//                .build();
     }
 
     @Bean

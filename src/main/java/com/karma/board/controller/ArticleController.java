@@ -1,8 +1,10 @@
 package com.karma.board.controller;
 
+import com.karma.board.controller.request.WriteArticleRequest;
 import com.karma.board.controller.response.ArticleResponse;
 import com.karma.board.controller.response.ArticlesResponse;
 import com.karma.board.controller.response.CommentsResponse;
+import com.karma.board.domain.Article;
 import com.karma.board.domain.SearchType;
 import com.karma.board.domain.dto.ArticleDto;
 import com.karma.board.domain.dto.ArticleWithCommentDto;
@@ -14,10 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,5 +45,16 @@ public class ArticleController {
         map.addAttribute("article", ArticleResponse.from(dto));
         map.addAttribute("comments", CommentsResponse.from(dto));
         return "article/detail/index";
+    }
+
+    @GetMapping("/write")
+    public String write(){
+        return "article/write/index";
+    }
+    @PostMapping("/write")
+    public String saveArticle(@RequestParam String title, @RequestParam String content, @RequestParam String hashtags){
+        Article article = WriteArticleRequest.to(WriteArticleRequest.of(title, content, hashtags));
+        articleService.saveArticle(article);
+        return "redirect:/articles";
     }
 }
