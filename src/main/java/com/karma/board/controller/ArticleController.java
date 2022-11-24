@@ -42,6 +42,7 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public String article(@PathVariable Long articleId, ModelMap map){
         ArticleWithCommentDto dto = articleService.getArticleWithCommentDto(articleId);
+        map.addAttribute("articleId", articleId);
         map.addAttribute("article", ArticleResponse.from(dto));
         map.addAttribute("comments", CommentsResponse.from(dto));
         return "article/detail/index";

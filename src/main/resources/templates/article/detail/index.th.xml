@@ -7,10 +7,10 @@
     <attr sel="#title-area" th:object="${article}">
         <!--TODO:Pagination-->
         <attr sel="#btn-next">
-            <attr sel="a" th:href="@{'/articles/'+${article.id-1}}"/>
+            <attr sel="a" th:href="@{'/articles/'+${articleId-1}}"/>
         </attr>
         <attr sel="#btn-previous">
-            <attr sel="a" th:href="@{'/articles/'+${article.id+1}}"/>
+            <attr sel="a" th:href="@{'/articles/'+${articleId+1}}"/>
         </attr>
         <attr sel="#title" th:text="*{title}"/>
     </attr>
@@ -27,16 +27,16 @@
 
     <!--Write Comment-->
     <attr sel="#write-comment-area">
-        <!--TODO:Submit Comment-->
+        <attr sel="#article-id" th:value="${articleId}"/>
     </attr>
 
     <!--See Comments-->
     <attr sel="#article-comments">
         <attr sel="li" th:remove="all-but-first">
             <attr sel="div" th:each="comment : ${comments.comments}">
-                <attr sel="strong" th:text="*{createdBy}"/>
-                <attr sel="small/time" th:datetime="*{createdAt}" th:text="${#temporals.format(comment.createdAt, 'yy년 mm월 dd일 hh시 mm분')}"/>
-                <attr sel="p" th:text="*{content}"/>
+                <attr sel="strong" th:text="${comment.createdBy}"/>
+                <attr sel="small/time" th:datetime="${comment.createdAt}" th:text="${#temporals.format(comment.createdAt, 'yy년 MM월 dd일 hh시 mm분')}"/>
+                <attr sel="p" th:text="${comment.content}"/>
             </attr>
         </attr>
     </attr>

@@ -62,9 +62,13 @@
     <!--댓글쓰기-->
     <div class="row mt-3">
       <section id="write-comment-area" name="write-comment-area">
-        <form class="row">
+        <form class="row" action="/comments/write" method="post">
+          <!--게시글 Id-->
+          <input name="articleId" id="article-id" hidden/>
           <div class="col form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+            <!--댓글입력-->
+            <textarea class="form-control h-100" placeholder="Leave a comment here"
+                      id="floatingTextarea" name="content" style="resize:none;"></textarea>
             <label for="floatingTextarea">Comment</label>
           </div>
           <div class="col-1 align-self-center">
@@ -84,22 +88,17 @@
               <ul id="article-comments" class="row col-7">
                 <li class="list-group-item">
                   <div>
-                    <strong>TEST AUTHOR</strong>
+                    <strong>AUTHOR</strong>
                     <small><time>2022-01-01</time></small>
-                    <p>TEST COMMENT</p>
+                    <p>COMMENT</p>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-
-
-
       </section>
     </div>
-
-
 
   </main>
 

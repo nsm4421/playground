@@ -20,7 +20,7 @@ public class CommentController {
     @PostMapping("/write")
     public String saveComment(WriteCommentRequest writeCommentRequest){
         // TODO : 인증기능 구현 후에 createdBy는 실제 유저명 넣기
-        UserAccountDto userAccountDto = UserAccountDto.of("test email", "test username", "test password", "test description", RoleType.USER);
+        UserAccountDto userAccountDto = UserAccountDto.of("test email", "karma", "test password", "test description", RoleType.USER);
         CommentDto commentDto = WriteCommentRequest.to(writeCommentRequest);
         commentService.saveComment(userAccountDto, commentDto);
         return String.format("redirect:/articles/%s", writeCommentRequest.getArticleId());
