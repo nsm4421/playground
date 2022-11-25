@@ -1,5 +1,6 @@
 package com.karma.board.domain;
 
+import com.karma.board.domain.dto.UserAccountDto;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,17 +35,27 @@ public class MyPrincipal implements UserDetails {
                 .collect(Collectors.toUnmodifiableSet());
         return new MyPrincipal(email, username, password, description, authorities);
     }
-
     protected MyPrincipal(){}
 
     //  Principal → Entity
-    public UserAccount to(MyPrincipal myPrincipal){
+    public static UserAccount toEntity(MyPrincipal myPrincipal){
         return UserAccount.of(
                 myPrincipal.getEmail(),
                 myPrincipal.getUsername(),
                 myPrincipal.getPassword(),
                 myPrincipal.getDescription(),
-                RoleType.USER                       // TODO
+                RoleType.USER
+        );
+    }
+
+    //  Principal → Dto
+    public static UserAccountDto toDto(MyPrincipal myPrincipal){
+        return UserAccountDto.of(
+                myPrincipal.getEmail(),
+                myPrincipal.getUsername(),
+                myPrincipal.getPassword(),
+                myPrincipal.getDescription(),
+                RoleType.USER
         );
     }
 
@@ -58,23 +69,32 @@ public class MyPrincipal implements UserDetails {
         );
     }
 
+    // Dto → Principal
+    public static MyPrincipal from(UserAccountDto userAccountDto) {
+        return MyPrincipal.of(
+                userAccountDto.getEmail(),
+                userAccountDto.getUsername(),
+                userAccountDto.getPassword(),
+                userAccountDto.getDescription());
+    }
+
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

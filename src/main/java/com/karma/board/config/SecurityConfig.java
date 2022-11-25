@@ -19,35 +19,33 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
     ) throws Exception {
-        http.csrf().disable();
         return http
                 .authorizeHttpRequests(auth -> auth
+                        // Static(html, css, js, favicon...) 허용
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .anyRequest()
+                        // GET 요청 허용
+                        .mvcMatchers(
+                            HttpMethod.GET,
+                            "/","/register", "/articles"
+                        )
                         .permitAll()
+                        // POST 요청 허용
+                        .mvcMatchers(
+                                HttpMethod.POST,
+                                "/register"
+                        )
+                        .permitAll()
+                        // 이 외의 모든 기능은 인증 필요
+                        .anyRequest()
+                        .authenticated()
                 )
+                // 폼 로그인 사용 & 로그아웃 시 루트페이지로
                 .formLogin(withDefaults())
                 .logout(logout -> logout.logoutSuccessUrl("/"))
+                // csrf 풀기
+                .csrf().disable()
                 .build();
-        // TODO : 테스트를 위해 임시로 주석처리
-//        return http
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-//                        .permitAll()
-//                        .mvcMatchers(
-//                            HttpMethod.GET,
-//                            "/",
-//                            "/articles",
-//                            "/articles/**",     // TODO : 제거 (테스트를 위해 열어놓음)ㄴ
-//                            "/articles/search-hashtag")
-//                        .permitAll()
-//                        .anyRequest()
-//                        .authenticated()
-//                )
-//                .formLogin(withDefaults())
-//                .logout(logout -> logout.logoutSuccessUrl("/"))
-//                .build();
     }
 
     @Bean
