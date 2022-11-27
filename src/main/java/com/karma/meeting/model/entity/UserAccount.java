@@ -2,32 +2,32 @@ package com.karma.meeting.model.entity;
 
 import com.karma.meeting.model.enums.RoleType;
 import com.karma.meeting.model.enums.Sex;
-import com.karma.meeting.model.AuditingFields;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Entity
 @ToString
 @Table(
         indexes = {
-        @Index(columnList = "email", unique = true),
-        @Index(columnList = "nickname", unique = true)
+                @Index(columnList = "email", unique = true),
+                @Index(columnList = "nickname", unique = true),
+                @Index(columnList = "username", unique = true)
 })
-@EntityListeners(AuditingFields.class)
-public class UserAccount extends AuditingFields{
+public class UserAccount{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false, updatable = false, name = "username")
     private String username;
     @Column(unique = true, nullable = false) @Setter
     private String nickname;
-    @Column(nullable = false) @Enumerated(EnumType.STRING) @Setter
+    @Enumerated(EnumType.STRING) @Setter
     private Sex sex;
     @Setter
     private String password;
@@ -35,12 +35,12 @@ public class UserAccount extends AuditingFields{
     private String email;
     @Column(nullable = false) @Enumerated(EnumType.STRING)
     private RoleType roleType = RoleType.USER;
-    @Column(nullable = false) @Setter
+    @Setter
     private String description;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Column(nullable = false) @Setter
-    private LocalDateTime birthAt;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Setter
+    private LocalDate birthAt;
 
-    private UserAccount(String username, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDateTime birthAt) {
+    private UserAccount(String username, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDate birthAt) {
         this.username = username;
         this.nickname = nickname;
         this.sex = sex;
@@ -53,11 +53,11 @@ public class UserAccount extends AuditingFields{
 
     protected UserAccount(){}
 
-    public static UserAccount of(String username, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDateTime birthAt) {
+    public static UserAccount of(String username, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDate birthAt) {
         return new UserAccount(username, nickname, sex, password, email, roleType, description, birthAt);
     }
 
-    public static UserAccount of(String username, String nickname, Sex sex, String password, String email, String description, LocalDateTime birthAt) {
+    public static UserAccount of(String username, String nickname, Sex sex, String password, String email, String description, LocalDate birthAt) {
         return new UserAccount(username, nickname, sex, password, email, RoleType.USER, description, birthAt);
     }
 }

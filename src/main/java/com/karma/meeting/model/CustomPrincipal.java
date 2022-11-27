@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,9 +22,9 @@ public class CustomPrincipal implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
     private String description;
-    private LocalDateTime birthAt;
+    private LocalDate birthAt;
 
-    private CustomPrincipal(String email, String username, String nickname, Sex sex, String password, Collection<? extends GrantedAuthority> authorities, String description, LocalDateTime birthAt) {
+    private CustomPrincipal(String email, String username, String nickname, Sex sex, String password, Collection<? extends GrantedAuthority> authorities, String description, LocalDate birthAt) {
         this.email = email;
         this.username = username;
         this.nickname = nickname;
@@ -37,8 +37,8 @@ public class CustomPrincipal implements UserDetails {
 
     protected CustomPrincipal(){}
 
-    public static CustomPrincipal of(String email, String userId, String nickname, Sex sex, String password, RoleType roleType, String description, LocalDateTime birthAt){
-        return new CustomPrincipal(email,userId,nickname,sex,password, typeCastingForRoleType(roleType), description, birthAt);
+    public static CustomPrincipal of(String email, String username, String nickname, Sex sex, String password, RoleType roleType, String description, LocalDate birthAt){
+        return new CustomPrincipal(email,username,nickname,sex,password, typeCastingForRoleType(roleType), description, birthAt);
     }
     public static CustomPrincipal from(UserAccount userAccount){
         return CustomPrincipal.of(
@@ -52,12 +52,6 @@ public class CustomPrincipal implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toUnmodifiableSet());
     }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return false;

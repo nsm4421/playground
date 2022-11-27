@@ -6,7 +6,7 @@ import com.karma.meeting.model.entity.UserAccount;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,9 +18,9 @@ public class UserAccountDto {
     private String email;
     private RoleType roleType;
     private String description;
-    private LocalDateTime birthAt;
+    private LocalDate birthAt;
 
-    private UserAccountDto(String userId, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDateTime birthAt) {
+    private UserAccountDto(String userId, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDate birthAt) {
         this.username = userId;
         this.nickname = nickname;
         this.sex = sex;
@@ -33,7 +33,7 @@ public class UserAccountDto {
 
     protected UserAccountDto(){}
 
-    public static UserAccountDto of(String userId, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDateTime birthAt){
+    public static UserAccountDto of(String userId, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDate birthAt){
         return new UserAccountDto(userId,nickname,sex,password,email,roleType,description,birthAt);
     }
 
