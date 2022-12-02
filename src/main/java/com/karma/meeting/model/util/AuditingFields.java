@@ -1,4 +1,4 @@
-package com.karma.meeting.model;
+package com.karma.meeting.model.util;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public abstract class AuditingFields {
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate @Column(updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate
     protected LocalDateTime createdAt;
 
     @CreatedBy @Column(updatable = false)
@@ -30,4 +30,6 @@ public abstract class AuditingFields {
 
     @LastModifiedBy
     protected String modifiedBy;
+
+    private LocalDateTime removedAt = null;
 }

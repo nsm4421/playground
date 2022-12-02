@@ -1,7 +1,5 @@
-package com.karma.meeting.model;
+package com.karma.meeting.model.util;
 
-import com.karma.meeting.model.enums.RoleType;
-import com.karma.meeting.model.enums.Sex;
 import com.karma.meeting.model.entity.UserAccount;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

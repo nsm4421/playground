@@ -1,7 +1,7 @@
 package com.karma.meeting.model.dto;
 
-import com.karma.meeting.model.enums.RoleType;
-import com.karma.meeting.model.enums.Sex;
+import com.karma.meeting.model.util.RoleType;
+import com.karma.meeting.model.util.Sex;
 import com.karma.meeting.model.entity.UserAccount;
 import lombok.Getter;
 import lombok.Setter;

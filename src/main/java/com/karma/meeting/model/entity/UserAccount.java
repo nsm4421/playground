@@ -1,26 +1,37 @@
 package com.karma.meeting.model.entity;
 
-import com.karma.meeting.model.enums.RoleType;
-import com.karma.meeting.model.enums.Sex;
+import com.karma.meeting.model.util.AuditingFields;
+import com.karma.meeting.model.util.RoleType;
+import com.karma.meeting.model.util.Sex;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @ToString
-@Table(
+@Table(name = "user_account",
         indexes = {
                 @Index(columnList = "email", unique = true),
                 @Index(columnList = "nickname", unique = true),
                 @Index(columnList = "username", unique = true)
 })
-public class UserAccount{
+@EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE user_account SET removed_at = NOW() WHERE id=?")
+@Where(clause = "removed_at is NULL")
+public class UserAccount {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false, updatable = false, name = "username")
@@ -39,6 +50,14 @@ public class UserAccount{
     private String description;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Setter
     private LocalDate birthAt;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @CreatedDate
+    protected LocalDateTime createdAt;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @LastModifiedDate
+    protected LocalDateTime modifiedAt;
+
+    private LocalDateTime removedAt = null;
 
     private UserAccount(String username, String nickname, Sex sex, String password, String email, RoleType roleType, String description, LocalDate birthAt) {
         this.username = username;

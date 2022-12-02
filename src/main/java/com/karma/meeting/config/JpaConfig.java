@@ -1,6 +1,6 @@
 package com.karma.meeting.config;
 
-import com.karma.meeting.model.CustomPrincipal;
+import com.karma.meeting.model.util.CustomPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

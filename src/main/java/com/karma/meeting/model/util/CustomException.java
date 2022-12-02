@@ -1,6 +1,6 @@
-package com.karma.meeting.model.exception;
+package com.karma.meeting.model.util;
 
-import com.karma.meeting.model.enums.CustomErrorCode;
+import com.karma.meeting.model.util.CustomErrorCode;
 import lombok.Getter;
 
 @Getter
@@ -17,5 +17,4 @@ public class CustomException extends RuntimeException{
         this.customErrorCode = customErrorCode;
         this.message = message;
     }
-
 }

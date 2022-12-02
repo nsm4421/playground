@@ -1,6 +1,6 @@
 package com.karma.meeting.controller.request;
 
-import com.karma.meeting.model.enums.Sex;
+import com.karma.meeting.model.util.Sex;
 import lombok.Data;
 
 import java.time.LocalDate;

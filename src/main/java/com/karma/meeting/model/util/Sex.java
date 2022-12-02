@@ -1,4 +1,4 @@
-package com.karma.meeting.model.enums;
+package com.karma.meeting.model.util;
 
 import lombok.Getter;
 
