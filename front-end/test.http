@@ -1,0 +1,10 @@
+POST http://localhost:8080/ws/chat
+
+
+{
+    "roomId":"1",
+    "sender":"nsm4421",
+    "content":"web socket test",
+    "createdAt":"2022-01-01",
+    "messageType":"ENTER"
+}

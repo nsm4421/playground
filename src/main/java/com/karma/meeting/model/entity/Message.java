@@ -1,6 +1,7 @@
 package com.karma.meeting.model.entity;
 
 import com.karma.meeting.model.AuditingFields;
+import com.karma.meeting.model.enums.MessageType;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -19,15 +20,19 @@ public class Message extends AuditingFields {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private Message(ChatRoom chatRoom, UserAccount userAccount, String content) {
+    @Enumerated
+    private MessageType messageType;
+
+    private Message(ChatRoom chatRoom, UserAccount userAccount, String content, MessageType messageType) {
         this.chatRoom = chatRoom;
         this.userAccount = userAccount;
         this.content = content;
+        this.messageType = messageType;
     }
 
     protected Message(){}
 
-    public static Message of(ChatRoom chatRoom, UserAccount userAccount, String content){
-        return new Message(chatRoom, userAccount, content);
+    public static Message of(ChatRoom chatRoom, UserAccount userAccount, String content, MessageType messageType){
+        return new Message(chatRoom, userAccount, content, messageType);
     }
 }

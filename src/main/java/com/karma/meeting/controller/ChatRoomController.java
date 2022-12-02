@@ -2,22 +2,22 @@ package com.karma.meeting.controller;
 
 import com.karma.meeting.controller.request.ChangeChatRoomTitleRequest;
 import com.karma.meeting.controller.request.CreateChatroomRequest;
-import com.karma.meeting.controller.response.GetAllMessagesResponse;
+import com.karma.meeting.controller.response.GetChatRoomsResponse;
 import com.karma.meeting.controller.response.Response;
 import com.karma.meeting.model.CustomPrincipal;
-import com.karma.meeting.model.dto.MessageDto;
 import com.karma.meeting.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/chat-room")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
+
     @PostMapping("/create")
     private Response<Long> createChatRoom(CreateChatroomRequest req, @AuthenticationPrincipal CustomPrincipal principal){
         /**
@@ -28,14 +28,12 @@ public class ChatRoomController {
         Long chatRoomId = chatRoomService.createChatRoom(req.getTitle(), principal.getUsername());
         return Response.success(chatRoomId);
     }
-    @GetMapping("/{roomId}")
-    private GetAllMessagesResponse getAllMessages(@PathVariable Long roomId){
+    @GetMapping("/")
+    private Page<GetChatRoomsResponse> getAllRoom(Pageable pageable){
         /**
-         * 채팅방 메세지 가져오기
-         * Input : 채팅방 id
-         * Output : 메세지 Set
+         * 채팅방 목록 가져오기
          */
-        return GetAllMessagesResponse.from(chatRoomService.getAllMessages(roomId));
+        return chatRoomService.getChatRooms(pageable).map(GetChatRoomsResponse::from);
     }
 
     @DeleteMapping("/{roomId}")
