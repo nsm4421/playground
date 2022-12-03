@@ -1,8 +1,8 @@
 package com.karma.meeting.config;
 
-import com.karma.meeting.model.CustomPrincipal;
-import com.karma.meeting.model.enums.CustomErrorCode;
-import com.karma.meeting.model.exception.CustomException;
+import com.karma.meeting.model.util.CustomPrincipal;
+import com.karma.meeting.model.util.CustomErrorCode;
+import com.karma.meeting.model.util.CustomException;
 import com.karma.meeting.repository.UserAccountRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -36,16 +36,29 @@ public class SecurityConfig {
                         // POST 요청 허용
                         .mvcMatchers(
                                 HttpMethod.POST,
-                                "/api/userAccount/register"
+                                "/api/userAccount/register", "/api/userAccount/login","/api/login"
                         )
                         .permitAll()
                         // 이 외의 모든 기능은 인증 필요
                         .anyRequest()
                         .authenticated()
                 )
-                // 폼 로그인 사용 & 로그아웃 시 루트페이지로
-                .formLogin(withDefaults())
-                .logout(logout -> logout.logoutSuccessUrl("/"))
+                // 로그인 폼
+                /**
+                 * loginPage : 인증이 필요한 경우 이동할 URL
+                 * defaultSuccessUrl : 로그인 성공시 이동할 URL
+                 * failureUrl : 로그인 실패시 이동할 URL
+                 * usernameParameter : form-data 에서 username name 태그
+                 * passwordParameter : form-data 에서 password name 태그
+                 * loginProcessingUrl : login 인증을 처리할 URL
+                 */
+                .formLogin()
+                .defaultSuccessUrl("/")                 // 로그인 성공시 이동할 URL
+                .failureUrl("/login?error")
+                .usernameParameter("username")          // username parameter name
+                .passwordParameter("password")         // password parameter name
+                .loginProcessingUrl("/api/login")			// 로그인 Form Action Url
+                .and()
                 // csrf 풀기
                 .csrf().disable()
                 .build();
@@ -66,4 +79,5 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

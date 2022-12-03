@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Button, Grid, TextField, Typography } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -51,6 +51,10 @@ const Index = () => {
         e.preventDefault();
         setIsPasswordConfirmVisible(!isPasswordConfirmVisible);
     }
+    const handleAlert = (e)=>{
+        e.preventDefault();
+        setMessage("");
+    }
 
     const handleSubmit = (e)=>{
         setIsLoading(true);
@@ -61,14 +65,13 @@ const Index = () => {
             setIsLoading(false);
             return;
         }
-        const endPoint = "api/userAccount/register";
+        const endPoint = "/api/userAccount/register";
         const data = {username, nickname, email, password, sex, description, birthAt}
-        console.log(data);
         axios.post(endPoint, data
         ).then((res)=>{
             navigator("/login");            
         }).catch((err)=>{
-            setMessage(`에러 발생 >>> ${message}`)
+            setMessage(`에러 발생 >>> ${err.response.data.message}`)
             console.log("Error >>>", err)
         }).finally(()=>{
             setIsLoading(false);
@@ -90,7 +93,13 @@ const Index = () => {
         <Container>
             
             <Typography variant='h4' sx={{marginTop:'5vh', padding:'1vh'}}>회원가입</Typography>
-            <Typography variant="p">{message}</Typography>
+
+          
+            {
+                message === ""
+                ? null
+                : <Alert severity="error" onClick={handleAlert}>{message}</Alert>
+            }
 
             <Grid container sx={{padding:'1vh'}} spacing={2}>
                 {/* 유저명 */}

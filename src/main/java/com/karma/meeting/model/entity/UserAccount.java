@@ -28,7 +28,6 @@ import java.time.LocalDateTime;
                 @Index(columnList = "nickname", unique = true),
                 @Index(columnList = "username", unique = true)
 })
-@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE user_account SET removed_at = NOW() WHERE id=?")
 @Where(clause = "removed_at is NULL")
 public class UserAccount {
@@ -56,6 +55,16 @@ public class UserAccount {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @LastModifiedDate
     protected LocalDateTime modifiedAt;
+
+    @PrePersist
+    void registeredAt() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void modifiedAt() {
+        this.modifiedAt = LocalDateTime.now();
+    }
 
     private LocalDateTime removedAt = null;
 

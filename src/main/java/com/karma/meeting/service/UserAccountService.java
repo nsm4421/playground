@@ -1,11 +1,11 @@
 package com.karma.meeting.service;
 
-import com.karma.meeting.model.CustomPrincipal;
+import com.karma.meeting.model.util.CustomPrincipal;
 import com.karma.meeting.model.entity.UserAccount;
-import com.karma.meeting.model.enums.CustomErrorCode;
-import com.karma.meeting.model.enums.RoleType;
-import com.karma.meeting.model.enums.Sex;
-import com.karma.meeting.model.exception.CustomException;
+import com.karma.meeting.model.util.CustomErrorCode;
+import com.karma.meeting.model.util.RoleType;
+import com.karma.meeting.model.util.Sex;
+import com.karma.meeting.model.util.CustomException;
 import com.karma.meeting.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

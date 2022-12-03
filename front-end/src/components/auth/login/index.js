@@ -2,7 +2,6 @@ import { VisibilityOff } from '@mui/icons-material';
 import Visibility from '@mui/icons-material/Visibility';
 import { Button, Container, IconButton, Paper, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import axios from "axios";
 import { useState } from "react";
 
 const Login = ()=>{
@@ -11,6 +10,7 @@ const Login = ()=>{
     const [password, setPassowrd] = useState("");
     const [isLoading, setIsLoaidng] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const endPoint = "/api/userAccount/login";
 
     const handleUsername = (e)=>{
         setUsername(e.target.value);
@@ -27,19 +27,25 @@ const Login = ()=>{
     const handleSubmit = async (e)=>{
         setIsLoaidng(true);
         e.preventDefault();
-        const data = {username, password}
-        await axios
-            .post("/api/userAccount/login", data)
-            .then((res)=>{
-                // TODO
-                console.log(res);
-            })
-            .catch((err)=>{
-                console.log(err);
-            })
-            .finally(()=>{
-                setIsLoaidng(false);
-            })
+        var formData = new FormData(); 
+        formData.append('username',username); 
+        formData.append('password',password); 
+        fetch(endPoint, {
+            method: 'POST',
+            cache: 'no-cache',
+            body: formData, 
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            // TODO - 로그인 성공시 리다이렉션
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+        .finally(()=>{
+            setIsLoaidng(false);
+        })
     }
 
     const LabelForVisibility = ({label, isVisible, handleIsVisible}) => {
@@ -70,6 +76,13 @@ const Login = ()=>{
             
             <Button sx={{marginTop:'5vh', padding:'1vh'}} disabled={isLoading} color="success" variant='contained' onClick={handleSubmit}>로그인</Button>
             
+            <form action="/api/login" method="post">
+                <input name="username"></input>
+                <input name="password"></input>
+                <button type="submit">submit</button>
+            </form>
+
+
         </Container>
     );
 }
