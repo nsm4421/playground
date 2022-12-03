@@ -10,9 +10,12 @@ li {
 a {
   text-decoration: none;
   font-weight: bold;
-  color: white;
 }
 
-:root {
-  --background-color:black
+@media (prefers-color-scheme: light) {
+    color:black
+}
+
+@media (prefers-color-scheme: dark) {
+    color:white
 }

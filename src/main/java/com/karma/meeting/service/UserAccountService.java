@@ -1,11 +1,7 @@
 package com.karma.meeting.service;
 
-import com.karma.meeting.model.util.CustomPrincipal;
+import com.karma.meeting.model.util.*;
 import com.karma.meeting.model.entity.UserAccount;
-import com.karma.meeting.model.util.CustomErrorCode;
-import com.karma.meeting.model.util.RoleType;
-import com.karma.meeting.model.util.Sex;
-import com.karma.meeting.model.util.CustomException;
 import com.karma.meeting.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,14 +16,14 @@ public class UserAccountService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
-    public CustomPrincipal register(String username, String nickname, String password, String email, Sex sex, String description, LocalDate birthAt){
+    public CustomResponse register(String username, String nickname, String password, String email, Sex sex, String description, LocalDate birthAt){
         // 중복여부 체크
-        checkDuplicated(field.USERNAME, username);
-        checkDuplicated(field.EMAIL, email);
-        checkDuplicated(field.NICKNAME, nickname);
+        if(isExist(fieldsNeedToCheckDuplicated.USERNAME, username)){return CustomResponse.of(CustomState.DUPLICATED_ENTITY, "Username is duplicated");};
+        if(isExist(fieldsNeedToCheckDuplicated.EMAIL, email)){return CustomResponse.of(CustomState.DUPLICATED_ENTITY, "Email is duplicated");};
+        if(isExist(fieldsNeedToCheckDuplicated.NICKNAME, nickname)){return CustomResponse.of(CustomState.DUPLICATED_ENTITY, "Nickname is duplicated");};
         // 저장
-        UserAccount userAccount = UserAccount.of(username,nickname,sex,passwordEncoder.encode(password),email,RoleType.USER,description,birthAt);
-        return CustomPrincipal.from(userAccountRepository.save(userAccount));
+        userAccountRepository.save(UserAccount.of(username,nickname,sex,passwordEncoder.encode(password),email,RoleType.USER,description,birthAt));
+        return CustomResponse.of(CustomState.SUCCESS);
     }
 
     /**
@@ -35,56 +31,15 @@ public class UserAccountService {
      * @param f : 중복여부 검사할 필드 (username, email, nickname)
      * @param keyword : 중복여부 검사할 값
      */
-    private void checkDuplicated(field f, String keyword){
-        switch (f){
-            case USERNAME -> {
-                if(userAccountRepository.findByUsername(keyword).isPresent()){
-                    throw new CustomException(
-                            CustomErrorCode.DUPLICATED_ENTITY,
-                            String.format("[%s]는 이미 존재하는 유저명입니다.", keyword));
-                }
-            }
-            case EMAIL -> {
-                if(userAccountRepository.findByEmail(keyword).isPresent()){
-                    throw new CustomException(
-                            CustomErrorCode.DUPLICATED_ENTITY,
-                            String.format("[%s]는 이미 존재하는 이메일입니다.", keyword));
-                }
-            }
-            case NICKNAME -> {
-                if(userAccountRepository.findByNickname(keyword).isPresent()){
-                    throw new CustomException(
-                            CustomErrorCode.DUPLICATED_ENTITY,
-                            String.format("[%s]는 이미 존재하는 닉네임입니다.", keyword));
-                }
-            }
-            default -> throw new CustomException(
-                    CustomErrorCode.INTERNAL_SERVER_ERROR,  "잘못된 파라메터가 주어짐");
+    private Boolean isExist(fieldsNeedToCheckDuplicated f, String keyword){
+        return switch (f){
+            case USERNAME ->  userAccountRepository.findByUsername(keyword).isPresent();
+            case EMAIL ->  userAccountRepository.findByEmail(keyword).isPresent();
+            case NICKNAME ->  userAccountRepository.findByNickname(keyword).isPresent();
         };
     }
 
-    private UserAccount findBy(field f, String keyword){
-        return switch (f){
-            case USERNAME->userAccountRepository.findByUsername(keyword)
-                    .orElseThrow(()->{throw new CustomException(
-                            CustomErrorCode.DUPLICATED_ENTITY,
-                            String.format("[%s]는 존재하지 않는 유저명입니다", keyword)
-                    );});
-            case NICKNAME -> userAccountRepository.findByNickname(keyword)
-                    .orElseThrow(()->{throw new CustomException(
-                            CustomErrorCode.DUPLICATED_ENTITY,
-                            String.format("[%s]는 존재하지 않는 닉네임입니다", keyword)
-                    );});
-            case EMAIL -> userAccountRepository.findByEmail(keyword)
-                    .orElseThrow(()->{throw new CustomException(
-                            CustomErrorCode.DUPLICATED_ENTITY,
-                            String.format("[%s]는 존재하지 않는 이메일입니다", keyword)
-                    );});
-            default -> throw new CustomException(
-                    CustomErrorCode.INTERNAL_SERVER_ERROR,  "잘못된 파라메터가 주어짐");
-        };
-    }
-    private enum field{
+    private enum fieldsNeedToCheckDuplicated {
         USERNAME,NICKNAME,EMAIL;
     }
 }

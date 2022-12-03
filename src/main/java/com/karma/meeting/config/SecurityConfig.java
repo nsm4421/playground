@@ -1,8 +1,7 @@
 package com.karma.meeting.config;
 
 import com.karma.meeting.model.util.CustomPrincipal;
-import com.karma.meeting.model.util.CustomErrorCode;
-import com.karma.meeting.model.util.CustomException;
+import com.karma.meeting.model.util.CustomResponse;
 import com.karma.meeting.repository.UserAccountRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -10,10 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
@@ -30,13 +28,13 @@ public class SecurityConfig {
                         // GET 요청 허용
                         .mvcMatchers(
                                 HttpMethod.GET,
-                                "/", "/register"
+                                "/register", "/login"
                         )
                         .permitAll()
                         // POST 요청 허용
                         .mvcMatchers(
                                 HttpMethod.POST,
-                                "/api/userAccount/register", "/api/userAccount/login","/api/login"
+                                "/register", "/login"
                         )
                         .permitAll()
                         // 이 외의 모든 기능은 인증 필요
@@ -57,7 +55,7 @@ public class SecurityConfig {
                 .failureUrl("/login?error")
                 .usernameParameter("username")          // username parameter name
                 .passwordParameter("password")         // password parameter name
-                .loginProcessingUrl("/api/login")			// 로그인 Form Action Url
+                .loginProcessingUrl("/login")			// 로그인 Form Action Url
                 .and()
                 // csrf 풀기
                 .csrf().disable()
@@ -66,18 +64,11 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserAccountRepository repository) {
         return username -> CustomPrincipal.from(
-                repository
-                        .findByUsername(username)
-                        .orElseThrow(()->{
-                            throw new CustomException(
-                                    CustomErrorCode.ENTITY_NOT_FOUNDED,
-                                    String.format("Username [%s] is not founded", username)
-                            );
-                        }));
+                repository.findByUsername(username)
+                        .orElseThrow(()->{throw new UsernameNotFoundException(String.format("Username [%s] is not founded...", username));}));
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
