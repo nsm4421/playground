@@ -27,7 +27,7 @@ public class JpaConfig {
                 .map(Authentication::getPrincipal)
                 // ⅴ) Type Casting
                 .map(CustomPrincipal.class::cast)
-                // ⅵ) 유저명 꺼내기
-                .map(CustomPrincipal::getUsername);
+                // ⅵ) 닉네임 꺼내기
+                .map(CustomPrincipal::getNickname);
     }
 }
