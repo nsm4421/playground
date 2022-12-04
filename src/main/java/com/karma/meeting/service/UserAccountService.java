@@ -1,5 +1,6 @@
 package com.karma.meeting.service;
 
+import com.karma.meeting.model.dto.UserAccountDto;
 import com.karma.meeting.model.util.*;
 import com.karma.meeting.model.entity.UserAccount;
 import com.karma.meeting.repository.UserAccountRepository;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.time.LocalDate;
 
 @Service
@@ -16,14 +18,13 @@ public class UserAccountService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
-    public CustomResponse register(String username, String nickname, String password, String email, Sex sex, String description, LocalDate birthAt){
+    public void register(String username, String nickname, String password, String email, Sex sex, String description, LocalDate birthAt){
         // 중복여부 체크
-        if(isExist(fieldsNeedToCheckDuplicated.USERNAME, username)){return CustomResponse.of(CustomState.DUPLICATED_ENTITY, "Username is duplicated");};
-        if(isExist(fieldsNeedToCheckDuplicated.EMAIL, email)){return CustomResponse.of(CustomState.DUPLICATED_ENTITY, "Email is duplicated");};
-        if(isExist(fieldsNeedToCheckDuplicated.NICKNAME, nickname)){return CustomResponse.of(CustomState.DUPLICATED_ENTITY, "Nickname is duplicated");};
+        if(isExist(fieldsNeedToCheckDuplicated.USERNAME, username)){throw new EntityExistsException("Username is duplicated...");};
+        if(isExist(fieldsNeedToCheckDuplicated.EMAIL, email)){throw new EntityExistsException("Email is duplicated...");};
+        if(isExist(fieldsNeedToCheckDuplicated.NICKNAME, nickname)){throw new EntityExistsException("nickname is duplicated...");};
         // 저장
         userAccountRepository.save(UserAccount.of(username,nickname,sex,passwordEncoder.encode(password),email,RoleType.USER,description,birthAt));
-        return CustomResponse.of(CustomState.SUCCESS);
     }
 
     /**
