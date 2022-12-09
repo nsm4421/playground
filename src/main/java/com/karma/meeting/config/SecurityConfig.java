@@ -28,7 +28,7 @@ public class SecurityConfig {
                         // GET 요청 허용
                         .mvcMatchers(
                                 HttpMethod.GET,
-                                "/register", "/login"
+                                "/", "/register", "/login"
                         )
                         .permitAll()
                         // POST 요청 허용
