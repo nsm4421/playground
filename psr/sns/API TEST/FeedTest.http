@@ -1,0 +1,10 @@
+###
+POST http://localhost:8080/api/v1/feed/write
+uthorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyI8LS0tIEpXVCDsnbjspp3thqDtgbAg7IOd7ISxIOyLnCDsgqzsmqntlaAg7J247KadIO2CpCA8LS0tLSI6InRlc3RfdXNlcm5hbWUyIiwiaWF0IjoxNjYyOTA0NTcyLCJleHAiOjE2NjU0OTY1NzJ9.4QU1EDeLu5rWr5p1OXYMbv3JhmflVSaGMZoOwlE02nM
+Host: localhost
+Content-Type: application/json
+{
+    "username":"test_username2",
+    "title" :"test_title",
+    "body":"test_body"
+}
