@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Article</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <style>
+        #table-header > th > a {
+            text-decoration:none;
+            color:black;
+        };
+    </style>
+</head>
+<body>
+    <header id="header"/>
+
+    <main class="container">
+
+        <div class="row mt-3 mb-3">
+            <form id="search-form" name="searchForm">
+                <div class="input-group justify-content-between" id="search-bar" name="searchBar">
+                    <!--Select Bar-->
+                    <div class="w-20">
+                        <select class="form-select" id="search-type" name="searchType">
+                            <option value="title" selected>Title</option>
+                            <option value="author">Author</option>
+                            <option value="hashtag">Hashtag</option>
+                        </select>
+                    </div>
+                    <!--Search Input-->
+                    <div class="flex-fill">
+                        <input type="search" class="form-control" placeholder="keyword..." name="keyword" id="keyword"/>
+                    </div>
+                    <!--Submit Button-->
+                    <div class="w-20">
+                        <button id="search-button" type="submit" class="btn btn-primary">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!--Article-->
+        <table class="table mt-5 table-hover" id="article-table" name="article-table">
+            <tr id="table-header" name="table-header">
+                <th scope="col" class="col-6 title"><a>Title</a></th>
+                <th scope="col" class="hashtags"><a>Hashtag</a></th>
+                <th scope="col" class="author"><a>Author</a></th>
+                <th scope="col" class="created-at"><a>Written At</a></th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td class="title"><a>Test Title</a></td>
+                    <td class="hashtags">Test Hashtag</td>
+                    <td class="author">Test Author</td>
+                    <td class="created-at"><time>2022-12-21</time></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--Pagination-->
+        <div class="d-flex justify-content-center mt-5">
+            <nav id="pagination" name="pagination">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link"/></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </main>
+    <footer id="footer"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>
