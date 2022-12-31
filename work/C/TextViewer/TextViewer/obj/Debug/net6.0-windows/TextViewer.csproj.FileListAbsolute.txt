@@ -1,0 +1,17 @@
+C:\Users\N\source\repos\TextViewer\TextViewer\bin\Debug\net6.0-windows\TextViewer.exe
+C:\Users\N\source\repos\TextViewer\TextViewer\bin\Debug\net6.0-windows\TextViewer.deps.json
+C:\Users\N\source\repos\TextViewer\TextViewer\bin\Debug\net6.0-windows\TextViewer.runtimeconfig.json
+C:\Users\N\source\repos\TextViewer\TextViewer\bin\Debug\net6.0-windows\TextViewer.dll
+C:\Users\N\source\repos\TextViewer\TextViewer\bin\Debug\net6.0-windows\ref\TextViewer.dll
+C:\Users\N\source\repos\TextViewer\TextViewer\bin\Debug\net6.0-windows\TextViewer.pdb
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.csproj.AssemblyReference.cache
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.Form1.resources
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.csproj.GenerateResource.cache
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.AssemblyInfoInputs.cache
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.AssemblyInfo.cs
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.csproj.CoreCompileInputs.cache
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.dll
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\ref\TextViewer.dll
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.pdb
+C:\Users\N\source\repos\TextViewer\TextViewer\obj\Debug\net6.0-windows\TextViewer.genruntimeconfig.cache

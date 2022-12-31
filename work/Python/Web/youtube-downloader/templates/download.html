@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download</title>
+</head>
+<body>
+
+    <div id="youtube-info" display="none">
+        <p id="link">{{link}}</p>
+        <p id="option">{{option}}</p>
+    </div>
+    <hr/>
+    
+    
+    <div>
+        <p>영상제목 >>> {{title}}</p>
+        <p>영상길이(초) >>> {{length}} 초</p>
+        <p>영상조회수 >>> : {{numView}}</p>
+        <p>영상설명 >>> {{description}}</p>
+        <button id="download-btn" onclick="clickEvent();">다운로드하기</button>
+        <br/>
+        <img src={{thumbnail_url}} alt="thumbnail_url"/>
+    </div>
+
+    <script>
+        const link = document.getElementById('link').innerText;
+        const option = document.getElementById('option').innerText;
+        const info = document.getElementById('youtube-info');
+        const btn = document.getElementById('download-btn');
+
+        const clickEvent = ()=>{     
+            btn.disabled = true;   
+            btn.innerText = ">>>다운로드중<<<";   
+            fetch('/download', {
+                method:'POST',
+                body:JSON.stringify({
+                    link:link, option:option
+                })
+            }).then((res)=>res.json())
+            .then((data)=>{           
+                data.isDownSuccess
+                ? alert('Download Success')
+                : alert('Download Failed')
+            }).catch(()=>{
+                alert('Sever Failure');
+            }).finally(()=>{
+                btn.disabled = false;
+                btn.innerText = "다운로드 하기"; 
+            })
+        }
+
+
+    </script>
+</body>
+</html>

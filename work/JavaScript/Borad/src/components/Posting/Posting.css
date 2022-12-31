@@ -1,0 +1,166 @@
+.posting__container {
+    height: 100%;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-color: aliceblue;
+}
+
+.posting__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2vmin;
+    font-size: 5vmin;
+    font-weight: 600;
+}
+
+.posting__header__box {
+    display: flex;
+    align-items: center;
+}
+
+.posting__header__box img {
+    width: 8vmin;
+    border-radius: 50%;
+}
+
+.posting__header__button {
+    border: 1px solid;
+    border-radius: 50%;
+    border-color: darkgreen;
+    color: white;
+    background-color: darkgreen;
+}
+
+.posting__header__button:hover {
+    color: orange;
+    border : 3px;
+    border-color: orange;
+}
+
+.posting__header span {
+    margin-left: 5vmin;
+}
+
+
+.posting__button__box {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3vmin;
+    margin-bottom: 1vmin;
+}
+
+.posting__button__box li {
+    list-style: none;
+}
+
+.posting__button__item {
+    color: #61dafb;
+}
+
+.posting__button__item:hover {
+    color: orange;
+    border: 1px;
+    border-radius: 10%;
+    border-color: orange;
+}
+
+.posting__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.posting__grid__inner__img__box {
+    display: flex;
+    position: relative;
+    justify-content: center;
+}
+
+.posting__grid__image {
+    max-width: 90%;
+    height: auto;
+    margin: 0;
+}
+
+.posting__hide__comment {
+    visibility: hidden;
+}
+
+.posting__grid__inner__left__icon {
+    position: absolute;
+    top:50%;
+    left:1%;
+}
+
+.posting__grid__inner__left__icon:hover {
+    color: orange;
+}
+
+.posting__grid__inner__right__icon {
+    position: absolute;
+    top:50%;
+    right:1%;
+}
+
+.posting__grid__inner__right__icon:hover {
+    color: orange;
+}
+
+.posting__article {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.posting__comment__container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.posting__comment__textfield {
+    background-color: aliceblue;
+    width: 80%;
+}
+
+.posting__comment__button {
+    border: 0;
+    outline: 0;
+    padding: 5px;
+    border-color: white;
+    color: white;
+    background-color: inherit;
+}
+
+.posting__comment {
+    display: grid;
+    grid-template-columns: 2fr 6fr 2fr;
+    row-gap: 5px;
+    column-gap: 5px;
+}
+
+.posting__comment * {
+    padding: 1vmin;
+    margin: 1vmin;
+}
+
+.posting__comment h5{ 
+    font-weight: 800; 
+}
+
+.posting__comment p{
+    color: gainsboro;
+    text-align: left;
+}
+
+.posting__comment span {
+    color: gainsboro;
+    text-align: right;
+}
+
+.posting__comment__button:hover {
+    color: orange;
+    border-color: orange;
+}
+

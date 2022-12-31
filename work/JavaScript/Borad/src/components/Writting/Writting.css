@@ -1,0 +1,40 @@
+.margin__block {
+    margin-top: 5vmin;
+}
+
+.writting__title {
+    margin-right: 3vmin;
+}
+
+.add__image {
+    display: none;
+}
+
+.add__image__inner__box {
+    display: flex;
+    width: 10vmin;
+    height: 10vmin;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: 1vmin;
+}
+
+.add__image__box {
+    display: flex;
+}
+
+.img__preview {
+    max-width: 100%;
+    height: auto
+}
+
+.writting__button__box {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.writting__submit__btn {
+    margin-left: 30vmin;
+}
