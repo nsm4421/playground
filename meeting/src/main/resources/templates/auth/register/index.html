@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header id="header"/>
+
+    <div class="m-10 sm:mt-10">
+        <div class="md:grid md:grid-cols-3 md:gap-6">
+            <h1 class="block text-large text-blue-800"><strong>회원가입</strong></h1>
+            <div class="mt-5 md:col-span-3 md:mt-0">
+                <!--회원가입 폼-->
+                <form id="submitForm" action="/register" method="post">
+                    <div class="overflow-hidden shadow sm:rounded-md">
+                        <div class="bg-white px-4 py-5 sm:p-6">
+                            <div class="grid grid-cols-6 gap-6">
+
+                                <!--유저명-->
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="username" class="block text-sm font-medium text-blue-700">유저명</label>
+                                    <input type="text" name="username" id="username" placeholder="로그인 시 입력할 유저명을 입력해주세요"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+
+                                <!--닉네임-->
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="nickname" class="block text-sm font-medium text-blue-700">닉네임</label>
+                                    <input type="text" name="nickname" id="nickname" placeholder="닉네임을 작명해주세요"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+
+                                <!--이메일주소-->
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="email" class="block text-sm font-medium text-blue-700">이메일 주소</label>
+                                    <input type="email" name="email" id="email" placeholder="example@naver.com"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+
+                                <!--패스워드-->
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="password" class="block text-sm font-medium text-blue-700">패스워드</label>
+                                    <input type="password" name="password" id="password" placeholder="비밀번호를 입력해주세요"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+
+                                <!--성별-->
+                                <div class="col-span-6 sm:col-span-3">
+                                    <fieldset>
+                                        <label class="block text-sm font-medium text-blue-700">성별</label>
+                                  
+                                        <div class="flex items-center mt-1 mb-4">
+                                            <input id="sex-male" type="radio" name="sex" value="MALE" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" checked>
+                                            <label for="sex-male" class="mt-1 block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                남자
+                                            </label>
+                                        </div>
+
+                                        <div class="flex items-center mt-1 mb-4">
+                                            <input id="sex-female" type="radio" name="sex" value="FEMALE" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" checked>
+                                            <label for="sex-female" class="mt-1 block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                여자
+                                            </label>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+
+                                <!--달력-->
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="birthAt" class="mt-1 block text-sm font-medium text-blue-700">생년월일</label>
+                                    <input name="birthAt" id="birthAt" type="date" class="mt-1"/>
+                                </div>
+
+                                <!--자기소개-->
+                                <div class="col-span-6 sm:col-span-6 mt-3">
+                                    <label for="description" class="mt-1 block text-sm font-medium text-blue-700">상태글</label>
+                                    <div class="mt-1">
+                                        <textarea id="description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
+                                        placeholder="간단히 자신을 표현해주세요" style="resize:none"></textarea>
+                                    </div>
+                                </div>
+
+                                <!--회원가입 버튼-->
+                                <div class="mt-3 col-span-6 sm:col-span-4">
+                                    <button id="btn-submit" type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        회원가입
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <footer id="footer"/>
+    <script>
+        const endPoint = "/register";
+        document.getElementById("submitForm").onsubmit = async (e)=>{
+            let formData = new FormData();
+            formData.append("username", document.getElementById("username").value);
+            formData.append("nickname", document.getElementById("nickname").value);
+            formData.append("email", document.getElementById("email").value);
+            formData.append("password", document.getElementById("password").value);
+            formData.append("birthAt", document.getElementById("birthAt").value);
+            formData.append("description", document.getElementById("description").value);
+            formData.append("sex", document.getElementById("sex-male").checked ? "MALE" : "FEMALE");
+            await fetch(endPoint, {
+                method:"post",
+                body:formData   
+            })
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch((err)=>{
+                alert("회원가입 실패");
+                console.log(err);
+            });
+        }   
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<thlogic xmlns:th="http://www.thymeleaf.org">
+    <attr sel="#header" th:replace="header/index :: #header"/>
+    <attr sel="#footer" th:replace="footer/index :: #footer"/>
+
+    <attr sel="#feed__box" th:each="feed : ${feeds}">
+        <attr sel="#feed__title" th:text="${feed.title}"/>
+        <attr sel="#feed__content" th:text="${feed.content}"/>
+        <attr sel="#detail__link" th:href="'/feed/' + ${feed.id}"/>
+        <attr sel="#feed__createdAt" th:datetime="${feed.createdAt}" th:text="${#temporals.format(feed.createdAt, 'yy년 MM월 dd일 HH시 mm분')}"/>
+        <attr sel="#feed__createdBy" th:text="${feed.createdBy}"/>
+    </attr>
+</thlogic>
