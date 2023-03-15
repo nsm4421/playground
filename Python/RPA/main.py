@@ -50,11 +50,12 @@ class Rpa:
         """
         print('한글파일 변환中...')
         for hwp_doc in tqdm(listdir(hwp_dir)):
-            hwp = cls.open_hwp_doc(join(hwp_dir, hwp_doc))
-            cls.change_text_color(hwp)
-            cls.save_hwp_doc(hwp, join(working_dir, hwp_doc))
-            cls.convert_hwp_to_pdf(hwp, join(working_dir, hwp_doc.replace(".hwp",".pdf")))
-            cls.close_hwp_doc(hwp)
+            if '.hwp' in hwp_doc:
+                hwp = cls.open_hwp_doc(join(hwp_dir, hwp_doc))
+                cls.change_text_color(hwp)
+                cls.save_hwp_doc(hwp, join(working_dir, hwp_doc))
+                cls.convert_hwp_to_pdf(hwp, join(working_dir, hwp_doc.replace(".hwp",".pdf")))
+                cls.close_hwp_doc(hwp)
 
     @classmethod
     def merge_pdf_files_by_mapping(cls, working_dir, ctr_mapping, pdf_dir, suffix = "공시용"):
@@ -126,15 +127,17 @@ class Rpa:
         hwp.HAction.Execute("AllReplace", option.HSet)
 
     @staticmethod
-    def convert_hwp_to_pdf(hwp, pdf_file_path):
+    def convert_hwp_to_pdf(hwp, pdf_file_path, printmethod=0):
         """
-        한글 파일을 PDF 파일로 변환해주는 메써드
+        한글 파일을 두쪽모음 해제 후 PDF 파일로 변환해주는 메써드
         """
-        option = hwp.HParameterSet.HFileOpenSave
-        hwp.HAction.GetDefault("FileSaveAs_S", option.HSet)
-        option.filename = abspath(pdf_file_path)
-        option.Format = "PDF"
-        hwp.HAction.Execute("FileSaveAs_S", option.HSet)
+        action = hwp.CreateAction("Print")
+        print_setting = action.CreateSet()
+        action.GetDefault(print_setting)
+        print_setting.SetItem("PrintMethod", printmethod)  
+        print_setting.SetItem("FileName", abspath(pdf_file_path)) 
+        print_setting.SetItem("PrinterName", "Microsoft Print to PDF")
+        action.Execute(print_setting)
 
     @staticmethod
     def merge_pdf(woriking_dir, pdf_files, save_file_path):
@@ -151,4 +154,4 @@ class Rpa:
 if __name__ == '__main__':
 
     rpa = Rpa()
-    rpa.run(exel_file_path='./list.xlsx',hwp_dir='./hwp',working_dir='./work',pdf_dir='./pdf')
+    rpa.run(exel_file_path='./input/list.xlsx',hwp_dir='./input',working_dir='./work',pdf_dir='./output')
