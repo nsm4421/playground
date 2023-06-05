@@ -2,6 +2,7 @@ export type PostData = {
   _id: string;
   title?: string;
   content?: string;
+  email:string;
 };
 
 export type WritePostData = {

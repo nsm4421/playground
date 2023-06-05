@@ -2,15 +2,16 @@
 
 import GitHubProvider from "next-auth/providers/github";
 import NextAuth, { NextAuthOptions } from "next-auth";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import { connectDB } from "@/util/database";
 
-if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET){
+if (!process.env.NEXTAUTH_SECRET || !process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET){
     throw new Error("check .env file")
 }
 
-const authOptions: NextAuthOptions = {
-    session: {
-      strategy: "jwt",
-    },
+export const authOptions: NextAuthOptions = {
+    secret:process.env.NEXTAUTH_SECRET,
+    adapter:MongoDBAdapter(connectDB),
     providers: [
         GitHubProvider({
           clientId: process.env.GITHUB_CLIENT_ID,

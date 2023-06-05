@@ -1,3 +1,4 @@
+import { getLoginUserEmail } from "@/util/auth-util";
 import { connectDB } from "@/util/database";
 import { PostData } from "@/util/model";
 import { ObjectId } from "mongodb";
@@ -37,7 +38,7 @@ export async function GET(request: Request) {
     });
   } catch (err) {
     // on failure
-    console.error(err)
+    console.error(err);
     return NextResponse.json({
       success: false,
       message: "server error",
@@ -48,8 +49,17 @@ export async function GET(request: Request) {
 /// Write post
 export async function POST(req: NextRequest) {
   try {
+    // check user logined or not
+    const email = await getLoginUserEmail();
+    if (!email) {
+      return NextResponse.json({
+        success: false,
+        message: "can't get login user's email",
+      });
+    }
+
     // check user input
-    const input = await req.json();
+    let input = await req.json();
     if (!input.title || !input.content) {
       return NextResponse.json({
         success: false,
@@ -59,7 +69,9 @@ export async function POST(req: NextRequest) {
 
     // insert data
     const db = (await connectDB).db(process.env.DB_NAME);
-    const data = await db.collection("post").insertOne(input);
+    const data = await db
+      .collection("post")
+      .insertOne({ ...input, email, createAt: new Date() });
 
     // on success
     return NextResponse.json({
@@ -69,7 +81,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     // on failure
-    console.error(err)
+    console.error(err);
     return NextResponse.json({
       success: false,
       message: "server error",
@@ -80,6 +92,15 @@ export async function POST(req: NextRequest) {
 /// Update post
 export async function PUT(req: NextRequest) {
   try {
+    // check user logined or not
+    const email = await getLoginUserEmail();
+    if (!email) {
+      return NextResponse.json({
+        success: false,
+        message: "can't get login user's email",
+      });
+    }
+
     // check user input
     const input = await req.json();
     if (!input._id) {
@@ -95,8 +116,27 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    // insert data
+    // check post exists
     const db = (await connectDB).db(process.env.DB_NAME);
+    const post = await db
+      .collection("post")
+      .findOne({ _id: new ObjectId(input._id) });
+    if (!post) {
+      return NextResponse.json({
+        success: false,
+        message: "post doesn't exist",
+      });
+    }
+
+    // check author is equal to login user
+    if (post.email != email){
+      return NextResponse.json({
+        success: false,
+        message: "only author can update post",
+      });
+    }
+
+    // update data
     const data = await db
       .collection("post")
       .updateOne(
@@ -112,7 +152,7 @@ export async function PUT(req: NextRequest) {
     });
   } catch (err) {
     // on failure
-    console.error(err)
+    console.error(err);
     return NextResponse.json({
       success: false,
       message: "server error",

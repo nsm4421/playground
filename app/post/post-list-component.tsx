@@ -17,13 +17,18 @@ export default function PostListComponent() {
   };
 
   const deletePost = async (_id: string) => {
-    setIsLoading(false);
     fetch("/api/post/delete", {
       method: "POST",
       body: JSON.stringify({ _id }),
-    }).then(() => {
-      setPosts([...posts].filter((post) => post._id !== _id));
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setPosts([...posts].filter((post) => post._id !== _id));
+          return;
+        }
+        alert(data.message);
+      });
   };
 
   useEffect(() => {

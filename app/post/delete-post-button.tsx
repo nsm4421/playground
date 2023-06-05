@@ -11,9 +11,14 @@ export default function DeletePostButton(props: {
   }
   const [isLoading, setIsLoading] = useState(false);
   const handleDeletePost = async () => {
-    setIsLoading(false);
-    await props.deletePost(props._id);
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
+      await props.deletePost(props._id);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
