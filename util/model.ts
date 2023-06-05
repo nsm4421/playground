@@ -15,3 +15,8 @@ export type EditPostData = {
   title: string;
   content: string;
 };
+
+export type RegisterRequest = {
+  email:string;
+  password:string;
+}
