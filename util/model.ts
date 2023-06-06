@@ -27,3 +27,5 @@ export type CommentData = {
   content: string;
   name: string;
 };
+
+export type ROLE = "USER" | "MANGER" | "ADMIN";

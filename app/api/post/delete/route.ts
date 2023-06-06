@@ -1,20 +1,22 @@
 import { getLoginUserEmail } from "@/util/auth-util";
 import { connectDB } from "@/util/database";
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 /// Delete post
 export async function POST(req: NextRequest) {
   try {
     // check user logined or not
-    const email = await getLoginUserEmail();
-    if (!email) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user.id;
+    if (!userId) {
       return NextResponse.json({
         success: false,
-        message: "can't get login user's email",
+        message: "need to login",
       });
     }
-
     // check id
     const input = await req.json();
     if (!input._id) {
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     // check author and login user are equal
-    if (post.email !== email) {
+    if (post.userId !== userId) {
       return NextResponse.json({
         success: false,
         message: "only author can delete post",

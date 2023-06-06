@@ -43,18 +43,19 @@ export const authOptions: NextAuthOptions = {
             id: String(doc?._id),
             email: doc?.email,
             password: doc?.password,
+            image: doc?.image ?? null,
+            role: doc?.role ?? "USER",
           }));
 
-        // user not found
-        if (!user) return null;
+        // user information is not valid
+        if (!user.id || !user.email || !user.password) return null;
 
         // password is invalid
         if (!credentials?.password) return null;
-        if (!(await bcrypt.compare(credentials.password, user?.password))) {
+        if (!(await bcrypt.compare(credentials.password, user?.password)))
           return null;
-        }
 
-        // // login success
+        // return user
         return user;
       },
     }),
@@ -75,11 +76,7 @@ export const authOptions: NextAuthOptions = {
         const db = (await connectDB).db(process.env.DB_NAME);
         await db
           .collection("users")
-          .updateOne(
-            { email: user.email },
-            { $set: { ...user } },
-            { upsert: true }
-          );
+          .updateOne({ id: user.id }, { $set: { ...user } }, { upsert: true });
         return true;
       } catch (err) {
         console.error(err);
@@ -88,7 +85,7 @@ export const authOptions: NextAuthOptions = {
     },
     jwt: async ({ token, user }) => {
       if (user) {
-        token.user = { name: user.name, email: user.email };
+        token.user = { ...user };
       }
       return token;
     },

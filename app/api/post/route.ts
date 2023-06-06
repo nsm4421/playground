@@ -1,8 +1,9 @@
-import { getLoginUserEmail } from "@/util/auth-util";
 import { connectDB } from "@/util/database";
 import { PostData } from "@/util/model";
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 /// Get post by id
 export async function GET(request: Request) {
@@ -50,11 +51,12 @@ export async function GET(request: Request) {
 export async function POST(req: NextRequest) {
   try {
     // check user logined or not
-    const email = await getLoginUserEmail();
-    if (!email) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user.id;
+    if (!userId) {
       return NextResponse.json({
         success: false,
-        message: "can't get login user's email",
+        message: "need to login",
       });
     }
 
@@ -71,7 +73,7 @@ export async function POST(req: NextRequest) {
     const db = (await connectDB).db(process.env.DB_NAME);
     const data = await db
       .collection("post")
-      .insertOne({ ...input, email, createAt: new Date() });
+      .insertOne({ ...input, userId, createAt: new Date(), updatedAt : new Date()});
 
     // on success
     return NextResponse.json({
@@ -93,11 +95,12 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     // check user logined or not
-    const email = await getLoginUserEmail();
-    if (!email) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user.id;
+    if (!userId) {
       return NextResponse.json({
         success: false,
-        message: "can't get login user's email",
+        message: "need to login",
       });
     }
 
@@ -129,7 +132,7 @@ export async function PUT(req: NextRequest) {
     }
 
     // check author is equal to login user
-    if (post.email != email){
+    if (post.userId !== userId){
       return NextResponse.json({
         success: false,
         message: "only author can update post",
@@ -141,7 +144,7 @@ export async function PUT(req: NextRequest) {
       .collection("post")
       .updateOne(
         { _id: new ObjectId(input._id) },
-        { $set: { title: input.title, content: input.content } }
+        { $set: { title: input.title, content: input.content, updatedAt : new Date() } }
       );
 
     // on success

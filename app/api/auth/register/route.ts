@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const hashed = await bcrypt.hash(input.password, 10);
     const data = await db
       .collection("users")
-      .insertOne({ ...input, password: hashed, provider:"CREDENTIALS" });
+      .insertOne({ ...input, password: hashed, role:"USER" });
 
     if (!data.insertedId) {
       return NextResponse.json({
