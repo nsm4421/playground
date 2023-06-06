@@ -2,7 +2,7 @@ export type PostData = {
   _id: string;
   title?: string;
   content?: string;
-  email:string;
+  email?: string;
 };
 
 export type WritePostData = {
@@ -11,12 +11,19 @@ export type WritePostData = {
 };
 
 export type EditPostData = {
-  _id : string;
+  _id: string;
   title: string;
   content: string;
 };
 
 export type RegisterRequest = {
-  email:string;
-  password:string;
-}
+  email: string;
+  password: string;
+};
+
+export type CommentData = {
+  _id: string;
+  postId: string;
+  content: string;
+  name: string;
+};
