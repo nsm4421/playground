@@ -22,10 +22,13 @@ export type RegisterRequest = {
 };
 
 export type CommentData = {
-  _id: string;
+  _id: string;      // comment id
+  userId: string;   
   postId: string;
+  nickname: string;
   content: string;
-  name: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ROLE = "USER" | "MANGER" | "ADMIN";

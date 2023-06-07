@@ -1,13 +1,15 @@
-import { getLoginUserEmail } from "@/util/auth-util";
 import { connectDB } from "@/util/database";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../../[...nextauth]/route";
+import { ObjectId } from "mongodb";
 
 // Get nickname
 export async function GET() {
   try {
     // check logined or not
-    const email = await getLoginUserEmail();
-    if (!email) {
+    const session = await getServerSession(authOptions)
+    if (!session?.user.id) {
       return NextResponse.json({
         success: false,
         message: "login first",
@@ -18,16 +20,16 @@ export async function GET() {
     const db = (await connectDB).db(process.env.DB_NAME);
 
     // get user id
-    const user = await db.collection("users").findOne({ email });
+    const user = await db.collection("users").findOne({ _id : new ObjectId(session.user.id) });
 
-    if (!user?._id) {
+    if (!user || !user.email) {
       return NextResponse.json({
         success: false,
         message: "user id is not founded",
       });
     }
 
-    const data = await db.collection("nickname").findOne({ email });
+    const data = await db.collection("nickname").findOne({ userId:user._id });
 
     // on success
     if (!data?.nickname) {
@@ -56,8 +58,8 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     // check logined or not
-    const email = await getLoginUserEmail();
-    if (!email) {
+    const session = await getServerSession(authOptions)
+    if (!session?.user.id) {
       return NextResponse.json({
         success: false,
         message: "login first",
@@ -82,27 +84,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // check nickname is duplicated or not
-    if (await db.collection("users").findOne({ email })) {
-      return NextResponse.json({
-        success: false,
-        message: "nickname is duplicated",
-      });
-    }
-
-    // get user id
-    const user = await db.collection("users").findOne({ email });
-    if (!user?._id) {
-      return NextResponse.json({
-        success: false,
-        message: "user id is not founded",
-      });
-    }
-
     // save nickname
     const data = await db
       .collection("nickname")
-      .insertOne({ userId: user._id, nickname: input.nickname, email});
+      .insertOne({ userId: session.user.id, email:session.user.email, nickname: input.nickname});
 
     // on success
     return NextResponse.json({

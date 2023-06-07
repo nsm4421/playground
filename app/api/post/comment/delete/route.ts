@@ -1,10 +1,10 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { connectDB } from "@/util/database";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 
-/// Delete post
+/// Delete comment
 export async function POST(req: NextRequest) {
   try {
     // check user logined or not
@@ -18,40 +18,40 @@ export async function POST(req: NextRequest) {
     }
     // check id
     const input = await req.json();
-    if (!input._id) {
+    if (!input.commentId) {
       return NextResponse.json({
         success: false,
-        message: "id is not valid",
+        message: "comment id is not given",
       });
     }
 
     // check post exist or not
     const db = (await connectDB).db(process.env.DB_NAME);
-    const post = await db.collection("post").findOne({ _id: new ObjectId(input._id) });
-    if (!post) {
+    const comment = await db.collection("comment").findOne({ _id: new ObjectId(input.commentId) });
+    if (!comment) {
       return NextResponse.json({
         success: false,
-        message: "post not found",
+        message: "comment not found",
       });
     }
 
     // check author and login user are equal
-    if (post.userId !== userId) {
+    if (comment.userId !== userId) {
       return NextResponse.json({
         success: false,
-        message: "only author can delete post",
+        message: "only author can delete comment",
       });
     }
 
     // delete data
     const data = await db
-      .collection("post")
-      .deleteOne({ _id: new ObjectId(input._id) });
+      .collection("comment")
+      .deleteOne({ _id: new ObjectId(input.commentId) });
 
     if (data.deletedCount !== 1) {
       return NextResponse.json({
         success: false,
-        message: "fail to delete post, return delete count",
+        message: "fail to delete comment, return delete count",
         data: data.deletedCount,
       });
     }
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     // on success
     return NextResponse.json({
       success: true,
-      message: "success to delete post, return delete count",
+      message: "success to delete comment, return delete count",
       data: data.deletedCount,
     });
   } catch (err) {
