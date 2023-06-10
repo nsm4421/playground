@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthSession>
-        <body className={inter.className}>
+        <body className={inter.className + ' bg-slate-100 text dark:bg-slate-800 text-black dark:text-white'}>
           <CustomNavbar />
           {children}
         </body>
