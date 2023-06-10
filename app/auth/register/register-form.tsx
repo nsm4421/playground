@@ -5,9 +5,8 @@ import InputAtom from "@/components/atom/input-atom";
 import useInput from "@/util/hook/use-input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { TrashIcon } from '@heroicons/react/24/solid';
-import { XMarkIcon  } from '@heroicons/react/24/solid';
-
+import { TrashIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const MAX_LENGTH = 30;
 
@@ -81,6 +80,7 @@ export default function RegisterForm() {
       {/* Form */}
       <div className="px-4 py-4">
         <InputAtom
+          value={email}
           label="Email"
           onChange={onEmailChange}
           placeholder="example@naver.com"
@@ -88,6 +88,7 @@ export default function RegisterForm() {
       </div>
       <div className="px-4 py-4">
         <InputAtom
+          value={password}
           label="Password"
           type="password"
           onChange={onPasswordChange}
@@ -96,6 +97,7 @@ export default function RegisterForm() {
       </div>
       <div className="px-4 py-4">
         <InputAtom
+          value={passwordConfirm}
           label="Password Confirm"
           type="password"
           onChange={onPasswordConfirm}
@@ -114,9 +116,12 @@ export default function RegisterForm() {
 
       {/* Error Message */}
       {errorMessage && (
-        <div className="px-4 py-2 justify-between">          
+        <div className="px-4 py-2 justify-between">
           <span className="text-red-400 text-sm">{errorMessage}</span>
-          <XMarkIcon onClick={clearErrorMessage} className="w-6 h-6 float-right hover:text-red-400"/>
+          <XMarkIcon
+            onClick={clearErrorMessage}
+            className="w-6 h-6 float-right hover:text-red-400"
+          />
         </div>
       )}
 

@@ -11,6 +11,7 @@ export async function GET() {
     // check logined or not
     const session = await getServerSession(authOptions);
     if (!session?.user.id) return apiError(CustomErrorType.UNAUTHORIZED);
+    const userId = new ObjectId(session.user.id)
 
     // find nickname by email
     const db = (await connectDB).db(process.env.DB_NAME);
@@ -18,7 +19,7 @@ export async function GET() {
     // get user id
     const user = await db
       .collection("users")
-      .findOne({ _id: new ObjectId(session.user.id) });
+      .findOne({ _id: userId });
     if (!user || !user.email)
       return apiError(
         CustomErrorType.ENTITY_NOT_FOUND,
@@ -26,7 +27,7 @@ export async function GET() {
       );
 
     // on success
-    const data = await db.collection("nickname").findOne({ userId: user._id });
+    const data = await db.collection("nickname").findOne({ userId: session.user.id });
     return apiSuccess({
       message: "success to set nickname",
       data: data?.nickname,

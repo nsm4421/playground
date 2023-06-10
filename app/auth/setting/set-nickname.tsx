@@ -1,64 +1,76 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
+import ButtonAtom from "@/components/atom/button-atom";
+import InputAtom from "@/components/atom/input-atom";
+import useInput from "@/util/hook/use-input";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function SetNickname() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [nickname, setNickname] = useState<string | null>(null);
-  const handleNickname = (e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  };
+  const { value: nickname, setValue: setNickname, onChange } = useInput("");
+  const [message, setMessage] = useState<string | null>(null);
 
-  // on mounted, get nickname from DB
+  const clearMessage = () => setMessage(null);
+
   const setInitNickname = async () => {
     setIsLoading(true);
-    await fetch("/api/auth/setting/nickname")
-      .then((res) => res.json())
+    await axios
+      .get("/api/auth/setting/nickname")
+      .then((res) => res.data.data)
+      .then((nickname) => {
+        if (nickname) setNickname(nickname)       
+        else setMessage("You haven't set nickname")
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  // handle submit nickname
+  const handleSubmit = async () => {
+    if (!nickname) {
+      setMessage("nickname is not given");
+      return;
+    }
+    setIsLoading(true);
+    axios
+      .post("/api/auth/setting/nickname", { nickname })
+      .then((res) => res.data)
       .then((data) => {
-        if (data.success) return setNickname(data.data);
-      });
-    setIsLoading(false);
+        console.log(data)
+        setNickname(data.nickname);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
     setInitNickname();
   }, []);
 
-  // handle submit nickname
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    // check nickname
-    if (!nickname) {
-      alert("nickname is not given");
-      return;
-    }
-    // save nickname
-    await fetch("/api/auth/setting/nickname", {
-      method: "POST",
-      body: JSON.stringify({ nickname }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          router.push("/");
-          return;
-        }
-        alert(data.message);
-      })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
-  };
-
   return (
     <>
-      <label>Set Username</label>
-      <br/>
-      <input value={nickname ?? ""} onChange={handleNickname} />
-      <button disabled={isLoading} onClick={handleSubmit}>
-        Submit
-      </button>
+      <p className="px-4 text-lg font-extrabold">Nickname</p>
+      <div className="px-4 py-4 flex justify-between gap-3">
+        <div className="flex-grow">
+          <InputAtom value={nickname} onChange={onChange} placeholder="your nickname" />
+        </div>
+        <div>
+          <ButtonAtom
+            disabled={isLoading}
+            label={"Edit"}
+            onClick={handleSubmit}
+          />
+        </div>
+      </div>
+      {message && (
+        <div className="px-6 justify-between">
+          <span className="text-red-400 text-sm">{message}</span>
+          <XMarkIcon
+            onClick={clearMessage}
+            className="w-6 h-6 float-right hover:text-red-400"
+          />
+        </div>
+      )}
     </>
   );
 }

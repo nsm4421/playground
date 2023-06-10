@@ -71,6 +71,10 @@ const navItems = {
       path: "/post",
     },
     {
+      label: "Setting",
+      path: "/auth/setting",
+    },
+    {
       label: "Sign Out",
       path: "/api/auth/signOut",
       onClick: () => {

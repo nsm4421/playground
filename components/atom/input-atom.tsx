@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface AtomProps {
+  value:string
   onChange: (e: ChangeEvent<HTMLInputElement>)=>void
   id?: string;
   label?: string;
@@ -18,6 +19,7 @@ export default function InputAtom(props: AtomProps) {
         </label>
       )}
       <input
+        value={props.value}
         onChange={props.onChange}
         type={props.type ?? "text"}
         id={props.id}
