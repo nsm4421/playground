@@ -3,19 +3,19 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { ObjectId } from "mongodb";
+import { CustomErrorType, apiError, apiSuccess } from "@/util/api-response";
 
 /// Get comments by id
-export async function GET(request: Request) {
+export async function GET(req: NextRequest) {
   try {
     // check url
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(req.url);
     const postId = searchParams.get("postId");
-    if (!postId) {
-      return NextResponse.json({
-        success: false,
-        message: "success",
-      });
-    }
+    if (!postId)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "post id is not given"
+      );
 
     // find comment by post id
     const db = (await connectDB).db(process.env.DB_NAME);
@@ -48,18 +48,10 @@ export async function GET(request: Request) {
       .toArray();
 
     // on success
-    return NextResponse.json({
-      success: true,
-      message: "success",
-      data: comments,
-    });
-  } catch (err) {
-    // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiSuccess({ data: comments });
+  } catch (_) {
+     // on failure
+    return apiError()
   }
 }
 
@@ -69,21 +61,12 @@ export async function POST(req: NextRequest) {
     // check user logined or not
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
-    if (!userId) {
-      return NextResponse.json({
-        success: false,
-        message: "need to login",
-      });
-    }
+    if (!userId) return apiError(CustomErrorType.UNAUTHORIZED);
 
     // check user input
-    let input = await req.json();
-    if (!input.content || !input.postId) {
-      return NextResponse.json({
-        success: false,
-        message: "content or post id is blank",
-      });
-    }
+    const input = await req.json();
+    if (!input.postId) return apiError(CustomErrorType.INVALID_PARAMETER, "post id is not valid")
+    if (!input.content) return apiError(CustomErrorType.INVALID_PARAMETER, "content is not valid")
 
     // insert data
     const db = (await connectDB).db(process.env.DB_NAME);
@@ -95,18 +78,10 @@ export async function POST(req: NextRequest) {
     });
 
     // on success
-    return NextResponse.json({
-      success: true,
-      message: "success to write comment, return inserted id",
-      data: data.insertedId,
-    });
-  } catch (err) {
+    return apiSuccess({message: "success to write comment, return inserted id",data: data.insertedId,})
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiError()
   }
 }
 
@@ -116,33 +91,31 @@ export async function PUT(req: NextRequest) {
     // check user logined or not
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
-    if (!userId) {
-      return NextResponse.json({
-        success: false,
-        message: "need to login",
-      });
-    }
+    if (!userId) return apiError(CustomErrorType.UNAUTHORIZED);
 
     // check user input
-    let input = await req.json();
-    if (!input.content || !input.commentId) {
-      return NextResponse.json({
-        success: false,
-        message: "content or comment id is blank",
-      });
-    }
+    const input = await req.json();
+    if (!input.commentId)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "comment id is not valid"
+      );
+    if (!input.content)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "content is not valid"
+      );
 
     // check logined user and author are equal
     const db = (await connectDB).db(process.env.DB_NAME);
     const comment = await db
       .collection("comment")
       .findOne({ _id: new ObjectId(input.commentId) });
-    if (comment?.userId !== session.user.id) {
-      return NextResponse.json({
-        success: false,
-        message: "only author can update comment",
-      });
-    }
+    if (comment?.userId !== session.user.id)
+      return apiError(
+        CustomErrorType.UNAUTHORIZED,
+        "only author can update comment"
+      );
 
     // insert data
     const data = await db
@@ -153,17 +126,65 @@ export async function PUT(req: NextRequest) {
       );
 
     // on success
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: "success to update comment, return updated id",
       data: data.upsertedId,
     });
-  } catch (err) {
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
+    return apiError();
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    // check user logined or not
+    const session = await getServerSession(authOptions);
+    const userId = session?.user.id;
+    if (!userId) return apiError(CustomErrorType.UNAUTHORIZED);
+
+    // check url
+    const { searchParams } = new URL(req.url);
+    const commentId = searchParams.get("commentId");
+    if (!commentId)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "comment id is not given"
+      );
+
+    // check post exist or not
+    const db = (await connectDB).db(process.env.DB_NAME);
+    const comment = await db
+      .collection("comment")
+      .findOne({ _id: new ObjectId(commentId) });
+    if (!comment)
+      return apiError(
+        CustomErrorType.ENTITY_NOT_FOUND,
+        "comment is not founded"
+      );
+
+    // check author and login user are equal
+    if (comment.userId !== userId)
+      return apiError(
+        CustomErrorType.UNAUTHORIZED,
+        "only author can delete comment"
+      );
+
+    // delete data
+    const data = await db
+      .collection("comment")
+      .deleteOne({ _id: new ObjectId(commentId) });
+
+    if (data.deletedCount !== 1)
+      return apiError(CustomErrorType.DB_ERROR, "fail to delete comment on db");
+
+    // on success
+    return apiSuccess({
+      message: "success to delete comment, return delete count",
+      data: data.deletedCount,
     });
+  } catch (_) {
+    // on failure
+    return apiError();
   }
 }

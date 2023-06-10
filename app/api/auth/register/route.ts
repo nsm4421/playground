@@ -1,57 +1,37 @@
+import { CustomErrorType, apiError, apiSuccess } from "@/util/api-response";
 import { connectDB } from "@/util/database";
 import { RegisterRequest } from "@/util/model";
 import bcrypt from "bcrypt";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 // Register
 export async function POST(req: NextRequest) {
   try {
     // check input
-    const input: RegisterRequest = await req.json();
-    if (!input.email || !input.password) {
-      return NextResponse.json({
-        success: false,
-        message: "email or password is blank",
-      });
-    }
+    const { email, password }: RegisterRequest = await req.json();
+    if (!email)
+      return apiError(CustomErrorType.INVALID_PARAMETER, "email is not given ");
+    if (!password) return apiError(CustomErrorType.INVALID_PARAMETER,"password is not given");
 
     // check registered or not
     const db = (await connectDB).db(process.env.DB_NAME);
-    const user = await db
-      .collection("users")
-      .findOne({ email: input.email });
-    if (user) {
-      return NextResponse.json({
-        success: false,
-        message: "already registered email",
-      });
-    }
+    const user = await db.collection("users").findOne({ email });
+    if (user) return apiError(CustomErrorType.DUPLICATED_ENTITY,"email alrady exist");
 
     // insert data
-    const hashed = await bcrypt.hash(input.password, 10);
+    const hashed = await bcrypt.hash(password, 10);
     const data = await db
       .collection("users")
-      .insertOne({ ...input, password: hashed, role:"USER" });
-
-    if (!data.insertedId) {
-      return NextResponse.json({
-        success: false,
-        message: "inserting data in DB fails",
-      });
-    }
+      .insertOne({ email, password: hashed, role: "USER" });
+    if (!data.insertedId) return apiError(CustomErrorType.DB_ERROR, "inserting data in DB failed");
 
     // on success
-    return NextResponse.json({
-      success: true,
-      message: "success to register, return inserted id",
+    return apiSuccess({
       data: data.insertedId,
+      message: "sign up success, return inserted id",
     });
-  } catch (err) {
+  } catch {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiError();
   }
 }

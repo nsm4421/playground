@@ -4,46 +4,59 @@ import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
+import { CustomErrorType, apiError, apiSuccess } from "@/util/api-response";
+
+const findAllPost = async () => {
+  const db = (await connectDB).db(process.env.DB_NAME);
+  const posts = await db
+    .collection("post")
+    .find()
+    .toArray()
+    .then((docs) => docs.map((doc) => ({ ...doc, _id: String(doc._id) })));
+  // on success
+  return apiSuccess({ data: posts });
+};
+
+const findPostById = async (postId: string) => {
+  // check post id
+  if (!postId)
+    return apiError(CustomErrorType.INVALID_PARAMETER, "post id in not valid");
+
+  // find by id
+  const db = (await connectDB).db(process.env.DB_NAME);
+  const data: PostData | null = await db
+    .collection("post")
+    .findOne({
+      _id: new ObjectId(postId),
+    })
+    .then((doc) => {
+      if (doc) return { ...doc, _id: String(doc._id) };
+      return null;
+    });
+
+  // post not found
+  if (!data) return apiError(CustomErrorType.ENTITY_NOT_FOUND, "no post found");
+
+  // on success
+  return apiSuccess({ data });
+};
 
 /// Get post by id
-export async function GET(request: Request) {
+export async function GET(req: Request) {
   try {
-    // check url
-    const { searchParams } = new URL(request.url);
-    const _id = searchParams.get("_id");
-    let data: PostData | null = null;
-    if (!(_id && typeof _id === "string")) {
-      return NextResponse.json({
-        success: false,
-        message: "post id is not valid",
-      });
+    // get param
+    const { searchParams } = new URL(req.url);
+    const postId = searchParams.get("postId");
+    // post id is given → find post by id
+    // post id is not given  → find all
+    if (postId) {
+      return findPostById(postId);
+    } else {
+      return findAllPost();
     }
-
-    // find by id
-    const db = (await connectDB).db(process.env.DB_NAME);
-    data = await db
-      .collection("post")
-      .findOne({
-        _id: new ObjectId(_id),
-      })
-      .then((doc) => {
-        if (doc) return { ...doc, _id: String(doc._id) };
-        return null;
-      });
-
-    // on success
-    return NextResponse.json({
-      success: true,
-      message: "success",
-      data,
-    });
-  } catch (err) {
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiError();
   }
 }
 
@@ -53,41 +66,35 @@ export async function POST(req: NextRequest) {
     // check user logined or not
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
-    if (!userId) {
-      return NextResponse.json({
-        success: false,
-        message: "need to login",
-      });
-    }
+    if (!userId) return apiError(CustomErrorType.UNAUTHORIZED);
 
     // check user input
-    let input = await req.json();
-    if (!input.title || !input.content) {
-      return NextResponse.json({
-        success: false,
-        message: "title or content is blank",
-      });
-    }
+    const input = await req.json();
+    if (!input.title)
+      return apiError(CustomErrorType.INVALID_PARAMETER, "title is not valid");
+    if (!input.content)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "content is not valid"
+      );
 
     // insert data
     const db = (await connectDB).db(process.env.DB_NAME);
-    const data = await db
-      .collection("post")
-      .insertOne({ ...input, userId, createAt: new Date(), updatedAt : new Date()});
+    const data = await db.collection("post").insertOne({
+      ...input,
+      userId,
+      createAt: new Date(),
+      updatedAt: new Date(),
+    });
 
     // on success
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: "success to write post, return inserted id",
       data: data.insertedId,
     });
-  } catch (err) {
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiError();
   }
 }
 
@@ -97,68 +104,114 @@ export async function PUT(req: NextRequest) {
     // check user logined or not
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
-    if (!userId) {
-      return NextResponse.json({
-        success: false,
-        message: "need to login",
-      });
-    }
+    if (!userId) return apiError(CustomErrorType.UNAUTHORIZED);
 
     // check user input
     const input = await req.json();
-    if (!input._id) {
-      return NextResponse.json({
-        success: false,
-        message: "post id is not given",
-      });
-    }
-    if (!input.title || !input.content) {
-      return NextResponse.json({
-        success: false,
-        message: "title or content is blank",
-      });
-    }
+    if (!input.postId)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "post id is not valid"
+      );
+    if (!input.title)
+      return apiError(CustomErrorType.INVALID_PARAMETER, "title is not valid");
+    if (!input.content)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "content is not valid"
+      );
 
     // check post exists
     const db = (await connectDB).db(process.env.DB_NAME);
     const post = await db
       .collection("post")
       .findOne({ _id: new ObjectId(input._id) });
-    if (!post) {
-      return NextResponse.json({
-        success: false,
-        message: "post doesn't exist",
-      });
-    }
+    if (!post)
+      return apiError(CustomErrorType.ENTITY_NOT_FOUND, "post not founded");
 
     // check author is equal to login user
-    if (post.userId !== userId){
-      return NextResponse.json({
-        success: false,
-        message: "only author can update post",
-      });
-    }
-
-    // update data
-    const data = await db
-      .collection("post")
-      .updateOne(
-        { _id: new ObjectId(input._id) },
-        { $set: { title: input.title, content: input.content, updatedAt : new Date() } }
+    if (post.userId !== userId)
+      return apiError(
+        CustomErrorType.UNAUTHORIZED,
+        "only author can update post"
       );
 
+    // update data
+    const data = await db.collection("post").updateOne(
+      { _id: new ObjectId(input.postId) },
+      {
+        $set: {
+          title: input.title,
+          content: input.content,
+          updatedAt: new Date(),
+        },
+      }
+    );
+
     // on success
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: "success to update post, return updated id",
       data: data.upsertedId,
     });
-  } catch (err) {
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
+    return apiError();
+  }
+}
+
+/// Delete post
+export async function DELETE(req: NextRequest) {
+  try {
+    // check user logined or not
+    const session = await getServerSession(authOptions);
+    const userId = session?.user.id;
+    if (!userId) return apiError(CustomErrorType.UNAUTHORIZED);
+
+    // get param
+    const { searchParams } = new URL(req.url);
+    const postId = await searchParams.get("postId");
+    if (!postId)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "post id is not valid"
+      );
+
+    // check post exist or not
+    const db = (await connectDB).db(process.env.DB_NAME);
+    const post = await db
+      .collection("post")
+      .findOne({ _id: new ObjectId(postId) });
+    if (!post)
+      return apiError(CustomErrorType.ENTITY_NOT_FOUND, "post not founded");
+
+    // check author and login user are equal
+    if (post.userId !== userId) {
+      return NextResponse.json({
+        success: false,
+        message: "only author can delete post",
+      });
+    }
+
+    // delete data
+    const data = await db
+      .collection("post")
+      .deleteOne({ _id: new ObjectId(postId) });
+
+    if (data.deletedCount !== 1) {
+      return NextResponse.json({
+        success: false,
+        message: "fail to delete post, return delete count",
+        data: data.deletedCount,
+      });
+    }
+
+    // on success
+    return apiSuccess({
+      message: "success to delete post, return delete count",
+      data: data.deletedCount,
     });
+  } catch (_) {
+    // on failure
+    return apiError()
   }
 }

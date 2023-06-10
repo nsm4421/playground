@@ -1,106 +1,81 @@
 import { connectDB } from "@/util/database";
 import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { authOptions } from "../../[...nextauth]/route";
 import { ObjectId } from "mongodb";
+import { apiSuccess, apiError, CustomErrorType } from "@/util/api-response";
 
-// Get nickname
+/// Get nickname
 export async function GET() {
   try {
     // check logined or not
-    const session = await getServerSession(authOptions)
-    if (!session?.user.id) {
-      return NextResponse.json({
-        success: false,
-        message: "login first",
-      });
-    }
+    const session = await getServerSession(authOptions);
+    if (!session?.user.id) return apiError(CustomErrorType.UNAUTHORIZED);
 
     // find nickname by email
     const db = (await connectDB).db(process.env.DB_NAME);
 
     // get user id
-    const user = await db.collection("users").findOne({ _id : new ObjectId(session.user.id) });
-
-    if (!user || !user.email) {
-      return NextResponse.json({
-        success: false,
-        message: "user id is not founded",
-      });
-    }
-
-    const data = await db.collection("nickname").findOne({ userId:user._id });
+    const user = await db
+      .collection("users")
+      .findOne({ _id: new ObjectId(session.user.id) });
+    if (!user || !user.email)
+      return apiError(
+        CustomErrorType.ENTITY_NOT_FOUND,
+        "user id is not founded"
+      );
 
     // on success
-    if (!data?.nickname) {
-      return NextResponse.json({
-        success: true,
-        message: "nickname not exist",
-        data: null,
-      });
-    }
-    return NextResponse.json({
-      success: true,
-      message: "nickname exists",
-      data: data.nickname,
+    const data = await db.collection("nickname").findOne({ userId: user._id });
+    return apiSuccess({
+      message: "success to set nickname",
+      data: data?.nickname,
     });
-  } catch (err) {
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiError();
   }
 }
 
-// Set nickname
+/// Set nickname
 export async function POST(req: NextRequest) {
   try {
     // check logined or not
-    const session = await getServerSession(authOptions)
-    if (!session?.user.id) {
-      return NextResponse.json({
-        success: false,
-        message: "login first",
-      });
-    }
+    const session = await getServerSession(authOptions);
+    if (!session?.user.id) return apiError(CustomErrorType.UNAUTHORIZED);
 
     // check input
-    const input: { nickname: string } = await req.json();
-    if (!input.nickname) {
-      return NextResponse.json({
-        success: false,
-        message: "nickname is not given",
-      });
-    }
+    const { nickname } = await req.json();
+    if (!nickname)
+      return apiError(
+        CustomErrorType.INVALID_PARAMETER,
+        "nickname is not given"
+      );
 
     // check nickname duplicated or not
     const db = (await connectDB).db(process.env.DB_NAME);
-    if (await db.collection("nickname").findOne({ nickname: input.nickname })) {
-      return NextResponse.json({
-        success: false,
-        message: "nickname is duplicated",
-      });
-    }
+    if (await db.collection("nickname").findOne({ nickname }))
+      return apiError(
+        CustomErrorType.DUPLICATED_ENTITY,
+        "nickname is duplicated"
+      );
 
     // save nickname
     const data = await db
       .collection("nickname")
-      .insertOne({ userId: session.user.id, email:session.user.email, nickname: input.nickname});
+      .insertOne({
+        userId: session.user.id,
+        email: session.user.email,
+        nickname,
+      });
 
     // on success
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: "nickname is saved, return inserted id",
       data: data.insertedId,
     });
-  } catch (err) {
+  } catch (_) {
     // on failure
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      message: "server error",
-    });
+    return apiError();
   }
 }
