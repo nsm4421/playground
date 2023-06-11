@@ -5,13 +5,14 @@ import InputAtom from "@/components/atom/input-atom";
 import useInput from "@/util/hook/use-input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { TrashIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const MAX_LENGTH = 30;
 
 export default function RegisterForm() {
   const router = useRouter();
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [passwordConfirmvisible, setPasswordConfirmVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const { value: email, onChange: onEmailChange } = useInput(
     "",
@@ -90,7 +91,9 @@ export default function RegisterForm() {
         <InputAtom
           value={password}
           label="Password"
-          type="password"
+          onFocus={()=>{setPasswordVisible(true)}}
+          onBlur={()=>{setPasswordVisible(false)}}
+          type={passwordVisible?"text":"password"}
           onChange={onPasswordChange}
           placeholder="1q2w3e4r!"
         />
@@ -99,7 +102,9 @@ export default function RegisterForm() {
         <InputAtom
           value={passwordConfirm}
           label="Password Confirm"
-          type="password"
+          onFocus={()=>{setPasswordConfirmVisible(true)}}
+          onBlur={()=>{setPasswordConfirmVisible(false)}}
+          type={passwordConfirmvisible?"text":"password"}
           onChange={onPasswordConfirm}
           placeholder="1q2w3e4r!"
         />

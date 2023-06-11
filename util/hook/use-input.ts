@@ -6,7 +6,7 @@ export default function useInput(
 ) {
   const [value, setValue] = useState<string>(initValue ?? "");
   const clear = () => setValue("");
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {
       target: { value: v },
     } = e;
@@ -14,5 +14,5 @@ export default function useInput(
     if (typeof validator === "function") willUpdate = validator(v);
     if (willUpdate) setValue(e.target.value);
   };
-  return {value, setValue, onChange, clear}
+  return { value, setValue, onChange, clear };
 }
