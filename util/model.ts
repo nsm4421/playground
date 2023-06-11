@@ -1,8 +1,10 @@
 export type PostData = {
-  _id: string;
+  postId: string;
   title?: string;
   content?: string;
-  email?: string;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type WritePostData = {
@@ -11,7 +13,7 @@ export type WritePostData = {
 };
 
 export type EditPostData = {
-  _id: string;
+  postId: string;
   title: string;
   content: string;
 };
@@ -22,8 +24,8 @@ export type RegisterRequest = {
 };
 
 export type CommentData = {
-  _id: string;      // comment id
-  userId: string;   
+  commentId: string; // comment id
+  userId: string;
   postId: string;
   nickname: string;
   content: string;

@@ -6,15 +6,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { CustomErrorType, apiError, apiSuccess } from "@/util/api-response";
 
-const findAllPost = async () => {
+const findAllPost = async (props: { page: number; limit: number }) => {
   const db = (await connectDB).db(process.env.DB_NAME);
   const posts = await db
     .collection("post")
     .find()
+    .sort({ createdAt: 1 })
+    .skip((props.page - 1) * props.limit)
+    .limit(props.limit)
     .toArray()
-    .then((docs) => docs.map((doc) => ({ ...doc, _id: String(doc._id) })));
+    .then((docs) =>
+      docs.map((doc) => ({ ...doc, postId: String(doc._id) } as PostData))
+    );
+  const totalCount = await db.collection("post").countDocuments();
   // on success
-  return apiSuccess({ data: posts });
+  return apiSuccess({ data: { posts, totalCount } });
 };
 
 const findPostById = async (postId: string) => {
@@ -30,7 +36,7 @@ const findPostById = async (postId: string) => {
       _id: new ObjectId(postId),
     })
     .then((doc) => {
-      if (doc) return { ...doc, _id: String(doc._id) };
+      if (doc) return { ...doc, postId: String(doc._id) };
       return null;
     });
 
@@ -46,13 +52,18 @@ export async function GET(req: Request) {
   try {
     // get param
     const { searchParams } = new URL(req.url);
-    const postId = searchParams.get("postId");
+    const postId = await searchParams.get("postId");
+    const page = await searchParams.get("page");
+    const limit = await searchParams.get("limit");
     // post id is given → find post by id
     // post id is not given  → find all
     if (postId) {
-      return findPostById(postId);
+      return await findPostById(postId);
     } else {
-      return findAllPost();
+      return await findAllPost({
+        page: Number(page) ?? 1,
+        limit: Number(limit) ?? 10,
+      });
     }
   } catch (_) {
     // on failure
@@ -83,7 +94,7 @@ export async function POST(req: NextRequest) {
     const data = await db.collection("post").insertOne({
       ...input,
       userId,
-      createAt: new Date(),
+      createdAt: new Date(),
       updatedAt: new Date(),
     });
 
@@ -212,6 +223,6 @@ export async function DELETE(req: NextRequest) {
     });
   } catch (_) {
     // on failure
-    return apiError()
+    return apiError();
   }
 }

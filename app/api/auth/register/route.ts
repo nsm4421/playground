@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const hashed = await bcrypt.hash(password, 10);
     const data = await db
       .collection("users")
-      .insertOne({ email, password: hashed, role: "USER" });
+      .insertOne({ email, password: hashed, image:null, role: "USER" });
     if (!data.insertedId) return apiError(CustomErrorType.DB_ERROR, "inserting data in DB failed");
 
     // on success

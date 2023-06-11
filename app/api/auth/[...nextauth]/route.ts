@@ -5,6 +5,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { connectDB } from "@/util/database";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
 
 if (
   !process.env.NEXTAUTH_SECRET ||
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
         const db = (await connectDB).db(process.env.DB_NAME);
         await db
           .collection("users")
-          .updateOne({ id: user.id }, { $set: { ...user } }, { upsert: true });
+          .updateOne({ _id: new ObjectId(user.id) }, { $set: { ...user } }, { upsert: true });
         return true;
       } catch (err) {
         console.error(err);
