@@ -2,7 +2,6 @@ import {
   ArrowRightCircleIcon,
   ArrowLeftCircleIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -11,6 +10,7 @@ import { Dispatch, SetStateAction } from "react";
  * @param setPage
  * @param limt number of element per size
  * @param totalCount number of total elements
+ * @param isLoading loading중 여부
  * @returns
  */
 export default function PaginationAtom(props: {
@@ -18,6 +18,7 @@ export default function PaginationAtom(props: {
   setPage: Dispatch<SetStateAction<number>>;
   limit: number;
   totalCount: number;
+  isLoading?: boolean;
 }) {
   const minPage = Math.max(props.page - Math.floor(props.limit / 2), 1);
   const maxPage = Math.min(
@@ -29,7 +30,7 @@ export default function PaginationAtom(props: {
     props.setPage(page);
   };
   const clsName =
-    "px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-green-600 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-green-500";
+    "px-3 leading-tight text-gray-500 bg-white border-gray-300 hover:text-green-600 hover:bg-green-400 hover:text-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-green-500";
   const clsNameActive = `${clsName} ${"text-blue-600 dark:text-blue-400"}`;
 
   return (
@@ -37,7 +38,7 @@ export default function PaginationAtom(props: {
       <li className="px-3">
         <button
           className="cursor-pointer hover:text-green-500"
-          disabled={props.page <= 1}
+          disabled={props.page <= 1 && props.isLoading}
           onClick={handleOnClick(props.page - 1)}
         >
           <ArrowLeftCircleIcon className="h-4 w-4" />
@@ -50,12 +51,13 @@ export default function PaginationAtom(props: {
       ).map((page) => {
         return (
           <li key={page}>
-            <div
+            <button
+              disabled={props.isLoading}
               onClick={handleOnClick(page)}
               className={page === props.page ? clsNameActive : clsName}
             >
               {page}
-            </div>
+            </button>
           </li>
         );
       })}
@@ -63,7 +65,7 @@ export default function PaginationAtom(props: {
       <li className="px-3">
         <button
           className="cursor-pointer hover:text-green-500"
-          disabled={props.page >= maxPage}
+          disabled={props.page >= maxPage && props.isLoading}
           onClick={handleOnClick(props.page + 1)}
         >
           <ArrowRightCircleIcon className="h-4 w-4" />

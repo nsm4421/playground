@@ -10,7 +10,30 @@ const findAllPost = async (props: { page: number; limit: number }) => {
   const db = (await connectDB).db(process.env.DB_NAME);
   const posts = await db
     .collection("post")
-    .find()
+    .aggregate([
+      {
+        $lookup: {
+          // Join by userId with nickname collection
+          from: "nickname",
+          localField: "userId",
+          foreignField: "userId",
+          // Call forien collection(nickname) fields "as" foriegnColumns
+          as: "foreignColumns",
+        },
+      },
+      { $unwind: "$foreignColumns" },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          postId: 1,
+          content: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          nickname: "$foreignColumns.nickname",
+        },
+      },
+    ])
     .sort({ createdAt: 1 })
     .skip((props.page - 1) * props.limit)
     .limit(props.limit)

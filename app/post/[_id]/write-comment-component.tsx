@@ -1,40 +1,47 @@
-"use client"
+"use client";
 
+import ButtonAtom from "@/components/atom/button-atom";
+import InputAtom from "@/components/atom/input-atom";
+import useInput from "@/util/hook/use-input";
+import axios from "axios";
 import { useParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
-export default function WriteCommentComponent() {
+export default function WriteCommentComponent(prpos:{refetch:Function}) {
   const params = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [content, setContent] = useState<string>("");
-  const handleComment = (e: ChangeEvent<HTMLInputElement>) => {
-    setContent(e.target.value);
-  };
+  const {
+    value: content,
+    onChange: onContentChange,
+    clear: clearContent,
+  } = useInput("", (value: string) => value.length < 300);
   const handleSubmit = async () => {
     const postId = await params?._id;
+    if (!postId) return;
     setIsLoading(true);
-    await fetch("/api/post/comment", {
-      method: "POST",
-      body: JSON.stringify({ content,  postId}),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success){
-          setContent("");
-          return;
-        }
-        alert(data.message)
+    await axios
+      .post("/api/post/comment", { content, postId })
+      .then((_) => {
+        clearContent()
+        prpos.refetch()
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
   };
 
   return (
-    <>
-      <input value={content} onChange={handleComment} />
-      <button disabled={isLoading} onClick={handleSubmit}>
-        Submit
-      </button>
-    </>
+    <div className="flex justify-center shadow-sm">
+      <div className="max-w-5xl w-full p-2">
+        <span className="p-2 text-sm text-gray-600 dark:text-gray-300">
+          Comment
+        </span>
+        <div className="p-2 flex justify-between">
+          <div className="max-w-3xl w-full mr-2">
+            <InputAtom value={content} onChange={onContentChange} />
+          </div>
+          <ButtonAtom onClick={handleSubmit} disabled={isLoading} label="Submit" />
+        </div>
+      </div>
+    </div>
   );
 }

@@ -11,10 +11,12 @@ export async function GET(req: NextRequest) {
     // check url
     const { searchParams } = new URL(req.url);
     const postId = searchParams.get("postId");
-    if (!postId)
+    const page = Number(searchParams.get("page"));
+    const limit = Number(searchParams.get("limit"));
+    if (!postId || !page || !limit)
       return apiError(
         CustomErrorType.INVALID_PARAMETER,
-        "post id is not given"
+        "post id or page or limit is not given"
       );
 
     // find comment by post id
@@ -45,10 +47,15 @@ export async function GET(req: NextRequest) {
           },
         },
       ])
+      .sort({ createdAt: 1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .toArray();
 
+    const totalCount = await db.collection("comment").countDocuments({postId});
+ 
     // on success
-    return apiSuccess({ data: comments });
+    return apiSuccess({ data: {comments, totalCount} });
   } catch (_) {
      // on failure
     return apiError()

@@ -15,7 +15,7 @@ export default function EditFormComponent() {
 
   const router = useRouter();
   const [initData, setInitData] = useState<EditPostData>({
-    _id: "",
+    postId: "",
     title: "",
     content: "",
   });

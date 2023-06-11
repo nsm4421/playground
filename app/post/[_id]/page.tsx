@@ -1,11 +1,12 @@
-import DetailComponent from "./detail-component";
+import CommentComponent from "./comment-component";
+import PostContentComponent from "./post-content-component";
 
 export default async function Detail() {
 
   return (
     <>
-      <h1>Detail Page</h1>
-      <DetailComponent/>
+      <PostContentComponent />
+      <CommentComponent/>
     </>
   );
 }
