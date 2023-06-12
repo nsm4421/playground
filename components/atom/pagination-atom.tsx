@@ -2,6 +2,7 @@ import {
   ArrowRightCircleIcon,
   ArrowLeftCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -19,15 +20,18 @@ export default function PaginationAtom(props: {
   limit: number;
   totalCount: number;
   isLoading?: boolean;
+  href?:string;
 }) {
+  const router = useRouter();
   const minPage = Math.max(props.page - Math.floor(props.limit / 2), 1);
   const maxPage = Math.min(
     props.page + Math.floor(props.limit / 2),
     Math.ceil(props.totalCount / props.limit)
   );
-  const handleOnClick = (page: number) => () => {
+  const handleOnClick = (page: number) => async () => {
     if (page < minPage || page > maxPage) return;
-    props.setPage(page);
+    await props.setPage(page);
+    if (props.href) router.push(`${props.href}?page=${page}`)
   };
   const clsName =
     "px-3 leading-tight text-gray-500 bg-white border-gray-300 hover:text-green-600 hover:bg-green-400 hover:text-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-green-500";

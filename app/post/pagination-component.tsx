@@ -14,7 +14,7 @@ export default function PaginationComponent(props: {
     <div className="flex justify-between py-5">
       <div className="px-2">
         <label>Pagination</label>
-        <PaginationAtom {...props} />
+        <PaginationAtom {...props} href={'/post'}/>
       </div>
       <div>
         <Link href={"/post/write"}>

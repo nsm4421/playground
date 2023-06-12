@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import PostComponent from "./post-component";
 import axios from "axios";
 import PaginationComponent from "./pagination-component";
-import IconButtonAtom from "@/components/atom/icon-button-atom";
+import { useParams } from "next/navigation";
 
 export default function PostListComponent() {
+  const params = useParams();
+  // const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [posts, setPosts] = useState<PostData[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -15,7 +17,7 @@ export default function PostListComponent() {
   const fetchPost = async () => {
     setIsLoading(true);
     await axios
-      .get(`/api/post?page=${page}&limit=${10}`)
+      .get(`/api/post?page=${page??1}&limit=${10}`)
       .then((res) => res.data.data)
       .then((data: { posts: PostData[]; totalCount: number }) => {
         setPosts(data.posts);
@@ -63,7 +65,7 @@ export default function PostListComponent() {
         <tbody>
           {posts &&
             posts.map((post: PostData, idx) => (
-              <PostComponent key={idx} post={post} fetchPost={fetchPost} />
+              <PostComponent key={idx} post={post} fetchPost={fetchPost}/>
             ))}
         </tbody>
       </table>
