@@ -1,7 +1,7 @@
 "use client";
 
 import { EditPostData, WritePostData } from "@/util/model";
-import { useParams, useRouter } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ErrorComponent from "../../../../components/error-component";
 import useAxios from "@/util/hook/use-axios";
@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 export default function EditFormComponent() {
   const { data: session } = useSession();
   const params = useParams();
+  if (!params.postId) return notFound()
   const router = useRouter();
   const {
     value: title,

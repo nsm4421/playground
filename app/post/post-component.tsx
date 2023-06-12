@@ -27,7 +27,7 @@ export default function PostComponent(props: {
           <IconButtonAtom label={props.post.title} icon={<ArrowUpRightIcon className="w-4 h-4"/>} disabled={false}/>
         </th>
         <td className="px-6 py-4 text-center">{props.post.content}</td>
-        <td className="px-6 py-4 text-center">{props.post.userId}</td>
+        <td className="px-6 py-4 text-center">{props.post.nickname}</td>
         <td className="px-6 py-4 text-center">{props.post.createdAt}</td>
         <td className="px-6 py-4 text-center">
           {/* if login user and author are equal, then show edit, delete button */}

@@ -3,6 +3,7 @@ export type PostData = {
   title?: string;
   content?: string;
   userId?: string;
+  nickname?:string;
   createdAt?: string;
   updatedAt?: string;
 };
