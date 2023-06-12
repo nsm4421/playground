@@ -25,6 +25,7 @@ const findAllPost = async (props: { page: number; limit: number }) => {
       {
         $project: {
           _id: 1,
+          title:1,
           userId: 1,
           postId: 1,
           content: 1,
@@ -159,7 +160,7 @@ export async function PUT(req: NextRequest) {
     const db = (await connectDB).db(process.env.DB_NAME);
     const post = await db
       .collection("post")
-      .findOne({ _id: new ObjectId(input._id) });
+      .findOne({ _id: new ObjectId(input.postId) });
     if (!post)
       return apiError(CustomErrorType.ENTITY_NOT_FOUND, "post not founded");
 

@@ -13,7 +13,7 @@ export default function PostContentComponent() {
   const params = useParams();
   const handleGoBack = () => router.back();
   const init = async () => {
-    const postId = await params._id;
+    const postId = await params.postId;
     if (!postId) return;
     await axios
       .get(`/api/post?postId=${postId}`)

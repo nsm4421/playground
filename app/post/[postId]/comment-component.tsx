@@ -12,11 +12,11 @@ export default function CommentComponent() {
   const params = useParams();
   const [page, setPage] = useState<number>(1);
   const { data, isLoading, refetch } = useAxios({
-    url: `/api/post/comment?postId=${params._id}&page=${page}&limit=${10}`,
+    url: `/api/post/comment?postId=${params.postId}&page=${page}&limit=${10}`,
   });
 
   const handlePageChange = async () => {
-    if (!params._id) return;
+    if (!params.postId) return;
     await refetch();
   };
   useEffect(() => {
@@ -27,7 +27,6 @@ export default function CommentComponent() {
   return (
     <div>
       <WriteCommentComponent refetch={refetch} />
-
       <span className="text-sm p-2 m-2">Pagination</span>
 
       {!isLoading && (

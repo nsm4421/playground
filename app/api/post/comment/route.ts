@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
       .limit(limit)
       .toArray();
 
-    const totalCount = await db.collection("comment").countDocuments({postId});
+    const totalCount = await db.collection("comment").countDocuments();
  
     // on success
     return apiSuccess({ data: {comments, totalCount} });

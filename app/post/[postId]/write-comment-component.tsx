@@ -16,7 +16,7 @@ export default function WriteCommentComponent(prpos:{refetch:Function}) {
     clear: clearContent,
   } = useInput("", (value: string) => value.length < 300);
   const handleSubmit = async () => {
-    const postId = await params?._id;
+    const postId = await params?.postId;
     if (!postId) return;
     setIsLoading(true);
     await axios
