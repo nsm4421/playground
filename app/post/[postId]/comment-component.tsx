@@ -11,7 +11,6 @@ import CommentItemComponent from "./comment-item-component";
 export default function CommentComponent() {
   const params = useParams();
   const [page, setPage] = useState<number>(1);
-  if (!params.postId) return notFound()
   const { data, isLoading, refetch } = useAxios({
     url: `/api/post/comment?postId=${params.postId}&page=${page}&limit=${10}`,
   });

@@ -16,7 +16,6 @@ import { useSession } from "next-auth/react";
 export default function EditFormComponent() {
   const { data: session } = useSession();
   const params = useParams();
-  if (!params.postId) return notFound()
   const router = useRouter();
   const {
     value: title,

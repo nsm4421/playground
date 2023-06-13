@@ -72,18 +72,18 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ user }) {
-      try {
-        const db = (await connectDB).db(process.env.DB_NAME);
-        await db
-          .collection("users")
-          .updateOne({ _id: new ObjectId(user.id) }, { $set: { ...user } }, { upsert: true });
-        return true;
-      } catch (err) {
-        console.error(err);
-        return false;
-      }
-    },
+    // async signIn({ user }) {
+    //   try {
+    //     const db = (await connectDB).db(process.env.DB_NAME);
+    //     await db
+    //       .collection("users")
+    //       .updateOne({ _id: new ObjectId(user.id) }, { $set: { ...user } }, { upsert: true });
+    //     return true;
+    //   } catch (err) {
+    //     console.error(err);
+    //     return false;
+    //   }
+    // },
     jwt: async ({ token, user }) => {
       if (user) {
         token.user = { ...user };
