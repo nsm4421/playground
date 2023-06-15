@@ -2,6 +2,7 @@ package.json
 package-lock.json
 yarn.lock
 .husky
+.env
 
 # dependencies
 /node_modules
