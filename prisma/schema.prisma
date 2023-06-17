@@ -3,13 +3,50 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mysql"  
   url = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-model Store {
+model User {
+  id Int @id @default(autoincrement())
+  email String?
+  password String?
+  nickname String?
+  reviews Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Restaurant {
   id Int @id @default(autoincrement())
   name String
   description String
+  location String?
+  reviews Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+	@@map("Store")
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+  hashtags Hashtag[]
+  content String
+  star Int
+  restaurantId Int @map("storeId")
+  restaurant Restaurant? @relation(fields: [restaurantId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hashtag {
+  id Int @id @default(autoincrement())
+  content String
+  reviewId Int
+  review Review  @relation(fields: [reviewId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
