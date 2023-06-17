@@ -1,6 +1,11 @@
+import ReivewList from './get-reviews'
 import ReviewForm from './review-form'
 
-export default function CreateReview() {
+interface Params {
+  params: { restaurantId: number }
+}
+
+export default async function CreateReview({ params }: Params) {
   return (
     <>
       <div className="text-3xl font-bold text-center">
@@ -10,12 +15,16 @@ export default function CreateReview() {
       {/* 리뷰작성 양식 */}
       <section className="flex justify-center mt-2">
         <div className="max-w-3xl w-full">
-          <ReviewForm />
+          <ReviewForm {...params} />
         </div>
       </section>
 
       {/* 기존댓글 */}
-      <section></section>
+      <section className="flex justify-center mt-5">
+        <div className="max-w-3xl w-full">
+          <ReivewList {...params} />
+        </div>
+      </section>
     </>
   )
 }

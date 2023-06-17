@@ -1,5 +1,3 @@
-'use client'
-
 import { Dispatch, SetStateAction } from 'react'
 import { AiOutlineStar } from 'react-icons/ai'
 import { AiFillStar } from 'react-icons/ai'
@@ -7,13 +5,14 @@ import { AiFillStar } from 'react-icons/ai'
 interface Props {
   min: number
   max: number
-  rating: number
   size?: 'LG' | 'MD' | 'SM'
-  setRating: Dispatch<SetStateAction<number>>
+  rating: number
+  setRating?: Dispatch<SetStateAction<number>>
 }
 
 export default function StartRating(props: Props) {
-  const handleRating = (idx: number) => () => props.setRating(idx)
+  const handleRating = (idx: number) => () =>
+    props.setRating && props.setRating(idx)
   let sizeClsName: string = 'text-xl'
   switch (props.size) {
     case 'LG':
