@@ -15,7 +15,7 @@ model User {
   nickname String?
   reviews Review[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Restaurant {
@@ -25,21 +25,21 @@ model Restaurant {
   location String?
   reviews Review[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-	@@map("Store")
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Review {
   id Int @id @default(autoincrement())
   hashtags Hashtag[]
+  menu String
   content String
-  star Int
-  restaurantId Int @map("storeId")
+  rating Int @map("star")
+  restaurantId Int
   restaurant Restaurant? @relation(fields: [restaurantId], references: [id])
   userId Int
   user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Hashtag {
@@ -48,5 +48,5 @@ model Hashtag {
   reviewId Int
   review Review  @relation(fields: [reviewId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 }
