@@ -8,10 +8,10 @@ import Input from '@/components/input-component'
 import { useRouter } from 'next/navigation'
 import DropDownSlider from '@/components/dropdown-slider-component'
 import axios from 'axios'
+import categoriesItem from '@/util/model/category-items'
 
 const MAX_CHARACTER_Name = 30
 const MAX_CHARACTER_Description = 300
-const categoriesItem = ['한식', '중식', '일식']
 
 export default function RestaurantForm() {
   const router = useRouter()
