@@ -1,4 +1,5 @@
 type RestaurantModel = {
+  id: number
   category?: string
   name: string
   description: string

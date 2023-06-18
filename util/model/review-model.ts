@@ -1,4 +1,5 @@
 type ReviewModel = {
+  id: number
   content: string
   rating: number
   nickname?: string
