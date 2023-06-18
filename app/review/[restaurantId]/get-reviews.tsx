@@ -1,38 +1,34 @@
 'use client'
 
+import Pagination from '@/components/pagination-component'
 import StartRating from '@/components/rating-star-component'
 import ReviewModel from '@/util/model/review-model'
 import koreanTimeDistance from '@/util/time-distance'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import useAxios from '@/util/hook/use-axios'
+
+interface ResponseData {
+  reviews: ReviewModel[]
+  totalCount: number
+}
 
 export default function ReivewList(props: { restaurantId: number }) {
-  const [isLoading, setIsLoading] = useState(false)
-  // TODO : pagination
   const [page, setPage] = useState<number>(1)
-  const [reviews, setReviews] = useState<ReviewModel[]>([])
+  const { data, error, isLoading } = useAxios<ResponseData>({
+    url: `/api/review?restaurantId=${props.restaurantId}&page=${page}`,
+    method: 'GET',
+  })
 
-  const getReviews = async () => {
-    setIsLoading(true)
-    await axios
-      .get(`/api/review?restaurantId=${props.restaurantId}&page=${page}`)
-      .then((res) => res.data)
-      .then((data: ReviewModel[]) => setReviews(data))
-      .catch(console.error)
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }
-
-  useEffect(() => {
-    getReviews()
-  }, [])
+  // TODO : Loading, Error Component
+  if (isLoading) return <div>Loadings...</div>
+  if (error || !data.reviews || !data.totalCount) return <div>Error...</div>
 
   return (
     <>
-      {reviews.map((review, idx) => (
+      {data.reviews.map((review: ReviewModel, idx: number) => (
         <Review key={idx} review={review} />
       ))}
+      <Pagination page={page} setPage={setPage} totalCount={data.totalCount} />
     </>
   )
 }

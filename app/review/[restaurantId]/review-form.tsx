@@ -4,14 +4,16 @@ import ImageUploadButton from '@/components/image-upload-button'
 import StartRating from '@/components/rating-star-component'
 
 import TextArea from '@/components/text-area-component'
-import { PointerEventHandler, useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import Input from '@/components/input-component'
+import { useRouter } from 'next/navigation'
 
 const MAX_CHARACTER_MENU = 30
 const MAX_CHARACTER_CONTENT = 300
 
 export default function ReviewForm(props: { restaurantId: number }) {
+  const router = useRouter()
   const [content, setContent] = useState<string>('')
   const [images, setImages] = useState<string[]>([])
   const [rating, setRating] = useState<number>(5)
@@ -24,14 +26,12 @@ export default function ReviewForm(props: { restaurantId: number }) {
   const handleSubmit = async () => {
     await axios
       .post('/api/review', {
-        content,
-        rating,
-        menu,
         ...props,
+        content: content,
+        menu: menu,
       })
       .then(() => {
-        setMenu('')
-        setContent('')
+        router.refresh()
       })
       .catch(console.error)
   }

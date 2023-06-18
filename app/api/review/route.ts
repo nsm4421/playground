@@ -24,17 +24,21 @@ export async function GET(req: NextRequest) {
     )
 
   try {
-    const res = await prisma.review.findMany({
+    const reviews = await prisma.review.findMany({
       skip: 10 * (page - 1),
       take: 10,
       where: {
         restaurantId,
       },
     })
-    return NextResponse.json(res, {
-      status: 200,
-      statusText: 'Success to get reviews',
-    })
+    const totalCount = await prisma.review.count({ where: { restaurantId } })
+    return NextResponse.json(
+      { reviews, totalCount },
+      {
+        status: 200,
+        statusText: 'Success to get reviews',
+      }
+    )
   } catch (err) {
     console.error(err)
     return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
