@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 interface AxiosState<T = any> {
   isLoading: boolean
   error: any
-  data: T
+  data?: T
 }
 
 interface AxiosOption<T = any> {
@@ -18,10 +18,10 @@ export default function useAxios<T>(
   axiosInstance = defaultAxios
 ) {
   // state
-  const [state, setState] = useState<AxiosState>({
+  const [state, setState] = useState<AxiosState<T>>({
     isLoading: true,
     error: null,
-    data: null,
+    data: undefined,
   })
   const [lastUpdated, setLastUpdated] = useState<number>(0)
 

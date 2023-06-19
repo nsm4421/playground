@@ -8,32 +8,32 @@ interface Props {
   restaurantId: number
 }
 
+interface ResponseData {
+  restaurant: RestaurantModel
+}
+
 export default function ResturantNav(props: Props) {
-  const {
-    data: restaurant,
-    isLoading,
-    error,
-  } = useAxios<RestaurantModel>({
+  const { data, isLoading, error } = useAxios<ResponseData>({
     url: `/api/restaurant?restaurantId=${props.restaurantId}`,
     method: 'GET',
   })
 
   // TODO : Loading, Error Component
   if (isLoading) return <h1>Loadings...</h1>
-  if (error || !restaurant) return <h1>Error...</h1>
+  if (error || !data?.restaurant) return <h1>Error...</h1>
 
   return (
     <nav className="p-2 shadow-sm shadow-gray-500 dark:shadow-slate-500">
       <div className="text-3xl font-extrabold hover:text-orange-400">
         <Link href={`/restaurant/${props.restaurantId}`}>
-          {restaurant.name}
+          {data.restaurant.name}
         </Link>
       </div>
       <div className="text-xl text-gray-700 dark:text-slate-300 mt-5">
-        {restaurant.description}
+        {data.restaurant.description}
       </div>
       <div className="text-gray-800 dark:text-slate-500 mt-5">
-        {restaurant.location}
+        {data.restaurant.location}
       </div>
     </nav>
   )
