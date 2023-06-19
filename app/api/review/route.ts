@@ -7,9 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // 해당 유저와 식당에 리뷰를 날리는 요청을 통해 테스트
 
 export async function GET(req: NextRequest) {
-  const restaurantId = Number(
-    await req.nextUrl.searchParams.get('restaurantId')
-  )
+  const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
   const page = Number(await req.nextUrl.searchParams.get('page'))
 
   if (!restaurantId)
@@ -57,10 +55,10 @@ export async function POST(req: NextRequest) {
         rating,
         menu,
         restaurant: {
-          connect: { id: Number(restaurantId) },
+          connect: { id: restaurantId },
         },
         user: {
-          connect: { id: Number(restaurantId) },
+          connect: { id: 'TODO' },
         },
       },
     })
@@ -84,14 +82,14 @@ export async function PUT(req: NextRequest) {
         rating,
         menu,
         restaurant: {
-          connect: { id: Number(restaurantId) },
+          connect: { id: restaurantId },
         },
         user: {
-          connect: { id: Number(restaurantId) },
+          connect: { id: restaurantId },
         },
       },
       where: {
-        id: Number(reviewId),
+        id: reviewId,
       },
     })
     return NextResponse.json(res, {
@@ -105,10 +103,8 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const restaurantId = Number(
-    await req.nextUrl.searchParams.get('restaurantId')
-  )
-  const reviewId = Number(await req.nextUrl.searchParams.get('reviewId'))
+  const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
+  const reviewId = await req.nextUrl.searchParams.get('reviewId')
   if (!restaurantId)
     return NextResponse.json(
       {},

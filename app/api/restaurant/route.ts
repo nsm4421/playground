@@ -2,7 +2,7 @@ import RestaurantModel from '@/util/model/restaurant-model'
 import prisma from '@/util/prsima'
 import { NextRequest, NextResponse } from 'next/server'
 
-const findUnique = async (restaurantId: number) => {
+const findUnique = async (restaurantId: string) => {
   const restaurant = (await prisma.restaurant.findUniqueOrThrow({
     where: {
       id: restaurantId,
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
   try {
     let res
     // Case Ⅰ) find by id
-    if (restaurantId) res = await findUnique(Number(restaurantId))
+    if (restaurantId) res = await findUnique(restaurantId)
     // Case Ⅱ) find many with category
     else if (category) res = await findManyWithCategory(Number(page), category)
     // Case Ⅲ) find many

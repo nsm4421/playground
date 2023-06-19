@@ -12,7 +12,7 @@ interface ResponseData {
   totalCount: number
 }
 
-export default function ReivewList(props: { restaurantId: number }) {
+export default function ReivewList(props: { restaurantId: string }) {
   const [page, setPage] = useState<number>(1)
   const { data, error, isLoading } = useAxios<ResponseData>({
     url: `/api/review?restaurantId=${props.restaurantId}&page=${page}`,
@@ -21,7 +21,7 @@ export default function ReivewList(props: { restaurantId: number }) {
 
   // TODO : Loading, Error Component
   if (isLoading) return <div>Loadings...</div>
-  if (error || !data.reviews || !data.totalCount) return <div>Error...</div>
+  if (error || !data?.reviews || !data?.totalCount) return <div>Error...</div>
 
   return (
     <>

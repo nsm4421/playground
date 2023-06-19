@@ -12,7 +12,11 @@ import { useRouter } from 'next/navigation'
 const MAX_CHARACTER_MENU = 30
 const MAX_CHARACTER_CONTENT = 300
 
-export default function ReviewForm(props: { restaurantId: number }) {
+interface Props {
+  restaurantId: string
+}
+
+export default function ReviewForm(props: Props) {
   const router = useRouter()
   const [content, setContent] = useState<string>('')
   const [images, setImages] = useState<string[]>([])

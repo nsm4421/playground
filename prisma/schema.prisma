@@ -8,18 +8,56 @@ datasource db {
   relationMode = "prisma"
 }
 
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model User {
-  id Int @id @default(autoincrement())
-  email String?
+  id           String   @id @default(cuid())
+  name          String?
+  nickname String? @unique  @default(cuid())
   password String?
-  nickname String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
   reviews Review[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }
 
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 model Restaurant {
-  id Int @id @default(autoincrement())
+  id           String   @id @default(cuid())
   category String?
   name String
   description String
@@ -30,23 +68,23 @@ model Restaurant {
 }
 
 model Review {
-  id Int @id @default(autoincrement())
+  id           String   @id @default(cuid())
   hashtags Hashtag[]
   menu String
   content String
   rating Int @map("star")
-  restaurantId Int
+  restaurantId String
   restaurant Restaurant? @relation(fields: [restaurantId], references: [id])
-  userId Int
+  userId String
   user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }
 
 model Hashtag {
-  id Int @id @default(autoincrement())
+  id           String   @id @default(cuid())
   content String
-  reviewId Int
+  reviewId String
   review Review  @relation(fields: [reviewId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())

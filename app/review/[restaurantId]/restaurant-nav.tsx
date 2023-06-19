@@ -4,16 +4,10 @@ import useAxios from '@/util/hook/use-axios'
 import RestaurantModel from '@/util/model/restaurant-model'
 import Link from 'next/link'
 
-interface Props {
-  restaurantId: number
-}
-
-interface ResponseData {
-  restaurant: RestaurantModel
-}
-
-export default function ResturantNav(props: Props) {
-  const { data, isLoading, error } = useAxios<ResponseData>({
+export default function ResturantNav(props: { restaurantId: string }) {
+  const { data, isLoading, error } = useAxios<{
+    restaurant: RestaurantModel
+  }>({
     url: `/api/restaurant?restaurantId=${props.restaurantId}`,
     method: 'GET',
   })
