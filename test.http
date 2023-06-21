@@ -1,0 +1,4 @@
+GET http://localhost:3000/api/auth/sign-up?field=email&value=test
+
+### 
+GET http://localhost:3000/api/review?page=1

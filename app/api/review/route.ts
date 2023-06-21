@@ -13,12 +13,12 @@ export async function GET(req: NextRequest) {
   if (!restaurantId)
     return NextResponse.json(
       {},
-      { status: 400, statusText: 'restaurant id parameter is invalid' }
+      { status: 400, statusText: 'INVALID_PARAMETER' }
     )
   if (!page)
     return NextResponse.json(
       {},
-      { status: 400, statusText: 'page parameter is invalid' }
+      { status: 400, statusText: 'INVALID_PARAMETER' }
     )
 
   try {
@@ -34,12 +34,12 @@ export async function GET(req: NextRequest) {
       { reviews, totalCount },
       {
         status: 200,
-        statusText: 'Success to get reviews',
+        statusText: 'SUCCESS',
       }
     )
   } catch (err) {
     console.error(err)
-    return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
+    return NextResponse.json({}, { status: 500, statusText: 'SERVER_ERROR' })
   }
 }
 
@@ -64,11 +64,11 @@ export async function POST(req: NextRequest) {
     })
     return NextResponse.json(res, {
       status: 200,
-      statusText: 'Success to write',
+      statusText: 'SUCCESS',
     })
   } catch (err) {
     console.error(err)
-    return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
+    return NextResponse.json({}, { status: 500, statusText: 'SERVER_ERROR' })
   }
 }
 
@@ -98,7 +98,7 @@ export async function PUT(req: NextRequest) {
     })
   } catch (err) {
     console.error(err)
-    return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
+    return NextResponse.json({}, { status: 500, statusText: 'SERVER_ERROR' })
   }
 }
 
@@ -108,12 +108,12 @@ export async function DELETE(req: NextRequest) {
   if (!restaurantId)
     return NextResponse.json(
       {},
-      { status: 400, statusText: 'restaurant id parameter is invalid' }
+      { status: 400, statusText: 'INVALID_PARAMETER' }
     )
   if (!reviewId)
     return NextResponse.json(
       {},
-      { status: 400, statusText: 'review id parameter is invalid' }
+      { status: 400, statusText: 'INVALID_PARAMETER' }
     )
   // TODO : 리뷰작성자와 로그인한 유저가 동일한 유저인지 확인하는 로직
   try {
@@ -122,12 +122,9 @@ export async function DELETE(req: NextRequest) {
         id: reviewId,
       },
     })
-    return NextResponse.json(
-      {},
-      { status: 200, statusText: 'Success to delete' }
-    )
+    return NextResponse.json({}, { status: 200, statusText: 'SUCCESS' })
   } catch (err) {
     console.error(err)
-    return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
+    return NextResponse.json({}, { status: 500, statusText: 'SERVER_ERROR' })
   }
 }

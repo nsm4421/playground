@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
   if (await (!restaurantId && !page && !category)) {
     return NextResponse.json(
       {},
-      { status: 400, statusText: 'Invalid Parameters' }
+      { status: 400, statusText: 'INVALID_PARAMETER' }
     )
   }
 
@@ -58,11 +58,11 @@ export async function GET(req: NextRequest) {
     else res = await findMany(Number(page))
     return NextResponse.json(res, {
       status: 200,
-      statusText: 'Success to get restaurant',
+      statusText: 'SUCCESS',
     })
   } catch (err) {
     console.error(err)
-    return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
+    return NextResponse.json({}, { status: 500, statusText: 'SERVER_ERROR' })
   }
 }
 
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
   if (!name || !category || !description)
     return NextResponse.json(
       {},
-      { status: 400, statusText: 'body is not given' }
+      { status: 400, statusText: 'INVALID_PARAMETER' }
     )
   try {
     const res = await prisma.restaurant.create({
@@ -83,10 +83,10 @@ export async function POST(req: NextRequest) {
     })
     return NextResponse.json(res, {
       status: 200,
-      statusText: 'Success to create resturant',
+      statusText: 'SUCCESS',
     })
   } catch (err) {
     console.error(err)
-    return NextResponse.json({}, { status: 500, statusText: 'Server Fail' })
+    return NextResponse.json({}, { status: 500, statusText: 'SERVER_ERROR' })
   }
 }

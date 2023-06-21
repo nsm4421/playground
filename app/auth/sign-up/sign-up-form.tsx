@@ -5,7 +5,7 @@ import { useState } from 'react'
 import SignUpFormRequired from './sign-up-form-required'
 import SignUpFormNotRequired from './sign-up-form-not-reqired'
 import Button from '@/components/button-component'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import Modal from '@/components/modal-component'
 
 const LoginPageUrl = '/auth/login'
@@ -32,12 +32,22 @@ export default function SignUpForm() {
         password,
         nickname: nickname ? nickname : null,
       })
-      // .then(() => router.push(LoginPageUrl))
-      .then(console.log)
-      .catch((err) => {
-        console.log(typeof err)
-        console.error(err.message)
-        setModalMessage('서버 오류로 인해 회원가입에 실패하였습니다')
+      .then(() => router.push(LoginPageUrl))
+      .catch((err: AxiosError) => {
+        console.error(err)
+        switch (err.response?.statusText) {
+          case 'INVALID_PARAMETER':
+            setModalMessage('유효하지 않은 값이 주어졌습니다')
+            break
+          case 'DUPLICATED_EMAIL':
+            setModalMessage('이메일이 중복되었습니다')
+            break
+          case 'DUPLICATED_NICKNAME':
+            setModalMessage('닉네임이 중복되었습니다')
+            break
+          default:
+            setModalMessage('서버 오류가 발생했습니다')
+        }
       })
   }
 

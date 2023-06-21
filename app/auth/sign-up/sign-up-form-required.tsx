@@ -2,7 +2,7 @@
 
 import IconButton from '@/components/icon-button-component'
 import Input from '@/components/input-component'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { AiFillMail, AiOutlineCheck, AiOutlineKey } from 'react-icons/ai'
 
@@ -26,31 +26,24 @@ export default function SignUpFormRequired(props: Props) {
     }
     setIsLoading(true)
     await axios
-      .get(`/api/auth/sign-up?field=email&email=${props.email}`)
-      .then((res) => res.data)
-      .then((data) => data.type)
-      .then((type) => {
-        switch (type) {
-          case 'SUCCESS':
-            setEmailTooltip(`${props.email}은 사용 가능한 이메일입니다`)
-            setEmailChecked(true)
-            break
+      .get(`/api/auth/sign-up?field=email&value=${props.email}`)
+      .then(() => {
+        setEmailTooltip(`${props.email}은 사용 가능한 이메일입니다`)
+        setEmailChecked(true)
+      })
+      .catch((err: AxiosError) => {
+        console.error(err)
+        setEmailChecked(false)
+        switch (err.response?.statusText) {
           case 'INVALID_PARAMETER':
-            setEmailTooltip('이메일을 입력해주세요')
-            setEmailChecked(false)
+            setEmailTooltip('이메일이나 비밀번호 입력이 유효하지 않습니다')
             break
           case 'DUPLICATED':
-            setEmailTooltip(`${props.email}은 이미 가입된 이메일입니다`)
-            setEmailChecked(false)
+            setEmailTooltip('중복된 이메일입니다')
             break
           default:
-            setEmailTooltip('서버 오류가 발생했습니다')
-            setEmailChecked(false)
+            setEmailTooltip('서버 에러가 발생했습니다')
         }
-      })
-      .catch((err) => {
-        console.error(err)
-        setEmailTooltip('서버 오류가 발생했습니다')
       })
       .finally(() => setIsLoading(false))
   }

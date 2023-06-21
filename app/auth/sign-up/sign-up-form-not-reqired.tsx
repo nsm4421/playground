@@ -2,7 +2,7 @@
 
 import IconButton from '@/components/icon-button-component'
 import Input from '@/components/input-component'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Dispatch, SetStateAction, useState } from 'react'
 import {
   AiFillAccountBook,
@@ -31,30 +31,23 @@ export default function SignUpFormNotRequired(props: Props) {
     setIsLoading(true)
     await axios
       .get(`/api/auth/sign-up?field=nickname&value=${props.nickname}`)
-      .then((res) => res.data)
-      .then((data) => data.type)
-      .then((type) => {
-        switch (type) {
-          case 'SUCCESS':
-            setNicknameTooltip(`${props.nickname}은 사용 가능한 이메일입니다`)
-            setNicknameChecked(true)
-            break
+      .then(() => {
+        setNicknameTooltip(`${props.nickname}은 사용 가능한 닉네임입니다`)
+        setNicknameChecked(true)
+      })
+      .catch((err: AxiosError) => {
+        console.error(err)
+        setNicknameChecked(false)
+        switch (err.response?.statusText) {
           case 'INVALID_PARAMETER':
-            setNicknameTooltip('이메일을 입력해주세요')
-            setNicknameChecked(false)
+            setNicknameTooltip('닉네임이 유효하지 않습니다')
             break
           case 'DUPLICATED':
-            setNicknameTooltip(`${props.nickname}은 이미 사용중인 닉네임입니다`)
-            setNicknameChecked(false)
+            setNicknameTooltip('중복된 닉네임입니다')
             break
           default:
-            setNicknameTooltip('서버 오류가 발생했습니다')
-            setNicknameChecked(false)
+            setNicknameTooltip('서버 에러가 발생했습니다')
         }
-      })
-      .catch((err) => {
-        console.error(err)
-        setNicknameTooltip('서버 오류가 발생했습니다')
       })
       .finally(() => setIsLoading(false))
   }
