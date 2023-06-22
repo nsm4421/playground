@@ -8,7 +8,7 @@ import Button from '@/components/button-component'
 import axios, { AxiosError } from 'axios'
 import Modal from '@/components/modal-component'
 
-const LoginPageUrl = '/auth/login'
+const LoginPageUrl = '/auth/sign-up'
 
 export default function SignUpForm() {
   const router = useRouter()

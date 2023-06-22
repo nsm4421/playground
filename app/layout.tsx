@@ -4,6 +4,7 @@ import RecoilProvider from '@/components/provider/recoil-provider'
 import { ReactNode } from 'react'
 import { Session } from 'next-auth'
 import SessionProvider from '@/components/provider/session-provider'
+import Nav from '@/components/nav-component'
 
 // header
 export const metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout(props: {
       <body className={nanum_gothic.className}>
         <RecoilProvider>
           <SessionProvider session={props.session}>
+            <Nav />
             {props.children}
           </SessionProvider>
         </RecoilProvider>
