@@ -1,5 +1,7 @@
 import prisma from '@/util/prsima'
+import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
+import { authOptions } from '../auth/[...nextauth]/route'
 
 // 일단은 가짜 유저와 가짜 식당을 DB에 넣어놓음
 // insert into User(email, password, nickname) values('test@naver.com', '1234', 'test');
@@ -7,27 +9,28 @@ import { NextRequest, NextResponse } from 'next/server'
 // 해당 유저와 식당에 리뷰를 날리는 요청을 통해 테스트
 
 export async function GET(req: NextRequest) {
-  const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
-  const page = Number(await req.nextUrl.searchParams.get('page'))
-
-  if (!restaurantId)
-    return NextResponse.json(
-      {},
-      { status: 400, statusText: 'INVALID_PARAMETER' }
-    )
-  if (!page)
-    return NextResponse.json(
-      {},
-      { status: 400, statusText: 'INVALID_PARAMETER' }
-    )
-
   try {
+    // check logined or not
+    const session = await getServerSession(authOptions)
+    if (!session) {
+      return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
+    }
+    // check parameters
+    const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
+    const page = Number(await req.nextUrl.searchParams.get('page'))
+
+    if (!restaurantId || !page)
+      return NextResponse.json(
+        {},
+        { status: 400, statusText: 'INVALID_PARAMETER' }
+      )
     const reviews = await prisma.review.findMany({
       skip: 10 * (page - 1),
       take: 10,
       where: {
         restaurantId,
       },
+      orderBy: { createdAt: 'desc' },
     })
     const totalCount = await prisma.review.count({ where: { restaurantId } })
     return NextResponse.json(
@@ -47,7 +50,11 @@ export async function POST(req: NextRequest) {
   const { restaurantId, rating, menu, content } = await req.json()
 
   try {
-    // TODO : 로그인한 유저를 가져오도록 설정
+    // check logined or not
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
+    }
 
     const res = await prisma.review.create({
       data: {
@@ -58,7 +65,7 @@ export async function POST(req: NextRequest) {
           connect: { id: restaurantId },
         },
         user: {
-          connect: { id: 'TODO' },
+          connect: { id: session.user.userId },
         },
       },
     })
@@ -73,9 +80,14 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const { reviewId, restaurantId, rating, menu, content } = await req.json()
-  // TODO : 리뷰작성자와 로그인한 유저가 동일한 유저인지 확인하는 로직
   try {
+    // check logined or not
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
+    }
+    // check params
+    const { reviewId, restaurantId, rating, menu, content } = await req.json()
     const res = await prisma.review.update({
       data: {
         content,
@@ -103,20 +115,34 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
-  const reviewId = await req.nextUrl.searchParams.get('reviewId')
-  if (!restaurantId)
-    return NextResponse.json(
-      {},
-      { status: 400, statusText: 'INVALID_PARAMETER' }
-    )
-  if (!reviewId)
-    return NextResponse.json(
-      {},
-      { status: 400, statusText: 'INVALID_PARAMETER' }
-    )
-  // TODO : 리뷰작성자와 로그인한 유저가 동일한 유저인지 확인하는 로직
   try {
+    // check logined or not
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
+    }
+    // check params
+    const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
+    const reviewId = await req.nextUrl.searchParams.get('reviewId')
+    if (!restaurantId)
+      return NextResponse.json(
+        {},
+        { status: 400, statusText: 'INVALID_PARAMETER' }
+      )
+    if (!reviewId)
+      return NextResponse.json(
+        {},
+        { status: 400, statusText: 'INVALID_PARAMETER' }
+      )
+    const review = await prisma.review.findUniqueOrThrow({
+      where: {
+        id: reviewId,
+      },
+    })
+    // check author
+    if (review.userId != session.user.userId)
+      return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
+    // delete
     await prisma.review.delete({
       where: {
         id: reviewId,
