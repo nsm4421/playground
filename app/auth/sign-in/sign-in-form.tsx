@@ -29,12 +29,12 @@ export default function SignInForm() {
       password,
       redirect: false,
     })
-    console.log(res)
     if (res?.error) {
       setModalMessage(res.error)
       return
     }
     router.push('/')
+    return
   }
 
   return (

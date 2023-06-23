@@ -3,11 +3,6 @@ import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { authOptions } from '../auth/[...nextauth]/route'
 
-// 일단은 가짜 유저와 가짜 식당을 DB에 넣어놓음
-// insert into User(email, password, nickname) values('test@naver.com', '1234', 'test');
-// insert into Restaurant(name, description) values("홍콩반점", "30년전통");
-// 해당 유저와 식당에 리뷰를 날리는 요청을 통해 테스트
-
 export async function GET(req: NextRequest) {
   try {
     // check logined or not
@@ -65,7 +60,7 @@ export async function POST(req: NextRequest) {
           connect: { id: restaurantId },
         },
         user: {
-          connect: { id: session.user.userId },
+          connect: { id: session.user.id },
         },
       },
     })
@@ -122,13 +117,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
     }
     // check params
-    const restaurantId = await req.nextUrl.searchParams.get('restaurantId')
     const reviewId = await req.nextUrl.searchParams.get('reviewId')
-    if (!restaurantId)
-      return NextResponse.json(
-        {},
-        { status: 400, statusText: 'INVALID_PARAMETER' }
-      )
     if (!reviewId)
       return NextResponse.json(
         {},
@@ -140,7 +129,7 @@ export async function DELETE(req: NextRequest) {
       },
     })
     // check author
-    if (review.userId != session.user.userId)
+    if (review.userId != session.user.id)
       return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
     // delete
     await prisma.review.delete({

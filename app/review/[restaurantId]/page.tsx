@@ -8,35 +8,27 @@ interface Params {
 
 export default async function CreateReview({ params }: Params) {
   return (
-    <>
-      {/* Nav */}
-      <section className="mt-2 mb-10 flex justify-center p-2">
-        <div className="max-w-3xl w-full">
+    <div className="flex justify-center">
+      <div className="max-w-3xl w-full">
+        {/* Nav */}
+        <div className="mt-3 mb-5">
           <ResturantNav {...params} />
         </div>
-      </section>
 
-      <section className="flex justify-center">
-        <div className="max-w-3xl w-full shadow-md shadow-slate-200 dark:shadow-slate-500 p-2">
-          <div className="text-3xl font-bold text-center">
+        {/* Edit */}
+        <div className="shadow-md shadow-slate-200 dark:shadow-slate-500 p-2">
+          <div className="text-3xl font-bold text-center mt-5 mb-2">
             이 가게를 추천하시겠어요?
           </div>
-
           {/* 리뷰작성 양식 */}
-          <section className="flex justify-center mt-2">
-            <div className="max-w-3xl w-full">
-              <ReviewForm {...params} />
-            </div>
-          </section>
-
-          {/* 기존댓글 */}
-          <div className="flex justify-center mt-5">
-            <div className="max-w-3xl w-full">
-              <ReivewList {...params} />
-            </div>
-          </div>
+          <ReviewForm {...params} />
         </div>
-      </section>
-    </>
+
+        {/* 기존댓글 */}
+        <div className="mt-3 shadow-md shadow-slate-200 dark:shadow-slate-500 p-2">
+          <ReivewList {...params} />
+        </div>
+      </div>
+    </div>
   )
 }

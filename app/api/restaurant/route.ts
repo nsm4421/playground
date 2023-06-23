@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
         name,
         category,
         description,
-        createdBy: session.user.userId,
+        createdBy: session.user.id,
       },
     })
     return NextResponse.json(res, {
@@ -126,7 +126,7 @@ export async function PUT(req: NextRequest) {
     if (!restaurant)
       return NextResponse.json({}, { status: 400, statusText: 'NOT_FOUND' })
     // check author
-    if (restaurant.createdBy != session.user.userId)
+    if (restaurant.createdBy != session.user.id)
       return NextResponse.json(
         {},
         { status: 400, statusText: 'NOT_AUTHORIZED' }
@@ -138,7 +138,7 @@ export async function PUT(req: NextRequest) {
         name,
         category,
         description,
-        updatedBy: session.user.userId,
+        updatedBy: session.user.id,
       },
     })
     return NextResponse.json(res, {
@@ -172,7 +172,7 @@ export async function DELETE(req: NextRequest) {
     if (!restaurant)
       return NextResponse.json({}, { status: 400, statusText: 'NOT_FOUND' })
     // check author
-    if (restaurant.createdBy != session.user.userId)
+    if (restaurant.createdBy != session.user.id)
       return NextResponse.json(
         {},
         { status: 400, statusText: 'NOT_AUTHORIZED' }

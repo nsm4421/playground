@@ -4,7 +4,7 @@ interface Props {
   className?: string
   disabled?: boolean
   icon: ReactNode
-  label: string
+  label?: string
   onClick?: MouseEventHandler<HTMLButtonElement>
 }
 

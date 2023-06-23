@@ -60,7 +60,7 @@ model Restaurant {
   id           String   @id @default(cuid())
   category String?
   name String
-  description String
+  description String @db.Text
   location String?
   reviews Review[]
   createdAt DateTime @default(now())
@@ -73,10 +73,10 @@ model Review {
   id           String   @id @default(cuid())
   hashtags Hashtag[]
   menu String
-  content String
+  content String @db.Text
   rating Int @map("star")
   restaurantId String
-  restaurant Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurant Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   userId String
   user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())

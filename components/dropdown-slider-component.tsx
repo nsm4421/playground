@@ -14,10 +14,7 @@ interface Props {
 }
 
 export default function DropDownSlider(props: Props) {
-  const handleSelected = (idx: number) => () => {
-    console.log(idx)
-    props.setSelected(idx)
-  }
+  const handleSelected = (idx: number) => () => props.setSelected(idx)
   const clsNameActvie =
     'm-1 bg-slate-500 text-white rounded-md p-1 text-center hover:bg-slate-500'
   const clsNameDeActvie = 'm-1 p-1 text-center hover:bg-orange-500'

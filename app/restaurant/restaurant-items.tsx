@@ -7,6 +7,9 @@ import useAxios from '@/util/hook/use-axios'
 import RestuarantModel from '@/util/model/restaurant-model'
 import RestuarntItem from './restaurant-item'
 import Pagination from '@/components/pagination-component'
+import { HiOutlinePencilSquare } from 'react-icons/hi2'
+import IconButton from '@/components/icon-button-component'
+import Link from 'next/link'
 
 type ResponseData = {
   resturants: RestuarantModel[]
@@ -47,15 +50,23 @@ export default function RestaurntItems() {
               totalCount={data?.totalCount ?? 0}
             />
           </div>
+          <div className="ml-5">
+            <Link href={'/restaurant/create'}>
+              <IconButton
+                icon={<HiOutlinePencilSquare className="mr-1" />}
+                label={'글쓰기'}
+              />
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* 가게 Items */}
       {(!error || data?.resturants || data?.totalCount) && (
-        <section className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-10">
+        <section className="mx-5 mt-10 w-full max-[1024px]:max-w-fit">
           {data?.resturants?.map((restuarant, idx) => (
-            <div className="h-auto max-w-full rounded-lg" key={idx}>
-              <RestuarntItem restaurant={restuarant} />
+            <div className="h-auto max-w-full rounded-lg mt-5" key={idx}>
+              <RestuarntItem restaurant={restuarant} refetch={refetch} />
             </div>
           ))}
         </section>

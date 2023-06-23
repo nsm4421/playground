@@ -31,8 +31,9 @@ export default function ReviewForm(props: Props) {
     await axios
       .post('/api/review', {
         ...props,
-        content: content,
-        menu: menu,
+        content,
+        menu,
+        rating,
       })
       .then(() => {
         router.refresh()
@@ -84,7 +85,7 @@ export default function ReviewForm(props: Props) {
         )}
       </div>
 
-      <div className="mt-10 flex justify-between align-middle">
+      <div className="mt-10 mb-3 flex justify-between align-middle">
         <ImageUploadButton maxNum={3} images={images} setImages={setImages} />
         <Button label={'제출하기'} onClick={handleSubmit} />
       </div>
