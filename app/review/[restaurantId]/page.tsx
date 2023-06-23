@@ -3,7 +3,7 @@ import ReviewForm from './review-form'
 import ResturantNav from './restaurant-nav'
 
 interface Params {
-  params: { restaurantId: number }
+  params: { restaurantId: string }
 }
 
 export default async function CreateReview({ params }: Params) {

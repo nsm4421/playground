@@ -1,11 +1,7 @@
 import RestaurantModel from '@/util/model/restaurant-model'
 import Link from 'next/link'
 
-interface Props {
-  restaurant: RestaurantModel
-}
-
-export default function RestaurantItem(props: Props) {
+export default function RestaurantItem(props: { restaurant: RestaurantModel }) {
   return (
     <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       {/* TODO : 이미지 보여주기 */}

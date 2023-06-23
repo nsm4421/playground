@@ -9,6 +9,7 @@ import {
 interface Props {
   content: string
   setContent: Dispatch<SetStateAction<string>>
+  type?: string
   placeholder?: string
   maxCharactor?: number
   onFocus?: FocusEventHandler<HTMLInputElement>
@@ -24,6 +25,7 @@ export default function Input(props: Props) {
     <input
       onFocus={props.onFocus ?? undefined}
       onPointerLeave={props.onPointerLeave ?? undefined}
+      type={props.type ?? 'text'}
       value={props.content}
       onChange={handleContent}
       placeholder={props.placeholder}
