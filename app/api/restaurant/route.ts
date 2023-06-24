@@ -73,6 +73,13 @@ export async function GET(req: NextRequest) {
   }
 }
 
+interface PostRequest {
+  name: string
+  category?: string
+  description: string
+  images?: string
+}
+
 export async function POST(req: NextRequest) {
   try {
     // check logined or not
@@ -81,18 +88,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
     }
     // check request
-    const { name, category, description } = await req.json()
-    if (!name || !category || !description)
+    const { name, category, description, images }: PostRequest =
+      await req.json()
+    if (!name || !description)
       return NextResponse.json(
         {},
         { status: 400, statusText: 'INVALID_PARAMETER' }
       )
+    // save restaurant
     const res = await prisma.restaurant.create({
       data: {
         name,
         category,
         description,
         createdBy: session.user.id,
+        ...(images !== '' && { images }),
       },
     })
     return NextResponse.json(res, {

@@ -1,6 +1,6 @@
 'use client'
 import Button from '@/components/button-component'
-import ImageUploadButton from '@/components/image-upload-button'
+import ImageUploadButtons from '@/components/image-upload-button'
 import StartRating from '@/components/rating-star-component'
 
 import TextArea from '@/components/text-area-component'
@@ -86,7 +86,7 @@ export default function ReviewForm(props: Props) {
       </div>
 
       <div className="mt-10 mb-3 flex justify-between align-middle">
-        <ImageUploadButton maxNum={3} images={images} setImages={setImages} />
+        <ImageUploadButtons maxNum={3} images={images} setImages={setImages} />
         <Button label={'제출하기'} onClick={handleSubmit} />
       </div>
     </>

@@ -3,10 +3,11 @@ type RestaurantModel = {
   category?: string
   name: string
   description: string
+  images?: string
   location?: string
   createdBy?: string
-  createdAt?: string
-  updatedAt?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export default RestaurantModel

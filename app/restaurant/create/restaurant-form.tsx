@@ -1,6 +1,6 @@
 'use client'
 import Button from '@/components/button-component'
-import ImageUploadButton from '@/components/image-upload-button'
+import ImageUploadButtons from '@/components/image-upload-button'
 
 import TextArea from '@/components/text-area-component'
 import { useState } from 'react'
@@ -9,6 +9,9 @@ import { useRouter } from 'next/navigation'
 import DropDownSlider from '@/components/dropdown-slider-component'
 import axios from 'axios'
 import categoriesItem from '@/util/model/category-items'
+import S3 from '@/util/s3'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
+import convertURLtoFile from '@/util/conver-url-to-file'
 
 const MAX_CHARACTER_Name = 30
 const MAX_CHARACTER_Description = 300
@@ -24,18 +27,57 @@ export default function RestaurantForm() {
   const [contentCharacterVisible, setContentCharacterVisible] =
     useState<boolean>(false)
 
+  const uploadImageAndReturnFilename = async (url: string) => {
+    try {
+      const file = await convertURLtoFile(url)
+      if (await !url) return null
+      const filename = `${Math.random().toString(36).slice(2, 30)}`
+      const res = await S3.send(
+        new PutObjectCommand({
+          Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
+          Key: filename,
+          Body: file,
+          ContentType: file.type,
+        })
+      )
+      if (res.$metadata.httpStatusCode?.toString() == '200') {
+        return filename
+      }
+      return null
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   const handleSubmit = async () => {
-    await axios
-      .post('/api/restaurant', {
+    try {
+      // concat image urls
+      let imageUrls = ''
+      for (const image of images) {
+        if (image)
+          imageUrls = `${imageUrls}|${
+            process.env.NEXT_PUBLIC_S3_URL_PREFIX
+          }__${await uploadImageAndReturnFilename(image)}`
+      }
+      console.table({
         name,
         category: selected === -1 ? null : categoriesItem[selected],
         description,
+        ...(imageUrls !== '' && { images: imageUrls }),
       })
-      .then(() => {
-        router.push('/restaurant')
-        return
-      })
-      .catch(console.error)
+      // save restaurant
+      await axios
+        .post('/api/restaurant', {
+          name,
+          category: selected === -1 ? null : categoriesItem[selected],
+          description,
+          ...(imageUrls !== '' && { images: imageUrls }),
+        })
+        .then(() => router.push('/restaurant'))
+        .catch(console.error)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -98,7 +140,7 @@ export default function RestaurantForm() {
       </div>
 
       <div className="p-1 mx-1 mt-10 flex justify-between align-middle">
-        <ImageUploadButton maxNum={3} images={images} setImages={setImages} />
+        <ImageUploadButtons maxNum={3} images={images} setImages={setImages} />
         <Button label={'제출하기'} onClick={handleSubmit} />
       </div>
     </>

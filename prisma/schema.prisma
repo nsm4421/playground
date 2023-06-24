@@ -63,6 +63,7 @@ model Restaurant {
   description String @db.Text
   location String?
   reviews Review[]
+  images String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   createdBy String

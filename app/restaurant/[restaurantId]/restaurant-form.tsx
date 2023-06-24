@@ -1,6 +1,6 @@
 'use client'
 import Button from '@/components/button-component'
-import ImageUploadButton from '@/components/image-upload-button'
+import ImageUploadButtons from '@/components/image-upload-button'
 
 import TextArea from '@/components/text-area-component'
 import { useEffect, useState } from 'react'
@@ -115,7 +115,7 @@ export default function RestaurantForm(props: { restaurantId: string }) {
       </div>
 
       <div className="p-1 mx-1 mt-10 flex justify-between align-middle">
-        <ImageUploadButton maxNum={3} images={images} setImages={setImages} />
+        <ImageUploadButtons maxNum={3} images={images} setImages={setImages} />
         <Button label={'제출하기'} onClick={handleSubmit} />
       </div>
     </>
