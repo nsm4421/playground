@@ -7,13 +7,16 @@ import convertURLtoFile from '../../conver-url-to-file'
  * @param url file url
  * @returns uploaded filename
  */
-export default async function uploadImageAndReturnFilename(url: string) {
+export default async function uploadImageAndReturnFilename(
+  url: string,
+  numDigit?: number
+) {
   try {
     if (await !url) return null
     const file = await convertURLtoFile(url)
-    const filename = `${process.env.NEXT_PUBLIC_S3_URL_PREFIX}/${Math.random()
-      .toString(36)
-      .slice(2, 30)}_${new Date().toString()}_${file.name}`
+    const filename = `${Math.random()
+      .toString((numDigit ?? 30) + 2)
+      .slice(2, (numDigit ?? 30) + 2)}${Date.now()}`
     const res = await S3Client.send(
       new PutObjectCommand({
         Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,

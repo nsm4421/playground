@@ -63,7 +63,7 @@ export default function RestaurntItems() {
 
       {/* 가게 Items */}
       {(!error || data?.resturants || data?.totalCount) && (
-        <section className="mx-5 mt-10 w-full max-[1024px]:max-w-fit">
+        <section className=" mt-10 w-full">
           {data?.resturants?.map((restuarant, idx) => (
             <div className="h-auto max-w-full rounded-lg mt-5" key={idx}>
               <RestuarntItem restaurant={restuarant} refetch={refetch} />

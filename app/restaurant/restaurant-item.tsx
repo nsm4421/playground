@@ -1,5 +1,6 @@
 'use client'
 
+import Carousel from '@/components/atom/carousel-component'
 import IconButton from '@/components/atom/icon-button-component'
 import RestaurantModel from '@/util/model/restaurant-model'
 import axios from 'axios'
@@ -17,16 +18,12 @@ export default function RestaurantItem(props: {
       .delete(`/api/restaurant?restaurantId=${props.restaurant.id}`)
       .catch(console.error)
   }
-
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      {/* TODO : 이미지 보여주기 */}
-      {/* <img
-            className="rounded-t-lg"
-            src="/docs/images/blog/image-1.jpg"
-            alt=""
-          /> */}
-
+    <div className="pt-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      {/* Carousel */}
+      {props.restaurant.images && (
+        <Carousel images={props.restaurant.images.split(',')} height={56} />
+      )}
       <div className="p-5">
         <div className="flex justify-between">
           {/* 음식점 이름 */}
