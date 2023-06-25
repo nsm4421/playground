@@ -1,4 +1,4 @@
-import RestaurantForm from './restaurant-form'
+import RestaurantEditComponent from '@/components/restaurant-edit-component'
 
 interface Params {
   params: { restaurantId: string }
@@ -11,7 +11,7 @@ export default function RestaurantDetail({ params }: Params) {
         <div className="mt-2 mb-10">
           <h1 className="font-extrabold text-3xl">가게 정보 수정하기</h1>
         </div>
-        <RestaurantForm {...params} />
+        <RestaurantEditComponent {...params} label={'수정'} />
       </div>
     </div>
   )

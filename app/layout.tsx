@@ -4,7 +4,7 @@ import RecoilProvider from '@/components/provider/recoil-provider'
 import { ReactNode } from 'react'
 import { Session } from 'next-auth'
 import SessionProvider from '@/components/provider/session-provider'
-import Nav from '@/components/nav-component'
+import Nav from '@/components/atom/nav-component'
 
 // header
 export const metadata = {

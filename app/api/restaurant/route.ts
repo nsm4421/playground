@@ -1,5 +1,5 @@
 import RestaurantModel from '@/util/model/restaurant-model'
-import prisma from '@/util/prsima'
+import prisma from '@/util/db/prisma/prsima-client'
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { authOptions } from '../auth/[...nextauth]/route'
@@ -123,7 +123,8 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({}, { status: 400, statusText: 'UNAUTHORIZED' })
     }
     // check request
-    const { restaurantId, name, category, description } = await req.json()
+    const { restaurantId, name, category, description, images } =
+      await req.json()
     if (!restaurantId || !name || !category || !description)
       return NextResponse.json(
         {},
@@ -149,6 +150,8 @@ export async function PUT(req: NextRequest) {
         category,
         description,
         updatedBy: session.user.id,
+        updatedAt: new Date(),
+        ...(images !== '' && { images }),
       },
     })
     return NextResponse.json(res, {

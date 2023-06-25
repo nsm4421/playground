@@ -1,4 +1,4 @@
-import RestaurantForm from './restaurant-form'
+import RestaurantEditComponent from '@/components/restaurant-edit-component'
 
 export default function CreateRestaurant() {
   return (
@@ -7,7 +7,7 @@ export default function CreateRestaurant() {
         <div className="mt-2 mb-10">
           <h1 className="font-extrabold text-3xl">가게 추가하기</h1>
         </div>
-        <RestaurantForm />
+        <RestaurantEditComponent label={'추가'} />
       </div>
     </div>
   )

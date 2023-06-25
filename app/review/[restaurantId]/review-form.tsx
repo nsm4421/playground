@@ -1,12 +1,12 @@
 'use client'
-import Button from '@/components/button-component'
-import ImageUploadButtons from '@/components/image-upload-button'
-import StartRating from '@/components/rating-star-component'
+import Button from '@/components/atom/button-component'
+import ImageUploadButtons from '@/components/atom/image-upload-button'
+import StartRating from '@/components/atom/rating-star-component'
 
-import TextArea from '@/components/text-area-component'
+import TextArea from '@/components/atom/text-area-component'
 import { useState } from 'react'
 import axios from 'axios'
-import Input from '@/components/input-component'
+import Input from '@/components/atom/input-component'
 import { useRouter } from 'next/navigation'
 
 const MAX_CHARACTER_MENU = 30

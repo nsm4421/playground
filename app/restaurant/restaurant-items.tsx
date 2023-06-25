@@ -6,9 +6,9 @@ import CateoryTab from './category-tab'
 import useAxios from '@/util/hook/use-axios'
 import RestuarantModel from '@/util/model/restaurant-model'
 import RestuarntItem from './restaurant-item'
-import Pagination from '@/components/pagination-component'
+import Pagination from '@/components/atom/pagination-component'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
-import IconButton from '@/components/icon-button-component'
+import IconButton from '@/components/atom/icon-button-component'
 import Link from 'next/link'
 
 type ResponseData = {

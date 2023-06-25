@@ -1,6 +1,6 @@
 'use client'
 
-import IconButton from '@/components/icon-button-component'
+import IconButton from '@/components/atom/icon-button-component'
 import RestaurantModel from '@/util/model/restaurant-model'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'

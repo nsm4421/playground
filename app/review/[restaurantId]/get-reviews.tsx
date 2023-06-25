@@ -1,13 +1,13 @@
 'use client'
 
-import Pagination from '@/components/pagination-component'
-import StartRating from '@/components/rating-star-component'
+import Pagination from '@/components/atom/pagination-component'
+import StartRating from '@/components/atom/rating-star-component'
 import ReviewModel from '@/util/model/review-model'
 import koreanTimeDistance from '@/util/time-distance'
 import { useState } from 'react'
 import useAxios from '@/util/hook/use-axios'
 import { HiTrash } from 'react-icons/hi2'
-import IconButton from '@/components/icon-button-component'
+import IconButton from '@/components/atom/icon-button-component'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 

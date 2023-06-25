@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import SignUpFormRequired from './sign-up-form-required'
 import SignUpFormNotRequired from './sign-up-form-not-reqired'
-import Button from '@/components/button-component'
+import Button from '@/components/atom/button-component'
 import axios, { AxiosError } from 'axios'
-import Modal from '@/components/modal-component'
+import Modal from '@/components/atom/modal-component'
 
 const LoginPageUrl = '/auth/sign-in'
 

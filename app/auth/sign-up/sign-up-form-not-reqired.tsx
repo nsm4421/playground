@@ -1,7 +1,7 @@
 'use client'
 
-import IconButton from '@/components/icon-button-component'
-import Input from '@/components/input-component'
+import IconButton from '@/components/atom/icon-button-component'
+import Input from '@/components/atom/input-component'
 import axios, { AxiosError } from 'axios'
 import { Dispatch, SetStateAction, useState } from 'react'
 import {

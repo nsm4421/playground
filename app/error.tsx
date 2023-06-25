@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/components/button-component'
+import Button from '@/components/atom/button-component'
 import { useRouter } from 'next/navigation'
 
 export default function ErrorPage() {

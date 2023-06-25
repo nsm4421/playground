@@ -1,4 +1,4 @@
-import prisma from '@/util/prsima'
+import prisma from '@/util/db/prisma/prsima-client'
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { authOptions } from '../auth/[...nextauth]/route'

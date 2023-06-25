@@ -1,4 +1,4 @@
-import prisma from '@/util/prsima'
+import prisma from '@/util/db/prisma/prsima-client'
 import bcrypt from 'bcrypt'
 import { NextRequest, NextResponse } from 'next/server'
 

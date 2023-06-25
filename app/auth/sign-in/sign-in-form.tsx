@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import Button from '@/components/button-component'
-import Modal from '@/components/modal-component'
+import Button from '@/components/atom/button-component'
+import Modal from '@/components/atom/modal-component'
 import { signIn } from 'next-auth/react'
 import { AiFillMail, AiOutlineKey } from 'react-icons/ai'
-import Input from '@/components/input-component'
+import Input from '@/components/atom/input-component'
 import Link from 'next/link'
 
 export default function SignInForm() {

@@ -4,7 +4,7 @@ declare global {
   var _s3: S3Client
 }
 
-let S3: S3Client
+let CustomS3: S3Client
 
 const accessKeyId = process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID
 const secretAccessKey = process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY
@@ -24,9 +24,9 @@ if (process.env.NODE_ENV === 'development') {
       region,
     })
   }
-  S3 = global._s3
+  CustomS3 = global._s3
 } else {
-  S3 = new S3Client({
+  CustomS3 = new S3Client({
     credentials: {
       accessKeyId,
       secretAccessKey,
@@ -35,4 +35,4 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
-export default S3
+export default CustomS3
