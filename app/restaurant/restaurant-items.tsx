@@ -54,7 +54,7 @@ export default function RestaurntItems() {
             <Link href={'/restaurant/create'}>
               <IconButton
                 icon={<HiOutlinePencilSquare className="mr-1" />}
-                label={'글쓰기'}
+                label={'음식점 추가하기'}
               />
             </Link>
           </div>

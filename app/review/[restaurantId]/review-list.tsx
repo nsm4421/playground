@@ -10,8 +10,6 @@ import { HiTrash } from 'react-icons/hi2'
 import IconButton from '@/components/atom/icon-button-component'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
-import S3Client from '@/util/db/s3/s3-client'
-import { GetObjectCommand } from '@aws-sdk/client-s3'
 import Image from 'next/image'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import _lastFetchedAt from './review-state'
@@ -56,7 +54,6 @@ export default function ReivewList(props: { restaurantId: string }) {
 function ReviewItem(props: { review: ReviewModel }) {
   const { data: session } = useSession()
   const [_, setLastFetched] = useRecoilState(_lastFetchedAt)
-  const [imageData, setImageData] = useState<string[]>([])
   // 리뷰삭제 기능
   const handleDelete = async () => {
     await axios
@@ -69,23 +66,6 @@ function ReviewItem(props: { review: ReviewModel }) {
       })
       .catch(console.error)
   }
-  useEffect(() => {
-    props.review.images?.split(',').map(async (Key, idx) => {
-      const base64Image = await S3Client.send(
-        new GetObjectCommand({
-          Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
-          Key,
-        })
-      )
-        .then((res) => res.Body)
-        .then((body) => body?.transformToByteArray())
-        .then((arr) => arr && Buffer.from(arr).toString('base64'))
-      if (!base64Image) return
-      const newImages = [...imageData]
-      newImages[idx] = `data:image/jpeg;base64,${base64Image}`
-      setImageData(newImages)
-    })
-  }, [])
   return (
     <div className="shadow-slate-300 dark:shadow-slate-700 border-b-2 mt-1 mb-1 pt-3 pb-3 dark:border-b-slate-600">
       <div className="mt-2 flex justify-between ">
@@ -112,20 +92,6 @@ function ReviewItem(props: { review: ReviewModel }) {
       {/* 별점 */}
       <div className="mt-2">
         <StartRating min={1} max={5} rating={props.review.rating} />
-      </div>
-      {/* 첨부 이미지 */}
-      <div className="mt-2">
-        {imageData &&
-          imageData.map((data, idx) => (
-            <div className="flex" key={idx}>
-              <Image
-                src={data}
-                width={100}
-                height={100}
-                alt={`${idx + 1}th-image`}
-              />{' '}
-            </div>
-          ))}
       </div>
       {/* 리뷰 내용 */}
       <div className="mt-2 break-words">

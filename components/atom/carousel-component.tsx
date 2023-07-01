@@ -6,6 +6,7 @@ import S3Client from '@/util/db/s3/s3-client'
 import Image from 'next/image'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 interface Props {
   images: string[]
@@ -21,20 +22,12 @@ export default function Carousel(props: Props) {
   const handleGoNext = () => setSelected((selected + 1) % props.images.length)
   // idx번째 이미지를 가져오기
   const setImage = async (idx: number) => {
-    const Key = props.images[idx]
-    if (!Key) return
-    const base64Image = await S3Client.send(
-      new GetObjectCommand({
-        Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
-        Key,
-      })
-    )
-      .then((res) => res.Body)
-      .then((body) => body?.transformToByteArray())
-      .then((arr) => arr && Buffer.from(arr).toString('base64'))
-    if (!base64Image) return
+    const data = await axios
+      .get(`/api/s3?key=${props.images[idx]}`)
+      .then((res) => res.data.data)
+    if (!data) return
     const newUrls = [...imagesData]
-    newUrls[idx] = `data:image/jpeg;base64,${base64Image}`
+    newUrls[idx] = `data:image/jpeg;base64,${data}`
     setImagesData(newUrls)
   }
   useEffect(() => {
