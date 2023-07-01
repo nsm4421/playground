@@ -41,8 +41,17 @@ export async function GET(req: NextRequest) {
   }
 }
 
+interface PostRequest {
+  restaurantId: string
+  rating: number
+  menu: string
+  content: string
+  images?: string
+}
+
 export async function POST(req: NextRequest) {
-  const { restaurantId, rating, menu, content } = await req.json()
+  const { restaurantId, rating, menu, content, images }: PostRequest =
+    await req.json()
 
   try {
     // check logined or not
@@ -62,6 +71,7 @@ export async function POST(req: NextRequest) {
         user: {
           connect: { id: session.user.id },
         },
+        ...(images && { images }),
       },
     })
     return NextResponse.json(res, {

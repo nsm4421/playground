@@ -3,7 +3,7 @@ import S3Client from './s3-client'
 import convertURLtoFile from '../../conver-url-to-file'
 
 /**
- * 파일 업로드 후
+ * 파일 업로드 후 Key값 반환
  * @param url file url
  * @returns uploaded filename
  */

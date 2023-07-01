@@ -75,6 +75,7 @@ model Review {
   hashtags Hashtag[]
   menu String
   content String @db.Text
+  images String? @db.Text
   rating Int @map("star")
   restaurantId String
   restaurant Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: Cascade)

@@ -4,12 +4,18 @@ import Pagination from '@/components/atom/pagination-component'
 import StartRating from '@/components/atom/rating-star-component'
 import ReviewModel from '@/util/model/review-model'
 import koreanTimeDistance from '@/util/time-distance'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useAxios from '@/util/hook/use-axios'
 import { HiTrash } from 'react-icons/hi2'
 import IconButton from '@/components/atom/icon-button-component'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
+import S3Client from '@/util/db/s3/s3-client'
+import { GetObjectCommand } from '@aws-sdk/client-s3'
+import Image from 'next/image'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import _lastFetchedAt from './review-state'
+import deleteFile from '@/util/db/s3/s3-delete'
 
 interface ResponseData {
   reviews: ReviewModel[]
@@ -17,11 +23,17 @@ interface ResponseData {
 }
 
 export default function ReivewList(props: { restaurantId: string }) {
+  const lastModifiedAt = useRecoilValue(_lastFetchedAt)
   const [page, setPage] = useState<number>(1)
-  const { data, error, isLoading } = useAxios<ResponseData>({
+  const { data, error, isLoading, refetch } = useAxios<ResponseData>({
     url: `/api/review?restaurantId=${props.restaurantId}&page=${page}`,
     method: 'GET',
   })
+
+  // page나 lastModfiedAt이 변경되면, 서버로부터 리뷰데이터 refetch
+  useEffect(() => {
+    refetch()
+  }, [page, lastModifiedAt])
 
   if (isLoading || error || !data?.reviews || !data?.totalCount) return
 
@@ -43,14 +55,41 @@ export default function ReivewList(props: { restaurantId: string }) {
 
 function ReviewItem(props: { review: ReviewModel }) {
   const { data: session } = useSession()
+  const [_, setLastFetched] = useRecoilState(_lastFetchedAt)
+  const [imageData, setImageData] = useState<string[]>([])
+  // 리뷰삭제 기능
   const handleDelete = async () => {
     await axios
       .delete(`/api/review?reviewId=${props.review.id}`)
+      .then(() => {
+        // 최종 Fetch된 시간 Update → 리뷰 데이터 refetch
+        setLastFetched(Date.now())
+        // S3 Bucket에 저장된 데이터 삭제 요청
+        props.review.images?.split(',').map((image) => deleteFile(image))
+      })
       .catch(console.error)
   }
+  useEffect(() => {
+    props.review.images?.split(',').map(async (Key, idx) => {
+      const base64Image = await S3Client.send(
+        new GetObjectCommand({
+          Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
+          Key,
+        })
+      )
+        .then((res) => res.Body)
+        .then((body) => body?.transformToByteArray())
+        .then((arr) => arr && Buffer.from(arr).toString('base64'))
+      if (!base64Image) return
+      const newImages = [...imageData]
+      newImages[idx] = `data:image/jpeg;base64,${base64Image}`
+      setImageData(newImages)
+    })
+  }, [])
   return (
-    <div className="shadow-slate-300 dark:shadow-slate-700">
+    <div className="shadow-slate-300 dark:shadow-slate-700 border-b-2 mt-1 mb-1 pt-3 pb-3 dark:border-b-slate-600">
       <div className="mt-2 flex justify-between ">
+        {/* 작성자 닉네임 */}
         <div>
           <span>{props.review.nickname ?? '익명'}</span>
           {props.review.createdAt && (
@@ -59,6 +98,7 @@ function ReviewItem(props: { review: ReviewModel }) {
             </span>
           )}
         </div>
+        {/* 작성자인 경우 삭제 버튼 */}
         {session?.user.id === props.review.userId && (
           <div className="flex justify-start">
             <IconButton
@@ -69,9 +109,25 @@ function ReviewItem(props: { review: ReviewModel }) {
           </div>
         )}
       </div>
+      {/* 별점 */}
       <div className="mt-2">
         <StartRating min={1} max={5} rating={props.review.rating} />
       </div>
+      {/* 첨부 이미지 */}
+      <div className="mt-2">
+        {imageData &&
+          imageData.map((data, idx) => (
+            <div className="flex" key={idx}>
+              <Image
+                src={data}
+                width={100}
+                height={100}
+                alt={`${idx + 1}th-image`}
+              />{' '}
+            </div>
+          ))}
+      </div>
+      {/* 리뷰 내용 */}
       <div className="mt-2 break-words">
         <p className="whitespace-normal">{props.review.content}</p>
       </div>
