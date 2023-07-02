@@ -12,8 +12,9 @@ import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import Image from 'next/image'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import _lastFetchedAt from './review-state'
+import { lastReviewFetchedAt } from './review-state'
 import deleteFile from '@/util/db/s3/s3-delete'
+import Loading from '@/components/loading-component'
 
 interface ResponseData {
   reviews: ReviewModel[]
@@ -21,7 +22,7 @@ interface ResponseData {
 }
 
 export default function ReivewList(props: { restaurantId: string }) {
-  const lastModifiedAt = useRecoilValue(_lastFetchedAt)
+  const lastFetched = useRecoilValue(lastReviewFetchedAt)
   const [page, setPage] = useState<number>(1)
   const { data, error, isLoading, refetch } = useAxios<ResponseData>({
     url: `/api/review?restaurantId=${props.restaurantId}&page=${page}`,
@@ -31,7 +32,9 @@ export default function ReivewList(props: { restaurantId: string }) {
   // page나 lastModfiedAt이 변경되면, 서버로부터 리뷰데이터 refetch
   useEffect(() => {
     refetch()
-  }, [page, lastModifiedAt])
+  }, [page, lastFetched])
+
+  if (isLoading) return <Loading className="w-full h-10" />
 
   if (isLoading || error || !data?.reviews || !data?.totalCount) return
 
@@ -53,7 +56,7 @@ export default function ReivewList(props: { restaurantId: string }) {
 
 function ReviewItem(props: { review: ReviewModel }) {
   const { data: session } = useSession()
-  const [_, setLastFetched] = useRecoilState(_lastFetchedAt)
+  const [_, setLastFetched] = useRecoilState(lastReviewFetchedAt)
   // 리뷰삭제 기능
   const handleDelete = async () => {
     await axios

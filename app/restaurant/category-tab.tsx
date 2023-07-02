@@ -24,6 +24,7 @@ export default function CateoryTab(props: Props) {
           {props.labels.map((label, idx) => (
             <li key={idx}>
               <button
+                disabled={props.isLoading}
                 className={
                   idx === props.selected ? clsNameActive : clsNameDeActive
                 }

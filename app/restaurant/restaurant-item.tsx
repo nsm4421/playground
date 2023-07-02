@@ -6,20 +6,26 @@ import RestaurantModel from '@/util/model/restaurant-model'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { HiPencil, HiTrash } from 'react-icons/hi2'
+import { useState } from 'react'
+import { HiChevronDown, HiChevronUp, HiPencil, HiTrash } from 'react-icons/hi2'
+import Review from './review'
 
 export default function RestaurantItem(props: {
   restaurant: RestaurantModel
   refetch: () => void
 }) {
   const { data: session } = useSession()
+  const [isAccordianOpen, setAccordianOpen] = useState<boolean>(false)
+  const handleIsAccordianOpen = () => {
+    setAccordianOpen(!isAccordianOpen)
+  }
   const handleDelete = async () => {
     await axios
       .delete(`/api/restaurant?restaurantId=${props.restaurant.id}`)
       .catch(console.error)
   }
   return (
-    <div className="pt-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="pt-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
       {/* Carousel */}
       {props.restaurant.images && (
         <Carousel images={props.restaurant.images.split(',')} height={56} />
@@ -49,11 +55,25 @@ export default function RestaurantItem(props: {
             </div>
           )}
         </div>
-
-        {/* 음식점 설명 */}
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          {props.restaurant.description}
-        </p>
+        <div className="flex justify-between">
+          {/* 음식점 설명 */}
+          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+            {props.restaurant.description}
+          </p>
+          <IconButton
+            onClick={handleIsAccordianOpen}
+            className="bg-transparent hover:text-orange-400"
+            icon={
+              isAccordianOpen ? (
+                <HiChevronUp className="text-xl font-extrabold" />
+              ) : (
+                <HiChevronDown className="text-xl font-extrabold" />
+              )
+            }
+          />
+        </div>
+        {/* Accordian이 열리면 리뷰 보여주기 */}
+        {isAccordianOpen && <Review restaurantId={props.restaurant.id} />}
       </div>
     </div>
   )

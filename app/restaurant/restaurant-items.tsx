@@ -10,6 +10,8 @@ import Pagination from '@/components/atom/pagination-component'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 import IconButton from '@/components/atom/icon-button-component'
 import Link from 'next/link'
+import Loading from '@/components/loading-component'
+import WriteReviewModal from '@/app/restaurant/write-review-modal'
 
 type ResponseData = {
   resturants: RestuarantModel[]
@@ -17,6 +19,11 @@ type ResponseData = {
 }
 
 export default function RestaurntItems() {
+  /** States
+   * selected : 현재 선택한 카테고리
+   * page : 현재 선택한 음식점 list 페이지
+   * currentRestaurntId : 리뷰를 작성할 음식점의 id state,
+   */
   const [selected, setSelected] = useState(0)
   const [page, setPage] = useState(1)
   const { data, error, isLoading, refetch } = useAxios<ResponseData>({
@@ -30,8 +37,11 @@ export default function RestaurntItems() {
     return
   }, [selected])
 
+  if (isLoading) return <Loading />
+
   return (
     <>
+      <WriteReviewModal />
       {/* 카테고리 Slider, Pagination 바 */}
       <section>
         <div className="flex justify-start">
@@ -43,7 +53,7 @@ export default function RestaurntItems() {
               setSelected={setSelected}
             />
           </div>
-          <div className="max-w-fit">
+          <div className="max-md:hidden">
             <Pagination
               page={page}
               setPage={setPage}
@@ -54,9 +64,18 @@ export default function RestaurntItems() {
             <Link href={'/restaurant/create'}>
               <IconButton
                 icon={<HiOutlinePencilSquare className="mr-1" />}
-                label={'음식점 추가하기'}
+                label={'글쓰기'}
               />
             </Link>
+          </div>
+        </div>
+        <div className="flex justify-start mt-3 p-3">
+          <div className="block md:hidden">
+            <Pagination
+              page={page}
+              setPage={setPage}
+              totalCount={data?.totalCount ?? 0}
+            />
           </div>
         </div>
       </section>

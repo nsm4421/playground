@@ -1,8 +1,5 @@
 'use client'
 
-import { GetObjectCommand } from '@aws-sdk/client-s3'
-import S3Client from '@/util/db/s3/s3-client'
-
 import Image from 'next/image'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
@@ -37,23 +34,26 @@ export default function Carousel(props: Props) {
   return (
     <div className="relative w-full" data-carousel="static">
       <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-        {imagesData.map((url, idx) => (
-          <div
-            key={idx}
-            className={`${
-              idx !== selected ? 'hidden' : ''
-            } duration-700 ease-in-out block`}
-            data-carousel-item
-          >
-            <Image
-              width={props.width ?? 50}
-              height={props.height ?? 50}
-              src={url}
-              className="absolute max-w-fit max-h-full h-full block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              alt={idx.toString()}
-            />
-          </div>
-        ))}
+        {imagesData.map(
+          (url, idx) =>
+            url.startsWith('data:image/') && (
+              <div
+                key={idx}
+                className={`${
+                  idx !== selected ? 'hidden' : ''
+                } duration-700 ease-in-out block`}
+                data-carousel-item
+              >
+                <Image
+                  width={props.width ?? 50}
+                  height={props.height ?? 50}
+                  src={url}
+                  className="absolute max-w-fit max-h-full h-full block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                  alt={idx.toString()}
+                />
+              </div>
+            )
+        )}
 
         {/* 뒤로가기 버튼 */}
         <button
