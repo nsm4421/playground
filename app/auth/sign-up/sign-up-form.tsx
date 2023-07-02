@@ -68,7 +68,7 @@ export default function SignUpForm() {
           <Button
             onClick={handleSignUp}
             className="disabled:cursor-not-allowed bg-blue-100 dark:bg-slate-600 hover:text-orange-500 text-slate-700 dark:text-slate-300 font-bold py-2 px-4 rounded-lg inline-flex items-center"
-            label={'제출하기'}
+            label={'회원가입'}
           />
         </div>
       </div>

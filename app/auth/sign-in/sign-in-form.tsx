@@ -55,7 +55,7 @@ export default function SignInForm() {
         <Button
           onClick={handleSignIn}
           className="disabled:cursor-not-allowed bg-slate-100 dark:bg-slate-600 hover:text-orange-500 text-slate-700 dark:text-slate-100 font-bold py-2 px-4 rounded-lg inline-flex items-center"
-          label={'제출하기'}
+          label={'로그인'}
         />
       </div>
 
@@ -86,6 +86,7 @@ export default function SignInForm() {
               content={password}
               setContent={setPassword}
               maxCharactor={30}
+              type="password"
               placeholder="1q2w3e4r!"
             />
           </div>
