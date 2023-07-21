@@ -108,7 +108,7 @@ flutter:
     - assets/json/
     - assets/image/
     - assets/image/icon/
-    - assets/image/flag/
+    - assets/image/splash/splash.png
     - assets/image/darkmode/
     - assets/translations/
     - assets/
