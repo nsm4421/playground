@@ -14,14 +14,22 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin, AfterLayoutMixin {
+class MainScreenState extends State<MainScreen>
+    with SingleTickerProviderStateMixin, AfterLayoutMixin {
   TabItem _currentTab = TabItem.home;
-  final tabs = [TabItem.home, TabItem.favorite];
+  final tabs = [
+    TabItem.home,
+    TabItem.benefit,
+    TabItem.favorite,
+    TabItem.stock,
+    TabItem.all
+  ];
   final List<GlobalKey<NavigatorState>> navigatorKeys = [];
 
   int get _currentIndex => tabs.indexOf(_currentTab);
 
-  GlobalKey<NavigatorState> get _currentTabNavigationKey => navigatorKeys[_currentIndex];
+  GlobalKey<NavigatorState> get _currentTabNavigationKey =>
+      navigatorKeys[_currentIndex];
 
   bool get extendBody => true;
 
@@ -41,7 +49,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         extendBody: extendBody, //bottomNavigationBar 아래 영역 까지 그림
         drawer: const MenuDrawer(),
         body: Padding(
-          padding: EdgeInsets.only(bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
+          padding: EdgeInsets.only(
+              bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
           child: SafeArea(
             bottom: !extendBody,
             child: pages,
@@ -120,13 +129,15 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
     });
   }
 
-  BottomNavigationBarItem bottomItem(
-      bool activate, IconData iconData, IconData inActivateIconData, String label) {
+  BottomNavigationBarItem bottomItem(bool activate, IconData iconData,
+      IconData inActivateIconData, String label) {
     return BottomNavigationBarItem(
         icon: Icon(
           key: ValueKey(label),
           activate ? iconData : inActivateIconData,
-          color: activate ? context.appColors.iconButton : context.appColors.iconButtonInactivate,
+          color: activate
+              ? context.appColors.iconButton
+              : context.appColors.iconButtonInactivate,
         ),
         label: label);
   }
