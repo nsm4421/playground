@@ -5,6 +5,7 @@ import 'package:fast_app_base/common/widget/w_empty_expanded.dart';
 import 'package:fast_app_base/common/widget/w_round_button.dart';
 import 'package:fast_app_base/common/widget/w_rounded_container.dart';
 import 'package:fast_app_base/screen/dialog/d_message.dart';
+import 'package:fast_app_base/screen/main/s_main.dart';
 import 'package:fast_app_base/screen/main/tab/home/vo/mock_account.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_appbar.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_bank_account.dart';
@@ -25,23 +26,34 @@ class HomeFragment extends StatelessWidget {
       child: Container(
           child: Stack(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(padding: EdgeInsets.only(top: 60)),
-                BigButton("토스뱅크", onTap: () {}),
-                RoundedContainer(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    "자산".text.bold.white.make(),
-                    ...bankAccounts
-                        .map((e) => BankAccountWidget(bankAccount: e))
-                        .toList()
-                  ],
-                ))
-              ],
-            ).pSymmetric(h: 20),
+          RefreshIndicator(
+            edgeOffset: AppBarWidget.appBarHeight,
+            onRefresh: () async {
+              // TODO : 새로 고침시 처리할 로직
+              await sleepAsync(500.ms);
+            },
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                  top: AppBarWidget.appBarHeight,
+                  bottom: MainScreenState.bottomNavHeight),
+              child: Column(
+                children: [
+                  BigButton("토스뱅크", onTap: () {
+                    context.showErrorSnackbar('Snak Bar 누름');
+                  }),
+                  RoundedContainer(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      "자산".text.bold.white.make(),
+                      ...bankAccounts
+                          .map((e) => BankAccountWidget(bankAccount: e))
+                          .toList()
+                    ],
+                  ))
+                ],
+              ).pSymmetric(h: 20),
+            ),
           ),
           AppBarWidget()
         ],

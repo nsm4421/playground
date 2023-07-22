@@ -1,8 +1,10 @@
+import 'package:fast_app_base/screen/notification/s_notification.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/common.dart';
 
 class AppBarWidget extends StatefulWidget {
+  static const double appBarHeight = 60;
   const AppBarWidget({super.key});
 
   @override
@@ -15,7 +17,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      height: AppBarWidget.appBarHeight,
       color: context.appColors.appBarBackground,
       child: Row(
         children: [
@@ -27,9 +29,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
           // Tab을 누르면 redDot을 보여주지 않음
           Tap(
             onTap: () {
-              setState(() {
-                _showRedDot = !_showRedDot;
-              });
+              Nav.push(const NotificationScreen());
             },
             child: Stack(
               children: [
