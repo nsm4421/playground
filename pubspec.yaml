@@ -111,7 +111,7 @@ flutter:
     - assets/image/splash/splash.png
     - assets/image/darkmode/
     - assets/translations/
-    - assets/
+    - assets/image/bank/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
