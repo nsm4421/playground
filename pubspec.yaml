@@ -113,6 +113,7 @@ flutter:
     - assets/image/darkmode/
     - assets/translations/
     - assets/image/bank/
+    - assets/image/benefit/
     - assets/image/notification/
 
   # An image asset can refer to one or more resolution-specific "variants", see
