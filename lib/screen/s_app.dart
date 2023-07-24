@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/screen/c_bottom_nav.dart';
+import 'package:flutter_sns/screen/home/s_home.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends GetView<BottomNavController> {
-  const HomeScreen({super.key});
+class AppScreen extends GetView<BottomNavController> {
+  const AppScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: controller.handleWillPop,
         child: Obx(() => Scaffold(
-              /// TODO : Appbar
-              appBar: AppBar(),
-
               /// body
               body: IndexedStack(
                 index: controller.navIndex.value,
                 // TODO : Replace by fragments
                 children: const [
-                  Text("Home"),
+                  HomeScreen(),
                   Text("Search"),
                   Text("Upload"),
                   Text("Activity"),

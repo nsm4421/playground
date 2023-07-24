@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sns/screen/s_home.dart';
+import 'package:flutter_sns/screen/s_app.dart';
 import 'package:flutter_sns/util/init_binding.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialBinding: InitBinding(),
-      home: const HomeScreen(),
+      home: const AppScreen(),
     );
   }
 }
