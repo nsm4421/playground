@@ -43,7 +43,10 @@ class _SearchScreenState extends State<SearchScreen> {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){Get.to(SearchFocusScreen());},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (ctx) => SearchFocusScreen()));
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(
                   vertical: SearchScreen._SMALL_PADDING,

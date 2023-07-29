@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sns/screen/c_bottom_nav.dart';
 import 'package:flutter_sns/screen/search/f_accounts.dart';
 import 'package:flutter_sns/screen/search/f_audio.dart';
 import 'package:flutter_sns/screen/search/f_place.dart';
@@ -80,8 +81,8 @@ class _SearchFocusScreenState extends State<SearchFocusScreen>
       leading: Container(
         margin: const EdgeInsets.only(top: SearchFocusScreen._LARGE_MARGIN),
         child: GestureDetector(
-          onTap: Get.back,
-          child: Icon(Icons.arrow_back),
+          onTap: BottomNavController.to.handleWillPop,
+          child: const Icon(Icons.arrow_back),
         ),
       ),
       titleSpacing: 0,

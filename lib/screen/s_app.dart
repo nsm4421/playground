@@ -37,9 +37,17 @@ class AppScreen extends GetView<BottomNavController> {
               body: IndexedStack(
                 index: controller.navIndex.value,
                 // TODO : Replace by fragments
-                children: const [
+                children: [
                   HomeScreen(),
-                  SearchScreen(),
+                  // 중첩 라우팅을 위해 global key 생성
+                  Navigator(
+                    key: controller.searchPageNavigatorKey,
+                    onGenerateRoute: (routeSetting) {
+                      return MaterialPageRoute(
+                        builder: (context) => SearchScreen(),
+                      );
+                    },
+                  ),
                   Text("Upload"),
                   Text("Activity"),
                   Text("MyPage"),
