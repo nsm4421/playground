@@ -3,9 +3,10 @@ import 'package:flutter_sns/screen/home/f_post.dart';
 import 'package:flutter_sns/screen/home/f_story.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const double _LOGO_SIZE = 120;
+  static const double _LOGO_SIZE = 25;
   static const double _DIRECT_ICON_PADDING = 15;
 
   const HomeScreen({super.key});
@@ -16,7 +17,10 @@ class HomeScreen extends StatelessWidget {
       /// appbar
       appBar: AppBar(
         elevation: 0,
-        title: ImageIconWidget(imagePath: ImagePath.logo, size: _LOGO_SIZE),
+        title: Text(
+          "My Instagram",
+          style: GoogleFonts.lobsterTwo(fontSize: _LOGO_SIZE),
+        ),
         actions: [
           GestureDetector(
             // TODO : DM 아이콘 누를 때 동작 정의

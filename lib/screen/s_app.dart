@@ -10,6 +10,24 @@ import 'search/s_search.dart';
 class AppScreen extends GetView<BottomNavController> {
   const AppScreen({super.key});
 
+  static const double _ICON_SIZE = 30;
+
+  BottomNavigationBarItem _bottomNavItem(
+      {required String iconImagePath,
+      String? activeIconImagePath,
+      String? label}) {
+    return BottomNavigationBarItem(
+        icon: ImageIconWidget(
+          size: _ICON_SIZE,
+          imagePath: iconImagePath,
+        ),
+        activeIcon: ImageIconWidget(
+          size: _ICON_SIZE,
+          imagePath: activeIconImagePath ?? iconImagePath,
+        ),
+        label: label);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -37,45 +55,23 @@ class AppScreen extends GetView<BottomNavController> {
                   onTap: controller.handleNav,
                   items: [
                     // Home Icon
-                    BottomNavigationBarItem(
-                        icon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.homeOff,
-                        ),
-                        activeIcon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.homeOn,
-                        ),
+                    _bottomNavItem(
+                        iconImagePath: ImagePath.homeOff,
+                        activeIconImagePath: ImagePath.homeOn,
                         label: "Home"),
                     // Search Icon
-                    BottomNavigationBarItem(
-                        icon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.searchOff,
-                        ),
-                        activeIcon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.searchOn,
-                        ),
+                    _bottomNavItem(
+                        iconImagePath: ImagePath.searchOff,
+                        activeIconImagePath: ImagePath.searchOn,
                         label: "Search"),
                     // Upload Icon
-                    BottomNavigationBarItem(
-                        icon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.uploadIcon,
-                        ),
-                        label: "Upload"),
+                    _bottomNavItem(
+                        iconImagePath: ImagePath.uploadIcon, label: "Search"),
                     // Activity Icon
-                    BottomNavigationBarItem(
-                        icon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.activeOff,
-                        ),
-                        activeIcon: ImageIconWidget(
-                          size: 30,
-                          imagePath: ImagePath.activeOn,
-                        ),
-                        label: "Activity"),
+                    _bottomNavItem(
+                        iconImagePath: ImagePath.activeOff,
+                        activeIconImagePath: ImagePath.activeOn,
+                        label: "Search"),
                     // Avatar
                     BottomNavigationBarItem(
                         icon: Container(
