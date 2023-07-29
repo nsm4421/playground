@@ -5,6 +5,8 @@ import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
 import 'package:get/get.dart';
 
+import 'search/s_search.dart';
+
 class AppScreen extends GetView<BottomNavController> {
   const AppScreen({super.key});
 
@@ -19,7 +21,7 @@ class AppScreen extends GetView<BottomNavController> {
                 // TODO : Replace by fragments
                 children: const [
                   HomeScreen(),
-                  Text("Search"),
+                  SearchScreen(),
                   Text("Upload"),
                   Text("Activity"),
                   Text("MyPage"),
