@@ -5,6 +5,7 @@ import 'package:flutter_sns/screen/search/f_audio.dart';
 import 'package:flutter_sns/screen/search/f_place.dart';
 import 'package:flutter_sns/screen/search/f_tag.dart';
 import 'package:flutter_sns/screen/search/f_top.dart';
+import 'package:flutter_sns/util/common_size.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -18,14 +19,6 @@ class TabMenu {
 // SearchScreen에서 검색 탭이 focus될 때 보여줄 화면
 class SearchFocusScreen extends StatefulWidget {
   const SearchFocusScreen({super.key});
-
-  // static const List<String> tabMenu = ["인기", "계정", "오디오", "태그", "장소"];
-
-  static const double _LARGE_MARGIN = 15;
-  static const double _MIDIUM_PADDING = 8;
-  static const double _SMALL_PADDING = 2;
-  static const double _NAV_HEIGHT = 50;
-  static const double _TAB_LABEL_SIZE = 15;
 
   @override
   State<SearchFocusScreen> createState() => _SearchFocusScreenState();
@@ -50,10 +43,10 @@ class _SearchFocusScreenState extends State<SearchFocusScreen>
 
   PreferredSizeWidget _tabs() {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(SearchFocusScreen._NAV_HEIGHT),
+      preferredSize: Size.fromHeight(CommonSize.padding5xl),
       child: Container(
         width: Size.infinite.width,
-        height: SearchFocusScreen._NAV_HEIGHT,
+        height: CommonSize.padding5xl,
         decoration: const BoxDecoration(
             border: Border(bottom: BorderSide(color: Color(0xffe4e4e4)))),
         child: TabBar(
@@ -61,12 +54,12 @@ class _SearchFocusScreenState extends State<SearchFocusScreen>
             controller: tabController,
             tabs: tabMenu
                 .map((tab) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: SearchFocusScreen._MIDIUM_PADDING),
+                      padding:
+                          EdgeInsets.symmetric(vertical: CommonSize.paddingMd),
                       child: Text(
                         tab.label,
-                        style: const TextStyle(
-                            fontSize: SearchFocusScreen._TAB_LABEL_SIZE,
+                        style: TextStyle(
+                            fontSize: CommonSize.fontsizeMd,
                             fontWeight: FontWeight.bold),
                       ),
                     ))
@@ -79,7 +72,7 @@ class _SearchFocusScreenState extends State<SearchFocusScreen>
     return AppBar(
       elevation: 0,
       leading: Container(
-        margin: const EdgeInsets.only(top: SearchFocusScreen._LARGE_MARGIN),
+        margin: EdgeInsets.only(top: CommonSize.paddingSm),
         child: GestureDetector(
           onTap: BottomNavController.to.handleWillPop,
           child: const Icon(Icons.arrow_back),
@@ -90,11 +83,10 @@ class _SearchFocusScreenState extends State<SearchFocusScreen>
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color(0xefefefef)),
-        padding: const EdgeInsets.only(
-            left: SearchFocusScreen._MIDIUM_PADDING,
-            top: SearchFocusScreen._SMALL_PADDING,
-            bottom: SearchFocusScreen._SMALL_PADDING),
-        margin: const EdgeInsets.only(top: SearchFocusScreen._LARGE_MARGIN),
+        padding: EdgeInsets.only(
+            left: CommonSize.paddingMd,
+            top: CommonSize.paddingSm,
+            bottom: CommonSize.paddingSm),
         child: const TextField(
           decoration: InputDecoration(
               border: InputBorder.none,
@@ -109,6 +101,7 @@ class _SearchFocusScreenState extends State<SearchFocusScreen>
 
   Widget _body() {
     return Container(
+      margin: EdgeInsets.only(top: CommonSize.paddingLg),
       child: TabBarView(
         controller: tabController,
         children: tabMenu.map((tab) => tab.fragment).toList(),

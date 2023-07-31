@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/screen/c_bottom_nav.dart';
 import 'package:flutter_sns/screen/home/s_home.dart';
+import 'package:flutter_sns/util/common_size.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
 import 'package:get/get.dart';
@@ -10,19 +11,17 @@ import 'search/s_search.dart';
 class AppScreen extends GetView<BottomNavController> {
   const AppScreen({super.key});
 
-  static const double _ICON_SIZE = 30;
-
   BottomNavigationBarItem _bottomNavItem(
       {required String iconImagePath,
       String? activeIconImagePath,
       String? label}) {
     return BottomNavigationBarItem(
         icon: ImageIconWidget(
-          size: _ICON_SIZE,
+          size: CommonSize.iconSizeLg,
           imagePath: iconImagePath,
         ),
         activeIcon: ImageIconWidget(
-          size: _ICON_SIZE,
+          size: CommonSize.iconSizeLg,
           imagePath: activeIconImagePath ?? iconImagePath,
         ),
         label: label);

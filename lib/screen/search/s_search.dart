@@ -3,15 +3,13 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/screen/search/s_search_focus.dart';
+import 'package:flutter_sns/util/common_size.dart';
 import 'package:get/get.dart';
 import 'package:quiver/iterables.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
-  static const double _IMAGE_PADDING = 2;
-  static const double _SMALL_PADDING = 8;
-  static const double _LARGE_PADDING = 15;
   static const String _MOCK_IMAGE = 'https://picsum.photos/250/250';
   static const int _MOCK_IMAGE_COUNT = 100;
 
@@ -48,56 +46,70 @@ class _SearchScreenState extends State<SearchScreen> {
                   MaterialPageRoute(builder: (ctx) => SearchFocusScreen()));
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                  vertical: SearchScreen._SMALL_PADDING,
-                  horizontal: SearchScreen._SMALL_PADDING),
-              margin: const EdgeInsets.symmetric(
-                  vertical: SearchScreen._SMALL_PADDING,
-                  horizontal: SearchScreen._LARGE_PADDING),
+              padding: EdgeInsets.symmetric(
+                  vertical: CommonSize.paddingMd,
+                  horizontal: CommonSize.paddingSm),
+              margin: EdgeInsets.only(
+                  left: CommonSize.paddingTiny,
+                  right: CommonSize.paddingTiny,
+                  bottom: CommonSize.paddingLg),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: const Color(0xefefefef),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(Icons.search),
+                  SizedBox(
+                    width: CommonSize.paddingTiny,
+                  ),
                   Text(
                     "Search",
-                    style: TextStyle(fontSize: 15, color: Color(0xef838383)),
+                    style: TextStyle(
+                        fontSize: CommonSize.fontsizeMd,
+                        color: Color(0xef838383)),
                   ),
                 ],
               ),
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(right: SearchScreen._LARGE_PADDING),
-          child: Icon(Icons.location_pin),
+        // TODO : location 버튼 누를 때 동작 정의
+        GestureDetector(
+          onTap: () {},
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: CommonSize.paddingLg,
+                right: CommonSize.paddingLg,
+                bottom: CommonSize.paddingLg),
+            child: Icon(Icons.location_pin),
+          ),
         )
       ],
     );
   }
 
   Widget _body() {
-    return SingleChildScrollView(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-            groupedBox.length,
-            (idx1) => Expanded(
-                    child: Column(
-                  children: List.generate(
-                      groupedBox[idx1].length,
-                      (idx2) => Container(
-                            padding: const EdgeInsets.all(
-                                SearchScreen._IMAGE_PADDING),
-                            height: Get.width / 3 * groupedBox[idx1][idx2],
-                            child: CachedNetworkImage(
-                              imageUrl: SearchScreen._MOCK_IMAGE,
-                              fit: BoxFit.cover,
-                            ),
-                          )),
-                ))).toList(),
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+              groupedBox.length,
+              (idx1) => Expanded(
+                      child: Column(
+                    children: List.generate(
+                        groupedBox[idx1].length,
+                        (idx2) => Container(
+                              padding: EdgeInsets.all(CommonSize.paddingTiny),
+                              height: Get.width / 3 * groupedBox[idx1][idx2],
+                              child: CachedNetworkImage(
+                                imageUrl: SearchScreen._MOCK_IMAGE,
+                                fit: BoxFit.cover,
+                              ),
+                            )),
+                  ))).toList(),
+        ),
       ),
     );
   }
@@ -109,7 +121,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             _appBar(),
-            Expanded(child: _body()),
+            _body(),
           ],
         ),
       ),
