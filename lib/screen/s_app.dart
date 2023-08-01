@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sns/screen/active/s_active.dart';
 import 'package:flutter_sns/screen/c_bottom_nav.dart';
 import 'package:flutter_sns/screen/home/s_home.dart';
+import 'package:flutter_sns/screen/mypage/s_my_page.dart';
 import 'package:flutter_sns/util/common_size.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
@@ -50,7 +51,7 @@ class AppScreen extends GetView<BottomNavController> {
                   ),
                   Text("Upload"),
                   ActiveScreen(),
-                  Text("MyPage"),
+                  MyPageScreen(),
                 ],
               ),
 

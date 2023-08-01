@@ -24,8 +24,14 @@ class CommonSize {
 
   static double get margin2Xl => 30;
 
+  static double get margin3Xl => 35;
+
+  static double get margin4Xl => 40;
+
   /// iconSize
   static double get iconSizeSm => 15;
+
+  static double get iconSizeMd => 25;
 
   static double get iconSizeLg => 30;
 
@@ -58,4 +64,8 @@ class CommonSize {
   static double get avatar3xl => 50;
 
   static double get avatar4xl => 60;
+
+  static double get avatar5xl => 70;
+
+  static double get avatar6xl => 80;
 }
