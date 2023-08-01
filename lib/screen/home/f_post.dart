@@ -8,7 +8,6 @@ import 'package:flutter_sns/widget/w_image_icon.dart';
 class PostFragment extends StatelessWidget {
   const PostFragment({super.key});
 
-  // static const double _SMALL_FONTSIZE = 15;
   static const String _MOCK_NICKNAME = 'TEST NICKNAME';
   static const String _MOCK_IMAGE_URL =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2OT6twSQM_jZlMBv6ix78oy5_HdmBaRS4S2dzAJhChBM5c-EbkhFGRYvnYT8uxPOWYZY&usqp=CAU';

@@ -1,20 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sns/util/common_size.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({Key? key}) : super(key: key);
 
-  static const double _LARGE_FONT_SIZE = 20;
-  static const double _MEDIUM_FONT_SIZE = 18;
-  static const double _SMALL_IMAGE_SIZE = 25;
-  static const double _SMALL_PADDING = 5;
-  static const double _LARGE_PADDING = 20;
-  static const double _SMALL_MARGIN = 5;
-  static const double _LARGE_MARGIN = 20;
   static const int _IMAGE_COUNT = 30;
 
   @override
@@ -65,19 +58,18 @@ class _UploadScreenState extends State<UploadScreen> {
       elevation: 0,
       backgroundColor: Colors.white,
       leading: GestureDetector(onTap: Get.back, child: Icon(Icons.close)),
-      title: const Text(
+      title: Text(
         "새 게시글",
         style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: UploadScreen._LARGE_FONT_SIZE,
+            fontSize: CommonSize.fontsizeLg,
             color: Colors.black),
       ),
       actions: [
         GestureDetector(
             onTap: () {},
-            child: const Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: UploadScreen._LARGE_PADDING),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: CommonSize.paddingLg),
               child: Icon(Icons.arrow_forward_rounded),
             ))
       ],
@@ -99,7 +91,7 @@ class _UploadScreenState extends State<UploadScreen> {
     return InkWell(
       onTap: callback,
       child: Container(
-          padding: EdgeInsets.all(UploadScreen._SMALL_PADDING),
+          padding: EdgeInsets.all(CommonSize.paddingSm),
           decoration: BoxDecoration(
               color: Colors.grey, borderRadius: BorderRadius.circular(20)),
           child: Row(
@@ -110,7 +102,7 @@ class _UploadScreenState extends State<UploadScreen> {
               ),
               if (label != null)
                 SizedBox(
-                  width: UploadScreen._SMALL_PADDING,
+                  width: CommonSize.paddingSm,
                 ),
               if (label != null)
                 Text(
@@ -125,7 +117,7 @@ class _UploadScreenState extends State<UploadScreen> {
 
   Widget _menu() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: UploadScreen._LARGE_MARGIN),
+      padding: EdgeInsets.symmetric(horizontal: CommonSize.marginXl),
       child: Row(
         children: [
           GestureDetector(
@@ -139,10 +131,11 @@ class _UploadScreenState extends State<UploadScreen> {
                   )),
                   context: context,
                   builder: (_) => Container(
-                    padding: EdgeInsets.symmetric(vertical: UploadScreen._LARGE_MARGIN),
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: UploadScreen._LARGE_PADDING),
-                        height: Get.height/2,
+                        padding:
+                            EdgeInsets.symmetric(vertical: CommonSize.marginXl),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: CommonSize.paddingLg),
+                        height: Get.height / 2,
                         color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -153,24 +146,23 @@ class _UploadScreenState extends State<UploadScreen> {
                                   children: List.generate(
                                       albums.length,
                                       (index) => InkWell(
-                                        onTap: (){
-                                          // TODO : 선택시 선택한 갤러리 변경
-                                        },
-                                        child: Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical:
-                                                      UploadScreen._LARGE_PADDING,
-                                                  horizontal: UploadScreen
-                                                      ._SMALL_PADDING),
+                                            onTap: () {
+                                              // TODO : 선택시 선택한 갤러리 변경
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: CommonSize.marginXl,
+                                                  horizontal:
+                                                      CommonSize.paddingMd),
                                               child: Text(
                                                 albums[index].name,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: UploadScreen
-                                                        ._MEDIUM_FONT_SIZE),
+                                                    fontSize:
+                                                        CommonSize.fontsizeLg),
                                               ),
                                             ),
-                                      )),
+                                          )),
                                 ),
                               ),
                             )
@@ -184,7 +176,7 @@ class _UploadScreenState extends State<UploadScreen> {
                   headerTitle ?? "Gallery",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: UploadScreen._MEDIUM_FONT_SIZE),
+                      fontSize: CommonSize.fontsizeLg),
                 ),
                 Icon(Icons.arrow_drop_down_sharp),
               ],
@@ -195,14 +187,14 @@ class _UploadScreenState extends State<UploadScreen> {
               label: "MultiSelect",
               callback: getMultiImage,
               iconData: Icons.drive_folder_upload),
-          const SizedBox(
-            width: UploadScreen._SMALL_MARGIN,
+          SizedBox(
+            width: CommonSize.fontsizeLg,
           ),
           _menuItem(
               callback: getImageFromCamera,
               iconData: Icons.camera_alt_outlined),
-          const SizedBox(
-            width: UploadScreen._SMALL_MARGIN,
+          SizedBox(
+            width: CommonSize.marginMd,
           ),
         ],
       ),
@@ -257,11 +249,11 @@ class _UploadScreenState extends State<UploadScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: UploadScreen._SMALL_MARGIN),
+            SizedBox(height: CommonSize.marginLg),
             _preView(),
-            const SizedBox(height: UploadScreen._LARGE_MARGIN),
+            SizedBox(height: CommonSize.marginXl),
             _menu(),
-            const SizedBox(height: UploadScreen._LARGE_MARGIN),
+            SizedBox(height: CommonSize.marginLg),
             _gridView()
           ],
         ),
