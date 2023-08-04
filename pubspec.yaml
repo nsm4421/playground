@@ -41,6 +41,9 @@ dependencies:
   google_fonts: ^5.1.0
   photo_manager: ^2.7.0
   image_picker: ^1.0.1
+  firebase_core: ^2.15.0
+  firebase_auth: ^4.7.2
+  google_sign_in: ^6.1.4
 
 dev_dependencies:
   flutter_test:
