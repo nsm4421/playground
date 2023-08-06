@@ -1,5 +1,6 @@
-
 class ImagePath {
+  static String get defaultProfile => 'assets/images/default_image.png';
+
   static String get homeOff => 'assets/images/bottom_nav_home_off_icon.jpg';
 
   static String get homeOn => 'assets/images/bottom_nav_home_on_icon.jpg';

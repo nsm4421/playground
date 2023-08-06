@@ -4,12 +4,12 @@ import 'package:flutter_sns/model/my_info_dto.dart';
 import 'package:flutter_sns/util/common_size.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
+import 'package:get/get.dart';
 
 class MyInfoFragment extends StatelessWidget {
-  const MyInfoFragment(
-      {super.key, required this.thumbnailUrl, required this.myInfoVo});
+  const MyInfoFragment({super.key, this.thumbnailUrl, required this.myInfoVo});
 
-  final String thumbnailUrl;
+  final String? thumbnailUrl;
   final MyInfoDto myInfoVo;
 
   Widget _infoItem({required String title, required int count}) {
@@ -31,8 +31,21 @@ class MyInfoFragment extends StatelessWidget {
   Widget _info(MyInfoDto vo) {
     return Row(
       children: [
-        MainStoryAvatarWidget(
-            imagePath: thumbnailUrl, size: CommonSize.avatar6xl),
+        SizedBox(
+          width: CommonSize.marginXl,
+        ),
+        (thumbnailUrl == null) | (thumbnailUrl?.isEmpty ?? true)
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image.asset(
+                      ImagePath.defaultProfile,
+                      fit: BoxFit.cover,
+                    )))
+            : MainStoryAvatarWidget(
+                imagePath: thumbnailUrl!, size: CommonSize.avatar6xl),
         SizedBox(
           width: CommonSize.marginXl,
         ),

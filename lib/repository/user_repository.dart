@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_sns/model/user_dto.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserRepository {
   static Future<UserDto?> findByUid(String uid) async {
@@ -17,6 +21,20 @@ class UserRepository {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  static UploadTask? uploadThumbnail(
+      {required XFile xFile, required String filename}) {
+    try {
+      var f = File(xFile.path);
+      var ref = FirebaseStorage.instance.ref().child('users').child(filename);
+      final metaData = SettableMetadata(
+          contentType: 'image/jpeg',
+          customMetadata: {'thumbnail-file-path': xFile.path});
+      return ref.putFile(f, metaData);
+    } catch (e) {
+      return null;
     }
   }
 }

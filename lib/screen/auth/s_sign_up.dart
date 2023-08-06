@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/controller/auth_controller.dart';
 import 'package:flutter_sns/model/user_dto.dart';
 import 'package:flutter_sns/util/common_size.dart';
+import 'package:flutter_sns/util/get_image_path.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignUpScreen extends StatefulWidget {
   final String uid;
@@ -15,28 +19,31 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nicknameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  XFile? thumbnail;
 
   Widget _avatarWidget() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100), color: Colors.blueGrey),
-      child: SizedBox(
-        child: Icon(
-          Icons.person,
-          size: 100,
-          color: Colors.white,
-        ),
-      ),
-    );
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(200),
+        child: SizedBox(
+            width: 200,
+            height: 200,
+            child: thumbnail != null
+                ? Image.file(
+                    File(thumbnail!.path),
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    ImagePath.defaultProfile,
+                    fit: BoxFit.cover,
+                  )));
   }
 
   Widget _txtField(
       {String? hintText, required TextEditingController controller}) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: CommonSize.marginLg, vertical: CommonSize.marginLg),
+          horizontal: CommonSize.marginXl, vertical: CommonSize.marginLg),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
@@ -44,6 +51,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             contentPadding: EdgeInsets.all(CommonSize.paddingSm)),
       ),
     );
+  }
+
+  Widget _imagePickBtn() {
+    return ElevatedButton(onPressed: handlePickImage, child: Text("프사 변경"));
   }
 
   Widget _submitBtn() {
@@ -54,11 +65,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  void handlePickImage() async {
+    thumbnail =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
+    setState(() {});
+  }
+
   void handleSignUp() async {
-    bool isSuccess = await AuthController.to.signUp(UserDto(
-        uid: widget.uid,
-        nickname: _nicknameController.text,
-        description: _descriptionController.text));
+    await AuthController.to.signUp(
+        dto: UserDto(
+            uid: widget.uid,
+            nickname: _nicknameController.text,
+            description: _descriptionController.text),
+        xFile: thumbnail);
   }
 
   @override
@@ -78,20 +97,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(
               height: CommonSize.margin2Xl,
             ),
-            Center(
-              child: Column(
-                children: [
-                  _avatarWidget(),
-                  SizedBox(
-                    height: CommonSize.marginXl,
-                  ),
-                  ElevatedButton(onPressed: () {}, child: Text("이미지 변경")),
-                  _txtField(hintText: "닉네임", controller: _nicknameController),
-                  _txtField(
-                      hintText: "자기소개", controller: _descriptionController),
-                ],
-              ),
-            )
+            _avatarWidget(),
+            SizedBox(
+              height: CommonSize.marginLg,
+            ),
+            _imagePickBtn(),
+            _txtField(hintText: "닉네임", controller: _nicknameController),
+            _txtField(hintText: "자기소개", controller: _descriptionController),
           ],
         ),
       ),

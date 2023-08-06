@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sns/util/common_size.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class MyPostFragment extends StatefulWidget {
   const MyPostFragment({super.key});

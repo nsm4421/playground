@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sns/controller/auth_controller.dart';
 import 'package:flutter_sns/screen/active/s_active.dart';
 import 'package:flutter_sns/controller/bottom_nav_controller.dart';
 import 'package:flutter_sns/screen/home/s_home.dart';
@@ -83,12 +85,26 @@ class AppScreen extends GetView<BottomNavController> {
                         label: "Search"),
                     // Avatar
                     BottomNavigationBarItem(
-                        icon: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.grey),
-                          child: const SizedBox(),
+                        icon: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: SizedBox(
+                            width: CommonSize.iconSizeLg + 5,
+                            height: CommonSize.iconSizeLg + 5,
+                            child: (AuthController.to.user.value.thumbnail ==
+                                        null) |
+                                    (AuthController
+                                            .to.user.value.thumbnail?.isEmpty ??
+                                        true)
+                                ? Image.asset(
+                                    ImagePath.defaultProfile,
+                                    fit: BoxFit.cover,
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl:
+                                        AuthController.to.user.value.thumbnail!,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
                         ),
                         label: "Avatar"),
                   ]),

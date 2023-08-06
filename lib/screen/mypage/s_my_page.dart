@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sns/controller/auth_controller.dart';
 import 'package:flutter_sns/screen/mypage/f_my_info.dart';
 import 'package:flutter_sns/screen/mypage/f_my_post.dart';
 import 'package:flutter_sns/model/my_info_dto.dart';
@@ -8,19 +9,16 @@ import 'package:flutter_sns/widget/w_image_icon.dart';
 
 class MyPageScreen extends StatelessWidget {
   const MyPageScreen({super.key});
-
-  static const String _MOCK_IMAGE_URL =
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2OT6twSQM_jZlMBv6ix78oy5_HdmBaRS4S2dzAJhChBM5c-EbkhFGRYvnYT8uxPOWYZY&usqp=CAU';
   static final MyInfoDto _MOCK_MY_INFO = MyInfoDto(
       followingCount: 100,
       followerCount: 1000,
       postCount: 1,
-      introduce: "자기소개 글 \n 안녕하세요~~~~");
+      introduce: AuthController.to.user.value.description);
 
   AppBar _appBar() {
     return AppBar(
       title: Text(
-        "Nickname",
+        AuthController.to.user.value.nickname.toString(),
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: CommonSize.fontsizeXl),
       ),
@@ -51,7 +49,7 @@ class MyPageScreen extends StatelessWidget {
         child: Column(
           children: [
             MyInfoFragment(
-              thumbnailUrl: _MOCK_IMAGE_URL,
+              thumbnailUrl: AuthController.to.user.value.thumbnail,
               myInfoVo: _MOCK_MY_INFO,
             ),
             SizedBox(
