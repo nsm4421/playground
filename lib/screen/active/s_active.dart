@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sns/screen/active/vo_activity.dart';
+import 'package:flutter_sns/model/activity_dto.dart';
 import 'package:flutter_sns/screen/home/w_avatar.dart';
 import 'package:flutter_sns/util/common_size.dart';
 
@@ -9,20 +9,20 @@ class ActiveScreen extends StatelessWidget {
   static const String _MOCK_IMAGE_URL =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2OT6twSQM_jZlMBv6ix78oy5_HdmBaRS4S2dzAJhChBM5c-EbkhFGRYvnYT8uxPOWYZY&usqp=CAU';
 
-  static List<ActivityVo> _MOCK_ACTIVITY_VO = [
-    ActivityVo(
+  static List<ActivityDto> _MOCK_ACTIVITY_VO = [
+    ActivityDto(
         message: "테스트 메세지1 입니다",
         imagePath: _MOCK_IMAGE_URL,
         createdAt: DateTime.now().subtract(Duration(hours: 5))),
-    ActivityVo(message: "테스트 메세지2 입니다", imagePath: _MOCK_IMAGE_URL),
-    ActivityVo(message: "테스트 메세지3 입니다", imagePath: _MOCK_IMAGE_URL),
-    ActivityVo(message: "테스트 메세지4 입니다", imagePath: _MOCK_IMAGE_URL),
-    ActivityVo(message: "테스트 메세지5 입니다", imagePath: _MOCK_IMAGE_URL),
-    ActivityVo(message: "테스트 메세지6 입니다", imagePath: _MOCK_IMAGE_URL),
-    ActivityVo(message: "테스트 메세지7 입니다", imagePath: _MOCK_IMAGE_URL),
+    ActivityDto(message: "테스트 메세지2 입니다", imagePath: _MOCK_IMAGE_URL),
+    ActivityDto(message: "테스트 메세지3 입니다", imagePath: _MOCK_IMAGE_URL),
+    ActivityDto(message: "테스트 메세지4 입니다", imagePath: _MOCK_IMAGE_URL),
+    ActivityDto(message: "테스트 메세지5 입니다", imagePath: _MOCK_IMAGE_URL),
+    ActivityDto(message: "테스트 메세지6 입니다", imagePath: _MOCK_IMAGE_URL),
+    ActivityDto(message: "테스트 메세지7 입니다", imagePath: _MOCK_IMAGE_URL),
   ];
 
-  Widget _activityItem(ActivityVo activity) {
+  Widget _activityItem(ActivityDto activity) {
     return Padding(
       padding: EdgeInsets.all(CommonSize.paddingMd),
       child: Row(
@@ -49,7 +49,7 @@ class ActiveScreen extends StatelessWidget {
   }
 
   Widget _activityView(
-      {required String title, required List<ActivityVo> activities}) {
+      {required String title, required List<ActivityDto> activities}) {
     return Padding(
       padding: EdgeInsets.all(CommonSize.paddingMd),
       child: Column(

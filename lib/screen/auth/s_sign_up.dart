@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sns/c_auth.dart';
-import 'package:flutter_sns/model/vo_user.dart';
+import 'package:flutter_sns/controller/auth_controller.dart';
+import 'package:flutter_sns/model/user_dto.dart';
 import 'package:flutter_sns/util/common_size.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void handleSignUp() async {
-    bool isSuccess = await AuthController.to.signUp(UserVo(
+    bool isSuccess = await AuthController.to.signUp(UserDto(
         uid: widget.uid,
         nickname: _nicknameController.text,
         description: _descriptionController.text));

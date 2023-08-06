@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sns/screen/c_bottom_nav.dart';
+import 'package:flutter_sns/controller/bottom_nav_controller.dart';
 import 'package:flutter_sns/screen/search/f_accounts.dart';
 import 'package:flutter_sns/screen/search/f_audio.dart';
 import 'package:flutter_sns/screen/search/f_place.dart';

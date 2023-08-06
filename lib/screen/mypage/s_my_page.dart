@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/screen/mypage/f_my_info.dart';
 import 'package:flutter_sns/screen/mypage/f_my_post.dart';
-import 'package:flutter_sns/screen/mypage/vo_my_info.dart';
+import 'package:flutter_sns/model/my_info_dto.dart';
 import 'package:flutter_sns/util/common_size.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
@@ -11,7 +11,7 @@ class MyPageScreen extends StatelessWidget {
 
   static const String _MOCK_IMAGE_URL =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2OT6twSQM_jZlMBv6ix78oy5_HdmBaRS4S2dzAJhChBM5c-EbkhFGRYvnYT8uxPOWYZY&usqp=CAU';
-  static final MyInfoVo _MOCK_MY_INFO = MyInfoVo(
+  static final MyInfoDto _MOCK_MY_INFO = MyInfoDto(
       followingCount: 100,
       followerCount: 1000,
       postCount: 1,

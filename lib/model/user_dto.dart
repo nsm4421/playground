@@ -1,13 +1,13 @@
-class UserVo {
+class UserDto {
   String? uid;
   String? nickname;
   String? thumbnail;
   String? description;
 
-  UserVo({this.uid, this.nickname, this.thumbnail, this.description});
+  UserDto({this.uid, this.nickname, this.thumbnail, this.description});
 
-  factory UserVo.fromJson(Map<String, dynamic> json) {
-    return UserVo(
+  factory UserDto.fromJson(Map<String, dynamic> json) {
+    return UserDto(
       uid: json['uid'] != null ? json['uid'] as String : '',
       nickname: json['nickname'] != null ? json['nickname'] as String : '',
       thumbnail: json['thumbnail'] != null ? json['thumbnail'] as String : '',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/screen/home/w_avatar.dart';
-import 'package:flutter_sns/screen/mypage/vo_my_info.dart';
+import 'package:flutter_sns/model/my_info_dto.dart';
 import 'package:flutter_sns/util/common_size.dart';
 import 'package:flutter_sns/util/get_image_path.dart';
 import 'package:flutter_sns/widget/w_image_icon.dart';
@@ -10,7 +10,7 @@ class MyInfoFragment extends StatelessWidget {
       {super.key, required this.thumbnailUrl, required this.myInfoVo});
 
   final String thumbnailUrl;
-  final MyInfoVo myInfoVo;
+  final MyInfoDto myInfoVo;
 
   Widget _infoItem({required String title, required int count}) {
     return Column(
@@ -28,7 +28,7 @@ class MyInfoFragment extends StatelessWidget {
     );
   }
 
-  Widget _info(MyInfoVo vo) {
+  Widget _info(MyInfoDto vo) {
     return Row(
       children: [
         MainStoryAvatarWidget(

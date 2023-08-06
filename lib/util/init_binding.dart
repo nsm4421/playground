@@ -1,5 +1,5 @@
-import 'package:flutter_sns/c_auth.dart';
-import 'package:flutter_sns/screen/c_bottom_nav.dart';
+import 'package:flutter_sns/controller/auth_controller.dart';
+import 'package:flutter_sns/controller/bottom_nav_controller.dart';
 import 'package:get/get.dart';
 
 class InitBinding extends Bindings {

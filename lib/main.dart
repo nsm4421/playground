@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sns/c_auth.dart';
+import 'package:flutter_sns/controller/auth_controller.dart';
 import 'package:flutter_sns/firebase_options.dart';
-import 'package:flutter_sns/model/vo_user.dart';
+import 'package:flutter_sns/model/user_dto.dart';
 import 'package:flutter_sns/screen/auth/s_sign_in.dart';
 import 'package:flutter_sns/screen/auth/s_sign_up.dart';
 import 'package:flutter_sns/screen/s_app.dart';
@@ -39,7 +39,7 @@ class MyApp extends GetView<AuthController> {
             // not sign in → show login page
             if (!user.hasData) return SignInScreen();
             // sign → show app
-            return FutureBuilder<UserVo?>(
+            return FutureBuilder<UserDto?>(
                 future: controller.loginUser(user.data!.uid),
                 builder: (BuildContext context, snapshot) {
                   return Obx(() =>
