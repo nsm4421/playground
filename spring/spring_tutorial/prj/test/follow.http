@@ -1,0 +1,71 @@
+### 팔로우 맺기 test1 → 팔로우테스트
+PUT http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjc0ODk2ODA3LCJleHAiOjE2ODA5NDQ4MDd9.2dHFlZn__ht82on12EBZTfJ04-Gk-3ESSEYXapP4BLw
+
+{
+    "nickname":"팔로우테스트"
+}
+
+### 팔로우 맺기 test2 → 팔로우테스트
+PUT http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QyIiwiaWF0IjoxNjc0ODk2ODMxLCJleHAiOjE2ODA5NDQ4MzF9.KxDa43TgtmLPky2oQXqvyOuUKpmXIFQ3JTScTET-1yY
+
+{
+    "nickname":"팔로우테스트"
+}
+
+### 팔로우 맺기 test3 → 팔로우테스트
+PUT http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QzIiwiaWF0IjoxNjc0ODk2ODQzLCJleHAiOjE2ODA5NDQ4NDN9.8a8JefxhamzncTekLStRpOkJ3UkhuFLjXsv9UnTepRs
+
+{
+    "nickname":"팔로우테스트"
+}
+
+### 팔로우 맺기 팔로우테스트 → test1
+PUT http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Iu2MlOuhnOyasO2FjOyKpO2KuCIsImlhdCI6MTY3NDg5OTEwMiwiZXhwIjoxNjgwOTQ3MTAyfQ.FvEv_Mw17yvHu4LkHpGW6AZKuoiuLCYOTJJ3rfFGoAI
+
+{
+    "nickname":"test1"
+}
+
+### 팔로우 리스트
+POST http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Iu2MlOuhnOyasO2FjOyKpO2KuCIsImlhdCI6MTY3NDg5Mzk5MiwiZXhwIjoxNjgwOTQxOTkyfQ.C2DVvCKfKd60EdWXgobq-rrmjg6S40BBG2ZrLoEY5iY
+
+{
+    "nickname":"팔로우테스트",
+    "followingType":"FOLLOWER"
+}
+
+### 팔로우 리스트
+POST http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Iu2MlOuhnOyasO2FjOyKpO2KuCIsImlhdCI6MTY3NDg5Mzk5MiwiZXhwIjoxNjgwOTQxOTkyfQ.C2DVvCKfKd60EdWXgobq-rrmjg6S40BBG2ZrLoEY5iY
+
+{
+    "nickname":"팔로우테스트",
+    "followingType":"LEADER"
+}
+
+### 팔로우 삭제
+DELETE  http://localhost:8080/api/v1/user/follow
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Iu2MlOuhnOyasO2FjOyKpO2KuCIsImlhdCI6MTY3NDg5Mjg4MCwiZXhwIjoxNjgwOTQwODgwfQ.qvYV7AtCOpWDxTakUfkfPaM3ZkT4YmP182EJ61OdeM4
+
+{
+    "nickname":"팔로우테스트"
+}

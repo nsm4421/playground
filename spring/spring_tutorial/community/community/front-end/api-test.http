@@ -1,0 +1,4 @@
+GET http://localhost:8080/api/user/kakao/me?code=tHTTUc3XgyBncJe4KNNutUeAWCQ2GKdxhxy0Csx5VEpbB86ZJ5sTXkBiF6fCaDgR1gCpMAo9c5oAAAGHGk1yFw
+Content-Type: application/json
+Accept-Encoding: UTF-8
+

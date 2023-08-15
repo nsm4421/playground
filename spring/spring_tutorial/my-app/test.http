@@ -1,0 +1,174 @@
+### 회원가입
+POST http://localhost:8080/api/user/signup
+Content-Type: application/json
+
+{
+    "username":"test4",
+    "password":"testtest",
+    "email":"test4@naver.com",
+    "memo":"test_memo"
+}
+
+### 로그인
+POST http://localhost:8080/api/user/login
+Content-Type: application/json
+
+{
+    "username":"test4",
+    "password":"testtest"
+}
+
+### 회원정보 수정
+PUT http://localhost:8080/api/user/modify
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "password":"951221",
+    "email":"test_userinfo_change@naver.com",
+    "memo":"test_userinfo_change_memo"
+}
+
+
+### 게시글 작성
+POST http://localhost:8080/api/article
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "title":"test_title",
+    "content":"test_content",
+    "hashtags":["test_h1", "test_h2", "test_h3"]
+}
+
+### 게시글 수정
+PUT http://localhost:8080/api/article
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "articleId":1,
+    "title":"modified_title",
+    "content":"modified_content",
+    "hashtags":["modified_h1", "test_h2", "test_h3"]
+}
+
+### 게시글 삭제
+DELETE  http://localhost:8080/api/article/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+### 게시글 다건 조회
+GET http://localhost:8080/api/article
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+### 게시글 검색
+GET http://localhost:8080/api/article?&page=0&search-type=TITLE&search-text=hard&sort-field=TITLE&sort-direction=ASC&size=20
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+### 게시글 단건 조회
+GET http://localhost:8080/api/article/1
+Content-Type: application/json
+
+
+### 부모 댓글 작성
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "articleId" : 1,
+    "parentCommentId": null,
+    "content": "test for parent comment"
+}
+
+### 자식 댓글 작성 1
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "articleId" : 1,
+    "parentCommentId": 1,
+    "content": "test for child comment1"
+}
+
+### 자식 댓글 작성 2
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "articleId" : 1,
+    "parentCommentId": 1,
+    "content": "test for child comment2"
+}
+
+### 부모 댓글 조회
+GET http://localhost:8080/api/comment?article-id=1
+Content-Type: application/json
+
+### 자식 댓글 조회
+GET http://localhost:8080/api/comment?parent-comment-id=1
+Content-Type: application/json
+
+### 댓글 수정1
+PUT http://localhost:8080/api/comment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "commentId": 1,
+    "content": "test for modify comment1"
+}
+
+### 댓글 수정2
+PUT http://localhost:8080/api/comment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "commentId": 2,
+    "content": "test for modify comment2"
+}
+
+### 댓글 삭제
+DELETE http://localhost:8080/api/comment/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "commentId": 1,
+    "content": "test for delete comment"
+}
+
+### 부모 댓글 조회
+GET http://localhost:8080/api/comment?article-id=1
+Content-Type: application/json
+
+### 자식 댓글 조회
+GET http://localhost:8080/api/comment?parent-comment-id=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+### 좋아요
+POST http://localhost:8080/api/emotion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+{
+    "emotion":"LIKE",
+    "articleId":8
+}
+
+### 좋아요 개수 가져오기
+GET http://localhost:8080/api/emotion?article-id=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI
+
+### 좋아요 개수 가져오기
+GET http://localhost:8080/api/emotion/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3Q0IiwiaWF0IjoxNjgzOTU4NjA5LCJleHAiOjE2ODQ5NTg2MDl9.1XwgilJ8QWSMiKuikPepkSDT344CCxXvzFm_q2EUKuI

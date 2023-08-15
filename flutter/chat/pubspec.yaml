@@ -1,0 +1,20 @@
+name: chat
+description: A new Flutter package project.
+version: 0.0.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  encrypt: ^5.0.1
+  logger: ^1.0.2
+  flutter:
+    sdk: flutter
+  rethink_db_ns: ^0.0.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.3.2
+
+flutter: null

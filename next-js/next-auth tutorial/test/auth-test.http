@@ -1,0 +1,16 @@
+### Register
+POST http://localhost:3000/api/auth/register
+
+{
+    "username" : "test4",
+    "password" : "test4",
+    "email" : "test4@naver.com"
+}
+
+### login
+POST http://localhost:3000/api/auth/login
+
+{
+    "username" : "test4",
+    "password" : "test4"
+}
