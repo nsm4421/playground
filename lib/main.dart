@@ -1,3 +1,4 @@
+import 'package:chat_app/common/theme/themes.dart';
 import 'package:chat_app/screen/s_home.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Themes();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Chat App",
-        theme: ThemeData.dark(useMaterial3: true),
+        themeMode: ThemeMode.system,
+        theme: theme.lightTheme,
+        darkTheme: theme.darkTheme,
         home: const HomeScreen());
   }
 }
