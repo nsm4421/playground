@@ -38,6 +38,11 @@ dependencies:
   flutter_native_splash: ^2.3.2
   google_fonts: ^5.1.0
   country_picker: ^2.0.20
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.7.3
+  cloud_firestore: ^4.8.5
+  firebase_storage: ^11.2.6
+  flutter_riverpod: ^2.3.7
 
 # Reference : https://pub.dev/packages/flutter_native_splash
 flutter_native_splash:
