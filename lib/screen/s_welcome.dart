@@ -2,8 +2,8 @@ import 'package:chat_app/common/widget/w_size.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   // TODO : 회원가입, 로그인 처리
   void _handleSignUp() {}

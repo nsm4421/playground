@@ -1,5 +1,6 @@
+import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/common/theme/themes.dart';
-import 'package:chat_app/screen/s_home.dart';
+import 'package:chat_app/screen/s_welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +20,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Themes();
     return MaterialApp(
+        onGenerateRoute: CustomRoutes.onGeneralRoute,
         debugShowCheckedModeBanner: false,
         title: "Chat App",
         themeMode: ThemeMode.system,
         theme: theme.lightTheme,
         darkTheme: theme.darkTheme,
         // home: const HomeScreen());
-        home: HomeScreen());
+        home: WelcomeScreen());
   }
 }

@@ -3,14 +3,14 @@ import 'package:chat_app/common/widget/w_text_feild.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddUserInfo extends StatefulWidget {
-  const AddUserInfo({super.key});
+class AddUserInfoScreen extends StatefulWidget {
+  const AddUserInfoScreen({super.key});
 
   @override
-  State<AddUserInfo> createState() => _AddUserInfoState();
+  State<AddUserInfoScreen> createState() => _AddUserInfoScreenState();
 }
 
-class _AddUserInfoState extends State<AddUserInfo> {
+class _AddUserInfoScreenState extends State<AddUserInfoScreen> {
 
   late TextEditingController _nicknameController;
 

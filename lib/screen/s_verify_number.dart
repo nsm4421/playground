@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
-  const VerifyNumberScreen({super.key});
+  const VerifyNumberScreen(
+      {super.key, required this.countryCode, required this.phoneNumber});
+
+  final String countryCode;
+  final String phoneNumber;
 
   @override
   State<VerifyNumberScreen> createState() => _VerifyNumberScreenState();
@@ -12,9 +16,6 @@ class VerifyNumberScreen extends StatefulWidget {
 
 class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
   late TextEditingController _verifyNumberController;
-
-  final String countryCode = "+82";
-  final String phoneNumber = "010-1234-1234";
 
   @override
   initState() {
@@ -50,7 +51,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
             style: TextStyle(fontSize: 25),
           ),
           const Height(height: 50),
-          Text("+$countryCode $phoneNumber 로 인증문자를 보냈습니다"),
+          Text("+${widget.countryCode} ${widget.phoneNumber} 로 인증문자를 보냈습니다"),
         ],
       ),
     );
