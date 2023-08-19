@@ -30,25 +30,35 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buttons() {
-    const double buttonTextSize = 20;
+    const double buttonTextSize = 18;
     const double marginSize = 10;
     return Column(
       children: [
         ElevatedButton(
           onPressed: _handleSignUp,
-          child: const Text(
-            "회원가입하기",
-            style: TextStyle(
-                fontSize: buttonTextSize, fontWeight: FontWeight.bold),
+          child: const SizedBox(
+            width: 100,
+            child: Center(
+              child: Text(
+                "회원가입하기",
+                style: TextStyle(
+                    fontSize: buttonTextSize, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
         ),
         const Height(height: marginSize),
         ElevatedButton(
           onPressed: _handleSignIn,
-          child: const Text(
-            "로그인하기",
-            style: TextStyle(
-                fontSize: buttonTextSize, fontWeight: FontWeight.bold),
+          child: const SizedBox(
+            width: 100,
+            child: Center(
+              child: Text(
+                "로그인하기",
+                style: TextStyle(
+                    fontSize: buttonTextSize, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
         ),
       ],
