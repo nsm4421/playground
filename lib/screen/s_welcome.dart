@@ -1,3 +1,4 @@
+import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/common/widget/w_size.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,9 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
-  // TODO : 회원가입, 로그인 처리
-  void _handleSignUp() {}
+  void _handleSignUp(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      CustomRoutes.addPhoneNumber,
+      (route) => false,
+    );
+  }
 
+// TODO : 로그인 처리
   void _handleSignIn() {}
 
   Widget _title() {
@@ -29,13 +36,15 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buttons() {
+  Widget _buttons(BuildContext context) {
     const double buttonTextSize = 18;
     const double marginSize = 10;
     return Column(
       children: [
         ElevatedButton(
-          onPressed: _handleSignUp,
+          onPressed: () {
+            _handleSignUp(context);
+          },
           child: const SizedBox(
             width: 100,
             child: Center(
@@ -91,7 +100,7 @@ class WelcomeScreen extends StatelessWidget {
               _title(),
               // TODO : 앱 로고 이미지 넣기
               const Expanded(child: SizedBox()),
-              _buttons(),
+              _buttons(context),
               _divider(),
               _footer(),
               const Height(height: marginSize)

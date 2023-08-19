@@ -2,18 +2,21 @@ import 'package:chat_app/common/theme/colors.dart';
 import 'package:chat_app/common/widget/w_show_dialog.dart';
 import 'package:chat_app/common/widget/w_size.dart';
 import 'package:chat_app/common/widget/w_text_feild.dart';
+import 'package:chat_app/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddPhoneNumberScreen extends StatefulWidget {
+class AddPhoneNumberScreen extends ConsumerStatefulWidget {
   const AddPhoneNumberScreen({super.key});
 
   @override
-  State<AddPhoneNumberScreen> createState() => _AddPhoneNumberScreenState();
+  ConsumerState<AddPhoneNumberScreen> createState() =>
+      _AddPhoneNumberScreenState();
 }
 
-class _AddPhoneNumberScreenState extends State<AddPhoneNumberScreen> {
+class _AddPhoneNumberScreenState extends ConsumerState<AddPhoneNumberScreen> {
   late TextEditingController _countryNameController;
   late TextEditingController _countryCodeController;
   late TextEditingController _phoneNumberController;
@@ -53,7 +56,14 @@ class _AddPhoneNumberScreenState extends State<AddPhoneNumberScreen> {
         message: '전화번호는 최소 9글자여야 합니다!',
       );
     }
-    // TODO : 유효한 전화번호 인지 체크하고, 다음단계로 넘어가기
+    // SMS 인증
+    ref
+        .read(authControllerProvider)
+        .sendSmsCode(context: context, phoneNumber: '+$countryCode$phoneNumber');
+  }
+
+  _handleVerifySmsCode(){
+
   }
 
   _handleShowCountryPicker() {

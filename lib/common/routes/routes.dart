@@ -22,7 +22,7 @@ class CustomRoutes {
         final Map args = routeSettings.arguments as Map;
         return MaterialPageRoute(
             builder: (context) => VerifyNumberScreen(
-                  countryCode: args['countryCode'],
+                  smsCodeId: args['smsCodeId'],
                   phoneNumber: args['phoneNumber'],
                 ));
       case addUserInfo:

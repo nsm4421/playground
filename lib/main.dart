@@ -2,6 +2,7 @@ import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/common/theme/themes.dart';
 import 'package:chat_app/screen/s_welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +27,6 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: theme.lightTheme,
         darkTheme: theme.darkTheme,
-        // home: const HomeScreen());
-        home: WelcomeScreen());
+        home: const WelcomeScreen());
   }
 }
