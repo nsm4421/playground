@@ -1,14 +1,18 @@
+import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/repository/auth_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authControllerProvider =
-    Provider((ref) => AuthController(ref.watch(authRepositoryProvider)));
+final authControllerProvider = Provider(
+  (ref) => AuthController(
+      authRepository: ref.watch(authRepositoryProvider), providerRef: ref),
+);
 
 class AuthController {
   final AuthRepository authRepository;
+  final ProviderRef providerRef;
 
-  AuthController(this.authRepository);
+  AuthController({required this.authRepository, required this.providerRef});
 
   void sendSmsCode({
     required BuildContext context,
@@ -31,5 +35,26 @@ class AuthController {
         smsCodeId: smsCodeId,
         smsCode: smsCode,
         mounted: mounted);
+  }
+
+  saveUserInfoInFirestore({
+    required String username,
+    required var profileImage,
+    required BuildContext context,
+    required bool mounted,
+  }) {
+    // 프로필 정보 저장
+    authRepository.saveUserInfoInFirestore(
+        username: username,
+        profileImage: profileImage,
+        ref: providerRef,
+        mounted: true);
+
+    // Home화면으로 이동
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      CustomRoutes.home,
+      (route) => false,
+    );
   }
 }

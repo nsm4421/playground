@@ -1,29 +1,61 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:chat_app/common/widget/w_alert_message.dart';
 import 'package:chat_app/common/widget/w_size.dart';
 import 'package:chat_app/common/widget/w_text_feild.dart';
+import 'package:chat_app/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddUserInfoScreen extends StatefulWidget {
+class AddUserInfoScreen extends ConsumerStatefulWidget {
   const AddUserInfoScreen({super.key});
 
   @override
-  State<AddUserInfoScreen> createState() => _AddUserInfoScreenState();
+  ConsumerState<AddUserInfoScreen> createState() => _AddUserInfoScreenState();
 }
 
-class _AddUserInfoScreenState extends State<AddUserInfoScreen> {
-  late TextEditingController _nicknameController;
+class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
+  File? imageFromCamera;
+  Uint8List? imageFromGallery;
+  late TextEditingController _usernameController;
 
   @override
   initState() {
     super.initState();
-    _nicknameController = TextEditingController();
+    _usernameController = TextEditingController();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _usernameController.dispose();
   }
 
   // TODO : 썸네일 버튼 클릭 시
-  _handleClickAddThumbnail() {}
+  _handleClickAddThumbnail(BuildContext context) {}
 
-  // TODO : 썸네일 버튼 클릭 시
-  _handleClickNextButton() {}
+  /// 프로필 등록
+  void _handleClickNextButton() {
+    String username = _usernameController.text;
+    if (username.isEmpty) {
+      showAlertDialog(context: context, message: '유저명을 입력해주세요');
+      return;
+    }
+    if (username.length < 3 || username.length > 20) {
+      showAlertDialog(context: context, message: '유저명은 3~20 이내로 작명해주세요');
+      return;
+    }
+    // TODO : 닉네임 중복 여부 검사
+    ref.read(authControllerProvider).saveUserInfoInFirestore(
+        username: username,
+        profileImage: imageFromCamera ?? imageFromGallery ?? '',
+        context: context,
+        mounted: mounted);
+  }
+
+  void _handleGoBackButton(BuildContext context) => Navigator.pop(context);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +67,15 @@ class _AddUserInfoScreenState extends State<AddUserInfoScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          leading: InkWell(
+            onTap: () {
+              _handleGoBackButton(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: fontSizeLg,
+            ),
+          ),
           centerTitle: true,
           title: Text(
             "Profile",
@@ -43,6 +84,7 @@ class _AddUserInfoScreenState extends State<AddUserInfoScreen> {
           ),
         ),
         body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             children: [
               /// header
@@ -64,7 +106,9 @@ class _AddUserInfoScreenState extends State<AddUserInfoScreen> {
 
               /// 프로필 이미지
               InkWell(
-                onTap: _handleClickAddThumbnail,
+                onTap: () {
+                  _handleClickAddThumbnail(context);
+                },
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -84,21 +128,22 @@ class _AddUserInfoScreenState extends State<AddUserInfoScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: marginSizeLg),
                 child: CustomTextFieldWidget(
                   hintText: "닉네임",
-                  controller: _nicknameController,
+                  controller: _usernameController,
                   fontSize: fontSizeMd,
                 ),
               ),
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
-        /// next 버튼
-        floatingActionButton: ElevatedButton(
-          onPressed: _handleClickNextButton,
-          child: const Text(
-            "NEXT",
-            style: TextStyle(fontSize: fontSizeMd),
+              const Height(height: marginSizeLg),
+
+              /// next 버튼
+              ElevatedButton(
+                onPressed: _handleClickNextButton,
+                child: const Text(
+                  "NEXT",
+                  style: TextStyle(fontSize: fontSizeMd),
+                ),
+              ),
+            ],
           ),
         ),
       ),
