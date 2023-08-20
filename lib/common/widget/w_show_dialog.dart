@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-showAlertDialog({
+showAlertDialogWidget({
   required BuildContext context,
   required String message,
   String? btnText,

@@ -20,8 +20,6 @@ class _AddPhoneNumberScreenState extends ConsumerState<AddPhoneNumberScreen> {
   late TextEditingController _countryNameController;
   late TextEditingController _countryCodeController;
   late TextEditingController _phoneNumberController;
-  final _colors =
-      (ThemeMode.system == ThemeMode.light) ? LightColors() : DarkColors();
 
   @override
   void initState() {
@@ -45,26 +43,23 @@ class _AddPhoneNumberScreenState extends ConsumerState<AddPhoneNumberScreen> {
     final countryCode = _countryCodeController.text;
 
     if (phoneNumber.isEmpty) {
-      return showAlertDialog(
+      return showAlertDialogWidget(
         context: context,
         message: "전화번호를 입력해주세요!",
       );
     }
     if (phoneNumber.length < 9) {
-      return showAlertDialog(
+      return showAlertDialogWidget(
         context: context,
         message: '전화번호는 최소 9글자여야 합니다!',
       );
     }
     // SMS 인증
-    ref
-        .read(authControllerProvider)
-        .sendSmsCode(context: context, phoneNumber: '+$countryCode$phoneNumber');
+    ref.read(authControllerProvider).sendSmsCode(
+        context: context, phoneNumber: '+$countryCode$phoneNumber');
   }
 
-  _handleVerifySmsCode(){
-
-  }
+  _handleVerifySmsCode() {}
 
   _handleShowCountryPicker() {
     showCountryPicker(
@@ -95,75 +90,95 @@ class _AddPhoneNumberScreenState extends ConsumerState<AddPhoneNumberScreen> {
     );
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      elevation: 0,
-      title: Text(
-        'PHONE',
-        style: GoogleFonts.lobster(fontSize: 25, color: _colors.grey),
-      ),
-      centerTitle: true,
-    );
-  }
+  // 뒤로가기(Welcome page로)
+  void _handleGoBack(BuildContext context) =>
+    Navigator.pop(context, false);
 
-  Widget _header() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Text(
-        "전화번호를 등록해주세요",
-      ),
-    );
-  }
-
-  Widget _phoneNumberFragment() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 70,
-            child: CustomTextField(
-              onTap: _handleShowCountryPicker,
-              controller: _countryCodeController,
-              prefixText: '+',
-              readOnly: true,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: CustomTextField(
-              controller: _phoneNumberController,
-              hintText: 'phone number',
-              textAlign: TextAlign.left,
-              keyboardType: TextInputType.number,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _floatingActionButton() {
-    return ElevatedButton(
-        onPressed: _handleClickNextButton, child: const Text("NEXT"));
-  }
 
   @override
   Widget build(BuildContext context) {
+    const double fontSizeLg = 25;
+    const double fontSizeMd = 18;
+    const double marginSize2Xl = 35;
+    const double marginSizeMd = 20;
+    const double marginSizeSm = 10;
+
     return Scaffold(
-      appBar: _appBar(),
+      /// appbar
+      appBar: AppBar(
+        elevation: 0,
+        leading: InkWell(
+          onTap: (){
+            _handleGoBack(context);
+          },
+          // onTap: _handleGoBack(context),
+          child: const Icon(
+            Icons.arrow_back_ios_new,
+            size: fontSizeLg,
+          ),
+        ),
+        title: Text(
+          'PHONE',
+          style: GoogleFonts.lobster(
+            fontSize: fontSizeLg,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
-          const Height(height: 20),
-          _header(),
-          const Height(height: 20),
-          _phoneNumberFragment(),
-          const Height(height: 20)
+          const Height(height: marginSizeMd),
+
+          /// header
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: marginSizeMd,
+              vertical: marginSizeSm,
+            ),
+            child: Text(
+              "전화번호를 입력해주세요",
+              style: TextStyle(fontSize: fontSizeMd),
+            ),
+          ),
+          const Height(height: marginSizeMd),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: marginSize2Xl,
+            ),
+            child: Row(
+              children: [
+                /// 국가 선택
+                SizedBox(
+                  width: 70,
+                  child: CustomTextFieldWidget(
+                    onTap: _handleShowCountryPicker,
+                    controller: _countryCodeController,
+                    prefixText: '+',
+                    readOnly: true,
+                  ),
+                ),
+                const SizedBox(width: marginSizeSm),
+
+                /// 전화번호 text field
+                Expanded(
+                  child: CustomTextFieldWidget(
+                    controller: _phoneNumberController,
+                    hintText: 'phone number',
+                    textAlign: TextAlign.left,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Height(height: marginSizeMd)
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _floatingActionButton(),
+
+      /// next 버튼
+      floatingActionButton: ElevatedButton(
+          onPressed: _handleClickNextButton, child: const Text("NEXT")),
     );
   }
 }

@@ -26,7 +26,7 @@ class AuthRepository {
             await firebaseAuth.signInWithCredential(credential);
           },
           verificationFailed: (e) {
-            showAlertDialog(context: context, message: e.toString());
+            showAlertDialogWidget(context: context, message: e.toString());
           },
           codeSent: (smsCodeId, resendCodeId) {
             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -37,7 +37,7 @@ class AuthRepository {
           },
           codeAutoRetrievalTimeout: (String smsCodeId) {});
     } on FirebaseAuth catch (e) {
-      showAlertDialog(context: context, message: e.toString());
+      showAlertDialogWidget(context: context, message: e.toString());
     }
   }
 

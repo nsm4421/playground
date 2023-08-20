@@ -24,46 +24,38 @@ class VerifyNumberScreen extends ConsumerWidget {
         mounted: true);
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      leading: const Icon(Icons.arrow_back_ios),
-      title: Text(
-        "Verify",
-        style: GoogleFonts.lobster(fontSize: 30),
-      ),
-      titleSpacing: 2,
-      centerTitle: true,
-    );
-  }
-
-  Widget _header() {
-    return Center(
-      child: Column(
-        children: [
-          const Height(height: 30),
-          const Text(
-            "전화번호 인증",
-            style: TextStyle(fontSize: 25),
-          ),
-          const Height(height: 50),
-          Text("$phoneNumber 로 인증문자를 보냈습니다"),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Scaffold(
-        appBar: _appBar(),
+        appBar: AppBar(
+          leading: const Icon(Icons.arrow_back_ios),
+          title: Text(
+            "Verify",
+            style: GoogleFonts.lobster(fontSize: 30),
+          ),
+          titleSpacing: 2,
+          centerTitle: true,
+        ),
         body: Column(
           children: [
-            _header(),
+            Center(
+              child: Column(
+                children: [
+                  const Height(height: 30),
+                  const Text(
+                    "전화번호 인증",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  const Height(height: 50),
+                  Text("$phoneNumber 로 인증문자를 보냈습니다"),
+                ],
+              ),
+            ),
             const Height(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: CustomTextField(
+              child: CustomTextFieldWidget(
                 hintText: "- - - - - -",
                 fontSize: 20,
                 autoFocus: true,

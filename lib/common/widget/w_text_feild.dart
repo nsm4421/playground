@@ -1,8 +1,8 @@
 import 'package:chat_app/common/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
+class CustomTextFieldWidget extends StatelessWidget {
+  const CustomTextFieldWidget({
     super.key,
     this.controller,
     this.hintText,

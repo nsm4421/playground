@@ -1,4 +1,5 @@
 import 'package:chat_app/common/theme/colors.dart';
+import 'package:chat_app/common/theme/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,11 +15,13 @@ class Themes {
     final colors = LightColors();
     return base.copyWith(
       scaffoldBackgroundColor: colors.background,
+      extensions: [CustomThemeExtension.lightMode],
       appBarTheme: AppBarTheme(
         backgroundColor: colors.green,
         titleTextStyle: const TextStyle(
-          fontSize: 18,
+          fontSize: 25,
           fontWeight: FontWeight.w600,
+          color: Colors.white
         ),
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -81,12 +84,13 @@ class Themes {
     final colors = DarkColors();
     return base.copyWith(
       scaffoldBackgroundColor: colors.background,
+      extensions: [CustomThemeExtension.darkMode],
       appBarTheme: AppBarTheme(
         backgroundColor: colors.greyBackground,
-        titleTextStyle: TextStyle(
-          fontSize: 18,
+        titleTextStyle: const TextStyle(
+          fontSize: 25,
           fontWeight: FontWeight.w600,
-          color: colors.grey,
+          color: Colors.teal
         ),
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
