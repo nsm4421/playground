@@ -43,6 +43,8 @@ dependencies:
   cloud_firestore: ^4.8.5
   firebase_storage: ^11.2.6
   flutter_riverpod: ^2.3.7
+  image_picker: ^1.0.2
+  photo_manager: ^2.7.1
 
 # Reference : https://pub.dev/packages/flutter_native_splash
 flutter_native_splash:
