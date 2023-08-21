@@ -1,13 +1,13 @@
-import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/common/widget/w_alert_message.dart';
+import 'package:chat_app/common/widget/w_photo_item.dart';
 import 'package:chat_app/common/widget/w_size.dart';
 import 'package:chat_app/common/widget/w_text_feild.dart';
 import 'package:chat_app/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddUserInfoScreen extends ConsumerStatefulWidget {
   const AddUserInfoScreen({super.key});
@@ -17,8 +17,7 @@ class AddUserInfoScreen extends ConsumerStatefulWidget {
 }
 
 class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
-  File? imageFromCamera;
-  Uint8List? imageFromGallery;
+  XFile? _profileImage;
   late TextEditingController _usernameController;
 
   @override
@@ -34,10 +33,22 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
   }
 
   // TODO : 썸네일 버튼 클릭 시
-  _handleClickAddThumbnail(BuildContext context) {}
+  _handleClickAddThumbnail(BuildContext context) async {
+    final image = await Navigator.pushNamed(
+      context,
+      CustomRoutes.pickProfileImage,
+    );
+
+    if (image is XFile) {
+      setState(() {
+        _profileImage = image;
+      });
+    }
+  }
 
   /// 프로필 등록
   void _handleClickNextButton() {
+    // 닉네임 체크
     String username = _usernameController.text;
     if (username.isEmpty) {
       showAlertDialog(context: context, message: '유저명을 입력해주세요');
@@ -48,9 +59,16 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
       return;
     }
     // TODO : 닉네임 중복 여부 검사
+    // 프로필 이미지 검사
+    if (_profileImage is! XFile) {
+      showAlertDialog(context: context, message: '프로필 이미지를 등록해주세요');
+      return;
+    }
+
+    // TODO : 프로필 이미지 저장
     ref.read(authControllerProvider).saveUserInfoInFirestore(
         username: username,
-        profileImage: imageFromCamera ?? imageFromGallery ?? '',
+        profileImage: _profileImage!,
         context: context,
         mounted: mounted);
   }
@@ -63,6 +81,7 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
     const double fontSizeMd = 18;
     const double marginSizeLg = 30;
     const double marginSizeSm = 10;
+    const double imageSize = 100;
 
     return SafeArea(
       child: Scaffold(
@@ -102,25 +121,30 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
                   style: TextStyle(fontSize: fontSizeMd),
                 ),
               ),
-              const Height(height: 2 * marginSizeLg),
+              const Height(height: marginSizeLg),
 
               /// 프로필 이미지
-              InkWell(
-                onTap: () {
-                  _handleClickAddThumbnail(context);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.blueGrey),
-                  child: const Icon(
-                    Icons.add_a_photo_outlined,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              _profileImage is XFile
+                  ? SizedBox(
+                      width: imageSize,
+                      height: imageSize,
+                      child: PhotoItemWidget(xFile: _profileImage!))
+                  : InkWell(
+                      onTap: () {
+                        _handleClickAddThumbnail(context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.blueGrey),
+                        child: const Icon(
+                          Icons.add_a_photo_outlined,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
               const Height(height: marginSizeLg),
 
               /// 닉네임 입력

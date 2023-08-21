@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/common/widget/w_show_dialog.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -6,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 final authRepositoryProvider = Provider((ref) => AuthRepository(
     firebaseAuth: FirebaseAuth.instance,
@@ -63,7 +66,7 @@ class AuthRepository {
 
   void saveUserInfoInFirestore({
     required String username,
-    required String profileImage,
+    required XFile profileImage,
     required ProviderRef ref,
     required bool mounted,
   }) async {
@@ -73,16 +76,16 @@ class AuthRepository {
       if (currentUser.phoneNumber == null) return;
 
       // 프로필 이미지가 있는 경우
-      // if (profileImage != null) {
-      //   String? profileImageDownloadLink = await ref
-      //       .read(firebaseStoreageRepositoryProvider)
-      //       .saveFile(ref: '/profile/${currentUser.uid}', file: profileImage);
-      // }
+      String? profileImageDownloadLink = await ref
+          .read(firebaseStoreageRepositoryProvider)
+          .saveFile(
+              ref: '/profile/${currentUser.uid}',
+              file: File(profileImage.path));
 
       UserModel user = UserModel(
           username: username,
           uid: currentUser.uid,
-          profileImageUrl: '',
+          profileImageUrl: profileImageDownloadLink ?? '',
           active: true,
           phoneNumber: currentUser.phoneNumber!,
           groupId: []);

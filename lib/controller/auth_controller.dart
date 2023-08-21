@@ -2,6 +2,7 @@ import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/repository/auth_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 final authControllerProvider = Provider(
   (ref) => AuthController(
@@ -39,7 +40,7 @@ class AuthController {
 
   saveUserInfoInFirestore({
     required String username,
-    required var profileImage,
+    required XFile profileImage,
     required BuildContext context,
     required bool mounted,
   }) {
