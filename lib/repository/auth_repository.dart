@@ -97,4 +97,15 @@ class AuthRepository {
       if (!mounted) return;
     } catch (e) {}
   }
+
+  Future<UserModel?> getCurrentUser() async {
+    UserModel? currentUser;
+    final data = (await firebaseFirestore
+            .collection('users')
+            .doc(firebaseAuth.currentUser?.uid)
+            .get())
+        .data();
+    if (data != null) currentUser = UserModel.fromJson(data);
+    return currentUser;
+  }
 }

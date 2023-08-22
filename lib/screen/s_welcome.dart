@@ -3,16 +3,12 @@ import 'package:chat_app/common/widget/w_size.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// 시작 페이지
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
-  // 회원가입 페이지로
+  // 전화번호로 회원가입 페이지로
   void _handleRegister(BuildContext context) =>
       Navigator.pushNamed(context, CustomRoutes.addPhoneNumber);
-
-  // TODO : 로그인 처리
-  void _handleLogin() {}
 
   @override
   Widget build(BuildContext context) {
@@ -53,37 +49,23 @@ class WelcomeScreen extends StatelessWidget {
                     onPressed: () {
                       _handleRegister(context);
                     },
-                    child: const SizedBox(
-                      width: 100,
-                      child: Center(
-                        child: Text(
-                          "회원가입",
-                          style: TextStyle(
-                            fontSize: fontSizeMd,
-                            fontWeight: FontWeight.bold,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: marginSizeSm),
+                      child: SizedBox(
+                        width: 200,
+                        child: Center(
+                          child: Text(
+                            "전화번호로 회원가입",
+                            style: TextStyle(
+                              fontSize: fontSizeMd,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                   const Height(height: marginSizeTn),
-
-                  /// 로그인 버튼
-                  ElevatedButton(
-                    onPressed: _handleLogin,
-                    child: const SizedBox(
-                      width: 100,
-                      child: Center(
-                        child: Text(
-                          "로그인",
-                          style: TextStyle(
-                            fontSize: fontSizeMd,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const Padding(

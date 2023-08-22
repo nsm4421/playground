@@ -65,7 +65,6 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
       return;
     }
 
-    // TODO : 프로필 이미지 저장
     ref.read(authControllerProvider).saveUserInfoInFirestore(
         username: username,
         profileImage: _profileImage!,
@@ -151,7 +150,7 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: marginSizeLg),
                 child: CustomTextFieldWidget(
-                  hintText: "닉네임",
+                  hintText: "유저명을 입력해주세요",
                   controller: _usernameController,
                   fontSize: fontSizeMd,
                 ),

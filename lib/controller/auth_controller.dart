@@ -1,4 +1,5 @@
 import 'package:chat_app/common/routes/routes.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/repository/auth_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,10 @@ import 'package:image_picker/image_picker.dart';
 final authControllerProvider = Provider(
   (ref) => AuthController(
       authRepository: ref.watch(authRepositoryProvider), providerRef: ref),
+);
+
+final currentAuthProvider = FutureProvider(
+  (ref) => ref.watch(authControllerProvider).getCurrentUser(),
 );
 
 class AuthController {
@@ -57,5 +62,9 @@ class AuthController {
       CustomRoutes.home,
       (route) => false,
     );
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    return await authRepository.getCurrentUser();
   }
 }
