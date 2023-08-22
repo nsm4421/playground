@@ -1,9 +1,9 @@
 import 'package:chat_app/common/routes/routes.dart';
 import 'package:chat_app/common/theme/themes.dart';
 import 'package:chat_app/controller/auth_controller.dart';
-import 'package:chat_app/screen/s_error.dart';
+import 'package:chat_app/screen/util/s_error.dart';
 import 'package:chat_app/screen/s_home.dart';
-import 'package:chat_app/screen/s_loading.dart';
+import 'package:chat_app/screen/util/s_loading.dart';
 import 'package:chat_app/screen/s_welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
