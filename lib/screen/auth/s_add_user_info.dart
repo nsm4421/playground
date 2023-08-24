@@ -47,7 +47,7 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
   }
 
   /// 프로필 등록
-  void _handleClickNextButton() {
+  void _handleClickNextButton() async {
     // 닉네임 체크
     String username = _usernameController.text;
     if (username.isEmpty) {
@@ -58,13 +58,12 @@ class _AddUserInfoScreenState extends ConsumerState<AddUserInfoScreen> {
       showAlertDialog(context: context, message: '유저명은 3~20 이내로 작명해주세요');
       return;
     }
-    // TODO : 닉네임 중복 여부 검사
     // 프로필 이미지 검사
     if (_profileImage is! XFile) {
       showAlertDialog(context: context, message: '프로필 이미지를 등록해주세요');
       return;
     }
-
+    // 저장
     ref.read(authControllerProvider).saveUserInfoInFirestore(
         username: username,
         profileImage: _profileImage!,

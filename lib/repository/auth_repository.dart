@@ -6,13 +6,16 @@ import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/repository/firesbase_storage_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-final authRepositoryProvider = Provider((ref) => AuthRepository(
-    firebaseAuth: FirebaseAuth.instance,
-    firebaseFirestore: FirebaseFirestore.instance));
+final authRepositoryProvider = Provider(
+  (ref) => AuthRepository(
+      firebaseAuth: FirebaseAuth.instance,
+      firebaseFirestore: FirebaseFirestore.instance),
+);
 
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
@@ -64,7 +67,7 @@ class AuthRepository {
     } on FirebaseAuth catch (e) {}
   }
 
-  void saveUserInfoInFirestore({
+  Future<bool> isSavingUserInfoSuccess({
     required String username,
     required XFile profileImage,
     required ProviderRef ref,
@@ -72,8 +75,15 @@ class AuthRepository {
   }) async {
     try {
       User? currentUser = firebaseAuth.currentUser;
-      if (currentUser == null) return;
-      if (currentUser.phoneNumber == null) return;
+      if (currentUser == null) return false;
+      if (currentUser.phoneNumber == null) return false;
+
+      bool isUsernameDuplicated = await firebaseFirestore
+          .collection('users')
+          .doc(username)
+          .get()
+          .then((DocumentSnapshot snapshot) => snapshot.exists);
+      if (isUsernameDuplicated) return false;
 
       // 프로필 이미지가 있는 경우
       String? profileImageDownloadLink = await ref
@@ -90,12 +100,16 @@ class AuthRepository {
           phoneNumber: currentUser.phoneNumber!,
           groupId: []);
 
+      // DB에 저장
       await firebaseFirestore
           .collection('users')
           .doc(currentUser.uid)
           .set(user.toMap());
-      if (!mounted) return;
-    } catch (e) {}
+      if (!mounted) return false;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<UserModel?> getCurrentUser() async {

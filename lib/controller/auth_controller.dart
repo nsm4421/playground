@@ -20,6 +20,7 @@ class AuthController {
 
   AuthController({required this.authRepository, required this.providerRef});
 
+  /// SMS 코드 보내기
   void sendSmsCode({
     required BuildContext context,
     required String phoneNumber,
@@ -30,6 +31,7 @@ class AuthController {
     );
   }
 
+  /// SMS 코드 인증하기
   void verifySmsCode({
     required BuildContext context,
     required String smsCodeId,
@@ -37,33 +39,39 @@ class AuthController {
     required bool mounted,
   }) async {
     authRepository.verifySmsCode(
-        context: context,
-        smsCodeId: smsCodeId,
-        smsCode: smsCode,
-        mounted: mounted);
+      context: context,
+      smsCodeId: smsCodeId,
+      smsCode: smsCode,
+      mounted: mounted,
+    );
   }
 
-  saveUserInfoInFirestore({
+  /// 프로필 정보 저장
+  void saveUserInfoInFirestore({
     required String username,
     required XFile profileImage,
     required BuildContext context,
     required bool mounted,
-  }) {
-    // 프로필 정보 저장
-    authRepository.saveUserInfoInFirestore(
-        username: username,
-        profileImage: profileImage,
-        ref: providerRef,
-        mounted: true);
-
-    // Home화면으로 이동
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      CustomRoutes.home,
-      (route) => false,
-    );
+  }) async {
+    await authRepository
+        .isSavingUserInfoSuccess(
+          username: username,
+          profileImage: profileImage,
+          ref: providerRef,
+          mounted: true,
+        )
+        .then((bool isSuccess) => {
+              if (isSuccess)
+                // 저장 성공 시 Home화면으로 이동
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  CustomRoutes.home,
+                  (route) => false,
+                )
+            });
   }
 
+  /// 현재 로그인한 유저 가져오기
   Future<UserModel?> getCurrentUser() async {
     return await authRepository.getCurrentUser();
   }
