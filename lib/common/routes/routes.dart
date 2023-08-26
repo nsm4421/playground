@@ -1,6 +1,7 @@
 import 'package:chat_app/screen/auth/s_add_phone_number.dart';
 import 'package:chat_app/screen/auth/s_add_user_info.dart';
 import 'package:chat_app/screen/auth/s_pick_image.dart';
+import 'package:chat_app/screen/chat/s_contract.dart';
 import 'package:chat_app/screen/s_home.dart';
 import 'package:chat_app/screen/util/s_page_not_found.dart';
 import 'package:chat_app/screen/s_welcome.dart';
@@ -8,8 +9,8 @@ import 'package:chat_app/screen/auth/s_verify_number.dart';
 import 'package:flutter/material.dart';
 
 class CustomRoutes {
-  /// home
   static const String home = 'home';
+  static const String contract = 'contract';
 
   /// auth
   static const String welcome = 'welcome';
@@ -20,9 +21,10 @@ class CustomRoutes {
 
   static Route<dynamic> onGeneralRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
-      /// home
       case home:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
+      case contract:
+        return MaterialPageRoute(builder: (context) => const ContractScreen());
 
       /// auth
       case welcome:
@@ -41,8 +43,7 @@ class CustomRoutes {
         return MaterialPageRoute(
             builder: (context) => const AddUserInfoScreen());
       case pickProfileImage:
-        return MaterialPageRoute(
-            builder: (context) => const PickImageScreen());
+        return MaterialPageRoute(builder: (context) => const PickImageScreen());
 
       /// not found exception page
       default:

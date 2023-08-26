@@ -1,10 +1,12 @@
+import 'package:chat_app/common/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
-  // TODO : 아이콘 클릭 이벤트
-  _handleClickFloatingActionButton() {}
+  _handleClickFloatingActionButton(BuildContext context) {
+    Navigator.pushNamed(context, CustomRoutes.contract);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class ChatScreen extends StatelessWidget {
       body: const Text("CALL"),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _handleClickFloatingActionButton();
+          _handleClickFloatingActionButton(context);
         },
         child: const Icon(Icons.chat),
       ),
