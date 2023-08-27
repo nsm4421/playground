@@ -1,4 +1,4 @@
-import 'package:state_management_tutorial/common.dart';
+import 'package:state_management_tutorial/utils/common.dart';
 
 class AddToDoVo {
   final DateTime dueDay; // 마감일
@@ -20,6 +20,7 @@ class ToDoVo extends AddToDoVo {
   ToDoVo({
     required super.dueDay,
     required super.text,
+    super.type,
     required this.id,
     required this.status,
   }) : createdAt = DateTime.now();
@@ -29,6 +30,7 @@ class ToDoVo extends AddToDoVo {
       dueDay: vo.dueDay,
       text: vo.text,
       id: DateTime.now().millisecondsSinceEpoch.toString(),
+      type: vo.type,
       status: StatusType.yet,
     );
   }

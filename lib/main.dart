@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_tutorial/s_home.dart';
+import 'package:state_management_tutorial/screen/s_home.dart';
 
 void main() {
   runApp(const MyApp());

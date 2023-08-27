@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_tutorial/vo_todo.dart';
+import 'package:state_management_tutorial/model/vo_todo.dart';
 
 /// Horizontal Margin
 class Width extends StatelessWidget {
@@ -46,29 +46,6 @@ class MyIconButton extends StatelessWidget {
         iconData,
         size: 25,
       ),
-    );
-  }
-}
-
-/// 할일 아이템 Widget
-class ToDoItem extends StatelessWidget {
-  const ToDoItem({super.key, required this.todo});
-
-  final ToDoVo todo;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(
-          child: Checkbox(
-            value: true,
-            onChanged: null,
-          ),
-        ),
-        Text(todo.text),
-
-      ],
     );
   }
 }

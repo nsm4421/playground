@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:state_management_tutorial/vo_todo.dart';
-import 'package:state_management_tutorial/common.dart';
-import 'package:state_management_tutorial/w_common.dart';
+import 'package:state_management_tutorial/model/vo_todo.dart';
+import 'package:state_management_tutorial/utils/common.dart';
+import 'package:state_management_tutorial/utils/w_common.dart';
 
 class AddToDoScreen extends StatefulWidget {
   const AddToDoScreen({super.key});
