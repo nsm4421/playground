@@ -25,7 +25,7 @@ enum StatusType {
 
   static description(StatusType type) => type._description;
 
-  static StatusType getOpposite(StatusType type) {
+  static StatusType getOpposite(StatusType type)  {
     if (type == done) return yet;
     return done;
   }

@@ -77,10 +77,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _handleDelete(int index) {
+  void _handleDone(int index, bool done) {
     setState(() {
-      checkedItemIdList.removeWhere((element) => element == todoList[index].id);
-      todoList.removeAt(index);
+      todoList[index].status = done ? StatusType.done : StatusType.yet;
+    });
+  }
+
+  void _handleDeleteAll() {
+    setState(() {
+      todoList.removeWhere((element) => checkedItemIdList.contains(element.id));
+      checkedItemIdList = [];
     });
   }
 
@@ -115,7 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Text(
                   "Items",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                )
+                ),
+                Spacer(),
+                InkWell(
+                  onTap: _handleDeleteAll,
+                  child: const Icon(Icons.delete),
+                ),
+                const Width(width: 25)
               ],
             ),
             const Divider(),
@@ -135,16 +147,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     title: Text(
                       item.text,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
+                      style: TextStyle(
+                          decoration: item.status == StatusType.done
+                              ? TextDecoration.lineThrough
+                              : null,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: (item.status == StatusType.done
+                              ? Colors.grey
+                              : Colors.redAccent)),
                     ),
                     trailing: InkWell(
                       onTap: () {
-                        _handleDelete(index);
+                        final isDone = !(item.status == StatusType.done);
+                        _handleDone(index, isDone);
                       },
-                      child: const Icon(Icons.delete),
+                      child: item.status == StatusType.done
+                          ? const Icon(Icons.repeat)
+                          : const Icon(Icons.done),
                     ),
                     subtitle: Text(
                       DateFormat(
