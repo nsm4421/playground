@@ -1,8 +1,8 @@
 import 'package:state_management_tutorial/utils/common.dart';
 
 class AddToDoVo {
-  final DateTime dueDay; // 마감일
-  final String text; // 할일
+  DateTime dueDay; // 마감일
+  String text; // 할일
   ImportanceType type;
 
   AddToDoVo({

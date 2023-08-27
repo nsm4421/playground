@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_tutorial/model/vo_todo.dart';
 
 /// Horizontal Margin
 class Width extends StatelessWidget {
