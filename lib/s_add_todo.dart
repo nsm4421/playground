@@ -61,7 +61,7 @@ class _AddToDoScreenState extends State<AddToDoScreen> {
     }
     // 이전 화면으로 할일 객체 넘겨주기
     Navigator.pop(
-        context, AddToDoVo(dueDay: _dueDay, text: _textEditingController.text));
+        context, AddToDoVo(dueDay: _dueDay, text: _textEditingController.text, type: _type));
   }
 
   @override
