@@ -1,9 +1,8 @@
-import 'package:chat_app/screen/service/chat/f_chat.dart';
+import 'package:chat_app/screen/service/chat/s_chat.dart';
 import 'package:chat_app/screen/service/home/s_home.dart';
+import 'package:chat_app/screen/service/my-page/s_my_page.dart';
 import 'package:chat_app/screen/service/search/s_search.dart';
-import 'package:chat_app/screen/service/setting/f_setting.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class IndexScreen extends StatefulWidget {
   const IndexScreen({super.key});
@@ -15,8 +14,6 @@ class IndexScreen extends StatefulWidget {
 class _IndexScreenState extends State<IndexScreen> {
   int _selectedIndex = 0;
 
-
-
   _botomNavBar() => NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (idx) {
@@ -25,10 +22,29 @@ class _IndexScreenState extends State<IndexScreen> {
           });
         },
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(icon: Icon(Icons.search), label: "Search"),
-          NavigationDestination(icon: Icon(Icons.chat), label: "Chat"),
-          NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+          NavigationDestination(
+            icon: Icon(
+              Icons.home,
+            ),
+            label: "Home",
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Icons.search,
+            ),
+            label: "Search",
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Icons.chat,
+            ),
+            label: "Chat",
+          ),
+          NavigationDestination(
+              icon: Icon(
+                Icons.account_circle,
+              ),
+              label: "My Page"),
         ],
       );
 
@@ -41,8 +57,8 @@ class _IndexScreenState extends State<IndexScreen> {
           children: const [
             HomeFragment(),
             SearchFragment(),
-            ChatFragment(),
-            SettingFragment(),
+            ChatScreen(),
+            MyPageScreen(),
           ],
         ),
         bottomNavigationBar: _botomNavBar(),

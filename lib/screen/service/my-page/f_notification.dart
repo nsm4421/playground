@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ChatFragment extends StatelessWidget {
-  const ChatFragment({super.key});
+class NotificationFragment extends StatelessWidget {
+  const NotificationFragment({super.key});
 
   @override
   Widget build(BuildContext context) {
