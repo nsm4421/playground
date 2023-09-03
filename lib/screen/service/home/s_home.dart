@@ -15,6 +15,28 @@ class _HomeFragmentState extends State<HomeFragment> {
   int _bannerIndex = 0;
   final PageController _pageController = PageController();
 
+  AppBar _appBar() => AppBar(
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          "Chat App",
+          style: GoogleFonts.lobsterTwo(
+            fontWeight: FontWeight.bold,
+            fontSize: 28,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.logout,
+              size: 25,
+              color: Colors.blueGrey,
+            ),
+          ),
+        ],
+      );
+
   Widget _banner() {
     const double bannerHeight = 200;
     // TODO : Change Banners
@@ -115,16 +137,21 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _banner(),
-          DefaultDivider(),
-          _recommend(),
-          DefaultDivider(),
-          _star(),
-          const Height(50)
-        ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: _appBar(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _banner(),
+              DefaultDivider(),
+              _recommend(),
+              DefaultDivider(),
+              _star(),
+              const Height(50)
+            ],
+          ),
+        ),
       ),
     );
   }
