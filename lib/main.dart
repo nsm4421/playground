@@ -1,4 +1,4 @@
-import 'package:chat_app/screen/s_home.dart';
+import 'package:chat_app/screen/service/s_index.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +20,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Chat App",
       themeMode: ThemeMode.system,
-      theme: ThemeData.light(),
+      theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
+          useMaterial3: true),
       darkTheme: ThemeData.dark(),
-      home: HomeScreen(),
+      home: IndexScreen(),
     );
   }
 }
