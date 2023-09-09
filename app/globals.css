@@ -2,26 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+li {
+    list-style: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+@layer components {
+    .main-container {
+        @apply flex min-h-screen flex-1 flex-col items-center;
+    }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+    .nav-bar {
+        @apply py-3 flex justify-between align-middle bg-slate-900 text-white;
+    }
+
+    .app-shell {
+        @apply  sticky left-0 top-0 z-20 flex h-screen w-fit flex-col rounded-lg justify-start overflow-auto max-md:hidden bg-slate-800 text-white;
+    }
+
+    .app-shell-item {
+        @apply flex p-2 rounded-md mt-10 mx-3 font-extralight;
+    }
+
+    .app-shell-item-active {
+        @apply flex p-2 rounded-md mt-10 mx-3 bg-indigo-700 font-bold;
+    }
+
+    .app-shell-item-label {
+        @apply max-lg:hidden ml-3;
+    }
+
+    .bottom-nav {
+        @apply flex bg-slate-700 text-white justify-evenly fixed bottom-0 z-10 w-full rounded-t-3xl p-4 backdrop-blur-lg md:hidden;
+    }
+
+    .bottom-nav-item {
+        @apply p-2 rounded-md mx-3 font-extralight;
+    }
+
+    .bottom-nav-item-active {
+        @apply p-2 rounded-md mx-3 bg-indigo-700 font-bold;
+    }
+
+    .bottom-nav-item-label {
+        @apply max-sm:hidden mt-2;
+    }
+
+    .right-sidebar {
+        @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col rounded-lg justify-between gap-12 overflow-auto px-3 bg-slate-800 text-white max-xl:hidden;
+    }
+ }
