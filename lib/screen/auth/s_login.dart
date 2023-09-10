@@ -1,6 +1,7 @@
 import 'package:chat_app/screen/widget/w_box.dart';
 import 'package:chat_app/screen/widget/w_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -67,7 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginBtn() => ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          // TODO : 로그인 인증로직
+          context.go('/');
+        },
         child: Text(
           "Login",
           style: GoogleFonts.lobsterTwo(
@@ -80,7 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
   _signUpBtn() {
     return ButtonWithText(
       label: "Make Account?",
-      callback: () {},
+      callback: () {
+        context.push('/sign_up');
+      },
       fontSize: 18,
       textColor: Colors.blue,
       bgColor: Colors.white,

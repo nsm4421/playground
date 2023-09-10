@@ -1,6 +1,6 @@
 import 'package:chat_app/screen/widget/w_box.dart';
-import 'package:chat_app/screen/widget/w_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       centerTitle: true,
       elevation: 0,
       leading: InkWell(
-        onTap: () {},
+        onTap: () {context.go('/login');},
         child: const Icon(Icons.arrow_back_ios),
       ),
       title: Text(
