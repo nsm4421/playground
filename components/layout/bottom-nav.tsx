@@ -1,6 +1,6 @@
 "use client";
 
-import sideBarItems from "@/utils/const/side-bar-items";
+import sideBarItems from "@/lib/const/side-bar-items";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
