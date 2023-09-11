@@ -54,6 +54,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
   build_runner: ^2.3.3
+  google_sign_in: ^6.1.4
 
 # Reference : https://pub.dev/packages/flutter_native_splash
 flutter_native_splash:

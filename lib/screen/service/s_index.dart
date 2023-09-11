@@ -1,7 +1,9 @@
+import 'package:chat_app/screen/auth/s_login.dart';
 import 'package:chat_app/screen/service/chat/s_chat.dart';
 import 'package:chat_app/screen/service/home/s_home.dart';
 import 'package:chat_app/screen/service/my-page/s_my_page.dart';
 import 'package:chat_app/screen/service/search/s_search.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class IndexScreen extends StatefulWidget {
 class _IndexScreenState extends State<IndexScreen> {
   int _selectedIndex = 0;
 
-  _botomNavBar() => NavigationBar(
+  _bottomNavBar() => NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (idx) {
           setState(() {
@@ -51,17 +53,26 @@ class _IndexScreenState extends State<IndexScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: const [
-            HomeFragment(),
-            SearchFragment(),
-            ChatScreen(),
-            MyPageScreen(),
-          ],
-        ),
-        bottomNavigationBar: _botomNavBar(),
+      child: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          /// 로그인 안 된 경우, 로그인 화면으로 보내기
+          if (!snapshot.hasData) {
+            return const LoginScreen();
+          }
+          return Scaffold(
+            body: IndexedStack(
+              index: _selectedIndex,
+              children: const [
+                HomeFragment(),
+                SearchFragment(),
+                ChatScreen(),
+                MyPageScreen(),
+              ],
+            ),
+            bottomNavigationBar: _bottomNavBar(),
+          );
+        },
       ),
     );
   }

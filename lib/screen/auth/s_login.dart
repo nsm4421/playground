@@ -1,8 +1,9 @@
 import 'package:chat_app/screen/widget/w_box.dart';
-import 'package:chat_app/screen/widget/w_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +24,84 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
   }
+
+  _handleSignUpWithGoogle() async {
+    try {
+      /// google sign in
+      final credit = await GoogleSignIn()
+          .signIn()
+          .then((googleUser) async => await googleUser?.authentication)
+          .then((auth) => GoogleAuthProvider.credential(
+              accessToken: auth?.accessToken, idToken: auth?.idToken))
+          .then((credential) async =>
+              await FirebaseAuth.instance.signInWithCredential(credential));
+
+      /// getting credit fail
+      if (credit.user == null) {
+        _showSnackBar('google sign in failed');
+        return;
+      }
+
+      /// success
+      if (context.mounted) context.go("/");
+    }
+
+    /// on error
+    catch (e) {
+      _showSnackBar('google sign in failed...');
+      return;
+    }
+  }
+
+  _handleSignUpWithEmail() => context.push("/sign_up");
+
+  _handleLogin() async {
+    try {
+      /// check input
+      if (!_formKey.currentState!.validate()) {
+        _showSnackBar('check input again');
+        return;
+      }
+      _formKey.currentState!.save();
+
+      /// get user
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      if (credential.user == null) {
+        _showSnackBar('user not found...');
+        return;
+      }
+
+      /// go to home
+      if (context.mounted) {
+        _showSnackBar('login success');
+        context.go("/");
+      }
+    }
+
+    /// on error
+    on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "user-not-founded":
+          _showSnackBar('${_emailController.text}\n is not registered');
+          return;
+        case "wrong-password":
+          _showSnackBar('password is wrong');
+          return;
+        default:
+          _showSnackBar('firebase auth error...');
+          return;
+      }
+    } catch (e) {
+      _showSnackBar('login failed');
+      return;
+    }
+  }
+
+  void _showSnackBar(String message) => ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(message)));
 
   Widget _header() {
     return Text(
@@ -68,10 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginBtn() => ElevatedButton(
-        onPressed: () {
-          // TODO : 로그인 인증로직
-          context.go('/');
-        },
+        onPressed: _handleLogin,
         child: Text(
           "Login",
           style: GoogleFonts.lobsterTwo(
@@ -81,39 +157,57 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  _signUpBtn() {
-    return ButtonWithText(
-      label: "Make Account?",
-      callback: () {
-        context.push('/sign_up');
-      },
-      fontSize: 18,
-      textColor: Colors.blue,
-      bgColor: Colors.white,
-    );
-  }
-
-  _googleSignUpBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          "assets/images/google-icon.png",
-          height: 25,
-          width: 25,
-        ),
-        const Width(15),
-        Text(
-          "Sign up with google?",
-          style: GoogleFonts.karla(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue,
+  _signUpBtn() => InkWell(
+        onTap: _handleSignUpWithEmail,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.email_outlined,
+                size: 25,
+                color: Colors.teal,
+              ),
+              const Width(15),
+              Text(
+                "Sign up with email?",
+                style: GoogleFonts.karla(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              )
+            ],
           ),
-        )
-      ],
-    );
-  }
+        ),
+      );
+
+  _googleSignUpBtn() => InkWell(
+        onTap: _handleSignUpWithGoogle,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/google-icon.png",
+                height: 25,
+                width: 25,
+              ),
+              const Width(15),
+              Text(
+                "Sign up with google?",
+                style: GoogleFonts.karla(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -133,9 +227,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   _form(),
                   const Height(32),
                   _loginBtn(),
+                  const Height(8),
                   const DefaultDivider(),
+                  const Height(8),
                   _signUpBtn(),
-                  const Height(16),
+                  const Height(8),
                   _googleSignUpBtn(),
                 ],
               ),

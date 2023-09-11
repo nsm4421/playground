@@ -1,8 +1,8 @@
 import 'package:chat_app/screen/widget/w_box.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -14,6 +14,8 @@ class HomeFragment extends StatefulWidget {
 class _HomeFragmentState extends State<HomeFragment> {
   int _bannerIndex = 0;
   final PageController _pageController = PageController();
+
+  _handleLogout() => FirebaseAuth.instance.signOut();
 
   AppBar _appBar() => AppBar(
         centerTitle: true,
@@ -27,7 +29,7 @@ class _HomeFragmentState extends State<HomeFragment> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _handleLogout,
             icon: const Icon(
               Icons.logout,
               size: 25,
@@ -144,9 +146,9 @@ class _HomeFragmentState extends State<HomeFragment> {
           child: Column(
             children: [
               _banner(),
-              DefaultDivider(),
+              const DefaultDivider(),
               _recommend(),
-              DefaultDivider(),
+              const DefaultDivider(),
               _star(),
               const Height(50)
             ],
