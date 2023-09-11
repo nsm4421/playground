@@ -6,7 +6,7 @@ part '../generated/message_model.freezed.dart';
 
 /**
  * 메세지
- ** messageId : document Id
+ ** messageId
  ** chatRoomId : 채팅방 id
  ** senderUid : 유저 id
  ** receiverUid : 유저명
@@ -18,7 +18,9 @@ part '../generated/message_model.freezed.dart';
 @freezed
 sealed class MessageModel with _$MessageModel {
   factory MessageModel(
-      {String? messageId,
+      {
+        String? docId,
+        String? messageId,
         String? chatRoomId,
         String? senderUid,
         String? receiverUid,

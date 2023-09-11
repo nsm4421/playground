@@ -20,7 +20,7 @@ extension EnumParsing on ReceiptStatus {
 
 /**
  * 메세지 수신 여부
- ** receiptId : 수신자 id
+ ** receiptId
  ** messageId : 메세지 id
  ** status : 메세지 수신 상태
  ** createdAt : 메세지 보낸 시간
@@ -28,7 +28,9 @@ extension EnumParsing on ReceiptStatus {
 @freezed
 sealed class ReceiptModel with _$ReceiptModel {
   factory ReceiptModel(
-      {String? receiptId,
+      {
+        String? docId,
+        String? receiptId,
         String? messageId,
         ReceiptStatus? status,
         DateTime? createdAt,

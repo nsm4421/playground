@@ -20,6 +20,7 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatRoomModel {
+  String? get docId => throw _privateConstructorUsedError;
   String? get chatRoomId => throw _privateConstructorUsedError;
   List<String>? get uidList => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -38,7 +39,8 @@ abstract class $ChatRoomModelCopyWith<$Res> {
       _$ChatRoomModelCopyWithImpl<$Res, ChatRoomModel>;
   @useResult
   $Res call(
-      {String? chatRoomId,
+      {String? docId,
+      String? chatRoomId,
       List<String>? uidList,
       DateTime? createdAt,
       DateTime? removedAt});
@@ -57,12 +59,17 @@ class _$ChatRoomModelCopyWithImpl<$Res, $Val extends ChatRoomModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? docId = freezed,
     Object? chatRoomId = freezed,
     Object? uidList = freezed,
     Object? createdAt = freezed,
     Object? removedAt = freezed,
   }) {
     return _then(_value.copyWith(
+      docId: freezed == docId
+          ? _value.docId
+          : docId // ignore: cast_nullable_to_non_nullable
+              as String?,
       chatRoomId: freezed == chatRoomId
           ? _value.chatRoomId
           : chatRoomId // ignore: cast_nullable_to_non_nullable
@@ -92,7 +99,8 @@ abstract class _$$_ChatRoomModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? chatRoomId,
+      {String? docId,
+      String? chatRoomId,
       List<String>? uidList,
       DateTime? createdAt,
       DateTime? removedAt});
@@ -109,12 +117,17 @@ class __$$_ChatRoomModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? docId = freezed,
     Object? chatRoomId = freezed,
     Object? uidList = freezed,
     Object? createdAt = freezed,
     Object? removedAt = freezed,
   }) {
     return _then(_$_ChatRoomModel(
+      docId: freezed == docId
+          ? _value.docId
+          : docId // ignore: cast_nullable_to_non_nullable
+              as String?,
       chatRoomId: freezed == chatRoomId
           ? _value.chatRoomId
           : chatRoomId // ignore: cast_nullable_to_non_nullable
@@ -139,7 +152,8 @@ class __$$_ChatRoomModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ChatRoomModel implements _ChatRoomModel {
   _$_ChatRoomModel(
-      {this.chatRoomId,
+      {this.docId,
+      this.chatRoomId,
       final List<String>? uidList,
       this.createdAt,
       this.removedAt})
@@ -148,6 +162,8 @@ class _$_ChatRoomModel implements _ChatRoomModel {
   factory _$_ChatRoomModel.fromJson(Map<String, dynamic> json) =>
       _$$_ChatRoomModelFromJson(json);
 
+  @override
+  final String? docId;
   @override
   final String? chatRoomId;
   final List<String>? _uidList;
@@ -167,7 +183,7 @@ class _$_ChatRoomModel implements _ChatRoomModel {
 
   @override
   String toString() {
-    return 'ChatRoomModel(chatRoomId: $chatRoomId, uidList: $uidList, createdAt: $createdAt, removedAt: $removedAt)';
+    return 'ChatRoomModel(docId: $docId, chatRoomId: $chatRoomId, uidList: $uidList, createdAt: $createdAt, removedAt: $removedAt)';
   }
 
   @override
@@ -175,6 +191,7 @@ class _$_ChatRoomModel implements _ChatRoomModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ChatRoomModel &&
+            (identical(other.docId, docId) || other.docId == docId) &&
             (identical(other.chatRoomId, chatRoomId) ||
                 other.chatRoomId == chatRoomId) &&
             const DeepCollectionEquality().equals(other._uidList, _uidList) &&
@@ -186,7 +203,7 @@ class _$_ChatRoomModel implements _ChatRoomModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, chatRoomId,
+  int get hashCode => Object.hash(runtimeType, docId, chatRoomId,
       const DeepCollectionEquality().hash(_uidList), createdAt, removedAt);
 
   @JsonKey(ignore: true)
@@ -205,7 +222,8 @@ class _$_ChatRoomModel implements _ChatRoomModel {
 
 abstract class _ChatRoomModel implements ChatRoomModel {
   factory _ChatRoomModel(
-      {final String? chatRoomId,
+      {final String? docId,
+      final String? chatRoomId,
       final List<String>? uidList,
       final DateTime? createdAt,
       final DateTime? removedAt}) = _$_ChatRoomModel;
@@ -213,6 +231,8 @@ abstract class _ChatRoomModel implements ChatRoomModel {
   factory _ChatRoomModel.fromJson(Map<String, dynamic> json) =
       _$_ChatRoomModel.fromJson;
 
+  @override
+  String? get docId;
   @override
   String? get chatRoomId;
   @override

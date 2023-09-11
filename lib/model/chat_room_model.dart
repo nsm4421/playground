@@ -6,7 +6,7 @@ part '../generated/chat_room_model.freezed.dart';
 
 /**
  * 채팅방
- ** chatRoomId : document id
+ ** chatRoomId
  ** uidList : 유저 id
  ** createdAt : 채팅방 개설시간
  ** removedAt : 채팅방 삭제시간
@@ -14,7 +14,8 @@ part '../generated/chat_room_model.freezed.dart';
 @freezed
 sealed class ChatRoomModel with _$ChatRoomModel {
   factory ChatRoomModel(
-      {String? chatRoomId,
+      {    String? docId,
+        String? chatRoomId,
         List<String>? uidList,
         DateTime? createdAt,
         DateTime? removedAt,

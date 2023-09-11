@@ -6,7 +6,7 @@ part '../generated/user_model.freezed.dart';
 
 /**
  * 사용자
- ** uid : document id
+ ** uid : user id
  ** username : 유저명
  ** description : 자기소개
  ** profileUrl : 프로필 이미지
@@ -17,6 +17,7 @@ part '../generated/user_model.freezed.dart';
 @freezed
 sealed class UserModel with _$UserModel {
   factory UserModel({
+    String? docId,
     String? uid,
     String? username,
     String? description,

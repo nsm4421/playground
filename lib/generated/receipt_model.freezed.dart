@@ -20,6 +20,7 @@ ReceiptModel _$ReceiptModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReceiptModel {
+  String? get docId => throw _privateConstructorUsedError;
   String? get receiptId => throw _privateConstructorUsedError;
   String? get messageId => throw _privateConstructorUsedError;
   ReceiptStatus? get status => throw _privateConstructorUsedError;
@@ -38,7 +39,8 @@ abstract class $ReceiptModelCopyWith<$Res> {
       _$ReceiptModelCopyWithImpl<$Res, ReceiptModel>;
   @useResult
   $Res call(
-      {String? receiptId,
+      {String? docId,
+      String? receiptId,
       String? messageId,
       ReceiptStatus? status,
       DateTime? createdAt});
@@ -57,12 +59,17 @@ class _$ReceiptModelCopyWithImpl<$Res, $Val extends ReceiptModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? docId = freezed,
     Object? receiptId = freezed,
     Object? messageId = freezed,
     Object? status = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
+      docId: freezed == docId
+          ? _value.docId
+          : docId // ignore: cast_nullable_to_non_nullable
+              as String?,
       receiptId: freezed == receiptId
           ? _value.receiptId
           : receiptId // ignore: cast_nullable_to_non_nullable
@@ -92,7 +99,8 @@ abstract class _$$_ReceiptModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? receiptId,
+      {String? docId,
+      String? receiptId,
       String? messageId,
       ReceiptStatus? status,
       DateTime? createdAt});
@@ -109,12 +117,17 @@ class __$$_ReceiptModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? docId = freezed,
     Object? receiptId = freezed,
     Object? messageId = freezed,
     Object? status = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_$_ReceiptModel(
+      docId: freezed == docId
+          ? _value.docId
+          : docId // ignore: cast_nullable_to_non_nullable
+              as String?,
       receiptId: freezed == receiptId
           ? _value.receiptId
           : receiptId // ignore: cast_nullable_to_non_nullable
@@ -139,11 +152,17 @@ class __$$_ReceiptModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ReceiptModel implements _ReceiptModel {
   _$_ReceiptModel(
-      {this.receiptId, this.messageId, this.status, this.createdAt});
+      {this.docId,
+      this.receiptId,
+      this.messageId,
+      this.status,
+      this.createdAt});
 
   factory _$_ReceiptModel.fromJson(Map<String, dynamic> json) =>
       _$$_ReceiptModelFromJson(json);
 
+  @override
+  final String? docId;
   @override
   final String? receiptId;
   @override
@@ -155,7 +174,7 @@ class _$_ReceiptModel implements _ReceiptModel {
 
   @override
   String toString() {
-    return 'ReceiptModel(receiptId: $receiptId, messageId: $messageId, status: $status, createdAt: $createdAt)';
+    return 'ReceiptModel(docId: $docId, receiptId: $receiptId, messageId: $messageId, status: $status, createdAt: $createdAt)';
   }
 
   @override
@@ -163,6 +182,7 @@ class _$_ReceiptModel implements _ReceiptModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ReceiptModel &&
+            (identical(other.docId, docId) || other.docId == docId) &&
             (identical(other.receiptId, receiptId) ||
                 other.receiptId == receiptId) &&
             (identical(other.messageId, messageId) ||
@@ -175,7 +195,7 @@ class _$_ReceiptModel implements _ReceiptModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, receiptId, messageId, status, createdAt);
+      Object.hash(runtimeType, docId, receiptId, messageId, status, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -193,7 +213,8 @@ class _$_ReceiptModel implements _ReceiptModel {
 
 abstract class _ReceiptModel implements ReceiptModel {
   factory _ReceiptModel(
-      {final String? receiptId,
+      {final String? docId,
+      final String? receiptId,
       final String? messageId,
       final ReceiptStatus? status,
       final DateTime? createdAt}) = _$_ReceiptModel;
@@ -201,6 +222,8 @@ abstract class _ReceiptModel implements ReceiptModel {
   factory _ReceiptModel.fromJson(Map<String, dynamic> json) =
       _$_ReceiptModel.fromJson;
 
+  @override
+  String? get docId;
   @override
   String? get receiptId;
   @override
