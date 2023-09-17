@@ -55,6 +55,10 @@ dependencies:
   json_annotation: ^4.8.1
   build_runner: ^2.3.3
   google_sign_in: ^6.1.4
+  camera: ^0.10.5+3
+  flutter_image_compress: ^2.0.4
+  uuid: ^4.0.0
+  cached_network_image: ^3.2.3
 
 # Reference : https://pub.dev/packages/flutter_native_splash
 flutter_native_splash:
