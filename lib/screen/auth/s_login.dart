@@ -1,4 +1,5 @@
 import 'package:chat_app/screen/widget/w_box.dart';
+import 'package:chat_app/utils/alert_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       /// getting credit fail
       if (credit.user == null) {
-        _showSnackBar('google sign in failed');
+        AlertUtils.showSnackBar(context, 'google sign in failed');
         return;
       }
 
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     /// on error
     catch (e) {
-      _showSnackBar('google sign in failed...');
+      AlertUtils.showSnackBar(context, 'google sign in failed...');
       return;
     }
   }
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       /// check input
       if (!_formKey.currentState!.validate()) {
-        _showSnackBar('check input again');
+        AlertUtils.showSnackBar(context, 'check input again');
         return;
       }
       _formKey.currentState!.save();
@@ -70,13 +71,13 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
       if (credential.user == null) {
-        _showSnackBar('user not found...');
+        AlertUtils.showSnackBar(context, 'user not found...');
         return;
       }
 
       /// go to home
       if (context.mounted) {
-        _showSnackBar('login success');
+        AlertUtils.showSnackBar(context, 'login success');
         context.go("/");
       }
     }
@@ -85,23 +86,21 @@ class _LoginScreenState extends State<LoginScreen> {
     on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "user-not-founded":
-          _showSnackBar('${_emailController.text}\n is not registered');
+          AlertUtils.showSnackBar(
+              context, '${_emailController.text}\n is not registered');
           return;
         case "wrong-password":
-          _showSnackBar('password is wrong');
+          AlertUtils.showSnackBar(context, 'password is wrong');
           return;
         default:
-          _showSnackBar('firebase auth error...');
+          AlertUtils.showSnackBar(context, 'firebase auth error...');
           return;
       }
     } catch (e) {
-      _showSnackBar('login failed');
+      AlertUtils.showSnackBar(context, 'login failed');
       return;
     }
   }
-
-  void _showSnackBar(String message) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(message)));
 
   Widget _header() {
     return Text(

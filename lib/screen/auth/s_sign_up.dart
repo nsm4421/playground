@@ -1,4 +1,5 @@
 import 'package:chat_app/screen/widget/w_box.dart';
+import 'package:chat_app/utils/alert_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,29 +15,43 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  late TextEditingController _emailTEC;
+  late TextEditingController _passwordTEC;
+  late TextEditingController _passwordConfirmTEC;
 
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    _emailTEC = TextEditingController();
+    _passwordTEC = TextEditingController();
+    _passwordConfirmTEC = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailTEC.dispose();
+    _passwordTEC.dispose();
+    _passwordConfirmTEC.dispose();
   }
 
   Future<void> _handleSignUp() async {
     try {
       if (!_formKey.currentState!.validate()) {
-        _showSnackBar('check input again');
+        AlertUtils.showSnackBar(context, 'check input again');
         return;
       }
       _formKey.currentState!.save();
+      if (_passwordTEC.text != _passwordConfirmTEC.text) {
+        AlertUtils.showSnackBar(context, 'password are not matched');
+        return;
+      }
 
       /// sign up & save in fire store
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
+            email: _emailTEC.text.trim(),
+            password: _passwordTEC.text.trim(),
           )
           .then((credential) =>
               FirebaseFirestore.instance.collection('users').add({
@@ -56,13 +71,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "weak-password":
-          _showSnackBar('password is too weak...');
+          AlertUtils.showSnackBar(context, 'password is too weak...');
           return;
         case "email-already-in-use":
-          _showSnackBar('email is already in use...');
+          AlertUtils.showSnackBar(context, 'email is already in use...');
           return;
         default:
-          _showSnackBar('firebase auth error...');
+          AlertUtils.showSnackBar(context, 'firebase auth error...');
           return;
       }
     } catch (e) {
@@ -113,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           children: [
             TextFormField(
-                controller: _emailController,
+                controller: _emailTEC,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -126,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     (v == null || v.isEmpty) ? "Press Email" : null),
             const Height(32),
             TextFormField(
-              controller: _passwordController,
+              controller: _passwordTEC,
               obscureText: true,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
@@ -138,6 +153,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               validator: (v) =>
                   (v == null || v.isEmpty) ? "Press Password" : null,
+            ),
+            const Height(32),
+            TextFormField(
+              controller: _passwordConfirmTEC,
+              obscureText: true,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Password Confirm",
+                prefixIcon: Icon(
+                  Icons.key,
+                ),
+              ),
+              validator: (v) =>
+                  (v != _passwordTEC.text) ? "password is not matched" : null,
             )
           ],
         ),
