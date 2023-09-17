@@ -20,7 +20,6 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MessageModel {
-  String? get docId => throw _privateConstructorUsedError;
   String? get messageId => throw _privateConstructorUsedError;
   String? get chatRoomId => throw _privateConstructorUsedError;
   String? get senderUid => throw _privateConstructorUsedError;
@@ -43,8 +42,7 @@ abstract class $MessageModelCopyWith<$Res> {
       _$MessageModelCopyWithImpl<$Res, MessageModel>;
   @useResult
   $Res call(
-      {String? docId,
-      String? messageId,
+      {String? messageId,
       String? chatRoomId,
       String? senderUid,
       String? receiverUid,
@@ -67,7 +65,6 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? docId = freezed,
     Object? messageId = freezed,
     Object? chatRoomId = freezed,
     Object? senderUid = freezed,
@@ -78,10 +75,6 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? removedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      docId: freezed == docId
-          ? _value.docId
-          : docId // ignore: cast_nullable_to_non_nullable
-              as String?,
       messageId: freezed == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
@@ -127,8 +120,7 @@ abstract class _$$_MessageModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? docId,
-      String? messageId,
+      {String? messageId,
       String? chatRoomId,
       String? senderUid,
       String? receiverUid,
@@ -149,7 +141,6 @@ class __$$_MessageModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? docId = freezed,
     Object? messageId = freezed,
     Object? chatRoomId = freezed,
     Object? senderUid = freezed,
@@ -160,10 +151,6 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? removedAt = freezed,
   }) {
     return _then(_$_MessageModel(
-      docId: freezed == docId
-          ? _value.docId
-          : docId // ignore: cast_nullable_to_non_nullable
-              as String?,
       messageId: freezed == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
@@ -204,8 +191,7 @@ class __$$_MessageModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_MessageModel implements _MessageModel {
   _$_MessageModel(
-      {this.docId,
-      this.messageId,
+      {this.messageId,
       this.chatRoomId,
       this.senderUid,
       this.receiverUid,
@@ -217,8 +203,6 @@ class _$_MessageModel implements _MessageModel {
   factory _$_MessageModel.fromJson(Map<String, dynamic> json) =>
       _$$_MessageModelFromJson(json);
 
-  @override
-  final String? docId;
   @override
   final String? messageId;
   @override
@@ -238,7 +222,7 @@ class _$_MessageModel implements _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(docId: $docId, messageId: $messageId, chatRoomId: $chatRoomId, senderUid: $senderUid, receiverUid: $receiverUid, message: $message, image: $image, createdAt: $createdAt, removedAt: $removedAt)';
+    return 'MessageModel(messageId: $messageId, chatRoomId: $chatRoomId, senderUid: $senderUid, receiverUid: $receiverUid, message: $message, image: $image, createdAt: $createdAt, removedAt: $removedAt)';
   }
 
   @override
@@ -246,7 +230,6 @@ class _$_MessageModel implements _MessageModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MessageModel &&
-            (identical(other.docId, docId) || other.docId == docId) &&
             (identical(other.messageId, messageId) ||
                 other.messageId == messageId) &&
             (identical(other.chatRoomId, chatRoomId) ||
@@ -265,8 +248,8 @@ class _$_MessageModel implements _MessageModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, docId, messageId, chatRoomId,
-      senderUid, receiverUid, message, image, createdAt, removedAt);
+  int get hashCode => Object.hash(runtimeType, messageId, chatRoomId, senderUid,
+      receiverUid, message, image, createdAt, removedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -284,8 +267,7 @@ class _$_MessageModel implements _MessageModel {
 
 abstract class _MessageModel implements MessageModel {
   factory _MessageModel(
-      {final String? docId,
-      final String? messageId,
+      {final String? messageId,
       final String? chatRoomId,
       final String? senderUid,
       final String? receiverUid,
@@ -297,8 +279,6 @@ abstract class _MessageModel implements MessageModel {
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
       _$_MessageModel.fromJson;
 
-  @override
-  String? get docId;
   @override
   String? get messageId;
   @override

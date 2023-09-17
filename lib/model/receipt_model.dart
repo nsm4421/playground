@@ -29,7 +29,6 @@ extension EnumParsing on ReceiptStatus {
 sealed class ReceiptModel with _$ReceiptModel {
   factory ReceiptModel(
       {
-        String? docId,
         String? receiptId,
         String? messageId,
         ReceiptStatus? status,

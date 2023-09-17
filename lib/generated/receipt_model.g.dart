@@ -8,7 +8,6 @@ part of '../model/receipt_model.dart';
 
 _$_ReceiptModel _$$_ReceiptModelFromJson(Map<String, dynamic> json) =>
     _$_ReceiptModel(
-      docId: json['docId'] as String?,
       receiptId: json['receiptId'] as String?,
       messageId: json['messageId'] as String?,
       status: $enumDecodeNullable(_$ReceiptStatusEnumMap, json['status']),
@@ -19,7 +18,6 @@ _$_ReceiptModel _$$_ReceiptModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_ReceiptModelToJson(_$_ReceiptModel instance) =>
     <String, dynamic>{
-      'docId': instance.docId,
       'receiptId': instance.receiptId,
       'messageId': instance.messageId,
       'status': _$ReceiptStatusEnumMap[instance.status],

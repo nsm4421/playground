@@ -17,7 +17,6 @@ part '../generated/user_model.freezed.dart';
 @freezed
 sealed class UserModel with _$UserModel {
   factory UserModel({
-    String? docId,
     String? uid,
     String? username,
     String? description,

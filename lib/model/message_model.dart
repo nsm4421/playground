@@ -19,7 +19,6 @@ part '../generated/message_model.freezed.dart';
 sealed class MessageModel with _$MessageModel {
   factory MessageModel(
       {
-        String? docId,
         String? messageId,
         String? chatRoomId,
         String? senderUid,
