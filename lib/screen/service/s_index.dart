@@ -1,8 +1,8 @@
 import 'package:chat_app/screen/auth/s_login.dart';
 import 'package:chat_app/screen/service/chat/s_chat.dart';
+import 'package:chat_app/screen/service/feed/s_feed.dart';
 import 'package:chat_app/screen/service/home/s_home.dart';
 import 'package:chat_app/screen/service/my-page/s_my_page.dart';
-import 'package:chat_app/screen/service/search/s_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -32,9 +32,9 @@ class _IndexScreenState extends State<IndexScreen> {
           ),
           NavigationDestination(
             icon: Icon(
-              Icons.search,
+              Icons.photo_album,
             ),
-            label: "Search",
+            label: "Feed",
           ),
           NavigationDestination(
             icon: Icon(
@@ -65,7 +65,7 @@ class _IndexScreenState extends State<IndexScreen> {
               index: _selectedIndex,
               children: const [
                 HomeFragment(),
-                SearchFragment(),
+                FeedScreen(),
                 ChatScreen(),
                 MyPageScreen(),
               ],
