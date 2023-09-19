@@ -1,106 +1,49 @@
+import 'package:chat_app/controller/auth_controller.dart';
 import 'package:chat_app/screen/widget/w_box.dart';
-import 'package:chat_app/utils/alert_util.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   late GlobalKey<FormState> _formKey;
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  late TextEditingController _emailTEC;
+  late TextEditingController _passwordTEC;
 
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    _emailTEC = TextEditingController();
+    _passwordTEC = TextEditingController();
   }
 
-  _handleSignUpWithGoogle() async {
-    try {
-      /// google sign in
-      final credit = await GoogleSignIn()
-          .signIn()
-          .then((googleUser) async => await googleUser?.authentication)
-          .then((auth) => GoogleAuthProvider.credential(
-              accessToken: auth?.accessToken, idToken: auth?.idToken))
-          .then((credential) async =>
-              await FirebaseAuth.instance.signInWithCredential(credential));
-
-      /// getting credit fail
-      if (credit.user == null) {
-        AlertUtils.showSnackBar(context, 'google sign in failed');
-        return;
-      }
-
-      /// success
-      if (context.mounted) context.go("/");
-    }
-
-    /// on error
-    catch (e) {
-      AlertUtils.showSnackBar(context, 'google sign in failed...');
-      return;
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    _emailTEC.dispose();
+    _passwordTEC.dispose();
   }
 
-  _handleSignUpWithEmail() => context.push("/sign_up");
+  _handleLoginWithEmailAndPassword() =>
+      ref.read(authControllerProvider).loginWithEmailAndPassword(
+            context: context,
+            formKey: _formKey,
+            emailTEC: _emailTEC,
+            passwordTEC: _passwordTEC,
+          );
 
-  _handleLogin() async {
-    try {
-      /// check input
-      if (!_formKey.currentState!.validate()) {
-        AlertUtils.showSnackBar(context, 'check input again');
-        return;
-      }
-      _formKey.currentState!.save();
+  _handleGoToSignUpPage() =>
+      ref.read(authControllerProvider).goToSignUpPage(context);
 
-      /// get user
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      if (credential.user == null) {
-        AlertUtils.showSnackBar(context, 'user not found...');
-        return;
-      }
-
-      /// go to home
-      if (context.mounted) {
-        AlertUtils.showSnackBar(context, 'login success');
-        context.go("/");
-      }
-    }
-
-    /// on error
-    on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "user-not-founded":
-          AlertUtils.showSnackBar(
-              context, '${_emailController.text}\n is not registered');
-          return;
-        case "wrong-password":
-          AlertUtils.showSnackBar(context, 'password is wrong');
-          return;
-        default:
-          AlertUtils.showSnackBar(context, 'firebase auth error...');
-          return;
-      }
-    } catch (e) {
-      AlertUtils.showSnackBar(context, 'login failed');
-      return;
-    }
-  }
+  _handleSignUpWithGoogle() =>
+      ref.read(authControllerProvider).signUpWithGoogle(context);
 
   Widget _header() {
     return Text(
@@ -119,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           /// Email
           TextFormField(
-              controller: _emailController,
+              controller: _emailTEC,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Email",
@@ -130,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           /// Password
           TextFormField(
-              controller: _passwordController,
+              controller: _passwordTEC,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Password",
@@ -146,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginBtn() => ElevatedButton(
-        onPressed: _handleLogin,
+        onPressed: _handleLoginWithEmailAndPassword,
         child: Text(
           "Login",
           style: GoogleFonts.lobsterTwo(
@@ -157,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   _signUpBtn() => InkWell(
-        onTap: _handleSignUpWithEmail,
+        onTap: _handleGoToSignUpPage,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(

@@ -1,19 +1,18 @@
+import 'package:chat_app/controller/auth_controller.dart';
 import 'package:chat_app/screen/widget/w_box.dart';
-import 'package:chat_app/utils/alert_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _emailTEC;
   late TextEditingController _passwordTEC;
@@ -35,59 +34,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordConfirmTEC.dispose();
   }
 
-  Future<void> _handleSignUp() async {
-    try {
-      if (!_formKey.currentState!.validate()) {
-        AlertUtils.showSnackBar(context, 'check input again');
-        return;
-      }
-      _formKey.currentState!.save();
-      if (_passwordTEC.text != _passwordConfirmTEC.text) {
-        AlertUtils.showSnackBar(context, 'password are not matched');
-        return;
-      }
-
-      /// sign up & save in fire store
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: _emailTEC.text.trim(),
-            password: _passwordTEC.text.trim(),
-          )
-          .then((credential) =>
-              FirebaseFirestore.instance.collection('users').add({
-                "uid": credential.user?.uid ?? '',
-                "email": credential.user?.email ?? "",
-              }));
-
-      /// on success, go to login screen
-      if (context.mounted) {
-        _showSnackBar('success');
-        context.go('/login');
-        return;
-      }
-    }
-
-    /// on error - show error message
-    on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "weak-password":
-          AlertUtils.showSnackBar(context, 'password is too weak...');
-          return;
-        case "email-already-in-use":
-          AlertUtils.showSnackBar(context, 'email is already in use...');
-          return;
-        default:
-          AlertUtils.showSnackBar(context, 'firebase auth error...');
-          return;
-      }
-    } catch (e) {
-      _showSnackBar('unknown error...');
-      return;
-    }
-  }
-
-  void _showSnackBar(String message) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(message)));
+  _signUpWithEmailAndPassword() =>
+      ref.read(authControllerProvider).signUpWithEmailAndPassword(
+            context: context,
+            formKey: _formKey,
+            emailTEC: _emailTEC,
+            passwordTEC: _passwordTEC,
+            passwordConfirmTEC: _passwordConfirmTEC,
+          );
 
   AppBar _appBar() {
     return AppBar(
@@ -176,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _signUpBtn() => ElevatedButton(
-        onPressed: _handleSignUp,
+        onPressed: _signUpWithEmailAndPassword,
         child: Text(
           "Sign Up",
           style: GoogleFonts.lobsterTwo(
