@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:chat_app/controller/feed_controller.dart';
 import 'package:chat_app/utils/alert_util.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:chat_app/model/feed_model.dart';
 import 'package:chat_app/screen/widget/w_box.dart';
@@ -12,37 +14,29 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddFeedScreen extends StatefulWidget {
+class AddFeedScreen extends ConsumerStatefulWidget {
   const AddFeedScreen({super.key});
 
   @override
-  State<AddFeedScreen> createState() => _AddFeedScreenState();
+  ConsumerState<AddFeedScreen> createState() => _AddFeedScreenState();
 }
 
-class _AddFeedScreenState extends State<AddFeedScreen> {
+class _AddFeedScreenState extends ConsumerState<AddFeedScreen> {
   late TextEditingController _contentTEC;
-  late List<TextEditingController> _hashtagTEC;
-  late FirebaseAuth _auth;
-  late FirebaseFirestore _db;
-  late FirebaseStorage _storage;
-  XFile? _xFile;
-  Uint8List? _imgData;
+  late List<TextEditingController> _hashtagTECList;
 
   @override
   void initState() {
     super.initState();
     _contentTEC = TextEditingController();
-    _hashtagTEC = [TextEditingController()];
-    _auth = FirebaseAuth.instance;
-    _db = FirebaseFirestore.instance;
-    _storage = FirebaseStorage.instance;
+    _hashtagTECList = [TextEditingController()];
   }
 
   @override
   void dispose() {
     super.dispose();
     _contentTEC.dispose();
-    for (var element in _hashtagTEC) {
+    for (var element in _hashtagTECList) {
       element.dispose();
     }
   }
@@ -50,12 +44,12 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
   /// 해시태그 추가
   /// 해시태그 개수 최대 3개, _hashtagTEC List에 TextEditingController 추가
   _handleAddHashtag() {
-    if (_hashtagTEC.length >= 3) {
+    if (_hashtagTECList.length >= 3) {
       AlertUtils.showSnackBar(context, 'Maximum of number of hashtag is 3');
       return;
     }
     setState(() {
-      _hashtagTEC.add(TextEditingController());
+      _hashtagTECList.add(TextEditingController());
     });
   }
 
@@ -63,74 +57,28 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
   /// _hashtagTEC List에 특정 index 원소 삭제
   _handleDeleteHashtag(int idx) {
     setState(() {
-      _hashtagTEC.removeAt(idx);
+      _hashtagTECList.removeAt(idx);
     });
   }
 
   /// 이미지 선택
   _handleSelectImageFromGallery() async {
-    final ImagePicker imagePicker = ImagePicker();
-    _xFile = await imagePicker.pickImage(source: ImageSource.gallery);
-    _imgData = await _xFile?.readAsBytes();
+    await ref.watch(feedControllerProvider).selectImageFromGallery();
     setState(() {});
   }
 
   /// 이미지 삭제
   _handleClearImage() {
     setState(() {
-      _xFile = null;
-      _imgData = null;
+      ref.watch(feedControllerProvider).clearImage();
     });
   }
 
-  /// 업로드
-  Future _handleUpload() async {
-    try {
-      // validate
-      if (_auth.currentUser?.uid == null) {
-        AlertUtils.showSnackBar(context, 'Need to login');
-        return;
-      }
-      if (_contentTEC.text.isEmpty || _contentTEC.text.isEmpty) {
-        AlertUtils.showSnackBar(context, 'content is missing...');
-        return;
-      }
-      // handle hashtag string
-      String hashtagString = '';
-      _hashtagTEC.map((e) => e.text.trim()).toSet().forEach((v) {
-        hashtagString = '$hashtagString#$v';
-      });
-      // save image in storage and get its download link
-      String? downloadLink;
-      if (_xFile != null && _imgData != null) {
-        final filename = ImageUtils.imageFileName(_xFile!);
-        final storageRef = _storage.ref().child(filename);
-        final compressedImage = await ImageUtils.imageCompress(img: _imgData!);
-        await storageRef.putData(compressedImage);
-        downloadLink = await storageRef.getDownloadURL();
-      }
-      // save feed in fire store
-      const uuid = Uuid();
-      FeedModel feedModel = FeedModel(
-        feedId: uuid.v1(),
-        content: _contentTEC.text.trim(),
-        uid: _auth.currentUser!.uid,
-        // TODO : username field
-        // author: ,
-        hashtags: hashtagString,
-        image: downloadLink,
-        createdAt: DateTime.now(),
+  _handleUpload() => ref.watch(feedControllerProvider).addFeed(
+        context: context,
+        contentTEC: _contentTEC,
+        hashtagTECList: _hashtagTECList,
       );
-      await _db.collection('feeds').add(feedModel.toJson());
-      if (context.mounted) {
-        AlertUtils.showSnackBar(context, 'Success');
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      AlertUtils.showSnackBar(context, 'Error occurs...');
-      return;
-    }
-  }
 
   AppBar _appBar() => AppBar(
         centerTitle: true,
@@ -205,12 +153,12 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Height(15),
               ...List.generate(
-                _hashtagTEC.length,
+                _hashtagTECList.length,
                 (idx) => TextFormField(
                   onChanged: (v) {
                     v.replaceAll("#", "");
                   },
-                  controller: _hashtagTEC[idx],
+                  controller: _hashtagTECList[idx],
                   maxLines: 1,
                   maxLength: 10,
                   decoration: InputDecoration(
@@ -228,7 +176,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       : null,
                 ),
               ),
-              if (_hashtagTEC.length < 3)
+              if (_hashtagTECList.length < 3)
                 IconButton(
                   onPressed: () {
                     _handleAddHashtag();
@@ -258,7 +206,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
           ],
         ),
         children: [
-          (_imgData == null)
+          (ref.watch(feedControllerProvider).imageData == null)
               ? GestureDetector(
                   onTap: _handleSelectImageFromGallery,
                   child: const Column(
@@ -288,7 +236,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                     children: [
                       Positioned(
                         child: Image.memory(
-                          _imgData!,
+                          ref.watch(feedControllerProvider).imageData!,
                           fit: BoxFit.cover,
                         ),
                       ),

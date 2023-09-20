@@ -25,28 +25,28 @@ class AuthRepository {
       .then((auth) => GoogleAuthProvider.credential(
           accessToken: auth?.accessToken, idToken: auth?.idToken))
       .then((credential) async =>
-          await FirebaseAuth.instance.signInWithCredential(credential));
+          await auth.signInWithCredential(credential));
 
   Future<UserCredential> signUpWithEmailAndPassword(
-      String email, String password) async =>
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          String email, String password) async =>
+      await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
   Future<UserCredential> loginWithEmailAndPassword(
           String email, String password) async =>
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
   Future<void> saveUserInDB(UserCredential credential) async {
-      if (credential.user == null) throw Exception('Credential has no info...');
-      await FirebaseFirestore.instance.collection('users').add({
-        "uid":credential.user?.uid,
-        "email":credential.user?.email
-      });
+    if (credential.user == null) throw Exception('Credential has no info...');
+    await firestore
+        .collection('users')
+        .add({"uid": credential.user?.uid, "email": credential.user?.email});
   }
 
+  User? getCurrentUser() => auth.currentUser;
 }
