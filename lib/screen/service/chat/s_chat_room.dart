@@ -1,0 +1,134 @@
+import 'package:chat_app/controller/chat_controller.dart';
+import 'package:chat_app/model/message_model.dart';
+import 'package:chat_app/repository/auth_repository.dart';
+import 'package:chat_app/screen/widget/w_message_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class ChatRoomScreen extends ConsumerStatefulWidget {
+  const ChatRoomScreen({super.key, required this.chatRoomId});
+
+  final String chatRoomId;
+
+  @override
+  ConsumerState<ChatRoomScreen> createState() => _ChatRoomScreenState();
+}
+
+class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
+  late TextEditingController _messageTEC;
+  late ScrollController _sc;
+  final List<MessageModel> _messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _messageTEC = TextEditingController();
+    _sc = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getInitMessages();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _messageTEC.dispose();
+    _sc.dispose();
+  }
+
+  _getInitMessages() async => _messages.addAll(
+        await ref.watch(chatControllerProvider).getMessages(
+              chatRoomId: widget.chatRoomId,
+              sc: _sc,
+            ),
+      );
+
+  _handleSendMessage() {
+    if (_messageTEC.text.trim().isEmpty) return;
+    ref.watch(chatControllerProvider).sendTextMessage(
+        context: context,
+        chatRoomId: widget.chatRoomId,
+        tec: _messageTEC,
+        sc: _sc);
+  }
+
+  Widget _textField() {
+    return TextField(
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          onPressed: _handleSendMessage,
+          icon: const Icon(
+            Icons.send,
+          ),
+        ),
+      ),
+      controller: _messageTEC,
+      maxLines: 1,
+    );
+  }
+
+  Widget _messageList(String myUid) => Padding(
+        padding: const EdgeInsets.all(8),
+        child: StreamBuilder<List<MessageModel>>(
+          initialData: _messages,
+          stream: ref
+              .read(chatControllerProvider)
+              .getMessageStream(widget.chatRoomId),
+          builder: (BuildContext context,
+                  AsyncSnapshot<List<MessageModel>> snapshot) =>
+              (snapshot.connectionState == ConnectionState.waiting)
+                  ? const CircularProgressIndicator()
+                  : ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) =>
+                          (snapshot.data?[index] != null
+                              ? _messageItem(
+                                  data: snapshot.data![index], myUid: myUid)
+                              : const SizedBox()),
+                    ),
+        ),
+      );
+
+  Widget _messageItem({required MessageModel data, required String myUid}) =>
+      MessageCardWidget(message: data, isMyMessage: data.senderUid == myUid);
+
+  @override
+  Widget build(BuildContext context) {
+    final myUid = ref.read(authRepositoryProvider).getCurrentUser()?.uid;
+    // TODO : 에러처리
+    if (myUid == null) return const Text("ERROR");
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        // TODO : 채팅방 이름
+        title: Text(
+          widget.chatRoomId,
+          style: GoogleFonts.lobsterTwo(
+            fontWeight: FontWeight.bold,
+            fontSize: 32,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              controller: _sc,
+              child: Column(
+                children: [
+                  _messageList(myUid),
+                ],
+              ),
+            ),
+          ),
+          _textField(),
+        ],
+      ),
+    );
+  }
+}

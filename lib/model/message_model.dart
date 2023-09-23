@@ -9,7 +9,6 @@ part '../generated/message_model.freezed.dart';
  ** messageId
  ** chatRoomId : 채팅방 id
  ** senderUid : 유저 id
- ** receiverUid : 유저명
  ** message : 메세지
  ** image : 이미지 링크
  ** createdAt : 메세지 작성시간
@@ -22,7 +21,6 @@ sealed class MessageModel with _$MessageModel {
         String? messageId,
         String? chatRoomId,
         String? senderUid,
-        String? receiverUid,
         String? message,
         String? image,
         DateTime? createdAt,

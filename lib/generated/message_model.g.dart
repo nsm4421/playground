@@ -11,7 +11,6 @@ _$_MessageModel _$$_MessageModelFromJson(Map<String, dynamic> json) =>
       messageId: json['messageId'] as String?,
       chatRoomId: json['chatRoomId'] as String?,
       senderUid: json['senderUid'] as String?,
-      receiverUid: json['receiverUid'] as String?,
       message: json['message'] as String?,
       image: json['image'] as String?,
       createdAt: json['createdAt'] == null
@@ -27,7 +26,6 @@ Map<String, dynamic> _$$_MessageModelToJson(_$_MessageModel instance) =>
       'messageId': instance.messageId,
       'chatRoomId': instance.chatRoomId,
       'senderUid': instance.senderUid,
-      'receiverUid': instance.receiverUid,
       'message': instance.message,
       'image': instance.image,
       'createdAt': instance.createdAt?.toIso8601String(),

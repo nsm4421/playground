@@ -23,7 +23,6 @@ mixin _$MessageModel {
   String? get messageId => throw _privateConstructorUsedError;
   String? get chatRoomId => throw _privateConstructorUsedError;
   String? get senderUid => throw _privateConstructorUsedError;
-  String? get receiverUid => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -45,7 +44,6 @@ abstract class $MessageModelCopyWith<$Res> {
       {String? messageId,
       String? chatRoomId,
       String? senderUid,
-      String? receiverUid,
       String? message,
       String? image,
       DateTime? createdAt,
@@ -68,7 +66,6 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? messageId = freezed,
     Object? chatRoomId = freezed,
     Object? senderUid = freezed,
-    Object? receiverUid = freezed,
     Object? message = freezed,
     Object? image = freezed,
     Object? createdAt = freezed,
@@ -86,10 +83,6 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
       senderUid: freezed == senderUid
           ? _value.senderUid
           : senderUid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      receiverUid: freezed == receiverUid
-          ? _value.receiverUid
-          : receiverUid // ignore: cast_nullable_to_non_nullable
               as String?,
       message: freezed == message
           ? _value.message
@@ -123,7 +116,6 @@ abstract class _$$_MessageModelCopyWith<$Res>
       {String? messageId,
       String? chatRoomId,
       String? senderUid,
-      String? receiverUid,
       String? message,
       String? image,
       DateTime? createdAt,
@@ -144,7 +136,6 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? messageId = freezed,
     Object? chatRoomId = freezed,
     Object? senderUid = freezed,
-    Object? receiverUid = freezed,
     Object? message = freezed,
     Object? image = freezed,
     Object? createdAt = freezed,
@@ -162,10 +153,6 @@ class __$$_MessageModelCopyWithImpl<$Res>
       senderUid: freezed == senderUid
           ? _value.senderUid
           : senderUid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      receiverUid: freezed == receiverUid
-          ? _value.receiverUid
-          : receiverUid // ignore: cast_nullable_to_non_nullable
               as String?,
       message: freezed == message
           ? _value.message
@@ -194,7 +181,6 @@ class _$_MessageModel implements _MessageModel {
       {this.messageId,
       this.chatRoomId,
       this.senderUid,
-      this.receiverUid,
       this.message,
       this.image,
       this.createdAt,
@@ -210,8 +196,6 @@ class _$_MessageModel implements _MessageModel {
   @override
   final String? senderUid;
   @override
-  final String? receiverUid;
-  @override
   final String? message;
   @override
   final String? image;
@@ -222,7 +206,7 @@ class _$_MessageModel implements _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(messageId: $messageId, chatRoomId: $chatRoomId, senderUid: $senderUid, receiverUid: $receiverUid, message: $message, image: $image, createdAt: $createdAt, removedAt: $removedAt)';
+    return 'MessageModel(messageId: $messageId, chatRoomId: $chatRoomId, senderUid: $senderUid, message: $message, image: $image, createdAt: $createdAt, removedAt: $removedAt)';
   }
 
   @override
@@ -236,8 +220,6 @@ class _$_MessageModel implements _MessageModel {
                 other.chatRoomId == chatRoomId) &&
             (identical(other.senderUid, senderUid) ||
                 other.senderUid == senderUid) &&
-            (identical(other.receiverUid, receiverUid) ||
-                other.receiverUid == receiverUid) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.createdAt, createdAt) ||
@@ -249,7 +231,7 @@ class _$_MessageModel implements _MessageModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, messageId, chatRoomId, senderUid,
-      receiverUid, message, image, createdAt, removedAt);
+      message, image, createdAt, removedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -270,7 +252,6 @@ abstract class _MessageModel implements MessageModel {
       {final String? messageId,
       final String? chatRoomId,
       final String? senderUid,
-      final String? receiverUid,
       final String? message,
       final String? image,
       final DateTime? createdAt,
@@ -285,8 +266,6 @@ abstract class _MessageModel implements MessageModel {
   String? get chatRoomId;
   @override
   String? get senderUid;
-  @override
-  String? get receiverUid;
   @override
   String? get message;
   @override
