@@ -1,6 +1,7 @@
 import 'package:chat_app/controller/chat_controller.dart';
 import 'package:chat_app/model/message_model.dart';
 import 'package:chat_app/repository/auth_repository.dart';
+import 'package:chat_app/repository/chat_repository.dart';
 import 'package:chat_app/screen/widget/w_message_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   late TextEditingController _messageTEC;
   late ScrollController _sc;
   final List<MessageModel> _messages = [];
+  String chatRoomName = '';
 
   @override
   void initState() {
@@ -26,7 +28,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     _messageTEC = TextEditingController();
     _sc = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getInitMessages();
+      _init();
     });
   }
 
@@ -37,12 +39,22 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     _sc.dispose();
   }
 
-  _getInitMessages() async => _messages.addAll(
-        await ref.watch(chatControllerProvider).getMessages(
-              chatRoomId: widget.chatRoomId,
-              sc: _sc,
-            ),
-      );
+  _init() async {
+    // 채팅방 이름 설정하기
+    chatRoomName = await ref
+            .read(chatRepositoryProvider)
+            .getChatRoomById(widget.chatRoomId)
+            .then((value) => value?.chatRoomName) ??
+        'Chat Room';
+    // 메세지 가져오기
+    _messages.addAll(
+      await ref.read(chatControllerProvider).getMessages(
+            chatRoomId: widget.chatRoomId,
+            sc: _sc,
+          ),
+    );
+    setState(() {});
+  }
 
   _handleSendMessage() {
     if (_messageTEC.text.trim().isEmpty) return;
@@ -74,7 +86,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         child: StreamBuilder<List<MessageModel>>(
           initialData: _messages,
           stream: ref
-              .read(chatControllerProvider)
+              .read(chatRepositoryProvider)
               .getMessageStream(widget.chatRoomId),
           builder: (BuildContext context,
                   AsyncSnapshot<List<MessageModel>> snapshot) =>
@@ -99,6 +111,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final myUid = ref.read(authRepositoryProvider).getCurrentUser()?.uid;
+
     // TODO : 에러처리
     if (myUid == null) return const Text("ERROR");
 
@@ -107,7 +120,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         centerTitle: true,
         // TODO : 채팅방 이름
         title: Text(
-          widget.chatRoomId,
+          chatRoomName,
           style: GoogleFonts.lobsterTwo(
             fontWeight: FontWeight.bold,
             fontSize: 32,

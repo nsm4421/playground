@@ -39,3 +39,12 @@ class DefaultDivider extends StatelessWidget {
         height: 50);
   }
 }
+
+class ExpandedSizedBox extends StatelessWidget {
+  const ExpandedSizedBox({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Expanded(child: SizedBox());
+  }
+}

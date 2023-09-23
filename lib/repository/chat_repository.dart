@@ -1,3 +1,4 @@
+import 'package:chat_app/model/chat_room_model.dart';
 import 'package:chat_app/model/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,35 @@ class ChatRepository {
     required this.storage,
   });
 
+  /// 채팅방 만들기
+  /// @param roomName 채팅방 방제
+  /// @param hashtags 해쉬태그를 #로 연결한 문자열
+  /// @return 개설한 채팅방의 id
+  Future<String?> createChatRoom(
+      {required String chatRoomName, required String hashtags}) async {
+    try {
+      final host = auth.currentUser;
+      if (host?.uid == null) throw Exception('[ERROR]AUNTHOIZED');
+      final chatRoomId = (const Uuid()).v1();
+      await firestore.collection('chats').doc(chatRoomId).set(
+            ChatRoomModel(
+              host: host?.uid,
+              chatRoomId: chatRoomId,
+              chatRoomName:chatRoomName,
+              hashtags: hashtags,
+              createdAt: DateTime.now(),
+            ).toJson(),
+          );
+      return chatRoomId;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// 텍스트 메세지 보내기
+  /// @param chatRoomId 채팅방 id
+  /// @param text 텍스트 메세지
+  /// @return 성공 여부
   Future<bool> sendTextMessage({
     required String chatRoomId,
     required String text,
@@ -49,6 +79,22 @@ class ChatRepository {
     }
   }
 
+  /// 채팅방 가져오기
+  /// @param chatRoomId
+  /// @return chatRoom(future)
+  Future<ChatRoomModel?> getChatRoomById(String chatRoomId) async =>
+      await firestore
+          .collection('chats') // Replace with your Firestore collection name
+          .where('chatRoomId', isEqualTo: chatRoomId)
+          .get()
+          .then((snapshot) => snapshot.docs.first.data())
+          .then((data) => ChatRoomModel.fromJson(data));
+
+  /// 메세지 가져오기
+  /// @param chatRoomId 채팅방 id
+  /// @param skipCount 건너 뛸 메세지 개수
+  /// @param takeCount 가져올 메세지 개수
+  /// @return 메세지 List Future
   Future<List<MessageModel>> getMessages({
     required String chatRoomId,
     int? skipCount,

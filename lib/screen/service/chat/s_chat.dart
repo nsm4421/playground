@@ -1,14 +1,26 @@
+import 'package:chat_app/screen/service/chat/f_add_chat_room.dart';
 import 'package:chat_app/screen/widget/w_box.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  _handleBottomModalSheet() => showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) => const AddChatRoomFragment(),
+      );
 
   AppBar _appBar() => AppBar(
         centerTitle: true,
         title: Text(
-          "Chat",
+          "Chats",
           style: GoogleFonts.lobster(
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -16,9 +28,10 @@ class ChatScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _handleBottomModalSheet,
             icon: const Icon(
-              Icons.more_horiz,
+              Icons.add_box_outlined,
+              size: 30,
             ),
           ),
         ],

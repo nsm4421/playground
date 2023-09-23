@@ -9,8 +9,9 @@ part of '../model/chat_room_model.dart';
 _$_ChatRoomModel _$$_ChatRoomModelFromJson(Map<String, dynamic> json) =>
     _$_ChatRoomModel(
       chatRoomId: json['chatRoomId'] as String?,
-      uidList:
-          (json['uidList'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      chatRoomName: json['chatRoomName'] as String?,
+      host: json['host'] as String?,
+      hashtags: json['hashtags'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -22,7 +23,9 @@ _$_ChatRoomModel _$$_ChatRoomModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_ChatRoomModelToJson(_$_ChatRoomModel instance) =>
     <String, dynamic>{
       'chatRoomId': instance.chatRoomId,
-      'uidList': instance.uidList,
+      'chatRoomName': instance.chatRoomName,
+      'host': instance.host,
+      'hashtags': instance.hashtags,
       'createdAt': instance.createdAt?.toIso8601String(),
       'removedAt': instance.removedAt?.toIso8601String(),
     };
