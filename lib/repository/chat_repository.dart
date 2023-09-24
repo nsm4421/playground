@@ -8,9 +8,10 @@ import 'package:uuid/uuid.dart';
 
 final chatRepositoryProvider = Provider(
   (ref) => ChatRepository(
-      auth: FirebaseAuth.instance,
-      firestore: FirebaseFirestore.instance,
-      storage: FirebaseStorage.instance),
+    auth: FirebaseAuth.instance,
+    firestore: FirebaseFirestore.instance,
+    storage: FirebaseStorage.instance,
+  ),
 );
 
 class ChatRepository {
@@ -24,20 +25,21 @@ class ChatRepository {
     required this.storage,
   });
 
-  /// 채팅방 만들기
+  /// 채팅방 생성하기
   /// @param roomName 채팅방 방제
   /// @param hashtags 해쉬태그를 #로 연결한 문자열
   /// @return 개설한 채팅방의 id
   Future<String?> createChatRoom(
       {required String chatRoomName, required List<String> hashtags}) async {
     try {
-      final host = auth.currentUser;
-      if (host?.uid == null) throw Exception('[ERROR]AUNTHOIZED');
-      final chatRoomId = (const Uuid()).v1();
+      // 권한 체크
+      final uid = auth.currentUser?.uid;
+      if (uid == null) throw Exception("NOT LOGIN");
+      final chatRoomId = const Uuid().v1();
       await firestore.collection('chats').doc(chatRoomId).set(
             ChatRoomModel(
-              host: host?.uid,
-              uidList: [host!.uid],
+              host: uid,
+              uidList: [uid],
               chatRoomId: chatRoomId,
               chatRoomName: chatRoomName,
               hashtags: hashtags,
@@ -65,6 +67,49 @@ class ChatRepository {
           .toList();
     } catch (e) {
       return [];
+    }
+  }
+
+  /// 채팅방 수정하기
+  /// @param chatRoomId 채팅방 id
+  /// @param chatRoomName 채팅방 방제
+  /// @param hashtags 해쉬태그를 #로 연결한 문자열
+  /// @return 개설한 채팅방의 id
+  Future<bool> editChatRoom(
+      {required String chatRoomId,
+      required String chatRoomName,
+      required List<String> hashtags}) async {
+    try {
+      final uid = auth.currentUser?.uid;
+      final chatRoom = await getChatRoomById(chatRoomId);
+      if ((uid != chatRoom?.host) || (uid == null)) throw Exception("ERROR");
+      if (chatRoom == null) throw Exception("NOT FETCHED");
+      await firestore.collection('chats').doc(chatRoomId).set(
+            chatRoom
+                .copyWith(chatRoomName: chatRoomName, hashtags: hashtags)
+                .toJson(),
+          );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// 채팅방 삭제하기
+  /// @param chatRoomId 채팅방 id
+  /// @return 삭제 여부
+  Future<bool> deleteChatRoom({
+    required String chatRoomId,
+  }) async {
+    try {
+      final uid = auth.currentUser?.uid;
+      final hostUid =
+          await getChatRoomById(chatRoomId).then((chatRoom) => chatRoom?.host);
+      if (uid != hostUid) throw Exception("UnAuthorized");
+      await firestore.collection('chats').doc(chatRoomId).delete();
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

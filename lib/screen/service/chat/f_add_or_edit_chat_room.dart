@@ -1,19 +1,24 @@
 import 'package:chat_app/controller/chat_controller.dart';
+import 'package:chat_app/repository/chat_repository.dart';
 import 'package:chat_app/screen/widget/w_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddChatRoomFragment extends ConsumerStatefulWidget {
-  const AddChatRoomFragment({super.key});
+/// 채팅방을 만들거나, 수정하는 UI
+class AddOrEditChatRoomFragment extends ConsumerStatefulWidget {
+  const AddOrEditChatRoomFragment(this.chatRoomId, {super.key});
+
+  final String? chatRoomId;
 
   @override
-  ConsumerState<AddChatRoomFragment> createState() =>
+  ConsumerState<AddOrEditChatRoomFragment> createState() =>
       _AddChatRoomFragmentState();
 }
 
-class _AddChatRoomFragmentState extends ConsumerState<AddChatRoomFragment> {
+class _AddChatRoomFragmentState
+    extends ConsumerState<AddOrEditChatRoomFragment> {
   late TextEditingController _chatRoomNameTEC;
   late List<TextEditingController> _hashtagTECList;
   final _formKey = GlobalKey<FormState>();
@@ -25,6 +30,9 @@ class _AddChatRoomFragmentState extends ConsumerState<AddChatRoomFragment> {
     super.initState();
     _chatRoomNameTEC = TextEditingController();
     _hashtagTECList = [];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _init();
+    });
   }
 
   @override
@@ -34,16 +42,39 @@ class _AddChatRoomFragmentState extends ConsumerState<AddChatRoomFragment> {
     _hashtagTECList.map((tec) => tec.dispose());
   }
 
-  void _handleCreateRoom() {
-    ref.read(chatControllerProvider).createChatRoom(
-          context: context,
-          formKey: _formKey,
-          chatRoomNameTEC: _chatRoomNameTEC,
-          hashtagTECList: _hashtagTECList,
-        );
+  _init() async {
+    if (widget.chatRoomId == null) return;
+    final fetched = await ref
+        .read(chatRepositoryProvider)
+        .getChatRoomById(widget.chatRoomId!);
+    _chatRoomNameTEC.text = fetched?.chatRoomName ?? "";
+    fetched?.hashtags.forEach((hashtag) {
+      final tec = TextEditingController();
+      tec.text = hashtag ?? "";
+      _hashtagTECList.add(tec);
+    });
   }
 
-  void _handleAddHashtag() {
+  _handleSubmit() async {
+    (widget.chatRoomId == null)
+        // create mode
+        ? await ref.read(chatControllerProvider).createChatRoom(
+              context: context,
+              formKey: _formKey,
+              chatRoomNameTEC: _chatRoomNameTEC,
+              hashtagTECList: _hashtagTECList,
+            )
+        // edit mode
+        : await ref.read(chatControllerProvider).editChatRoom(
+              chatRoomId: widget.chatRoomId!,
+              context: context,
+              formKey: _formKey,
+              chatRoomNameTEC: _chatRoomNameTEC,
+              hashtagTECList: _hashtagTECList,
+            );
+  }
+
+  _handleAddHashtag() {
     if (_hashtagTECList.length < _maxHashtagNum) {
       setState(() {
         _hashtagTECList.add(TextEditingController());
@@ -51,16 +82,16 @@ class _AddChatRoomFragmentState extends ConsumerState<AddChatRoomFragment> {
     }
   }
 
-  void _handleClose() => context.pop();
-
-  void _handleDeleteHashtag(int index) {
+  _handleDeleteHashtag(int index) {
     setState(() {
       _hashtagTECList.removeAt(index);
     });
   }
 
+  _handleClose() => context.pop();
+
   _addChatRoomButton(BuildContext context) => IconButton(
-      onPressed: _handleCreateRoom,
+      onPressed: _handleSubmit,
       icon: const Icon(
         Icons.create_outlined,
         size: 30,
