@@ -98,7 +98,6 @@ class AuthController {
     required TextEditingController emailTEC,
     required TextEditingController passwordTEC,
     required TextEditingController passwordConfirmTEC,
-
   }) async {
     try {
       if (!formKey.currentState!.validate()) {
@@ -111,18 +110,17 @@ class AuthController {
         return;
       }
 
-      await authRepository.signUpWithEmailAndPassword(
-          emailTEC.text, passwordTEC.text)
+      await authRepository
+          .signUpWithEmailAndPassword(emailTEC.text, passwordTEC.text)
           .then((credential) async =>
-      await authRepository.saveUserInDB(credential));
+              await authRepository.saveUserInDB(credential));
 
       if (context.mounted) {
         AlertUtils.showSnackBar(context, 'success');
         context.go('/login');
         return;
       }
-    }
-    on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "weak-password":
           AlertUtils.showSnackBar(context, 'password is too weak...');

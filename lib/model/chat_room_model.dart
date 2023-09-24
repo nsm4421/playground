@@ -1,3 +1,4 @@
+import 'package:chat_app/model/message_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '../generated/chat_room_model.g.dart';
@@ -19,7 +20,8 @@ sealed class ChatRoomModel with _$ChatRoomModel {
     String? chatRoomId,
     String? chatRoomName,
     String? host,
-    String? hashtags,
+    @Default([])List<String> uidList,
+    @Default([])List<String> hashtags,
     DateTime? createdAt,
     DateTime? removedAt,
   }) = _ChatRoomModel;

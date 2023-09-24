@@ -1,6 +1,7 @@
 import 'package:chat_app/model/message_model.dart';
 import 'package:chat_app/repository/auth_repository.dart';
 import 'package:chat_app/repository/chat_repository.dart';
+import 'package:chat_app/screen/service/chat/f_add_chat_room.dart';
 import 'package:chat_app/screen/service/chat/s_chat_room.dart';
 import 'package:chat_app/utils/alert_util.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,22 @@ class ChatController {
         curve: Curves.easeOut,
       );
 
-  void createChatRoom({
+  showAddChatRoomFragment({required BuildContext context}) =>
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) => const AddChatRoomFragment(),
+      );
+
+  goToChatRoom({required BuildContext context, required String chatRoomId}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (ctx) => ChatRoomScreen(chatRoomId: chatRoomId)),
+    );
+  }
+
+  createChatRoom({
     required BuildContext context,
     required GlobalKey<FormState> formKey,
     required TextEditingController chatRoomNameTEC,
@@ -45,16 +61,11 @@ class ChatController {
       return;
     }
     formKey.currentState!.save();
-    // 해시태그들을 #로 연결
-    String hashtags = '';
-    for (var hashtag in hashtagTECList) {
-      hashtags = '$hashtags#$hashtag';
-    }
     // 채팅방 정보 저장
     await chatRepository
         .createChatRoom(
-      chatRoomName: chatRoomNameTEC.text,
-      hashtags: hashtags,
+      chatRoomName: chatRoomNameTEC.text.trim(),
+      hashtags: hashtagTECList.map((tec) => tec.text.trim()).toList(),
     )
         .then((chatRoomId) {
       // 채팅방 만들기 실패

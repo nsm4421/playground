@@ -18,6 +18,7 @@ class _AddChatRoomFragmentState extends ConsumerState<AddChatRoomFragment> {
   late List<TextEditingController> _hashtagTECList;
   final _formKey = GlobalKey<FormState>();
   final int _maxHashtagNum = 3;
+  final int _maxHashtagLength = 8;
 
   @override
   void initState() {
@@ -153,8 +154,19 @@ class _AddChatRoomFragmentState extends ConsumerState<AddChatRoomFragment> {
           TextFormField(
             controller: _hashtagTECList[index],
             keyboardType: TextInputType.text,
-            validator: (v) =>
-                (v == null || v.isEmpty) ? "Press Hashtag," : null,
+            maxLength: 8,
+            validator: (v) {
+              if (v == null || v.isEmpty) {
+                return "press hashtag";
+              }
+              if (v.length > _maxHashtagLength) {
+                return "max length of hashtag is $_maxHashtagLength";
+              }
+              if (v.contains("#")) {
+                return "remove # in hashtag";
+              }
+              return null;
+            },
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 onPressed: () {

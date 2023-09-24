@@ -29,7 +29,7 @@ class ChatRepository {
   /// @param hashtags 해쉬태그를 #로 연결한 문자열
   /// @return 개설한 채팅방의 id
   Future<String?> createChatRoom(
-      {required String chatRoomName, required String hashtags}) async {
+      {required String chatRoomName, required List<String> hashtags}) async {
     try {
       final host = auth.currentUser;
       if (host?.uid == null) throw Exception('[ERROR]AUNTHOIZED');
@@ -37,8 +37,9 @@ class ChatRepository {
       await firestore.collection('chats').doc(chatRoomId).set(
             ChatRoomModel(
               host: host?.uid,
+              uidList: [host!.uid],
               chatRoomId: chatRoomId,
-              chatRoomName:chatRoomName,
+              chatRoomName: chatRoomName,
               hashtags: hashtags,
               createdAt: DateTime.now(),
             ).toJson(),
@@ -46,6 +47,24 @@ class ChatRepository {
       return chatRoomId;
     } catch (e) {
       return null;
+    }
+  }
+
+  /// 채팅방 목록 가져오기
+  /// @param skipCount skip 개수
+  /// @param takeCount 가져올 방 개수
+  /// @return 채팅방 목록
+  Future<List<ChatRoomModel>> getChatRoomList({
+    int? skipCount,
+    int? takeCount,
+  }) async {
+    try {
+      return (await firestore.collection('chats').get().then((snapshot) =>
+              snapshot.docs.skip(skipCount ?? 0).take(takeCount ?? 100)))
+          .map((doc) => ChatRoomModel.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      return [];
     }
   }
 
@@ -111,6 +130,18 @@ class ChatRepository {
                   : snapshot.docs.skip(skipCount ?? 0).take(takeCount)))
           .map((e) => MessageModel.fromJson(e.data()))
           .toList();
+
+  Stream<List<ChatRoomModel>> getChatRoomStream() => firestore
+          .collection('chats')
+          .orderBy('createdAt')
+          .snapshots()
+          .asyncMap((e) async {
+        List<ChatRoomModel> chatRooms = [];
+        for (var doc in e.docs) {
+          chatRooms.add(ChatRoomModel.fromJson(doc.data()));
+        }
+        return chatRooms;
+      });
 
   Stream<List<MessageModel>> getMessageStream(String chatRoomId) => firestore
           .collection('chats')
