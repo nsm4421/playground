@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../generated/receipt_model.g.dart';
+part 'generated/receipt_model.g.dart';
 
-part '../generated/receipt_model.freezed.dart';
+part 'generated/receipt_model.freezed.dart';
 
 
 enum ReceiptStatus { sent, delivered, read }

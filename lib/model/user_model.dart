@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../generated/user_model.g.dart';
+part 'generated/user_model.g.dart';
 
-part '../generated/user_model.freezed.dart';
+part 'generated/user_model.freezed.dart';
 
 /**
  * 사용자
@@ -19,6 +19,7 @@ sealed class UserModel with _$UserModel {
   factory UserModel({
     String? uid,
     String? username,
+    String? email,
     String? description,
     String? profileUrl,
     DateTime? createdAt,

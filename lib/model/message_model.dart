@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../generated/message_model.g.dart';
+part 'generated/message_model.g.dart';
 
-part '../generated/message_model.freezed.dart';
+part 'generated/message_model.freezed.dart';
 
 /**
  * 메세지

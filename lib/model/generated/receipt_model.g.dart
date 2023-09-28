@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../model/receipt_model.dart';
+part of '../receipt_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

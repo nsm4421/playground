@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of '../model/feed_model.dart';
+part of '../feed_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -22,9 +22,8 @@ FeedModel _$FeedModelFromJson(Map<String, dynamic> json) {
 mixin _$FeedModel {
   String? get feedId => throw _privateConstructorUsedError;
   String? get uid => throw _privateConstructorUsedError;
-  String? get author => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
-  String? get hashtags => throw _privateConstructorUsedError;
+  List<String> get hashtags => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get modifiedAt => throw _privateConstructorUsedError;
@@ -44,9 +43,8 @@ abstract class $FeedModelCopyWith<$Res> {
   $Res call(
       {String? feedId,
       String? uid,
-      String? author,
       String? content,
-      String? hashtags,
+      List<String> hashtags,
       String? image,
       DateTime? createdAt,
       DateTime? modifiedAt,
@@ -68,9 +66,8 @@ class _$FeedModelCopyWithImpl<$Res, $Val extends FeedModel>
   $Res call({
     Object? feedId = freezed,
     Object? uid = freezed,
-    Object? author = freezed,
     Object? content = freezed,
-    Object? hashtags = freezed,
+    Object? hashtags = null,
     Object? image = freezed,
     Object? createdAt = freezed,
     Object? modifiedAt = freezed,
@@ -85,18 +82,14 @@ class _$FeedModelCopyWithImpl<$Res, $Val extends FeedModel>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String?,
-      author: freezed == author
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
-              as String?,
       content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      hashtags: freezed == hashtags
+      hashtags: null == hashtags
           ? _value.hashtags
           : hashtags // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -127,9 +120,8 @@ abstract class _$$_FeedModelCopyWith<$Res> implements $FeedModelCopyWith<$Res> {
   $Res call(
       {String? feedId,
       String? uid,
-      String? author,
       String? content,
-      String? hashtags,
+      List<String> hashtags,
       String? image,
       DateTime? createdAt,
       DateTime? modifiedAt,
@@ -149,9 +141,8 @@ class __$$_FeedModelCopyWithImpl<$Res>
   $Res call({
     Object? feedId = freezed,
     Object? uid = freezed,
-    Object? author = freezed,
     Object? content = freezed,
-    Object? hashtags = freezed,
+    Object? hashtags = null,
     Object? image = freezed,
     Object? createdAt = freezed,
     Object? modifiedAt = freezed,
@@ -166,18 +157,14 @@ class __$$_FeedModelCopyWithImpl<$Res>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String?,
-      author: freezed == author
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
-              as String?,
       content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      hashtags: freezed == hashtags
-          ? _value.hashtags
+      hashtags: null == hashtags
+          ? _value._hashtags
           : hashtags // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -204,13 +191,13 @@ class _$_FeedModel implements _FeedModel {
   _$_FeedModel(
       {this.feedId,
       this.uid,
-      this.author,
       this.content,
-      this.hashtags,
+      final List<String> hashtags = const [],
       this.image,
       this.createdAt,
       this.modifiedAt,
-      this.removedAt});
+      this.removedAt})
+      : _hashtags = hashtags;
 
   factory _$_FeedModel.fromJson(Map<String, dynamic> json) =>
       _$$_FeedModelFromJson(json);
@@ -220,11 +207,16 @@ class _$_FeedModel implements _FeedModel {
   @override
   final String? uid;
   @override
-  final String? author;
-  @override
   final String? content;
+  final List<String> _hashtags;
   @override
-  final String? hashtags;
+  @JsonKey()
+  List<String> get hashtags {
+    if (_hashtags is EqualUnmodifiableListView) return _hashtags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_hashtags);
+  }
+
   @override
   final String? image;
   @override
@@ -236,7 +228,7 @@ class _$_FeedModel implements _FeedModel {
 
   @override
   String toString() {
-    return 'FeedModel(feedId: $feedId, uid: $uid, author: $author, content: $content, hashtags: $hashtags, image: $image, createdAt: $createdAt, modifiedAt: $modifiedAt, removedAt: $removedAt)';
+    return 'FeedModel(feedId: $feedId, uid: $uid, content: $content, hashtags: $hashtags, image: $image, createdAt: $createdAt, modifiedAt: $modifiedAt, removedAt: $removedAt)';
   }
 
   @override
@@ -246,10 +238,8 @@ class _$_FeedModel implements _FeedModel {
             other is _$_FeedModel &&
             (identical(other.feedId, feedId) || other.feedId == feedId) &&
             (identical(other.uid, uid) || other.uid == uid) &&
-            (identical(other.author, author) || other.author == author) &&
             (identical(other.content, content) || other.content == content) &&
-            (identical(other.hashtags, hashtags) ||
-                other.hashtags == hashtags) &&
+            const DeepCollectionEquality().equals(other._hashtags, _hashtags) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -261,8 +251,16 @@ class _$_FeedModel implements _FeedModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, feedId, uid, author, content,
-      hashtags, image, createdAt, modifiedAt, removedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      feedId,
+      uid,
+      content,
+      const DeepCollectionEquality().hash(_hashtags),
+      image,
+      createdAt,
+      modifiedAt,
+      removedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -282,9 +280,8 @@ abstract class _FeedModel implements FeedModel {
   factory _FeedModel(
       {final String? feedId,
       final String? uid,
-      final String? author,
       final String? content,
-      final String? hashtags,
+      final List<String> hashtags,
       final String? image,
       final DateTime? createdAt,
       final DateTime? modifiedAt,
@@ -298,11 +295,9 @@ abstract class _FeedModel implements FeedModel {
   @override
   String? get uid;
   @override
-  String? get author;
-  @override
   String? get content;
   @override
-  String? get hashtags;
+  List<String> get hashtags;
   @override
   String? get image;
   @override

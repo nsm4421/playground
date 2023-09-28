@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of '../model/user_model.dart';
+part of '../user_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -22,6 +22,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String? get uid => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get profileUrl => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $UserModelCopyWith<$Res> {
   $Res call(
       {String? uid,
       String? username,
+      String? email,
       String? description,
       String? profileUrl,
       DateTime? createdAt,
@@ -64,6 +66,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   $Res call({
     Object? uid = freezed,
     Object? username = freezed,
+    Object? email = freezed,
     Object? description = freezed,
     Object? profileUrl = freezed,
     Object? createdAt = freezed,
@@ -78,6 +81,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       username: freezed == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String?,
       description: freezed == description
           ? _value.description
@@ -113,6 +120,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
   $Res call(
       {String? uid,
       String? username,
+      String? email,
       String? description,
       String? profileUrl,
       DateTime? createdAt,
@@ -133,6 +141,7 @@ class __$$_UserModelCopyWithImpl<$Res>
   $Res call({
     Object? uid = freezed,
     Object? username = freezed,
+    Object? email = freezed,
     Object? description = freezed,
     Object? profileUrl = freezed,
     Object? createdAt = freezed,
@@ -147,6 +156,10 @@ class __$$_UserModelCopyWithImpl<$Res>
       username: freezed == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String?,
       description: freezed == description
           ? _value.description
@@ -178,6 +191,7 @@ class _$_UserModel implements _UserModel {
   _$_UserModel(
       {this.uid,
       this.username,
+      this.email,
       this.description,
       this.profileUrl,
       this.createdAt,
@@ -192,6 +206,8 @@ class _$_UserModel implements _UserModel {
   @override
   final String? username;
   @override
+  final String? email;
+  @override
   final String? description;
   @override
   final String? profileUrl;
@@ -204,7 +220,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, username: $username, description: $description, profileUrl: $profileUrl, createdAt: $createdAt, lastSeen: $lastSeen, removedAt: $removedAt)';
+    return 'UserModel(uid: $uid, username: $username, email: $email, description: $description, profileUrl: $profileUrl, createdAt: $createdAt, lastSeen: $lastSeen, removedAt: $removedAt)';
   }
 
   @override
@@ -215,6 +231,7 @@ class _$_UserModel implements _UserModel {
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.username, username) ||
                 other.username == username) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.profileUrl, profileUrl) ||
@@ -229,8 +246,8 @@ class _$_UserModel implements _UserModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, username, description,
-      profileUrl, createdAt, lastSeen, removedAt);
+  int get hashCode => Object.hash(runtimeType, uid, username, email,
+      description, profileUrl, createdAt, lastSeen, removedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -250,6 +267,7 @@ abstract class _UserModel implements UserModel {
   factory _UserModel(
       {final String? uid,
       final String? username,
+      final String? email,
       final String? description,
       final String? profileUrl,
       final DateTime? createdAt,
@@ -263,6 +281,8 @@ abstract class _UserModel implements UserModel {
   String? get uid;
   @override
   String? get username;
+  @override
+  String? get email;
   @override
   String? get description;
   @override
