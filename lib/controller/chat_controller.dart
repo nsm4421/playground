@@ -19,15 +19,17 @@ final chatControllerProvider = Provider((ref) {
 });
 
 class ChatController {
-  final AuthRepository authRepository;
-  final ChatRepository chatRepository;
-  final ProviderRef ref;
+  final AuthRepository _authRepository;
+  final ChatRepository _chatRepository;
+  final ProviderRef _ref;
 
   ChatController({
-    required this.authRepository,
-    required this.chatRepository,
-    required this.ref,
-  });
+    required AuthRepository authRepository,
+    required ChatRepository chatRepository,
+    required ProviderRef<dynamic> ref,
+  })  : _authRepository = authRepository,
+        _chatRepository = chatRepository,
+        _ref = ref;
 
   /// 맨 아래로 스크롤 하기
   _scrollToBottom(ScrollController sc) => sc.animateTo(
@@ -49,7 +51,7 @@ class ChatController {
   /// 채팅방 입장하기
   goToChatRoom(
           {required BuildContext context, required String chatRoomId}) async =>
-      await chatRepository.getChatRoomById(chatRoomId).then((fetched) {
+      await _chatRepository.getChatRoomById(chatRoomId).then((fetched) {
         // 채팅방이 존재하지 않는 경우
         if (fetched == null) {
           AlertUtils.showSnackBar(context, 'Chat Room Not Exist...');
@@ -79,7 +81,7 @@ class ChatController {
     }
     formKey.currentState!.save();
     // 채팅방 정보 저장
-    await chatRepository
+    await _chatRepository
         .createChatRoom(
       chatRoomName: chatRoomNameTEC.text.trim(),
       hashtags: hashtagTECList.map((tec) => tec.text.trim()).toList(),
@@ -114,7 +116,7 @@ class ChatController {
     // 채팅방 정보 저장
     final chatRoomName = chatRoomNameTEC.text.trim();
     final hashtags = hashtagTECList.map((tec) => tec.text.trim()).toList();
-    await chatRepository
+    await _chatRepository
         .editChatRoom(
       chatRoomId: chatRoomId,
       chatRoomName: chatRoomName,
@@ -131,21 +133,7 @@ class ChatController {
     });
   }
 
-  /// 채팅방 삭제하기
-  deleteChatRoom({
-    required BuildContext context,
-    required String chatRoomId,
-  }) async =>
-      await chatRepository
-          .deleteChatRoom(chatRoomId: chatRoomId)
-          .then((isSuccess) {
-        if (isSuccess) {
-          context.pop();
-          return;
-        }
-        AlertUtils.showSnackBar(context, 'Fail to delete chat room');
-        return;
-      });
+
 
   /// 텍스트 메시지 보내기
   Future<void> sendTextMessage(
@@ -154,7 +142,7 @@ class ChatController {
           required TextEditingController tec,
           required ScrollController sc}) async =>
       // save data in server
-      await chatRepository
+      await _chatRepository
           .sendTextMessage(
         chatRoomId: chatRoomId,
         text: tec.text,
@@ -169,7 +157,7 @@ class ChatController {
   /// 특정 채팅방에서 메세지 조회하기
   Future<List<MessageModel>> getMessages(
           {required String chatRoomId, ScrollController? sc}) async =>
-      await chatRepository.getMessages(chatRoomId: chatRoomId).then((data) {
+      await _chatRepository.getMessages(chatRoomId: chatRoomId).then((data) {
         if (sc != null) _scrollToBottom(sc);
         return data;
       });

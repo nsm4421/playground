@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
@@ -49,13 +50,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: "Chat App",
-        themeMode: ThemeMode.system,
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-            useMaterial3: true),
-        darkTheme: ThemeData.dark(),
-        routerConfig: _routerConfig);
+      debugShowCheckedModeBanner: false,
+      title: "Chat App",
+      themeMode: ThemeMode.system,
+      // light theme
+      theme: ThemeData(
+          primarySwatch: Colors.yellow,
+          brightness: Brightness.light,
+          appBarTheme: AppBarTheme(
+              titleTextStyle: GoogleFonts.lobsterTwo(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 32,
+          )),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(),
+          elevatedButtonTheme:
+              ElevatedButtonThemeData(style: ElevatedButton.styleFrom()),
+          useMaterial3: true),
+      // dark theme
+      darkTheme: ThemeData(
+          primarySwatch: Colors.yellow,
+          brightness: Brightness.dark,
+          appBarTheme: AppBarTheme(
+            titleTextStyle: GoogleFonts.lobsterTwo(
+              fontWeight: FontWeight.bold,
+              color: Colors.white70,
+              fontSize: 32,
+            ),
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(),
+          elevatedButtonTheme:
+              ElevatedButtonThemeData(style: ElevatedButton.styleFrom()),
+          useMaterial3: true),
+      routerConfig: _routerConfig,
+    );
   }
 }

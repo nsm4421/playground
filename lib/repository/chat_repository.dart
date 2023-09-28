@@ -15,15 +15,17 @@ final chatRepositoryProvider = Provider(
 );
 
 class ChatRepository {
-  final FirebaseFirestore firestore;
-  final FirebaseAuth auth;
-  final FirebaseStorage storage;
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
 
   ChatRepository({
-    required this.firestore,
-    required this.auth,
-    required this.storage,
-  });
+    required FirebaseFirestore firestore,
+    required FirebaseAuth auth,
+    required FirebaseStorage storage,
+  })  : _auth = auth,
+        _firestore = firestore,
+        _storage = storage;
 
   /// 채팅방 생성하기
   /// @param roomName 채팅방 방제
@@ -33,10 +35,10 @@ class ChatRepository {
       {required String chatRoomName, required List<String> hashtags}) async {
     try {
       // 권한 체크
-      final uid = auth.currentUser?.uid;
+      final uid = _auth.currentUser?.uid;
       if (uid == null) throw Exception("NOT LOGIN");
       final chatRoomId = const Uuid().v1();
-      await firestore.collection('chats').doc(chatRoomId).set(
+      await _firestore.collection('chats').doc(chatRoomId).set(
             ChatRoomModel(
               host: uid,
               uidList: [uid],
@@ -61,7 +63,7 @@ class ChatRepository {
     int? takeCount,
   }) async {
     try {
-      return (await firestore.collection('chats').get().then((snapshot) =>
+      return (await _firestore.collection('chats').get().then((snapshot) =>
               snapshot.docs.skip(skipCount ?? 0).take(takeCount ?? 100)))
           .map((doc) => ChatRoomModel.fromJson(doc.data()))
           .toList();
@@ -80,11 +82,11 @@ class ChatRepository {
       required String chatRoomName,
       required List<String> hashtags}) async {
     try {
-      final uid = auth.currentUser?.uid;
+      final uid = _auth.currentUser?.uid;
       final chatRoom = await getChatRoomById(chatRoomId);
       if ((uid != chatRoom?.host) || (uid == null)) throw Exception("ERROR");
       if (chatRoom == null) throw Exception("NOT FETCHED");
-      await firestore.collection('chats').doc(chatRoomId).set(
+      await _firestore.collection('chats').doc(chatRoomId).set(
             chatRoom
                 .copyWith(chatRoomName: chatRoomName, hashtags: hashtags)
                 .toJson(),
@@ -102,11 +104,11 @@ class ChatRepository {
     required String chatRoomId,
   }) async {
     try {
-      final uid = auth.currentUser?.uid;
+      final uid = _auth.currentUser?.uid;
       final hostUid =
           await getChatRoomById(chatRoomId).then((chatRoom) => chatRoom?.host);
       if (uid != hostUid) throw Exception("UnAuthorized");
-      await firestore.collection('chats').doc(chatRoomId).delete();
+      await _firestore.collection('chats').doc(chatRoomId).delete();
       return true;
     } catch (e) {
       return false;
@@ -122,10 +124,10 @@ class ChatRepository {
     required String text,
   }) async {
     try {
-      final sender = auth.currentUser;
+      final sender = _auth.currentUser;
       final messageId = (const Uuid()).v1();
       if (sender?.uid == null) throw Exception('[ERROR]AUNTHOIZED');
-      await firestore
+      await _firestore
           .collection('chats')
           .doc(chatRoomId)
           .collection('messages')
@@ -147,7 +149,7 @@ class ChatRepository {
   /// @param chatRoomId
   /// @return chatRoom(future)
   Future<ChatRoomModel?> getChatRoomById(String chatRoomId) async =>
-      await firestore
+      await _firestore
           .collection('chats') // Replace with your Firestore collection name
           .where('chatRoomId', isEqualTo: chatRoomId)
           .get()
@@ -164,7 +166,7 @@ class ChatRepository {
     int? skipCount,
     int? takeCount,
   }) async =>
-      (await firestore
+      (await _firestore
               .collection('chats')
               .doc(chatRoomId)
               .collection('messages')
@@ -176,7 +178,7 @@ class ChatRepository {
           .map((e) => MessageModel.fromJson(e.data()))
           .toList();
 
-  Stream<List<ChatRoomModel>> getChatRoomStream() => firestore
+  Stream<List<ChatRoomModel>> getChatRoomStream() => _firestore
           .collection('chats')
           .orderBy('createdAt')
           .snapshots()
@@ -188,7 +190,7 @@ class ChatRepository {
         return chatRooms;
       });
 
-  Stream<List<MessageModel>> getMessageStream(String chatRoomId) => firestore
+  Stream<List<MessageModel>> getMessageStream(String chatRoomId) => _firestore
           .collection('chats')
           .doc(chatRoomId)
           .collection('messages')
