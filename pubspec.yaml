@@ -10,6 +10,7 @@ dependencies:
   dart_code_metrics: ^5.7.6
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.7
   go_router: ^11.1.2
 
 dev_dependencies:
@@ -19,6 +20,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/image
-    - assets/lottie
-    - assets/svg
+    - assets/image/
+    - assets/lottie/
+    - assets/svg/
