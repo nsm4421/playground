@@ -1,0 +1,12 @@
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          build_extensions:
+            '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
+            '^lib/data/data_source/remote/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
+      freezed:
+        options:
+          build_extensions:
+            '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
