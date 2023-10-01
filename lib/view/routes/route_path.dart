@@ -9,4 +9,5 @@ class RouteItem {
 class RoutePath {
   static final RouteItem splash = RouteItem(path: '/splash', name: 'splash');
   static final RouteItem home = RouteItem(path: '/home', name: 'home');
+  static final RouteItem main = RouteItem(path: '/main', name: 'main');
 }

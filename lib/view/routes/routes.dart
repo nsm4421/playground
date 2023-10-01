@@ -1,3 +1,4 @@
+import '../main/main_screen.dart';
 import '../pages/splash/splash_page.dart';
 import '../pages/home/home_page.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,12 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) =>
           const SplashPage(),
     ),
-    // home page
+    // main page
+    GoRoute(
+      path: RoutePath.main.path,
+      name: RoutePath.main.name,
+      builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+    ),    // home page
     GoRoute(
       path: RoutePath.home.path,
       name: RoutePath.home.name,
