@@ -1,21 +1,24 @@
+import 'components/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../common/theme/constant/icon_paths.dart';
 import '../pages/category/category_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/search/search_page.dart';
 import '../pages/user/user_page.dart';
+import 'components/top_app_bar_widget.dart';
 import 'cubit/bottom_nav_cubit.dart';
+import 'cubit/top_app_bar_cubit.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-        create: (_) => BottomNavCubit(),
-        child: const MainScreenView(),
+  Widget build(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => TopAppBarCubit()),
+          BlocProvider(create: (_) => BottomNavCubit()),
+        ],
+        child: MainScreenView(),
       );
 }
 
@@ -25,10 +28,7 @@ class MainScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Main Page"),
-        centerTitle: true,
-      ),
+      appBar: TopAppBarWidget(),
       body: BlocBuilder<BottomNavCubit, BottomNavState>(
         builder: (BuildContext context, BottomNavState state) {
           switch (state) {
@@ -43,27 +43,7 @@ class MainScreenView extends StatelessWidget {
           }
         },
       ),
-      bottomNavigationBar: BlocBuilder<BottomNavCubit, BottomNavState>(
-        builder: (BuildContext context, BottomNavState state) =>
-            BottomNavigationBar(
-          items: List.generate(
-            BottomNavState.values.length,
-            (idx) => BottomNavState.values[idx],
-          )
-              .map((state) => BottomNavigationBarItem(
-                    icon: state.icon,
-                    label: state.label,
-                    activeIcon: state.activeIcon,
-                    tooltip: state.label,
-                  ))
-              .toList(),
-          onTap: (index) => context.read<BottomNavCubit>().handleIndex(index),
-          currentIndex: state.index,
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-        ),
-      ),
+      bottomNavigationBar: BottomNavWidget(),
     );
   }
 }
