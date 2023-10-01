@@ -1,5 +1,7 @@
-import 'package:commerce_app/view/routes/routes.dart';
+import 'view/routes/routes.dart';
 import 'package:flutter/material.dart';
+
+import 'common/theme/custom/custom_theme_data.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,5 +13,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp.router(
         routerConfig: router,
+        theme: CustomThemeData.themeData,
       );
 }
