@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: duration), () => context.go(RoutePath.home.path));
+    Timer(Duration(seconds: duration), () => context.go(RoutePath.main.path));
   }
 
   @override
