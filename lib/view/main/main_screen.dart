@@ -1,3 +1,4 @@
+import '../../common/utils/common.dart';
 import 'components/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,16 +30,16 @@ class MainScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopAppBarWidget(),
-      body: BlocBuilder<BottomNavCubit, BottomNavState>(
-        builder: (BuildContext context, BottomNavState state) {
+      body: BlocBuilder<BottomNavCubit, BottomNav>(
+        builder: (BuildContext context, BottomNav state) {
           switch (state) {
-            case BottomNavState.home:
+            case BottomNav.home:
               return const HomePage();
-            case BottomNavState.category:
+            case BottomNav.category:
               return const CategoryPage();
-            case BottomNavState.search:
+            case BottomNav.search:
               return const SearchPage();
-            case BottomNavState.user:
+            case BottomNav.user:
               return const UserPage();
           }
         },

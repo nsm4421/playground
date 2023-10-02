@@ -1,6 +1,6 @@
+import '../../common/utils/common.dart';
 import '../../domain/model/menu_model.dart';
 import '../../domain/repository/display_repository.dart';
-import '../../view/main/cubit/top_app_bar_cubit.dart';
 import '../data_source/remote/display_api.dart';
 import '../mapper/common_mapper.dart';
 import '../mapper/display_mapper.dart';
@@ -13,7 +13,7 @@ class DisplayRepositoryImpl implements DisplayRepository {
 
   @override
   Future<ResponseWrapper<List<MenuModel>>> getMenusByMallType({
-    required MallTypeState mallType,
+    required MallType mallType,
   }) async {
     final response = await _displayApi.getMenusByMallType(mallType.name);
     final data = response.data?.map((dto) => dto.toModel()).toList() ?? [];

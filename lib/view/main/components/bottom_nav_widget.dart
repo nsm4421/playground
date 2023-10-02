@@ -1,3 +1,4 @@
+import '../../../common/utils/common.dart';
 import '../cubit/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +8,12 @@ class BottomNavWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavCubit, BottomNavState>(
-      builder: (BuildContext context, BottomNavState state) =>
+    return BlocBuilder<BottomNavCubit, BottomNav>(
+      builder: (BuildContext context, BottomNav state) =>
           BottomNavigationBar(
         items: List.generate(
-          BottomNavState.values.length,
-          (idx) => BottomNavState.values[idx],
+          BottomNav.values.length,
+          (idx) => BottomNav.values[idx],
         )
             .map((state) => BottomNavigationBarItem(
                   icon: state.icon,

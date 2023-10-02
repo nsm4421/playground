@@ -1,3 +1,4 @@
+import '../../../common/utils/common.dart';
 import '../../../common/widget/size_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,9 +31,8 @@ class HomeAppBarWidget extends StatelessWidget {
       (int index) => context.read<MallTypeCubit>().handleIndex(index);
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<MallTypeCubit, MallTypeState>(
-        builder: (BuildContext _, MallTypeState state) {
+  Widget build(BuildContext context) => BlocBuilder<MallTypeCubit, MallType>(
+        builder: (BuildContext _, MallType state) {
           final borderRadius = const BorderRadius.all(
             Radius.circular(_borderRadius),
           );
@@ -75,31 +75,38 @@ class HomeAppBarWidget extends StatelessWidget {
             title: AnimatedContainer(
               decoration: BoxDecoration(borderRadius: borderRadius),
               child: DefaultTabController(
-                length: MallTypeState.values.length,
+                length: MallType.values.length,
                 initialIndex: state.index,
                 child: SizedBox(
                   height: _tabBarHeight,
                   child: TabBar(
-                      tabs: List.generate(MallTypeState.values.length,
-                              (index) => MallTypeState.values[index].mallName)
-                          .map((name) => Tab(
+                    tabs: List.generate(
+                      MallType.values.length,
+                      (index) => MallType.values[index].mallName,
+                    )
+                        .map((name) => Tab(
                               child: SizedBox(
-                                  width: _tabBarWidth,
-                                  child: Center(child: Text(name)))))
-                          .toList(),
-                      isScrollable: true,
-                      indicator: BoxDecoration(
-                          color: indicatorColor, borderRadius: borderRadius),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      dividerColor: Colors.transparent,
-                      labelColor: labelColor,
-                      labelStyle: labelStyle,
-                      labelPadding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                      unselectedLabelColor: unSelectedLabelColor,
-                      unselectedLabelStyle: unSelectedLabelStyle,
-                      onTap: _handleMallType(context),
-                      splashBorderRadius: borderRadius),
+                                width: _tabBarWidth,
+                                child: Center(child: Text(name)),
+                              ),
+                            ))
+                        .toList(),
+                    isScrollable: true,
+                    indicator: BoxDecoration(
+                      color: indicatorColor,
+                      borderRadius: borderRadius,
+                    ),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    dividerColor: Colors.transparent,
+                    labelColor: labelColor,
+                    labelStyle: labelStyle,
+                    labelPadding:
+                        EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                    unselectedLabelColor: unSelectedLabelColor,
+                    unselectedLabelStyle: unSelectedLabelStyle,
+                    onTap: _handleMallType(context),
+                    splashBorderRadius: borderRadius,
+                  ),
                 ),
                 animationDuration: Duration(milliseconds: _durationMilSec),
               ),
