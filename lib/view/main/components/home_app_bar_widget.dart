@@ -27,12 +27,12 @@ class HomeAppBarWidget extends StatelessWidget {
   }
 
   _handleMallType(BuildContext context) =>
-      (int index) => context.read<TopAppBarCubit>().handleIndex(index);
+      (int index) => context.read<MallTypeCubit>().handleIndex(index);
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<TopAppBarCubit, TopAppBarState>(
-        builder: (BuildContext _, TopAppBarState state) {
+      BlocBuilder<MallTypeCubit, MallTypeState>(
+        builder: (BuildContext _, MallTypeState state) {
           final borderRadius = const BorderRadius.all(
             Radius.circular(_borderRadius),
           );
@@ -75,13 +75,13 @@ class HomeAppBarWidget extends StatelessWidget {
             title: AnimatedContainer(
               decoration: BoxDecoration(borderRadius: borderRadius),
               child: DefaultTabController(
-                length: TopAppBarState.values.length,
+                length: MallTypeState.values.length,
                 initialIndex: state.index,
                 child: SizedBox(
                   height: _tabBarHeight,
                   child: TabBar(
-                      tabs: List.generate(TopAppBarState.values.length,
-                              (index) => TopAppBarState.values[index].mallName)
+                      tabs: List.generate(MallTypeState.values.length,
+                              (index) => MallTypeState.values[index].mallName)
                           .map((name) => Tab(
                               child: SizedBox(
                                   width: _tabBarWidth,

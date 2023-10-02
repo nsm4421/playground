@@ -7,10 +7,10 @@ targets:
             '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
             '^lib/data/mapper/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
             '^lib/data/data_source/remote/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
-            '^lib/domain/entity/{{}}.dart': 'lib/domain/generated/{{}}.g.dart'
+            '^lib/domain/model/{{}}.dart': 'lib/domain/generated/{{}}.g.dart'
       freezed:
         options:
           build_extensions:
             '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
             '^lib/data/mapper/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
-            '^lib/domain/entity/{{}}.dart': 'lib/domain/generated/{{}}.freezed.dart'
+            '^lib/domain/model/{{}}.dart': 'lib/domain/generated/{{}}.freezed.dart'

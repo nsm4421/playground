@@ -15,7 +15,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => TopAppBarCubit()),
+          BlocProvider(create: (_) => MallTypeCubit()),
           BlocProvider(create: (_) => BottomNavCubit()),
         ],
         child: MainScreenView(),

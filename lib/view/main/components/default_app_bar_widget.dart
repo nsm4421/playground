@@ -11,8 +11,8 @@ class DefaultAppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<TopAppBarCubit, TopAppBarState>(
-        builder: (BuildContext _, TopAppBarState state) => Container(
+      BlocBuilder<MallTypeCubit, MallTypeState>(
+        builder: (BuildContext _, MallTypeState state) => Container(
           child: AppBar(
             title: Text(
               label,
