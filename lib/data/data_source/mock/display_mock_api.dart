@@ -9,15 +9,23 @@ class DisplayMockApi implements DisplayApi {
   @override
   Future<ResponseWrapper<List<MenuDto>>> getMenusByMallType(String mallType) =>
       Future(
-        () => ResponseWrapper(
+        () => ResponseWrapper<List<MenuDto>>(
           status: 'SUCCESS',
           code: '200',
           message: 'MALL_TYPE:$mallType',
-          data: jsonDecode((mallType.toUpperCase() == "MARKET")
-                  ? DisplayMockData.menusByMarket
-                  : DisplayMockData.menusByBeauty)
-              .map(MenuDto.fromJson)
-              .toList(),
+          data: _parseMenus(
+            (mallType.toUpperCase() == "MARKET")
+                ? DisplayMockData.menusByMarket
+                : DisplayMockData.menusByBeauty,
+          ),
         ),
       );
+
+  _parseMenus(String source) {
+    final List json = jsonDecode(source);
+    List<MenuDto> menus = [];
+    menus = json.map((e) => MenuDto.fromJson(e)).toList();
+
+    return menus;
+  }
 }
