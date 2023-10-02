@@ -18,6 +18,6 @@ class DisplayRepositoryImpl implements DisplayRepository {
     final response = await _displayApi.getMenusByMallType(mallType.name);
     final data = response.data?.map((dto) => dto.toModel()).toList() ?? [];
 
-    return response.toEntity<List<MenuModel>>(data);
+    return response.toModel<List<MenuModel>>(data);
   }
 }

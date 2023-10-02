@@ -1,7 +1,7 @@
 import 'response_wrapper.dart';
 
 extension ResponseWrapperX on ResponseWrapper {
-  ResponseWrapper<T> toEntity<T>(T data) => ResponseWrapper<T>(
+  ResponseWrapper<T> toModel<T>(T data) => ResponseWrapper<T>(
         status: status,
         code: code,
         message: message,
