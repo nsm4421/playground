@@ -1,0 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../common/utils/error/error_response.dart';
+
+part '../generated/result.freezed.dart';
+
+@freezed
+class Result<T> with _$Result {
+  const factory Result.success(T data) = Success;
+
+  const factory Result.failure(ErrorResponse error) = Error;
+}

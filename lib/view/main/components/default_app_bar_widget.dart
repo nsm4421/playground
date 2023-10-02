@@ -1,3 +1,4 @@
+import '../../../common/utils/common.dart';
 import '../cubit/top_app_bar_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +11,8 @@ class DefaultAppBarWidget extends StatelessWidget {
   final String label;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<TopAppBarCubit, TopAppBarState>(
-        builder: (BuildContext _, TopAppBarState state) => Container(
+  Widget build(BuildContext context) => BlocBuilder<MallTypeCubit, MallType>(
+        builder: (BuildContext _, MallType state) => Container(
           child: AppBar(
             title: Text(
               label,

@@ -1,3 +1,4 @@
+import '../../../common/utils/common.dart';
 import 'home_app_bar_widget.dart';
 
 import '../cubit/bottom_nav_cubit.dart';
@@ -14,9 +15,9 @@ class TopAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<BottomNavCubit, BottomNavState>(
-        builder: (BuildContext context, BottomNavState state) =>
-            (state == BottomNavState.home)
+      BlocBuilder<BottomNavCubit, BottomNav>(
+        builder: (BuildContext context, BottomNav state) =>
+            (state == BottomNav.home)
                 ? HomeAppBarWidget()
                 : DefaultAppBarWidget(label: state.label.toUpperCase()),
       );

@@ -1,0 +1,17 @@
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          build_extensions:
+            '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
+            '^lib/data/mapper/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
+            '^lib/data/data_source/remote/{{}}.dart': 'lib/data/generated/{{}}.g.dart'
+            '^lib/domain/model/{{}}.dart': 'lib/domain/generated/{{}}.g.dart'
+      freezed:
+        options:
+          build_extensions:
+            '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
+            '^lib/data/mapper/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
+            '^lib/domain/model/{{}}.dart': 'lib/domain/generated/{{}}.freezed.dart'
+            '^lib/view/pages/home/menu_bloc/{{}}.dart': 'lib/view/generated/{{}}.freezed.dart'

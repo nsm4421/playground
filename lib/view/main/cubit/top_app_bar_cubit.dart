@@ -1,18 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// mall type
-enum TopAppBarState { market, beauty }
+import '../../../common/utils/common.dart';
 
-class TopAppBarCubit extends Cubit<TopAppBarState> {
-  TopAppBarCubit() : super(TopAppBarState.market);
 
-  void handleIndex(int index) => emit(TopAppBarState.values[index]);
+
+class MallTypeCubit extends Cubit<MallType> {
+  MallTypeCubit() : super(MallType.market);
+
+  void handleIndex(int index) => emit(MallType.values[index]);
 }
 
-extension TopAppBarCubitX on TopAppBarState {
-  bool get isMarketMall => this == TopAppBarState.market;
+extension MallTypeX on MallType {
+  bool get isMarketMall => this == MallType.market;
 
-  bool get isBeautyMall => this == TopAppBarState.beauty;
+  bool get isBeautyMall => this == MallType.beauty;
 
-  String get mallName => this == TopAppBarState.market ? 'Market' : 'Beauty';
+  String get mallName => this == MallType.market ? 'Market' : 'Beauty';
 }
