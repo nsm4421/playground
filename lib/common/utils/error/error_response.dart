@@ -1,11 +1,11 @@
 class ErrorResponse {
   final String? status;
   final String? code;
-  final String? messsage;
+  final String? message;
 
   ErrorResponse({
     this.status = 'ERROR',
     this.code = '500',
-    this.messsage = 'ERROR',
+    this.message = 'ERROR',
   });
 }
