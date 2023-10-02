@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/utils/common.dart';
+import '../../../common/widget/dialog_widget.dart';
 import '../../../domain/usecase/display/display_usecase.dart';
 import '../../../service_locator.dart';
 import '../../main/cubit/top_app_bar_cubit.dart';
-import 'menu_bloc/menu_bloc.dart';
-import 'menu_bloc/menu_event.dart';
-import 'menu_bloc/menu_state.dart';
+import 'bloc/menu_bloc.dart';
+import 'bloc/menu_event.dart';
+import 'bloc/menu_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,30 +26,42 @@ class HomePage extends StatelessWidget {
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
 
+  bool _listenWhen(MallType previous, MallType next) =>
+      (previous.index != next.index);
+
+  bool _consumerListenWhen(MenuState previous, MenuState next) =>
+      (previous.status != next.status);
+
+  _listener(BuildContext context, MallType state) =>
+      context.read<MenuBloc>().add(MenuInitialized(state));
+
+  _consumerListener(BuildContext context, MenuState state) async {
+    if (state.status != Status.error) return;
+    final bool result =
+        await DialogWidget.errorDialog(context, state.error) ?? false;
+    if (result) {
+      context.read()<MenuBloc>().add(MenuInitialized(MallType.market));
+    }
+  }
+
   @override
   Widget build(BuildContext context) => BlocListener<MallTypeCubit, MallType>(
-        listener: (BuildContext context, MallType state) =>
-            context.read<MenuBloc>().add(MenuInitialized(state)),
-        listenWhen: (MallType previous, MallType next) =>
-            (previous.index != next.index),
-        child: BlocBuilder<MenuBloc, MenuState>(
+        listener: _listener,
+        listenWhen: _listenWhen,
+        child: BlocConsumer<MenuBloc, MenuState>(
           builder: (BuildContext _, MenuState state) {
             switch (state.status) {
               case Status.initial:
               case Status.loading:
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Center(child: CircularProgressIndicator());
               case Status.success:
-                return Center(
-                  child: Text(state.menus.toString()),
-                );
+                return Center(child: Text(state.menus.toString()));
               case Status.error:
-                return Center(
-                  child: Text("Error"),
-                );
+                return Center(child: Text("Error"));
             }
           },
+          listener: _consumerListener,
+          listenWhen: _consumerListenWhen,
         ),
       );
 }

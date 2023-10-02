@@ -14,4 +14,4 @@ targets:
             '^lib/data/dto/display/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
             '^lib/data/mapper/{{}}.dart': 'lib/data/generated/{{}}.freezed.dart'
             '^lib/domain/model/{{}}.dart': 'lib/domain/generated/{{}}.freezed.dart'
-            '^lib/view/pages/home/menu_bloc/{{}}.dart': 'lib/view/generated/{{}}.freezed.dart'
+            '^lib/view/pages/home/bloc/{{}}.dart': 'lib/view/generated/{{}}.freezed.dart'

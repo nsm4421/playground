@@ -1,4 +1,4 @@
-import 'package:commerce_app/service_locator.dart';
+import 'service_locator.dart';
 
 import 'view/routes/routes.dart';
 import 'package:flutter/material.dart';
