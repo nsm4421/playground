@@ -5,7 +5,7 @@ import 'error_response.dart';
 class CustomException {
   const CustomException();
 
-  static ErrorResponse? setError(error) {
+  static ErrorResponse setError(error) {
     if (error is Exception) {
       if (error.runtimeType == DioException) {
         final dioError = error as DioException;
@@ -18,15 +18,24 @@ class CustomException {
           message: message,
         );
       } else {
-        final code = '7777';
+        final code = '8888';
         final message = 'service is unavailable now';
 
         return ErrorResponse(
-          status: 'unKnown error',
+          status: 'unExpected error',
           code: code,
           message: message,
         );
       }
+    } else {
+      final code = '8888';
+      final message = 'service is unavailable now';
+
+      return ErrorResponse(
+        status: 'unKnown error',
+        code: code,
+        message: message,
+      );
     }
   }
 }

@@ -1,9 +1,12 @@
+import 'package:commerce_app/service_locator.dart';
+
 import 'view/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 import 'common/theme/custom/custom_theme_data.dart';
 
 void main() {
+  setLocator();
   runApp(const MainApp());
 }
 
