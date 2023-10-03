@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../common/utils/common.dart';
-import '../bloc/view_module_bloc.dart';
-import '../bloc/view_module_event.dart';
-import '../bloc/view_module_state.dart';
+import '../bloc/view_module/view_module_bloc.dart';
+import '../bloc/view_module/view_module_event.dart';
+import '../bloc/view_module/view_module_state.dart';
 
 class ViewModuleList extends StatefulWidget {
   const ViewModuleList({super.key});

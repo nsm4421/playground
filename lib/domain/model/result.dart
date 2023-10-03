@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../common/utils/error/error_response.dart';
 
-part '../generated/result.freezed.dart';
+part '../../generated/result.freezed.dart';
 
 @freezed
 class Result<T> with _$Result<T> {

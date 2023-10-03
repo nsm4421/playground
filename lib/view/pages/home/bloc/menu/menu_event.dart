@@ -1,4 +1,4 @@
-import '../../../../common/utils/common.dart';
+import '../../../../../common/utils/common.dart';
 
 abstract class MenuEvent {
   const MenuEvent();

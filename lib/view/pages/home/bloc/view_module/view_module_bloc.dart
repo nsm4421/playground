@@ -1,18 +1,18 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../component/view_module_widget.dart';
+import '../../component/view_module_widget.dart';
 import 'view_module_event.dart';
 import 'view_module_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../common/utils/common.dart';
-import '../../../../common/utils/custom_logger.dart';
-import '../../../../common/utils/error/custom_exception.dart';
-import '../../../../domain/model/result.dart';
-import '../../../../domain/model/view_module_model.dart';
-import '../../../../domain/usecase/display/display_usecase.dart';
-import '../../../../domain/usecase/display/view_module/get_view_modules_usecase.dart';
+import '../../../../../common/utils/common.dart';
+import '../../../../../common/utils/custom_logger.dart';
+import '../../../../../common/utils/error/custom_exception.dart';
+import '../../../../../domain/model/result.dart';
+import '../../../../../domain/model/view_module_model.dart';
+import '../../../../../domain/usecase/display/display_usecase.dart';
+import '../../../../../domain/usecase/display/view_module/get_view_modules_usecase.dart';
 
 class ViewModuleBloc extends Bloc<ViewModuleEvent, ViewModuleState> {
   final DisplayUseCase _displayUseCase;

@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../../generated/menu_dto.freezed.dart';
+part '../../../generated/menu_dto.freezed.dart';
 
-part '../../generated/menu_dto.g.dart';
+part '../../../generated/menu_dto.g.dart';
 
 @freezed
 class MenuDto with _$MenuDto {

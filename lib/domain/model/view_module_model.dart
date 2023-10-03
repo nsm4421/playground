@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../generated/view_module_model.freezed.dart';
+part '../../generated/view_module_model.freezed.dart';
 
-part '../generated/view_module_model.g.dart';
+part '../../generated/view_module_model.g.dart';
 
 @freezed
 class ViewModuleModel with _$ViewModuleModel {

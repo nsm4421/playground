@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../../generated/view_module.freezed.dart';
+part '../../../generated/view_module.freezed.dart';
 
-part '../../generated/view_module.g.dart';
+part '../../../generated/view_module.g.dart';
 
 @freezed
 class ViewModuleDto with _$ViewModuleDto {

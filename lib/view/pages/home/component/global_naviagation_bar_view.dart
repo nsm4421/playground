@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common/utils/common.dart';
 import '../../../../domain/model/menu_model.dart';
 import '../../../../service_locator.dart';
-import '../bloc/view_module_bloc.dart';
-import '../bloc/view_module_event.dart';
+import '../bloc/view_module/view_module_bloc.dart';
+import '../bloc/view_module/view_module_event.dart';
 
 class GlobalNavbarView extends StatelessWidget {
   const GlobalNavbarView({

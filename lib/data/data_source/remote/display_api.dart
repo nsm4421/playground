@@ -4,7 +4,7 @@ import '../../dto/display/view_module.dart';
 import '../../mapper/response_wrapper.dart';
 import '../../dto/display/menu_dto.dart';
 
-part '../../generated/display_api.g.dart';
+part '../../../generated/display_api.g.dart';
 
 @RestApi()
 abstract class DisplayApi {

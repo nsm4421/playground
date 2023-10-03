@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../generated/menu_model.freezed.dart';
+part '../../generated/menu_model.freezed.dart';
 
-part '../generated/menu_model.g.dart';
+part '../../generated/menu_model.g.dart';
 
 @freezed
 class MenuModel with _$MenuModel {

@@ -1,10 +1,7 @@
 pubspec.lock
 .metadata
 assets/env/*
-lib/data/generated/*.dart
-lib/domain/generated/*.dart
-lib/view/generated/*.dart
-lib/data/data_source/mock/display_mock_data.dart
+lib/generated/*
 
 # Miscellaneous
 *.class
