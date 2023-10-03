@@ -1,3 +1,4 @@
+import 'product_info_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '../../generated/view_module_model.freezed.dart';
@@ -11,6 +12,7 @@ class ViewModuleModel with _$ViewModuleModel {
     required String title,
     required String subtitle,
     required String imageUrl,
+    required List<ProductInfoModel> products,
   }) = _ViewModuleModel;
 
   factory ViewModuleModel.fromJson(Map<String, dynamic> json) =>

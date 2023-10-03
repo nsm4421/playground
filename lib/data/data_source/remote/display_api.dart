@@ -1,6 +1,6 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
-import '../../dto/display/view_module.dart';
+import '../../dto/display/view_module_dto.dart';
 import '../../mapper/response_wrapper.dart';
 import '../../dto/display/menu_dto.dart';
 

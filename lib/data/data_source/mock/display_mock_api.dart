@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../dto/display/view_module.dart';
+import '../../dto/display/view_module_dto.dart';
 import '../../mapper/response_wrapper.dart';
 import '../../dto/display/menu_dto.dart';
 import '../remote/display_api.dart';
@@ -27,7 +27,6 @@ class DisplayMockApi implements DisplayApi {
     required int tabId,
     int page = 1,
   }) async {
-
     // 최대 4p 까지
     final int max_page = 4;
 
@@ -39,20 +38,7 @@ class DisplayMockApi implements DisplayApi {
             data: null,
           ));
 
-    late String source;
-    final endOfTabId = tabId % 10;
-    switch (endOfTabId) {
-      case 1:
-        source = DisplayMockData.viewModulesByTabIdCaseOne;
-      case 2:
-        source = DisplayMockData.viewModulesByTabIdCaseTwo;
-      case 3:
-        source = DisplayMockData.viewModulesByTabIdCaseThree;
-      case 4:
-        source = DisplayMockData.viewModulesByTabIdCaseFour;
-      case 5:
-        source = DisplayMockData.viewModulesByTabIdCaseFive;
-    }
+    String source = DisplayMockData.getViewModules();
     final data = _parseViewModules(source);
 
     return Future(() => ResponseWrapper(
