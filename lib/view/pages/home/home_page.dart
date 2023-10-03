@@ -18,8 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocBuilder<MallTypeCubit, MallType>(
         builder: (BuildContext _, MallType state) => BlocProvider(
-          create: (_) =>
-              MenuBloc(getIt<DisplayUseCase>())..add(MenuInitialized(state)),
+          create: (_) => getIt<MenuBloc>()..add(MenuInitialized(state)),
           child: HomePageView(),
         ),
       );
@@ -34,8 +33,8 @@ class HomePageView extends StatelessWidget {
   bool _consumerListenWhen(MenuState previous, MenuState next) =>
       (previous.status != next.status);
 
-  _listener(BuildContext _, MallType state) =>
-      getIt<MenuBloc>()..add(MenuInitialized(state));
+  _listener(BuildContext context, MallType state) =>
+      context.read<MenuBloc>().add(MenuInitialized(state));
 
   _consumerListener(BuildContext context, MenuState state) async {
     if (state.status != Status.error) return;

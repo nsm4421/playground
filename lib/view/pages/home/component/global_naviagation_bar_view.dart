@@ -27,9 +27,11 @@ class GlobalNavbarView extends StatelessWidget {
           (index) => BlocProvider(
             create: (_) => getIt<ViewModuleBloc>()
               ..add(ViewModuleInitialized(
-                menus[index].tabId,
+                tabId: menus[index].tabId,
               )),
-            child: ViewModuleList(),
+            child: ViewModuleList(
+              tabId: menus[index].tabId,
+            ),
           ),
         ),
       ),

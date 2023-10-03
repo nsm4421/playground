@@ -41,6 +41,17 @@ class ViewModuleBloc extends Bloc<ViewModuleEvent, ViewModuleState> {
     ViewModuleInitialized event,
     Emitter<ViewModuleState> emit,
   ) async {
+    final tabId = event.tabId;
+
+    // 새로고침이 된 경우
+    if (event.isRefresh) {
+      emit(state.copyWith(
+          status: Status.initial,
+          currentPage: 1,
+          isLastPage: false,
+          viewModuleWidgets: []));
+    }
+
     // 로딩중으로 상태 변경 후, 0.5초 기다리기
     emit(state.copyWith(status: Status.loading));
     await Future.delayed(Duration(milliseconds: _durationMilliSec));
@@ -48,7 +59,7 @@ class ViewModuleBloc extends Bloc<ViewModuleEvent, ViewModuleState> {
       // view module 리스트 가져오기
       final Result<List<ViewModuleModel>> response =
           await _displayUseCase.execute<Result<List<ViewModuleModel>>>(
-        remoteUseCase: GetViewModulesUseCase(tabId: event.tabId, page: 1),
+        remoteUseCase: GetViewModulesUseCase(tabId: tabId, page: 1),
       );
       response.when(
         // 성공인 경우, view module widgets 리스트 필드 상태 변경
@@ -58,7 +69,7 @@ class ViewModuleBloc extends Bloc<ViewModuleEvent, ViewModuleState> {
             viewModuleWidgets: viewModules
                 .map((viewModuleModel) => ViewModuleWidget(viewModuleModel))
                 .toList(),
-            tabId: event.tabId,
+            tabId: tabId,
           ));
         },
         // 실패인 경우, error 필드 상태 변경

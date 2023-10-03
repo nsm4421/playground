@@ -7,7 +7,9 @@ import '../bloc/view_module/view_module_event.dart';
 import '../bloc/view_module/view_module_state.dart';
 
 class ViewModuleList extends StatefulWidget {
-  const ViewModuleList({super.key});
+  const ViewModuleList({super.key, required this.tabId});
+
+  final int tabId;
 
   @override
   State<ViewModuleList> createState() => _ViewModuleListState();
@@ -38,6 +40,11 @@ class _ViewModuleListState extends State<ViewModuleList> {
     }
   }
 
+  // 새로고침 되는 경우 → initialized 이벤트 발생
+  Future<void> _onRefresh() async => context
+      .read<ViewModuleBloc>()
+      .add(ViewModuleInitialized(tabId: widget.tabId, isRefresh: true));
+
   Widget _loadingWidget() => Center(
         child: SizedBox(
           width: 30,
@@ -55,26 +62,28 @@ class _ViewModuleListState extends State<ViewModuleList> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<ViewModuleBloc, ViewModuleState>(builder: (
-        BuildContext _,
-        ViewModuleState state,
-      ) {
-        // 로딩중
-        if (state.status == Status.initial || state.viewModuleWidgets.isEmpty)
-          return _loadingWidget();
+  Widget build(BuildContext context) => RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: BlocBuilder<ViewModuleBloc, ViewModuleState>(builder: (
+          BuildContext _,
+          ViewModuleState state,
+        ) {
+          // 로딩중
+          if (state.status == Status.initial || state.viewModuleWidgets.isEmpty)
+            return _loadingWidget();
 
-        // 에러
-        if (state.error == Status.error) return Text("ERROR");
+          // 에러
+          if (state.error == Status.error) return Text("ERROR");
 
-        // 성공
-        return ListView(
-          controller: _scrollController,
-          shrinkWrap: true,
-          children: [
-            ...state.viewModuleWidgets,
-            if (state.status == Status.loading) _loadingWidget(),
-          ],
-        );
-      });
+          // 성공
+          return ListView(
+            controller: _scrollController,
+            shrinkWrap: true,
+            children: [
+              ...state.viewModuleWidgets,
+              if (state.status == Status.loading) _loadingWidget(),
+            ],
+          );
+        }),
+      );
 }
