@@ -10,7 +10,8 @@ abstract class DisplayRepository extends Repository {
     required MallType mallType,
   });
 
-  Future<ResponseWrapper<List<ViewModuleModel>>> getViewModulesByTabId({
+  Future<ResponseWrapper<List<ViewModuleModel>>> getViewModulesByTabIdAndPage({
     required int tabId,
+    int page = 1,
   });
 }

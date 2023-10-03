@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../common/utils/common.dart';
 import '../../../../domain/model/menu_model.dart';
-import '../../../../domain/usecase/display/display_usecase.dart';
 import '../../../../service_locator.dart';
 import '../bloc/view_module_bloc.dart';
 import '../bloc/view_module_event.dart';

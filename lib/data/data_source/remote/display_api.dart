@@ -16,7 +16,8 @@ abstract class DisplayApi {
   );
 
   @GET("/api/view-modules/{tab_id}")
-  Future<ResponseWrapper<List<ViewModuleDto>>> getViewModuleByTabId(
-    @Path('tab_id') int tabId,
-  );
+  Future<ResponseWrapper<List<ViewModuleDto>>> getViewModuleByTabIdAndPage({
+    @Path('tab_id') required int tabId,
+    @Query('page') int page = 1,
+  });
 }

@@ -3,13 +3,56 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../common/utils/common.dart';
 import '../bloc/view_module_bloc.dart';
+import '../bloc/view_module_event.dart';
 import '../bloc/view_module_state.dart';
-import 'view_module_widget.dart';
 
-class ViewModuleList extends StatelessWidget {
+class ViewModuleList extends StatefulWidget {
   const ViewModuleList({super.key});
 
-  static const double _dividerThickness = 2;
+  @override
+  State<ViewModuleList> createState() => _ViewModuleListState();
+}
+
+class _ViewModuleListState extends State<ViewModuleList> {
+  late ScrollController _scrollController;
+  static const double _scrollThreshold = 0.9;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
+
+  // 전체 높이에 90%(threshold)에 도달 여부로, fetch 여부 가져오기
+  void _onScroll() {
+    if (!_scrollController.hasClients) {
+      _scrollController = ScrollController();
+    }
+    final maxScrollSize = _scrollController.position.maxScrollExtent;
+    final currentScrollSize = _scrollController.offset;
+
+    final needToScroll = currentScrollSize >= maxScrollSize * _scrollThreshold;
+    if (needToScroll) {
+      context.read<ViewModuleBloc>().add(ViewModuleFetched());
+    }
+  }
+
+  Widget _loadingWidget() => Center(
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: CircularProgressIndicator(),
+        ),
+      );
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+  }
 
   @override
   Widget build(BuildContext context) =>
@@ -17,26 +60,21 @@ class ViewModuleList extends StatelessWidget {
         BuildContext _,
         ViewModuleState state,
       ) {
-        switch (state.status) {
-          case Status.initial:
-          case Status.loading:
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          case Status.success:
-            return ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (BuildContext _, int index) =>
-                  state.viewModuleWidgets[index],
-              separatorBuilder: (BuildContext _, int __) => Divider(
-                thickness: _dividerThickness,
-              ),
-              itemCount: state.viewModuleWidgets.length,
-            );
-          case Status.error:
-            return Center(
-              child: Text("error"),
-            );
-        }
+        // 로딩중
+        if (state.status == Status.initial || state.viewModuleWidgets.isEmpty)
+          return _loadingWidget();
+
+        // 에러
+        if (state.error == Status.error) return Text("ERROR");
+
+        // 성공
+        return ListView(
+          controller: _scrollController,
+          shrinkWrap: true,
+          children: [
+            ...state.viewModuleWidgets,
+            if (state.status == Status.loading) _loadingWidget(),
+          ],
+        );
       });
 }
