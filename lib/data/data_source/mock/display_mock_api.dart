@@ -23,7 +23,9 @@ class DisplayMockApi implements DisplayApi {
       );
 
   @override
-  Future<ResponseWrapper<List<MenuDto>>> getViewModuleByTabId(int tabId) async {
+  Future<ResponseWrapper<List<ViewModuleDto>>> getViewModuleByTabId(
+    int tabId,
+  ) async {
     late String source;
     final endOfTabId = tabId % 10;
     switch (endOfTabId) {

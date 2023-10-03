@@ -1,5 +1,6 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
+import '../../dto/display/view_module.dart';
 import '../../mapper/response_wrapper.dart';
 import '../../dto/display/menu_dto.dart';
 
@@ -15,7 +16,7 @@ abstract class DisplayApi {
   );
 
   @GET("/api/view-modules/{tab_id}")
-  Future<ResponseWrapper<List<MenuDto>>> getViewModuleByTabId(
+  Future<ResponseWrapper<List<ViewModuleDto>>> getViewModuleByTabId(
     @Path('tab_id') int tabId,
   );
 }
