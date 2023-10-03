@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+
+import '../component/view_module_widget.dart';
 import 'view_module_event.dart';
 import 'view_module_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +41,9 @@ class ViewModuleBloc extends Bloc<ViewModuleEvent, ViewModuleState> {
         success: (viewModules) {
           emit(state.copyWith(
             status: Status.success,
-            viewModules: viewModules,
+            viewModuleWidgets: (viewModules as List<ViewModuleModel>)
+                .map((viewModuleModel) => ViewModuleWidget(viewModuleModel))
+                .toList(),
             tabId: event.tabId,
           ));
         },

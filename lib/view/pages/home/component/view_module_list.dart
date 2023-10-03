@@ -4,11 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common/utils/common.dart';
 import '../bloc/view_module_bloc.dart';
 import '../bloc/view_module_state.dart';
+import 'view_module_widget.dart';
 
 class ViewModuleList extends StatelessWidget {
   const ViewModuleList({super.key});
 
-  static const double _dividerThickness = 4;
+  static const double _dividerThickness = 2;
 
   @override
   Widget build(BuildContext context) =>
@@ -23,21 +24,14 @@ class ViewModuleList extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           case Status.success:
-            return Center(
-              child: Column(
-                children: [
-                  ListView.separated(
-                    shrinkWrap: true,
-                    // TODO : view model UI 수정하기
-                    itemBuilder: (BuildContext _, int index) =>
-                        Text(state.viewModules[index].toString()),
-                    separatorBuilder: (BuildContext _, int __) => Divider(
-                      thickness: _dividerThickness,
-                    ),
-                    itemCount: state.viewModules.length,
-                  ),
-                ],
+            return ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (BuildContext _, int index) =>
+                  state.viewModuleWidgets[index],
+              separatorBuilder: (BuildContext _, int __) => Divider(
+                thickness: _dividerThickness,
               ),
+              itemCount: state.viewModuleWidgets.length,
             );
           case Status.error:
             return Center(

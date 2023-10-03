@@ -34,15 +34,15 @@ class HomePageView extends StatelessWidget {
   bool _consumerListenWhen(MenuState previous, MenuState next) =>
       (previous.status != next.status);
 
-  _listener(BuildContext context, MallType state) =>
-      context.read<MenuBloc>().add(MenuInitialized(state));
+  _listener(BuildContext _, MallType state) =>
+      locator<MenuBloc>()..add(MenuInitialized(state));
 
   _consumerListener(BuildContext context, MenuState state) async {
     if (state.status != Status.error) return;
     final bool result =
         await DialogWidget.errorDialog(context, state.error) ?? false;
     if (result) {
-      context.read()<MenuBloc>().add(MenuInitialized(MallType.market));
+      locator<MenuBloc>().add(MenuInitialized(MallType.market));
     }
   }
 
