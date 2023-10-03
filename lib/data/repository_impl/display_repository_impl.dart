@@ -1,5 +1,6 @@
 import '../../common/utils/common.dart';
 import '../../domain/model/menu_model.dart';
+import '../../domain/model/view_module_model.dart';
 import '../../domain/repository/display_repository.dart';
 import '../data_source/remote/display_api.dart';
 import '../mapper/common_mapper.dart';
@@ -19,5 +20,15 @@ class DisplayRepositoryImpl implements DisplayRepository {
     final data = response.data?.map((dto) => dto.toModel()).toList() ?? [];
 
     return response.toModel<List<MenuModel>>(data);
+  }
+
+  @override
+  Future<ResponseWrapper<List<ViewModuleModel>>> getViewModulesByTabId({
+    required int tabId,
+  }) async {
+    final response = await _displayApi.getViewModuleByTabId(tabId);
+    final data = response.data?.map((dto) => dto.toModel()).toList() ?? [];
+
+    return response.toModel<List<ViewModuleModel>>(data);
   }
 }

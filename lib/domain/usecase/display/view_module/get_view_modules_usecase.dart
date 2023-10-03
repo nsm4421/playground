@@ -2,18 +2,20 @@ import 'package:commerce_app/domain/model/result.dart';
 
 import '../../../../common/utils/common.dart';
 import '../../../../common/utils/error/error_response.dart';
-import '../../../model/menu_model.dart';
+import '../../../model/view_module_model.dart';
 import '../../../repository/display_repository.dart';
 import '../../base/remote_usecase.dart';
 
-class GetMenusUseCase extends RemoteUseCase<DisplayRepository> {
-  final MallType mallType;
+class GetViewModulesUseCase extends RemoteUseCase<DisplayRepository> {
+  final int tabId;
 
-  GetMenusUseCase(this.mallType);
+  GetViewModulesUseCase(this.tabId);
 
   @override
-  Future<Result<List<MenuModel>>> call(DisplayRepository repository) async {
-    final result = await repository.getMenusByMallType(mallType: mallType);
+  Future<Result<List<ViewModuleModel>>> call(
+    DisplayRepository repository,
+  ) async {
+    final result = await repository.getViewModulesByTabId(tabId: tabId);
 
     return result.status == 'SUCCESS'
         ? Result.success(result.data ?? [])

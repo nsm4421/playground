@@ -18,7 +18,9 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
   }
 
   Future<void> _onMenuInitialized(
-      MenuInitialized event, Emitter<MenuState> emit) async {
+    MenuInitialized event,
+    Emitter<MenuState> emit,
+  ) async {
     emit(state.copyWith(status: Status.loading));
     try {
       final Result<List<MenuModel>> response = await _displayUseCase.execute(
