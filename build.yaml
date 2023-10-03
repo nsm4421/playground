@@ -8,8 +8,7 @@ targets:
             '^lib/data/mapper/{{}}.dart': 'lib/generated/{{}}.g.dart'
             '^lib/data/data_source/remote/{{}}.dart': 'lib/generated/{{}}.g.dart'
             '^lib/domain/model/{{}}.dart': 'lib/generated/{{}}.g.dart'
-            '^lib/{{}}.dart': 'lib/generated/{{}}.g.dart'
-      freezed:
+    freezed:
         options:
           build_extensions:
             '^lib/data/dto/display/{{}}.dart': 'lib/generated/{{}}.freezed.dart'

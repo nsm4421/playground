@@ -1,3 +1,5 @@
+import 'package:injectable/injectable.dart';
+
 import '../../common/utils/common.dart';
 import '../../domain/model/menu_model.dart';
 import '../../domain/model/view_module_model.dart';
@@ -7,6 +9,7 @@ import '../mapper/common_mapper.dart';
 import '../mapper/display_mapper.dart';
 import '../mapper/response_wrapper.dart';
 
+@Singleton(as: DisplayRepository)
 class DisplayRepositoryImpl implements DisplayRepository {
   final DisplayApi _displayApi;
 

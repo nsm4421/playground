@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../../../common/utils/common.dart';
 import '../../../../../common/utils/custom_logger.dart';
@@ -10,6 +11,7 @@ import '../../../../../domain/usecase/display/menu/get_menus_usecase.dart';
 import 'menu_event.dart';
 import 'menu_state.dart';
 
+@injectable
 class MenuBloc extends Bloc<MenuEvent, MenuState> {
   final DisplayUseCase _displayUseCase;
 

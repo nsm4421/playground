@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:commerce_app/common/theme/custom/custom_font_weight.dart';
+import '../../../../common/theme/custom/custom_font_weight.dart';
 import '../../../../common/theme/custom/custom_theme.dart';
 import '../../../../domain/model/menu_model.dart';
-import '../../../../domain/usecase/display/display_usecase.dart';
-import '../../../../service_locator.dart';
-import '../bloc/view_module/view_module_bloc.dart';
-import '../bloc/view_module/view_module_event.dart';
-import 'view_module_list.dart';
 
 class GlobalNavBar extends StatelessWidget {
   const GlobalNavBar({super.key, required this.menus});

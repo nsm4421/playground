@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/utils/common.dart';
 import '../../../common/widget/dialog_widget.dart';
+import '../../../dependency_injection.dart';
 import '../../../domain/usecase/display/display_usecase.dart';
-import '../../../service_locator.dart';
 import '../../main/cubit/top_app_bar_cubit.dart';
 import 'bloc/menu/menu_bloc.dart';
 import 'bloc/menu/menu_event.dart';
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<MallTypeCubit, MallType>(
         builder: (BuildContext _, MallType state) => BlocProvider(
           create: (_) =>
-              MenuBloc(locator<DisplayUseCase>())..add(MenuInitialized(state)),
+              MenuBloc(getIt<DisplayUseCase>())..add(MenuInitialized(state)),
           child: HomePageView(),
         ),
       );
@@ -35,14 +35,14 @@ class HomePageView extends StatelessWidget {
       (previous.status != next.status);
 
   _listener(BuildContext _, MallType state) =>
-      locator<MenuBloc>()..add(MenuInitialized(state));
+      getIt<MenuBloc>()..add(MenuInitialized(state));
 
   _consumerListener(BuildContext context, MenuState state) async {
     if (state.status != Status.error) return;
     final bool result =
         await DialogWidget.errorDialog(context, state.error) ?? false;
     if (result) {
-      locator<MenuBloc>().add(MenuInitialized(MallType.market));
+      getIt<MenuBloc>().add(MenuInitialized(MallType.market));
     }
   }
 

@@ -1,4 +1,4 @@
-import 'service_locator.dart';
+import 'dependency_injection.dart';
 
 import 'view/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'common/theme/custom/custom_theme_data.dart';
 
 void main() {
-  setLocator();
+  configureDependencies();
   runApp(const MainApp());
 }
 

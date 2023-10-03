@@ -1,4 +1,5 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:injectable/injectable.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../component/view_module_widget.dart';
@@ -14,6 +15,7 @@ import '../../../../../domain/model/view_module_model.dart';
 import '../../../../../domain/usecase/display/display_usecase.dart';
 import '../../../../../domain/usecase/display/view_module/get_view_modules_usecase.dart';
 
+@injectable
 class ViewModuleBloc extends Bloc<ViewModuleEvent, ViewModuleState> {
   final DisplayUseCase _displayUseCase;
 
