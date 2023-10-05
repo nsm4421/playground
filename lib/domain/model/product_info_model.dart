@@ -13,7 +13,7 @@ class ProductInfoModel with _$ProductInfoModel {
     required String description,
     required int price, // 판매가
     required int originalPrice, // 원가
-    required int discountAmount, // 할인액
+    required double discountRate, // 할인율
     required int reviewCount,
   }) = _ProducInfotModel;
 

@@ -14,7 +14,7 @@ class ProductInfoDto with _$ProductInfoDto {
     @Default('') String description,
     @Default(-1) int price, // 판매가
     @Default(-1) int originalPrice, // 원가
-    @Default(-1) int discountAmount, // 할인액
+    @Default(-1) double discountRate, // 할인율
     @Default(-1) int reviewCount,
   }) = _ProductInfoDto;
 

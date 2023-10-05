@@ -29,7 +29,7 @@ extension ProductInfoX on ProductInfoDto {
         description: description ?? '',
         price: price ?? -1,
         originalPrice: originalPrice ?? -1,
-        discountAmount: discountAmount ?? -1,
+        discountRate: discountRate ?? 0.0,
         reviewCount: reviewCount ?? -1,
       );
 }

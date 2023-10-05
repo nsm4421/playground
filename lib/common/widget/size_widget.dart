@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Height extends StatelessWidget {
   const Height(this.height, {super.key});
 
-  final height;
+  final double height;
 
   @override
   Widget build(BuildContext context) => SizedBox(height: height);
@@ -12,7 +12,7 @@ class Height extends StatelessWidget {
 class Width extends StatelessWidget {
   const Width(this.width, {super.key});
 
-  final width;
+  final double width;
 
   @override
   Widget build(BuildContext context) => SizedBox(width: width);
