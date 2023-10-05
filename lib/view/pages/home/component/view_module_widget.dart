@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../common/utils/common.dart';
 import '../../../../domain/model/view_module_model.dart';
+import 'view_module_item/view_module_carousel.dart';
 
 class ViewModuleWidget extends StatelessWidget {
   const ViewModuleWidget(
@@ -54,10 +55,12 @@ class ViewModuleWidget extends StatelessWidget {
           height: 200,
           child: Center(child: Text('ViewModuleE')),
         );
+      case ViewModuleType.carousel_view_module:
+        return ViewModuleCarousel(viewModuleModel);
       default:
         return SizedBox(
           height: 200,
-          child: Center(child: Text('ViewModuleNone')),
+          child: Center(child: Text('ViewModuleNone${viewModuleModel.type.toString()}')),
         );
     }
   }

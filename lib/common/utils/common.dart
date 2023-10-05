@@ -9,5 +9,6 @@ enum ViewModuleType {
   viewModuleB,
   viewModuleC,
   viewModuleD,
-  viewModuleE
+  viewModuleE,
+  carousel_view_module,
 }
