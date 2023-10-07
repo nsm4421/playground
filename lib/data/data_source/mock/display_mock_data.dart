@@ -17,8 +17,8 @@ class DisplayMockData {
 
   static final String productInfo = '''{
         "productId": "${DateTime.now().microsecondsSinceEpoch}",
-        "title":"FastCampus 플러터 강의 샘플 상품의 타이틀 입니다. 긴 문자를 노출했을 시 화면에서는 오버플로우가 발생할 수 있어 반드시 체크를 해야합니다.",
-        "subtitle":"This is sample product info. it has a long long subtitle text. plz check this!",
+        "name":"FastCampus 플러터 강의 샘플 상품의 타이틀 입니다. 긴 문자를 노출했을 시 화면에서는 오버플로우가 발생할 수 있어 반드시 체크를 해야합니다.",
+        "description":"This is sample product info. it has a long long subtitle text. plz check this!",
         "price": 8000,
         "originalPrice": 10000,
         "discountRate": 20,

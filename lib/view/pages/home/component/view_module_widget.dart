@@ -1,7 +1,11 @@
+import 'package:commerce_app/view/pages/home/component/view_module_item/view_module_category.dart';
+import 'package:commerce_app/view/pages/home/component/view_module_item/view_module_scroll.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/utils/common.dart';
 import '../../../../domain/model/view_module_model.dart';
+import 'view_module_item/view_module_banner.dart';
+import 'view_module_item/view_module_carousel.dart';
 
 class ViewModuleWidget extends StatelessWidget {
   const ViewModuleWidget(
@@ -54,10 +58,20 @@ class ViewModuleWidget extends StatelessWidget {
           height: 200,
           child: Center(child: Text('ViewModuleE')),
         );
+      case ViewModuleType.carousel_view_module:
+        return ViewModuleCarousel(viewModuleModel);
+      case ViewModuleType.banner_view_module:
+        return ViewModuleBanner(viewModuleModel);
+      case ViewModuleType.scroll_view_module:
+        return ViewModuleScroll(viewModuleModel);
+      case ViewModuleType.category_product_view_module:
+        return ViewModuleCategory(viewModuleModel);
       default:
         return SizedBox(
           height: 200,
-          child: Center(child: Text('ViewModuleNone')),
+          child: Center(
+            child: Text('ViewModuleNone${viewModuleModel.type.toString()}'),
+          ),
         );
     }
   }

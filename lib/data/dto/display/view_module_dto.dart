@@ -1,8 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../../../generated/view_module.freezed.dart';
+import 'product_info_dto.dart';
 
-part '../../../generated/view_module.g.dart';
+part '../../../generated/view_module_dto.freezed.dart';
+
+part '../../../generated/view_module_dto.g.dart';
 
 @freezed
 class ViewModuleDto with _$ViewModuleDto {
@@ -11,6 +13,8 @@ class ViewModuleDto with _$ViewModuleDto {
     @Default('') String title,
     @Default('') String subtitle,
     @Default('') String imageUrl,
+    @Default(<ProductInfoDto>[])  List<ProductInfoDto> products,
+    @Default(<String>[])  List<String> tabs,
   }) = _ViewModuleDto;
 
   factory ViewModuleDto.fromJson(Map<String, dynamic> json) =>
