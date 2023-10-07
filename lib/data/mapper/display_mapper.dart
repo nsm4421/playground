@@ -18,6 +18,7 @@ extension ViewModuleDtoX on ViewModuleDto {
         subtitle: subtitle ?? '',
         imageUrl: imageUrl ?? '',
         products: products.map((e) => e.toModel()).toList() ?? [],
+        tabs: tabs ?? [],
       );
 }
 

@@ -13,6 +13,7 @@ class ViewModuleModel with _$ViewModuleModel {
     required String subtitle,
     required String imageUrl,
     required List<ProductInfoModel> products,
+    required List<String> tabs,
   }) = _ViewModuleModel;
 
   factory ViewModuleModel.fromJson(Map<String, dynamic> json) =>

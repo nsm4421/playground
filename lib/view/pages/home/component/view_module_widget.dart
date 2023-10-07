@@ -1,3 +1,4 @@
+import 'package:commerce_app/view/pages/home/component/view_module_item/view_module_category.dart';
 import 'package:commerce_app/view/pages/home/component/view_module_item/view_module_scroll.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,9 @@ class ViewModuleWidget extends StatelessWidget {
       case ViewModuleType.banner_view_module:
         return ViewModuleBanner(viewModuleModel);
       case ViewModuleType.scroll_view_module:
-        return ScrollViewModule(viewModuleModel);
+        return ViewModuleScroll(viewModuleModel);
+      case ViewModuleType.category_product_view_module:
+        return ViewModuleCategory(viewModuleModel);
       default:
         return SizedBox(
           height: 200,

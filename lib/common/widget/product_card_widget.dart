@@ -75,7 +75,7 @@ class ProductCardWidget extends StatelessWidget {
                   Width(5),
                   // 판매가격
                   Text(
-                    '${productInfoModel.price.toString()}원',
+                    '${productInfoModel.price.toString()}',
                     style: priceTextStyle?.copyWithPriceTextStyle(),
                   ),
                   Width(5),
@@ -87,8 +87,6 @@ class ProductCardWidget extends StatelessWidget {
                 ],
               ),
               Height(5),
-
-              Height(8),
               // 리뷰 개수
               if (showReviewInfo)
                 Row(

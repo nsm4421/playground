@@ -4,8 +4,8 @@ import '../../../../../common/widget/view_module_title_widget.dart';
 import '../../../../../domain/model/view_module_model.dart';
 import 'package:flutter/material.dart';
 
-class ScrollViewModule extends StatelessWidget {
-  const ScrollViewModule(this._viewModuleModel, {super.key});
+class ViewModuleScroll extends StatelessWidget {
+  const ViewModuleScroll(this._viewModuleModel, {super.key});
 
   final ViewModuleModel _viewModuleModel;
 

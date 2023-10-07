@@ -20,7 +20,8 @@ enum ViewModuleType {
   viewModuleE,
   carousel_view_module,
   banner_view_module, // 광고 배너
-  scroll_view_module
+  scroll_view_module,
+  category_product_view_module,
 }
 
 extension IntEx on int {
