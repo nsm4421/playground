@@ -65,14 +65,6 @@ class ProductCardWidget extends StatelessWidget {
                 maxLines: 2,
               ),
               Height(5),
-              // 상품설명
-              Text(
-                '${productInfoModel.description}',
-                style: titleTextStyle,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-              Height(5),
               Row(
                 children: [
                   // 할인금액
@@ -83,7 +75,7 @@ class ProductCardWidget extends StatelessWidget {
                   Width(5),
                   // 판매가격
                   Text(
-                    '${productInfoModel.price.toString()}',
+                    '${productInfoModel.price.toString()}원',
                     style: priceTextStyle?.copyWithPriceTextStyle(),
                   ),
                   Width(5),
