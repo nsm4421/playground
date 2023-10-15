@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_app/core/util/logger.dart';
+import 'package:my_app/model/user/user.model.dart';
+import 'package:my_app/repository/auth.repository.dart';
 
 class RegisterController extends GetxController {
   static RegisterController get to => Get.find();
@@ -89,5 +92,71 @@ class RegisterController extends GetxController {
   /// 프로필 이미지 취소하기
   cancelProfileImage() {
     _profileImage.value = null;
+  }
+
+  /// 이메일, 비밀번호로 회원가입하기
+  createAccountWithEmailAndPassword() async {
+    try {
+      // 입력값 검사
+      final email = _emailTEC.value.text;
+      final password = _passwordTEC.value.text;
+      final nickname = _nicknameTEC.value.text;
+      final age = int.parse(_ageTEC.value.text);
+      final phone = _phoneTEC.value.text;
+      final city = _cityTEC.value.text;
+      final introduce = _introduceTEC.value.text;
+      final height = int.parse(_heightTEC.value.text);
+      final job = _jobTEC.value.text;
+      final ideal = _idealTEC.value.text;
+      final profileImage = _profileImage.value;
+      if (!email.isEmail ||
+          password.isEmpty ||
+          nickname.isEmpty ||
+          profileImage == null) {
+        Get.snackbar('ERROR', '입력값이 유효하지 않습니다');
+        return;
+      }
+
+      // 회원가입
+      final credential = await AuthRepository.to
+          .createAccountWithEmailAndPassword(email: email, password: password);
+      if (credential?.user?.uid == null) {
+        Get.snackbar('ERROR', '회원가입 중 오류가 발생하였습니다');
+        return;
+      }
+      final uid = credential!.user!.uid;
+
+      // 프로필 이미지 저장
+      final profileImageUrl = await AuthRepository.to
+          .saveProfileImageInStorage(uid: uid, profileImage: profileImage!);
+      if (profileImageUrl == null) {
+        Get.snackbar('WARNING', '프로필 이미지 등록에 실패했습니다');
+      }
+
+      // TODO : 비밀번호 암호화
+      final user = UserModel(
+          email: email,
+          nickname: nickname,
+          password: password,
+          age: age,
+          phone: phone,
+          city: city,
+          introduce: introduce,
+          height: height,
+          job: job,
+          ideal: ideal,
+          profileImageUrl: profileImageUrl,
+          createdAt: DateTime.now(),
+          modifiedAt: DateTime.now());
+      await AuthRepository.to
+          .saveDataInUserCollection(uid: uid, data: user.toJson());
+
+      // 성공 시 로그인 페이지로 이동
+      Get.snackbar('SUCCESS', '회원가입에 성공하였습니다');
+      Get.toNamed('/login');
+    } catch (e) {
+      CustomLogger.logger.e(e);
+      Get.snackbar('ERROR', e.toString());
+    }
   }
 }

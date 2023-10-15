@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/repository/auth.repository.dart';
+import 'firebase_options.dart';
 import 'package:my_app/presentation/features/auth/login.screen.dart';
 import 'package:my_app/presentation/features/auth/register.screen.dart';
 import 'package:my_app/presentation/features/home/home.screen.dart';
@@ -8,8 +11,12 @@ import 'package:my_app/presentation/features/splash/splash.screen.dart';
 import 'controller/login.controller.dart';
 import 'controller/register.controller.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  Get.put(AuthRepository(),permanent: true);
   runApp(const MyApp());
 }
 

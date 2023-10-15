@@ -112,7 +112,7 @@ class RegisterScreen extends GetView<RegisterController> {
 
                   // 직업
                   CustomTextFieldWidget(
-                    tec: controller.idealTEC,
+                    tec: controller.jobTEC,
                     labelText: "직업",
                     prefixIconData: Icons.money_outlined,
                   ),
@@ -135,7 +135,7 @@ class RegisterScreen extends GetView<RegisterController> {
           ),
           floatingActionButton: FloatingActionButton(
             // TODO : 회원가입 기능구현하기
-            onPressed: () {},
+            onPressed: controller.createAccountWithEmailAndPassword,
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
               size: 30,

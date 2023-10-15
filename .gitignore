@@ -6,7 +6,8 @@ linux/*
 macos/*
 web/*
 windows/*
-lib/core/util/dependency_injection/dependency_injection.config.dart
+lib/firebase_options.dart
+lib/**.g.dart
 
 # Miscellaneous
 *.class
