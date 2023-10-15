@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_app/presentation/features/auth/logn.screen.dart';
+import 'package:my_app/presentation/features/auth/login.screen.dart';
 import 'package:my_app/presentation/features/auth/register.screen.dart';
 import 'package:my_app/presentation/features/home/home.screen.dart';
 import 'package:my_app/presentation/features/splash/splash.screen.dart';
+
+import 'controller/login.controller.dart';
+import 'controller/register.controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter App',
-      darkTheme: ThemeData.dark()
+      theme: ThemeData.dark()
           .copyWith(useMaterial3: true, scaffoldBackgroundColor: Colors.black),
       initialRoute: '/splash',
       getPages: [
@@ -31,11 +34,17 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/register',
           page: () => const RegisterScreen(),
+          binding: BindingsBuilder(() {
+            Get.put(RegisterController());
+          }),
           transition: Transition.fadeIn,
         ),
         GetPage(
           name: '/login',
           page: () => const LoginScreen(),
+          binding: BindingsBuilder(() {
+            Get.put(LoginController());
+          }),
           transition: Transition.fadeIn,
         ),
         GetPage(
