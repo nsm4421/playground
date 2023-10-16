@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class RegisterController extends GetxController {
   late TextEditingController _idealTEC; // 이상형
   final Rx<File?> _profileImage = Rx<File?>(null); // 프로필 이미지
   XFile? _pickedImage; // image picker로 선택한 이미지
+  final RxBool _isLoading = false.obs;
 
   // getter
   TextEditingController get emailTEC => _emailTEC;
@@ -47,6 +49,8 @@ class RegisterController extends GetxController {
   TextEditingController get idealTEC => _idealTEC;
 
   Rx<File?> get profileImage => _profileImage;
+
+  bool get isLoading => _isLoading.value;
 
   @override
   onInit() {
@@ -74,7 +78,7 @@ class RegisterController extends GetxController {
     _cityTEC.dispose();
     _introduceTEC.dispose();
     _heightTEC.dispose();
-    _jobTEC = TextEditingController();
+    _jobTEC.dispose();
     _idealTEC.dispose();
   }
 
@@ -97,23 +101,43 @@ class RegisterController extends GetxController {
   /// 이메일, 비밀번호로 회원가입하기
   createAccountWithEmailAndPassword() async {
     try {
+      _isLoading.value = true;
+
       // 입력값 검사
       final email = _emailTEC.value.text;
       final password = _passwordTEC.value.text;
       final nickname = _nicknameTEC.value.text;
-      final age = int.parse(_ageTEC.value.text);
+      final age = _ageTEC.value.text;
       final phone = _phoneTEC.value.text;
       final city = _cityTEC.value.text;
       final introduce = _introduceTEC.value.text;
-      final height = int.parse(_heightTEC.value.text);
+      final height = _heightTEC.value.text;
       final job = _jobTEC.value.text;
       final ideal = _idealTEC.value.text;
       final profileImage = _profileImage.value;
-      if (!email.isEmail ||
-          password.isEmpty ||
-          nickname.isEmpty ||
-          profileImage == null) {
-        Get.snackbar('ERROR', '입력값이 유효하지 않습니다');
+
+      if (!email.isEmail) {
+        Get.snackbar('ERROR', '이메일을 입력해주세요');
+        return;
+      }
+      if (password.isEmpty) {
+        Get.snackbar('ERROR', '비밀번호를 입력해주세요');
+        return;
+      }
+      if (nickname.isEmpty) {
+        Get.snackbar('ERROR', '닉네임을 입력해주세요');
+        return;
+      }
+      if (profileImage == null) {
+        Get.snackbar('ERROR', '프로필 이미지를 등록해주세요');
+        return;
+      }
+
+      // 닉네임 중복여부 검사
+      final isDuplicatedNickname =
+          await AuthRepository.to.isDuplicated("nickname", nickname);
+      if (isDuplicatedNickname) {
+        Get.snackbar('ERROR', '중복된 닉네임입니다');
         return;
       }
 
@@ -128,7 +152,7 @@ class RegisterController extends GetxController {
 
       // 프로필 이미지 저장
       final profileImageUrl = await AuthRepository.to
-          .saveProfileImageInStorage(uid: uid, profileImage: profileImage!);
+          .saveProfileImageInStorage(uid: uid, profileImage: profileImage);
       if (profileImageUrl == null) {
         Get.snackbar('WARNING', '프로필 이미지 등록에 실패했습니다');
       }
@@ -138,11 +162,11 @@ class RegisterController extends GetxController {
           email: email,
           nickname: nickname,
           password: password,
-          age: age,
+          age: int.parse(age),
           phone: phone,
           city: city,
           introduce: introduce,
-          height: height,
+          height: int.parse(height),
           job: job,
           ideal: ideal,
           profileImageUrl: profileImageUrl,
@@ -157,6 +181,8 @@ class RegisterController extends GetxController {
     } catch (e) {
       CustomLogger.logger.e(e);
       Get.snackbar('ERROR', e.toString());
+    } finally {
+      _isLoading.value = false;
     }
   }
 }
