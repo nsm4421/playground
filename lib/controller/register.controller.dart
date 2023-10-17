@@ -171,7 +171,7 @@ class RegisterController extends GetxController {
           ideal: ideal,
           profileImageUrl: profileImageUrl,
           createdAt: DateTime.now(),
-          modifiedAt: DateTime.now());
+          lastSeen: DateTime.now());
       await AuthRepository.to
           .saveDataInUserCollection(uid: uid, data: user.toJson());
 

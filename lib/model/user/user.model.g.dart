@@ -19,12 +19,16 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       job: json['job'] as String? ?? '',
       ideal: json['ideal'] as String? ?? '',
       profileImageUrl: json['profileImageUrl'] as String? ?? '',
+      imageUrls: (json['imageUrls'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      modifiedAt: json['modifiedAt'] == null
+      lastSeen: json['lastSeen'] == null
           ? null
-          : DateTime.parse(json['modifiedAt'] as String),
+          : DateTime.parse(json['lastSeen'] as String),
       removedAt: json['removedAt'] == null
           ? null
           : DateTime.parse(json['removedAt'] as String),
@@ -43,7 +47,8 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'job': instance.job,
       'ideal': instance.ideal,
       'profileImageUrl': instance.profileImageUrl,
+      'imageUrls': instance.imageUrls,
       'createdAt': instance.createdAt?.toIso8601String(),
-      'modifiedAt': instance.modifiedAt?.toIso8601String(),
+      'lastSeen': instance.lastSeen?.toIso8601String(),
       'removedAt': instance.removedAt?.toIso8601String(),
     };

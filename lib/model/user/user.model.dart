@@ -18,8 +18,9 @@ class UserModel with _$UserModel {
     @Default('') String? job, // 직업
     @Default('') String? ideal, // 이상형
     @Default('') String? profileImageUrl, // 프로필 이미지 Url
+    @Default(<String>[]) List<String> imageUrls, // 이미지 Url
     DateTime? createdAt, // 생성시간
-    DateTime? modifiedAt, // 수정시간
+    DateTime? lastSeen, // 가장 최근 접속시간
     DateTime? removedAt, // 삭제시간
   }) = _UserModel;
 

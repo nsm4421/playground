@@ -32,8 +32,9 @@ mixin _$UserModel {
   String? get ideal => throw _privateConstructorUsedError; // 이상형
   String? get profileImageUrl =>
       throw _privateConstructorUsedError; // 프로필 이미지 Url
+  List<String> get imageUrls => throw _privateConstructorUsedError; // 이미지 Url
   DateTime? get createdAt => throw _privateConstructorUsedError; // 생성시간
-  DateTime? get modifiedAt => throw _privateConstructorUsedError; // 수정시간
+  DateTime? get lastSeen => throw _privateConstructorUsedError; // 가장 최근 접속시간
   DateTime? get removedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,8 +60,9 @@ abstract class $UserModelCopyWith<$Res> {
       String? job,
       String? ideal,
       String? profileImageUrl,
+      List<String> imageUrls,
       DateTime? createdAt,
-      DateTime? modifiedAt,
+      DateTime? lastSeen,
       DateTime? removedAt});
 }
 
@@ -88,8 +90,9 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? job = freezed,
     Object? ideal = freezed,
     Object? profileImageUrl = freezed,
+    Object? imageUrls = null,
     Object? createdAt = freezed,
-    Object? modifiedAt = freezed,
+    Object? lastSeen = freezed,
     Object? removedAt = freezed,
   }) {
     return _then(_value.copyWith(
@@ -137,13 +140,17 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      imageUrls: null == imageUrls
+          ? _value.imageUrls
+          : imageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      modifiedAt: freezed == modifiedAt
-          ? _value.modifiedAt
-          : modifiedAt // ignore: cast_nullable_to_non_nullable
+      lastSeen: freezed == lastSeen
+          ? _value.lastSeen
+          : lastSeen // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       removedAt: freezed == removedAt
           ? _value.removedAt
@@ -173,8 +180,9 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? job,
       String? ideal,
       String? profileImageUrl,
+      List<String> imageUrls,
       DateTime? createdAt,
-      DateTime? modifiedAt,
+      DateTime? lastSeen,
       DateTime? removedAt});
 }
 
@@ -200,8 +208,9 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? job = freezed,
     Object? ideal = freezed,
     Object? profileImageUrl = freezed,
+    Object? imageUrls = null,
     Object? createdAt = freezed,
-    Object? modifiedAt = freezed,
+    Object? lastSeen = freezed,
     Object? removedAt = freezed,
   }) {
     return _then(_$UserModelImpl(
@@ -249,13 +258,17 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      imageUrls: null == imageUrls
+          ? _value._imageUrls
+          : imageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      modifiedAt: freezed == modifiedAt
-          ? _value.modifiedAt
-          : modifiedAt // ignore: cast_nullable_to_non_nullable
+      lastSeen: freezed == lastSeen
+          ? _value.lastSeen
+          : lastSeen // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       removedAt: freezed == removedAt
           ? _value.removedAt
@@ -280,9 +293,11 @@ class _$UserModelImpl implements _UserModel {
       this.job = '',
       this.ideal = '',
       this.profileImageUrl = '',
+      final List<String> imageUrls = const <String>[],
       this.createdAt,
-      this.modifiedAt,
-      this.removedAt});
+      this.lastSeen,
+      this.removedAt})
+      : _imageUrls = imageUrls;
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -331,18 +346,29 @@ class _$UserModelImpl implements _UserModel {
   @JsonKey()
   final String? profileImageUrl;
 // 프로필 이미지 Url
+  final List<String> _imageUrls;
+// 프로필 이미지 Url
+  @override
+  @JsonKey()
+  List<String> get imageUrls {
+    if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_imageUrls);
+  }
+
+// 이미지 Url
   @override
   final DateTime? createdAt;
 // 생성시간
   @override
-  final DateTime? modifiedAt;
-// 수정시간
+  final DateTime? lastSeen;
+// 가장 최근 접속시간
   @override
   final DateTime? removedAt;
 
   @override
   String toString() {
-    return 'UserModel(email: $email, password: $password, nickname: $nickname, age: $age, phone: $phone, city: $city, introduce: $introduce, height: $height, job: $job, ideal: $ideal, profileImageUrl: $profileImageUrl, createdAt: $createdAt, modifiedAt: $modifiedAt, removedAt: $removedAt)';
+    return 'UserModel(email: $email, password: $password, nickname: $nickname, age: $age, phone: $phone, city: $city, introduce: $introduce, height: $height, job: $job, ideal: $ideal, profileImageUrl: $profileImageUrl, imageUrls: $imageUrls, createdAt: $createdAt, lastSeen: $lastSeen, removedAt: $removedAt)';
   }
 
   @override
@@ -365,10 +391,12 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.ideal, ideal) || other.ideal == ideal) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._imageUrls, _imageUrls) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.modifiedAt, modifiedAt) ||
-                other.modifiedAt == modifiedAt) &&
+            (identical(other.lastSeen, lastSeen) ||
+                other.lastSeen == lastSeen) &&
             (identical(other.removedAt, removedAt) ||
                 other.removedAt == removedAt));
   }
@@ -388,8 +416,9 @@ class _$UserModelImpl implements _UserModel {
       job,
       ideal,
       profileImageUrl,
+      const DeepCollectionEquality().hash(_imageUrls),
       createdAt,
-      modifiedAt,
+      lastSeen,
       removedAt);
 
   @JsonKey(ignore: true)
@@ -419,8 +448,9 @@ abstract class _UserModel implements UserModel {
       final String? job,
       final String? ideal,
       final String? profileImageUrl,
+      final List<String> imageUrls,
       final DateTime? createdAt,
-      final DateTime? modifiedAt,
+      final DateTime? lastSeen,
       final DateTime? removedAt}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -449,10 +479,12 @@ abstract class _UserModel implements UserModel {
   @override // 이상형
   String? get profileImageUrl;
   @override // 프로필 이미지 Url
+  List<String> get imageUrls;
+  @override // 이미지 Url
   DateTime? get createdAt;
   @override // 생성시간
-  DateTime? get modifiedAt;
-  @override // 수정시간
+  DateTime? get lastSeen;
+  @override // 가장 최근 접속시간
   DateTime? get removedAt;
   @override
   @JsonKey(ignore: true)
