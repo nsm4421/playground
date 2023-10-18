@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/presentation/features/chat/chat.screen.dart';
+import 'package:my_app/presentation/features/home/bloc/swipe/swipe.event.dart';
 import 'package:my_app/presentation/features/match/match.screen.dart';
 import 'package:my_app/presentation/features/setting/setting.screen.dart';
 
 import '../../../core/constant/bottom_navigation.enum.dart';
+import '../home/bloc/swipe/swipe.bloc.dart';
 import '../home/home.screen.dart';
 import 'bottom_navigation.widget.dart';
 import 'cubit/bottom_navigation.cubit.dart';
@@ -15,7 +17,9 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => BottomNavCubit()),
+          BlocProvider<BottomNavCubit>(create: (_) => BottomNavCubit()),
+          BlocProvider<SwipeBloc>(
+              create: (_) => SwipeBloc()..add(SwipeInitEvent()))
         ],
         child: const _MainScreenView(),
       );
