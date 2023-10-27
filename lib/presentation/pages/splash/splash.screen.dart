@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constant/asset_path.dart';
+import '../../../core/constant/enums/routes.enum.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,14 +20,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: _durationSecond), () => context.go('/home'));
+    Timer(const Duration(seconds: _durationSecond),
+        () => context.go(Routes.main.path));
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: Center(
-          child: SvgPicture.asset(AssetPath.appLogo),
-        ),
-      );
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: Center(child: SvgPicture.asset(AssetPath.appLogo)));
 }

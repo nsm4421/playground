@@ -1,20 +1,21 @@
 import 'package:go_router/go_router.dart';
-import 'package:my_app/presentation/pages/home/home.screen.dart';
+import 'package:my_app/core/constant/enums/routes.enum.dart';
+import 'package:my_app/presentation/main/main.screen.dart';
 
 import '../pages/splash/splash.screen.dart';
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: "/splash",
+  initialLocation: Routes.splash.path,
   routes: [
     GoRoute(
-      path: '/splash',
-      name: "splash",
+      path: Routes.splash.path,
+      name: Routes.splash.name,
       builder: (_, __) => const SplashScreen(),
     ),
     GoRoute(
-      path: '/home',
-      name: "home",
-      builder: (_, __) => const HomeScreen(),
+      path: Routes.main.path,
+      name: Routes.main.name,
+      builder: (_, __) => const MainScreen(),
     ),
   ],
 );
