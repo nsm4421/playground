@@ -8,6 +8,7 @@ web/*
 windows/*
 lib/firebase_options.dart
 lib/**.g.dart
+lib/dependency_injection.config.dart
 
 # Miscellaneous
 *.class
