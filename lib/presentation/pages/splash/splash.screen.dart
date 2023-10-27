@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../core/constant/asset_path.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -24,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: Center(
-          child: SvgPicture.asset("assets/svg/app-logo.svg"),
+          child: SvgPicture.asset(AssetPath.appLogo),
         ),
       );
 }
