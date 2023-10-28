@@ -11,6 +11,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: routerConfig,
         theme: CustomThemeData.themeData,
       );

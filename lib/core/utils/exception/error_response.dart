@@ -1,5 +1,3 @@
-import '../../constant/enums/status.enum.dart';
-
 class ErrorResponse {
   final String? status;
   final String? code;

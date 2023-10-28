@@ -1,4 +1,4 @@
-import 'package:my_app/core/utils/reponse_wrappper/response_wrapper.dart';
+import 'package:my_app/core/utils/response_wrappper/response_wrapper.dart';
 
 extension ResponseWrapperEx on ResponseWrapper {
   ResponseWrapper<T> toModel<T>(T data) => ResponseWrapper<T>(

@@ -1,11 +1,13 @@
-import 'package:my_app/core/utils/reponse_wrappper/response_wrapper.dart';
-import 'package:my_app/core/utils/reponse_wrappper/response_wrapper_extension.dart';
+import 'package:injectable/injectable.dart';
+import 'package:my_app/core/utils/response_wrappper/response_wrapper_extension.dart';
 import 'package:my_app/data/mapper/story_mapper.dart';
 import 'package:my_app/domain/model/story/story.model.dart';
 import 'package:my_app/domain/repository/story.repository.dart';
 
+import '../../core/utils/response_wrappper/response_wrapper.dart';
 import '../data_source/remote/story.api.dart';
 
+@Singleton(as: StoryRepository)
 class StoryRepositoryImpl extends StoryRepository {
   final StoryApi _storyApi;
 

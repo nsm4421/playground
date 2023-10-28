@@ -1,5 +1,6 @@
 enum Status {
+  initial,
   success,
   loading,
-  fail;
+  error;
 }

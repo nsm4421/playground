@@ -1,7 +1,8 @@
-import 'package:my_app/core/utils/reponse_wrappper/response_wrapper.dart';
 import 'package:my_app/data/data_source/remote/story.api.dart';
 import 'package:my_app/data/dto/story/story/story.dto.dart';
 import 'package:my_app/data/dto/user/user.dto.dart';
+
+import '../../../core/utils/response_wrappper/response_wrapper.dart';
 
 class MockStoryApi implements StoryApi {
   @override
@@ -9,7 +10,7 @@ class MockStoryApi implements StoryApi {
     return Future.delayed(
         const Duration(milliseconds: 400),
         () => const ResponseWrapper(
-                status: 'SUCCESS',
+                status:'SUCCESS',
                 code: '0000',
                 message: 'SUCCESS_TO_GET_STORY',
                 data: [
