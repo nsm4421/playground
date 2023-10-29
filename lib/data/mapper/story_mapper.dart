@@ -5,5 +5,5 @@ import '../../domain/model/story/story.model.dart';
 
 extension StorydtoEx on StoryDto {
   StoryModel toModel() =>
-      StoryModel(user: user?.toModel(), content: content, imageUrl: imageUrl);
+      StoryModel(user: user?.toModel(), content: content, imageUrls: imageUrls);
 }

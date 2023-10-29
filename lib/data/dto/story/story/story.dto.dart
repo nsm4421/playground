@@ -11,7 +11,7 @@ class StoryDto with _$StoryDto {
   const factory StoryDto({
     @Default(UserDto()) UserDto? user,
     @Default('') String? content,
-    @Default('') String? imageUrl,
+    @Default(<String>[]) List<String> imageUrls,
   }) = _StoryDto;
 
   factory StoryDto.fromJson(Map<String, dynamic> json) =>

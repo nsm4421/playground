@@ -6,10 +6,10 @@ import '../../../core/utils/response_wrappper/response_wrapper.dart';
 
 part 'story.api.g.dart';
 
-@RestApi(baseUrl: "/api/story")
+@RestApi()
 abstract class StoryApi {
   factory StoryApi(Dio dio) = _StoryApi;
 
-  @GET("/list")
+  @GET("api/story/list")
   Future<ResponseWrapper<List<StoryDto>>> getStories();
 }

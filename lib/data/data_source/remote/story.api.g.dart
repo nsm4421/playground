@@ -12,9 +12,7 @@ class _StoryApi implements StoryApi {
   _StoryApi(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= '/api/story';
-  }
+  });
 
   final Dio _dio;
 
@@ -34,7 +32,7 @@ class _StoryApi implements StoryApi {
     )
             .compose(
               _dio.options,
-              '/list',
+              'api/story/list',
               queryParameters: queryParameters,
               data: _data,
             )

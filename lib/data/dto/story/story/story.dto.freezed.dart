@@ -22,7 +22,7 @@ StoryDto _$StoryDtoFromJson(Map<String, dynamic> json) {
 mixin _$StoryDto {
   UserDto? get user => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
+  List<String> get imageUrls => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $StoryDtoCopyWith<$Res> {
   factory $StoryDtoCopyWith(StoryDto value, $Res Function(StoryDto) then) =
       _$StoryDtoCopyWithImpl<$Res, StoryDto>;
   @useResult
-  $Res call({UserDto? user, String? content, String? imageUrl});
+  $Res call({UserDto? user, String? content, List<String> imageUrls});
 
   $UserDtoCopyWith<$Res>? get user;
 }
@@ -55,7 +55,7 @@ class _$StoryDtoCopyWithImpl<$Res, $Val extends StoryDto>
   $Res call({
     Object? user = freezed,
     Object? content = freezed,
-    Object? imageUrl = freezed,
+    Object? imageUrls = null,
   }) {
     return _then(_value.copyWith(
       user: freezed == user
@@ -66,10 +66,10 @@ class _$StoryDtoCopyWithImpl<$Res, $Val extends StoryDto>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrls: null == imageUrls
+          ? _value.imageUrls
+          : imageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 
@@ -94,7 +94,7 @@ abstract class _$$StoryDtoImplCopyWith<$Res>
       __$$StoryDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UserDto? user, String? content, String? imageUrl});
+  $Res call({UserDto? user, String? content, List<String> imageUrls});
 
   @override
   $UserDtoCopyWith<$Res>? get user;
@@ -113,7 +113,7 @@ class __$$StoryDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? user = freezed,
     Object? content = freezed,
-    Object? imageUrl = freezed,
+    Object? imageUrls = null,
   }) {
     return _then(_$StoryDtoImpl(
       user: freezed == user
@@ -124,10 +124,10 @@ class __$$StoryDtoImplCopyWithImpl<$Res>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrls: null == imageUrls
+          ? _value._imageUrls
+          : imageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -136,7 +136,10 @@ class __$$StoryDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
   const _$StoryDtoImpl(
-      {this.user = const UserDto(), this.content = '', this.imageUrl = ''});
+      {this.user = const UserDto(),
+      this.content = '',
+      final List<String> imageUrls = const <String>[]})
+      : _imageUrls = imageUrls;
 
   factory _$StoryDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$StoryDtoImplFromJson(json);
@@ -147,13 +150,18 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
   @override
   @JsonKey()
   final String? content;
+  final List<String> _imageUrls;
   @override
   @JsonKey()
-  final String? imageUrl;
+  List<String> get imageUrls {
+    if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_imageUrls);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'StoryDto(user: $user, content: $content, imageUrl: $imageUrl)';
+    return 'StoryDto(user: $user, content: $content, imageUrls: $imageUrls)';
   }
 
   @override
@@ -163,7 +171,7 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
       ..add(DiagnosticsProperty('type', 'StoryDto'))
       ..add(DiagnosticsProperty('user', user))
       ..add(DiagnosticsProperty('content', content))
-      ..add(DiagnosticsProperty('imageUrl', imageUrl));
+      ..add(DiagnosticsProperty('imageUrls', imageUrls));
   }
 
   @override
@@ -173,13 +181,14 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
             other is _$StoryDtoImpl &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.content, content) || other.content == content) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl));
+            const DeepCollectionEquality()
+                .equals(other._imageUrls, _imageUrls));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, user, content, imageUrl);
+  int get hashCode => Object.hash(runtimeType, user, content,
+      const DeepCollectionEquality().hash(_imageUrls));
 
   @JsonKey(ignore: true)
   @override
@@ -199,7 +208,7 @@ abstract class _StoryDto implements StoryDto {
   const factory _StoryDto(
       {final UserDto? user,
       final String? content,
-      final String? imageUrl}) = _$StoryDtoImpl;
+      final List<String> imageUrls}) = _$StoryDtoImpl;
 
   factory _StoryDto.fromJson(Map<String, dynamic> json) =
       _$StoryDtoImpl.fromJson;
@@ -209,7 +218,7 @@ abstract class _StoryDto implements StoryDto {
   @override
   String? get content;
   @override
-  String? get imageUrl;
+  List<String> get imageUrls;
   @override
   @JsonKey(ignore: true)
   _$$StoryDtoImplCopyWith<_$StoryDtoImpl> get copyWith =>

@@ -11,7 +11,7 @@ class StoryModel with _$StoryModel {
   const factory StoryModel({
     required UserModel? user,
     required String? content,
-    required String? imageUrl,
+    required List<String> imageUrls,
   }) = _StoryModel;
 
   factory StoryModel.fromJson(Map<String, dynamic> json) =>
