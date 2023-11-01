@@ -6,11 +6,11 @@ import 'presentation/routes/router_config.dart';
 import 'dependency_injection.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   configureDependencies(); // 의존성 주입
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 
