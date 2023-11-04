@@ -5,7 +5,7 @@ import 'package:my_app/domain/model/story/story.model.dart';
 import 'package:my_app/domain/repository/story.repository.dart';
 
 import '../../core/utils/response_wrappper/response_wrapper.dart';
-import '../data_source/remote/story.api.dart';
+import '../data_source/remote/story/story.api.dart';
 
 @Singleton(as: StoryRepository)
 class StoryRepositoryImpl extends StoryRepository {

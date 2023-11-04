@@ -11,7 +11,7 @@ _$ResponseWrapperImpl<T> _$$ResponseWrapperImplFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) =>
     _$ResponseWrapperImpl<T>(
-      status: json['status'] as String? ?? '',
+      status: $enumDecode(_$ResponseStatusEnumMap, json['status']),
       code: json['code'] as String? ?? '',
       message: json['message'] as String? ?? '',
       data: _$nullableGenericFromJson(json['data'], fromJsonT),
@@ -22,11 +22,16 @@ Map<String, dynamic> _$$ResponseWrapperImplToJson<T>(
   Object? Function(T value) toJsonT,
 ) =>
     <String, dynamic>{
-      'status': instance.status,
+      'status': _$ResponseStatusEnumMap[instance.status]!,
       'code': instance.code,
       'message': instance.message,
       'data': _$nullableGenericToJson(instance.data, toJsonT),
     };
+
+const _$ResponseStatusEnumMap = {
+  ResponseStatus.success: 'success',
+  ResponseStatus.error: 'error',
+};
 
 T? _$nullableGenericFromJson<T>(
   Object? input,

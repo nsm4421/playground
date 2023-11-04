@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../constant/enums/status.enum.dart';
+
 part 'response_wrapper.freezed.dart';
 
 part 'response_wrapper.g.dart';
@@ -8,7 +10,7 @@ part 'response_wrapper.g.dart';
 @Freezed(genericArgumentFactories: true)
 class ResponseWrapper<T> with _$ResponseWrapper<T> {
   const factory ResponseWrapper({
-    @Default('') String status,
+    required ResponseStatus status,
     @Default('') String code,
     @Default('') String message,
     T? data,

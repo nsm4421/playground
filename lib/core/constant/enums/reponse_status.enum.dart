@@ -1,1 +1,0 @@
-enum ResponseStatus { success, fail }

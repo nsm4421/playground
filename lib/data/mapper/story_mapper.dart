@@ -1,4 +1,4 @@
-import 'package:my_app/data/dto/story/story/story.dto.dart';
+import 'package:my_app/data/dto/story/story.dto.dart';
 import 'package:my_app/data/mapper/user_mapper.dart';
 
 import '../../domain/model/story/story.model.dart';
