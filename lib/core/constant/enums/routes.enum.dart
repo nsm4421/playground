@@ -1,4 +1,4 @@
-enum Routes { splash, main }
+enum Routes { splash, main, chat }
 
 extension RoutesEx on Routes {
   String get path {
@@ -7,6 +7,8 @@ extension RoutesEx on Routes {
         return "/splash";
       case Routes.main:
         return "/main";
+      case Routes.chat:
+        return "/chat";
     }
   }
 
@@ -16,6 +18,8 @@ extension RoutesEx on Routes {
         return "splash";
       case Routes.main:
         return "main";
+      case Routes.chat:
+        return "chat";
     }
   }
 }
