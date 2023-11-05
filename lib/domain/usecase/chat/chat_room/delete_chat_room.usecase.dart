@@ -4,16 +4,16 @@ import '../../../model/result/result.dart';
 import '../../../repository/chat.repository.dart';
 import '../../base/remote.usecase.dart';
 
-class GetChatMessageStreamUseCase extends RemoteUseCase<ChatRepository> {
+class DeleteChatRoomUseCase extends RemoteUseCase<ChatRepository> {
   final String chatRoomId;
 
-  GetChatMessageStreamUseCase({required this.chatRoomId});
+  DeleteChatRoomUseCase({required this.chatRoomId});
 
   @override
   Future call(ChatRepository repository) async {
-    final result = repository.getChatMessageStream(chatRoomId);
+    final result = await repository.deleteChatRoom(chatRoomId);
     return result.status == ResponseStatus.success
-        ? Result.success(result.data ?? [])
+        ? Result.success(result.data)
         : Result.failure(ErrorResponse(
             status: 'ERROR', code: result.code, message: result.message));
   }

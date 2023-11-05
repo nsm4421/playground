@@ -73,16 +73,40 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  ResponseWrapper<Stream<List<ChatMessageModel>>?> getChatMessageStream(
-      String chatRoomId) {
+  Future<ResponseWrapper<void>> modifyChatRoom(
+      {required String chatRoomId,
+      required String chatRoomName,
+      required List<String> hashtags}) async {
     try {
-      final stream = _chatApi.getChatMessageStream(chatRoomId);
-      return ResponseWrapper(status: ResponseStatus.success, data: stream);
+      await _chatApi.modifyChatRoom(
+          chatRoomId: chatRoomId,
+          chatRoomName: chatRoomName,
+          hashtags: hashtags);
+      return const ResponseWrapper(status: ResponseStatus.success);
     } catch (err) {
       CustomLogger.logger.e(err);
       return const ResponseWrapper(
-          status: ResponseStatus.error,
-          message: "Fail to get chat message stream");
+          status: ResponseStatus.error, message: "Fail to modify chat room");
     }
   }
+
+  @override
+  Future<ResponseWrapper<void>> deleteChatRoom(String chatRoomId) async {
+    try {
+      await _chatApi.deleteChatRoom(chatRoomId);
+      return const ResponseWrapper(status: ResponseStatus.success);
+    } catch (err) {
+      CustomLogger.logger.e(err);
+      return const ResponseWrapper(
+          status: ResponseStatus.error, message: "Fail to delete chat room");
+    }
+  }
+
+  @override
+  Stream<List<ChatRoomModel>> getChatRoomStream() =>
+      _chatApi.getChatRoomStream();
+
+  @override
+  Stream<List<ChatMessageModel>> getChatMessageStream(String chatRoomId) =>
+      _chatApi.getChatMessageStream(chatRoomId);
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/custom_theme.dart';
+import 'package:my_app/domain/repository/chat.repository.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.bloc.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.event.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.state.dart';
@@ -67,12 +67,15 @@ class _ChatScreenViewState extends State<_ChatScreenView> {
           onRefresh: () async {
             await _handleGetChatRooms();
           },
-          child: ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (_, index) =>
-                  _ChatRoomListTile(widget.state.chatRooms[index]),
-              separatorBuilder: (_, __) => const Divider(),
-              itemCount: widget.state.chatRooms.length),
+          child: StreamBuilder<List<ChatRoomModel>>(
+            stream: getIt<ChatRepository>().getChatRoomStream(),
+            initialData: widget.state.chatRooms,
+            builder: (_, snapshot) => SingleChildScrollView(
+              child: Column(
+                  children:
+                      snapshot.data!.map((e) => _ChatRoomListTile(e)).toList()),
+            ),
+          ),
         ),
       );
 }
@@ -93,7 +96,7 @@ class _ChatRoomListTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (ctx) => ChatRoomScreen(chatRoom.chatRoomId!),
+            builder: (ctx) => ChatRoomScreen(chatRoom),
           ),
         );
       };

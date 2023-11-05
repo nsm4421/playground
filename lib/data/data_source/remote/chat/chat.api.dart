@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/data/dto/chat/chat_message/chat_message.dto.dart';
 import 'package:my_app/data/mapper/chat_message_mapper.dart';
+import 'package:my_app/data/mapper/chat_room_mapper.dart';
+import 'package:my_app/domain/model/chat/chat_room/chat_room.model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../domain/model/chat/chat_message/chat_message.model.dart';
@@ -50,6 +52,42 @@ class ChatApi {
     return res;
   }
 
+  Future<void> modifyChatRoom({
+    required String chatRoomId,
+    required String chatRoomName,
+    required List<String> hashtags,
+  }) async {
+    final currentUid = _auth.currentUser?.uid;
+    if (currentUid == null) throw Exception('NOT_LOGIN');
+    final fetched = await _db
+        .collection(_chatCollectionName)
+        .doc(chatRoomId)
+        .get()
+        .then((value) => value.data());
+    if (fetched == null) throw Exception('NOT_FOUND');
+    final chatRoom = ChatRoomDto.fromJson(fetched);
+    if (chatRoom.hostUid != currentUid) throw Exception('NOT_GRANTED');
+    await _db.collection(_chatCollectionName).doc(chatRoomId).set(chatRoom
+        .copyWith(chatRoomName: chatRoomName, hashtags: hashtags)
+        .toJson());
+  }
+
+  Future<void> deleteChatRoom(
+    String chatRoomId,
+  ) async {
+    final currentUid = _auth.currentUser?.uid;
+    if (currentUid == null) throw Exception('NOT_LOGIN');
+    final fetched = await _db
+        .collection(_chatCollectionName)
+        .doc(chatRoomId)
+        .get()
+        .then((value) => value.data());
+    if (fetched == null) throw Exception('NOT_FOUND');
+    final chatRoom = ChatRoomDto.fromJson(fetched);
+    if (chatRoom.hostUid != currentUid) throw Exception('NOT_GRANTED');
+    await _db.collection(_chatCollectionName).doc(chatRoomId).delete();
+  }
+
   Future<ChatRoomDto> getChatRoomById(String chatRoomId) async =>
       ChatRoomDto.fromJson((await _db
               .collection(_chatCollectionName)
@@ -63,11 +101,23 @@ class ChatApi {
           .collection(_chatCollectionName)
           .doc(chatRoomId)
           .collection(_messageCollectionName)
-          .orderBy(_orderByFieldName, descending: true)
+          .orderBy(_orderByFieldName)
           .get())
       .docs
       .map((e) => ChatMessageDto.fromJson(e.data()))
       .toList();
+
+  Stream<List<ChatRoomModel>> getChatRoomStream() => _db
+          .collection(_chatCollectionName)
+          .orderBy(_orderByFieldName, descending: true)
+          .snapshots()
+          .asyncMap((e) async {
+        List<ChatRoomModel> chatRooms = [];
+        for (var doc in e.docs) {
+          chatRooms.add(ChatRoomDto.fromJson(doc.data()).toModel());
+        }
+        return chatRooms;
+      });
 
   Stream<List<ChatMessageModel>> getChatMessageStream(String chatRoomId) => _db
           .collection(_chatCollectionName)

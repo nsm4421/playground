@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/domain/model/chat/chat_message/chat_message.model.dart';
+import 'package:my_app/domain/model/chat/chat_room/chat_room.model.dart';
+
+import '../../../dependency_injection.dart';
+import '../../../domain/repository/chat.repository.dart';
 
 class ChatRoomScreen extends StatelessWidget {
-  const ChatRoomScreen(this.chatRoomId, {super.key});
+  const ChatRoomScreen(this.chatRoom, {super.key});
 
-  final String chatRoomId;
+  final ChatRoomModel chatRoom;
 
   @override
-  Widget build(BuildContext context) => chatRoomId.isEmpty
-      ? const Center(child: Text("잘못된 접근입니다"))
-      : Scaffold(
-          appBar: AppBar(
-            title: Text("ChatRoom ${chatRoomId}"),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(chatRoom.chatRoomName ?? ''),
+        ),
+        body: StreamBuilder<List<ChatMessageModel>>(
+          stream: getIt<ChatRepository>()
+              .getChatMessageStream(chatRoom.chatRoomId!),
+          initialData: [],
+          builder: (_, snapshot) => SingleChildScrollView(
+            child: Column(
+              children: snapshot.data!.map((e) => Text(e.toString())).toList(),
+            ),
           ),
-        );
+        ),
+      );
 }
