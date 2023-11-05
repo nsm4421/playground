@@ -12,6 +12,7 @@ class StoryDto with _$StoryDto {
     @Default(UserDto()) UserDto? user,
     @Default('') String? content,
     @Default(<String>[]) List<String> imageUrls,
+    DateTime? createdAt,
   }) = _StoryDto;
 
   factory StoryDto.fromJson(Map<String, dynamic> json) =>

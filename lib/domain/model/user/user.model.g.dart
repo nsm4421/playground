@@ -11,6 +11,9 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       nickname: json['nickname'] as String?,
       age: json['age'] as int?,
       profileImageUrl: json['profileImageUrl'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -18,4 +21,5 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'nickname': instance.nickname,
       'age': instance.age,
       'profileImageUrl': instance.profileImageUrl,
+      'createdAt': instance.createdAt?.toIso8601String(),
     };

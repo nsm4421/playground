@@ -10,6 +10,7 @@ class UserDto with _$UserDto {
     @Default('') String? nickname,
     @Default(-1) int age,
     @Default('') String? profileImageUrl,
+    DateTime? createdAt,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

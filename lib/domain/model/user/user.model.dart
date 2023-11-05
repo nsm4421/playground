@@ -10,7 +10,8 @@ class UserModel with _$UserModel {
   const factory UserModel(
       {required String? nickname,
       required int? age,
-      required String? profileImageUrl}) = _UserModel;
+      required String? profileImageUrl,
+      DateTime? createdAt}) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);

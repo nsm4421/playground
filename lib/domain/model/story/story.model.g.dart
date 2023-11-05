@@ -14,6 +14,9 @@ _$StoryModelImpl _$$StoryModelImplFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String?,
       imageUrls:
           (json['imageUrls'] as List<dynamic>).map((e) => e as String).toList(),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$$StoryModelImplToJson(_$StoryModelImpl instance) =>
@@ -21,4 +24,5 @@ Map<String, dynamic> _$$StoryModelImplToJson(_$StoryModelImpl instance) =>
       'user': instance.user,
       'content': instance.content,
       'imageUrls': instance.imageUrls,
+      'createdAt': instance.createdAt?.toIso8601String(),
     };

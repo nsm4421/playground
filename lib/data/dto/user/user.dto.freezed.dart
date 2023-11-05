@@ -23,6 +23,7 @@ mixin _$UserDto {
   String? get nickname => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   String? get profileImageUrl => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,11 @@ abstract class $UserDtoCopyWith<$Res> {
   factory $UserDtoCopyWith(UserDto value, $Res Function(UserDto) then) =
       _$UserDtoCopyWithImpl<$Res, UserDto>;
   @useResult
-  $Res call({String? nickname, int age, String? profileImageUrl});
+  $Res call(
+      {String? nickname,
+      int age,
+      String? profileImageUrl,
+      DateTime? createdAt});
 }
 
 /// @nodoc
@@ -53,6 +58,7 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? nickname = freezed,
     Object? age = null,
     Object? profileImageUrl = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
       nickname: freezed == nickname
@@ -67,6 +73,10 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -78,7 +88,11 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
       __$$UserDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? nickname, int age, String? profileImageUrl});
+  $Res call(
+      {String? nickname,
+      int age,
+      String? profileImageUrl,
+      DateTime? createdAt});
 }
 
 /// @nodoc
@@ -95,6 +109,7 @@ class __$$UserDtoImplCopyWithImpl<$Res>
     Object? nickname = freezed,
     Object? age = null,
     Object? profileImageUrl = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(_$UserDtoImpl(
       nickname: freezed == nickname
@@ -109,6 +124,10 @@ class __$$UserDtoImplCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -117,7 +136,10 @@ class __$$UserDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserDtoImpl implements _UserDto {
   const _$UserDtoImpl(
-      {this.nickname = '', this.age = -1, this.profileImageUrl = ''});
+      {this.nickname = '',
+      this.age = -1,
+      this.profileImageUrl = '',
+      this.createdAt});
 
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDtoImplFromJson(json);
@@ -131,10 +153,12 @@ class _$UserDtoImpl implements _UserDto {
   @override
   @JsonKey()
   final String? profileImageUrl;
+  @override
+  final DateTime? createdAt;
 
   @override
   String toString() {
-    return 'UserDto(nickname: $nickname, age: $age, profileImageUrl: $profileImageUrl)';
+    return 'UserDto(nickname: $nickname, age: $age, profileImageUrl: $profileImageUrl, createdAt: $createdAt)';
   }
 
   @override
@@ -146,12 +170,15 @@ class _$UserDtoImpl implements _UserDto {
                 other.nickname == nickname) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
-                other.profileImageUrl == profileImageUrl));
+                other.profileImageUrl == profileImageUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, nickname, age, profileImageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, nickname, age, profileImageUrl, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -171,7 +198,8 @@ abstract class _UserDto implements UserDto {
   const factory _UserDto(
       {final String? nickname,
       final int age,
-      final String? profileImageUrl}) = _$UserDtoImpl;
+      final String? profileImageUrl,
+      final DateTime? createdAt}) = _$UserDtoImpl;
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
 
@@ -181,6 +209,8 @@ abstract class _UserDto implements UserDto {
   int get age;
   @override
   String? get profileImageUrl;
+  @override
+  DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
   _$$UserDtoImplCopyWith<_$UserDtoImpl> get copyWith =>

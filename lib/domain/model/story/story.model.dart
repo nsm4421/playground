@@ -12,6 +12,7 @@ class StoryModel with _$StoryModel {
     required UserModel? user,
     required String? content,
     required List<String> imageUrls,
+    DateTime? createdAt,
   }) = _StoryModel;
 
   factory StoryModel.fromJson(Map<String, dynamic> json) =>

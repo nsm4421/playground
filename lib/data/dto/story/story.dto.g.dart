@@ -16,6 +16,9 @@ _$StoryDtoImpl _$$StoryDtoImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$$StoryDtoImplToJson(_$StoryDtoImpl instance) =>
@@ -23,4 +26,5 @@ Map<String, dynamic> _$$StoryDtoImplToJson(_$StoryDtoImpl instance) =>
       'user': instance.user,
       'content': instance.content,
       'imageUrls': instance.imageUrls,
+      'createdAt': instance.createdAt?.toIso8601String(),
     };

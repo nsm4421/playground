@@ -23,6 +23,7 @@ mixin _$StoryDto {
   UserDto? get user => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
   List<String> get imageUrls => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,11 @@ abstract class $StoryDtoCopyWith<$Res> {
   factory $StoryDtoCopyWith(StoryDto value, $Res Function(StoryDto) then) =
       _$StoryDtoCopyWithImpl<$Res, StoryDto>;
   @useResult
-  $Res call({UserDto? user, String? content, List<String> imageUrls});
+  $Res call(
+      {UserDto? user,
+      String? content,
+      List<String> imageUrls,
+      DateTime? createdAt});
 
   $UserDtoCopyWith<$Res>? get user;
 }
@@ -56,6 +61,7 @@ class _$StoryDtoCopyWithImpl<$Res, $Val extends StoryDto>
     Object? user = freezed,
     Object? content = freezed,
     Object? imageUrls = null,
+    Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
       user: freezed == user
@@ -70,6 +76,10 @@ class _$StoryDtoCopyWithImpl<$Res, $Val extends StoryDto>
           ? _value.imageUrls
           : imageUrls // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 
@@ -94,7 +104,11 @@ abstract class _$$StoryDtoImplCopyWith<$Res>
       __$$StoryDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UserDto? user, String? content, List<String> imageUrls});
+  $Res call(
+      {UserDto? user,
+      String? content,
+      List<String> imageUrls,
+      DateTime? createdAt});
 
   @override
   $UserDtoCopyWith<$Res>? get user;
@@ -114,6 +128,7 @@ class __$$StoryDtoImplCopyWithImpl<$Res>
     Object? user = freezed,
     Object? content = freezed,
     Object? imageUrls = null,
+    Object? createdAt = freezed,
   }) {
     return _then(_$StoryDtoImpl(
       user: freezed == user
@@ -128,6 +143,10 @@ class __$$StoryDtoImplCopyWithImpl<$Res>
           ? _value._imageUrls
           : imageUrls // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -138,7 +157,8 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
   const _$StoryDtoImpl(
       {this.user = const UserDto(),
       this.content = '',
-      final List<String> imageUrls = const <String>[]})
+      final List<String> imageUrls = const <String>[],
+      this.createdAt})
       : _imageUrls = imageUrls;
 
   factory _$StoryDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -160,8 +180,11 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
   }
 
   @override
+  final DateTime? createdAt;
+
+  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'StoryDto(user: $user, content: $content, imageUrls: $imageUrls)';
+    return 'StoryDto(user: $user, content: $content, imageUrls: $imageUrls, createdAt: $createdAt)';
   }
 
   @override
@@ -171,7 +194,8 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
       ..add(DiagnosticsProperty('type', 'StoryDto'))
       ..add(DiagnosticsProperty('user', user))
       ..add(DiagnosticsProperty('content', content))
-      ..add(DiagnosticsProperty('imageUrls', imageUrls));
+      ..add(DiagnosticsProperty('imageUrls', imageUrls))
+      ..add(DiagnosticsProperty('createdAt', createdAt));
   }
 
   @override
@@ -182,13 +206,15 @@ class _$StoryDtoImpl with DiagnosticableTreeMixin implements _StoryDto {
             (identical(other.user, user) || other.user == user) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality()
-                .equals(other._imageUrls, _imageUrls));
+                .equals(other._imageUrls, _imageUrls) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, user, content,
-      const DeepCollectionEquality().hash(_imageUrls));
+      const DeepCollectionEquality().hash(_imageUrls), createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -208,7 +234,8 @@ abstract class _StoryDto implements StoryDto {
   const factory _StoryDto(
       {final UserDto? user,
       final String? content,
-      final List<String> imageUrls}) = _$StoryDtoImpl;
+      final List<String> imageUrls,
+      final DateTime? createdAt}) = _$StoryDtoImpl;
 
   factory _StoryDto.fromJson(Map<String, dynamic> json) =
       _$StoryDtoImpl.fromJson;
@@ -219,6 +246,8 @@ abstract class _StoryDto implements StoryDto {
   String? get content;
   @override
   List<String> get imageUrls;
+  @override
+  DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
   _$$StoryDtoImplCopyWith<_$StoryDtoImpl> get copyWith =>

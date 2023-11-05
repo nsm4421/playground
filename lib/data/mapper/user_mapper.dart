@@ -5,5 +5,6 @@ extension UserDtoEx on UserDto {
   UserModel toModel() => UserModel(
       nickname: nickname ?? '',
       age: age ?? -1,
-      profileImageUrl: profileImageUrl ?? '');
+      profileImageUrl: profileImageUrl ?? '',
+      createdAt: createdAt);
 }
