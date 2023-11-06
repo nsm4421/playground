@@ -107,6 +107,24 @@ class ChatApi {
       .map((e) => ChatMessageDto.fromJson(e.data()))
       .toList();
 
+  Future<ChatMessageDto> sendChatMessage(
+      {required String chatRoomId, required String message}) async {
+    final chatMessageId = (const Uuid()).v1();
+    final chatMessage = ChatMessageDto(
+        chatRoomId: chatRoomId,
+        message: message,
+        createdAt: DateTime.now(),
+        // TODO : 인증기능 구현 후 실제 로그인한 유저 uid 박기
+        senderUid: "test user id");
+    await _db
+        .collection(_chatCollectionName)
+        .doc(chatRoomId)
+        .collection(_messageCollectionName)
+        .doc(chatMessageId)
+        .set(chatMessage.toJson());
+    return chatMessage;
+  }
+
   Stream<List<ChatRoomModel>> getChatRoomStream() => _db
           .collection(_chatCollectionName)
           .orderBy(_orderByFieldName, descending: true)

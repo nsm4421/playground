@@ -22,6 +22,9 @@ abstract class ChatRepository extends Repository {
   Future<ResponseWrapper<List<ChatMessageModel>?>> getChatMessages(
       String chatRoomId);
 
+  Future<ResponseWrapper<ChatMessageModel?>> sendChatMessage(
+      {required String chatRoomId, required String message});
+
   Stream<List<ChatRoomModel>> getChatRoomStream();
 
   Stream<List<ChatMessageModel>> getChatMessageStream(String chatRoomId);

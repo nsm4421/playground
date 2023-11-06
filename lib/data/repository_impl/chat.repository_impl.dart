@@ -73,6 +73,21 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
+  Future<ResponseWrapper<ChatMessageModel?>> sendChatMessage(
+      {required String chatRoomId, required String message}) async {
+    try {
+      final chatMessageDto = await _chatApi.sendChatMessage(
+          chatRoomId: chatRoomId, message: message);
+      return ResponseWrapper(
+          status: ResponseStatus.success, data: chatMessageDto.toModel());
+    } catch (err) {
+      CustomLogger.logger.e(err);
+      return const ResponseWrapper(
+          status: ResponseStatus.error, message: "Fail to send message");
+    }
+  }
+
+  @override
   Future<ResponseWrapper<void>> modifyChatRoom(
       {required String chatRoomId,
       required String chatRoomName,
