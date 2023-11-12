@@ -85,7 +85,7 @@ class _ChatRoomListTile extends StatelessWidget {
 
   final ChatRoomModel chatRoom;
 
-  _handleGoToChatRoom(BuildContext context) => () {
+  _handleGoToChatRoom(BuildContext context) => () async {
         if (chatRoom.chatRoomId == null) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('존재하지 않는 채팅방입니다'),
@@ -93,6 +93,7 @@ class _ChatRoomListTile extends StatelessWidget {
           ));
           return;
         }
+        getIt<ChatRoomBloc>().add(EnterChatRoomEvent(chatRoom.chatRoomId!));
         Navigator.push(
           context,
           MaterialPageRoute(

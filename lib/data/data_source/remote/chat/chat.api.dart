@@ -34,23 +34,53 @@ class ChatApi {
     await _db.collection(_chatCollectionName).doc(chatRoomId).set(ChatRoomDto(
             chatRoomId: chatRoomId,
             chatRoomName: chatRoomName,
-            hashtags: hashtags,
+            hashtags: hashtags.toSet().toList(),
             uidList: [uid],
             hostUid: uid,
             createdAt: DateTime.now())
         .toJson());
   }
 
-  Future<List<ChatRoomDto>> getChatRooms() async {
-    final res = (await _db
-            .collection(_chatCollectionName)
-            .orderBy(_orderByFieldName)
-            .get())
-        .docs
-        .map((e) => ChatRoomDto.fromJson(e.data()))
-        .toList();
-    return res;
+  Future<void> enterChatRoom(String chatRoomId) async {
+    final data =
+        (await _db.collection(_chatCollectionName).doc(chatRoomId).get())
+            .data();
+    if (data == null) throw Exception('NOT_EXIST');
+    final chatRoom = ChatRoomDto.fromJson(data);
+    // TODO : 실제 로그인한 유저 uid 사용하기
+    // final uid = _auth.currentUser?.uid;
+    const uid = 'test user id2';
+    await _db
+        .collection(_chatCollectionName)
+        .doc(chatRoomId)
+        .set(chatRoom.copyWith(uidList: [...chatRoom.uidList, uid]).toJson());
   }
+
+  Future<void> leaveChatRoom(String chatRoomId) async {
+    final data =
+        (await _db.collection(_chatCollectionName).doc(chatRoomId).get())
+            .data();
+    if (data == null) throw Exception('NOT_EXIST');
+    final chatRoom = ChatRoomDto.fromJson(data);
+    // TODO : 실제 로그인한 유저 uid 사용하기
+    // final uid = _auth.currentUser?.uid;
+    const uid = 'test user id2';
+    final uidList = [...chatRoom.uidList];
+    uidList.remove(uid);
+    chatRoom.uidList.remove(uid);
+    await _db
+        .collection(_chatCollectionName)
+        .doc(chatRoomId)
+        .set(chatRoom.copyWith(uidList: uidList).toJson());
+  }
+
+  Future<List<ChatRoomDto>> getChatRooms() async => (await _db
+          .collection(_chatCollectionName)
+          .orderBy(_orderByFieldName)
+          .get())
+      .docs
+      .map((e) => ChatRoomDto.fromJson(e.data()))
+      .toList();
 
   Future<void> modifyChatRoom({
     required String chatRoomId,
@@ -68,7 +98,8 @@ class ChatApi {
     final chatRoom = ChatRoomDto.fromJson(fetched);
     if (chatRoom.hostUid != currentUid) throw Exception('NOT_GRANTED');
     await _db.collection(_chatCollectionName).doc(chatRoomId).set(chatRoom
-        .copyWith(chatRoomName: chatRoomName, hashtags: hashtags)
+        .copyWith(
+            chatRoomName: chatRoomName, hashtags: hashtags.toSet().toList())
         .toJson());
   }
 

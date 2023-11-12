@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/core/utils/logging/custom_logger.dart';
 import 'package:my_app/domain/model/chat/chat_room/chat_room.model.dart';
 import 'package:my_app/domain/usecase/chat/chat_room/create_chat_room.usecase.dart';
+import 'package:my_app/domain/usecase/chat/chat_room/enter_chat_room.usecase.dart';
 import 'package:my_app/domain/usecase/chat/chat_room/get_chat_rooms.usecase.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.event.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.state.dart';
@@ -11,6 +12,7 @@ import '../../../../../core/constant/enums/status.enum.dart';
 import '../../../../../core/utils/exception/custom_exception.dart';
 import '../../../../../domain/model/result/result.dart';
 import '../../../../../domain/usecase/chat/chat.usecase.dart';
+import '../../../../../domain/usecase/chat/chat_room/leave_chat_room.usecase.dart';
 
 @injectable
 class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
@@ -19,6 +21,8 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
   ChatRoomBloc(this._chatUseCase) : super(const ChatRoomState()) {
     on<ChatRoomInitializedEvent>(_onChatRoomInitialized);
     on<ChatRoomCreateEvent>(_onChatRoomCreated);
+    on<EnterChatRoomEvent>(_onEnterChatRoom);
+    on<LeaveChatRoomEvent>(_onLeaveChatRoom);
   }
 
   Future<Result<List<ChatRoomModel>>> _getChatRooms() async =>
@@ -53,6 +57,30 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
       }, failure: (err) {
         emit(state.copyWith(status: Status.error, error: err));
       });
+    } catch (err) {
+      CustomLogger.logger.e(err);
+      emit(state.copyWith(
+          status: Status.error, error: CommonException.setError(err)));
+    }
+  }
+
+  Future<void> _onEnterChatRoom(
+      EnterChatRoomEvent event, Emitter<ChatRoomState> emit) async {
+    try {
+      await _chatUseCase.execute(
+          useCase: EnterChatRoomUseCase(event.chatRoomId));
+    } catch (err) {
+      CustomLogger.logger.e(err);
+      emit(state.copyWith(
+          status: Status.error, error: CommonException.setError(err)));
+    }
+  }
+
+  Future<void> _onLeaveChatRoom(
+      LeaveChatRoomEvent event, Emitter<ChatRoomState> emit) async {
+    try {
+      await _chatUseCase.execute(
+          useCase: LeaveChatRoomUseCase(event.chatRoomId));
     } catch (err) {
       CustomLogger.logger.e(err);
       emit(state.copyWith(

@@ -1,5 +1,3 @@
-import 'package:my_app/domain/model/chat/chat_message/chat_message.model.dart';
-
 import '../../../../core/constant/enums/status.enum.dart';
 import '../../../../core/utils/exception/error_response.dart';
 import '../../../model/result/result.dart';

@@ -4,6 +4,8 @@ import 'package:my_app/domain/model/chat/chat_message/chat_message.model.dart';
 import 'package:my_app/domain/model/chat/chat_room/chat_room.model.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_message/chat_message.event.dart';
 import 'package:my_app/presentation/pages/chat/bloc/chat_message/chat_message.state.dart';
+import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.bloc.dart';
+import 'package:my_app/presentation/pages/chat/bloc/chat_room/chat_room.event.dart';
 
 import '../../../core/constant/enums/status.enum.dart';
 import '../../../dependency_injection.dart';
@@ -48,17 +50,29 @@ class _ChatRoomView extends StatefulWidget {
 
 class _ChatRoomViewState extends State<_ChatRoomView> {
   late TextEditingController _tec;
+  late ScrollController _sc;
 
   @override
   void initState() {
     super.initState();
     _tec = TextEditingController();
+    _sc = ScrollController(initialScrollOffset: double.infinity);
   }
 
   @override
   void dispose() {
     super.dispose();
     _tec.dispose();
+    _sc.dispose();
+    getIt<ChatRoomBloc>().add(LeaveChatRoomEvent(widget.chatRoom.chatRoomId!));
+  }
+
+  _jumpToEndDown() {
+    _sc.animateTo(
+      _sc.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   // 메세지 보내기
@@ -68,30 +82,60 @@ class _ChatRoomViewState extends State<_ChatRoomView> {
         chatRoomId: widget.chatRoom.chatRoomId!,
         message: _tec.text.trimRight()));
     _tec.clear();
+    _jumpToEndDown();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        appBar: AppBar(title: Text(widget.chatRoom.chatRoomName ?? '')),
-        body: StreamBuilder<List<ChatMessageModel>>(
-          stream: getIt<ChatRepository>()
-              .getChatMessageStream(widget.chatRoom.chatRoomId!),
-          initialData: widget.messages,
-          builder: (_, snapshot) => Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                      children: snapshot.data!
-                          .map((e) => _ChatMessageItem(e))
-                          .toList()),
-                ),
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+      appBar: AppBar(title: Text(widget.chatRoom.chatRoomName ?? '')),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              controller: _sc,
+              child: StreamBuilder<List<ChatMessageModel>>(
+                stream: getIt<ChatRepository>()
+                    .getChatMessageStream(widget.chatRoom.chatRoomId!),
+                initialData: widget.messages,
+                builder: (_, AsyncSnapshot<List<ChatMessageModel>> snapshot) =>
+                    (snapshot.connectionState == ConnectionState.waiting)
+                        ? const Center(child: CircularProgressIndicator())
+                        : Column(
+                            children: snapshot.data!
+                                .map((e) => _ChatMessageItem(e))
+                                .toList(),
+                          ),
               ),
-              _ChatMessageTextField(tec: _tec, callback: _handleSendMessage)
-            ],
+            ),
           ),
-        ),
+          _ChatMessageTextField(tec: _tec, callback: _handleSendMessage)
+        ],
+      )
+
+      // Column(
+      //   children: [
+      //     Expanded(
+      //         child: SingleChildScrollView(
+      //           controller: _sc,
+      //           child: StreamBuilder<List<ChatMessageModel>>(
+      //             stream: getIt<ChatRepository>()
+      //                 .getChatMessageStream(widget.chatRoom.chatRoomId!),
+      //             initialData: widget.messages,
+      //             builder: (_, AsyncSnapshot<List<ChatMessageModel>> snapshot) =>
+      //             (snapshot.connectionState == ConnectionState.waiting)
+      //                 ? const Center(child: CircularProgressIndicator())
+      //                 : ListView.builder(
+      //               shrinkWrap: true,
+      //               itemCount: snapshot.data?.length ?? 0,
+      //               itemBuilder: (_, int index) =>
+      //                   _ChatMessageItem(snapshot.data![index]),
+      //             ),
+      //           ),
+      //         )),
+      //     _ChatMessageTextField(tec: _tec, callback: _handleSendMessage)
+      //   ],
+      // ),
       );
 }
 
@@ -120,8 +164,34 @@ class _ChatMessageTextField extends StatelessWidget {
 class _ChatMessageItem extends StatelessWidget {
   const _ChatMessageItem(this.chatMessage, {super.key});
 
+  static const double _widthRatio = 0.7;
+  static const double _paddingSize = 15;
+  static const double _verticalMargin = 5;
+  static const double _horizontalMargin = 8;
+
   final ChatMessageModel chatMessage;
 
   @override
-  Widget build(BuildContext context) => Text(chatMessage.message ?? '');
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(
+            vertical: _verticalMargin, horizontal: _horizontalMargin),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(_paddingSize),
+              width: MediaQuery.of(context).size.width * _widthRatio,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                chatMessage.message ?? '',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onPrimary),
+              ),
+            ),
+          ],
+        ),
+      );
 }

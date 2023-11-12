@@ -45,7 +45,7 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<ResponseWrapper<List<ChatRoomModel>?>> getChatRooms() async {
+  Future<ResponseWrapper<List<ChatRoomModel>>> getChatRooms() async {
     try {
       final chatRooms =
           (await _chatApi.getChatRooms()).map((e) => e.toModel()).toList();
@@ -53,12 +53,14 @@ class ChatRepositoryImpl extends ChatRepository {
     } catch (err) {
       CustomLogger.logger.e(err);
       return const ResponseWrapper(
-          status: ResponseStatus.error, message: "Fail to get chat rooms");
+          status: ResponseStatus.error,
+          message: "Fail to get chat rooms",
+          data: []);
     }
   }
 
   @override
-  Future<ResponseWrapper<List<ChatMessageModel>?>> getChatMessages(
+  Future<ResponseWrapper<List<ChatMessageModel>>> getChatMessages(
       String chatRoomId) async {
     try {
       final messages = (await _chatApi.getChatMessages(chatRoomId))
@@ -68,12 +70,14 @@ class ChatRepositoryImpl extends ChatRepository {
     } catch (err) {
       CustomLogger.logger.e(err);
       return const ResponseWrapper(
-          status: ResponseStatus.error, message: "Fail to get chat messages");
+          status: ResponseStatus.error,
+          message: "Fail to get chat messages",
+          data: []);
     }
   }
 
   @override
-  Future<ResponseWrapper<ChatMessageModel?>> sendChatMessage(
+  Future<ResponseWrapper<ChatMessageModel>> sendChatMessage(
       {required String chatRoomId, required String message}) async {
     try {
       final chatMessageDto = await _chatApi.sendChatMessage(
@@ -124,4 +128,26 @@ class ChatRepositoryImpl extends ChatRepository {
   @override
   Stream<List<ChatMessageModel>> getChatMessageStream(String chatRoomId) =>
       _chatApi.getChatMessageStream(chatRoomId);
+
+  @override
+  Future<ResponseWrapper<void>> enterChatRoom(String chatRoomId) async {
+    try {
+      await _chatApi.enterChatRoom(chatRoomId);
+      return const ResponseWrapper(status: ResponseStatus.success);
+    } catch (err) {
+      return const ResponseWrapper(
+          status: ResponseStatus.error, message: "Fail to delete chat room");
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<void>> leaveChatRoom(String chatRoomId) async {
+    try {
+      await _chatApi.leaveChatRoom(chatRoomId);
+      return const ResponseWrapper(status: ResponseStatus.success);
+    } catch (err) {
+      return const ResponseWrapper(
+          status: ResponseStatus.error, message: "Fail to delete chat room");
+    }
+  }
 }

@@ -8,7 +8,7 @@ import '../../base/remote.usecase.dart';
 class GetChatRoomByIdUseCase extends RemoteUseCase<ChatRepository> {
   final String chatRoomId;
 
-  GetChatRoomByIdUseCase({required this.chatRoomId});
+  GetChatRoomByIdUseCase(this.chatRoomId);
 
   @override
   Future call(ChatRepository repository) async {

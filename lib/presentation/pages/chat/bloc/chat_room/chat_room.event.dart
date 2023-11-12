@@ -10,3 +10,15 @@ class ChatRoomCreateEvent extends ChatRoomEvent {
 
   ChatRoomCreateEvent({required this.chatRoomName, required this.hashtags});
 }
+
+class EnterChatRoomEvent extends ChatRoomEvent {
+  final String chatRoomId;
+
+  EnterChatRoomEvent(this.chatRoomId);
+}
+
+class LeaveChatRoomEvent extends ChatRoomEvent {
+  final String chatRoomId;
+
+  LeaveChatRoomEvent(this.chatRoomId);
+}

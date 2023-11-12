@@ -10,7 +10,11 @@ abstract class ChatRepository extends Repository {
 
   Future<ResponseWrapper<ChatRoomModel?>> getChatRoomById(String chatRoomId);
 
-  Future<ResponseWrapper<List<ChatRoomModel>?>> getChatRooms();
+  Future<ResponseWrapper<List<ChatRoomModel>>> getChatRooms();
+
+  Future<ResponseWrapper<void>> enterChatRoom(String chatRoomId);
+
+  Future<ResponseWrapper<void>> leaveChatRoom(String chatRoomId);
 
   Future<ResponseWrapper<void>> modifyChatRoom(
       {required String chatRoomId,
@@ -19,10 +23,10 @@ abstract class ChatRepository extends Repository {
 
   Future<ResponseWrapper<void>> deleteChatRoom(String chatRoomId);
 
-  Future<ResponseWrapper<List<ChatMessageModel>?>> getChatMessages(
+  Future<ResponseWrapper<List<ChatMessageModel>>> getChatMessages(
       String chatRoomId);
 
-  Future<ResponseWrapper<ChatMessageModel?>> sendChatMessage(
+  Future<ResponseWrapper<ChatMessageModel>> sendChatMessage(
       {required String chatRoomId, required String message});
 
   Stream<List<ChatRoomModel>> getChatRoomStream();
