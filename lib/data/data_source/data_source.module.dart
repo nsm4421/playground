@@ -7,7 +7,7 @@ import 'package:my_app/data/data_source/remote/chat/chat.api.dart';
 import 'package:my_app/data/data_source/remote/story/story.api.dart';
 
 import '../../core/constant/rest_client.dart';
-import 'remote/user/user.api.dart';
+import 'remote/auth/auth.api.dart';
 
 @module
 abstract class DataSourceModule {
@@ -21,7 +21,7 @@ abstract class DataSourceModule {
   StoryApi get storyApi => MockStoryApi();
 
   @singleton
-  UserApi get userApi => UserApi(auth: _auth, db: _db);
+  AuthApi get userApi => AuthApi(auth: _auth, db: _db);
 
   @singleton
   ChatApi get chatApi => ChatApi(auth: _auth, db: _db);

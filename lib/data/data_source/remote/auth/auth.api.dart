@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_app/data/dto/user/user.dto.dart';
 import 'package:uuid/uuid.dart';
 
-class UserApi {
-  UserApi({
+class AuthApi {
+  AuthApi({
     required FirebaseAuth auth,
     required FirebaseFirestore db,
   })  : _auth = auth,
         _db = db;
+
+  static const String _userCollectionName = "user";
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _db;
@@ -34,4 +37,26 @@ class UserApi {
   Future<UserCredential> signInWithEmailAndPassword(
           {required String email, required String password}) async =>
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+  // 구글 계정으로 회원가입
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  // 닉네임 중복여부
+  Future<bool> checkNicknameDuplicated(String nickname) async {
+    final count = (await _db
+            .collection(_userCollectionName)
+            .where("nickname", isEqualTo: nickname)
+            .get()).docs.length;
+    return count > 0;
+  }
 }

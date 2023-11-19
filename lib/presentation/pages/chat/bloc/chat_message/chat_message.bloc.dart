@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/data/dto/chat/chat_message/chat_message.dto.dart';
 import 'package:my_app/domain/model/chat/chat_message/chat_message.model.dart';
 import 'package:my_app/domain/usecase/chat/chat_message/get_chat_messages.usecase.dart';
 import 'package:my_app/domain/usecase/chat/chat_message/send_chat_message.usecase.dart';
