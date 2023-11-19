@@ -17,7 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SignUpState {
   SignUpStatus get status => throw _privateConstructorUsedError;
-  UserModel get user => throw _privateConstructorUsedError;
+  dynamic get user => throw _privateConstructorUsedError;
+  List<Asset> get images => throw _privateConstructorUsedError;
   ErrorResponse get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,9 +32,11 @@ abstract class $SignUpStateCopyWith<$Res> {
           SignUpState value, $Res Function(SignUpState) then) =
       _$SignUpStateCopyWithImpl<$Res, SignUpState>;
   @useResult
-  $Res call({SignUpStatus status, UserModel user, ErrorResponse error});
-
-  $UserModelCopyWith<$Res> get user;
+  $Res call(
+      {SignUpStatus status,
+      dynamic user,
+      List<Asset> images,
+      ErrorResponse error});
 }
 
 /// @nodoc
@@ -50,7 +53,8 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   @override
   $Res call({
     Object? status = null,
-    Object? user = null,
+    Object? user = freezed,
+    Object? images = null,
     Object? error = null,
   }) {
     return _then(_value.copyWith(
@@ -58,23 +62,19 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SignUpStatus,
-      user: null == user
+      user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserModel,
+              as dynamic,
+      images: null == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<Asset>,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as ErrorResponse,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res> get user {
-    return $UserModelCopyWith<$Res>(_value.user, (value) {
-      return _then(_value.copyWith(user: value) as $Val);
-    });
   }
 }
 
@@ -86,10 +86,11 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
       __$$SignUpStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({SignUpStatus status, UserModel user, ErrorResponse error});
-
-  @override
-  $UserModelCopyWith<$Res> get user;
+  $Res call(
+      {SignUpStatus status,
+      dynamic user,
+      List<Asset> images,
+      ErrorResponse error});
 }
 
 /// @nodoc
@@ -104,7 +105,8 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? user = null,
+    Object? user = freezed,
+    Object? images = null,
     Object? error = null,
   }) {
     return _then(_$SignUpStateImpl(
@@ -112,10 +114,11 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SignUpStatus,
-      user: null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserModel,
+      user: freezed == user ? _value.user! : user,
+      images: null == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<Asset>,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -130,21 +133,32 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
   const _$SignUpStateImpl(
       {this.status = SignUpStatus.initial,
       this.user = const UserModel(),
-      this.error = const ErrorResponse()});
+      final List<Asset> images = const <Asset>[],
+      this.error = const ErrorResponse()})
+      : _images = images;
 
   @override
   @JsonKey()
   final SignUpStatus status;
   @override
   @JsonKey()
-  final UserModel user;
+  final dynamic user;
+  final List<Asset> _images;
+  @override
+  @JsonKey()
+  List<Asset> get images {
+    if (_images is EqualUnmodifiableListView) return _images;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_images);
+  }
+
   @override
   @JsonKey()
   final ErrorResponse error;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignUpState(status: $status, user: $user, error: $error)';
+    return 'SignUpState(status: $status, user: $user, images: $images, error: $error)';
   }
 
   @override
@@ -154,6 +168,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
       ..add(DiagnosticsProperty('type', 'SignUpState'))
       ..add(DiagnosticsProperty('status', status))
       ..add(DiagnosticsProperty('user', user))
+      ..add(DiagnosticsProperty('images', images))
       ..add(DiagnosticsProperty('error', error));
   }
 
@@ -163,12 +178,18 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
         (other.runtimeType == runtimeType &&
             other is _$SignUpStateImpl &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.user, user) || other.user == user) &&
+            const DeepCollectionEquality().equals(other.user, user) &&
+            const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, user, error);
+  int get hashCode => Object.hash(
+      runtimeType,
+      status,
+      const DeepCollectionEquality().hash(user),
+      const DeepCollectionEquality().hash(_images),
+      error);
 
   @JsonKey(ignore: true)
   @override
@@ -180,13 +201,16 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
 abstract class _SignUpState implements SignUpState {
   const factory _SignUpState(
       {final SignUpStatus status,
-      final UserModel user,
+      final dynamic user,
+      final List<Asset> images,
       final ErrorResponse error}) = _$SignUpStateImpl;
 
   @override
   SignUpStatus get status;
   @override
-  UserModel get user;
+  dynamic get user;
+  @override
+  List<Asset> get images;
   @override
   ErrorResponse get error;
   @override

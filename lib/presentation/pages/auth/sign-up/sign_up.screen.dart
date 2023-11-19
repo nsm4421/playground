@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/bloc/sign_up.bloc.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/bloc/sign_up.state.dart';
+import 'package:my_app/presentation/pages/auth/sign-up/component/already_sign_up.screen.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/on_boarding.screen.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/sign_up_view.screen.dart';
 
@@ -19,6 +20,8 @@ class SignUpScreen extends StatelessWidget {
             switch (state.status) {
               case SignUpStatus.loading:
                 return const Center(child: CircularProgressIndicator());
+              case SignUpStatus.alreadySignUp:
+                return const AlreadySignUpScreen();
               case SignUpStatus.initial:
               case SignUpStatus.signingUp:
                 return const SignUpViewScreen();
