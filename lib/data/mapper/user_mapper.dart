@@ -9,7 +9,7 @@ extension UserDtoEx on UserDto {
       nickname: nickname ?? '',
       sex:sex??Sex.male,
       age: age ?? -1,
-      profileImageUrl: profileImageUrl ?? '',
+      profileImageUrls: profileImageUrls ?? [],
       description: description??'',
       createdAt: createdAt);
 }

@@ -13,7 +13,7 @@ class UserDto with _$UserDto {
     @Default('') String? email,
     @Default(Sex.male) Sex sex,
     @Default(-1) int age,
-    @Default('') String? profileImageUrl,
+    @Default(<String>[]) List<String> profileImageUrls,
     @Default('') String? description,
     DateTime? createdAt,
   }) = _UserDto;

@@ -4,8 +4,6 @@ import 'package:my_app/domain/model/user/user.model.dart';
 
 part 'story.model.freezed.dart';
 
-part 'story.model.g.dart';
-
 @freezed
 class StoryModel with _$StoryModel {
   const factory StoryModel({
@@ -14,7 +12,4 @@ class StoryModel with _$StoryModel {
     required List<String> imageUrls,
     DateTime? createdAt,
   }) = _StoryModel;
-
-  factory StoryModel.fromJson(Map<String, dynamic> json) =>
-      _$StoryModelFromJson(json);
 }

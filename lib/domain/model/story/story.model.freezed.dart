@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-StoryModel _$StoryModelFromJson(Map<String, dynamic> json) {
-  return _StoryModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$StoryModel {
   UserModel? get user => throw _privateConstructorUsedError;
@@ -25,7 +21,6 @@ mixin _$StoryModel {
   List<String> get imageUrls => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $StoryModelCopyWith<StoryModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -153,7 +148,7 @@ class __$$StoryModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$StoryModelImpl with DiagnosticableTreeMixin implements _StoryModel {
   const _$StoryModelImpl(
       {required this.user,
@@ -161,9 +156,6 @@ class _$StoryModelImpl with DiagnosticableTreeMixin implements _StoryModel {
       required final List<String> imageUrls,
       this.createdAt})
       : _imageUrls = imageUrls;
-
-  factory _$StoryModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$StoryModelImplFromJson(json);
 
   @override
   final UserModel? user;
@@ -209,7 +201,6 @@ class _$StoryModelImpl with DiagnosticableTreeMixin implements _StoryModel {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, user, content,
       const DeepCollectionEquality().hash(_imageUrls), createdAt);
@@ -219,13 +210,6 @@ class _$StoryModelImpl with DiagnosticableTreeMixin implements _StoryModel {
   @pragma('vm:prefer-inline')
   _$$StoryModelImplCopyWith<_$StoryModelImpl> get copyWith =>
       __$$StoryModelImplCopyWithImpl<_$StoryModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$StoryModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _StoryModel implements StoryModel {
@@ -234,9 +218,6 @@ abstract class _StoryModel implements StoryModel {
       required final String? content,
       required final List<String> imageUrls,
       final DateTime? createdAt}) = _$StoryModelImpl;
-
-  factory _StoryModel.fromJson(Map<String, dynamic> json) =
-      _$StoryModelImpl.fromJson;
 
   @override
   UserModel? get user;

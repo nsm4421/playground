@@ -24,7 +24,7 @@ mixin _$UserDto {
   String? get email => throw _privateConstructorUsedError;
   Sex get sex => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
-  String? get profileImageUrl => throw _privateConstructorUsedError;
+  List<String> get profileImageUrls => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -43,7 +43,7 @@ abstract class $UserDtoCopyWith<$Res> {
       String? email,
       Sex sex,
       int age,
-      String? profileImageUrl,
+      List<String> profileImageUrls,
       String? description,
       DateTime? createdAt});
 }
@@ -65,7 +65,7 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? email = freezed,
     Object? sex = null,
     Object? age = null,
-    Object? profileImageUrl = freezed,
+    Object? profileImageUrls = null,
     Object? description = freezed,
     Object? createdAt = freezed,
   }) {
@@ -86,10 +86,10 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int,
-      profileImageUrl: freezed == profileImageUrl
-          ? _value.profileImageUrl
-          : profileImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      profileImageUrls: null == profileImageUrls
+          ? _value.profileImageUrls
+          : profileImageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
       String? email,
       Sex sex,
       int age,
-      String? profileImageUrl,
+      List<String> profileImageUrls,
       String? description,
       DateTime? createdAt});
 }
@@ -134,7 +134,7 @@ class __$$UserDtoImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? sex = null,
     Object? age = null,
-    Object? profileImageUrl = freezed,
+    Object? profileImageUrls = null,
     Object? description = freezed,
     Object? createdAt = freezed,
   }) {
@@ -155,10 +155,10 @@ class __$$UserDtoImplCopyWithImpl<$Res>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int,
-      profileImageUrl: freezed == profileImageUrl
-          ? _value.profileImageUrl
-          : profileImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      profileImageUrls: null == profileImageUrls
+          ? _value._profileImageUrls
+          : profileImageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -179,9 +179,10 @@ class _$UserDtoImpl implements _UserDto {
       this.email = '',
       this.sex = Sex.male,
       this.age = -1,
-      this.profileImageUrl = '',
+      final List<String> profileImageUrls = const <String>[],
       this.description = '',
-      this.createdAt});
+      this.createdAt})
+      : _profileImageUrls = profileImageUrls;
 
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDtoImplFromJson(json);
@@ -198,9 +199,16 @@ class _$UserDtoImpl implements _UserDto {
   @override
   @JsonKey()
   final int age;
+  final List<String> _profileImageUrls;
   @override
   @JsonKey()
-  final String? profileImageUrl;
+  List<String> get profileImageUrls {
+    if (_profileImageUrls is EqualUnmodifiableListView)
+      return _profileImageUrls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_profileImageUrls);
+  }
+
   @override
   @JsonKey()
   final String? description;
@@ -209,7 +217,7 @@ class _$UserDtoImpl implements _UserDto {
 
   @override
   String toString() {
-    return 'UserDto(nickname: $nickname, email: $email, sex: $sex, age: $age, profileImageUrl: $profileImageUrl, description: $description, createdAt: $createdAt)';
+    return 'UserDto(nickname: $nickname, email: $email, sex: $sex, age: $age, profileImageUrls: $profileImageUrls, description: $description, createdAt: $createdAt)';
   }
 
   @override
@@ -222,8 +230,8 @@ class _$UserDtoImpl implements _UserDto {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.age, age) || other.age == age) &&
-            (identical(other.profileImageUrl, profileImageUrl) ||
-                other.profileImageUrl == profileImageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._profileImageUrls, _profileImageUrls) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.createdAt, createdAt) ||
@@ -232,8 +240,15 @@ class _$UserDtoImpl implements _UserDto {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, nickname, email, sex, age,
-      profileImageUrl, description, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      nickname,
+      email,
+      sex,
+      age,
+      const DeepCollectionEquality().hash(_profileImageUrls),
+      description,
+      createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -255,7 +270,7 @@ abstract class _UserDto implements UserDto {
       final String? email,
       final Sex sex,
       final int age,
-      final String? profileImageUrl,
+      final List<String> profileImageUrls,
       final String? description,
       final DateTime? createdAt}) = _$UserDtoImpl;
 
@@ -270,7 +285,7 @@ abstract class _UserDto implements UserDto {
   @override
   int get age;
   @override
-  String? get profileImageUrl;
+  List<String> get profileImageUrls;
   @override
   String? get description;
   @override

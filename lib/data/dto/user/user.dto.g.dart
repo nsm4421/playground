@@ -12,7 +12,10 @@ _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String? ?? '',
       sex: $enumDecodeNullable(_$SexEnumMap, json['sex']) ?? Sex.male,
       age: json['age'] as int? ?? -1,
-      profileImageUrl: json['profileImageUrl'] as String? ?? '',
+      profileImageUrls: (json['profileImageUrls'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
       description: json['description'] as String? ?? '',
       createdAt: json['createdAt'] == null
           ? null
@@ -25,7 +28,7 @@ Map<String, dynamic> _$$UserDtoImplToJson(_$UserDtoImpl instance) =>
       'email': instance.email,
       'sex': _$SexEnumMap[instance.sex]!,
       'age': instance.age,
-      'profileImageUrl': instance.profileImageUrl,
+      'profileImageUrls': instance.profileImageUrls,
       'description': instance.description,
       'createdAt': instance.createdAt?.toIso8601String(),
     };

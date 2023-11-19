@@ -14,21 +14,16 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-UserModel _$UserModelFromJson(Map<String, dynamic> json) {
-  return _UserModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$UserModel {
   String? get email => throw _privateConstructorUsedError;
   String? get nickname => throw _privateConstructorUsedError;
   Sex? get sex => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
-  String? get profileImageUrl => throw _privateConstructorUsedError;
+  List<String> get profileImageUrls => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $UserModelCopyWith<UserModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -44,7 +39,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? nickname,
       Sex? sex,
       int? age,
-      String? profileImageUrl,
+      List<String> profileImageUrls,
       String? description,
       DateTime? createdAt});
 }
@@ -66,7 +61,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? nickname = freezed,
     Object? sex = freezed,
     Object? age = freezed,
-    Object? profileImageUrl = freezed,
+    Object? profileImageUrls = null,
     Object? description = freezed,
     Object? createdAt = freezed,
   }) {
@@ -87,10 +82,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int?,
-      profileImageUrl: freezed == profileImageUrl
-          ? _value.profileImageUrl
-          : profileImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      profileImageUrls: null == profileImageUrls
+          ? _value.profileImageUrls
+          : profileImageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -116,7 +111,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? nickname,
       Sex? sex,
       int? age,
-      String? profileImageUrl,
+      List<String> profileImageUrls,
       String? description,
       DateTime? createdAt});
 }
@@ -136,7 +131,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? nickname = freezed,
     Object? sex = freezed,
     Object? age = freezed,
-    Object? profileImageUrl = freezed,
+    Object? profileImageUrls = null,
     Object? description = freezed,
     Object? createdAt = freezed,
   }) {
@@ -157,10 +152,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int?,
-      profileImageUrl: freezed == profileImageUrl
-          ? _value.profileImageUrl
-          : profileImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      profileImageUrls: null == profileImageUrls
+          ? _value._profileImageUrls
+          : profileImageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -174,19 +169,17 @@ class __$$UserModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
   const _$UserModelImpl(
       {this.email,
       this.nickname,
       this.sex,
       this.age,
-      this.profileImageUrl,
+      final List<String> profileImageUrls = const <String>[],
       this.description,
-      this.createdAt});
-
-  factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserModelImplFromJson(json);
+      this.createdAt})
+      : _profileImageUrls = profileImageUrls;
 
   @override
   final String? email;
@@ -196,8 +189,16 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
   final Sex? sex;
   @override
   final int? age;
+  final List<String> _profileImageUrls;
   @override
-  final String? profileImageUrl;
+  @JsonKey()
+  List<String> get profileImageUrls {
+    if (_profileImageUrls is EqualUnmodifiableListView)
+      return _profileImageUrls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_profileImageUrls);
+  }
+
   @override
   final String? description;
   @override
@@ -205,7 +206,7 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserModel(email: $email, nickname: $nickname, sex: $sex, age: $age, profileImageUrl: $profileImageUrl, description: $description, createdAt: $createdAt)';
+    return 'UserModel(email: $email, nickname: $nickname, sex: $sex, age: $age, profileImageUrls: $profileImageUrls, description: $description, createdAt: $createdAt)';
   }
 
   @override
@@ -217,7 +218,7 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
       ..add(DiagnosticsProperty('nickname', nickname))
       ..add(DiagnosticsProperty('sex', sex))
       ..add(DiagnosticsProperty('age', age))
-      ..add(DiagnosticsProperty('profileImageUrl', profileImageUrl))
+      ..add(DiagnosticsProperty('profileImageUrls', profileImageUrls))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('createdAt', createdAt));
   }
@@ -232,31 +233,30 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
                 other.nickname == nickname) &&
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.age, age) || other.age == age) &&
-            (identical(other.profileImageUrl, profileImageUrl) ||
-                other.profileImageUrl == profileImageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._profileImageUrls, _profileImageUrls) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, email, nickname, sex, age,
-      profileImageUrl, description, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      email,
+      nickname,
+      sex,
+      age,
+      const DeepCollectionEquality().hash(_profileImageUrls),
+      description,
+      createdAt);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       __$$UserModelImplCopyWithImpl<_$UserModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$UserModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _UserModel implements UserModel {
@@ -265,12 +265,9 @@ abstract class _UserModel implements UserModel {
       final String? nickname,
       final Sex? sex,
       final int? age,
-      final String? profileImageUrl,
+      final List<String> profileImageUrls,
       final String? description,
       final DateTime? createdAt}) = _$UserModelImpl;
-
-  factory _UserModel.fromJson(Map<String, dynamic> json) =
-      _$UserModelImpl.fromJson;
 
   @override
   String? get email;
@@ -281,7 +278,7 @@ abstract class _UserModel implements UserModel {
   @override
   int? get age;
   @override
-  String? get profileImageUrl;
+  List<String> get profileImageUrls;
   @override
   String? get description;
   @override
