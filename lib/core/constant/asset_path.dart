@@ -1,5 +1,6 @@
 class AssetPath {
   static const String appLogo = 'assets/svg/app-logo.svg';
+  static const String googleLogo = 'assets/svg/google-logo.svg';
   static const String location = 'assets/svg/icon-location.svg';
   static const String cart = 'assets/svg/icon-cart.svg';
   static const String chat = 'assets/svg/icon-chat.svg';

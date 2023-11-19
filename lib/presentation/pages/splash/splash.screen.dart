@@ -17,11 +17,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   static const int _durationSecond = 2;
 
+  // TODO : 로그인 여부에 따라 routing 경로 다르게 적용하기
   @override
   void initState() {
     super.initState();
     Timer(const Duration(seconds: _durationSecond),
-        () => context.go(Routes.main.path));
+        () => context.go(Routes.signIn.path));
   }
 
   @override

@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/constant/enums/sign_up.enum.dart';
+
 part 'user.dto.freezed.dart';
 
 part 'user.dto.g.dart';
@@ -8,8 +10,11 @@ part 'user.dto.g.dart';
 class UserDto with _$UserDto {
   const factory UserDto({
     @Default('') String? nickname,
+    @Default('') String? email,
+    @Default(Sex.male) Sex sex,
     @Default(-1) int age,
     @Default('') String? profileImageUrl,
+    @Default('') String? description,
     DateTime? createdAt,
   }) = _UserDto;
 

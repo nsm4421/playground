@@ -20,9 +20,12 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserModel {
+  String? get email => throw _privateConstructorUsedError;
   String? get nickname => throw _privateConstructorUsedError;
+  Sex? get sex => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
   String? get profileImageUrl => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,9 +40,12 @@ abstract class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
   $Res call(
-      {String? nickname,
+      {String? email,
+      String? nickname,
+      Sex? sex,
       int? age,
       String? profileImageUrl,
+      String? description,
       DateTime? createdAt});
 }
 
@@ -56,16 +62,27 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? email = freezed,
     Object? nickname = freezed,
+    Object? sex = freezed,
     Object? age = freezed,
     Object? profileImageUrl = freezed,
+    Object? description = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
       nickname: freezed == nickname
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
               as String?,
+      sex: freezed == sex
+          ? _value.sex
+          : sex // ignore: cast_nullable_to_non_nullable
+              as Sex?,
       age: freezed == age
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
@@ -73,6 +90,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       profileImageUrl: freezed == profileImageUrl
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
@@ -91,9 +112,12 @@ abstract class _$$UserModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? nickname,
+      {String? email,
+      String? nickname,
+      Sex? sex,
       int? age,
       String? profileImageUrl,
+      String? description,
       DateTime? createdAt});
 }
 
@@ -108,16 +132,27 @@ class __$$UserModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? email = freezed,
     Object? nickname = freezed,
+    Object? sex = freezed,
     Object? age = freezed,
     Object? profileImageUrl = freezed,
+    Object? description = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_$UserModelImpl(
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
       nickname: freezed == nickname
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
               as String?,
+      sex: freezed == sex
+          ? _value.sex
+          : sex // ignore: cast_nullable_to_non_nullable
+              as Sex?,
       age: freezed == age
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
@@ -125,6 +160,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
       profileImageUrl: freezed == profileImageUrl
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
@@ -138,26 +177,35 @@ class __$$UserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
   const _$UserModelImpl(
-      {required this.nickname,
-      required this.age,
-      required this.profileImageUrl,
+      {this.email,
+      this.nickname,
+      this.sex,
+      this.age,
+      this.profileImageUrl,
+      this.description,
       this.createdAt});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
 
   @override
+  final String? email;
+  @override
   final String? nickname;
+  @override
+  final Sex? sex;
   @override
   final int? age;
   @override
   final String? profileImageUrl;
   @override
+  final String? description;
+  @override
   final DateTime? createdAt;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserModel(nickname: $nickname, age: $age, profileImageUrl: $profileImageUrl, createdAt: $createdAt)';
+    return 'UserModel(email: $email, nickname: $nickname, sex: $sex, age: $age, profileImageUrl: $profileImageUrl, description: $description, createdAt: $createdAt)';
   }
 
   @override
@@ -165,9 +213,12 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'UserModel'))
+      ..add(DiagnosticsProperty('email', email))
       ..add(DiagnosticsProperty('nickname', nickname))
+      ..add(DiagnosticsProperty('sex', sex))
       ..add(DiagnosticsProperty('age', age))
       ..add(DiagnosticsProperty('profileImageUrl', profileImageUrl))
+      ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('createdAt', createdAt));
   }
 
@@ -176,19 +227,23 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserModelImpl &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
+            (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, nickname, age, profileImageUrl, createdAt);
+  int get hashCode => Object.hash(runtimeType, email, nickname, sex, age,
+      profileImageUrl, description, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -206,20 +261,29 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
-      {required final String? nickname,
-      required final int? age,
-      required final String? profileImageUrl,
+      {final String? email,
+      final String? nickname,
+      final Sex? sex,
+      final int? age,
+      final String? profileImageUrl,
+      final String? description,
       final DateTime? createdAt}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
 
   @override
+  String? get email;
+  @override
   String? get nickname;
+  @override
+  Sex? get sex;
   @override
   int? get age;
   @override
   String? get profileImageUrl;
+  @override
+  String? get description;
   @override
   DateTime? get createdAt;
   @override
