@@ -61,7 +61,7 @@ class _NicknameFragmentViewState extends State<_NicknameFragmentView> {
       _helperText = _checkedDuplication ? '사용 가능한 닉네임입니다' : '이미 사용중인 닉네임입니다';
       if (!_checkedDuplication) return;
       if (context.mounted) {
-        context.read<SignUpBloc>().add(UpdateUserStateEvent(widget.state
+        context.read<SignUpBloc>().add(UpdateOnBoardStateEvent(widget.state
             .copyWith(user: widget.state.user.copyWith(nickname: nickname))));
       }
     } catch (err) {
@@ -86,7 +86,7 @@ class _NicknameFragmentViewState extends State<_NicknameFragmentView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 80),
+            const SizedBox(height: 50),
             Text("Nickname",
                 style: GoogleFonts.lobsterTwo(
                     fontSize: 50, fontWeight: FontWeight.bold)),

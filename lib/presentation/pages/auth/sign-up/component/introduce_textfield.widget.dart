@@ -32,7 +32,7 @@ class _IntroduceTextFieldWidgetState extends State<IntroduceTextFieldWidget> {
   }
 
   _handleChange(String description) {
-    context.read<SignUpBloc>().add(UpdateUserStateEvent(widget.state.copyWith(
+    context.read<SignUpBloc>().add(UpdateOnBoardStateEvent(widget.state.copyWith(
         user: widget.state.user.copyWith(description: description.trim()))));
   }
 

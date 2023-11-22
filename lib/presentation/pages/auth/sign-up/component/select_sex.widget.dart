@@ -16,20 +16,11 @@ class SelectSexWidget extends StatefulWidget {
 }
 
 class _SexWidgetState extends State<SelectSexWidget> {
-  Sex? _sex;
-
-  @override
-  initState() {
-    super.initState();
-    setState(() {
-      _sex = widget.state.user.sex;
-    });
-  }
-
   _handleSelectSex(Sex sex) => () {
-        _sex = (_sex == sex ? null : sex);
-        context.read<SignUpBloc>().add(UpdateUserStateEvent(widget.state
-            .copyWith(user: widget.state.user.copyWith(sex: _sex))));
+        context.read<SignUpBloc>().add(UpdateOnBoardStateEvent(widget.state
+            .copyWith(
+                user: widget.state.user.copyWith(
+                    sex: widget.state.user.sex == sex ? null : sex))));
         setState(() {});
       };
 
@@ -44,7 +35,7 @@ class _SexWidgetState extends State<SelectSexWidget> {
             children: [
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: _sex == Sex.male
+                      backgroundColor: widget.state.user.sex == Sex.male
                           ? Colors.blueAccent[100]
                           : Colors.grey[100]),
                   onPressed: _handleSelectSex(Sex.male),
@@ -62,7 +53,7 @@ class _SexWidgetState extends State<SelectSexWidget> {
               const SizedBox(width: 15),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: _sex == Sex.female
+                      backgroundColor: widget.state.user.sex == Sex.female
                           ? Colors.redAccent[100]
                           : Colors.grey[100]),
                   onPressed: _handleSelectSex(Sex.female),

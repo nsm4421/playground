@@ -26,6 +26,7 @@ class SignUpScreen extends StatelessWidget {
               case SignUpStatus.signingUp:
                 return const SignUpViewScreen();
               case SignUpStatus.onBoarding:
+              case SignUpStatus.done:
                 return const OnBoardingScreen();
               case SignUpStatus.error:
                 return const Center(child: Text("ERROR"));

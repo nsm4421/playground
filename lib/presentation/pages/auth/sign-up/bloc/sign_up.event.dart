@@ -8,8 +8,12 @@ class GoogleSignUpEvent extends SignUpEvent {
   GoogleSignUpEvent();
 }
 
-class UpdateUserStateEvent extends SignUpEvent {
+class UpdateOnBoardStateEvent extends SignUpEvent {
   final SignUpState state;
 
-  UpdateUserStateEvent(this.state);
+  UpdateOnBoardStateEvent(this.state);
+}
+
+class SubmitUserInfoEvent extends SignUpEvent {
+  SubmitUserInfoEvent();
 }

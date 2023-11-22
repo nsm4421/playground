@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/detail.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/nickname.fragment.dart';
+import 'package:my_app/presentation/pages/auth/sign-up/component/on_board_submit.screen.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/on_boarding_layout.widget.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/profile_image.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/welcome.screen.dart';
@@ -20,12 +21,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    _pages = <Widget>[
-      OnBoardingLayout(currentPage: 0, pageController: _pageController, fragment: const WelcomeFragment(), isFirstPage: true),
-      OnBoardingLayout(currentPage: 1, pageController: _pageController, fragment: const NicknameFragment()),
-      OnBoardingLayout(currentPage: 2, pageController: _pageController, fragment: const ProfileImageFragment()),
-      OnBoardingLayout(currentPage: 3, pageController: _pageController, fragment: const DetailFragment(), isLastPage: true),
+    final fragments = [
+      const WelcomeFragment(),
+      const NicknameFragment(),
+      const ProfileImageFragment(),
+      const DetailFragment(),
+      const OnBoardSubmitScreen()
     ];
+    _pages = fragments
+        .asMap()
+        .entries
+        .map((e) => OnBoardingLayout(
+              currentPage: e.key,
+              pageController: _pageController,
+              fragment: e.value,
+              isFirstPage: e.key == 0,
+              isLastPage: e.key == fragments.length - 1,
+            ))
+        .toList();
   }
 
   @override
@@ -35,12 +48,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(
-          child: Column(
+  Widget build(BuildContext context) => SafeArea(
+        child: Scaffold(
+          body: Column(
             children: [
               Expanded(
                   child: PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       pageSnapping: true,
                       itemCount: _pages.length,
                       controller: _pageController,

@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SignUpState {
   SignUpStatus get status => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
   dynamic get user => throw _privateConstructorUsedError;
   List<Asset> get images => throw _privateConstructorUsedError;
   ErrorResponse get error => throw _privateConstructorUsedError;
@@ -34,6 +35,7 @@ abstract class $SignUpStateCopyWith<$Res> {
   @useResult
   $Res call(
       {SignUpStatus status,
+      String uid,
       dynamic user,
       List<Asset> images,
       ErrorResponse error});
@@ -53,6 +55,7 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   @override
   $Res call({
     Object? status = null,
+    Object? uid = null,
     Object? user = freezed,
     Object? images = null,
     Object? error = null,
@@ -62,6 +65,10 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SignUpStatus,
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
       user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -88,6 +95,7 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {SignUpStatus status,
+      String uid,
       dynamic user,
       List<Asset> images,
       ErrorResponse error});
@@ -105,6 +113,7 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? uid = null,
     Object? user = freezed,
     Object? images = null,
     Object? error = null,
@@ -114,6 +123,10 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SignUpStatus,
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
       user: freezed == user ? _value.user! : user,
       images: null == images
           ? _value._images
@@ -132,6 +145,7 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
 class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
   const _$SignUpStateImpl(
       {this.status = SignUpStatus.initial,
+      this.uid = '',
       this.user = const UserModel(),
       final List<Asset> images = const <Asset>[],
       this.error = const ErrorResponse()})
@@ -140,6 +154,9 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
   @override
   @JsonKey()
   final SignUpStatus status;
+  @override
+  @JsonKey()
+  final String uid;
   @override
   @JsonKey()
   final dynamic user;
@@ -158,7 +175,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignUpState(status: $status, user: $user, images: $images, error: $error)';
+    return 'SignUpState(status: $status, uid: $uid, user: $user, images: $images, error: $error)';
   }
 
   @override
@@ -167,6 +184,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
     properties
       ..add(DiagnosticsProperty('type', 'SignUpState'))
       ..add(DiagnosticsProperty('status', status))
+      ..add(DiagnosticsProperty('uid', uid))
       ..add(DiagnosticsProperty('user', user))
       ..add(DiagnosticsProperty('images', images))
       ..add(DiagnosticsProperty('error', error));
@@ -178,6 +196,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
         (other.runtimeType == runtimeType &&
             other is _$SignUpStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             const DeepCollectionEquality().equals(other.user, user) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.error, error) || other.error == error));
@@ -187,6 +206,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
   int get hashCode => Object.hash(
       runtimeType,
       status,
+      uid,
       const DeepCollectionEquality().hash(user),
       const DeepCollectionEquality().hash(_images),
       error);
@@ -201,12 +221,15 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
 abstract class _SignUpState implements SignUpState {
   const factory _SignUpState(
       {final SignUpStatus status,
+      final String uid,
       final dynamic user,
       final List<Asset> images,
       final ErrorResponse error}) = _$SignUpStateImpl;
 
   @override
   SignUpStatus get status;
+  @override
+  String get uid;
   @override
   dynamic get user;
   @override
