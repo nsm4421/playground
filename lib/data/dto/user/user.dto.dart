@@ -11,8 +11,8 @@ class UserDto with _$UserDto {
   const factory UserDto({
     @Default('') String? nickname,
     @Default('') String? email,
-    @Default(Sex.male) Sex sex,
-    @Default(-1) int age,
+    @Default(Sex.male) Sex? sex,
+    DateTime? birthday,
     @Default(<String>[]) List<String> profileImageUrls,
     @Default('') String? description,
     DateTime? createdAt,

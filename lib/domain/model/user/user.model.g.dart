@@ -1,16 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dto.dart';
+part of 'user.model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
-    _$UserDtoImpl(
-      nickname: json['nickname'] as String? ?? '',
-      email: json['email'] as String? ?? '',
-      sex: $enumDecodeNullable(_$SexEnumMap, json['sex']) ?? Sex.male,
+_$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
+    _$UserModelImpl(
+      email: json['email'] as String?,
+      nickname: json['nickname'] as String?,
+      sex: $enumDecodeNullable(_$SexEnumMap, json['sex']),
       birthday: json['birthday'] == null
           ? null
           : DateTime.parse(json['birthday'] as String),
@@ -18,16 +18,16 @@ _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
-      description: json['description'] as String? ?? '',
+      description: json['description'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
     );
 
-Map<String, dynamic> _$$UserDtoImplToJson(_$UserDtoImpl instance) =>
+Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
     <String, dynamic>{
-      'nickname': instance.nickname,
       'email': instance.email,
+      'nickname': instance.nickname,
       'sex': _$SexEnumMap[instance.sex],
       'birthday': instance.birthday?.toIso8601String(),
       'profileImageUrls': instance.profileImageUrls,

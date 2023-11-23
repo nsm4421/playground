@@ -22,8 +22,8 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
 mixin _$UserDto {
   String? get nickname => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
-  Sex get sex => throw _privateConstructorUsedError;
-  int get age => throw _privateConstructorUsedError;
+  Sex? get sex => throw _privateConstructorUsedError;
+  DateTime? get birthday => throw _privateConstructorUsedError;
   List<String> get profileImageUrls => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -41,8 +41,8 @@ abstract class $UserDtoCopyWith<$Res> {
   $Res call(
       {String? nickname,
       String? email,
-      Sex sex,
-      int age,
+      Sex? sex,
+      DateTime? birthday,
       List<String> profileImageUrls,
       String? description,
       DateTime? createdAt});
@@ -63,8 +63,8 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
   $Res call({
     Object? nickname = freezed,
     Object? email = freezed,
-    Object? sex = null,
-    Object? age = null,
+    Object? sex = freezed,
+    Object? birthday = freezed,
     Object? profileImageUrls = null,
     Object? description = freezed,
     Object? createdAt = freezed,
@@ -78,14 +78,14 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      sex: null == sex
+      sex: freezed == sex
           ? _value.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as Sex,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
+              as Sex?,
+      birthday: freezed == birthday
+          ? _value.birthday
+          : birthday // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       profileImageUrls: null == profileImageUrls
           ? _value.profileImageUrls
           : profileImageUrls // ignore: cast_nullable_to_non_nullable
@@ -112,8 +112,8 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
   $Res call(
       {String? nickname,
       String? email,
-      Sex sex,
-      int age,
+      Sex? sex,
+      DateTime? birthday,
       List<String> profileImageUrls,
       String? description,
       DateTime? createdAt});
@@ -132,8 +132,8 @@ class __$$UserDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? nickname = freezed,
     Object? email = freezed,
-    Object? sex = null,
-    Object? age = null,
+    Object? sex = freezed,
+    Object? birthday = freezed,
     Object? profileImageUrls = null,
     Object? description = freezed,
     Object? createdAt = freezed,
@@ -147,14 +147,14 @@ class __$$UserDtoImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      sex: null == sex
+      sex: freezed == sex
           ? _value.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as Sex,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
+              as Sex?,
+      birthday: freezed == birthday
+          ? _value.birthday
+          : birthday // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       profileImageUrls: null == profileImageUrls
           ? _value._profileImageUrls
           : profileImageUrls // ignore: cast_nullable_to_non_nullable
@@ -178,7 +178,7 @@ class _$UserDtoImpl implements _UserDto {
       {this.nickname = '',
       this.email = '',
       this.sex = Sex.male,
-      this.age = -1,
+      this.birthday,
       final List<String> profileImageUrls = const <String>[],
       this.description = '',
       this.createdAt})
@@ -195,10 +195,9 @@ class _$UserDtoImpl implements _UserDto {
   final String? email;
   @override
   @JsonKey()
-  final Sex sex;
+  final Sex? sex;
   @override
-  @JsonKey()
-  final int age;
+  final DateTime? birthday;
   final List<String> _profileImageUrls;
   @override
   @JsonKey()
@@ -217,7 +216,7 @@ class _$UserDtoImpl implements _UserDto {
 
   @override
   String toString() {
-    return 'UserDto(nickname: $nickname, email: $email, sex: $sex, age: $age, profileImageUrls: $profileImageUrls, description: $description, createdAt: $createdAt)';
+    return 'UserDto(nickname: $nickname, email: $email, sex: $sex, birthday: $birthday, profileImageUrls: $profileImageUrls, description: $description, createdAt: $createdAt)';
   }
 
   @override
@@ -229,7 +228,8 @@ class _$UserDtoImpl implements _UserDto {
                 other.nickname == nickname) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.sex, sex) || other.sex == sex) &&
-            (identical(other.age, age) || other.age == age) &&
+            (identical(other.birthday, birthday) ||
+                other.birthday == birthday) &&
             const DeepCollectionEquality()
                 .equals(other._profileImageUrls, _profileImageUrls) &&
             (identical(other.description, description) ||
@@ -245,7 +245,7 @@ class _$UserDtoImpl implements _UserDto {
       nickname,
       email,
       sex,
-      age,
+      birthday,
       const DeepCollectionEquality().hash(_profileImageUrls),
       description,
       createdAt);
@@ -268,8 +268,8 @@ abstract class _UserDto implements UserDto {
   const factory _UserDto(
       {final String? nickname,
       final String? email,
-      final Sex sex,
-      final int age,
+      final Sex? sex,
+      final DateTime? birthday,
       final List<String> profileImageUrls,
       final String? description,
       final DateTime? createdAt}) = _$UserDtoImpl;
@@ -281,9 +281,9 @@ abstract class _UserDto implements UserDto {
   @override
   String? get email;
   @override
-  Sex get sex;
+  Sex? get sex;
   @override
-  int get age;
+  DateTime? get birthday;
   @override
   List<String> get profileImageUrls;
   @override

@@ -1,20 +1,26 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:my_app/data/dto/user/user.dto.dart';
-import 'package:uuid/uuid.dart';
 
 class AuthApi {
-  AuthApi({
-    required FirebaseAuth auth,
-    required FirebaseFirestore db,
-  })  : _auth = auth,
-        _db = db;
+  AuthApi(
+      {required FirebaseAuth auth,
+      required FirebaseFirestore db,
+      required FirebaseStorage storage})
+      : _auth = auth,
+        _db = db,
+        _storage = storage;
 
   static const String _userCollectionName = "user";
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _db;
+  final FirebaseStorage _storage;
 
   // 현재 로그인한 유저
   User? get currentUser => _auth.currentUser;
@@ -29,9 +35,9 @@ class AuthApi {
           email: email, password: password);
 
   // 회원정보 저장
-  // TODO : 비밀번호 encoding 후 저장
-  Future<void> saveUserInfoInDB(UserDto dto) async =>
-      await _db.collection('user').doc((const Uuid()).v1()).set(dto.toJson());
+  Future<void> saveUserInfoInDB(
+          {required String uid, required UserDto dto}) async =>
+      await _db.collection('user').doc(uid).set(dto.toJson());
 
   // 이메일, 비밀번호로 로그인
   Future<UserCredential> signInWithEmailAndPassword(
@@ -56,7 +62,21 @@ class AuthApi {
     final count = (await _db
             .collection(_userCollectionName)
             .where("nickname", isEqualTo: nickname)
-            .get()).docs.length;
+            .get())
+        .docs
+        .length;
     return count > 0;
   }
+
+  // 프로필 이미지 저장 후, 다운로드 링크 반환
+  Future<String> saveProfileImage(
+          {required String uid,
+          required String filename,
+          required Uint8List imageData}) async =>
+      await _storage
+          .ref(_userCollectionName)
+          .child(uid)
+          .child(filename)
+          .putData(imageData)
+          .then((task) => task.ref.getDownloadURL());
 }

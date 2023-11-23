@@ -7,9 +7,20 @@ extension UserDtoEx on UserDto {
   UserModel toModel() => UserModel(
       email: email ?? '',
       nickname: nickname ?? '',
-      sex:sex??Sex.male,
-      age: age ?? -1,
+      sex: sex ?? Sex.male,
+      birthday: birthday,
       profileImageUrls: profileImageUrls ?? [],
-      description: description??'',
+      description: description ?? '',
+      createdAt: createdAt);
+}
+
+extension UserModelEx on UserModel {
+  UserDto toDto() => UserDto(
+      email: email ?? '',
+      nickname: nickname ?? '',
+      sex: sex ?? Sex.male,
+      birthday: birthday,
+      profileImageUrls: profileImageUrls ?? [],
+      description: description ?? '',
       createdAt: createdAt);
 }
