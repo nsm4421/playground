@@ -8,6 +8,7 @@ import 'package:my_app/presentation/pages/auth/sign-up/sign_up_view.screen.dart'
 
 import '../../../../core/constant/enums/sign_up.enum.dart';
 import '../../../../dependency_injection.dart';
+import 'component/sign_up_complete.screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -26,10 +27,11 @@ class SignUpScreen extends StatelessWidget {
               case SignUpStatus.signingUp:
                 return const SignUpViewScreen();
               case SignUpStatus.onBoarding:
-              case SignUpStatus.done:
                 return const OnBoardingScreen();
               case SignUpStatus.error:
                 return const Center(child: Text("ERROR"));
+              case SignUpStatus.done:
+                return const SignUpCompleteScreen();
             }
           },
         ),

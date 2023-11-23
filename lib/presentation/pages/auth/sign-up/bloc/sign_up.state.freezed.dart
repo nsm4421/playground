@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SignUpState {
   SignUpStatus get status => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
-  dynamic get user => throw _privateConstructorUsedError;
+  UserModel get user => throw _privateConstructorUsedError;
   List<Asset> get images => throw _privateConstructorUsedError;
   ErrorResponse get error => throw _privateConstructorUsedError;
 
@@ -36,9 +36,11 @@ abstract class $SignUpStateCopyWith<$Res> {
   $Res call(
       {SignUpStatus status,
       String uid,
-      dynamic user,
+      UserModel user,
       List<Asset> images,
       ErrorResponse error});
+
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -56,7 +58,7 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   $Res call({
     Object? status = null,
     Object? uid = null,
-    Object? user = freezed,
+    Object? user = null,
     Object? images = null,
     Object? error = null,
   }) {
@@ -69,10 +71,10 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      user: freezed == user
+      user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as UserModel,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -82,6 +84,14 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           : error // ignore: cast_nullable_to_non_nullable
               as ErrorResponse,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value) as $Val);
+    });
   }
 }
 
@@ -96,9 +106,12 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
   $Res call(
       {SignUpStatus status,
       String uid,
-      dynamic user,
+      UserModel user,
       List<Asset> images,
       ErrorResponse error});
+
+  @override
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -114,7 +127,7 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? uid = null,
-    Object? user = freezed,
+    Object? user = null,
     Object? images = null,
     Object? error = null,
   }) {
@@ -127,7 +140,10 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      user: freezed == user ? _value.user! : user,
+      user: null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
@@ -159,7 +175,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
   final String uid;
   @override
   @JsonKey()
-  final dynamic user;
+  final UserModel user;
   final List<Asset> _images;
   @override
   @JsonKey()
@@ -197,19 +213,14 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
             other is _$SignUpStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.uid, uid) || other.uid == uid) &&
-            const DeepCollectionEquality().equals(other.user, user) &&
+            (identical(other.user, user) || other.user == user) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      status,
-      uid,
-      const DeepCollectionEquality().hash(user),
-      const DeepCollectionEquality().hash(_images),
-      error);
+  int get hashCode => Object.hash(runtimeType, status, uid, user,
+      const DeepCollectionEquality().hash(_images), error);
 
   @JsonKey(ignore: true)
   @override
@@ -222,7 +233,7 @@ abstract class _SignUpState implements SignUpState {
   const factory _SignUpState(
       {final SignUpStatus status,
       final String uid,
-      final dynamic user,
+      final UserModel user,
       final List<Asset> images,
       final ErrorResponse error}) = _$SignUpStateImpl;
 
@@ -231,7 +242,7 @@ abstract class _SignUpState implements SignUpState {
   @override
   String get uid;
   @override
-  dynamic get user;
+  UserModel get user;
   @override
   List<Asset> get images;
   @override

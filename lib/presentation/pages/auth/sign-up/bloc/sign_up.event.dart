@@ -14,6 +14,6 @@ class UpdateOnBoardStateEvent extends SignUpEvent {
   UpdateOnBoardStateEvent(this.state);
 }
 
-class SubmitUserInfoEvent extends SignUpEvent {
-  SubmitUserInfoEvent();
+class SubmitOnBoardingFormEvent extends SignUpEvent {
+  SubmitOnBoardingFormEvent();
 }

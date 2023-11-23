@@ -23,7 +23,7 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
                       fontWeight: FontWeight.w700, fontSize: 50)),
             ),
             const SizedBox(height: 50),
-            Text(state.user.email,
+            Text(state.user.email ?? "New User",
                 style: GoogleFonts.lobster(
                     fontWeight: FontWeight.w700,
                     fontSize: 25,

@@ -13,7 +13,7 @@ class SignUpState with _$SignUpState {
   const factory SignUpState({
     @Default(SignUpStatus.initial) SignUpStatus status,
     @Default('') String uid,
-    @Default(UserModel()) user,
+    @Default(UserModel()) UserModel user,
     @Default(<Asset>[]) List<Asset> images,
     @Default(ErrorResponse()) ErrorResponse error,
   }) = _SignUpState;

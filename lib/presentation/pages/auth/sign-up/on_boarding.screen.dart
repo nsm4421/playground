@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/detail.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/nickname.fragment.dart';
-import 'package:my_app/presentation/pages/auth/sign-up/component/on_board_submit.screen.dart';
+import 'package:my_app/presentation/pages/auth/sign-up/component/on_board_submit.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/on_boarding_layout.widget.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/profile_image.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/welcome.screen.dart';
@@ -14,8 +14,8 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  late PageController _pageController;
   late List<Widget> _pages;
+  late PageController _pageController;
 
   @override
   void initState() {
@@ -26,17 +26,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       const NicknameFragment(),
       const ProfileImageFragment(),
       const DetailFragment(),
-      const OnBoardSubmitScreen()
+      const OnBoardingSubmitFragment()
     ];
     _pages = fragments
         .asMap()
         .entries
         .map((e) => OnBoardingLayout(
               currentPage: e.key,
-              pageController: _pageController,
               fragment: e.value,
               isFirstPage: e.key == 0,
               isLastPage: e.key == fragments.length - 1,
+              pageController: _pageController,
             ))
         .toList();
   }
@@ -54,7 +54,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             children: [
               Expanded(
                   child: PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
                       pageSnapping: true,
                       itemCount: _pages.length,
                       controller: _pageController,

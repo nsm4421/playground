@@ -26,8 +26,9 @@ class _SelectAgeWidgetState extends State<SelectAgeWidget> {
                 user: widget.state.user.copyWith(birthday: selectedDate))));
       });
 
-  _birthdayFormatting(DateTime birthday) =>
-      "${birthday.year}-${birthday.month.toString().padLeft(2, '0')}-${birthday.day.toString().padLeft(2, '0')}";
+  _birthdayFormatting(DateTime? birthday) => birthday == null
+      ? "생일 선택하기"
+      : "${birthday.year}-${birthday.month.toString().padLeft(2, '0')}-${birthday.day.toString().padLeft(2, '0')}";
 
   @override
   Widget build(BuildContext context) => Row(
@@ -38,9 +39,7 @@ class _SelectAgeWidgetState extends State<SelectAgeWidget> {
           ElevatedButton(
               onPressed: _handleSelectBirthDay,
               child: Text(
-                widget.state.user.birthday == null
-                    ? "생일 선택하기"
-                    : _birthdayFormatting(widget.state.user.birthday),
+                _birthdayFormatting(widget.state.user.birthday),
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge

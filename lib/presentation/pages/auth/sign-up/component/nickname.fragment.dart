@@ -14,6 +14,7 @@ import '../bloc/sign_up.event.dart';
 class NicknameFragment extends StatelessWidget {
   const NicknameFragment({super.key});
 
+
   @override
   Widget build(BuildContext context) => BlocBuilder<SignUpBloc, SignUpState>(
       builder: (_, state) => _NicknameFragmentView(state));
@@ -38,7 +39,7 @@ class _NicknameFragmentViewState extends State<_NicknameFragmentView> {
   void initState() {
     super.initState();
     _tec = TextEditingController();
-    _tec.text = widget.state.user.nickname;
+    _tec.text = widget.state.user.nickname ?? '';
   }
 
   @override
@@ -73,8 +74,10 @@ class _NicknameFragmentViewState extends State<_NicknameFragmentView> {
     }
   }
 
-  _handleOnTextChange(_) {
+  _handleOnTextChange(v) {
     setState(() {
+      context.read<SignUpBloc>().add(UpdateOnBoardStateEvent(widget.state
+          .copyWith(user: widget.state.user.copyWith(nickname: v.trim()))));
       _helperText = '';
       _checkedDuplication = false;
     });

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class OnBoardingLayout extends StatelessWidget {
   const OnBoardingLayout(
       {super.key,
-      this.isFirstPage = false,
-      this.isLastPage = false,
-      required this.currentPage,
-      required this.pageController,
-      required this.fragment});
+        this.isFirstPage = false,
+        this.isLastPage = false,
+        required this.currentPage,
+        required this.pageController,
+        required this.fragment});
 
   final bool isFirstPage;
   final bool isLastPage;
@@ -23,29 +23,29 @@ class OnBoardingLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-              backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              elevation: 0,
-              leading: isFirstPage
-                  ? const SizedBox()
-                  : IconButton(
-                      icon: const Icon(
-                          Icons.keyboard_double_arrow_left_outlined,
-                          color: Colors.grey),
-                      onPressed: _handleGoToPrevious),
-              actions: [
-                isLastPage
-                    ? const SizedBox()
-                    : IconButton(
-                        icon: const Icon(
-                            Icons.keyboard_double_arrow_right_outlined,
-                            color: Colors.grey),
-                        onPressed: _handleGoToNext)
-              ]),
-          body: SingleChildScrollView(
-            child: fragment,
-          ),
-        ),
-      );
+    child: Scaffold(
+      appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+          elevation: 0,
+          leading: isFirstPage
+              ? const SizedBox()
+              : IconButton(
+              icon: const Icon(
+                  Icons.keyboard_double_arrow_left_outlined,
+                  color: Colors.grey),
+              onPressed: _handleGoToPrevious),
+          actions: [
+            isLastPage
+                ? const SizedBox()
+                : IconButton(
+                icon: const Icon(
+                    Icons.keyboard_double_arrow_right_outlined,
+                    color: Colors.grey),
+                onPressed: _handleGoToNext)
+          ]),
+      body: SingleChildScrollView(
+        child: fragment,
+      ),
+    ),
+  );
 }

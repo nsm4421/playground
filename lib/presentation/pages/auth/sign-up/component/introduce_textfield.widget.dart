@@ -22,7 +22,7 @@ class _IntroduceTextFieldWidgetState extends State<IntroduceTextFieldWidget> {
   initState() {
     super.initState();
     _tec = TextEditingController();
-    _tec.text = widget.state.user.description;
+    _tec.text = widget.state.user.description ?? '';
   }
 
   @override
@@ -32,8 +32,10 @@ class _IntroduceTextFieldWidgetState extends State<IntroduceTextFieldWidget> {
   }
 
   _handleChange(String description) {
-    context.read<SignUpBloc>().add(UpdateOnBoardStateEvent(widget.state.copyWith(
-        user: widget.state.user.copyWith(description: description.trim()))));
+    context.read<SignUpBloc>().add(UpdateOnBoardStateEvent(widget.state
+        .copyWith(
+            user:
+                widget.state.user.copyWith(description: description.trim()))));
   }
 
   @override
