@@ -1,4 +1,3 @@
-enum SignUpStatus { initial, loading, signingUp, onBoarding, error, done, alreadySignUp }
+enum SignUpStatus { initial, loading, onBoarding, error, done, alreadySignUp }
 
-enum Sex{male, female}
-
+enum Sex { male, female }

@@ -11,28 +11,26 @@ class AlreadySignUpScreen extends StatefulWidget {
 }
 
 class _AlreadySignUpScreenState extends State<AlreadySignUpScreen> {
-  _goToLoginPage() => context.go(Routes.signIn.path);
+  _handleGoToLoginPage() => context.go(Routes.signIn.path);
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("이미 회원가입 하였습니다",
-                  style: Theme.of(context).textTheme.displaySmall),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                  onPressed: _goToLoginPage,
-                  child: Text(
-                    "로그인 페이지로",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ))
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("이미 회원가입 하였습니다",
+                style: Theme.of(context).textTheme.displaySmall),
+            const SizedBox(height: 50)
+          ],
         ),
-      );
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _handleGoToLoginPage,
+        label: Text("Login페이지로",
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold)),
+      ));
 }

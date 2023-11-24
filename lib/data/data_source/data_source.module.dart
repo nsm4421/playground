@@ -23,7 +23,7 @@ abstract class DataSourceModule {
   StoryApi get storyApi => MockStoryApi();
 
   @singleton
-  AuthApi get userApi => AuthApi(auth: _auth, db: _db, storage: _storage);
+  AuthApi get authApi => AuthApi(auth: _auth, db: _db, storage: _storage);
 
   @singleton
   ChatApi get chatApi => ChatApi(auth: _auth, db: _db);

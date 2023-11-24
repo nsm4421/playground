@@ -12,14 +12,27 @@ import '../../core/constant/enums/status.enum.dart';
 import '../../core/utils/response_wrappper/response_wrapper.dart';
 import '../../domain/repository/auth.repository.dart';
 
-@Singleton(as: AuthRepository)
+@Singleton(as: AuthRepository) // 의존성 주입
 class AuthRepositoryImpl extends AuthRepository {
   final AuthApi _authApi;
 
-  static const int _quality = 96;
+  static const int _quality = 96; // 프로필 이미지 압축 시, 이미지 품질
 
   AuthRepositoryImpl(this._authApi);
 
+  /// 이메일로 유저 조회
+  @override
+  Future<ResponseWrapper<UserModel>> findByEmail(String email) async {
+    try {
+      final user = (await _authApi.findByEmail(email)).toModel();
+      return ResponseWrapper<UserModel>(
+          status: ResponseStatus.success, data: user);
+    } catch (err) {
+      return const ResponseWrapper<UserModel>(status: ResponseStatus.error);
+    }
+  }
+
+  /// 구글 계정으로 로그인
   @override
   Future<ResponseWrapper<UserCredential>> signInWithGoogle() async {
     try {
@@ -32,10 +45,12 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+  /// 닉네임 중복여부
   @override
   Future<bool> checkNicknameDuplicated(String nickname) async =>
       await _authApi.checkNicknameDuplicated(nickname);
 
+  /// 유저 정보 업로드
   @override
   Future<ResponseWrapper<void>> submitOnBoardingForm(
       {required String uid,
@@ -72,7 +87,6 @@ class AuthRepositoryImpl extends AuthRepository {
               .copyWith(
                   profileImageUrls: profileImageUrls, createdAt: DateTime.now())
               .toDto());
-      // Return
       return const ResponseWrapper<void>(status: ResponseStatus.success);
     } catch (err) {
       return const ResponseWrapper<void>(

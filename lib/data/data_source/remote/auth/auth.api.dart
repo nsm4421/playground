@@ -37,7 +37,7 @@ class AuthApi {
   // 회원정보 저장
   Future<void> saveUserInfoInDB(
           {required String uid, required UserDto dto}) async =>
-      await _db.collection('user').doc(uid).set(dto.toJson());
+      await _db.collection(_userCollectionName).doc(uid).set(dto.toJson());
 
   // 이메일, 비밀번호로 로그인
   Future<UserCredential> signInWithEmailAndPassword(
@@ -67,6 +67,15 @@ class AuthApi {
         .length;
     return count > 0;
   }
+
+  // Email로 유저 조회
+  Future<UserDto> findByEmail(String email) async => UserDto.fromJson((await _db
+          .collection(_userCollectionName)
+          .where("email", isEqualTo: email)
+          .get())
+      .docs
+      .first
+      .data());
 
   // 프로필 이미지 저장 후, 다운로드 링크 반환
   Future<String> saveProfileImage(

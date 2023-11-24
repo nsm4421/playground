@@ -19,7 +19,7 @@ mixin _$SignUpState {
   SignUpStatus get status => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
   UserModel get user => throw _privateConstructorUsedError;
-  List<Asset> get images => throw _privateConstructorUsedError;
+  List<Asset> get images => throw _privateConstructorUsedError; // 프로필 이미지
   ErrorResponse get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -185,6 +185,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
     return EqualUnmodifiableListView(_images);
   }
 
+// 프로필 이미지
   @override
   @JsonKey()
   final ErrorResponse error;
@@ -245,7 +246,7 @@ abstract class _SignUpState implements SignUpState {
   UserModel get user;
   @override
   List<Asset> get images;
-  @override
+  @override // 프로필 이미지
   ErrorResponse get error;
   @override
   @JsonKey(ignore: true)

@@ -8,6 +8,10 @@ class GoogleSignUpEvent extends SignUpEvent {
   GoogleSignUpEvent();
 }
 
+class OnBoardingInitializedEvent extends SignUpEvent {
+  OnBoardingInitializedEvent();
+}
+
 class UpdateOnBoardStateEvent extends SignUpEvent {
   final SignUpState state;
 

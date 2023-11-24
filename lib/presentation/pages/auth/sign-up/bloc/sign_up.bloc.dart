@@ -4,6 +4,7 @@ import 'package:my_app/core/constant/enums/sign_up.enum.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:my_app/domain/usecase/auth/auth.usecase.dart';
 import 'package:my_app/domain/usecase/auth/sign_in/google_sign_in.usecase.dart';
+import 'package:my_app/domain/usecase/auth/sign_in/on_boarding_initialized.usecase.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/bloc/sign_up.event.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/bloc/sign_up.state.dart';
 
@@ -17,6 +18,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   SignUpBloc(this._authUseCase) : super(const SignUpState()) {
     on<GoogleSignUpEvent>(_googleSignUp);
+    on<OnBoardingInitializedEvent>(_onBoardingInitialized);
     on<UpdateOnBoardStateEvent>(_updateOnBoardState);
     on<SubmitOnBoardingFormEvent>(_submitOnBoardingForm);
   }
@@ -26,19 +28,14 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       GoogleSignUpEvent event, Emitter<SignUpState> emit) async {
     try {
       emit(state.copyWith(status: SignUpStatus.loading));
-      // 회원가입 처리 후 인증정보 가져오기
       final response =
           await _authUseCase.execute(useCase: GoogleSignInUseCase());
       response.when(success: (credential) {
-        if (!credential.additionalUserInfo.isNewUser) {
-          // TODO : On Boarding 여부 판단 - 이미 했으면 로그인페이지로, 아니면 On Boarding 페이지로
-          // emit(state.copyWith(status: SignUpStatus.alreadySignUp));
-          // return;
-        }
-        // 처음 회원가입하는 경우
+        // 인증정보 검사
         final uid = credential.user?.uid;
         final email = credential.additionalUserInfo?.profile['email'];
         if (uid == null || email == null) throw Exception('회원가입되지 않은 회원입니다');
+
         emit(state.copyWith(
             status: SignUpStatus.onBoarding,
             uid: uid,
@@ -53,11 +50,36 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
   }
 
+  void _onBoardingInitialized(
+      OnBoardingInitializedEvent event, Emitter<SignUpState> emit) async {
+    try {
+      emit(state.copyWith(status: SignUpStatus.loading));
+      if (state.user.email == null) throw Exception("EMAIL IS NOT GIVEN");
+      final response = await _authUseCase.execute(
+          useCase: OnBoardingInitializedUseCase(state.user.email!));
+      response.when(success: (user) {
+        user.createdAt == null
+            ? emit(state.copyWith(user: user))
+            : emit(
+                state.copyWith(user: user, status: SignUpStatus.alreadySignUp));
+      }, failure: (err) {
+        emit(state.copyWith(
+            status: SignUpStatus.error, error: CommonException.setError(err)));
+      });
+    } catch (err) {
+      CustomLogger.logger.e(err);
+      emit(state.copyWith(
+          status: SignUpStatus.error, error: CommonException.setError(err)));
+    }
+  }
+
+  /// 회원정보 상태 업데이트
   void _updateOnBoardState(
       UpdateOnBoardStateEvent event, Emitter<SignUpState> emit) {
     emit(state.copyWith(images: event.state.images, user: event.state.user));
   }
 
+  /// 회원정보 제출
   Future<void> _submitOnBoardingForm(
       SubmitOnBoardingFormEvent event, Emitter<SignUpState> emit) async {
     try {

@@ -14,7 +14,7 @@ class SignUpState with _$SignUpState {
     @Default(SignUpStatus.initial) SignUpStatus status,
     @Default('') String uid,
     @Default(UserModel()) UserModel user,
-    @Default(<Asset>[]) List<Asset> images,
+    @Default(<Asset>[]) List<Asset> images, // 프로필 이미지
     @Default(ErrorResponse()) ErrorResponse error,
   }) = _SignUpState;
 }

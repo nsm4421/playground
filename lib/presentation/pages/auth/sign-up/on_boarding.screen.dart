@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/presentation/pages/auth/sign-up/bloc/sign_up.bloc.dart';
+import 'package:my_app/presentation/pages/auth/sign-up/bloc/sign_up.event.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/detail.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/nickname.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/on_board_submit.fragment.dart';
@@ -20,6 +23,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<SignUpBloc>().add(OnBoardingInitializedEvent());
     _pageController = PageController();
     final fragments = [
       const WelcomeFragment(),
