@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:my_app/data/dto/user/user.dto.dart';
 
 class AuthApi {
@@ -69,13 +68,13 @@ class AuthApi {
   }
 
   // Email로 유저 조회
-  Future<UserDto> findByEmail(String email) async => UserDto.fromJson((await _db
-          .collection(_userCollectionName)
-          .where("email", isEqualTo: email)
-          .get())
-      .docs
-      .first
-      .data());
+  Future<UserDto?> findByEmail(String email) async => await _db
+      .collection(_userCollectionName)
+      .where("email", isEqualTo: email)
+      .get()
+      .then((fetched) => fetched.size == 0
+          ? null
+          : UserDto.fromJson(fetched.docs.first.data()));
 
   // 프로필 이미지 저장 후, 다운로드 링크 반환
   Future<String> saveProfileImage(

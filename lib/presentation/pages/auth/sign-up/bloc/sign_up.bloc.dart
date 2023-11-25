@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/constant/enums/sign_up.enum.dart';
@@ -18,7 +19,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   SignUpBloc(this._authUseCase) : super(const SignUpState()) {
     on<GoogleSignUpEvent>(_googleSignUp);
-    on<OnBoardingInitializedEvent>(_onBoardingInitialized);
     on<UpdateOnBoardStateEvent>(_updateOnBoardState);
     on<SubmitOnBoardingFormEvent>(_submitOnBoardingForm);
   }
@@ -28,40 +28,26 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       GoogleSignUpEvent event, Emitter<SignUpState> emit) async {
     try {
       emit(state.copyWith(status: SignUpStatus.loading));
-      final response =
-          await _authUseCase.execute(useCase: GoogleSignInUseCase());
-      response.when(success: (credential) {
-        // 인증정보 검사
-        final uid = credential.user?.uid;
-        final email = credential.additionalUserInfo?.profile['email'];
-        if (uid == null || email == null) throw Exception('회원가입되지 않은 회원입니다');
-
+      // 구글계정으로 회원가입
+      (await _authUseCase.execute(useCase: GoogleSignInUseCase())).when(
+          success: (credential) {
         emit(state.copyWith(
-            status: SignUpStatus.onBoarding,
-            uid: uid,
-            user: UserModel(email: email, sex: null)));
+            uid: credential.user?.uid,
+            user: UserModel(
+                email: credential.additionalUserInfo?.profile!['email'],
+                sex: null)));
       }, failure: (err) {
         emit(state.copyWith(status: SignUpStatus.error, error: err));
       });
-    } catch (err) {
-      CustomLogger.logger.e(err);
-      emit(state.copyWith(
-          status: SignUpStatus.error, error: CommonException.setError(err)));
-    }
-  }
-
-  void _onBoardingInitialized(
-      OnBoardingInitializedEvent event, Emitter<SignUpState> emit) async {
-    try {
-      emit(state.copyWith(status: SignUpStatus.loading));
-      if (state.user.email == null) throw Exception("EMAIL IS NOT GIVEN");
-      final response = await _authUseCase.execute(
-          useCase: OnBoardingInitializedUseCase(state.user.email!));
-      response.when(success: (user) {
-        user.createdAt == null
-            ? emit(state.copyWith(user: user))
-            : emit(
-                state.copyWith(user: user, status: SignUpStatus.alreadySignUp));
+      // 이미 회원정보가 등록된 회원이면 Status를 AlreadySignUp
+      // 회원정보가 등록된적이 없는 경우(createdAt 필드가 null)이면 Status를 OnBoarding으로 업데이트
+      (await _authUseCase.execute(useCase: OnBoardingInitializedUseCase()))
+          .when(success: (UserModel? user) {
+        final onBoardDone = user?.createdAt != null;
+        emit(state.copyWith(
+            status: onBoardDone
+                ? SignUpStatus.alreadySignUp
+                : SignUpStatus.onBoarding));
       }, failure: (err) {
         emit(state.copyWith(
             status: SignUpStatus.error, error: CommonException.setError(err)));

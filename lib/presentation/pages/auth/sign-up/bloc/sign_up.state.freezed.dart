@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SignUpState {
   SignUpStatus get status => throw _privateConstructorUsedError;
-  String get uid => throw _privateConstructorUsedError;
+  String? get uid => throw _privateConstructorUsedError;
   UserModel get user => throw _privateConstructorUsedError;
   List<Asset> get images => throw _privateConstructorUsedError; // 프로필 이미지
   ErrorResponse get error => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $SignUpStateCopyWith<$Res> {
   @useResult
   $Res call(
       {SignUpStatus status,
-      String uid,
+      String? uid,
       UserModel user,
       List<Asset> images,
       ErrorResponse error});
@@ -57,7 +57,7 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   @override
   $Res call({
     Object? status = null,
-    Object? uid = null,
+    Object? uid = freezed,
     Object? user = null,
     Object? images = null,
     Object? error = null,
@@ -67,10 +67,10 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SignUpStatus,
-      uid: null == uid
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -105,7 +105,7 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {SignUpStatus status,
-      String uid,
+      String? uid,
       UserModel user,
       List<Asset> images,
       ErrorResponse error});
@@ -126,7 +126,7 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? uid = null,
+    Object? uid = freezed,
     Object? user = null,
     Object? images = null,
     Object? error = null,
@@ -136,10 +136,10 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SignUpStatus,
-      uid: null == uid
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -172,7 +172,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
   final SignUpStatus status;
   @override
   @JsonKey()
-  final String uid;
+  final String? uid;
   @override
   @JsonKey()
   final UserModel user;
@@ -233,7 +233,7 @@ class _$SignUpStateImpl with DiagnosticableTreeMixin implements _SignUpState {
 abstract class _SignUpState implements SignUpState {
   const factory _SignUpState(
       {final SignUpStatus status,
-      final String uid,
+      final String? uid,
       final UserModel user,
       final List<Asset> images,
       final ErrorResponse error}) = _$SignUpStateImpl;
@@ -241,7 +241,7 @@ abstract class _SignUpState implements SignUpState {
   @override
   SignUpStatus get status;
   @override
-  String get uid;
+  String? get uid;
   @override
   UserModel get user;
   @override

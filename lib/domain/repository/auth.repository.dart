@@ -7,7 +7,10 @@ import '../../core/utils/response_wrappper/response_wrapper.dart';
 
 abstract class AuthRepository extends Repository {
   /// 이메일로 유저 조회
-  Future<ResponseWrapper<UserModel>> findByEmail(String email);
+  Future<ResponseWrapper<UserModel?>> findByEmail(String email);
+
+  /// 현재 로그인한 유저 정보 조회
+  Future<ResponseWrapper<UserModel?>> getCurrentUserInfo();
 
   /// 구글 계정으로 로그인
   Future<ResponseWrapper<UserCredential>> signInWithGoogle();

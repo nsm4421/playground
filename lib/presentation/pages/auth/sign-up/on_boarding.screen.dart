@@ -7,7 +7,7 @@ import 'package:my_app/presentation/pages/auth/sign-up/component/nickname.fragme
 import 'package:my_app/presentation/pages/auth/sign-up/component/on_board_submit.fragment.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/on_boarding_layout.widget.dart';
 import 'package:my_app/presentation/pages/auth/sign-up/component/profile_image.fragment.dart';
-import 'package:my_app/presentation/pages/auth/sign-up/component/welcome.screen.dart';
+import 'package:my_app/presentation/pages/auth/sign-up/component/welcome.fragment.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -23,7 +23,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<SignUpBloc>().add(OnBoardingInitializedEvent());
+    context.read<SignUpBloc>();
     _pageController = PageController();
     final fragments = [
       const WelcomeFragment(),

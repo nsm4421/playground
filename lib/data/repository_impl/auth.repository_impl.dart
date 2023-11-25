@@ -22,11 +22,26 @@ class AuthRepositoryImpl extends AuthRepository {
 
   /// 이메일로 유저 조회
   @override
-  Future<ResponseWrapper<UserModel>> findByEmail(String email) async {
+  Future<ResponseWrapper<UserModel?>> findByEmail(String email) async {
     try {
-      final user = (await _authApi.findByEmail(email)).toModel();
+      final user = (await _authApi.findByEmail(email))?.toModel();
       return ResponseWrapper<UserModel>(
           status: ResponseStatus.success, data: user);
+    } catch (err) {
+      return const ResponseWrapper<UserModel>(status: ResponseStatus.error);
+    }
+  }
+
+  /// 현재 로그인한 유저 정보 가져오기
+  @override
+  Future<ResponseWrapper<UserModel?>> getCurrentUserInfo() async {
+    try {
+      final email = _authApi.currentUser?.email;
+      if (email == null) {
+        return const ResponseWrapper<UserModel>(
+            status: ResponseStatus.error, message: "NOT LOGIN");
+      }
+      return findByEmail(email);
     } catch (err) {
       return const ResponseWrapper<UserModel>(status: ResponseStatus.error);
     }

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/domain/repository/auth.repository.dart';
 
 import '../../../../core/constant/enums/status.enum.dart';
@@ -12,8 +13,8 @@ class GoogleSignInUseCase extends RemoteUseCase<AuthRepository> {
   Future call(AuthRepository repository) async {
     final result = await repository.signInWithGoogle();
     return result.status == ResponseStatus.success
-        ? Result.success(result.data)
-        : Result.failure(ErrorResponse(
+        ? Result<UserCredential>.success(result.data!)
+        : Result<UserCredential>.failure(ErrorResponse(
             status: 'ERROR', code: result.code, message: result.message));
   }
 }

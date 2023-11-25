@@ -11,16 +11,21 @@ class SubmitOnBoardingFormUseCase extends RemoteUseCase<AuthRepository> {
   SubmitOnBoardingFormUseCase(
       {required this.uid, required this.user, required this.images});
 
-  final String uid;
+  final String? uid;
   final UserModel user;
   final List<Asset> images;
 
   @override
   Future call(AuthRepository repository) async {
-    final result = await repository.submitOnBoardingForm(uid:uid, user: user, images: images);
+    if (uid == null) {
+      return const Result<void>.failure(
+          ErrorResponse(status: 'ERROR', message: 'UID IS NULL'));
+    }
+    final result = await repository.submitOnBoardingForm(
+        uid: uid!, user: user, images: images);
     return result.status == ResponseStatus.success
-        ? Result.success(result.data)
-        : Result.failure(ErrorResponse(
+        ? Result<void>.success(result.data)
+        : Result<void>.failure(ErrorResponse(
             status: 'ERROR', code: result.code, message: result.message));
   }
 }

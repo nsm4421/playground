@@ -12,7 +12,7 @@ part 'sign_up.state.freezed.dart';
 class SignUpState with _$SignUpState {
   const factory SignUpState({
     @Default(SignUpStatus.initial) SignUpStatus status,
-    @Default('') String uid,
+    @Default('') String? uid,
     @Default(UserModel()) UserModel user,
     @Default(<Asset>[]) List<Asset> images, // 프로필 이미지
     @Default(ErrorResponse()) ErrorResponse error,

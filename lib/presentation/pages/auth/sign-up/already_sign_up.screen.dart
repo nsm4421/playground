@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../core/constant/enums/routes.enum.dart';
+import '../../../../core/constant/enums/routes.enum.dart';
 
 class AlreadySignUpScreen extends StatefulWidget {
   const AlreadySignUpScreen({super.key});
