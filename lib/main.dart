@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/custom_theme_data.dart';
 import 'package:my_app/presentation/main/main.screen.dart';
 import 'package:my_app/presentation/pages/auth/auth.screen.dart';
+import 'package:my_app/presentation/pages/home/write_feed.screen.dart';
 import 'package:my_app/presentation/pages/splash/splash.screen.dart';
 import 'core/constant/enums/routes.enum.dart';
 import 'firebase_options.dart';
@@ -44,6 +45,11 @@ final GoRouter routerConfig = GoRouter(
       path: Routes.main.path,
       name: Routes.main.name,
       builder: (_, __) => const MainScreen(),
+    ),
+    GoRoute(
+      path: Routes.feed.path,
+      name: Routes.feed.name,
+      builder: (_, __) => const WriteFeedScreen(),
     ),
   ],
 );
