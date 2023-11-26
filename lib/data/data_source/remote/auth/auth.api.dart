@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_app/data/dto/user/user.dto.dart';
+import 'package:my_app/domain/model/user/user.model.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthApi {
   AuthApi(
@@ -27,6 +29,9 @@ class AuthApi {
   // 현재 로그인한 유저의 uid
   String? get uid => _auth.currentUser?.uid;
 
+  // 인증 Stream
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
   // 이메일, 비밀번호로 회원가입
   Future<UserCredential> createUserWithEmailAndPassword(
           {required String email, required String password}) async =>
@@ -45,15 +50,21 @@ class AuthApi {
 
   // 구글 계정으로 회원가입
   Future<UserCredential> signInWithGoogle() async {
+    // 회원가입 처리 후 인증정보 추출
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
-
     final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential = await _auth.signInWithCredential(credential);
+    // 회원정보 저장
+    final uid = userCredential.user?.uid ?? ((const Uuid()).v1());
+    await _db.collection(_userCollectionName).doc(uid).set(UserDto(
+          uid: uid,
+          email: userCredential.user?.email ?? '',
+          createdAt: DateTime.now(),
+        ).toJson());
+    return userCredential;
   }
 
   // 닉네임 중복여부

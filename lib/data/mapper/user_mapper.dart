@@ -5,6 +5,7 @@ import '../../core/constant/enums/sign_up.enum.dart';
 
 extension UserDtoEx on UserDto {
   UserModel toModel() => UserModel(
+    uid:uid??'',
       email: email ?? '',
       nickname: nickname ?? '',
       sex: sex ?? Sex.male,
@@ -16,6 +17,7 @@ extension UserDtoEx on UserDto {
 
 extension UserModelEx on UserModel {
   UserDto toDto() => UserDto(
+      uid:uid??'',
       email: email ?? '',
       nickname: nickname ?? '',
       sex: sex ?? Sex.male,

@@ -9,6 +9,7 @@ part 'user.dto.g.dart';
 @freezed
 class UserDto with _$UserDto {
   const factory UserDto({
+    @Default('') String? uid,
     @Default('') String? nickname,
     @Default('') String? email,
     @Default(Sex.male) Sex? sex,

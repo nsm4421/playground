@@ -32,25 +32,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       (await _authUseCase.execute(useCase: GoogleSignInUseCase())).when(
           success: (credential) {
         emit(state.copyWith(
+            status: SignUpStatus.done,
             uid: credential.user?.uid,
             user: UserModel(
                 email: credential.additionalUserInfo?.profile!['email'],
                 sex: null)));
       }, failure: (err) {
         emit(state.copyWith(status: SignUpStatus.error, error: err));
-      });
-      // 이미 회원정보가 등록된 회원이면 Status를 AlreadySignUp
-      // 회원정보가 등록된적이 없는 경우(createdAt 필드가 null)이면 Status를 OnBoarding으로 업데이트
-      (await _authUseCase.execute(useCase: OnBoardingInitializedUseCase()))
-          .when(success: (UserModel? user) {
-        final onBoardDone = user?.createdAt != null;
-        emit(state.copyWith(
-            status: onBoardDone
-                ? SignUpStatus.alreadySignUp
-                : SignUpStatus.onBoarding));
-      }, failure: (err) {
-        emit(state.copyWith(
-            status: SignUpStatus.error, error: CommonException.setError(err)));
       });
     } catch (err) {
       CustomLogger.logger.e(err);

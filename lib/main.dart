@@ -1,8 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/custom_theme_data.dart';
+import 'package:my_app/presentation/main/main.screen.dart';
+import 'package:my_app/presentation/pages/auth/auth.screen.dart';
+import 'package:my_app/presentation/pages/splash/splash.screen.dart';
+import 'core/constant/enums/routes.enum.dart';
 import 'firebase_options.dart';
-import 'presentation/routes/router_config.dart';
 import 'dependency_injection.dart';
 
 void main() async {
@@ -22,3 +26,24 @@ class MainApp extends StatelessWidget {
         theme: CustomThemeData.themeData,
       );
 }
+
+final GoRouter routerConfig = GoRouter(
+  initialLocation: Routes.splash.path,
+  routes: [
+    GoRoute(
+      path: Routes.splash.path,
+      name: Routes.splash.name,
+      builder: (_, __) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: Routes.auth.path,
+      name: Routes.auth.name,
+      builder: (_, __) => const AuthScreen(),
+    ),
+    GoRoute(
+      path: Routes.main.path,
+      name: Routes.main.name,
+      builder: (_, __) => const MainScreen(),
+    ),
+  ],
+);

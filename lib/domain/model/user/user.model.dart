@@ -10,7 +10,8 @@ part 'user.model.g.dart';
 @freezed
 class UserModel with _$UserModel {
   const factory UserModel(
-      {String? email,
+      {String? uid,
+      String? email,
       String? nickname,
       Sex? sex,
       DateTime? birthday,

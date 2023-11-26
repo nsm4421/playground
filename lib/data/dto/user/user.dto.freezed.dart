@@ -20,6 +20,7 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserDto {
+  String? get uid => throw _privateConstructorUsedError;
   String? get nickname => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   Sex? get sex => throw _privateConstructorUsedError;
@@ -39,7 +40,8 @@ abstract class $UserDtoCopyWith<$Res> {
       _$UserDtoCopyWithImpl<$Res, UserDto>;
   @useResult
   $Res call(
-      {String? nickname,
+      {String? uid,
+      String? nickname,
       String? email,
       Sex? sex,
       DateTime? birthday,
@@ -61,6 +63,7 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = freezed,
     Object? nickname = freezed,
     Object? email = freezed,
     Object? sex = freezed,
@@ -70,6 +73,10 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String?,
       nickname: freezed == nickname
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
@@ -110,7 +117,8 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? nickname,
+      {String? uid,
+      String? nickname,
       String? email,
       Sex? sex,
       DateTime? birthday,
@@ -130,6 +138,7 @@ class __$$UserDtoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = freezed,
     Object? nickname = freezed,
     Object? email = freezed,
     Object? sex = freezed,
@@ -139,6 +148,10 @@ class __$$UserDtoImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
   }) {
     return _then(_$UserDtoImpl(
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String?,
       nickname: freezed == nickname
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
@@ -175,7 +188,8 @@ class __$$UserDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserDtoImpl implements _UserDto {
   const _$UserDtoImpl(
-      {this.nickname = '',
+      {this.uid = '',
+      this.nickname = '',
       this.email = '',
       this.sex = Sex.male,
       this.birthday,
@@ -187,6 +201,9 @@ class _$UserDtoImpl implements _UserDto {
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDtoImplFromJson(json);
 
+  @override
+  @JsonKey()
+  final String? uid;
   @override
   @JsonKey()
   final String? nickname;
@@ -216,7 +233,7 @@ class _$UserDtoImpl implements _UserDto {
 
   @override
   String toString() {
-    return 'UserDto(nickname: $nickname, email: $email, sex: $sex, birthday: $birthday, profileImageUrls: $profileImageUrls, description: $description, createdAt: $createdAt)';
+    return 'UserDto(uid: $uid, nickname: $nickname, email: $email, sex: $sex, birthday: $birthday, profileImageUrls: $profileImageUrls, description: $description, createdAt: $createdAt)';
   }
 
   @override
@@ -224,6 +241,7 @@ class _$UserDtoImpl implements _UserDto {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserDtoImpl &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
             (identical(other.email, email) || other.email == email) &&
@@ -242,6 +260,7 @@ class _$UserDtoImpl implements _UserDto {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      uid,
       nickname,
       email,
       sex,
@@ -266,7 +285,8 @@ class _$UserDtoImpl implements _UserDto {
 
 abstract class _UserDto implements UserDto {
   const factory _UserDto(
-      {final String? nickname,
+      {final String? uid,
+      final String? nickname,
       final String? email,
       final Sex? sex,
       final DateTime? birthday,
@@ -276,6 +296,8 @@ abstract class _UserDto implements UserDto {
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
 
+  @override
+  String? get uid;
   @override
   String? get nickname;
   @override

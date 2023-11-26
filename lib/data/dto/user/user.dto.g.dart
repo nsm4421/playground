@@ -8,6 +8,7 @@ part of 'user.dto.dart';
 
 _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
     _$UserDtoImpl(
+      uid: json['uid'] as String? ?? '',
       nickname: json['nickname'] as String? ?? '',
       email: json['email'] as String? ?? '',
       sex: $enumDecodeNullable(_$SexEnumMap, json['sex']) ?? Sex.male,
@@ -26,6 +27,7 @@ _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$UserDtoImplToJson(_$UserDtoImpl instance) =>
     <String, dynamic>{
+      'uid': instance.uid,
       'nickname': instance.nickname,
       'email': instance.email,
       'sex': _$SexEnumMap[instance.sex],

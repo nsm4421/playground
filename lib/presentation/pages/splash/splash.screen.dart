@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_app/data/data_source/remote/auth/auth.api.dart';
+import 'package:my_app/dependency_injection.dart';
 
 import '../../../core/constant/asset_path.dart';
 import '../../../core/constant/enums/routes.enum.dart';
@@ -17,12 +19,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   static const int _durationSecond = 2;
 
-  // TODO : 로그인 여부에 따라 routing 경로 다르게 적용하기
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: _durationSecond),
-        () => context.go(Routes.signIn.path));
+    Timer(
+        const Duration(seconds: _durationSecond),
+        // 로그인 여부에 따라 다른 곳으로 Routing
+        () => context.go(getIt<AuthApi>().currentUser == null
+            ? Routes.auth.path
+            : Routes.main.path));
   }
 
   @override

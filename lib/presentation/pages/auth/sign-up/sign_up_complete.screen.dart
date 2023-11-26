@@ -12,7 +12,7 @@ class SignUpCompleteScreen extends StatefulWidget {
 }
 
 class _SignUpCompleteScreenState extends State<SignUpCompleteScreen> {
-  _handleGoToLoginPage() => context.go(Routes.signIn.path);
+  _handleGoToMainPage() => context.replace(Routes.main.path);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -38,9 +38,9 @@ class _SignUpCompleteScreenState extends State<SignUpCompleteScreen> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: _handleGoToLoginPage,
+          onPressed: _handleGoToMainPage,
           label: Text(
-            "Login페이지로",
+            "Let's Go~!",
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold),

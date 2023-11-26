@@ -12,7 +12,7 @@ class AuthErrorScreen extends StatefulWidget {
 }
 
 class _AuthErrorScreenState extends State<AuthErrorScreen> {
-  _handleGoToLoginPage() => context.go(Routes.signIn.path);
+  _handleGoToLoginPage() => context.go(Routes.auth.path);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -31,7 +31,7 @@ class _AuthErrorScreenState extends State<AuthErrorScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _handleGoToLoginPage,
-        label: Text("Login페이지로",
+        label: Text("처음 페이지로",
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold)),

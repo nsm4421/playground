@@ -1,12 +1,10 @@
-enum Routes { signIn, signUp, splash, main, chat }
+enum Routes { auth, splash, main, chat }
 
 extension RoutesEx on Routes {
   String get path {
     switch (this) {
-      case Routes.signIn:
-        return "/sign-in";
-      case Routes.signUp:
-        return "/sign-up";
+      case Routes.auth:
+        return "/";
       case Routes.splash:
         return "/splash";
       case Routes.main:
@@ -18,10 +16,8 @@ extension RoutesEx on Routes {
 
   String get name {
     switch (this) {
-      case Routes.signIn:
-        return "sign-in";
-      case Routes.signUp:
-        return "sign-up";
+      case Routes.auth:
+        return "auth";
       case Routes.splash:
         return "splash";
       case Routes.main:
