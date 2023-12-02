@@ -9,4 +9,6 @@ abstract class FeedRepository extends Repository {
       {required String content,
       required List<Asset> images,
       required List<String> hashtags});
+
+  Future<ResponseWrapper<List<FeedModel>>> getFeeds();
 }

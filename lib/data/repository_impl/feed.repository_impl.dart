@@ -73,4 +73,17 @@ class FeedRepositoryImpl extends FeedRepository {
     }
     return downloadLinks;
   }
+
+  @override
+  Future<ResponseWrapper<List<FeedModel>>> getFeeds() async {
+    try {
+      final feeds =
+          (await _feedApi.getFeeds()).map((e) => e.toModel()).toList();
+      return ResponseWrapper(status: ResponseStatus.success, data: feeds);
+    } catch (err) {
+      CustomLogger.logger.e(err);
+      return const ResponseWrapper(
+          status: ResponseStatus.error, message: "Fail to get feed");
+    }
+  }
 }
