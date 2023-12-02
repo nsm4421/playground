@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/data/data_source/mock/mock_story.api.dart';
 import 'package:my_app/data/data_source/remote/chat/chat.api.dart';
+import 'package:my_app/data/data_source/remote/feed/feed.api.dart';
 import 'package:my_app/data/data_source/remote/story/story.api.dart';
 
 import '../../core/constant/rest_client.dart';
@@ -27,4 +28,7 @@ abstract class DataSourceModule {
 
   @singleton
   ChatApi get chatApi => ChatApi(auth: _auth, db: _db);
+
+  @singleton
+  FeedApi get feedApi => FeedApi(auth: _auth, db: _db, storage: _storage);
 }
