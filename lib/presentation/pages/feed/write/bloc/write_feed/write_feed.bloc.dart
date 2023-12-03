@@ -3,8 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/core/utils/logging/custom_logger.dart';
 import 'package:my_app/domain/usecase/feed/feed.usecase.dart';
 import 'package:my_app/domain/usecase/feed/write/write_feed.usecase.dart';
-import 'package:my_app/presentation/pages/home/write/bloc/write_feed/write_feed.event.dart';
-import 'package:my_app/presentation/pages/home/write/bloc/write_feed/write_feed.state.dart';
+import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.event.dart';
+import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.state.dart';
 
 import '../../../../../../core/constant/enums/status.enum.dart';
 import '../../../../../../domain/model/feed/feed.model.dart';

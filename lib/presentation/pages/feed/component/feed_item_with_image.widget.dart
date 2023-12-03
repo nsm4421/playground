@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
-import 'package:my_app/presentation/pages/home/component/feed_item_content.widget.dart';
-import 'package:my_app/presentation/pages/home/component/feed_item_header.widget.dart';
-import 'package:my_app/presentation/pages/home/component/feed_item_icon_buttons.widget.dart';
+import 'package:my_app/presentation/pages/feed/component/feed_item_content.widget.dart';
+import 'package:my_app/presentation/pages/feed/component/feed_item_header.widget.dart';
+import 'package:my_app/presentation/pages/feed/component/feed_item_icon_buttons.widget.dart';
 
 class FeedItemWidgetWithImageWidget extends StatefulWidget {
   const FeedItemWidgetWithImageWidget(this.feed, {super.key});

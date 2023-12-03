@@ -7,8 +7,8 @@ import 'package:my_app/dependency_injection.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
 import 'package:my_app/domain/usecase/feed/feed.usecase.dart';
 import 'package:my_app/domain/usecase/feed/get/get_feed.usecase.dart';
-import 'package:my_app/presentation/pages/home/bloc/feed.event.dart';
-import 'package:my_app/presentation/pages/home/bloc/feed.state.dart';
+import 'package:my_app/presentation/pages/feed/bloc/feed.event.dart';
+import 'package:my_app/presentation/pages/feed/bloc/feed.state.dart';
 
 @injectable
 class FeedBloc extends Bloc<FeedEvent, FeedState> {

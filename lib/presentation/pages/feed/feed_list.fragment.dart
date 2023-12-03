@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
-import 'package:my_app/presentation/pages/home/bloc/feed.bloc.dart';
-import 'package:my_app/presentation/pages/home/bloc/feed.event.dart';
+import 'package:my_app/presentation/pages/feed/bloc/feed.bloc.dart';
+import 'package:my_app/presentation/pages/feed/bloc/feed.event.dart';
 import 'component/feed_item.widget.dart';
 
 class FeedListFragment extends StatefulWidget {
