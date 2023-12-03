@@ -21,10 +21,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   void _onInitialized(
       FeedInitializedEvent event, Emitter<FeedState> emit) async {
     try {
+      emit(state.copyWith(
+          status: Status.loading,
+          feedStream: getIt<FeedApi>().getFeedStream()));
       final response = await _feedUseCase.execute(useCase: GetFeedUseCase());
       response.when(success: (List<FeedModel> feeds) {
         emit(state.copyWith(
-            status: Status.initial,
+            status: Status.success,
             feedStream: getIt<FeedApi>().getFeedStream()));
       }, failure: (err) {
         CustomLogger.logger.e(err);

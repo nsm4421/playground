@@ -40,10 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (_, state) {
                 switch (state.status) {
                   case Status.initial:
-                  case Status.success:
-                    return const FeedListFragment();
                   case Status.loading:
                     return const Center(child: CircularProgressIndicator());
+                  case Status.success:
+                    return const FeedListFragment();
                   case Status.error:
                     return const Center(child: Text("ERROR"));
                 }

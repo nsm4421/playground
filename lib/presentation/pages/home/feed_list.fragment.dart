@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
 import 'package:my_app/presentation/pages/home/bloc/feed.bloc.dart';
 import 'package:my_app/presentation/pages/home/bloc/feed.event.dart';
-import 'package:my_app/presentation/pages/home/component/feed_item.widget.dart';
+import 'component/feed_item.widget.dart';
 
 class FeedListFragment extends StatefulWidget {
   const FeedListFragment({super.key});
@@ -45,8 +45,8 @@ class _FeedListFragmentState extends State<FeedListFragment> {
             if (snapshot.data == null) return const Text("NO DATA");
             // Feed 목록
             return Column(
-              children: snapshot.data!.map((e) => FeedItemWidget(e)).toList(),
-            );
+                children:
+                    snapshot.data!.map((e) => FeedItemWidget(e)).toList());
           },
         ),
       );
