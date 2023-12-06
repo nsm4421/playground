@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.bloc.dart';
-import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.event.dart';
+
+import '../bloc/write_feed.bloc.dart';
+import '../bloc/write_feed.event.dart';
 
 class WriteFeedErrorScreen extends StatelessWidget {
   const WriteFeedErrorScreen({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-import '../../../../../core/utils/logging/custom_logger.dart';
+import '../../../../core/utils/logging/custom_logger.dart';
 
 class SelectImageMenuWidget extends StatelessWidget {
   const SelectImageMenuWidget(

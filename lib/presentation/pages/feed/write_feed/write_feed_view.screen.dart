@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-import 'bloc/write_feed/write_feed.bloc.dart';
-import 'bloc/write_feed/write_feed.event.dart';
-import 'component/carousel_slider.widget.dart';
-import 'component/hashtag_textfield.widget.dart';
-import 'component/select_image.widget.dart';
-import 'component/content_textfield.widget.dart';
+import '../bloc/write_feed.bloc.dart';
+import '../bloc/write_feed.event.dart';
+import '../component/carousel_slider.widget.dart';
+import '../component/hashtag_textfield.widget.dart';
+import '../component/select_image.widget.dart';
+import '../component/content_textfield.widget.dart';
 
 class WriteFeedViewScreen extends StatefulWidget {
   const WriteFeedViewScreen({super.key});

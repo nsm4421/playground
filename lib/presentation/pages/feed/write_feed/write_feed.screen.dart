@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.bloc.dart';
-import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.event.dart';
-import 'package:my_app/presentation/pages/feed/write/bloc/write_feed/write_feed.state.dart';
-import 'package:my_app/presentation/pages/feed/write/write_feed_error.screen.dart';
-import 'package:my_app/presentation/pages/feed/write/write_feed_success.screen.dart';
-import 'package:my_app/presentation/pages/feed/write/write_feed_view.screen.dart';
+import 'package:my_app/presentation/pages/feed/write_feed/write_feed_error.screen.dart';
+import 'package:my_app/presentation/pages/feed/write_feed/write_feed_success.screen.dart';
+import 'package:my_app/presentation/pages/feed/write_feed/write_feed_view.screen.dart';
+
 
 import '../../../../core/constant/enums/status.enum.dart';
 import '../../../../dependency_injection.dart';
+import '../bloc/write_feed.bloc.dart';
+import '../bloc/write_feed.event.dart';
+import '../bloc/write_feed.state.dart';
 
 class WriteFeedScreen extends StatelessWidget {
   const WriteFeedScreen({super.key});

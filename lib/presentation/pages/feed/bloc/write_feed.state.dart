@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-import '../../../../../../core/constant/enums/status.enum.dart';
-import '../../../../../../core/utils/exception/error_response.dart';
+import '../../../../core/constant/enums/status.enum.dart';
+import '../../../../core/utils/exception/error_response.dart';
 
 part 'write_feed.state.freezed.dart';
 
