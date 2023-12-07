@@ -3,7 +3,6 @@ import 'package:my_app/domain/repository/feed.repository.dart';
 
 import '../../../../core/constant/enums/status.enum.dart';
 import '../../../../core/utils/exception/error_response.dart';
-import '../../../model/feed/feed.model.dart';
 import '../../../model/result/result.dart';
 import '../../base/remote.usecase.dart';
 
@@ -20,8 +19,8 @@ class WriteFeedUseCase extends RemoteUseCase<FeedRepository> {
     final result = await repository.saveFeed(
         content: content, images: images, hashtags: hashtags);
     return result.status == ResponseStatus.success
-        ? Result<FeedModel>.success(result.data!)
-        : Result<FeedModel>.failure(ErrorResponse(
+        ? const Result<void>.success(null)
+        : Result<void>.failure(ErrorResponse(
             status: 'ERROR', code: result.code, message: result.message));
   }
 }

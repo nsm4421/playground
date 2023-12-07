@@ -4,7 +4,6 @@ import 'package:my_app/presentation/pages/feed/write_feed/write_feed_error.scree
 import 'package:my_app/presentation/pages/feed/write_feed/write_feed_success.screen.dart';
 import 'package:my_app/presentation/pages/feed/write_feed/write_feed_view.screen.dart';
 
-
 import '../../../../core/constant/enums/status.enum.dart';
 import '../../../../dependency_injection.dart';
 import '../bloc/write_feed.bloc.dart';
@@ -36,3 +35,4 @@ class WriteFeedScreen extends StatelessWidget {
         ),
       );
 }
+

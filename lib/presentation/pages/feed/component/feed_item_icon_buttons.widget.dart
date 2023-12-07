@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/presentation/pages/feed/feed_comment/feed_comment.fragment.dart';
 
-class FeedItemIconButtonsWidget extends StatelessWidget {
-  const FeedItemIconButtonsWidget({super.key});
+class FeedItemIconButtonsWidget extends StatefulWidget {
+  const FeedItemIconButtonsWidget(this.feedId, {super.key});
 
-  // TODO : 이벤트 등록 - 좋아요, 댓글, 북마크
+  final String feedId;
+
+  @override
+  State<FeedItemIconButtonsWidget> createState() =>
+      _FeedItemIconButtonsWidgetState();
+}
+
+class _FeedItemIconButtonsWidgetState extends State<FeedItemIconButtonsWidget> {
   _handleClickFavoriteButton() {}
 
-  _handleClickAddCommentButton() {}
-
   _handleClickBookMarkButton() {}
+
+  _handleClickAddCommentButton(BuildContext context) => () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => Padding(
+            padding: const EdgeInsets.only(right: 10, left: 10),
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: FeedCommentFragment(widget.feedId)),
+          ),
+          showDragHandle: true,
+          enableDrag: true,
+          isDismissible: true,
+          isScrollControlled: true,
+          useSafeArea: true,
+          barrierColor: Colors.grey.withOpacity(0.5),
+        );
+      };
 
   @override
   Widget build(BuildContext context) => Row(
@@ -19,7 +43,7 @@ class FeedItemIconButtonsWidget extends StatelessWidget {
               onPressed: _handleClickFavoriteButton,
               icon: const Icon(Icons.favorite_outline, color: Colors.black)),
           IconButton(
-              onPressed: _handleClickAddCommentButton,
+              onPressed: _handleClickAddCommentButton(context),
               icon:
                   const Icon(Icons.add_comment_outlined, color: Colors.black)),
           const Spacer(),
