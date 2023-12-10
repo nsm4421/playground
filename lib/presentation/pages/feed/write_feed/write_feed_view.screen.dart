@@ -77,42 +77,45 @@ class _WriteFeedViewState extends State<WriteFeedViewScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Upload",
-              style: GoogleFonts.lobsterTwo(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary)),
-          actions: [
-            IconButton(
-                onPressed: _handleUploadFeed,
-                icon: Icon(
-                  Icons.upload_outlined,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 30,
-                ))
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                _ContentTextFieldWidget(_contentTEC),
-                const SizedBox(height: 10),
-                const Divider(),
-                const SizedBox(height: 10),
-                _HashtagsTextFieldWidget(_hashtagTECList),
-                const SizedBox(height: 10),
-                const Divider(),
-                const SizedBox(height: 10),
-                _SelectImageMenuWidget(images: _images, setImages: _setImages),
-                const SizedBox(height: 10),
-                CarouselSliderWidget(images: _images, setImages: _setImages),
-                const SizedBox(height: 30),
-              ],
+  Widget build(BuildContext context) => SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Upload",
+                style: GoogleFonts.lobsterTwo(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary)),
+            actions: [
+              IconButton(
+                  onPressed: _handleUploadFeed,
+                  icon: Icon(
+                    Icons.upload_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 30,
+                  ))
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  _ContentTextFieldWidget(_contentTEC),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _HashtagsTextFieldWidget(_hashtagTECList),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _SelectImageMenuWidget(
+                      images: _images, setImages: _setImages),
+                  const SizedBox(height: 10),
+                  CarouselSliderWidget(images: _images, setImages: _setImages),
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
           ),
         ),

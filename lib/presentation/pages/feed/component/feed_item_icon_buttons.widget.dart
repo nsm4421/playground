@@ -19,12 +19,9 @@ class _FeedItemIconButtonsWidgetState extends State<FeedItemIconButtonsWidget> {
   _handleClickAddCommentButton(BuildContext context) => () {
         showModalBottomSheet(
           context: context,
-          builder: (context) => Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10),
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: FeedCommentFragment(widget.feedId)),
-          ),
+          builder: (context) => SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: FeedCommentFragment(widget.feedId)),
           showDragHandle: true,
           enableDrag: true,
           isDismissible: true,

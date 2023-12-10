@@ -45,7 +45,7 @@ class FeedApi {
       (await _db
               .collection(_feedCollectionName)
               .doc(feedId)
-              .collection(_feedCollectionName)
+              .collection(_feedCommentCollectionName)
               .orderBy(_orderByFieldName, descending: true)
               .get())
           .docs
