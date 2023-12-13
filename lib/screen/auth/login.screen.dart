@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_app/configurations.dart';
+import 'package:my_app/repository/auth/auth.repository.dart';
 import 'package:my_app/screen/auth/sign_up.screen.dart';
+import 'package:my_app/screen/home/home.screen.dart';
+
+import '../../core/response/response.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _emailTec;
   late TextEditingController _passwordTec;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -30,7 +36,42 @@ class _LoginScreenState extends State<LoginScreen> {
   // TODO : 이벤트 기능 구현
   _handleGoToFindPasswordPage() {}
 
-  _handleClickLogin() {}
+  _handleClickLogin() async {
+    try {
+      // check email, password
+      final email = _emailTec.text.trim();
+      final password = _passwordTec.text.trim();
+      if (email.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('email or password are not given'),
+          duration: Duration(seconds: 1),
+        ));
+        return;
+      }
+      _isLoading = true;
+      await getIt<AuthRepository>()
+          .signInWithEmailAndPassword(email, password)
+          .then((response) {
+        if (response.status == Status.success) {
+          // login success
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const HomeScreen()));
+        } else {
+          // login fail
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(response.message ?? 'login fail...'),
+            duration: const Duration(seconds: 5),
+          ));
+        }
+      });
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoading = false;
+    }
+  }
 
   _handleGoToSignUpPage() => Navigator.push(
       context,
@@ -63,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       tec: _passwordTec,
                       hintText: 'Password',
                       prefixIcon: const Icon(Icons.key),
+                      isObscure: true,
                     ),
                     const SizedBox(height: 10),
                     InkWell(
@@ -89,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Divider(endIndent: 30, thickness: 0.8),
                 const SizedBox(height: 10),
                 InkWell(
-                    onTap: _handleGoToSignUpPage,
+                    onTap: _isLoading ? null : _handleGoToSignUpPage,
                     child: Text(
                       "Want to make account?",
                       style: GoogleFonts.karla(
@@ -106,15 +148,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
 class _LoginTextField extends StatelessWidget {
   const _LoginTextField(
-      {super.key, required this.tec, this.hintText, this.prefixIcon});
+      {super.key,
+      required this.tec,
+      this.hintText,
+      this.prefixIcon,
+      this.isObscure = false});
 
   final TextEditingController tec;
   final String? hintText;
   final Icon? prefixIcon;
+  final bool isObscure;
 
   @override
   Widget build(BuildContext context) => TextFormField(
         controller: tec,
+        obscureText: isObscure,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(8),
           hintText: hintText,
