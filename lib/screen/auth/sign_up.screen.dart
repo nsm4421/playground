@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_app/screen/auth/login.screen.dart';
+
+import '../../configurations.dart';
+import '../../core/response/response.dart';
+import '../../repository/auth/auth.repository.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -16,6 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _isPasswordVisible = false;
   bool _isPasswordConfirmVisible = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -43,7 +49,65 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _isPasswordConfirmVisible = !_isPasswordConfirmVisible;
       });
 
-  _handleSignUp() {}
+  _handleSignUp() async {
+    try {
+      // check user input
+      final email = _emailTec.text.trim();
+      final password = _passwordTec.text.trim();
+      final passwordConfirm = _passwordConfirmTec.text.trim();
+      final nickname = _nicknameTec.text.trim();
+      if (email.isEmpty || password.isEmpty || nickname.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('email,password or nickname are not given'),
+          duration: Duration(seconds: 2),
+        ));
+        return;
+      }
+      if (password != passwordConfirm) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('passwords are not same'),
+          duration: Duration(seconds: 2),
+        ));
+        return;
+      }
+
+      // sign up
+      _isLoading = true;
+      final signUpResponse = await getIt<AuthRepository>()
+          .createUserWithEmailAndPassword(email, password);
+
+      // sign up fail
+      if (signUpResponse.status == Status.error) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('sign up failed'),
+            duration: Duration(seconds: 2),
+          ));
+        }
+        return;
+      }
+
+      // save user info in DB
+      final uid = signUpResponse.data?.user?.uid;
+      await getIt<AuthRepository>()
+          .saveUser(uid: uid!, email: email, nickname: nickname);
+
+      // go to login page
+      if (context.mounted) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => const LoginScreen()));
+      }
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(err.toString()),
+        duration: const Duration(seconds: 2),
+      ));
+    } finally {
+      _isLoading = false;
+    }
+  }
 
   _handleGoToPreviousPage() => Navigator.pop(context);
 
@@ -101,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                      onPressed: _handleSignUp,
+                      onPressed: _isLoading ? null : _handleSignUp,
                       child: Text(
                         "Sign Up",
                         style: GoogleFonts.karla(
