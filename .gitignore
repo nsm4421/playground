@@ -7,6 +7,10 @@ web/**
 ios/**
 .metadata
 analysis_options.yaml
+firebase_options.dart
+configurations.config.dart
+**.g.dart
+**.freezed.dart
 
 # Miscellaneous
 *.class

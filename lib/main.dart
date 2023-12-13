@@ -1,7 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/firebase_options.dart';
+import 'package:my_app/screen/auth/login.screen.dart';
 import 'package:my_app/screen/home/home.screen.dart';
 
-void main() {
+import 'configurations.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // firebase setting
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // dependency injection
+  configureDependencies();
   runApp(const MyApp());
 }
 
@@ -17,7 +28,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) =>
+            snapshot.data != null && snapshot.hasData
+                ? const HomeScreen()
+                : const LoginScreen(),
+      ),
     );
   }
 }
