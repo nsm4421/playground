@@ -18,6 +18,8 @@ class AuthApi {
 
   static const String _userCollectionName = 'user';
 
+  String? get currentUid => _auth.currentUser?.uid;
+
   /// login with email and password
   Future<UserCredential> signInWithEmailAndPassword(
           String email, String password) async =>

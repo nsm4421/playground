@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/api/auth/auth.api.dart';
-import 'package:my_app/domain/model/user/user.model.dart';
 
 import '../../core/response/response.dart';
 import 'auth.repository.dart';
@@ -11,6 +10,9 @@ class AuthRepositoryImpl extends AuthRepository {
   final AuthApi _authApi;
 
   AuthRepositoryImpl(this._authApi);
+
+  @override
+  String? get currentUid => _authApi.currentUid;
 
   @override
   Future<Response<void>> signInWithEmailAndPassword(
