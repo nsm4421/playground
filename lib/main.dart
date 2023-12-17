@@ -24,7 +24,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Karma',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            secondary: Colors.blueGrey,
+            tertiary: Colors.grey),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,

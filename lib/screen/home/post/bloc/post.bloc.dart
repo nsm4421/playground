@@ -19,7 +19,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   void _onInit(InitPostEvent event, Emitter<PostState> emit) {
     try {
       emit(state.copyWith(status: PostStatus.initial));
-      print(state);
     } catch (err) {
       emit(const PostState(status: PostStatus.error));
     }
