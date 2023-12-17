@@ -7,6 +7,7 @@ part 'response.g.dart';
 
 enum Status {
   success,
+  warning,
   error;
 }
 
