@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_app/api/auth/auth.api.dart';
+import 'package:my_app/configurations.dart';
+import 'package:my_app/screen/home/bloc/auth.bloc.dart';
+import 'package:my_app/screen/home/bloc/auth.event.dart';
 import 'package:my_app/screen/home/profile/feed.fragment.dart';
 import 'package:my_app/screen/home/profile/reply.fragment.dart';
+import 'package:my_app/usecase/auth/sign_out.usecase.dart';
 
 enum _ProfileTabItems {
   feed(label: 'Feed', fragment: FeedFragment()),
@@ -42,6 +48,22 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.dispose();
   }
 
+  // TODO : 이미지 선택 입력 기능
+  _handleShowEditProfile() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => const _EditProfileWidget(),
+      showDragHandle: true,
+      isScrollControlled: false,
+      enableDrag: true,
+      isDismissible: true,
+      useSafeArea: true,
+      barrierColor: Colors.grey.withOpacity(0.5),
+    );
+  }
+
+  _handleSignOut() => context.read<AuthBloc>().add(SignOutEvent());
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Padding(
@@ -50,26 +72,36 @@ class _ProfileScreenState extends State<ProfileScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text("test",
+                leading: context
+                        .read<AuthBloc>()
+                        .state
+                        .profileImageUrls
+                        .isNotEmpty
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            context.read<AuthBloc>().state.profileImageUrls[0]),
+                        radius: 25,
+                      )
+                    : const CircleAvatar(
+                        child: Icon(Icons.account_circle_outlined)),
+                title: Text(context.read<AuthBloc>().state.nickname ?? '',
                     style: GoogleFonts.karla(
                         fontSize: 20, fontWeight: FontWeight.bold)),
-                subtitle: Text("@test",
+                subtitle: Text("1000 followers",
                     style: GoogleFonts.karla(
                         fontSize: 18,
                         color: Theme.of(context).colorScheme.secondary)),
                 contentPadding: const EdgeInsets.all(0),
-                trailing: const CircleAvatar(
-                  // TODO : 유저 프로필 이미지
-                  // backgroundImage: ,
-                  radius: 25,
+                trailing: IconButton(
+                  icon: const Icon(Icons.exit_to_app),
+                  onPressed: _handleSignOut,
+                  tooltip: "Sign Out",
                 ),
               ),
-              // TODO : 팔로잉 숫자 표시
-              const Text("1000 Followers"),
               const SizedBox(height: 20),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 InkWell(
-                    onTap: () {},
+                    onTap: _handleShowEditProfile,
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.4,
                       padding: const EdgeInsets.symmetric(
@@ -79,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           color: Theme.of(context)
                               .colorScheme
                               .tertiary
-                              .withOpacity(0.5)),
+                              .withOpacity(0.3)),
                       alignment: Alignment.center,
                       child: Text("Edit Profile",
                           style: GoogleFonts.karla(
@@ -97,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           color: Theme.of(context)
                               .colorScheme
                               .tertiary
-                              .withOpacity(0.5)),
+                              .withOpacity(0.3)),
                       alignment: Alignment.center,
                       child: Text("Share Profile",
                           style: GoogleFonts.karla(
@@ -124,6 +156,55 @@ class _ProfileScreenState extends State<ProfileScreen>
               )
             ],
           ),
+        ),
+      );
+}
+
+class _EditProfileWidget extends StatefulWidget {
+  const _EditProfileWidget({super.key});
+
+  @override
+  State<_EditProfileWidget> createState() => _EditProfileWidgetState();
+}
+
+class _EditProfileWidgetState extends State<_EditProfileWidget> {
+  late TextEditingController _nicknameTec;
+
+  @override
+  void initState() {
+    super.initState();
+    _nicknameTec = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nicknameTec.dispose();
+  }
+
+  _handleClearText() => _nicknameTec.clear();
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Nickname",
+              style: GoogleFonts.lobsterTwo(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 18),
+            ),
+            TextFormField(
+              controller: _nicknameTec,
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      onPressed: _handleClearText,
+                      icon: const Icon(Icons.clear))),
+            )
+          ],
         ),
       );
 }

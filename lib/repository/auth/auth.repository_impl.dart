@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/api/auth/auth.api.dart';
+import 'package:my_app/domain/dto/user/user.dto.dart';
+import 'package:my_app/domain/model/user/user.model.dart';
 
 import '../../core/response/response.dart';
 import 'auth.repository.dart';
@@ -13,6 +15,21 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   String? get currentUid => _authApi.currentUid;
+
+  @override
+  Future<Response<UserModel?>> getCurrentUser() async {
+    try {
+      final currentUser = (await _authApi.getCurrentUser())?.toModel();
+      return Response<UserModel?>(
+          status: currentUser != null ? Status.success : Status.error,
+          data: currentUser);
+    } catch (err) {
+      return Response<UserModel>(status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<void> signOut() async => await _authApi.signOut();
 
   @override
   Future<Response<void>> signInWithEmailAndPassword(
