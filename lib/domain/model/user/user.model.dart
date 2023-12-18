@@ -11,6 +11,7 @@ class UserModel with _$UserModel {
     String? uid,
     String? email,
     String? nickname,
+    @Default(<String>[]) List<String> profileImageUrls,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

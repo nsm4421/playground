@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
+import 'package:my_app/domain/model/user/user.model.dart';
 
 class AuthApi {
   AuthApi(
@@ -19,6 +20,13 @@ class AuthApi {
   static const String _userCollectionName = 'user';
 
   String? get currentUid => _auth.currentUser?.uid;
+
+  Future<UserDto?> getCurrentUser() async => await _db
+      .collection(_userCollectionName)
+      .doc(_auth.currentUser?.uid)
+      .get()
+      .then((doc) => doc.data())
+      .then((data) => data == null ? null : UserDto.fromJson(data));
 
   /// login with email and password
   Future<UserCredential> signInWithEmailAndPassword(
@@ -40,4 +48,7 @@ class AuthApi {
           .collection(_userCollectionName)
           .doc(uid)
           .set(UserDto(uid: uid, email: email, nickname: nickname).toJson());
+
+  /// sign out
+  Future<void> signOut() async => _auth.signOut();
 }

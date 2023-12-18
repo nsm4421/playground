@@ -12,6 +12,7 @@ class UserDto with _$UserDto {
     @Default('') String uid,
     @Default('') String email,
     @Default('') String nickname,
+    @Default(<String>[]) List<String> profileImageUrls,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
@@ -19,5 +20,9 @@ class UserDto with _$UserDto {
 }
 
 extension UserDtoEx on UserDto {
-  UserModel toModel() => UserModel(uid: uid, email: email, nickname: nickname);
+  UserModel toModel() => UserModel(
+      uid: uid,
+      email: email,
+      nickname: nickname,
+      profileImageUrls: profileImageUrls);
 }
