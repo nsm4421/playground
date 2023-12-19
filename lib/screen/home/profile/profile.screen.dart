@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_app/api/auth/auth.api.dart';
-import 'package:my_app/configurations.dart';
 import 'package:my_app/screen/home/bloc/auth.bloc.dart';
 import 'package:my_app/screen/home/bloc/auth.event.dart';
-import 'package:my_app/screen/home/profile/feed.fragment.dart';
+import 'package:my_app/screen/component/feed.fragment.dart';
 import 'package:my_app/screen/home/profile/reply.fragment.dart';
-import 'package:my_app/usecase/auth/sign_out.usecase.dart';
 
 enum _ProfileTabItems {
-  feed(label: 'Feed', fragment: FeedFragment()),
+  feed(label: 'Feed', fragment: FeedFragment(isMyFeed: true)),
   reply(label: 'Replies', fragment: ReplyFragment()),
   repost(label: 'Reposts', fragment: ReplyFragment());
 

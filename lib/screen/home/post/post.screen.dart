@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:my_app/screen/home/bloc/auth.bloc.dart';
 import 'package:my_app/screen/home/post/bloc/post.bloc.dart';
 import 'package:my_app/screen/home/post/bloc/post.state.dart';
 
@@ -106,11 +107,24 @@ class _PostScreenViewState extends State<_PostScreenView> {
               children: [
                 Row(
                   children: [
-                    const CircleAvatar(),
+                    // profile image
+                    context.read<AuthBloc>().state.profileImageUrls.isEmpty
+                        ? const CircleAvatar(
+                            child: Icon(Icons.account_circle_outlined))
+                        : CircleAvatar(
+                            backgroundImage: NetworkImage(context
+                                .read<AuthBloc>()
+                                .state
+                                .profileImageUrls[0])),
+
                     const SizedBox(width: 15),
-                    // TODO : uid대신 닉네임
-                    const Text('Username',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(context.read<AuthBloc>().state.nickname,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold)),
                     const Spacer(),
                     // hashtag button
                     IconButton(

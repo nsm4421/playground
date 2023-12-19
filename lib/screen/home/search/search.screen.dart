@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_app/domain/model/user/user.model.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -28,70 +27,64 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Center(
-                      child: Text("Search",
-                          style: GoogleFonts.lobsterTwo(
-                              fontSize: 35, fontWeight: FontWeight.bold))),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .tertiary
-                              .withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: TextField(
-                        controller: _searchTec,
-                        style: GoogleFonts.karla(
-                            color: Theme.of(context).colorScheme.onTertiary,
-                            decorationThickness: 0,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                            hintText: "What to do you want to see?",
-                            prefixIconColor:
-                                Theme.of(context).colorScheme.onTertiary,
-                            border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.search),
-                            suffixIcon: IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: _handleClearSearch)),
-                      ),
-                    ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Text("Search", style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .tertiary
+                          .withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: TextField(
+                    controller: _searchTec,
+                    style: GoogleFonts.karla(
+                        color: Theme.of(context).colorScheme.onTertiary,
+                        decorationThickness: 0,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                        hintText: "What to do you want to see?",
+                        prefixIconColor:
+                            Theme.of(context).colorScheme.onTertiary,
+                        border: InputBorder.none,
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: _handleClearSearch)),
                   ),
-
-                  const SizedBox(height: 18),
-                  const Divider(indent: 15, endIndent: 15),
-                  const SizedBox(height: 18),
-                  // TODO : 추천 유저 보여주기
-                  ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: 3,
-                      itemBuilder: (context, index) => ListTile(
-                            leading: const CircleAvatar(),
-                            title: Text("Username",
-                                style: GoogleFonts.lobster(
-                                    fontWeight: FontWeight.bold)),
-                            subtitle: const Text("#test1 #test2"),
-                            trailing: ElevatedButton(
-                                onPressed: () {}, child: const Text("Follow")),
-                          ),
-                      separatorBuilder: (_, __) =>
-                          const Divider(indent: 30, endIndent: 30))
-                ],
+                ),
               ),
-            ),
+
+              const SizedBox(height: 18),
+              // TODO : 추천 유저 보여주기
+              Expanded(
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: 100,
+                    itemBuilder: (context, index) => ListTile(
+                          leading: const CircleAvatar(),
+                          title: Text("Username",
+                              style: GoogleFonts.lobster(
+                                  fontWeight: FontWeight.bold)),
+                          subtitle: const Text("#test1 #test2"),
+                          trailing: ElevatedButton(
+                              onPressed: () {}, child: const Text("Follow")),
+                        ),
+                    separatorBuilder: (_, __) =>
+                        const Divider(indent: 30, endIndent: 30)),
+              )
+            ],
           ),
         ),
       );

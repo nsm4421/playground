@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/dto/feed/feed.dto.dart';
+import '../../domain/model/feed/feed.model.dart';
 
 class FeedApi {
   FeedApi(
@@ -22,7 +23,15 @@ class FeedApi {
 
   static const String _feedCollectionName = 'feed';
 
-  String? get currentUid => _auth.currentUser?.uid;
+  /// get stream of feed order by created at field
+  /// if uid is not given, then return stream for all feeds
+  Stream<List<FeedModel>> getFeedStreamByUser({String? uid}) => (uid == null
+          ? _db.collection(_feedCollectionName)
+          : _db.collection(_feedCollectionName).where("uid", isEqualTo: uid))
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .asyncMap((e) async =>
+          e.docs.map((doc) => FeedModel.fromJson(doc.data())).toList());
 
   /// save feed and return its id
   Future<String> saveFeed(FeedDto feed) async {
