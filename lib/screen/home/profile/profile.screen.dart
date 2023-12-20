@@ -6,6 +6,8 @@ import 'package:my_app/screen/home/bloc/auth.event.dart';
 import 'package:my_app/screen/component/feed.fragment.dart';
 import 'package:my_app/screen/home/profile/reply.fragment.dart';
 
+import 'edit_profile.widget.dart';
+
 enum _ProfileTabItems {
   feed(label: 'Feed', fragment: FeedFragment(isMyFeed: true)),
   reply(label: 'Replies', fragment: ReplyFragment()),
@@ -45,13 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.dispose();
   }
 
-  // TODO : 이미지 선택 입력 기능
   _handleShowEditProfile() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => const _EditProfileWidget(),
+      builder: (context) => const EditProfileWidget(),
       showDragHandle: true,
-      isScrollControlled: false,
+      isScrollControlled: true,
+      elevation: 0,
       enableDrag: true,
       isDismissible: true,
       useSafeArea: true,
@@ -153,55 +155,6 @@ class _ProfileScreenState extends State<ProfileScreen>
               )
             ],
           ),
-        ),
-      );
-}
-
-class _EditProfileWidget extends StatefulWidget {
-  const _EditProfileWidget({super.key});
-
-  @override
-  State<_EditProfileWidget> createState() => _EditProfileWidgetState();
-}
-
-class _EditProfileWidgetState extends State<_EditProfileWidget> {
-  late TextEditingController _nicknameTec;
-
-  @override
-  void initState() {
-    super.initState();
-    _nicknameTec = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _nicknameTec.dispose();
-  }
-
-  _handleClearText() => _nicknameTec.clear();
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Nickname",
-              style: GoogleFonts.lobsterTwo(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18),
-            ),
-            TextFormField(
-              controller: _nicknameTec,
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                      onPressed: _handleClearText,
-                      icon: const Icon(Icons.clear))),
-            )
-          ],
         ),
       );
 }

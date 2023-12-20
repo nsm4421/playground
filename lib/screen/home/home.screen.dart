@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget {
         providers: [
           BlocProvider<BottomNavigationCubit>(
               create: (_) => BottomNavigationCubit()),
+          // TODO : Auth Bloc을 사용해 인증정보를 담는 대신 Stream을 사용하도록 Refactoring하기
           BlocProvider<AuthBloc>(
               create: (_) => getIt<AuthBloc>()..add(InitAuthEvent())),
         ],

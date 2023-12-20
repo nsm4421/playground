@@ -1,8 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
-import 'package:my_app/domain/model/user/user.model.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthApi {
   AuthApi(
@@ -51,4 +54,27 @@ class AuthApi {
 
   /// sign out
   Future<void> signOut() async => _auth.signOut();
+
+  /// update user info
+  Future<void> updateProfile(
+      {required String nickname,
+      required List<Uint8List> imageDataList}) async {
+    // get user info in db
+    final user = await getCurrentUser();
+    if (user == null) {
+      throw const CertificateException('to update profile, proceed login');
+    }
+    // save profile image in storage
+    final profileImageUrls = await Future.wait(imageDataList.map(
+        (imageData) async => await _storage
+            .ref(_userCollectionName)
+            .child(user.uid)
+            .child('${(const Uuid()).v1()}.jpg')
+            .putData(imageData)
+            .then((task) => task.ref.getDownloadURL())));
+    // save user info in DB
+    await _db.collection(_userCollectionName).doc(user.uid).set(user
+        .copyWith(nickname: nickname, profileImageUrls: profileImageUrls)
+        .toJson());
+  }
 }

@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
+import 'package:multi_image_picker/src/asset.dart';
 import 'package:my_app/api/auth/auth.api.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
@@ -12,6 +16,8 @@ class AuthRepositoryImpl extends AuthRepository {
   final AuthApi _authApi;
 
   AuthRepositoryImpl(this._authApi);
+
+  static const int _profileImageQuality = 96;
 
   @override
   String? get currentUid => _authApi.currentUid;
@@ -63,6 +69,24 @@ class AuthRepositoryImpl extends AuthRepository {
       required String nickname}) async {
     try {
       await _authApi.saveUser(uid: uid, email: email, nickname: nickname);
+      return const Response<void>(status: Status.success);
+    } catch (err) {
+      return Response<void>(status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<Response<void>> updateProfile(
+      {required String nickname, required List<Asset> assets}) async {
+    try {
+      final imageDataList = await Future.wait(assets.map((image) async =>
+          await image
+              .getByteData()
+              .then((byte) => byte.buffer.asUint8List())
+              .then((data) => FlutterImageCompress.compressWithList(data,
+                  quality: _profileImageQuality))));
+      await _authApi.updateProfile(
+          nickname: nickname, imageDataList: imageDataList);
       return const Response<void>(status: Status.success);
     } catch (err) {
       return Response<void>(status: Status.error, message: err.toString());
