@@ -13,12 +13,21 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   PostBloc(this._feedUsecase) : super(const PostState()) {
     on<InitPostEvent>(_onInit);
+    on<UpdatePostStateEvent>(_onUpdate);
     on<SubmitPostEvent>(_onSubmit);
   }
 
   void _onInit(InitPostEvent event, Emitter<PostState> emit) {
     try {
       emit(state.copyWith(status: PostStatus.initial));
+    } catch (err) {
+      emit(const PostState(status: PostStatus.error));
+    }
+  }
+
+  void _onUpdate(UpdatePostStateEvent event, Emitter<PostState> emit) {
+    try {
+      emit(event.state.copyWith(status: PostStatus.initial));
     } catch (err) {
       emit(const PostState(status: PostStatus.error));
     }

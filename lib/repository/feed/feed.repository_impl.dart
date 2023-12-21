@@ -1,9 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:my_app/api/feed/feed,api.dart';
+import 'package:my_app/api/feed/feed.api.dart';
 import 'package:my_app/core/response/response.dart';
 import 'package:my_app/domain/dto/feed/feed.dto.dart';
 import 'package:my_app/repository/feed/feed.repository.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../core/util/image.util.dart';
 
 @Singleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
@@ -16,21 +19,26 @@ class FeedRepositoryImpl extends FeedRepository {
   Future<Response<String>> saveFeed(
       {required String content,
       required List<String> hashtags,
-      required List<Asset> images}) async {
+      required List<Asset> assets}) async {
     try {
-      // TODO : save images
-      final downloadLinks = [];
-      if (images.isNotEmpty) {}
-      final FeedDto feed = FeedDto(
+      final fid = const Uuid().v1();
+
+      // save images storage and get its download links
+      final downloadLinks = assets.isEmpty
+          ? []
+          : await _feedApi.saveFeedImages(
+              fid: fid, imageDataList: await ImageUtil.getImageData(assets));
+
+      // save feed
+      await _feedApi.saveFeed(FeedDto(
+        fid: fid,
         hashtags: hashtags,
         content: content,
         images: downloadLinks,
         likeCount: 0,
         commentCount: 0,
         shareCount: 0,
-      );
-
-      final fid = await _feedApi.saveFeed(feed);
+      ));
       return Response<String>(status: Status.success, data: fid);
     } catch (err) {
       return const Response<String>(

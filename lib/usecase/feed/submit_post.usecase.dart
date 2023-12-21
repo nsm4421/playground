@@ -19,6 +19,6 @@ class SubmitPostUsecase extends RemoteUsecase<FeedRepository> {
           status: Status.warning, message: 'Content is empty');
     }
     return await repository.saveFeed(
-        content: content, images: images, hashtags: hashtags);
+        content: content, assets: images, hashtags: hashtags);
   }
 }

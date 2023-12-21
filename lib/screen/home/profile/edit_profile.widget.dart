@@ -78,6 +78,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       // update profile
       await getIt<AuthRepository>()
           .updateProfile(nickname: _nicknameTec.text.trim(), assets: _assets);
+      getIt<AuthBloc>().add(InitAuthEvent());
       _status = _EditProfileStatus.success;
     } catch (err) {
       _status = _EditProfileStatus.error;

@@ -8,5 +8,5 @@ abstract class FeedRepository extends Repository {
   Future<Response<String>> saveFeed(
       {required String content,
       required List<String> hashtags,
-      required List<Asset> images});
+      required List<Asset> assets});
 }

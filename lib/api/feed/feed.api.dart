@@ -34,21 +34,22 @@ class FeedApi {
           e.docs.map((doc) => FeedModel.fromJson(doc.data())).toList());
 
   /// save feed and return its id
-  Future<String> saveFeed(FeedDto feed) async {
-    // create feed id
-    final fid = feed.fid.isNotEmpty ? feed.fid : const Uuid().v1();
+  Future<String> saveFeed(FeedDto feed) async => await _db
+      .collection(_feedCollectionName)
+      .doc(feed.fid)
+      .set(feed
+          .copyWith(uid: _auth.currentUser!.uid, createdAt: DateTime.now())
+          .toJson())
+      .then((_) => feed.fid);
 
-    // TODO : 이미지 업로드 기능
-
-    // save in DB
-    await _db.collection(_feedCollectionName).doc(fid).set(feed
-        .copyWith(
-          // TODO : profileImageUrl 필드 추가
-          uid: _auth.currentUser!.uid,
-          fid: fid,
-          createdAt: DateTime.now(),
-        )
-        .toJson());
-    return fid;
-  }
+  /// save feed images in storage and return its download links
+  Future<List<String>> saveFeedImages(
+          {required String fid,
+          required List<Uint8List> imageDataList}) async =>
+      await Future.wait(imageDataList.map((imageData) async => await _storage
+          .ref(_feedCollectionName)
+          .child(fid)
+          .child('${(const Uuid()).v1()}.jpg')
+          .putData(imageData)
+          .then((task) => task.ref.getDownloadURL())));
 }
