@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,6 +23,8 @@ class AuthApi {
 
   String? get currentUid => _auth.currentUser?.uid;
 
+  Stream<User?> get authStream => _auth.authStateChanges();
+
   Future<UserDto?> getCurrentUser() async => await _db
       .collection(_userCollectionName)
       .doc(_auth.currentUser?.uid)
@@ -33,48 +34,32 @@ class AuthApi {
 
   /// login with email and password
   Future<UserCredential> signInWithEmailAndPassword(
-          String email, String password) async =>
+          {required String email, required String password}) async =>
       await _auth.signInWithEmailAndPassword(email: email, password: password);
 
   /// register with email and password
   Future<UserCredential> createUserWithEmailAndPassword(
-          String email, String password) async =>
+          {required String email, required String password}) async =>
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
   /// save user info in DB
-  Future<void> saveUser(
-          {required String uid,
-          required String email,
-          required String nickname}) async =>
-      await _db
-          .collection(_userCollectionName)
-          .doc(uid)
-          .set(UserDto(uid: uid, email: email, nickname: nickname).toJson());
+  Future<void> saveUser(UserDto user) async => await _db
+      .collection(_userCollectionName)
+      .doc(user.uid)
+      .set(user.toJson());
 
   /// sign out
   Future<void> signOut() async => _auth.signOut();
 
-  /// update user info
-  Future<void> updateProfile(
-      {required String nickname,
-      required List<Uint8List> imageDataList}) async {
-    // get user info in db
-    final user = await getCurrentUser();
-    if (user == null) {
-      throw const CertificateException('to update profile, proceed login');
-    }
-    // save profile image in storage
-    final profileImageUrls = await Future.wait(imageDataList.map(
-        (imageData) async => await _storage
-            .ref(_userCollectionName)
-            .child(user.uid)
-            .child('${(const Uuid()).v1()}.jpg')
-            .putData(imageData)
-            .then((task) => task.ref.getDownloadURL())));
-    // save user info in DB
-    await _db.collection(_userCollectionName).doc(user.uid).set(user
-        .copyWith(nickname: nickname, profileImageUrls: profileImageUrls)
-        .toJson());
-  }
+  /// save profile images in storage and return its download links
+  Future<List<String>> saveProfileImages(
+          {required String uid,
+          required List<Uint8List> imageDataList}) async =>
+      await Future.wait(imageDataList.map((imageData) async => await _storage
+          .ref(_userCollectionName)
+          .child(uid)
+          .child('${(const Uuid()).v1()}.jpg')
+          .putData(imageData)
+          .then((task) => task.ref.getDownloadURL())));
 }

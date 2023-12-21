@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../api/feed/feed,api.dart';
+import '../../api/feed/feed.api.dart';
 import '../../configurations.dart';
 import '../../domain/model/feed/feed.model.dart';
 import '../home/bloc/auth.bloc.dart';

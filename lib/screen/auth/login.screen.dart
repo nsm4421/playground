@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       _isLoading = true;
       await getIt<AuthRepository>()
-          .signInWithEmailAndPassword(email, password)
+          .signInWithEmailAndPassword(email: email, password: password)
           .then((response) {
         if (response.status == Status.success) {
           // login success

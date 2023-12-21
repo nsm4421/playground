@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/src/asset.dart';
 import 'package:my_app/api/auth/auth.api.dart';
+import 'package:my_app/core/util/image.util.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 
@@ -39,9 +41,10 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<Response<void>> signInWithEmailAndPassword(
-      String email, String password) async {
+      {required String email, required String password}) async {
     try {
-      await _authApi.signInWithEmailAndPassword(email, password);
+      await _authApi.signInWithEmailAndPassword(
+          email: email, password: password);
       return const Response<void>(
           status: Status.success, message: 'login success');
     } catch (err) {
@@ -51,10 +54,10 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<Response<UserCredential>> createUserWithEmailAndPassword(
-      String email, String password) async {
+      {required String email, required String password}) async {
     try {
-      final credential =
-          await _authApi.createUserWithEmailAndPassword(email, password);
+      final credential = await _authApi.createUserWithEmailAndPassword(
+          email: email, password: password);
       return Response<UserCredential>(status: Status.success, data: credential);
     } catch (err) {
       return Response<UserCredential>(
@@ -68,7 +71,8 @@ class AuthRepositoryImpl extends AuthRepository {
       required String email,
       required String nickname}) async {
     try {
-      await _authApi.saveUser(uid: uid, email: email, nickname: nickname);
+      await _authApi
+          .saveUser(UserDto(uid: uid, email: email, nickname: nickname));
       return const Response<void>(status: Status.success);
     } catch (err) {
       return Response<void>(status: Status.error, message: err.toString());
@@ -79,14 +83,20 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Response<void>> updateProfile(
       {required String nickname, required List<Asset> assets}) async {
     try {
-      final imageDataList = await Future.wait(assets.map((image) async =>
-          await image
-              .getByteData()
-              .then((byte) => byte.buffer.asUint8List())
-              .then((data) => FlutterImageCompress.compressWithList(data,
-                  quality: _profileImageQuality))));
-      await _authApi.updateProfile(
-          nickname: nickname, imageDataList: imageDataList);
+      // get current user
+      final currentUser = await _authApi.getCurrentUser();
+      if (currentUser == null) {
+        throw const CertificateException('to update profile, need to login');
+      }
+      // save profile image
+      final profileImageUrls = assets.isEmpty
+          ? currentUser.profileImageUrls
+          : await _authApi.saveProfileImages(
+              uid: currentUser.uid,
+              imageDataList: await ImageUtil.getImageData(assets));
+      // update user info
+      await _authApi.saveUser(currentUser.copyWith(
+          nickname: nickname, profileImageUrls: profileImageUrls));
       return const Response<void>(status: Status.success);
     } catch (err) {
       return Response<void>(status: Status.error, message: err.toString());

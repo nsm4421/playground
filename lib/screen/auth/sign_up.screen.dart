@@ -74,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // sign up
       _isLoading = true;
       final signUpResponse = await getIt<AuthRepository>()
-          .createUserWithEmailAndPassword(email, password);
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       // sign up fail
       if (signUpResponse.status == Status.error) {

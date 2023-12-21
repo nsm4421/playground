@@ -13,10 +13,10 @@ abstract class AuthRepository extends Repository {
   Future<void> signOut();
 
   Future<Response<void>> signInWithEmailAndPassword(
-      String email, String password);
+      {required String email, required String password});
 
   Future<Response<UserCredential>> createUserWithEmailAndPassword(
-      String email, String password);
+      {required String email, required String password});
 
   Future<Response<void>> saveUser(
       {required String uid, required String email, required String nickname});
