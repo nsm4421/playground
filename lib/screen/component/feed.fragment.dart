@@ -26,18 +26,15 @@ class FeedFragment extends StatelessWidget {
               return (snapshot.hasData && !snapshot.hasError)
                   ? Scaffold(
                       body: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (context, index) =>
-                                      FeedItemWidget(snapshot.data![index])),
-                            ],
-                          ),
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) =>
+                                    FeedItemWidget(snapshot.data![index])),
+                          ],
                         ),
                       ),
                     )
