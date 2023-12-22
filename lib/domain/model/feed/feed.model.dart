@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../dto/feed/feed.dto.dart';
-
 part 'feed.model.freezed.dart';
 
 part 'feed.model.g.dart';
@@ -24,18 +22,4 @@ class FeedModel with _$FeedModel {
 
   factory FeedModel.fromJson(Map<String, dynamic> json) =>
       _$FeedModelFromJson(json);
-}
-
-extension FeedModelEx on FeedModel {
-  FeedDto toDto() => FeedDto(
-      fid: fid ?? '',
-      uid: uid ?? '',
-      profileImageUrl: profileImageUrl ?? '',
-      content: content ?? '',
-      hashtags: hashtags ?? [],
-      images: images ?? [],
-      createdAt: createdAt,
-      likeCount: likeCount ?? 0,
-      shareCount: shareCount ?? 0,
-      commentCount: commentCount ?? 0);
 }

@@ -16,7 +16,7 @@ class FeedFragment extends StatelessWidget {
   Widget build(BuildContext context) => StreamBuilder<List<FeedModel>>(
         stream: getIt<FeedApi>().getFeedStreamByUser(
             uid: isMyFeed ? context.read<AuthBloc>().state.uid : null),
-        builder: (context, snapshot) {
+        builder: (_, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:

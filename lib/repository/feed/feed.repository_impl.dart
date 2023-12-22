@@ -25,7 +25,7 @@ class FeedRepositoryImpl extends FeedRepository {
 
       // save images storage and get its download links
       final downloadLinks = assets.isEmpty
-          ? []
+          ? <String>[]
           : await _feedApi.saveFeedImages(
               fid: fid, imageDataList: await ImageUtil.getImageData(assets));
 
@@ -35,7 +35,7 @@ class FeedRepositoryImpl extends FeedRepository {
         hashtags: hashtags,
         content: content,
         images: downloadLinks,
-        likeCount: 0,
+        likeUidList: <String>[],
         commentCount: 0,
         shareCount: 0,
       ));

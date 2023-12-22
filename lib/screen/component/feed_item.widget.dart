@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/api/feed/feed.api.dart';
+import 'package:my_app/configurations.dart';
 
 import '../../core/util/time_diff.util.dart';
 import '../../domain/model/feed/feed.model.dart';
@@ -17,7 +19,6 @@ class FeedItemWidget extends StatefulWidget {
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
   late CarouselController _controller;
-  late int _currentPage;
 
   static const double _horizontalPadding = 10;
   static const double _circularAvatarSize = 40;
@@ -26,25 +27,21 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
   initState() {
     super.initState();
     _controller = CarouselController();
-    _currentPage = 0;
   }
 
   // TODO : 이벤트 등록
   _handleClickMoreIcon() {}
 
-  _handleClickLikeIcon() {}
+  _handleLike() async => await getIt<FeedApi>().likeFeed(widget.feed.fid!);
+
+  _handleDislike() async =>
+      await getIt<FeedApi>().dislikeFeed(widget.feed.fid!);
 
   _handleClickChatIcon() {}
 
   _handleClickRepeatIcon() {}
 
   _handleClickSendIcon() {}
-
-  _handleAnimateToPage(int page) => () => setState(() {
-        _controller.animateToPage(page,
-            duration: const Duration(milliseconds: 200));
-        _currentPage = page;
-      });
 
   @override
   Widget build(BuildContext context) => Column(
@@ -171,20 +168,55 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(width: _horizontalPadding),
-              IconButton(
-                  onPressed: _handleClickLikeIcon,
-                  icon: Icon(
-                    Icons.favorite_outline,
-                    color: Theme.of(context).colorScheme.secondary,
-                  )),
+
+              // like icon button
+              StreamBuilder<bool>(
+                  stream: getIt<FeedApi>().getLikeStream(widget.feed.fid!),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData && !snapshot.hasError) {
+                      final likePost = snapshot.data!;
+                      return Row(
+                        children: [
+                          IconButton(
+                              onPressed:
+                                  likePost ? _handleDislike : _handleLike,
+                              icon: Icon(
+                                  likePost
+                                      ? Icons.favorite
+                                      : Icons.favorite_outline,
+                                  color: likePost
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .tertiary)),
+                          Text(widget.feed.likeCount.toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary))
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  }),
+              const SizedBox(width: 10),
+
+              // comment icon
               IconButton(
                   onPressed: _handleClickChatIcon,
                   icon: Icon(Icons.chat_bubble_outline,
                       color: Theme.of(context).colorScheme.secondary)),
+              const SizedBox(width: 10),
+
               IconButton(
                   onPressed: _handleClickRepeatIcon,
                   icon: Icon(Icons.repeat,
                       color: Theme.of(context).colorScheme.secondary)),
+              const SizedBox(width: 10),
+
               IconButton(
                   onPressed: _handleClickSendIcon,
                   icon: Icon(Icons.send,

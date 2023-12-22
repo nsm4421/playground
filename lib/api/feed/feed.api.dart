@@ -30,8 +30,10 @@ class FeedApi {
           : _db.collection(_feedCollectionName).where("uid", isEqualTo: uid))
       .orderBy('createdAt', descending: true)
       .snapshots()
-      .asyncMap((e) async =>
-          e.docs.map((doc) => FeedModel.fromJson(doc.data())).toList());
+      .asyncMap((e) async => e.docs
+          .map((doc) => FeedDto.fromJson(doc.data()))
+          .map((dto) => dto.toModel())
+          .toList());
 
   /// save feed and return its id
   Future<String> saveFeed(FeedDto feed) async => await _db
@@ -52,4 +54,25 @@ class FeedApi {
           .child('${(const Uuid()).v1()}.jpg')
           .putData(imageData)
           .then((task) => task.ref.getDownloadURL())));
+
+  /// get stream of whether current user like feed or not
+  Stream<bool> getLikeStream(String fid) =>
+      (_db.collection(_feedCollectionName).where("fid", isEqualTo: fid))
+          .snapshots()
+          .asyncMap((e) async => e.docs
+              .map((doc) => FeedDto.fromJson(doc.data()))
+              .map((dto) => dto.likeUidList.contains(_auth.currentUser?.uid))
+              .toList()[0]);
+
+  /// add current user id in likeUidList field
+  Future<void> likeFeed(String fid) async =>
+      await _db.collection(_feedCollectionName).doc(fid).update({
+        'likeUidList': FieldValue.arrayUnion([_auth.currentUser?.uid])
+      });
+
+  /// remove current user id in likeUidList field
+  Future<void> dislikeFeed(String fid) async =>
+      await _db.collection(_feedCollectionName).doc(fid).update({
+        'likeUidList': FieldValue.arrayRemove([_auth.currentUser?.uid])
+      });
 }
