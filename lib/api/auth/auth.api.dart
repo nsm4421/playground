@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:my_app/core/constant/collection_name.enum.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,18 +20,23 @@ class AuthApi {
   final FirebaseFirestore _db;
   final FirebaseStorage _storage;
 
-  static const String _userCollectionName = 'user';
-
   String? get currentUid => _auth.currentUser?.uid;
 
   Stream<User?> get authStream => _auth.authStateChanges();
 
   Future<UserDto?> getCurrentUser() async => await _db
-      .collection(_userCollectionName)
+      .collection(CollectionName.user.name)
       .doc(_auth.currentUser?.uid)
       .get()
       .then((doc) => doc.data())
       .then((data) => data == null ? null : UserDto.fromJson(data));
+
+  Future<String?> getNicknameByUid(String uid) async => await _db
+      .collection(CollectionName.user.name)
+      .doc(uid)
+      .get()
+      .then((doc) => doc.data())
+      .then((data) => data == null ? null : UserDto.fromJson(data).nickname);
 
   /// login with email and password
   Future<UserCredential> signInWithEmailAndPassword(
@@ -45,7 +51,7 @@ class AuthApi {
 
   /// save user info in DB
   Future<void> saveUser(UserDto user) async => await _db
-      .collection(_userCollectionName)
+      .collection(CollectionName.user.name)
       .doc(user.uid)
       .set(user.toJson());
 
@@ -57,7 +63,7 @@ class AuthApi {
           {required String uid,
           required List<Uint8List> imageDataList}) async =>
       await Future.wait(imageDataList.map((imageData) async => await _storage
-          .ref(_userCollectionName)
+          .ref(CollectionName.user.name)
           .child(uid)
           .child('${(const Uuid()).v1()}.jpg')
           .putData(imageData)

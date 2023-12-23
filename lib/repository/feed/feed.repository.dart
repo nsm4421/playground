@@ -9,4 +9,11 @@ abstract class FeedRepository extends Repository {
       {required String content,
       required List<String> hashtags,
       required List<Asset> assets});
+
+  /// save feed comment and return its id
+  /// if parentCid is null, then save parent comment, else save child comment
+  Future<Response<String>> saveFeedComment(
+      {required String fid,
+      required String? parentCid,
+      required String content});
 }

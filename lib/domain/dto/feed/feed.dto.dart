@@ -17,8 +17,8 @@ class FeedDto with _$FeedDto {
     @Default(<String>[]) List<String> images,
     DateTime? createdAt,
     @Default(<String>[]) List<String> likeUidList,
+    @Default(<String>[]) List<String> cidList,
     @Default(0) int shareCount,
-    @Default(0) int commentCount,
   }) = _FeedDto;
 
   factory FeedDto.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +35,6 @@ extension FeedDtoEx on FeedDto {
       images: images,
       createdAt: createdAt,
       likeCount: likeUidList.length,
-      shareCount: shareCount,
-      commentCount: commentCount);
+      commentCount: cidList.length,
+      shareCount: shareCount);
 }
