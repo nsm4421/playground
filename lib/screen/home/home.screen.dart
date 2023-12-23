@@ -42,42 +42,44 @@ class _AuthSuccessScreen extends StatelessWidget {
   const _AuthSuccessScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: BlocBuilder<BottomNavigationCubit, BottomNavigationItem>(
-            builder: (BuildContext context, state) {
-          switch (state) {
-            case BottomNavigationItem.feed:
-              return const FeedScreen();
-            case BottomNavigationItem.search:
-              return const SearchScreen();
-            case BottomNavigationItem.post:
-              return const PostScreen();
-            case BottomNavigationItem.favorite:
-              return const FavoriteScreen();
-            case BottomNavigationItem.profile:
-              return const ProfileScreen();
-          }
-        }),
-        bottomNavigationBar:
-            BlocBuilder<BottomNavigationCubit, BottomNavigationItem>(
-          builder: (BuildContext context, state) => BottomNavigationBar(
-            currentIndex: state.index,
-            onTap: (index) =>
-                context.read<BottomNavigationCubit>().handleIndex(index),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            items: BottomNavigationItem.values
-                .map(
-                  (e) => BottomNavigationBarItem(
-                    icon: e.icon,
-                    activeIcon: e.activeIcon,
-                    label: e.label,
-                    tooltip: e.label,
-                  ),
-                )
-                .toList(),
+  Widget build(BuildContext context) => SafeArea(
+    child: Scaffold(
+          body: BlocBuilder<BottomNavigationCubit, BottomNavigationItem>(
+              builder: (BuildContext context, state) {
+            switch (state) {
+              case BottomNavigationItem.feed:
+                return const FeedScreen();
+              case BottomNavigationItem.search:
+                return const SearchScreen();
+              case BottomNavigationItem.post:
+                return const PostScreen();
+              case BottomNavigationItem.favorite:
+                return const FavoriteScreen();
+              case BottomNavigationItem.profile:
+                return const ProfileScreen();
+            }
+          }),
+          bottomNavigationBar:
+              BlocBuilder<BottomNavigationCubit, BottomNavigationItem>(
+            builder: (BuildContext context, state) => BottomNavigationBar(
+              currentIndex: state.index,
+              onTap: (index) =>
+                  context.read<BottomNavigationCubit>().handleIndex(index),
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+              items: BottomNavigationItem.values
+                  .map(
+                    (e) => BottomNavigationBarItem(
+                      icon: e.icon,
+                      activeIcon: e.activeIcon,
+                      label: e.label,
+                      tooltip: e.label,
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ),
-      );
+  );
 }

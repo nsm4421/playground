@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/api/feed/feed.api.dart';
 import 'package:my_app/configurations.dart';
+import 'package:my_app/domain/model/feed/parent_feed_comment.model.dart';
 
 import '../../core/util/time_diff.util.dart';
 import '../../domain/model/feed/feed.model.dart';
 import '../home/bloc/auth.bloc.dart';
+import '../home/feed/parent_comment.widget.dart';
 
 class FeedItemWidget extends StatefulWidget {
   const FeedItemWidget(this.feed, {super.key});
@@ -19,6 +23,8 @@ class FeedItemWidget extends StatefulWidget {
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
   late CarouselController _controller;
+  late Stream<bool> _likeStream;
+  late Stream<List<ParentFeedCommentModel>> _commentStream;
 
   static const double _horizontalPadding = 10;
   static const double _circularAvatarSize = 40;
@@ -27,6 +33,13 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
   initState() {
     super.initState();
     _controller = CarouselController();
+    _likeStream = getIt<FeedApi>().getLikeStream(widget.feed.fid!);
+    _commentStream = getIt<FeedApi>().getParentCommentStream(widget.feed.fid!);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
   }
 
   // TODO : 이벤트 등록
@@ -37,7 +50,17 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
   _handleDislike() async =>
       await getIt<FeedApi>().dislikeFeed(widget.feed.fid!);
 
-  _handleClickChatIcon() {}
+  _handleShowCommentView() => showModalBottomSheet(
+        context: context,
+        elevation: 0,
+        enableDrag: true,
+        isScrollControlled: false,
+        shape: const RoundedRectangleBorder(),
+        builder: (_) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: ParentCommentWidget(widget.feed.fid!),
+        ),
+      );
 
   _handleClickRepeatIcon() {}
 
@@ -171,20 +194,19 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
 
               // like icon button
               StreamBuilder<bool>(
-                  stream: getIt<FeedApi>().getLikeStream(widget.feed.fid!),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData && !snapshot.hasError) {
-                      final likePost = snapshot.data!;
-                      return Row(
+                stream: _likeStream,
+                builder: (_, snapshot) => (snapshot.hasData &&
+                        !snapshot.hasError)
+                    ? Row(
                         children: [
                           IconButton(
                               onPressed:
-                                  likePost ? _handleDislike : _handleLike,
+                                  snapshot.data! ? _handleDislike : _handleLike,
                               icon: Icon(
-                                  likePost
+                                  snapshot.data!
                                       ? Icons.favorite
                                       : Icons.favorite_outline,
-                                  color: likePost
+                                  color: snapshot.data!
                                       ? Theme.of(context).colorScheme.primary
                                       : Theme.of(context)
                                           .colorScheme
@@ -198,17 +220,29 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                                           .colorScheme
                                           .secondary))
                         ],
-                      );
-                    }
-                    return const SizedBox();
-                  }),
+                      )
+                    : const SizedBox(),
+              ),
               const SizedBox(width: 10),
 
               // comment icon
-              IconButton(
-                  onPressed: _handleClickChatIcon,
-                  icon: Icon(Icons.chat_bubble_outline,
-                      color: Theme.of(context).colorScheme.secondary)),
+              StreamBuilder<List<ParentFeedCommentModel>>(
+                  stream: _commentStream,
+                  builder: (_, snapshot) =>
+                      (snapshot.hasData && !snapshot.hasError)
+                          ? Row(
+                              children: [
+                                IconButton(
+                                    onPressed: _handleShowCommentView,
+                                    icon: Icon(Icons.chat_outlined,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary)),
+                                Text((snapshot.data ?? []).length.toString())
+                              ],
+                            )
+                          : const SizedBox()),
+
               const SizedBox(width: 10),
 
               IconButton(
