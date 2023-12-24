@@ -10,6 +10,7 @@ class FeedModel with _$FeedModel {
   const factory FeedModel({
     String? fid,
     String? uid,
+    String? nickname,
     String? profileImageUrl,
     String? content,
     @Default(<String>[]) List<String> hashtags,

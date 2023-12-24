@@ -9,7 +9,6 @@ import 'package:my_app/domain/model/feed/parent_feed_comment.model.dart';
 
 import '../../core/util/time_diff.util.dart';
 import '../../domain/model/feed/feed.model.dart';
-import '../home/bloc/auth.bloc.dart';
 import '../home/feed/parent_comment.widget.dart';
 
 class FeedItemWidget extends StatefulWidget {
@@ -76,14 +75,17 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               const SizedBox(width: _horizontalPadding),
 
               // profile image
-              const SizedBox(
+              SizedBox(
                 width: _circularAvatarSize,
-                child: CircleAvatar(child: Icon(Icons.account_circle_outlined)),
+                child: CircleAvatar(
+                    child: widget.feed.profileImageUrl != null
+                        ? Image.network(widget.feed.profileImageUrl!)
+                        : const Icon(Icons.account_circle_outlined)),
               ),
               const SizedBox(width: 8),
 
               // nickname
-              Text(context.read<AuthBloc>().state.nickname,
+              Text(widget.feed.nickname ?? '',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary)),

@@ -47,19 +47,19 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.dispose();
   }
 
-  _handleShowEditProfile() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => const EditProfileWidget(),
-      showDragHandle: true,
-      isScrollControlled: true,
-      elevation: 0,
-      enableDrag: true,
-      isDismissible: true,
-      useSafeArea: true,
-      barrierColor: Colors.grey.withOpacity(0.5),
-    );
-  }
+  // show edit profile view
+  // when close edit profile view, init auth bloc
+  _handleShowEditProfile() => showModalBottomSheet(
+        context: context,
+        builder: (context) => const EditProfileWidget(),
+        showDragHandle: true,
+        isScrollControlled: true,
+        elevation: 0,
+        enableDrag: true,
+        isDismissible: true,
+        useSafeArea: true,
+        barrierColor: Colors.grey.withOpacity(0.5),
+      ).whenComplete(() => context.read<AuthBloc>().add(InitAuthEvent()));
 
   _handleSignOut() => context.read<AuthBloc>().add(SignOutEvent());
 

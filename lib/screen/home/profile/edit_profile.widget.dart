@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:my_app/screen/home/bloc/auth.bloc.dart';
-import 'package:my_app/screen/home/bloc/auth.event.dart';
 
 import '../../../configurations.dart';
 import '../../../repository/auth/auth.repository.dart';
@@ -10,7 +8,6 @@ import '../../../repository/auth/auth.repository.dart';
 enum _EditProfileStatus {
   writing,
   loading,
-  success,
   error;
 }
 
@@ -78,8 +75,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       // update profile
       await getIt<AuthRepository>()
           .updateProfile(nickname: _nicknameTec.text.trim(), assets: _assets);
-      getIt<AuthBloc>().add(InitAuthEvent());
-      _status = _EditProfileStatus.success;
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
     } catch (err) {
       _status = _EditProfileStatus.error;
     } finally {
@@ -94,8 +92,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         return const _OnLoading();
       case _EditProfileStatus.error:
         return const _OnError();
-      case _EditProfileStatus.success:
-        return const _OnSuccess();
       case _EditProfileStatus.writing:
         return Scaffold(
           body: SingleChildScrollView(
@@ -200,15 +196,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         );
     }
   }
-}
-
-class _OnSuccess extends StatelessWidget {
-  const _OnSuccess({super.key});
-
-  @override
-  Widget build(BuildContext context) => const Center(
-        child: Text("Success~!"),
-      );
 }
 
 class _OnLoading extends StatelessWidget {

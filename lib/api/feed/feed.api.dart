@@ -37,10 +37,21 @@ class FeedApi {
               .where("uid", isEqualTo: uid))
       .orderBy('createdAt', descending: true)
       .snapshots()
-      .asyncMap((e) async => e.docs
-          .map((doc) => FeedDto.fromJson(doc.data()))
-          .map((dto) => dto.toModel())
-          .toList());
+      .asyncMap((e) async => Future.wait(e.docs
+              .map((doc) => FeedDto.fromJson(doc.data()))
+              .map((dto) async {
+            final user = UserModel.fromJson((await _db
+                        .collection(CollectionName.user.name)
+                        .doc(dto.uid)
+                        .get())
+                    .data() ??
+                {});
+            return dto.toModel().copyWith(
+                nickname: user.nickname,
+                profileImageUrl: user.profileImageUrls.isNotEmpty
+                    ? user.profileImageUrls[0]
+                    : null);
+          }).toList()));
 
   /// save feed and return its id
   Future<String> saveFeed(FeedDto feed) async => await _db
