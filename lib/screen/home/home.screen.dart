@@ -6,7 +6,7 @@ import 'package:my_app/screen/home/bloc/auth.state.dart';
 import 'package:my_app/screen/home/search/search.screen.dart';
 import '../../configurations.dart';
 import 'bloc/bottom_navigation.cubit.dart';
-import 'favorite/favorite.screen.dart';
+import 'chat/chat.screen.dart';
 import 'feed/feed.screen.dart';
 import 'post/post.screen.dart';
 import 'profile/profile.screen.dart';
@@ -43,7 +43,7 @@ class _AuthSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-    child: Scaffold(
+        child: Scaffold(
           body: BlocBuilder<BottomNavigationCubit, BottomNavigationItem>(
               builder: (BuildContext context, state) {
             switch (state) {
@@ -53,8 +53,8 @@ class _AuthSuccessScreen extends StatelessWidget {
                 return const SearchScreen();
               case BottomNavigationItem.post:
                 return const PostScreen();
-              case BottomNavigationItem.favorite:
-                return const FavoriteScreen();
+              case BottomNavigationItem.chat:
+                return const ChatScreen();
               case BottomNavigationItem.profile:
                 return const ProfileScreen();
             }
@@ -81,5 +81,5 @@ class _AuthSuccessScreen extends StatelessWidget {
             ),
           ),
         ),
-  );
+      );
 }

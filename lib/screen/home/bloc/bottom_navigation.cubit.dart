@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-const double _iconSize = 23;
-const double _activeIconSize = 28;
-
 enum BottomNavigationItem {
   feed(
       icon: Icon(Icons.home_outlined, size: _iconSize),
@@ -17,10 +14,10 @@ enum BottomNavigationItem {
       icon: Icon(Icons.add, size: _iconSize),
       activeIcon: Icon(Icons.add, size: _activeIconSize),
       label: 'Post'),
-  favorite(
-      icon: Icon(Icons.favorite_outline, size: _iconSize),
-      activeIcon: Icon(Icons.favorite, size: _activeIconSize),
-      label: 'Post'),
+  chat(
+      icon: Icon(Icons.chat_bubble_outline, size: _iconSize),
+      activeIcon: Icon(Icons.chat_bubble_outlined, size: _activeIconSize),
+      label: 'Chat'),
   profile(
       icon: Icon(Icons.account_circle_outlined, size: _iconSize),
       activeIcon: Icon(Icons.account_circle, size: _activeIconSize),
@@ -32,6 +29,9 @@ enum BottomNavigationItem {
   final Icon icon;
   final Icon activeIcon;
   final String label;
+
+  static const double _iconSize = 23;
+  static const double _activeIconSize = 28;
 }
 
 class BottomNavigationCubit extends Cubit<BottomNavigationItem> {

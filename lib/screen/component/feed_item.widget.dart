@@ -6,6 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/api/feed/feed.api.dart';
 import 'package:my_app/configurations.dart';
 import 'package:my_app/domain/model/feed/parent_feed_comment.model.dart';
+import 'package:my_app/domain/model/user/user.model.dart';
+import 'package:my_app/repository/chat/chat.repository.dart';
+import 'package:my_app/screen/home/bloc/auth.bloc.dart';
+import 'package:my_app/screen/home/chat/chat_room.screen.dart';
 
 import '../../core/util/time_diff.util.dart';
 import '../../domain/model/feed/feed.model.dart';
@@ -61,9 +65,18 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
         ),
       );
 
-  _handleClickRepeatIcon() {}
-
-  _handleClickSendIcon() {}
+  _handleGoToSChatScreen() async => await getIt<ChatRepository>()
+      .getDirectMessageChatId(widget.feed.uid!)
+      .then((res) => res.data)
+      .then((chatId) => chatId == null
+          ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("can't send direct message..."),
+              duration: Duration(seconds: 1),
+            ))
+          : Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => ChatScreen(chatId))));
 
   @override
   Widget build(BuildContext context) => Column(
@@ -202,6 +215,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                     ? Row(
                         children: [
                           IconButton(
+                              tooltip: 'Like',
                               onPressed:
                                   snapshot.data! ? _handleDislike : _handleLike,
                               icon: Icon(
@@ -235,6 +249,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                           ? Row(
                               children: [
                                 IconButton(
+                                    tooltip: 'Comment',
                                     onPressed: _handleShowCommentView,
                                     icon: Icon(Icons.chat_outlined,
                                         color: Theme.of(context)
@@ -247,16 +262,12 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
 
               const SizedBox(width: 10),
 
-              IconButton(
-                  onPressed: _handleClickRepeatIcon,
-                  icon: Icon(Icons.repeat,
-                      color: Theme.of(context).colorScheme.secondary)),
-              const SizedBox(width: 10),
-
-              IconButton(
-                  onPressed: _handleClickSendIcon,
-                  icon: Icon(Icons.send,
-                      color: Theme.of(context).colorScheme.secondary)),
+              if (context.read<AuthBloc>().state.uid != widget.feed.uid)
+                IconButton(
+                    tooltip: 'DM',
+                    onPressed: _handleGoToSChatScreen,
+                    icon: Icon(Icons.send,
+                        color: Theme.of(context).colorScheme.secondary)),
               const SizedBox(width: _horizontalPadding)
             ],
           ),

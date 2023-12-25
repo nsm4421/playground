@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       });
     } catch (err) {
-      print(err);
+      debugPrint(err.toString());
     } finally {
       _isLoading = false;
     }
