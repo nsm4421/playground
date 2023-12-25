@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/domain/dto/feed/child_feed_comment.dto.dart';
 import 'package:my_app/domain/dto/feed/parent_feed_comment.dto.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/feed/child_feed_comment.model.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:uuid/uuid.dart';
@@ -37,7 +36,7 @@ class FeedApi {
               .where("uid", isEqualTo: uid))
       .orderBy('createdAt', descending: true)
       .snapshots()
-      .asyncMap((e) async => Future.wait(e.docs
+      .asyncMap((e) async => await Future.wait(e.docs
               .map((doc) => FeedDto.fromJson(doc.data()))
               .map((dto) async {
             final user = UserModel.fromJson((await _db
