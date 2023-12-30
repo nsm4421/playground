@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/src/asset.dart';
@@ -100,6 +101,21 @@ class AuthRepositoryImpl extends AuthRepository {
       return const Response<void>(status: Status.success);
     } catch (err) {
       return Response<void>(status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<Response<List<UserModel>>> findUserByNickname(String nickname) async {
+    try {
+      return Response<List<UserModel>>(
+          status: Status.success,
+          data: (await _authApi.findUserByNickname(nickname))
+              .map((e) => e.toModel())
+              .toList());
+    } catch (err) {
+      debugPrint(err.toString());
+      return Response<List<UserModel>>(
+          status: Status.error, message: err.toString());
     }
   }
 }

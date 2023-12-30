@@ -75,4 +75,17 @@ class AuthApi {
           .child('${(const Uuid()).v1()}.jpg')
           .putData(imageData)
           .then((task) => task.ref.getDownloadURL())));
+
+  /// search users by nickname
+  Future<List<UserDto>> findUserByNickname(String keyword) => _db
+      .collection(CollectionName.user.name)
+      // like query
+      .where(Filter.and(Filter('nickname', isGreaterThanOrEqualTo: keyword),
+          Filter('nickname', isLessThan: '${keyword}z')))
+      .get()
+      .then((e) => e.docs
+          .map((e) => e.data())
+          .where((data) => data.isNotEmpty)
+          .map((data) => UserDto.fromJson(data))
+          .toList());
 }

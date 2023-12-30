@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -6,16 +7,24 @@ import 'package:my_app/core/response/response.dart';
 import 'package:my_app/domain/dto/feed/child_feed_comment.dto.dart';
 import 'package:my_app/domain/dto/feed/feed.dto.dart';
 import 'package:my_app/domain/dto/feed/parent_feed_comment.dto.dart';
+import 'package:my_app/domain/dto/user/user.dto.dart';
+import 'package:my_app/domain/model/feed/feed.model.dart';
+import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:my_app/repository/feed/feed.repository.dart';
+import 'package:my_app/screen/home/search/search.screen.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../api/auth/auth.api.dart';
 import '../../core/util/image.util.dart';
 
 @Singleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
+  final AuthApi _authApi;
   final FeedApi _feedApi;
 
-  FeedRepositoryImpl(this._feedApi);
+  FeedRepositoryImpl({required AuthApi authApi, required FeedApi feedApi})
+      : _authApi = authApi,
+        _feedApi = feedApi;
 
   @override
   Future<Response<String>> saveFeed(
@@ -66,6 +75,41 @@ class FeedRepositoryImpl extends FeedRepository {
       debugPrint(err.toString());
       return const Response<String>(
           status: Status.error, message: 'Fail to save child comment');
+    }
+  }
+
+  @override
+  Future<Response<List<FeedModel>>> searchFeed(
+      {required SearchOption option, required String keyword}) async {
+    try {
+      List<FeedModel> feeds = [];
+      switch (option) {
+        case SearchOption.hashtag:
+          feeds = (await _feedApi.findFeedByContent(keyword))
+              .map((e) => e.toModel())
+              .toList();
+        case SearchOption.content:
+          feeds = (await _feedApi.findFeedByContent(keyword))
+              .map((e) => e.toModel())
+              .toList();
+        case SearchOption.nickname:
+          throw Exception(
+              "search options for feed are only hashtag and content");
+      }
+      return Response<List<FeedModel>>(
+          status: Status.success,
+          data: await Future.wait(feeds.map((feed) async {
+            final user = await _authApi.findUserByUid(feed.uid!);
+            return feed.copyWith(
+                nickname: user.nickname,
+                profileImageUrl: user.profileImageUrls.isNotEmpty
+                    ? user.profileImageUrls[0]
+                    : null);
+          })));
+    } catch (err) {
+      debugPrint(err.toString());
+      return Response<List<FeedModel>>(
+          status: Status.error, message: err.toString());
     }
   }
 }

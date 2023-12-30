@@ -1,7 +1,11 @@
+import 'package:dartz/dartz.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:my_app/repository/base/repository.dart';
 
 import '../../core/response/response.dart';
+import '../../domain/model/feed/feed.model.dart';
+import '../../domain/model/user/user.model.dart';
+import '../../screen/home/search/search.screen.dart';
 
 abstract class FeedRepository extends Repository {
   /// save feed and return its id
@@ -16,4 +20,8 @@ abstract class FeedRepository extends Repository {
       {required String fid,
       required String? parentCid,
       required String content});
+
+  /// search users or feed
+  Future<Response<List<FeedModel>>> searchFeed(
+      {required SearchOption option, required String keyword});
 }

@@ -5,8 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/domain/dto/feed/child_feed_comment.dto.dart';
 import 'package:my_app/domain/dto/feed/parent_feed_comment.dto.dart';
+import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/feed/child_feed_comment.model.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
+import 'package:my_app/screen/home/search/search.screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/constant/collection_name.enum.dart';
@@ -194,4 +196,28 @@ class FeedApi {
             .toJson())
         .then((_) => childComment.cid);
   }
+
+  Future<List<FeedDto>> findFeedByHashtag(String keyword) async => await _db
+      .collection(CollectionName.feed.name)
+      .orderBy('createdAt')
+      .where(Filter('hashtags', arrayContains: keyword))
+      .get()
+      .then((e) => e.docs
+          .map((e) => e.data())
+          .where((data) => data.isNotEmpty)
+          .map((data) => FeedDto.fromJson(data))
+          .toList());
+
+  /// search feeds by content
+  Future<List<FeedDto>> findFeedByContent(String keyword) => _db
+      .collection(CollectionName.user.name)
+      // like query
+      .where(Filter.and(Filter('content', isGreaterThanOrEqualTo: keyword),
+          Filter('content', isLessThan: '${keyword}z')))
+      .get()
+      .then((e) => e.docs
+          .map((e) => e.data())
+          .where((data) => data.isNotEmpty)
+          .map((data) => FeedDto.fromJson(data))
+          .toList());
 }

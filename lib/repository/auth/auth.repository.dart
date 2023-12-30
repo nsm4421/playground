@@ -23,4 +23,6 @@ abstract class AuthRepository extends Repository {
 
   Future<Response<void>> updateProfile(
       {required String nickname, required List<Asset> assets});
+
+  Future<Response<List<UserModel>>> findUserByNickname(String nickname);
 }
