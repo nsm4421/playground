@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ReplyFragment extends StatelessWidget {
-  const ReplyFragment({super.key});
+class FollowingFragment extends StatelessWidget {
+  const FollowingFragment({super.key});
 
   @override
   Widget build(BuildContext context) => const SingleChildScrollView(

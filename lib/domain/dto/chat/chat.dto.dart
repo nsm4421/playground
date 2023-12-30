@@ -13,13 +13,14 @@ class ChatDto with _$ChatDto {
       {@Default('') String chatId,
       @Default(ChatType.dm) ChatType type,
       @Default(<String>{}) Set<String> uidList,
-      DateTime? createdAt}) = _ChatDto;
+      DateTime? createdAt,
+      DateTime? lastSeen}) = _ChatDto;
 
   factory ChatDto.fromJson(Map<String, dynamic> json) =>
       _$ChatDtoFromJson(json);
 }
 
 extension ChatDtoEx on ChatDto {
-  ChatModel toModel() =>
-      ChatModel(chatId: chatId, type: type, createdAt: createdAt);
+  ChatModel toModel() => ChatModel(
+      chatId: chatId, type: type, createdAt: createdAt, lastSeen: lastSeen);
 }

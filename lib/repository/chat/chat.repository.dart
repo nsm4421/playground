@@ -1,3 +1,5 @@
+import 'package:my_app/domain/model/chat/chat.model.dart';
+
 import '../../core/constant/chat.enum.dart';
 import '../../core/response/response.dart';
 import '../../domain/model/chat/message.model.dart';

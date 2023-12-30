@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/core/constant/collection_name.enum.dart';
 import 'package:my_app/domain/dto/chat/chat.dto.dart';
 import 'package:my_app/domain/dto/chat/message.dto.dart';
+import 'package:my_app/domain/dto/user/user.dto.dart';
+import 'package:my_app/domain/model/chat/chat.model.dart';
 import 'package:my_app/domain/model/chat/message.model.dart';
 import 'package:uuid/uuid.dart';
 import '../../core/constant/chat.enum.dart';
@@ -63,18 +65,40 @@ class ChatApi {
         : chats[0].chatId;
   }
 
+  /// get chat list current user in
+  Stream<List<ChatModel>> getChatStream() {
+    final currentUid = _getCurrentUidOrElseThrow();
+    return _db
+        .collection(CollectionName.chat.name)
+        .where(Filter('uidList', arrayContains: currentUid))
+        .orderBy('lastSeen', descending: false)
+        .snapshots()
+        .asyncMap((e) async => Future.wait(e.docs
+            .map((doc) => doc.data())
+            .map((data) => ChatDto.fromJson(data ?? {}))
+            .map((dto) async => dto.toModel().copyWith(
+                users: (await Future.wait(dto.uidList
+                        .where((uid) => uid.isNotEmpty)
+                        .map((uid) async => await _findUserByUid(uid))))
+                    .toSet(),
+                lastMessage: (await _getLastMessage(dto.chatId))))));
+  }
+
+  /// find users in specific chat room
+  Future<List<UserModel>> getUsersByChatId(String chatId) async =>
+      await Future.wait(ChatDto.fromJson(
+              (await _db.collection(CollectionName.chat.name).doc(chatId).get())
+                      .data() ??
+                  {})
+          .uidList
+          .where((uid) => uid.isNotEmpty)
+          .map((uid) async => await _findUserByUid(uid)));
+
   /// get stream of chat message
   Future<Stream<List<MessageModel>>> getMessageStreamByChatId(
       String chatId) async {
     final currentUid = _getCurrentUidOrElseThrow();
-    final users = await Future.wait(ChatDto.fromJson(
-            (await _db.collection(CollectionName.chat.name).doc(chatId).get())
-                    .data() ??
-                {})
-        .uidList
-        .where((uid) => uid.isNotEmpty)
-        .map((uid) async => await _findUserByUid(uid)));
-
+    final users = await getUsersByChatId(chatId);
     return _db
         .collection(CollectionName.chat.name)
         .doc(chatId)
@@ -91,6 +115,13 @@ class ChatApi {
                   .copyWith(isMine: currentUid == sender.uid, sender: sender);
             })));
   }
+
+  /// update last seen field of chat
+  Future<void> updateLastSeen(String chatId) async => await _db
+      .collection(CollectionName.chat.name)
+      .doc(chatId)
+      // save last seen as string not timestamp
+      .update({"lastSeen": DateTime.now().toString()});
 
   /// save chat message
   Future<void> sendMessage(MessageDto message) async => await _db
@@ -113,6 +144,18 @@ class ChatApi {
           .child('$chatId.jpg')
           .putData(imageData)
           .then((task) => task.ref.getDownloadURL())));
+
+  Future<MessageModel?> _getLastMessage(String chatId) async => await _db
+      .collection(CollectionName.chat.name)
+      .doc(chatId)
+      .collection(CollectionName.message.name)
+      .orderBy('createdAt', descending: true)
+      .limit(1)
+      .get()
+      .then((e) => e.docs)
+      .then((docs) => docs.isNotEmpty
+          ? MessageDto.fromJson(docs[0].data()).toModel()
+          : null);
 
   String _getCurrentUidOrElseThrow() {
     final uid = _auth.currentUser?.uid;

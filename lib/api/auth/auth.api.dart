@@ -24,6 +24,13 @@ class AuthApi {
 
   Stream<User?> get authStream => _auth.authStateChanges();
 
+  Future<UserDto> findUserByUid(String uid) async => await _db
+      .collection(CollectionName.user.name)
+      .doc(uid)
+      .get()
+      .then((doc) => doc.data())
+      .then((data) => UserDto.fromJson(data ?? {}));
+
   Future<UserDto?> getCurrentUser() async => await _db
       .collection(CollectionName.user.name)
       .doc(_auth.currentUser?.uid)

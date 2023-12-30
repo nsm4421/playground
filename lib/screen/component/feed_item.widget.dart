@@ -76,7 +76,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
           : Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => ChatScreen(chatId))));
+                  builder: (BuildContext context) => ChatRoomScreen(chatId))));
 
   @override
   Widget build(BuildContext context) => Column(

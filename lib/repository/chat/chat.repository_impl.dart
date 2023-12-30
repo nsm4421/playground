@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_app/domain/dto/chat/chat.dto.dart';
 import 'package:my_app/domain/dto/chat/message.dto.dart';
+import 'package:my_app/domain/dto/user/user.dto.dart';
+import 'package:my_app/domain/model/chat/chat.model.dart';
 import 'package:my_app/domain/model/chat/message.model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -48,6 +51,8 @@ class ChatRepositoryImpl extends ChatRepository {
           content: content,
           type: type,
           createdAt: DateTime.now()));
+      await _chatApi.updateLastSeen(chatId);
+
       return const Response<void>(status: Status.success);
     } catch (err) {
       debugPrint(err.toString());

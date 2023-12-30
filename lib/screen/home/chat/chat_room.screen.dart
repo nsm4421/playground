@@ -1,54 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/api/auth/auth.api.dart';
 import 'package:my_app/core/constant/chat.enum.dart';
 import 'package:my_app/domain/model/chat/message.model.dart';
 import 'package:my_app/repository/chat/chat.repository.dart';
 
+import '../../../api/chat/chat.api.dart';
 import '../../../configurations.dart';
 import '../../../core/response/response.dart';
 import '../../../core/util/time_diff.util.dart';
+import '../../../domain/model/user/user.model.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen(this.chatId, {super.key});
+class ChatRoomScreen extends StatefulWidget {
+  const ChatRoomScreen(this.chatId, {super.key});
 
   final String chatId;
 
   @override
+  State<ChatRoomScreen> createState() => _ChatRoomScreenState();
+}
+
+class _ChatRoomScreenState extends State<ChatRoomScreen> {
+  List<UserModel> _users = <UserModel>[];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      () async {
+        final currentUid = getIt<AuthApi>().currentUid;
+        _users = await getIt<ChatApi>().getUsersByChatId(widget.chatId).then(
+            (users) => users.where((user) => user.uid != currentUid).toList());
+
+        setState(() {});
+      }();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(chatId),
-        ),
+            title: Text(_users.map((u) => u.nickname).join(','),
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary))),
         body: FutureBuilder<Stream<List<MessageModel>>>(
-            future: getIt<ChatRepository>().getMessageStreamByChatId(chatId),
-            builder: (_, streamSnapshot) {
-              switch (streamSnapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return const Center(child: CircularProgressIndicator());
-                case ConnectionState.active:
-                case ConnectionState.done:
-                  return streamSnapshot.hasData && !streamSnapshot.hasError
-                      ? StreamBuilder<List<MessageModel>>(
-                          stream: streamSnapshot.data,
-                          builder: (_, messageSnapshot) => messageSnapshot
-                                      .hasData &&
-                                  !messageSnapshot.hasError
-                              // getting messages success
-                              ? _ChatScreenView(
-                                  chatId: chatId,
-                                  messages: messageSnapshot.data ?? [])
-                              // getting messages fail
-                              : Center(
-                                  child: Text("error on getting message data",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displayMedium)))
-                      // getting stream fail
-                      : Center(
-                          child: Text("can't get stream",
-                              style:
-                                  Theme.of(context).textTheme.displayMedium));
-              }
-            }),
+            future:
+                getIt<ChatRepository>().getMessageStreamByChatId(widget.chatId),
+            builder: (_, streamSnapshot) => StreamBuilder<List<MessageModel>>(
+                stream: streamSnapshot.data,
+                builder: (_, messageSnapshot) => streamSnapshot.hasData &&
+                        !streamSnapshot.hasError &&
+                        messageSnapshot.hasData &&
+                        !messageSnapshot.hasError
+                    ? _ChatScreenView(
+                        chatId: widget.chatId,
+                        messages: messageSnapshot.data ?? [])
+                    : const Center(child: CircularProgressIndicator()))),
       );
 }
 

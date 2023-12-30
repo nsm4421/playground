@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screen/home/favorite/follow.fragment.dart';
-import 'package:my_app/screen/home/favorite/reply.fragment.dart';
+import 'package:my_app/screen/home/chat/chat_list.fragment.dart';
+import 'package:my_app/screen/home/chat/follower.fragment.dart';
+import 'package:my_app/screen/home/chat/following.fragment.dart';
 
-import 'all.fragment.dart';
-
-enum _FavoriteTabItems {
-  feed(label: 'Feed', fragment: AllFragment()),
-  reply(label: 'Follows', fragment: FollowFragment()),
-  repost(label: 'Reposts', fragment: ReplyFragment());
+enum _ChatTabItems {
+  chat(label: 'Chat', fragment: ChatListFragment()),
+  reply(label: 'Followers', fragment: FollowerFragment()),
+  repost(label: 'Followings', fragment: FollowingFragment());
 
   final String label;
   final Widget fragment;
 
-  const _FavoriteTabItems({required this.label, required this.fragment});
+  const _ChatTabItems({required this.label, required this.fragment});
 }
 
-class FavoriteScreen extends StatefulWidget {
-  const FavoriteScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen>
+class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
 
@@ -30,7 +29,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   void initState() {
     super.initState();
     _controller = TabController(
-      length: _FavoriteTabItems.values.length,
+      length: _ChatTabItems.values.length,
       vsync: this,
       initialIndex: 0,
       animationDuration: const Duration(milliseconds: 300),
@@ -45,7 +44,6 @@ class _FavoriteScreenState extends State<FavoriteScreen>
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text("Activity"), centerTitle: true),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
@@ -56,7 +54,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
                 labelColor: Theme.of(context).colorScheme.primary,
                 labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                 unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-                tabs: _FavoriteTabItems.values
+                tabs: _ChatTabItems.values
                     .map((e) => SizedBox(
                         width: double.infinity, child: Tab(text: e.label)))
                     .toList(),
@@ -64,9 +62,8 @@ class _FavoriteScreenState extends State<FavoriteScreen>
               Expanded(
                 child: TabBarView(
                     controller: _controller,
-                    children: _FavoriteTabItems.values
-                        .map((e) => e.fragment)
-                        .toList()),
+                    children:
+                        _ChatTabItems.values.map((e) => e.fragment).toList()),
               )
             ],
           ),
