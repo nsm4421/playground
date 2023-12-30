@@ -1,6 +1,6 @@
 import 'package:my_app/domain/model/feed/feed.model.dart';
-import 'package:my_app/screen/home/search/search.screen.dart';
 
+import '../../core/constant/feed.enum.dart';
 import '../../core/response/response.dart';
 import '../../repository/feed/feed.repository.dart';
 import '../base/remote.usecase.dart';

@@ -38,15 +38,13 @@ class PostScreen extends StatelessWidget {
 }
 
 class _PostScreenView extends StatefulWidget {
-  const _PostScreenView({super.key});
+  const _PostScreenView();
 
   @override
   State<_PostScreenView> createState() => _PostScreenViewState();
 }
 
 class _PostScreenViewState extends State<_PostScreenView> {
-  static const int _maxImages = 5;
-
   late TextEditingController _contentTec;
   late PageController _pc;
   late List<TextEditingController> _hashtagTecList;
@@ -97,7 +95,11 @@ class _PostScreenViewState extends State<_PostScreenView> {
               .toList(),
           images: _assets));
     } catch (err) {
-      print(err);
+      debugPrint(err.toString());
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('fail to upload...'),
+        duration: Duration(seconds: 2),
+      ));
     }
   }
 

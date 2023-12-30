@@ -166,35 +166,26 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                 const SizedBox(height: 20),
                 // hashtags
                 if (widget.feed.hashtags.isNotEmpty)
-                  Row(
+                  Wrap(
                       children: widget.feed.hashtags
-                          .map((hashtag) => Container(
-                                margin: const EdgeInsets.only(right: 10),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primaryContainer),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.tag,
-                                        size: 18,
+                          .map((hashtag) => Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.tag,
+                                      size: 18,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                  Text(
+                                    hashtag,
+                                    style: TextStyle(
+                                        fontSize: 18,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .primary),
-                                    Text(
-                                      hashtag,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                  ],
-                                ),
+                                            .secondary),
+                                  ),
+                                  const SizedBox(width: 15)
+                                ],
                               ))
                           .toList())
               ],

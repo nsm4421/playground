@@ -210,7 +210,7 @@ class FeedApi {
 
   /// search feeds by content
   Future<List<FeedDto>> findFeedByContent(String keyword) => _db
-      .collection(CollectionName.user.name)
+      .collection(CollectionName.feed.name)
       // like query
       .where(Filter.and(Filter('content', isGreaterThanOrEqualTo: keyword),
           Filter('content', isLessThan: '${keyword}z')))

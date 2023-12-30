@@ -11,7 +11,6 @@ class FeedDto with _$FeedDto {
   const factory FeedDto({
     @Default('') String fid,
     @Default('') String uid,
-    @Default('') String profileImageUrl,
     @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,
@@ -29,7 +28,6 @@ extension FeedDtoEx on FeedDto {
   FeedModel toModel() => FeedModel(
       fid: fid,
       uid: uid,
-      profileImageUrl: profileImageUrl,
       content: content,
       hashtags: hashtags,
       images: images,

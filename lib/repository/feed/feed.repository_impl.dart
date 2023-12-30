@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -7,14 +6,12 @@ import 'package:my_app/core/response/response.dart';
 import 'package:my_app/domain/dto/feed/child_feed_comment.dto.dart';
 import 'package:my_app/domain/dto/feed/feed.dto.dart';
 import 'package:my_app/domain/dto/feed/parent_feed_comment.dto.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
-import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:my_app/repository/feed/feed.repository.dart';
-import 'package:my_app/screen/home/search/search.screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../api/auth/auth.api.dart';
+import '../../core/constant/feed.enum.dart';
 import '../../core/util/image.util.dart';
 
 @Singleton(as: FeedRepository)
@@ -78,6 +75,7 @@ class FeedRepositoryImpl extends FeedRepository {
     }
   }
 
+  /// search feeds by hashtag or content
   @override
   Future<Response<List<FeedModel>>> searchFeed(
       {required SearchOption option, required String keyword}) async {
@@ -85,7 +83,7 @@ class FeedRepositoryImpl extends FeedRepository {
       List<FeedModel> feeds = [];
       switch (option) {
         case SearchOption.hashtag:
-          feeds = (await _feedApi.findFeedByContent(keyword))
+          feeds = (await _feedApi.findFeedByHashtag(keyword))
               .map((e) => e.toModel())
               .toList();
         case SearchOption.content:
@@ -94,7 +92,7 @@ class FeedRepositoryImpl extends FeedRepository {
               .toList();
         case SearchOption.nickname:
           throw Exception(
-              "search options for feed are only hashtag and content");
+              "[FeedRepositoryImpl]search options for feed are only hashtag and content");
       }
       return Response<List<FeedModel>>(
           status: Status.success,

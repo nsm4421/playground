@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/core/constant/collection_name.enum.dart';
 import 'package:my_app/domain/dto/chat/chat.dto.dart';
 import 'package:my_app/domain/dto/chat/message.dto.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/chat/chat.model.dart';
 import 'package:my_app/domain/model/chat/message.model.dart';
 import 'package:uuid/uuid.dart';
@@ -49,11 +48,9 @@ class ChatApi {
     final chats = (await _db
             .collection(CollectionName.chat.name)
             .where(Filter.and(
-                Filter('type', isEqualTo: ChatType.dm.name),
-                Filter.or(
-                  Filter('uidList', arrayContains: currentUid),
-                  Filter('uidList', arrayContains: opponentUid),
-                )))
+              Filter('type', isEqualTo: ChatType.dm.name),
+              Filter('uidList', arrayContains: [currentUid, opponentUid]),
+            ))
             .get()
             .then((snapshot) => snapshot.docs))
         .map((doc) => doc.data())
@@ -71,7 +68,7 @@ class ChatApi {
     return _db
         .collection(CollectionName.chat.name)
         .where(Filter('uidList', arrayContains: currentUid))
-        .orderBy('lastSeen', descending: false)
+        .orderBy('lastSeen', descending: true)
         .snapshots()
         .asyncMap((e) async => Future.wait(e.docs
             .map((doc) => doc.data())

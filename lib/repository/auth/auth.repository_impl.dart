@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/src/asset.dart';
 import 'package:my_app/api/auth/auth.api.dart';
@@ -19,8 +17,6 @@ class AuthRepositoryImpl extends AuthRepository {
   final AuthApi _authApi;
 
   AuthRepositoryImpl(this._authApi);
-
-  static const int _profileImageQuality = 96;
 
   @override
   String? get currentUid => _authApi.currentUid;
