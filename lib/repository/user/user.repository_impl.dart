@@ -4,27 +4,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/src/asset.dart';
-import 'package:my_app/api/auth/auth.api.dart';
+import 'package:my_app/api/user/user.api.dart';
+
 import 'package:my_app/core/util/image.util.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 
 import '../../core/response/response.dart';
-import 'auth.repository.dart';
+import 'user.repository.dart';
 
-@Singleton(as: AuthRepository)
-class AuthRepositoryImpl extends AuthRepository {
-  final AuthApi _authApi;
+@Singleton(as: UserRepository)
+class UserRepositoryImpl extends UserRepository {
+  final UserApi _userApi;
 
-  AuthRepositoryImpl(this._authApi);
+  UserRepositoryImpl(this._userApi);
 
   @override
-  String? get currentUid => _authApi.currentUid;
+  String? get currentUid => _userApi.currentUid;
 
   @override
   Future<Response<UserModel?>> getCurrentUser() async {
     try {
-      final currentUser = (await _authApi.getCurrentUser())?.toModel();
+      final currentUser = (await _userApi.getCurrentUser())?.toModel();
       return Response<UserModel?>(
           status: currentUser != null ? Status.success : Status.error,
           data: currentUser);
@@ -34,13 +35,13 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<void> signOut() async => await _authApi.signOut();
+  Future<void> signOut() async => await _userApi.signOut();
 
   @override
   Future<Response<void>> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      await _authApi.signInWithEmailAndPassword(
+      await _userApi.signInWithEmailAndPassword(
           email: email, password: password);
       return const Response<void>(
           status: Status.success, message: 'login success');
@@ -53,7 +54,7 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Response<UserCredential>> createUserWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      final credential = await _authApi.createUserWithEmailAndPassword(
+      final credential = await _userApi.createUserWithEmailAndPassword(
           email: email, password: password);
       return Response<UserCredential>(status: Status.success, data: credential);
     } catch (err) {
@@ -68,7 +69,7 @@ class AuthRepositoryImpl extends AuthRepository {
       required String email,
       required String nickname}) async {
     try {
-      await _authApi
+      await _userApi
           .saveUser(UserDto(uid: uid, email: email, nickname: nickname));
       return const Response<void>(status: Status.success);
     } catch (err) {
@@ -81,18 +82,18 @@ class AuthRepositoryImpl extends AuthRepository {
       {required String nickname, required List<Asset> assets}) async {
     try {
       // get current user
-      final currentUser = await _authApi.getCurrentUser();
+      final currentUser = await _userApi.getCurrentUser();
       if (currentUser == null) {
         throw const CertificateException('to update profile, need to login');
       }
       // save profile image
       final profileImageUrls = assets.isEmpty
           ? currentUser.profileImageUrls
-          : await _authApi.saveProfileImages(
+          : await _userApi.saveProfileImages(
               uid: currentUser.uid,
               imageDataList: await ImageUtil.getImageData(assets));
       // update user info
-      await _authApi.saveUser(currentUser.copyWith(
+      await _userApi.saveUser(currentUser.copyWith(
           nickname: nickname, profileImageUrls: profileImageUrls));
       return const Response<void>(status: Status.success);
     } catch (err) {
@@ -105,7 +106,7 @@ class AuthRepositoryImpl extends AuthRepository {
     try {
       return Response<List<UserModel>>(
           status: Status.success,
-          data: (await _authApi.findUserByNickname(nickname))
+          data: (await _userApi.findUserByNickname(nickname))
               .map((e) => e.toModel())
               .toList());
     } catch (err) {

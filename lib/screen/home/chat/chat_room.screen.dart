@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/api/auth/auth.api.dart';
 import 'package:my_app/core/constant/chat.enum.dart';
 import 'package:my_app/domain/model/chat/message.model.dart';
 import 'package:my_app/repository/chat/chat.repository.dart';
 
 import '../../../api/chat/chat.api.dart';
+import '../../../api/user/user.api.dart';
 import '../../../configurations.dart';
 import '../../../core/response/response.dart';
 import '../../../core/util/time_diff.util.dart';
@@ -27,7 +27,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       () async {
-        final currentUid = getIt<AuthApi>().currentUid;
+        final currentUid = getIt<UserApi>().currentUid;
         _users = await getIt<ChatApi>().getUsersByChatId(widget.chatId).then(
             (users) => users.where((user) => user.uid != currentUid).toList());
 

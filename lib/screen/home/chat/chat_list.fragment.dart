@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/api/auth/auth.api.dart';
 import 'package:my_app/api/chat/chat.api.dart';
 import 'package:my_app/core/util/time_diff.util.dart';
 import 'package:my_app/domain/model/chat/chat.model.dart';
+import '../../../api/user/user.api.dart';
 import '../../../configurations.dart';
-import '../../../domain/model/user/user.model.dart';
 import 'chat_room.screen.dart';
 
 class ChatListFragment extends StatefulWidget {
@@ -88,7 +87,7 @@ class _ChatItemState extends State<_ChatItem> {
         onTap: _handleGoToChat,
         title: Text(
             widget._chat.users
-                .where((user) => user.uid != getIt<AuthApi>().currentUid)
+                .where((user) => user.uid != getIt<UserApi>().currentUid)
                 .map((user) => user.nickname)
                 .where((nickname) => nickname != null)
                 .toList()

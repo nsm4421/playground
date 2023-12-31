@@ -4,7 +4,7 @@ import 'package:my_app/screen/auth/login.screen.dart';
 
 import '../../configurations.dart';
 import '../../core/response/response.dart';
-import '../../repository/auth/auth.repository.dart';
+import '../../repository/user/user.repository.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -73,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       // sign up
       _isLoading = true;
-      final signUpResponse = await getIt<AuthRepository>()
+      final signUpResponse = await getIt<UserRepository>()
           .createUserWithEmailAndPassword(email: email, password: password);
 
       // sign up fail
@@ -89,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       // save user info in DB
       final uid = signUpResponse.data?.user?.uid;
-      await getIt<AuthRepository>()
+      await getIt<UserRepository>()
           .saveUser(uid: uid!, email: email, nickname: nickname);
 
       // go to login page

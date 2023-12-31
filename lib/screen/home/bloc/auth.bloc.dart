@@ -3,9 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:my_app/screen/home/bloc/auth.event.dart';
 import 'package:my_app/screen/home/bloc/auth.state.dart';
-import 'package:my_app/usecase/auth/auth.usecase.dart';
-import 'package:my_app/usecase/auth/get_current_user.usecase.dart';
-import 'package:my_app/usecase/auth/sign_out.usecase.dart';
+import 'package:my_app/usecase/user/user.usecase.dart';
+import 'package:my_app/usecase/user/get_current_user.usecase.dart';
+import 'package:my_app/usecase/user/sign_out.usecase.dart';
 
 import '../../../core/response/response.dart';
 

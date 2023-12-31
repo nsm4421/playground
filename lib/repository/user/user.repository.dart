@@ -5,7 +5,7 @@ import 'package:my_app/repository/base/repository.dart';
 import '../../core/response/response.dart';
 import '../../domain/model/user/user.model.dart';
 
-abstract class AuthRepository extends Repository {
+abstract class UserRepository extends Repository {
   String? get currentUid;
 
   Future<Response<UserModel?>> getCurrentUser();

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/domain/dto/chat/chat.dto.dart';
 import 'package:my_app/domain/dto/chat/message.dto.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
-import 'package:my_app/domain/model/chat/chat.model.dart';
 import 'package:my_app/domain/model/chat/message.model.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../api/auth/auth.api.dart';
 import '../../api/chat/chat.api.dart';
 import '../../core/constant/chat.enum.dart';
 import '../../core/response/response.dart';
@@ -15,12 +11,9 @@ import 'chat.repository.dart';
 
 @Singleton(as: ChatRepository)
 class ChatRepositoryImpl extends ChatRepository {
-  final AuthApi _authApi;
   final ChatApi _chatApi;
 
-  ChatRepositoryImpl({required AuthApi authApi, required ChatApi chatApi})
-      : _authApi = authApi,
-        _chatApi = chatApi;
+  ChatRepositoryImpl(this._chatApi);
 
   @override
   Future<Response<String>> getDirectMessageChatId(String opponentUid) async {

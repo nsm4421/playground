@@ -10,17 +10,17 @@ import 'package:my_app/domain/model/feed/feed.model.dart';
 import 'package:my_app/repository/feed/feed.repository.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../api/auth/auth.api.dart';
+import '../../api/user/user.api.dart';
 import '../../core/constant/feed.enum.dart';
 import '../../core/util/image.util.dart';
 
 @Singleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
-  final AuthApi _authApi;
+  final UserApi _userApi;
   final FeedApi _feedApi;
 
-  FeedRepositoryImpl({required AuthApi authApi, required FeedApi feedApi})
-      : _authApi = authApi,
+  FeedRepositoryImpl({required UserApi userApi, required FeedApi feedApi})
+      : _userApi = userApi,
         _feedApi = feedApi;
 
   @override
@@ -97,7 +97,7 @@ class FeedRepositoryImpl extends FeedRepository {
       return Response<List<FeedModel>>(
           status: Status.success,
           data: await Future.wait(feeds.map((feed) async {
-            final user = await _authApi.findUserByUid(feed.uid!);
+            final user = await _userApi.findUserByUid(feed.uid!);
             return feed.copyWith(
                 nickname: user.nickname,
                 profileImageUrl: user.profileImageUrls.isNotEmpty

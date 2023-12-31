@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_app/configurations.dart';
-import 'package:my_app/repository/auth/auth.repository.dart';
+import 'package:my_app/repository/user/user.repository.dart';
 import 'package:my_app/screen/auth/sign_up.screen.dart';
 import 'package:my_app/screen/home/home.screen.dart';
 
@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
       _isLoading = true;
-      await getIt<AuthRepository>()
+      await getIt<UserRepository>()
           .signInWithEmailAndPassword(email: email, password: password)
           .then((response) {
         if (response.status == Status.success) {

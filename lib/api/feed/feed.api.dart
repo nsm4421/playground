@@ -5,10 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/domain/dto/feed/child_feed_comment.dto.dart';
 import 'package:my_app/domain/dto/feed/parent_feed_comment.dto.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/feed/child_feed_comment.model.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
-import 'package:my_app/screen/home/search/search.screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/constant/collection_name.enum.dart';

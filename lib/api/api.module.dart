@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/api/chat/chat.api.dart';
 import 'package:my_app/api/feed/feed.api.dart';
-import 'auth/auth.api.dart';
+import 'package:my_app/api/user/user.api.dart';
 
 @module
 abstract class ApiModule {
@@ -13,7 +13,7 @@ abstract class ApiModule {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @singleton
-  AuthApi get authApi => AuthApi(auth: _auth, db: _db, storage: _storage);
+  UserApi get authApi => UserApi(auth: _auth, db: _db, storage: _storage);
 
   @singleton
   FeedApi get feedApi => FeedApi(auth: _auth, db: _db, storage: _storage);

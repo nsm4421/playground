@@ -1,11 +1,11 @@
 import 'package:injectable/injectable.dart';
 
-import '../../repository/auth/auth.repository.dart';
+import '../../repository/user/user.repository.dart';
 import '../base/remote.usecase.dart';
 
 @singleton
 class AuthUsecase {
-  final AuthRepository _authRepository;
+  final UserRepository _authRepository;
 
   AuthUsecase(this._authRepository);
 

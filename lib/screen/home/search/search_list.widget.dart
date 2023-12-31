@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/api/auth/auth.api.dart';
 
+import '../../../api/user/user.api.dart';
 import '../../../configurations.dart';
 import '../../../core/constant/feed.enum.dart';
 import '../../../domain/model/feed/feed.model.dart';
@@ -74,7 +74,7 @@ class _UserListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUid = getIt<AuthApi>().currentUid;
+    final currentUid = getIt<UserApi>().currentUid;
     return users.isNotEmpty
         ? ListView.builder(
             shrinkWrap: true,
