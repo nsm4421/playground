@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/domain/dto/user/user.dto.dart';
+import 'package:my_app/screen/home/bloc/auth.bloc.dart';
 
 import '../../../api/user/user.api.dart';
 import '../../../configurations.dart';
 import '../../../core/constant/feed.enum.dart';
 import '../../../domain/model/feed/feed.model.dart';
 import '../../../domain/model/user/user.model.dart';
-import '../../../repository/chat/chat.repository.dart';
 import '../../component/feed_item.widget.dart';
-import '../chat/chat_room.screen.dart';
+import '../../component/user_item.widget.dart';
 import 'bloc/search.bloc.dart';
 import 'bloc/search.state.dart';
 
@@ -51,55 +52,47 @@ class _FeedListWidget extends StatelessWidget {
       : const Center(child: Text('Nothing Searched'));
 }
 
-class _UserListWidget extends StatelessWidget {
-  const _UserListWidget(this.users, {super.key});
+class _UserListWidget extends StatefulWidget {
+  const _UserListWidget(this.users);
 
   final List<UserModel> users;
 
-  _handleSendDirectMessage(
-          {required String uid, required BuildContext context}) =>
-      () async => await getIt<ChatRepository>()
-          .getDirectMessageChatId(uid)
-          .then((res) => res.data)
-          .then((chatId) => chatId == null
-              ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("can't send direct message..."),
-                  duration: Duration(seconds: 1),
-                ))
-              : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ChatRoomScreen(chatId))));
+  @override
+  State<_UserListWidget> createState() => _UserListWidgetState();
+}
+
+class _UserListWidgetState extends State<_UserListWidget> {
+  late Stream<List<UserModel>> _stream;
+  late String _currentUid;
+
+  @override
+  void initState() {
+    super.initState();
+    _stream = getIt<UserApi>().getFollowingStream();
+    _currentUid = getIt<UserApi>().currentUid!;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final currentUid = getIt<UserApi>().currentUid;
-    return users.isNotEmpty
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              final user = users[index];
-              return ListTile(
-                  // TODO : 클릭 시 개인 페이지로
-                  onTap: () {},
-                  leading: CircleAvatar(
-                    child: user.profileImageUrls.isNotEmpty
-                        ? Image.network(user.profileImageUrls[0])
-                        : const Icon(Icons.question_mark),
-                  ),
-                  title: Text(user.nickname ?? ''),
-                  trailing: currentUid != user.uid
-                      ? IconButton(
-                          onPressed: _handleSendDirectMessage(
-                              uid: user.uid!, context: context),
-                          icon: Icon(
-                            Icons.send,
-                            color: Theme.of(context).colorScheme.primary,
-                          ))
-                      : const SizedBox());
-            })
-        : const Center(child: Text('Nothing Searched'));
+    return StreamBuilder<List<UserModel>>(
+        stream: _stream,
+        builder: (_, snapshot) {
+          final followingUidList = (snapshot.data ?? []).map((e) => e.uid);
+          return widget.users.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.users.length,
+                  itemBuilder: (_, index) {
+                    final user = widget.users[index];
+                    final isFollowing = followingUidList.contains(user.uid);
+                    return UserItemWidget(
+                      currentUid: _currentUid,
+                      user: user,
+                      addFollowButton: !isFollowing,
+                      addUnFollowButton: isFollowing,
+                    );
+                  })
+              : const Center(child: Text('Nothing Searched'));
+        });
   }
 }

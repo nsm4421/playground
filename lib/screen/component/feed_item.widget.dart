@@ -92,7 +92,14 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                 width: _circularAvatarSize,
                 child: CircleAvatar(
                     child: widget.feed.profileImageUrl != null
-                        ? Image.network(widget.feed.profileImageUrl!)
+                        ? Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        widget.feed.profileImageUrl!),
+                                    fit: BoxFit.cover)),
+                          )
                         : const Icon(Icons.account_circle_outlined)),
               ),
               const SizedBox(width: 8),

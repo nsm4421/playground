@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/core/constant/user.enum.dart';
 import 'package:my_app/screen/home/chat/chat_list.fragment.dart';
-import 'package:my_app/screen/home/chat/follower.fragment.dart';
-import 'package:my_app/screen/home/chat/following.fragment.dart';
+
+import '../../component/follow_list.widget.dart';
 
 enum _ChatTabItems {
   chat(label: 'Chat', fragment: ChatListFragment()),
-  reply(label: 'Followers', fragment: FollowerFragment()),
-  repost(label: 'Followings', fragment: FollowingFragment());
+  reply(label: 'Followers', fragment: FollowListWidget(FollowType.follower)),
+  repost(label: 'Followings', fragment: FollowListWidget(FollowType.following));
 
   final String label;
   final Widget fragment;
