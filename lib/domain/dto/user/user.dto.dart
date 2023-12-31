@@ -8,12 +8,13 @@ part 'user.dto.g.dart';
 
 @freezed
 class UserDto with _$UserDto {
-  const factory UserDto({
-    @Default('') String uid,
-    @Default('') String email,
-    @Default('') String nickname,
-    @Default(<String>[]) List<String> profileImageUrls,
-  }) = _UserDto;
+  const factory UserDto(
+      {@Default('') String uid,
+      @Default('') String email,
+      @Default('') String nickname,
+      @Default(<String>[]) List<String> profileImageUrls,
+      @Default(<String>[]) List<String> followingUidList,
+      DateTime? createdAt}) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
       _$UserDtoFromJson(json);
@@ -24,5 +25,7 @@ extension UserDtoEx on UserDto {
       uid: uid,
       email: email,
       nickname: nickname,
-      profileImageUrls: profileImageUrls);
+      profileImageUrls: profileImageUrls,
+      followingUidList: followingUidList,
+      createdAt: createdAt);
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +8,10 @@ import 'package:my_app/core/constant/collection_name.enum.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:uuid/uuid.dart';
 
-class AuthApi {
-  AuthApi(
+import '../../domain/model/user/user.model.dart';
+
+class UserApi {
+  UserApi(
       {required FirebaseAuth auth,
       required FirebaseFirestore db,
       required FirebaseStorage storage})
@@ -33,7 +36,7 @@ class AuthApi {
 
   Future<UserDto?> getCurrentUser() async => await _db
       .collection(CollectionName.user.name)
-      .doc(_auth.currentUser?.uid)
+      .doc(currentUid)
       .get()
       .then((doc) => doc.data())
       .then((data) => data == null ? null : UserDto.fromJson(data));
@@ -87,5 +90,38 @@ class AuthApi {
           .map((e) => e.data())
           .where((data) => data.isNotEmpty)
           .map((data) => UserDto.fromJson(data))
+          .toList());
+
+  /// add user id on followingUidList field
+  Future<void> followUser(String opponentUid) async =>
+      await _db.collection(CollectionName.user.name).doc(currentUid).update({
+        'followingUidList': FieldValue.arrayUnion([opponentUid])
+      });
+
+  /// remove user id on followingUidList field
+  Future<void> unFollowUser(String opponentUid) async =>
+      await _db.collection(CollectionName.user.name).doc(currentUid).update({
+        'followingUidList': FieldValue.arrayRemove([opponentUid])
+      });
+
+  /// get users stream that current user follows
+  Stream<List<UserModel>> getFollowingStream() => _db
+      .collection(CollectionName.user.name)
+      .doc(currentUid)
+      .snapshots()
+      .asyncMap((event) async => await Future.wait(
+          UserDto.fromJson(event.data() ?? {})
+              .followingUidList
+              .map((uid) async => (await findUserByUid(uid)).toModel())));
+
+  /// get user stream that follows current user
+  Stream<List<UserModel>> getFollowerStream() => _db
+      .collection(CollectionName.user.name)
+      .where(Filter('followingUidList', arrayContains: [currentUid]))
+      .snapshots()
+      .asyncMap((event) async => event.docs
+          .map((doc) => doc.data() ?? {})
+          .map((data) => UserDto.fromJson(data))
+          .map((dto) => dto.toModel())
           .toList());
 }

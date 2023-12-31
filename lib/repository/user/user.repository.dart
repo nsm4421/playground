@@ -25,4 +25,8 @@ abstract class UserRepository extends Repository {
       {required String nickname, required List<Asset> assets});
 
   Future<Response<List<UserModel>>> findUserByNickname(String nickname);
+
+  Future<Response<void>> followUser(String opponentUid);
+
+  Future<Response<void>> unFollowUser(String opponentUid);
 }

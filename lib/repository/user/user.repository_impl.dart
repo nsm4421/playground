@@ -115,4 +115,26 @@ class UserRepositoryImpl extends UserRepository {
           status: Status.error, message: err.toString());
     }
   }
+
+  @override
+  Future<Response<void>> followUser(String opponentUid) async {
+    try {
+      await _userApi.followUser(opponentUid);
+      return const Response<void>(status: Status.success);
+    } catch (err) {
+      debugPrint(err.toString());
+      return Response<void>(status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<Response<void>> unFollowUser(String opponentUid) async {
+    try {
+      await _userApi.unFollowUser(opponentUid);
+      return const Response<void>(status: Status.success);
+    } catch (err) {
+      debugPrint(err.toString());
+      return Response<void>(status: Status.error, message: err.toString());
+    }
+  }
 }
