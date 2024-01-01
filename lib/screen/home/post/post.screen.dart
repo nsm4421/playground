@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:my_app/api/user/user.api.dart';
 import 'package:my_app/screen/home/post/bloc/post.bloc.dart';
 import 'package:my_app/screen/home/post/bloc/post.state.dart';
 import 'package:my_app/screen/home/post/hashtag.fragment.dart';
@@ -8,7 +9,8 @@ import 'package:my_app/screen/home/post/photo.fragment.dart';
 import 'package:my_app/screen/home/post/upload_success.screen.dart';
 
 import '../../../configurations.dart';
-import '../bloc/auth.bloc.dart';
+
+import '../../../domain/model/user/user.model.dart';
 import 'bloc/post.event.dart';
 import 'content.fragment.dart';
 
@@ -126,53 +128,63 @@ class _PostScreenViewState extends State<_PostScreenView> {
           padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
           child: Column(
             children: [
-              Row(
-                children: [
-                  // profile image
-                  context.read<AuthBloc>().state.profileImageUrls.isEmpty
-                      ? const CircleAvatar(
-                          child: Icon(Icons.account_circle_outlined))
-                      : CircleAvatar(
-                          backgroundImage: NetworkImage(context
-                              .read<AuthBloc>()
-                              .state
-                              .profileImageUrls[0])),
+              StreamBuilder<UserModel>(
+                  stream: getIt<UserApi>().currentUserStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData) {
+                      return const SizedBox();
+                    }
+                    final user = snapshot.data;
+                    return Row(
+                      children: [
+                        // profile image
+                        (user?.profileImageUrls ?? []).isEmpty
+                            ? const CircleAvatar(
+                                child: Icon(Icons.account_circle_outlined))
+                            : CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(user!.profileImageUrls[0])),
 
-                  const SizedBox(width: 15),
-                  Text(context.read<AuthBloc>().state.nickname,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold)),
-                  const Spacer(),
-                  // content button
-                  IconButton(
-                      onPressed: _moveToPage(0),
-                      icon: Icon(Icons.book,
-                          color: _currentPage == 0
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.tertiary)),
-                  const SizedBox(width: 5),
-                  // hashtag button
-                  IconButton(
-                      onPressed: _moveToPage(1),
-                      icon: Icon(
-                        Icons.tag,
-                        color: _currentPage == 1
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.tertiary,
-                      )),
-                  const SizedBox(width: 5),
-                  // camera button
-                  IconButton(
-                      onPressed: _moveToPage(2),
-                      icon: Icon(
-                        Icons.add_a_photo_outlined,
-                        color: _currentPage == 2
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.tertiary,
-                      )),
-                ],
-              ),
+                        const SizedBox(width: 15),
+                        Text(user?.nickname ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.bold)),
+                        const Spacer(),
+                        // content button
+                        IconButton(
+                            onPressed: _moveToPage(0),
+                            icon: Icon(Icons.book,
+                                color: _currentPage == 0
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.tertiary)),
+                        const SizedBox(width: 5),
+                        // hashtag button
+                        IconButton(
+                            onPressed: _moveToPage(1),
+                            icon: Icon(
+                              Icons.tag,
+                              color: _currentPage == 1
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.tertiary,
+                            )),
+                        const SizedBox(width: 5),
+                        // camera button
+                        IconButton(
+                            onPressed: _moveToPage(2),
+                            icon: Icon(
+                              Icons.add_a_photo_outlined,
+                              color: _currentPage == 2
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.tertiary,
+                            )),
+                      ],
+                    );
+                  }),
               const SizedBox(height: 20),
               const Divider(),
               const SizedBox(height: 20),

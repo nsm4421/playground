@@ -27,6 +27,12 @@ class UserApi {
 
   Stream<User?> get authStream => _auth.authStateChanges();
 
+  Stream<UserModel> get currentUserStream => _db
+      .collection(CollectionName.user.name)
+      .doc(currentUid)
+      .snapshots()
+      .asyncMap((event) => UserDto.fromJson(event.data() ?? {}).toModel());
+
   Future<UserDto> findUserByUid(String uid) async => await _db
       .collection(CollectionName.user.name)
       .doc(uid)

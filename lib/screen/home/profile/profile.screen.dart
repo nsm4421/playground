@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_app/screen/home/bloc/auth.bloc.dart';
-import 'package:my_app/screen/home/bloc/auth.event.dart';
+import 'package:my_app/api/user/user.api.dart';
+import 'package:my_app/configurations.dart';
+import 'package:my_app/domain/model/user/user.model.dart';
+import 'package:my_app/repository/user/user.repository.dart';
 import 'package:my_app/screen/component/feed.fragment.dart';
 import 'package:my_app/screen/home/profile/reply.fragment.dart';
 
@@ -59,9 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen>
         isDismissible: true,
         useSafeArea: true,
         barrierColor: Colors.grey.withOpacity(0.5),
-      ).whenComplete(() => context.read<AuthBloc>().add(InitAuthEvent()));
+      );
 
-  _handleSignOut() => context.read<AuthBloc>().add(SignOutEvent());
+  _handleSignOut() => context.read<UserRepository>().signOut();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -70,33 +72,36 @@ class _ProfileScreenState extends State<ProfileScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                leading: context
-                        .read<AuthBloc>()
-                        .state
-                        .profileImageUrls
-                        .isNotEmpty
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            context.read<AuthBloc>().state.profileImageUrls[0]),
-                        radius: 25,
-                      )
-                    : const CircleAvatar(
-                        child: Icon(Icons.account_circle_outlined)),
-                title: Text(context.read<AuthBloc>().state.nickname ?? '',
-                    style: GoogleFonts.karla(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-                subtitle: Text("1000 followers",
-                    style: GoogleFonts.karla(
-                        fontSize: 18,
-                        color: Theme.of(context).colorScheme.secondary)),
-                contentPadding: const EdgeInsets.all(0),
-                trailing: IconButton(
-                  icon: const Icon(Icons.exit_to_app),
-                  onPressed: _handleSignOut,
-                  tooltip: "Sign Out",
-                ),
-              ),
+              StreamBuilder<UserModel>(
+                  stream: getIt<UserApi>().currentUserStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData)
+                      return const SizedBox();
+                    final user = snapshot.data;
+                    return ListTile(
+                      leading: (user?.profileImageUrls ?? []).isNotEmpty
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(user!.profileImageUrls[0]),
+                              radius: 25,
+                            )
+                          : const CircleAvatar(
+                              child: Icon(Icons.account_circle_outlined)),
+                      title: Text(user?.nickname ?? '',
+                          style: GoogleFonts.karla(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      subtitle: Text("1000 followers",
+                          style: GoogleFonts.karla(
+                              fontSize: 18,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      contentPadding: const EdgeInsets.all(0),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.exit_to_app),
+                        onPressed: _handleSignOut,
+                        tooltip: "Sign Out",
+                      ),
+                    );
+                  }),
               const SizedBox(height: 20),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 InkWell(

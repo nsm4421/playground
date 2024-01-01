@@ -47,10 +47,9 @@ class ChatApi {
     final currentUid = _getCurrentUidOrElseThrow();
     final chats = (await _db
             .collection(CollectionName.chat.name)
-            .where(Filter.and(
-              Filter('type', isEqualTo: ChatType.dm.name),
-              Filter('uidList', arrayContains: [currentUid, opponentUid]),
-            ))
+            .where(Filter('type', isEqualTo: ChatType.dm.name))
+            .where(Filter('uidList', arrayContains: opponentUid))
+            .where(Filter('uidList', arrayContains: currentUid))
             .get()
             .then((snapshot) => snapshot.docs))
         .map((doc) => doc.data())

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
-import 'package:my_app/screen/home/bloc/auth.bloc.dart';
 
 import '../../../api/user/user.api.dart';
 import '../../../configurations.dart';

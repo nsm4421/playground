@@ -4,11 +4,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/api/feed/feed.api.dart';
+import 'package:my_app/api/user/user.api.dart';
 import 'package:my_app/configurations.dart';
 import 'package:my_app/domain/model/feed/parent_feed_comment.model.dart';
-import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:my_app/repository/chat/chat.repository.dart';
-import 'package:my_app/screen/home/bloc/auth.bloc.dart';
 import 'package:my_app/screen/home/chat/chat_room.screen.dart';
 
 import '../../core/util/time_diff.util.dart';
@@ -25,6 +24,7 @@ class FeedItemWidget extends StatefulWidget {
 }
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
+  late String _currentUid;
   late CarouselController _controller;
   late Stream<bool> _likeStream;
   late Stream<List<ParentFeedCommentModel>> _commentStream;
@@ -35,6 +35,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
   @override
   initState() {
     super.initState();
+    _currentUid = getIt<UserApi>().currentUid!;
     _controller = CarouselController();
     _likeStream = getIt<FeedApi>().getLikeStream(widget.feed.fid!);
     _commentStream = getIt<FeedApi>().getParentCommentStream(widget.feed.fid!);
@@ -260,7 +261,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
 
               const SizedBox(width: 10),
 
-              if (context.read<AuthBloc>().state.uid != widget.feed.uid)
+              if (_currentUid != widget.feed.uid)
                 IconButton(
                     tooltip: 'DM',
                     onPressed: _handleGoToSChatScreen,
