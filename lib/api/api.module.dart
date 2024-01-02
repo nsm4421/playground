@@ -6,6 +6,8 @@ import 'package:my_app/api/chat/chat.api.dart';
 import 'package:my_app/api/feed/feed.api.dart';
 import 'package:my_app/api/user/user.api.dart';
 
+import 'notification/notification.api.dart';
+
 @module
 abstract class ApiModule {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,4 +22,8 @@ abstract class ApiModule {
 
   @singleton
   ChatApi get chatApi => ChatApi(auth: _auth, db: _db, storage: _storage);
+
+  @singleton
+  NotificationApi get notificationApi =>
+      NotificationApi(auth: _auth, db: _db, storage: _storage);
 }

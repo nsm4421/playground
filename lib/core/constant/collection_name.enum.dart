@@ -1,10 +1,12 @@
 /// └ user
+/// └ notification
 /// └ feed
 ///   └ comment
 ///     └ child-comment
 /// └ chat
 ///   └ message
-/// └ Follow
+/// └ follow
+
 enum CollectionName {
   user('user'),
   feed('feed'),
@@ -12,7 +14,8 @@ enum CollectionName {
   childComment('child-comment'),
   chat('chat'),
   message('message'),
-  follow('follow');
+  follow('follow'),
+  notification('notification');
 
   final String name;
 
