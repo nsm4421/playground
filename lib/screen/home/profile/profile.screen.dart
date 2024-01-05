@@ -6,6 +6,7 @@ import 'package:my_app/configurations.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 import 'package:my_app/repository/user/user.repository.dart';
 import 'package:my_app/screen/component/feed.fragment.dart';
+import 'package:my_app/screen/home/profile/notification.fragment.dart';
 import 'package:my_app/screen/home/profile/reply.fragment.dart';
 
 import 'edit_profile.widget.dart';
@@ -13,7 +14,7 @@ import 'edit_profile.widget.dart';
 enum _ProfileTabItems {
   feed(label: 'Feed', fragment: FeedFragment(isMyFeed: true)),
   reply(label: 'Replies', fragment: ReplyFragment()),
-  repost(label: 'Reposts', fragment: ReplyFragment());
+  repost(label: 'Notification', fragment: NotificationFragment());
 
   final String label;
   final Widget fragment;
@@ -75,8 +76,9 @@ class _ProfileScreenState extends State<ProfileScreen>
               StreamBuilder<UserModel>(
                   stream: getIt<UserApi>().currentUserStream,
                   builder: (context, snapshot) {
-                    if (snapshot.hasError || !snapshot.hasData)
+                    if (snapshot.hasError || !snapshot.hasData) {
                       return const SizedBox();
+                    }
                     final user = snapshot.data;
                     return ListTile(
                       leading: (user?.profileImageUrls ?? []).isNotEmpty
@@ -90,10 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                       title: Text(user?.nickname ?? '',
                           style: GoogleFonts.karla(
                               fontSize: 20, fontWeight: FontWeight.bold)),
-                      subtitle: Text("1000 followers",
-                          style: GoogleFonts.karla(
-                              fontSize: 18,
-                              color: Theme.of(context).colorScheme.secondary)),
                       contentPadding: const EdgeInsets.all(0),
                       trailing: IconButton(
                         icon: const Icon(Icons.exit_to_app),

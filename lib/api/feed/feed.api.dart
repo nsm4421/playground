@@ -27,6 +27,14 @@ class FeedApi {
   final FirebaseFirestore _db;
   final FirebaseStorage _storage;
 
+  Future<String?> getUidByFid(String fid) async => _db
+      .collection(CollectionName.feed.name)
+      .doc(fid)
+      .get()
+      .then((e) => e.data())
+      .then((data) => FeedDto.fromJson(data ?? {}))
+      .then((dto) => dto.uid);
+
   /// get stream of feed order by created at field
   /// if uid is not given, then return stream for all feeds
   Stream<List<FeedModel>> getFeedStreamByUser({String? uid}) => (uid == null

@@ -5,19 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multi_image_picker/src/asset.dart';
 import 'package:my_app/api/user/user.api.dart';
+import 'package:my_app/core/constant/notification.eum.dart';
 
 import 'package:my_app/core/util/image.util.dart';
+import 'package:my_app/domain/dto/notification/notification.dto.dart';
 import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 
+import '../../api/notification/notification.api.dart';
 import '../../core/response/response.dart';
 import 'user.repository.dart';
 
 @Singleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
   final UserApi _userApi;
+  final NotificationApi _notificationApi;
 
-  UserRepositoryImpl(this._userApi);
+  UserRepositoryImpl(
+      {required UserApi userApi, required NotificationApi notificationApi})
+      : _userApi = userApi,
+        _notificationApi = notificationApi;
 
   @override
   String? get currentUid => _userApi.currentUid;
@@ -120,6 +127,13 @@ class UserRepositoryImpl extends UserRepository {
   Future<Response<void>> followUser(String opponentUid) async {
     try {
       await _userApi.followUser(opponentUid);
+      final nickname = (await _userApi.getCurrentUser())?.nickname;
+      await _notificationApi.createNotification(NotificationDto(
+          title: 'Got Follower',
+          message: '${nickname ?? 'somebody'} follow you',
+          type: NotificationType.follow,
+          receiverUid: opponentUid,
+          createdAt: DateTime.now()));
       return const Response<void>(status: Status.success);
     } catch (err) {
       debugPrint(err.toString());

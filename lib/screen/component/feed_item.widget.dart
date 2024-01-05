@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/api/feed/feed.api.dart';
 import 'package:my_app/api/user/user.api.dart';
 import 'package:my_app/configurations.dart';
 import 'package:my_app/domain/model/feed/parent_feed_comment.model.dart';
 import 'package:my_app/repository/chat/chat.repository.dart';
+import 'package:my_app/repository/feed/feed.repository.dart';
 import 'package:my_app/screen/home/chat/chat_room.screen.dart';
 
 import '../../core/util/time_diff.util.dart';
@@ -41,18 +41,11 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
     _commentStream = getIt<FeedApi>().getParentCommentStream(widget.feed.fid!);
   }
 
-  @override
-  dispose() {
-    super.dispose();
-  }
-
-  // TODO : 이벤트 등록
-  _handleClickMoreIcon() {}
-
-  _handleLike() async => await getIt<FeedApi>().likeFeed(widget.feed.fid!);
+  _handleLike() async =>
+      await getIt<FeedRepository>().likeFeed(widget.feed.fid!);
 
   _handleDislike() async =>
-      await getIt<FeedApi>().dislikeFeed(widget.feed.fid!);
+      await getIt<FeedRepository>().dislikeFeed(widget.feed.fid!);
 
   _handleShowCommentView() => showModalBottomSheet(
         context: context,
@@ -110,20 +103,14 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary)),
-              const SizedBox(width: 10),
+              const Spacer(),
 
               // created at
               if (widget.feed.createdAt != null)
                 Text(TimeDiffUtil.getTimeDiffRep(widget.feed.createdAt!),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.tertiary)),
-              const Spacer(),
 
-              // more icon
-              IconButton(
-                  onPressed: _handleClickMoreIcon,
-                  icon: Icon(Icons.more_vert,
-                      color: Theme.of(context).colorScheme.tertiary)),
               const SizedBox(width: _horizontalPadding)
             ],
           ),

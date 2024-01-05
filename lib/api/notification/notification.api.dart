@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:my_app/domain/dto/user/user.dto.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/constant/collection_name.enum.dart';
@@ -54,7 +53,7 @@ class NotificationApi {
   }
 
   /// update notification isSeen field as true
-  Future<void> deleteNotification(String nid) async => await _db
+  Future<void> deleteNotificationById(String nid) async => await _db
       .collection(CollectionName.notification.name)
       .doc(nid)
       .update({'isSeen': true});

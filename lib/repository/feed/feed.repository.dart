@@ -22,4 +22,10 @@ abstract class FeedRepository extends Repository {
   /// search feed by hashtag or content
   Future<Response<List<FeedModel>>> searchFeed(
       {required SearchOption option, required String keyword});
+
+  /// like feed
+  Future<Response<void>> likeFeed(String fid);
+
+  /// cancel like on feed
+  Future<Response<void>> dislikeFeed(String fid);
 }

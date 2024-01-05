@@ -10,18 +10,26 @@ import 'package:my_app/domain/model/feed/feed.model.dart';
 import 'package:my_app/repository/feed/feed.repository.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../api/notification/notification.api.dart';
 import '../../api/user/user.api.dart';
 import '../../core/constant/feed.enum.dart';
+import '../../core/constant/notification.eum.dart';
 import '../../core/util/image.util.dart';
+import '../../domain/dto/notification/notification.dto.dart';
 
 @Singleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
   final UserApi _userApi;
   final FeedApi _feedApi;
+  final NotificationApi _notificationApi;
 
-  FeedRepositoryImpl({required UserApi userApi, required FeedApi feedApi})
+  FeedRepositoryImpl(
+      {required UserApi userApi,
+      required FeedApi feedApi,
+      required NotificationApi notificationApi})
       : _userApi = userApi,
-        _feedApi = feedApi;
+        _feedApi = feedApi,
+        _notificationApi = notificationApi;
 
   @override
   Future<Response<String>> saveFeed(
@@ -61,12 +69,21 @@ class FeedRepositoryImpl extends FeedRepository {
       required String? parentCid,
       required String content}) async {
     try {
+      // save comment
       final cid = const Uuid().v1(); // comment id
       parentCid == null
           ? await _feedApi.saveParentComment(
               ParentFeedCommentDto(cid: cid, fid: fid, content: content))
           : await _feedApi.saveChildComment(ChildFeedCommentDto(
               cid: cid, fid: fid, content: content, parentCid: parentCid));
+      // send notification on author
+      await _notificationApi.createNotification(NotificationDto(
+        receiverUid: await _feedApi.getUidByFid(fid) ?? '',
+        title: 'comment on my feed',
+        type: NotificationType.comment,
+        message: content,
+        createdAt: DateTime.now(),
+      ));
       return Response(status: Status.success, data: cid);
     } catch (err) {
       debugPrint(err.toString());
@@ -108,6 +125,36 @@ class FeedRepositoryImpl extends FeedRepository {
       debugPrint(err.toString());
       return Response<List<FeedModel>>(
           status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<Response<void>> likeFeed(String fid) async {
+    try {
+      // like feed
+      await _feedApi.likeFeed(fid);
+      // get current user nickname
+      final nickname = (await _userApi.getCurrentUser())?.nickname;
+      // send notification
+      await _notificationApi.createNotification(NotificationDto(
+          type: NotificationType.like,
+          receiverUid: await _feedApi.getUidByFid(fid) ?? '',
+          title: 'Like On My Feed',
+          message: '${nickname ?? 'somebody'} like on my feed',
+          createdAt: DateTime.now()));
+      return const Response<void>(status: Status.success);
+    } catch (err) {
+      return Response<void>(status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<Response<void>> dislikeFeed(String fid) async {
+    try {
+      await _feedApi.dislikeFeed(fid);
+      return const Response<void>(status: Status.success);
+    } catch (err) {
+      return Response<void>(status: Status.error, message: err.toString());
     }
   }
 }

@@ -17,21 +17,19 @@ class NotificationRepositoryImpl extends NotificationRepository {
   final UserApi _userApi;
   final NotificationApi _notificationApi;
 
-  NotificationRepositoryImpl({required userApi, required notificationApi})
+  NotificationRepositoryImpl(
+      {required UserApi userApi, required NotificationApi notificationApi})
       : _userApi = userApi,
         _notificationApi = notificationApi;
 
   @override
   Future<Response<List<NotificationModel>>> getNotifications() async {
     try {
-      final notifications = (await _notificationApi.getNotifications());
-      // delete notification(update unSeen field as true)
-      await Future.wait(notifications
-          .map((e) => e.nid)
-          .map((nid) => _notificationApi.deleteNotification(nid)));
       return Response<List<NotificationModel>>(
           status: Status.success,
-          data: notifications.map((e) => e.toModel()).toList());
+          data: (await _notificationApi.getNotifications())
+              .map((e) => e.toModel())
+              .toList());
     } catch (err) {
       debugPrint(err.toString());
       return Response<List<NotificationModel>>(
@@ -61,14 +59,28 @@ class NotificationRepositoryImpl extends NotificationRepository {
   }
 
   @override
-  Future<Response<void>> deleteNotification(String nid) async {
+  Future<Response<void>> deleteNotificationById(String nid) async {
     try {
       final notification = await _notificationApi.getNotificationByNid(nid);
       final currentUid = _userApi.currentUid;
       if (notification.receiverUid != currentUid) {
         throw const CertificateException('NOT_GRANT');
       }
-      await _notificationApi.deleteNotification(nid);
+      await _notificationApi.deleteNotificationById(nid);
+      return const Response<void>(status: Status.success);
+    } catch (err) {
+      debugPrint(err.toString());
+      return Response<void>(status: Status.error, message: err.toString());
+    }
+  }
+
+  @override
+  Future<Response<void>> deleteAllNotification() async {
+    try {
+      final notifications = await _notificationApi.getNotifications();
+      await Future.wait(notifications
+          .map((n) => n.nid)
+          .map((nid) async => await _notificationApi.deleteNotificationById(nid)));
       return const Response<void>(status: Status.success);
     } catch (err) {
       debugPrint(err.toString());

@@ -123,7 +123,7 @@ class UserApi {
   /// get user stream that follows current user
   Stream<List<UserModel>> getFollowerStream() => _db
       .collection(CollectionName.user.name)
-      .where(Filter('followingUidList', arrayContains: [currentUid]))
+      .where('followingUidList', arrayContainsAny: [currentUid])
       .snapshots()
       .asyncMap((event) async => event.docs
           .map((doc) => doc.data() ?? {})

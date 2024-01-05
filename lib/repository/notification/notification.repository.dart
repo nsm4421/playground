@@ -13,5 +13,7 @@ abstract class NotificationRepository extends Repository {
       required NotificationType type,
       required String receiverUid});
 
-  Future<Response<void>> deleteNotification(String nid);
+  Future<Response<void>> deleteNotificationById(String nid);
+
+  Future<Response<void>> deleteAllNotification();
 }
