@@ -4,6 +4,14 @@ android/
 ios/
 web/
 
+# assets
+assets/
+
+# build files
+**.g.dart
+**.freezed.dart
+**.config.dart
+
 # Miscellaneous
 *.class
 *.log
