@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/presentation/view/auth/sign_in.screen.dart';
 
 import '../../../core/enums/status.enum.dart';
 import '../../bloc/auth/user.bloc.dart';
@@ -13,24 +14,13 @@ class AuthScreen extends StatelessWidget {
     switch (status) {
       case Status.initial:
       case Status.success:
-        return _AuthScreenView();
+        return const SignInScreen();
       case Status.loading:
-        return _OnLoading();
+        return const _OnLoading();
       case Status.error:
-        return _OnError();
+        return const _OnError();
     }
   }
-}
-
-class _AuthScreenView extends StatelessWidget {
-  const _AuthScreenView({super.key});
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: SingleChildScrollView(
-          child: Column(),
-        ),
-      );
 }
 
 class _OnError extends StatelessWidget {

@@ -17,6 +17,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(this._authUseCase) : super(const UserState()) {
     on<InitialAuthCheck>(_onInitialAuthCheck);
     on<SignUpWithEmailAndPassword>(_onSignUpWithEmailAndPassword);
+    on<SignInWithEmailAndPassword>(_onSignInWithEmailAndPassword);
   }
 
   Future<void> _onInitialAuthCheck(
@@ -60,9 +61,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Future<void> _onSignInWithEmailAndPassword(
-      SignUpWithEmailAndPassword event,
-      Emitter<UserState> emit,
-      ) async {
+    SignInWithEmailAndPassword event,
+    Emitter<UserState> emit,
+  ) async {
     try {
       emit(state.copyWith(status: Status.loading));
       final response = await _authUseCase.execute<Result<String>>(
@@ -78,5 +79,4 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           status: Status.error, error: ErrorResponse.fromError(err)));
     }
   }
-
 }

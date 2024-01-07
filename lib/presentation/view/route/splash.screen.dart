@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/core/enums/route.enum.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // after 2 sec, go to main page
     Future.delayed(const Duration(seconds: _durationSec), () {
-      context.go('/main');
+      context.go(RoutePath.intro.path);
     });
   }
 
