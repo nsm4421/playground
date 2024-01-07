@@ -1,16 +1,15 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_app/data/data_source/base/auth.api.dart';
+import 'package:my_app/data/data_source/remote/auth.remote_api.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'auth/auth.api.dart';
 
 @module
 abstract class DataSourceModule {
-  final SupabaseClient _supabaseClient = SupabaseClient(
-    dotenv.env['DB_URL']!,
-    dotenv.env['ANON_KEY']!,
-  );
+  final bool _isDebug = dotenv.env['MODE'] == 'debug';
+  GoTrueClient get auth => Supabase.instance.client.auth;
 
   @singleton
-  AuthApi get authApi => AuthApi(_supabaseClient);
+  AuthApi get authApi => RemoteAuthApi(auth);
 }
