@@ -34,6 +34,9 @@ dependencies:
   # connect to database
   supabase_flutter: ^2.1.0
 
+  # routing
+  go_router: ^13.0.1
+
   # dependecy injection
   flutter_dotenv: ^5.0.2
   get_it: ^7.6.0
