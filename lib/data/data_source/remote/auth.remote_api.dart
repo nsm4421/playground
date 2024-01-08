@@ -15,7 +15,7 @@ class RemoteAuthApi extends AuthApi {
   @override
   Future<AuthResponse> signUpWithEmailAndPassword(
           {required String email, required String password}) async =>
-      await _auth.signInWithPassword(email: email, password: password);
+      await _auth.signUp(email: email, password: password);
 
   @override
   Future<void> signOut() async => await _auth.signOut();
