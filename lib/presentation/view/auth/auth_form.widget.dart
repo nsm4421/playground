@@ -101,6 +101,46 @@ class _PasswordFieldWidgetState extends State<PasswordFieldWidget> {
       );
 }
 
+class SignInFormWidget extends StatelessWidget {
+  const SignInFormWidget(
+      {super.key,
+      required this.emailTec,
+      required this.passwordTec,
+      required this.formKey});
+
+  final TextEditingController emailTec;
+  final TextEditingController passwordTec;
+  final GlobalKey<FormState> formKey;
+
+  String? _passwordValidator(String? password) {
+    if (password == null) return "error";
+    if (password.isEmpty) return "press password";
+    final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).{8,}$');
+    final isValidPassword = passwordRegex.hasMatch(password);
+    if (!isValidPassword) {
+      return "not valid password";
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) => Form(
+        key: formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            EmailFieldWidget(emailTec),
+            const SizedBox(height: 30),
+            PasswordFieldWidget(
+                tec: passwordTec,
+                isConfirm: false,
+                validator: _passwordValidator),
+          ],
+        ),
+      );
+}
+
 class SignUpFormWidget extends StatelessWidget {
   const SignUpFormWidget(
       {super.key,
@@ -150,8 +190,6 @@ class SignUpFormWidget extends StatelessWidget {
                 tec: passwordConfirmTec,
                 isConfirm: true,
                 validator: _passwordConfirmValidator),
-            const SizedBox(height: 30),
-            const SizedBox(height: 10),
           ],
         ),
       );

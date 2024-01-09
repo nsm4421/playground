@@ -4,7 +4,6 @@ abstract class UserEvent {
 
 class InitialAuthCheck extends UserEvent {}
 
-
 class SignUpWithEmailAndPassword extends UserEvent {
   final String email;
   final String password;
@@ -18,3 +17,5 @@ class SignInWithEmailAndPassword extends UserEvent {
 
   SignInWithEmailAndPassword({required this.email, required this.password});
 }
+
+class SignOut extends UserEvent {}

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/enums/colors.enum.dart';
 import 'package:my_app/core/enums/route.enum.dart';
+import 'package:my_app/presentation/bloc/auth/user.bloc.dart';
+import 'package:my_app/presentation/bloc/auth/user.event.dart';
 import 'package:my_app/presentation/component/text_button.widget.dart';
 import 'package:my_app/presentation/view/auth/auth_form.widget.dart';
 
@@ -13,11 +16,9 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  static const int _maxLength = 30;
-
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
-  bool _isPasswordVisible = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -33,20 +34,26 @@ class _SignInScreenState extends State<SignInScreen> {
     _passwordController.dispose();
   }
 
-  // TODO  : auth
-  _handleSignIn() {}
+  _handleSignIn() {
+    try {
+      final isValid = _formKey.currentState!.validate();
+      if (!isValid) return;
+      context.read<UserBloc>().add(SignInWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text));
+    } catch (err) {
+      debugPrint(err.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('error'),
+          duration: Duration(seconds: 2), // Adjust the duration as needed
+        ),
+      );
+    }
+  }
 
   _goToSignUpPage() {
     context.push(RoutePath.signUp.path);
   }
-
-  _switchVisible() => setState(() {
-        _isPasswordVisible = !_isPasswordVisible;
-      });
-
-  _clearEmail() => _emailController.clear();
-
-  _clearPassword() => _passwordController.clear();
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -63,12 +70,12 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SignInFormWidget(
+                      emailTec: _emailController,
+                      passwordTec: _passwordController,
+                      formKey: _formKey),
                   const SizedBox(height: 30),
-                  EmailFieldWidget(_emailController),
-                  const SizedBox(height: 30),
-                  PasswordFieldWidget(tec: _passwordController),
-                  const SizedBox(height: 30),
-                  TextButtonWidget(label: "Sign In", onTap: _handleSignIn),
+                  TextButtonWidget(label: "Login", onTap: _handleSignIn),
                   const SizedBox(height: 20),
                   TextButtonWidget(
                       label: "Sign Up",
