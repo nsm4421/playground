@@ -31,8 +31,10 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(title: Text("HOME"), actions: [
           Wrap(children: [
             IconButton(
+                onPressed: () {}, icon: const Icon(Icons.notifications_none)),
+            IconButton(
                 onPressed: _logout(context),
-                icon: const Icon(Icons.logout_outlined))
+                icon: const Icon(Icons.logout_outlined)),
           ])
         ]),
         body: Text("TODO"),
