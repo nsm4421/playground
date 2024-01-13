@@ -1,8 +1,16 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../domain/model/auth/user_metadata.model.dart';
+
 abstract class UserEvent {
   const UserEvent();
 }
 
-class InitialAuthCheck extends UserEvent {}
+class UpdateUserState extends UserEvent {
+  final User? user;
+
+  UpdateUserState(this.user);
+}
 
 class SignUpWithEmailAndPassword extends UserEvent {
   final String email;
@@ -19,3 +27,9 @@ class SignInWithEmailAndPassword extends UserEvent {
 }
 
 class SignOut extends UserEvent {}
+
+class EditUserMetaData extends UserEvent {
+  final UserMetaDataModel metaData;
+
+  EditUserMetaData(this.metaData);
+}

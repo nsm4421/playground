@@ -4,12 +4,16 @@ import 'package:my_app/data/data_source/base/auth.api.dart';
 import 'package:my_app/data/data_source/remote/auth.remote_api.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 @module
 abstract class DataSourceModule {
   final bool _isDebug = dotenv.env['MODE'] == 'debug';
-  GoTrueClient get auth => Supabase.instance.client.auth;
+  final _auth = Supabase.instance.client.auth;
+  final _rest = Supabase.instance.client.rest;
+
+  GoTrueClient get auth => _auth;
+
+  PostgrestClient get rest => _rest;
 
   @singleton
-  AuthApi get authApi => RemoteAuthApi(auth);
+  AuthApi get authApi => RemoteAuthApi(_auth);
 }

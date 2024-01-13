@@ -1,3 +1,4 @@
+import 'package:my_app/data/dto/auth/user/user_metadata.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AuthApi {
@@ -14,4 +15,6 @@ abstract class AuthApi {
   Stream<User?> getCurrentUserStream();
 
   User? getCurrentUer();
+
+  Future<void> updateMetaData(UserMetaDataDto metaData);
 }

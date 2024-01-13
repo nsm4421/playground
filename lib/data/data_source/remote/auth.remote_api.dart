@@ -1,3 +1,4 @@
+import 'package:my_app/data/dto/auth/user/user_metadata.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../base/auth.api.dart';
@@ -26,4 +27,8 @@ class RemoteAuthApi extends AuthApi {
 
   @override
   User? getCurrentUer() => _auth.currentUser;
+
+  @override
+  Future<void> updateMetaData(UserMetaDataDto metaData) async =>
+      await _auth.updateUser(UserAttributes(data: metaData.toJson()));
 }

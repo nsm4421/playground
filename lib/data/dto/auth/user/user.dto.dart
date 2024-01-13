@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/domain/model/user.model.dart';
+import 'package:my_app/data/dto/auth/user/user_metadata.dto.dart';
+import 'package:my_app/domain/model/auth/user.model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'user.dto.freezed.dart';
 
@@ -11,7 +13,7 @@ class UserDto with _$UserDto {
   const factory UserDto(
       {@Default('') String id,
       @Default('') String email,
-      @Default('') String nickname}) = _UserDto;
+      @Default(UserMetaDataDto()) UserMetaDataDto metaData}) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
       _$UserDtoFromJson(json);
@@ -19,5 +21,11 @@ class UserDto with _$UserDto {
 
 /// mapper
 extension UserDtoExt on UserDto {
-  UserModel dtoToModel() => UserModel(id: id, email: email, nickname: nickname);
+  UserModel dtoToModel() =>
+      UserModel(id: id, email: email, metaData: metaData.dtoToModel());
+
+  UserDto userToDto(User user) => UserDto(
+      id: user.id,
+      email: user.email ?? '',
+      metaData: UserMetaDataDto.fromJson(user.userMetadata ?? {}));
 }
