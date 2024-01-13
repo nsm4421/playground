@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '../../../core/enums/response_status.enum.dart';
 import '../../../core/response/error_response.dart';
 import '../../../core/response/result.dart';
@@ -6,18 +8,21 @@ import '../../repository/auth/auth.repository.dart';
 import '../base/remote.usecase.dart';
 
 class EditUserMetaDataUseCase extends RemoteUseCase<AuthRepository> {
-  final UserMetaDataModel metaData;
+  final String nickname;
+  final XFile? profileImageData;
 
-  EditUserMetaDataUseCase(this.metaData);
+  EditUserMetaDataUseCase({required this.nickname, this.profileImageData});
 
   @override
   Future call(AuthRepository repository) async {
-    final res = await repository.updateMetaData(metaData.modelToDto());
+    final res = await repository.editProfile(
+        nickname: nickname, profileImageData: profileImageData);
     switch (res.status) {
       case ResponseStatus.success:
-        return const Result<void>.success(null);
+        return Result<UserMetaDataModel>.success(res.data!);
       default:
-        return Result<void>.failure(ErrorResponse.fromResponseWrapper(res));
+        return Result<UserMetaDataModel>.failure(
+            ErrorResponse.fromResponseWrapper(res));
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_app/presentation/view/auth/auth.screen.dart';
 import 'package:my_app/presentation/view/auth/sign_up.screen.dart';
 import 'package:my_app/presentation/view/main/main.screen.dart';
+import 'package:my_app/presentation/view/main/profile/edit_profile.screen.dart';
 import 'package:my_app/presentation/view/route/splash.screen.dart';
 
 import '../../../core/enums/route.enum.dart';
@@ -24,4 +25,8 @@ final GoRouter router = GoRouter(routes: [
       path: RoutePath.main.path,
       name: RoutePath.main.label,
       builder: (context, state) => const MainScreen()),
+  GoRoute(
+      path: RoutePath.editProfile.path,
+      name: RoutePath.editProfile.label,
+      builder: (context, state) => const EditProfileScreen()),
 ], initialLocation: RoutePath.splash.path);

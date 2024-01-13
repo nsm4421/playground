@@ -10,7 +10,7 @@ part 'user_metadata.dto.g.dart';
 class UserMetaDataDto with _$UserMetaDataDto {
   const factory UserMetaDataDto({
     @Default('') String nickname,
-    @Default(<String>[]) List<String> profileImages,
+    @Default('') String profileImage,
   }) = _UserMetaDataDto;
 
   factory UserMetaDataDto.fromJson(Map<String, dynamic> json) =>
@@ -20,5 +20,5 @@ class UserMetaDataDto with _$UserMetaDataDto {
 extension UserMetaDataDtoExt on UserMetaDataDto {
   UserMetaDataModel dtoToModel() => UserMetaDataModel(
       nickname: nickname.isEmpty ? null : nickname,
-      profileImages: profileImages);
+      profileImage: profileImage.isEmpty ? null : profileImage);
 }

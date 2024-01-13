@@ -8,15 +8,16 @@ part 'user_metadata.model.g.dart';
 
 @freezed
 class UserMetaDataModel with _$UserMetaDataModel {
-  const factory UserMetaDataModel(
-      {String? nickname,
-      @Default(<String>[]) List<String> profileImages}) = _UserMetaDataModel;
+  const factory UserMetaDataModel({
+    String? nickname,
+    String? profileImage,
+  }) = _UserMetaDataModel;
 
   factory UserMetaDataModel.fromJson(Map<String, dynamic> json) =>
       _$UserMetaDataModelFromJson(json);
 }
 
 extension UserMetaDataModelExt on UserMetaDataModel {
-  UserMetaDataDto modelToDto() =>
-      UserMetaDataDto(nickname: nickname ?? '', profileImages: profileImages);
+  UserMetaDataDto modelToDto() => UserMetaDataDto(
+      nickname: nickname ?? '', profileImage: profileImage ?? '');
 }

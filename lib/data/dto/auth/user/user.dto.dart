@@ -19,13 +19,14 @@ class UserDto with _$UserDto {
       _$UserDtoFromJson(json);
 }
 
-/// mapper
 extension UserDtoExt on UserDto {
   UserModel dtoToModel() =>
       UserModel(id: id, email: email, metaData: metaData.dtoToModel());
+}
 
-  UserDto userToDto(User user) => UserDto(
-      id: user.id,
-      email: user.email ?? '',
-      metaData: UserMetaDataDto.fromJson(user.userMetadata ?? {}));
+extension UserExt on User {
+  UserDto userToDto() => UserDto(
+      id: id,
+      email: email ?? '',
+      metaData: UserMetaDataDto.fromJson(userMetadata ?? {}));
 }
