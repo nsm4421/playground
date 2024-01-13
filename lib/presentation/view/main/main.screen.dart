@@ -36,7 +36,7 @@ class _Body extends StatelessWidget {
           case BottomNav.chat:
             return const ChatScreen();
           case BottomNav.profile:
-            return const Profile();
+            return const ProfileScreen();
         }
       });
 }

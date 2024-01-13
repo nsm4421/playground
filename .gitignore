@@ -3,6 +3,9 @@ pubspec.lock
 android/
 ios/
 web/
+linux/
+macos/
+windows/
 
 # assets
 assets/
