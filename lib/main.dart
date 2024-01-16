@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_app/core/config/dependency_injection.dart';
 import 'package:my_app/presentation/main_view.dart';

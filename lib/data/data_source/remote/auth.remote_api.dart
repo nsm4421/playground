@@ -1,4 +1,3 @@
-import 'package:my_app/data/dto/auth/user/user_metadata.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../base/auth.api.dart';
@@ -7,6 +6,13 @@ class RemoteAuthApi extends AuthApi {
   final GoTrueClient _auth;
 
   RemoteAuthApi(this._auth);
+
+  @override
+  User? get currentUser => _auth.currentUser;
+
+  @override
+  Stream<User?> get authStream =>
+      _auth.onAuthStateChange.map((event) => event.session?.user);
 
   @override
   Future<AuthResponse> signInWithEmailAndPassword(
@@ -22,13 +28,6 @@ class RemoteAuthApi extends AuthApi {
   Future<void> signOut() async => await _auth.signOut();
 
   @override
-  Stream<User?> getCurrentUserStream() =>
-      _auth.onAuthStateChange.map((event) => event.session?.user);
-
-  @override
-  User? getCurrentUer() => _auth.currentUser;
-
-  @override
-  Future<void> updateMetaData(UserMetaDataDto metaData) async =>
-      await _auth.updateUser(UserAttributes(data: metaData.toJson()));
+  Future<void> updateUserMetaData(Map<String, String> data) async =>
+      await _auth.updateUser(UserAttributes(data: data));
 }

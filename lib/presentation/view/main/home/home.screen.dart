@@ -4,19 +4,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/route.enum.dart';
 import '../../../../core/enums/status.enum.dart';
-import '../../../bloc/auth/user.bloc.dart';
-import '../../../bloc/auth/user.event.dart';
-import '../../../bloc/auth/user.state.dart';
+import '../../../bloc/auth/auth.bloc.dart';
+import '../../../bloc/auth/auth.event.dart';
+import '../../../bloc/auth/auth.state.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   _logout(BuildContext context) => () {
-        context.read<UserBloc>().add(SignOut());
+        context.read<AuthBloc>().add(SignOut());
       };
 
   @override
-  Widget build(BuildContext context) => BlocListener<UserBloc, UserState>(
+  Widget build(BuildContext context) => BlocListener<AuthBloc, AuthState>(
       listener: (_, state) {
         if (state.authStatus == AuthStatus.unAuthenticated) {
           debugPrint(state.toString());
@@ -37,6 +37,6 @@ class HomeScreen extends StatelessWidget {
                 icon: const Icon(Icons.logout_outlined)),
           ])
         ]),
-        body: Text("TODO"),
+        body: SizedBox(),
       ));
 }

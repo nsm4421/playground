@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/enums/colors.enum.dart';
 import 'package:my_app/core/enums/route.enum.dart';
-import 'package:my_app/presentation/bloc/auth/user.bloc.dart';
-import 'package:my_app/presentation/bloc/auth/user.event.dart';
+import 'package:my_app/presentation/bloc/auth/auth.bloc.dart';
+import 'package:my_app/presentation/bloc/auth/auth.event.dart';
 import 'package:my_app/presentation/component/text_button.widget.dart';
 import 'package:my_app/presentation/view/auth/auth_form.widget.dart';
 
@@ -38,16 +38,16 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       final isValid = _formKey.currentState!.validate();
       if (!isValid) return;
-      context.read<UserBloc>().add(SignInWithEmailAndPassword(
+      context.read<AuthBloc>().add(SignInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text));
     } catch (err) {
       debugPrint(err.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('error'),
           duration: Duration(seconds: 2), // Adjust the duration as needed
-        ),
-      );
+        ));
+      }
     }
   }
 

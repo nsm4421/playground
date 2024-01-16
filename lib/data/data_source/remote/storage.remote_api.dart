@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../core/enums/bucket_name.enum.dart';
 import '../base/storage.api.dart';
 
 class RemoteStorageApi extends StorageApi {
@@ -13,14 +12,14 @@ class RemoteStorageApi extends StorageApi {
   @override
   Future<String> uploadFile(
       {required File file,
-      required BucketName bucketName,
+      required String bucketName,
       required String dir,
       required String filename,
       bool upsert = false,
       String? contentType,
       int? retryAttempts = 1}) async {
     final path = '$dir/$filename';
-    final bucket = _storage.from(bucketName.name);
+    final bucket = _storage.from(bucketName);
 
     // upload file on storage
     await bucket.upload(path, file,

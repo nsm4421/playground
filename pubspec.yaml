@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # connect to database
+  # supabase
   supabase_flutter: ^2.1.0
 
   # routing
@@ -46,13 +46,17 @@ dependencies:
   freezed: ^2.4.5
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
-  # bloc
 
+  # image
+  image_picker: ^1.0.7
+  flutter_image_compress: ^2.1.0
+
+  # bloc
   flutter_bloc: ^8.0.1
   bloc_concurrency: ^0.2.2
   equatable: ^2.0.3
-  # The following adds the Cupertino Icons font to your application.
 
+  # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 

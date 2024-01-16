@@ -5,8 +5,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text("Chat"),
-    ),
-  );
+          appBar: AppBar(
+        title: Text("Chat"),
+      ));
 }

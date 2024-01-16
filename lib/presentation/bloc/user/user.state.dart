@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/core/enums/status.enum.dart';
-import 'package:my_app/core/response/error_response.dart';
 import 'package:my_app/domain/model/auth/user.model.dart';
 
+import '../../../core/enums/status.enum.dart';
+import '../../../core/response/error_response.dart';
+
 part 'user.state.freezed.dart';
+
+part 'user.state.g.dart';
 
 @freezed
 class UserState with _$UserState {
@@ -14,4 +17,7 @@ class UserState with _$UserState {
     UserModel? user,
     @Default(ErrorResponse()) error,
   }) = _UserState;
+
+  factory UserState.fromJson(Map<String, dynamic> json) =>
+      _$UserStateFromJson(json);
 }
