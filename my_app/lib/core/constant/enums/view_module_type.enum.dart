@@ -1,0 +1,1 @@
+enum ViewModuleType { story, none }
