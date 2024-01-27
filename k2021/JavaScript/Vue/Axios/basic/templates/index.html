@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예제</title>
+</head>
+<body>
+    <div id="app">
+        <form>
+            메세지
+            <input type="text" v-model="message"></input>
+        </form>
+        <button type="submit" v-on:click="logging" v-on:submit.prevent>로깅</button>
+        <button type="submit" v-on:click="sendGet" method="GET" v-on:submit.prevent>GET요청</button>
+        <button type="submit" v-on:click="sendPost" method="POST">
+           POST요청</button>
+    </div>
+
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- View -->
+    <script>
+        new Vue({
+            el : "#app",
+            data : {
+                message : ""
+            },
+            methods : {
+
+                // 콘솔에 로깅 찍기
+                logging(){
+                    console.log('확인');
+                   
+                },
+
+                // 현재 주소로 GET 요청 보내기
+                sendGet (){
+                    axios.get('/', {timeout : 3000 })
+                    .then(
+                        res=>{
+                            console.log('상태코드 ->  ', res.status);
+                            console.log('헤더 ->  ', res.header);
+                            console.log('데이터 ->  ', res.data);
+                        }
+                    )
+                },
+
+                // test라는 주소로 POST 요청 보내기
+                sendPost (){                
+                    axios('/test', {
+                        method : 'POST',
+                        params : {
+                            message : this.message
+                        }
+                    })
+                    .then((res) => {
+                        alert(res.data)
+                    })
+                }
+            }
+        }
+        
+        )
+        
+    </script>
+
+</body>
+</html>

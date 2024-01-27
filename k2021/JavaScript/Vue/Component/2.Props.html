@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>V-bind</title>
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <child-component v-bind:prop데이터="메세지">
+        </child-component>
+    </div>
+
+    <script>
+        var 템플릿 = "<h1> {{prop데이터}} </h1>"
+
+        // 자식 컴퍼넌트
+        Vue.component('child-component', {
+            props : ['prop데이터'],
+            template : 템플릿
+        })        
+        
+        // 부모 컴퍼넌트
+        new Vue({
+            el : "#app",
+            data : {
+                메세지 : '부모 컴퍼넌트로 부터 온 메세지'
+            }
+        })
+
+    </script>
+
+
+</body>
+</html>

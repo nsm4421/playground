@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반복문</title>
+</head>
+<body>
+    <h1>반복문 돌리기</h1>
+    <h3>방법 1</h3>
+    {% for item in items %}
+    <li>
+        {{item}}
+    </li>   
+    {% endfor %}
+
+
+    <h2>방법 2</h2>
+    {% for idx in range(items | length) %}
+    <li>
+        {{idx+1}}번. {{items[idx]}}
+    </li>   
+    {% endfor %}
+</body>
+</html>

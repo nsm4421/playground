@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!-- 글쓰기 버튼 -->
+<form action="/myApp/main/write_article" method="GET" style="margin-bottom: 30px;">
+    <input type='submit' class="btn btn-outline-info" value="게시글 쓰기">
+    </input>
+</form>
+
+
+<legned class="border-bottom mb-4"  style="margin-bottom: 30px;">게시물</legned>
+<table>
+    <tbody>
+        <tr>
+            <!-- 헤더 -->
+            <th width="20%">번호</th>
+            <th width="20%">제목</th>
+            <th width="20%">글쓴이</th>           
+            <th width="30%">버튼</th>    
+            <th width="30%">비고</th>   
+        </tr>
+        <tr>
+            {% for article in articles%}
+                <!-- 번호 -->
+                <td width="20%">{{article[0]}}</td>
+                <!-- 제목 -->
+                <td width="20%">{{article[2]}}</td>
+                <!-- 글쓴이 -->
+                <td width="20%">{{article[1]}}</td>           
+                <!-- 버튼 -->       
+                <td>
+                <form action="/myApp/main/{{article[0]}}" method="GET">
+                    <input type='submit' class="btn btn-outline-info" value="게시글보기">
+                    </input>
+                </form>
+                </td>
+                <td>
+                    <!-- 로그인 & 내가 쓴글이면 -->
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.id == article[1] %}
+                            <!-- 내가 쓴 글이라고 표시 -->
+                            내가 쓴 글
+                        {% endif %}
+                    {% endif %}
+                    </td>
+            {% endfor %}
+        </tr>
+    </tbody>
+
+    
+</table>
+{% endblock content %}

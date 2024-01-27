@@ -1,0 +1,122 @@
+Function lapse_shock(in_해지율 As Range, in_납기 As Long)
+
+
+    '-------- 변수선언 ---------
+    
+    Dim projection As Long                          ' Projection 기간
+    
+    ' lapse : 해지율 | persistency : 유지율 | cummulative persistency : 누적유지율
+    
+    ' 유보효과, 상승효과 반영전
+    Dim lapse_반영전(1 To 100) As Double
+    Dim per_반영전(1 To 100) As Double
+    Dim cum_반영전(1 To 100) As Double
+    
+    ' 유보효과 반영후 / 상승효과 반영전
+    Dim lapse_유보효과(1 To 100) As Double
+    Dim per_유보효과(1 To 100) As Double
+    Dim cum_유보효과(1 To 100) As Double
+    
+    ' 유보효과, 상승효과 반영후
+    Dim lapse_상승효과() As Double
+       
+    
+    '-------- 유보효과/상승효과 반영전 ---------
+
+    
+    For Each w In in_해지율
+    
+        projection = projection + 1
+    
+        lapse_반영전(projection) = w
+    
+        
+        
+    Next w
+    
+    ReDim lapse_상승효과(1 To projection)
+    
+    For tt = 1 To projection
+    
+        per_반영전(tt) = 1 - lapse_반영전(tt)
+    
+    Next tt
+    
+    
+    cum_반영전(1) = per_반영전(1)
+    
+    For tt = 2 To projection
+    
+        cum_반영전(tt) = per_반영전(tt) * cum_반영전(tt - 1)
+    
+    Next tt
+    
+    
+    '-------- 유보효과 반영 ---------
+    
+    ' 유보율 : 완납 직전 3개년에 대해 50%, 75%, 100% 가정
+    
+    
+    For tt = 1 To projection
+    
+        Select Case tt
+        
+            Case in_납기 - 2
+            
+                lapse_유보효과(tt) = lapse_반영전(tt) * (1 - 0.5)       ' 유보율 50%
+            
+            Case in_납기 - 1
+            
+                lapse_유보효과(tt) = lapse_반영전(tt) * (1 - 0.75)      ' 유보율 75%
+            
+            Case in_납기
+            
+                lapse_유보효과(tt) = lapse_반영전(tt) * (1 - 1)         ' 유보율 100%
+            
+            Case Else
+            
+                lapse_유보효과(tt) = lapse_반영전(tt)
+        
+        End Select
+        
+    
+    Next tt
+    
+    For tt = 1 To projection
+    
+        per_유보효과(tt) = 1 - lapse_유보효과(tt)
+    
+    Next tt
+    
+    cum_유보효과(1) = per_유보효과(1)
+    
+    For tt = 2 To projection
+    
+        cum_유보효과(tt) = per_유보효과(tt) * cum_유보효과(tt - 1)
+    
+    Next tt
+    
+    
+    '-------- 상승효과 반영---------
+    
+    For tt = 1 To projection
+    
+    
+        If tt = in_납기 + 1 Then
+        
+            lapse_상승효과(tt) = 1 - cum_반영전(tt) / cum_유보효과(tt - 1)
+            
+        Else
+        
+            lapse_상승효과(tt) = lapse_유보효과(tt)
+        
+        End If
+    
+    Next tt
+    
+    '-------- Result---------
+
+    lapse_shock = lapse_상승효과
+    
+    
+End Function

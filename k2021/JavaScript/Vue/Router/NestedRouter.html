@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nested라우터</title>
+
+</head>
+<body>
+    <div id="app">
+        <h1>Nested 라우터 예제</h1>
+        <!-- 상위 컴퍼넌트 -->
+        <router-view></router-view>
+    </div>
+
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js">
+    </script>
+    <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.js">
+    </script>
+
+    <!-- Script -->
+    <script>
+        // 상위 컴퍼넌트
+        var User = {
+            template : '<div><h1>상위컴퍼넌트</h1><router-view></router-view></div>'
+        };
+        // 하위 컴퍼넌트
+        var UserPost = {
+            template : '<h3> User 게시글 </h3>', 
+        };
+        var UserProfile = {
+            template : '<h3> User 프로필 </h3>'
+        };
+        
+
+        // 라우트
+        var routes = [{
+            path : '/user',
+            // 상위 컴퍼넌트
+            component : User,
+            // 하위 컴퍼넌트
+            children : [
+                {
+                    path : 'posts',
+                    component : UserPost
+                },
+                {
+                    path : 'profile',
+                    component : UserProfile
+                },
+            ]
+        }];
+
+        // 라우터
+        var router = new VueRouter({
+            routes
+        });
+
+        var app = new Vue({
+            router
+        }).$mount('#app');
+    </script>
+    
+</body>
+</html>

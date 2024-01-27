@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>조건문</title>
+</head>
+<body>
+    <h1>조건문</h1>
+    
+    <h4>
+        점수 : {{score}}
+    </h4>
+    
+
+    {% if score>=90 %}
+    <h3>등급 : A</h3>
+    {% elif score>=80 %}
+    <h3>등급 : B</h3>
+    {% elif score>=70 %}
+    <h3>등급 : C</h3>
+    {% else %}
+    <h3>등급 : D</h3>
+    {% endif %}
+
+</body>
+</html>

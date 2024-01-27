@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+<!-- 내가 쓴 글이면 -->
+{% if current_user.is_authenticated %}
+    {% if current_user.id == article[1] %}
+        <!-- 삭제하기 버튼 보여주기 -->
+        <form action="/myApp/main/{{article[0]}}/delete" method="POST">
+            <input type='submit' class="btn btn-outline-info" value="글삭제하기">
+            </input>
+        </form>
+    {% endif %}
+{% endif %}
+
+<!-- 게시글 -->
+<table>
+    <h1> 제목 : {{article[2]}}</h1>   
+    <h2 style="margin-top:30px;"> 내용 : </h2>
+    <h3>{{article[3]}}</h3>
+</table>
+{% endblock content %}
