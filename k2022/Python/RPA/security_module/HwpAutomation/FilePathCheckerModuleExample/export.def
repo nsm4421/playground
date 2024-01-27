@@ -1,4 +1,0 @@
-LIBRARY	FilePathCheckerModuleExample
-
-EXPORTS
-	IsAccessiblePath
