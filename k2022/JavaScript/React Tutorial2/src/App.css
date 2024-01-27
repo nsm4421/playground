@@ -1,0 +1,78 @@
+:root {
+  /* padding */
+  --side-padding:12px;
+  
+  --avatar-size:36px;
+  
+  /* font size */
+  --font-large:18px;
+  --font-medium:14px;
+  --font-small:14px;
+  --font-micor:10px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style-type:none;
+  list-style-type: none;
+}
+
+a{
+  text-decoration: none;
+  color:white;
+}
+
+
+
+/* Header */
+.Header {
+  background-color: rgb(98, 95, 95);
+  color:aliceblue;
+  padding: 10px;
+  margin: 5px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: left;
+}
+
+/* 네비게이션바 */
+.App .Navbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  display: inline-block;
+  align-items: center;
+}
+
+/* 카드 */
+.like-icon-box, .dislike-icon-box, .report-icon-box {
+  margin-left: 30px;
+  text-align: center;
+}
+
+.Introduction {
+  height: 200px;
+  background: rgb(249, 242, 242);
+  border-radius: 20%;
+  text-align: center;
+  padding: auto;
+  margin: 10px;
+}
+
+.Mention-Upload{
+  display: flex;
+  vertical-align:middle;
+}
+.Mention-Upload-Button{
+  height: 100%;
+  display: flex;
+  margin-left:50px;
+  vertical-align:middle;
+}
+
+/* 작성시간 */
+.TimeWritted {
+  font-size: 15px;
+}

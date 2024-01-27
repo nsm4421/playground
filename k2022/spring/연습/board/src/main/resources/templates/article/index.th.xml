@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<thlogic xmlns:th="http://www.thymeleaf.org">
+    <!--Header&Footer-->
+    <attr sel="#header" th:replace="header :: #header"/>
+    <attr sel="#footer" th:replace="footer :: #footer"/>
+
+    <!--Search Bar-->
+    <attr sel="#search-form">
+        <attr sel="#keyword" th:value="${param.keyword}"/>
+        <attr sel="#search-type" th:remove="all-but-first">
+            <attr sel="option[0]" th:each="searchType:${searchTypes}"
+                  th:value="${searchType.name}"
+                  th:text="${searchType.description}"
+                  th:selected="${param.searchType != null && (param.searchType.toString == searchType.name)}"/>
+        </attr>
+    </attr>
+
+    <!--Article Table-->
+    <attr sel="#article-table">
+        <!--Table Header-->
+        <attr sel="#table-header" th:object="${articles}">
+            <attr sel=".title/a" th:text="Title"
+                  th:href="@{/articles(page=${articles.number},
+                  sort='title' + (*{sort.getOrderFor('title')} != null ? (*{sort.getOrderFor('title').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                  searchType=${param.searchType},
+                  searchValue=${param.searchValue})}"/>
+            <attr sel=".hashtags/a" th:text="Hashtag"
+                  th:href="@{/articles(page=${articles.number},
+                  sort='hashtags' + (*{sort.getOrderFor('hashtags')} != null ? (*{sort.getOrderFor('hashtags').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                  searchType=${param.searchType},
+                  searchValue=${param.searchValue})}"/>
+            <attr sel=".author/a" th:text="Author"
+                  th:href="@{/articles(page=${articles.number},
+                  sort='createdBy' + (*{sort.getOrderFor('createdBy')} != null ? (*{sort.getOrderFor('createdBy').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                  searchType=${param.searchType},
+                  searchValue=${param.searchValue})}"/>
+            <attr sel=".created-at/a" th:text="'Written At'"
+                  th:href="@{/articles(page=${articles.number},
+                  sort='createdAt' + (*{sort.getOrderFor('createdAt')} != null ? (*{sort.getOrderFor('createdAt').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                  searchType=${param.searchType},
+                  searchValue=${param.searchValue})}"/>
+        </attr>
+        <!--Table Body-->
+        <attr sel="tbody" th:remove="all-but-first">
+            <attr sel="tr[0]" th:each="article : ${articles}">
+                <attr sel="td.title/a" th:text="${article.title}" th:href="@{'/articles/'+${article.id}}"/>
+                <attr sel="td.hashtags" th:text="${article.hashtags}"/>
+                <attr sel="td.author" th:text="${article.author}"/>
+                <attr sel="td.created-at" th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yy년 MM월 dd일 hh시 mm분')}"/>
+            </attr>
+        </attr>
+    </attr>
+
+    <!--Pagination-->
+    <attr sel="#pagination">
+        <attr sel="li[0]/a"
+              th:text="'previous'"
+              th:href="@{/articles(page=${articles.number - 1})}"
+              th:class="'page-link' + (${articles.number} <= 0 ? ' disabled' : '')"
+        />
+        <attr sel="li[1]" th:class="page-item" th:each="page : ${pagination}">
+            <attr sel="a"
+                  th:text="${page + 1}"
+                  th:href="@{/articles(page=${page})}"
+                  th:class="'page-link' + (${page} == ${articles.number} ? ' disabled' : '')"
+            />
+        </attr>
+        <attr sel="li[2]/a"
+              th:text="'next'"
+              th:href="@{/articles(page=${articles.number + 1})}"
+              th:class="'page-link' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : '')"
+        />
+    </attr>
+</thlogic>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<thlogic xmlns:th="http://www.thymeleaf.org">
+    <attr sel="#header" th:replace="header/index :: #header"/>
+    <attr sel="#footer" th:replace="footer/index :: #footer"/>
+    <attr sel="#add__form" th:action="@{/feed/add}" th:method="post"/>
+</thlogic>

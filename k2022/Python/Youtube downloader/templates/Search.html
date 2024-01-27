@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영상 조회</title>
+</head>
+<body>
+
+    <h1>영상 조회</h1>
+
+    <h4>영상 링크 : {{clip_link}}</h4>
+    <h4>영상 제목 : {{title}}</h4>
+
+    <img src={{thumbnail_link}}></img>
+
+    <form action='/download' method="post">
+        <button type="submit"> 다운로드 이쿠 </button>
+    </form>
+    
+</body>
+</html>

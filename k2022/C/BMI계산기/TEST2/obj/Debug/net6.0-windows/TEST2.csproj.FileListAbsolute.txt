@@ -1,0 +1,17 @@
+C:\Users\N\source\repos\TEST2\TEST2\bin\Debug\net6.0-windows\TEST2.exe
+C:\Users\N\source\repos\TEST2\TEST2\bin\Debug\net6.0-windows\TEST2.deps.json
+C:\Users\N\source\repos\TEST2\TEST2\bin\Debug\net6.0-windows\TEST2.runtimeconfig.json
+C:\Users\N\source\repos\TEST2\TEST2\bin\Debug\net6.0-windows\TEST2.dll
+C:\Users\N\source\repos\TEST2\TEST2\bin\Debug\net6.0-windows\ref\TEST2.dll
+C:\Users\N\source\repos\TEST2\TEST2\bin\Debug\net6.0-windows\TEST2.pdb
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.csproj.AssemblyReference.cache
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.Form1.resources
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.csproj.GenerateResource.cache
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.AssemblyInfoInputs.cache
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.AssemblyInfo.cs
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.csproj.CoreCompileInputs.cache
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.dll
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\ref\TEST2.dll
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.pdb
+C:\Users\N\source\repos\TEST2\TEST2\obj\Debug\net6.0-windows\TEST2.genruntimeconfig.cache
