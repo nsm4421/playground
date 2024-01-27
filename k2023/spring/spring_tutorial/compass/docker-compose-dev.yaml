@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  compass-database:
+    container_name: compass-database
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: nsm4421/compass-database
+    environment:
+      - MARIADB_DATABASE=compass
+      - MARIADB_ROOT_PASSWORD=1221
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+  compass-redis:
+    container_name: compass-redis
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: nsm4421/compass-redis
+    ports:
+      - "6379:6379"

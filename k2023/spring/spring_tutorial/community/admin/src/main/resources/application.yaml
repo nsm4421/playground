@@ -1,0 +1,30 @@
+logging:
+  level:
+    com.karma.admin: debug
+    org.springframework.web.servlet: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+# community server use port 8080, so add setting for use another port
+server:port: 8081
+
+spring:
+  devtools:
+    livereload:
+      port: 35730
+  datasource:
+    url: jdbc:mysql://localhost:3306/community
+    username: root
+    password: 1221
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: true
+    defer-datasource-initialization: true
+    hibernate.ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+  sql.init.mode: always
+  data.rest:
+    base-path: /api
+    detection-strategy: annotated

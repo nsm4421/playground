@@ -1,0 +1,5 @@
+### 닉네임
+GET http://localhost:8080/api/v1/user/nickname
+Content-Type: application/json
+Accept-Encoding: UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Iu2FjOyKpO2KuO2VmOq4sCIsImlhdCI6MTY3Mzc3MjQzNCwiZXhwIjoxNjc5ODIwNDM0fQ.PlHU-rCsQJZVOb7VBkPREwafHVn6Llvcks_Luqne08c

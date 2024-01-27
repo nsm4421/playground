@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_DATABASE=LOCAL_DB
+      - MYSQL_USER=LOCAL_USER
+      - MYSQL_PASSWORD=LOCAL_PASSWORD
+      - MYSQL_ROOT_PASSWORD=LOCAL_PASSWORD
+      - TZ=ASIA/SEOUL
+    ports:
+      - "3306:3306"
+    volumes:
+      - /db/conf.d:/etc/mysql/conf.d
+      - /db/initdb.d:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+    ports:
+      - "22181:2181"
+
+  # create topic : docker-compose exec kafka kafka-topics --create --topic my-topic --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1
+  # exec producer : docker-compose exec kafka bash
+  #                 kafka-console-producer --topic my-topic --broker-list
+  # exec consumer :  docker-compose exec kafka bash
+  #                  kafka-console-consumer --topic my-topic --bootstrap-server kafka:9092
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
