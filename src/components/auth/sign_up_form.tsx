@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChangeEvent, useState } from "react"
 import { useRouter } from "next/router";
 import axios from "axios";
-import ApiRoute from "@/constant/api_route";
+import ApiRoute from "@/util/constant/api_route";
 
 
 interface SignUpFormState {
