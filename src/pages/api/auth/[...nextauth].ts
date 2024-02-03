@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
-import { PrismaClient } from "@prisma/client"
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import GoogleProvider from "next-auth/providers/google"
-
-const prisma = new PrismaClient()
+import NaverProvider from "next-auth/providers/naver"
+import KakaoProvider from "next-auth/providers/kakao"
+import prisma from "../../../../prisma/prisma_client";
 
 export default NextAuth({
     adapter: PrismaAdapter(prisma),
@@ -11,6 +11,17 @@ export default NextAuth({
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || "",
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || ""
-        })
-    ]
+        }),
+        NaverProvider({
+            clientId: process.env.NAVER_CLIENT_ID || "",
+            clientSecret: process.env.NAVER_CLIENT_SECRET || ""
+        }),
+        KakaoProvider({
+            clientId: process.env.KAKAO_CLIENT_ID || "",
+            clientSecret: process.env.KAKAO_CLIENT_SECRET || ""
+        }),
+    ],
+    pages: {
+        signIn: "/auth"
+    }
 })
