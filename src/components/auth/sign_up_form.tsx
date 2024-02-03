@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { ChangeEvent, useState } from "react"
-import { UserCredential } from "firebase/auth";
 import { useRouter } from "next/router";
+import axios from "axios";
+import ApiRoute from "@/constant/api_route";
 
 
 interface SignUpFormState {
@@ -15,19 +16,16 @@ interface SignUpFormState {
     passwordConfirmErrorMessage: string;
     isPasswordVisible: boolean;
     isPasswordConfirmVisible: boolean;
-    errorMessage:string;
+    errorMessage: string;
 }
 
-interface SignUpFormPorps {
-    signUp: (email: string, password: string) => Promise<UserCredential>
-}
-
-
-export default function SignUpForm(props: SignUpFormPorps) {
+export default function SignUpForm() {
 
     const MAX_LENGHTH = 20
-    
+
     const router = useRouter()
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [formState, setFormState] = useState<SignUpFormState>({
         email: "",
@@ -38,9 +36,8 @@ export default function SignUpForm(props: SignUpFormPorps) {
         passwordConfirmErrorMessage: "",
         isPasswordVisible: false,
         isPasswordConfirmVisible: false,
-        errorMessage:""
+        errorMessage: ""
     })
-
 
     const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value
@@ -78,19 +75,25 @@ export default function SignUpForm(props: SignUpFormPorps) {
     }
 
     const onSubmit = async () => {
+        setIsLoading(true)
         try {
-        // TODO : validate email and password
-        const credential = await props.onSumbit(formState.email, formState.password)
+            // TODO : validate email and password
+
+            await axios.post(ApiRoute.signUp, {
+                email: formState.email,
+                password: formState.password
+            }).then(console.log)
 
 
-        // TODO : save user info in firestore
+            // TODO : save user info in firestore
+            router.push("/auth/sign-in")
 
-        router.push("/auth/sign-in")
-        
 
-        } catch(err){
+        } catch (err) {
             console.debug(err)
-            setFormState({...formState, errorMessage:"Error occurs"})
+            setFormState({ ...formState, errorMessage: "Error occurs" })
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -114,7 +117,7 @@ export default function SignUpForm(props: SignUpFormPorps) {
         </div>
 
         <div>
-            <button onClick={onSubmit}>Sign UP</button>
+            <button onClick={onSubmit} disabled={isLoading}>Sign UP</button>
         </div>
 
         <div>

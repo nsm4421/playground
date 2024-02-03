@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { ChangeEvent, useState } from "react"
-import { UserCredential } from "firebase/auth";
+import axios from "axios";
+import ApiRoute from "@/constant/api_route";
 
 interface SignInFormState {
     email: string;
@@ -13,13 +14,11 @@ interface SignInFormState {
     errorMessage: string;
 }
 
-interface SignInProps {
-    signIn: (email: string, password: string) => Promise<UserCredential>
-}
-
-export default function SignInForm(props: SignInProps) {
+export default function SignInForm() {
 
     const MAX_LENGHTH = 20
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [formState, setFormState] = useState<SignInFormState>({
         email: "",
@@ -53,12 +52,16 @@ export default function SignInForm(props: SignInProps) {
     }
 
     const onSubmit = async () => {
+        setIsLoading(true)
         try {
-            const credential = await props.signIn(formState.email, formState.password)
-            console.log(credential)
+            await axios.post(ApiRoute.signIn, {
+                email: formState.email, password: formState.password
+            }).then(console.log)
         } catch (err) {
             console.debug(err)
             setFormState({ ...formState, errorMessage: "Error occurs" })
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -76,7 +79,7 @@ export default function SignInForm(props: SignInProps) {
         </div>
 
         <div>
-            <button onClick={onSubmit}>LOGIN</button>
+            <button onClick={onSubmit} disabled={isLoading}>LOGIN</button>
         </div>
 
         <div>
