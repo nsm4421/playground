@@ -1,4 +1,5 @@
 .env
+prisma/migrations
 
 # dependencies
 /node_modules
