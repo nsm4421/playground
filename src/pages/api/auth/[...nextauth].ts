@@ -1,11 +1,16 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import GoogleProvider from "next-auth/providers/google"
 import NaverProvider from "next-auth/providers/naver"
 import KakaoProvider from "next-auth/providers/kakao"
 import prisma from "../../../../prisma/prisma_client";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+    session: {
+        strategy: "jwt" as const,
+        maxAge: 60 * 60 * 24,
+        updateAge: 60 * 60
+    },
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
@@ -23,5 +28,22 @@ export default NextAuth({
     ],
     pages: {
         signIn: "/auth"
+    },
+    callbacks: {
+        session: async ({ session, token }) => ({
+            ...session,
+            user: {
+                ...session.user,
+                id: token.sub
+            }
+        }),
+        jwt: async ({ user, token }) =>{
+            if (user){
+                token.sub = user.id
+            }
+            return token
+        }
     }
-})
+}
+
+export default NextAuth(authOptions)
