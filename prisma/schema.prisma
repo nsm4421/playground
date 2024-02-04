@@ -60,9 +60,10 @@ model Post {
   hashtags String[]
   place    Place?   @relation(fields: [placeId], references: [id])
   placeId  String?
-  author   User     @relation(fields: [authorId], references: [id])
+  author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
   createdAt DateTime @default(now())
+  @@index([hashtags, placeId])
 }
 
 model Place {

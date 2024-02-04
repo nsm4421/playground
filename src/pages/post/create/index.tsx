@@ -1,5 +1,8 @@
+import ApiRoute from "@/util/constant/api_route";
 import { faHashtag, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react"
 
 interface PostState {
@@ -8,7 +11,7 @@ interface PostState {
     hashtags: string[];
     currentHashtag: string;
     currentHashtagErrorMessage: string;
-    isLoading: false;
+    isLoading: boolean;
 }
 
 export default function CreatePostPage() {
@@ -26,6 +29,7 @@ export default function CreatePostPage() {
         isLoading: false
     })
 
+    const router = useRouter()
 
     const handleContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const text = e.target.value
@@ -71,7 +75,28 @@ export default function CreatePostPage() {
     }
 
     const handleUpload = async () => {
+        if (postState.content === "") {
+            setPostState({ ...postState, contentErrorMessage: "본문을 입력해주세요" })
+            return
+        }
+        setPostState({ ...postState, isLoading: true })
+        try {
+            const response = await axios({
+                ...ApiRoute.createPost,
+                data: {
+                    content: postState.content,
+                    hashtags: postState.hashtags
+                }
+            })
+            console.log(response)
+            // 성공 시 root페이지로 이동
+            router.push("/")
+            window.alert("포스팅 업로드에 성공하였습니다")
+        } catch {
 
+        } finally {
+            setPostState({ ...postState, isLoading: false })
+        }
     }
 
     return <div className="h-full w-full">

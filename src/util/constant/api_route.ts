@@ -1,6 +1,8 @@
 const ApiRoute = {
-    signIn:"/api/auth/sign-in",
-    signUp:"/api/auth/sign-up"
+    createPost: {
+        method:"post",
+        url : "/api/post"
+    }
 }
 
 export default ApiRoute
