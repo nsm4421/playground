@@ -81,14 +81,13 @@ export default function CreatePostPage() {
         }
         setPostState({ ...postState, isLoading: true })
         try {
-            const response = await axios({
+            await axios({
                 ...ApiRoute.createPost,
                 data: {
                     content: postState.content,
                     hashtags: postState.hashtags
                 }
             })
-            console.log(response)
             // 성공 시 root페이지로 이동
             router.push("/")
             window.alert("포스팅 업로드에 성공하였습니다")

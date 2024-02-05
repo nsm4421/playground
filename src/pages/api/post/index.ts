@@ -1,14 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import POST from './_post';
+import GET from './_get';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const { method } = req;
     switch (method) {
 
-        // TODO : 포스팅 삭제
+        // 포스팅 조회
         case 'GET':
-            res.status(200).json({ message: 'TODO : 포스팅 단건조회 및 검색' });
+            await GET(req, res)
             break;
 
         // 포스팅 생성
