@@ -23,6 +23,13 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse<Resp
             }
         })
 
+        const posts = fetched.map((item)=>{
+            return {
+                ...item,
+                images : item.images.map((image)=>``)
+            }
+        })
+        
         res.status(200).json({ posts: fetched, message: "success to get posts" })
     } catch (err) {
         res.status(500).json({ posts: [], message: "internal server error" })

@@ -21,6 +21,7 @@ export default function PostPage() {
     if (errorMessage) {
         return <div className="h-screen w-screen flex justify-center items-center">
             <h1 className="text-5xl text-center font-bold text-rose-800">오류가 발생하였습니다 ㅠㅠ</h1>
+            <br/>
             <h1 className="text-3xl text-center font-bold text-rose-600">{errorMessage}</h1>
         </div>
     }

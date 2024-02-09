@@ -1,6 +1,7 @@
 import PostModel from "@/data/model/post_model"
 import { faComment, faEllipsis, faEllipsisVertical, faHashtag, faHeart, faMessage, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Carousel from "./carousel"
 
 interface PostItemProps {
     post: PostModel
@@ -14,7 +15,7 @@ export default function PostItem({ post }: PostItemProps) {
     const handleCommentButton = async () => { }
     const handleDirectMessageButton = async () => { }
 
-    return <li className="rounded-lg bg-slate-200 px-2 py-1">
+    return <li className="rounded-lg bg-slate-200 px-2 py-1 mt-4 mx-1">
         {/* 유저 프로필 */}
         <div className="text-xl font-semibold text-slate-600 flex justify-between">
             <div className="inline">
@@ -27,10 +28,6 @@ export default function PostItem({ post }: PostItemProps) {
             </button>
         </div>
 
-        {/* 본문 */}
-        <div className="text-2xl mt-3">{post.content}</div>
-
-
         {/* 해시태그 */}
         <div className="mt-3">
             <ul className="mt-3 flex-wrap flex">
@@ -38,13 +35,10 @@ export default function PostItem({ post }: PostItemProps) {
                     post.hashtags.map((hashtag, index) => <li className="text-xl font-bold inline mt-2 mr-3 p-1 rounded-md text-sky-600 border-sky-300 border-2" key={index}>
                         <FontAwesomeIcon icon={faHashtag} className="text-sm mr-2" />
                         <label className="mr-2">{hashtag}</label>
-                        <FontAwesomeIcon icon={faXmark} className="text-sm cursor-pointer" />
                     </li>)
                 }
             </ul>
         </div>
-
-        {/* TODO : Carousel */}
 
         {/* TODO : 좋아요, 댓글, DM 버튼 */}
         <div>

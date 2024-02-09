@@ -12,14 +12,15 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
             return
         }
 
-        // 포스팅 저장
-        const { content, hashtags } = req.body
+        // 포스팅 데이터 저장
+        const { content, hashtags, images } = req.body
         await prisma.post.create({
             data: {
-                content, hashtags,
+                content, hashtags, images: images,
                 authorId: session.user.id
             }
         })
+
         res.status(200).json({ message: "success to save post" })
     } catch (err) {
         // 에러처리

@@ -58,6 +58,7 @@ model Post {
   id       String   @id @default(cuid())
   content  String
   hashtags String[]
+  images String[]
   place    Place?   @relation(fields: [placeId], references: [id])
   placeId  String?
   author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
