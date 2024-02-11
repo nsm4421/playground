@@ -16,13 +16,12 @@ interface AddressPickerProps {
 export default function AddressPicker({ label, address, setAddress }: AddressPickerProps) {
 
     const [candidates, setCandidates] = useState<RoadAdress[]>([])
-    const { isLoading, currentLocation } = useGeoLocation()
+    const { isLoading, currentLocation, reFetch } = useGeoLocation()
 
     const getRoadAddress = async () => {
         setAddress(null)
         if (!currentLocation) {
-            setCandidates([])
-            console.warn("현재 위치 정보가 없음")
+            reFetch()
             return
         }
         await axios({
@@ -33,7 +32,9 @@ export default function AddressPicker({ label, address, setAddress }: AddressPic
             }
         }).then(res => res.data).then(data => {
             console.log(data.message)
-            setCandidates(data.addresses)
+            setCandidates(data.addresses.map((adr: RoadAdress) => ({
+                ...adr, ...currentLocation
+            })))
         })
     }
 
@@ -43,23 +44,13 @@ export default function AddressPicker({ label, address, setAddress }: AddressPic
         (async () => await getRoadAddress())()
     }, [currentLocation])
 
-    if (isLoading) {
-        return <div className="w-full justify-center flex">
-            <span>Loadings...</span>
-            <br />
-            <span>위치 정보를 가져오는 중입니다</span>
-        </div>
-    }
-
     return <div>
+
         <div className="justify-start flex items-center">
             <h3 className="text-xl font-semibold bg-slate-700 rounded-lg px-2 py-1 text-white inline mr-5">{label}</h3>
             {
-                address
-                    ? <span className="text-slate-800 hover:text-sky-700 text-xl font-bold" onClick={getRoadAddress}>{address.address_name}</span>
-                    : <span className="text-slate-500">현재 주소를 설정해주세요</span>
+                address && <span className="text-slate-800 hover:text-sky-700 text-xl font-bold cursor-pointer" onClick={getRoadAddress}>{address.address_name}</span>
             }
-
         </div>
 
         <ul className="my-3">

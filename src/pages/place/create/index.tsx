@@ -3,14 +3,14 @@ import ImageForm from "@/components/form/image_form";
 import Input from "@/components/form/input";
 import Textarea from "@/components/form/textarea";
 import AddressPicker from "@/components/map/AddressPicker";
+import { RoadAdress } from "@/data/model/location_model";
 import ApiRoute from "@/util/constant/api_route";
-import { Loc, RoadAdress } from "@/data/model/location_model";
-import useGeoLocation from "@/util/hook/useGeoLocation";
+import UseFile from "@/util/hook/useFile";
 import { faLocation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const MAX_NAME_LENGTH = 30
 const MAX_CONTENT_LENGTH = 300
@@ -28,12 +28,34 @@ export default function CreatePlacePage() {
     const [isLoding, setIsLoading] = useState<boolean>(false)
     const [content, setContent] = useState<string>('')
     const [hashtags, setHashtags] = useState<string[]>([])
-    const [images, setImages] = useState<File[]>([])
-
+    const { files: imageFiles, setFiles: setImageFiles, urls: images, upload: uplloadImages } = UseFile({
+        bucket: "images",
+        pathPrefix: "place"
+    })
 
     const handleUpload = async () => {
+        setIsLoading(true)
         try {
-            setIsLoading(true)
+            // 필드값 검사
+            if (name.trim() === '' || content.trim() === "") {
+                alert('장소명이나 본문을 확인해주세요')
+                return
+            }
+
+            if (!address){
+                alert('장소를 입력해주세요')
+                return 
+            }
+
+            // 이미지 업로드
+            await uplloadImages()
+
+            // 데이터 자장
+            await axios({
+                ...ApiRoute.createPlace, data: {
+                    content, hashtags, images, name, address
+                }
+            })
 
             // 성공 시, 루트 페이지로 이동
             router.push("/")
@@ -61,7 +83,7 @@ export default function CreatePlacePage() {
 
             {/* TODO : 지도 */}
             <div className="mt-5">
-                <AddressPicker label={"Address"} address={address} setAddress={setAddress}/>
+                <AddressPicker label={"Address"} address={address} setAddress={setAddress} />
             </div>
 
             {/* 이름 */}
@@ -80,8 +102,8 @@ export default function CreatePlacePage() {
             </div>
 
             {/* 이미지 */}
-            <div>
-                <ImageForm inputId={INPUT_ID} maxCount={MAX_IMAGE_COUNT} images={images} setImages={setImages} />
+            <div className="mt-5">
+                <ImageForm inputId={INPUT_ID} maxCount={MAX_IMAGE_COUNT} images={imageFiles} setImages={setImageFiles} />
             </div>
 
         </section>

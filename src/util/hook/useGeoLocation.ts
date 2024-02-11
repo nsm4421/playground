@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import Loc from "../../data/model/location_model";
-import { DateTime } from "next-auth/providers/kakao";
+import { useEffect, useState } from "react";
+import { Loc } from "../../data/model/location_model";
 
 // 강남역 위치
 const DEFAULT_LAT = 37.497624203
@@ -9,9 +8,7 @@ const DEFAULT_LNG = 127.03088379
 export default function useGeoLocation() {
 
     const [isLoading, setIsLoding] = useState<boolean>(false)
-    const [currentLocation, setCurrentLocation] = useState<Loc>({
-        latitude: DEFAULT_LAT, longitude: DEFAULT_LNG
-    })
+    const [currentLocation, setCurrentLocation] = useState<Loc | null>(null)
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [lastFetchedAt, setLastFetchedAt] = useState<number | null>(null)
 

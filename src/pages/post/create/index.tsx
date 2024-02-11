@@ -1,15 +1,11 @@
 import ApiRoute from "@/util/constant/api_route";
-import { faHashtag, faImage, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { ChangeEvent, SetStateAction, useEffect, useState } from "react"
-import Image from 'next/image';
-import { supabase } from "@/data/supabase/supbase_client";
-import { v4 as uuidv4 } from 'uuid';
+import { useState } from "react"
 import Hashtags from "@/components/form/hashtags";
 import Textarea from "@/components/form/textarea";
 import ImageForm from "@/components/form/image_form";
+import UseFile from "@/util/hook/useFile";
 
 const MAX_CONTENT_LENGTH = 1000         // 본문 글자수 제한
 const MAX_HASHTAG_LENGTH = 15           // 해시태그 글자수 제한
@@ -22,7 +18,10 @@ export default function CreatePostPage() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [content, setContent] = useState<string>('')
     const [hashtags, setHashtags] = useState<string[]>([])
-    const [images, setImages] = useState<File[]>([])
+    const { files: imageFiles, setFiles: setImageFiles, upload: uploadImages, urls: images } = UseFile({
+        bucket: 'images',
+        pathPrefix: 'post'
+    })
 
     const router = useRouter()
 
@@ -37,20 +36,7 @@ export default function CreatePostPage() {
             }
 
             // 이미지 업로드
-            let downloadLinks: string[] = []
-            for (let image in images) {
-                const { data, error } = await supabase.storage.from('images').upload(`post/${uuidv4()}`, image, {
-                    cacheControl: '3600',
-                    upsert: false,
-                })
-                if (error) {
-                    console.error('이미지 업로드 중 에러 발생')
-                    window.alert('이미지 업로드 중 에러가 발생했습니다')
-                    return
-                }
-                const { data: { publicUrl } } = supabase.storage.from('images').getPublicUrl(data.path);
-                downloadLinks.push(publicUrl)
-            }
+            await uploadImages()
 
             // DB에 데이터 업로드
             await axios({
@@ -58,7 +44,7 @@ export default function CreatePostPage() {
                 data: {
                     content,
                     hashtags,
-                    images: downloadLinks
+                    images
                 }
             })
 
@@ -87,7 +73,7 @@ export default function CreatePostPage() {
 
             {/* 본문 */}
             <div className="mt-3">
-                <Textarea label={'Content'} maxLength={MAX_CONTENT_LENGTH} content={content} setContent={setContent}/>
+                <Textarea label={'Content'} maxLength={MAX_CONTENT_LENGTH} content={content} setContent={setContent} />
             </div>
 
             {/* 해시태그 */}
@@ -98,7 +84,7 @@ export default function CreatePostPage() {
 
             {/* 이미지 */}
             <div className="mt-8">
-                <ImageForm inputId={INPUT_ID} maxCount={MAX_IMAGE_NUM} images={images} setImages={setImages} />
+                <ImageForm inputId={INPUT_ID} maxCount={MAX_IMAGE_NUM} images={imageFiles} setImages={setImageFiles} />
             </div>
         </section>
     </div>

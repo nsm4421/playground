@@ -6,7 +6,7 @@ import prisma from "../../../../prisma/prisma_client";
 interface RequestProps {
     content: string;
     hashtags: string[];
-    images: string[]
+    images: string[];
 }
 
 interface ResponseProps {

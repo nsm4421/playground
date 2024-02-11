@@ -1,19 +1,19 @@
 const ApiRoute = {
-    getPosts:{
-        method:"get",
-        url : "/api/post"
+    getPosts: {
+        method: "get",
+        url: "/api/post"
     },
     createPost: {
-        method:"post",
-        url : "/api/post"
+        method: "post",
+        url: "/api/post"
     },
-    createPlace : {
-        method:"post",
-        url:"/api/place"
+    createPlace: {
+        method: "post",
+        url: "/api/place"
     },
-    getRoadAddressFromCoordinate : {
-        method : "get",
-        url:"/api/location/coordinate2address"
+    getRoadAddressFromCoordinate: {
+        method: "get",
+        url: "/api/place/coordinate2address"
     }
 }
 
