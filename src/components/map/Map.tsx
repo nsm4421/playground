@@ -1,4 +1,4 @@
-import Loc from "@/util/constant/location";
+import { Loc } from "@/util/constant/location";
 import Script from "next/script"
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react"
 
@@ -14,12 +14,12 @@ interface MapProps {
     loc: Loc;
 }
 
-export default function Map({ level, setMap, loc}: MapProps) {
+export default function Map({ level, setMap, loc }: MapProps) {
 
     const loadMap = () => window.kakao.maps.load(() => {
         const container = document.getElementById("map")
         const option = {
-            center: new window.kakao.maps.LatLng(loc.lat, loc.lng),
+            center: new window.kakao.maps.LatLng(loc.latitude, loc.longitude),
             level
         }
         const map = new window.kakao.maps.Map(container, option)

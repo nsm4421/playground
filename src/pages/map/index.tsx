@@ -17,8 +17,8 @@ export default function MapPage() {
     const [map, setMap] = useState(null)
     const [level, setLevel] = useState<number>(2)
     const [currentLocation, setCurrentLocation] = useState<Loc>({
-        lat: DEFAULT_LAT,
-        lng: DEFAULT_LNG
+        latitude: DEFAULT_LAT,
+        longitude: DEFAULT_LNG
     })
 
     const handleLevelUp = () => {
