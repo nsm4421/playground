@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import axios from "axios";
-import { RoadAdress } from "@/util/constant/location";
+import { RoadAdress } from "@/data/model/location_model";
 
 interface ResponseType {
     total_count: number;
@@ -18,7 +18,7 @@ interface ResponseType {
  * - addresses 전체 조회 자료 개수
  * - message 메세지
  */
-export default async function Coordinate2Address(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+export default async function GET(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
     try {
         // 위경도
         const { x, y } = req.query

@@ -1,4 +1,4 @@
-import { Loc } from "@/util/constant/location";
+import { Loc } from "@/data/model/location_model";
 import Script from "next/script"
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react"
 

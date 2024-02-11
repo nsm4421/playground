@@ -2,7 +2,7 @@ import { useState } from "react"
 import Map from "@/components/map/Map"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faLocation, faMap, faSearch } from "@fortawesome/free-solid-svg-icons"
-import Loc from "@/util/constant/location"
+import Loc from "@/data/model/location_model"
 
 const DEFAULT_LAT = 37.497624203
 const DEFAULT_LNG = 127.03088379

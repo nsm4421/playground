@@ -13,7 +13,7 @@ const ApiRoute = {
     },
     getRoadAddressFromCoordinate : {
         method : "get",
-        url:"/api/location?type=coordinate2address"
+        url:"/api/location/coordinate2address"
     }
 }
 

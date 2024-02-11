@@ -3,7 +3,17 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import prisma from "../../../../prisma/prisma_client";
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
+interface RequestProps {
+    content: string;
+    hashtags: string[];
+    images: string[]
+}
+
+interface ResponseProps {
+    message: string;
+}
+
+export default async function POST(req: NextApiRequest, res: NextApiResponse<ResponseProps>) {
     try {
         // 로그인 여부 검사
         const session = await getServerSession(req, res, authOptions)
@@ -13,10 +23,10 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
         }
 
         // 포스팅 데이터 저장
-        const { content, hashtags, images } = req.body
+        const { content, hashtags, images }: RequestProps = req.body
         await prisma.post.create({
             data: {
-                content, hashtags, images: images,
+                content, hashtags, images,
                 authorId: session.user.id
             }
         })

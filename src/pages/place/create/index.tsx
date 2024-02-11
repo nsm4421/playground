@@ -4,7 +4,7 @@ import Input from "@/components/form/input";
 import Textarea from "@/components/form/textarea";
 import AddressPicker from "@/components/map/AddressPicker";
 import ApiRoute from "@/util/constant/api_route";
-import { Loc, RoadAdress } from "@/util/constant/location";
+import { Loc, RoadAdress } from "@/data/model/location_model";
 import useGeoLocation from "@/util/hook/useGeoLocation";
 import { faLocation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,7 +25,6 @@ export default function CreatePlacePage() {
 
     const [name, setName] = useState<string>('')
     const [address, setAddress] = useState<RoadAdress | null>(null)
-    const { currentLocation } = useGeoLocation();
     const [isLoding, setIsLoading] = useState<boolean>(false)
     const [content, setContent] = useState<string>('')
     const [hashtags, setHashtags] = useState<string[]>([])
@@ -62,7 +61,7 @@ export default function CreatePlacePage() {
 
             {/* TODO : 지도 */}
             <div className="mt-5">
-                <AddressPicker label={"Address"}/>
+                <AddressPicker label={"Address"} address={address} setAddress={setAddress}/>
             </div>
 
             {/* 이름 */}

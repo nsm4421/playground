@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import Loc from "../constant/location";
+import Loc from "../../data/model/location_model";
 import { DateTime } from "next-auth/providers/kakao";
 
 // 강남역 위치

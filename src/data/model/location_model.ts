@@ -3,7 +3,7 @@ export interface Loc {
     longitude: number;
 }
 
-export interface RoadAdress {
+export interface RoadAdress extends Loc {
     address_name: string,
     region_1depth_name: string,
     region_2depth_name: string,
@@ -14,4 +14,4 @@ export interface RoadAdress {
     sub_building_no: string,
     building_name: string,
     zone_no: string
-}
+} 
