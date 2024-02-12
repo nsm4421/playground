@@ -15,25 +15,16 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse<Resp
         const skip = (page - 1) * pageSize
 
         // 데이터 조회
-        const fetched = await prisma.post.findMany({
+        const posts = await prisma.post.findMany({
             skip,
             take: pageSize,
             orderBy: {
                 createdAt: 'desc',
             }
         })
-
-        const posts = fetched.map((item)=>{
-            return {
-                ...item,
-                images : item.images.map((image)=>``)
-            }
-        })
         
-        res.status(200).json({ posts: fetched, message: "success to get posts" })
+        res.status(200).json({ posts, message: "success to get posts" })
     } catch (err) {
         res.status(500).json({ posts: [], message: "internal server error" })
-    } finally {
-        prisma.$disconnect()
-    }
+    } 
 }

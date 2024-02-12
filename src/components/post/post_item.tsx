@@ -1,7 +1,7 @@
 import PostModel from "@/data/model/post_model"
-import { faComment, faEllipsis, faEllipsisVertical, faHashtag, faHeart, faMessage, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faComment, faEllipsisVertical, faHashtag, faMessage } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Carousel from "./carousel"
+import LikeIcon from "./like_icon";
 
 interface PostItemProps {
     post: PostModel
@@ -9,9 +9,8 @@ interface PostItemProps {
 
 export default function PostItem({ post }: PostItemProps) {
 
-    // TODO : 더보기 버튼 클릭 시 이벤트
+    // TODO
     const handleMoreButton = async () => { }
-    const handleLikeButton = async () => { }
     const handleCommentButton = async () => { }
     const handleDirectMessageButton = async () => { }
 
@@ -28,6 +27,13 @@ export default function PostItem({ post }: PostItemProps) {
             </button>
         </div>
 
+        {/* 본문 */}
+        <div className="text-xl font-semibold text-slate-600 flex justify-between">
+            <div className="inline">
+                <span>{post.content}</span>
+            </div>
+        </div>
+
         {/* 해시태그 */}
         <div className="mt-3">
             <ul className="mt-3 flex-wrap flex">
@@ -40,17 +46,13 @@ export default function PostItem({ post }: PostItemProps) {
             </ul>
         </div>
 
-        {/* TODO : 좋아요, 댓글, DM 버튼 */}
         <div>
             <ul className="mt-3 flex-wrap flex">
+                {/* 좋아요 아이콘 */}
                 <li className="mr-6 items-center">
-                    <button onClick={handleLikeButton} className="flex items-center">
-                        <i className="hover:text-rose-600 flex justify-center items-center text-center rounded-full w-5 h-5 opacity-25 hover:opacity-100">
-                            <FontAwesomeIcon icon={faHeart} className="text-sm" />
-                        </i>
-                        <span className="ml-2">좋아요 개수</span>
-                    </button>
+                    <LikeIcon postId={post.id} />
                 </li>
+                {/* 댓글 버튼 */}
                 <li className="mr-6">
                     <button onClick={handleCommentButton} className="flex items-center">
                         <i className="hover:text-sky-600 flex justify-center items-center text-center rounded-full w-5 h-5 opacity-25 hover:opacity-100">
@@ -59,6 +61,7 @@ export default function PostItem({ post }: PostItemProps) {
                         <span className="ml-2">댓글</span>
                     </button>
                 </li>
+                {/* DM버튼 */}
                 <li>
                     <button onClick={handleDirectMessageButton} className="flex items-center">
                         <i className="hover:text-green-600 flex justify-center items-center text-center rounded-full w-5 h-5 opacity-25 hover:opacity-100">

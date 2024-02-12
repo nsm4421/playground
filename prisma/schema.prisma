@@ -45,6 +45,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  emotions      Emotion[]
 }
 
 model VerificationToken {
@@ -57,17 +58,31 @@ model VerificationToken {
 
 // 포스팅
 model Post {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   content   String
   hashtags  String[]
   images    String[]
-  place     Place?   @relation(fields: [placeId], references: [id])
+  place     Place?    @relation(fields: [placeId], references: [id])
   placeId   String?
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  emotions  Emotion[]
 
   @@index([hashtags, placeId])
+}
+
+// 좋아요
+model Emotion {
+  id        String   @id @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([postId, userId])
 }
 
 // 장소
@@ -86,14 +101,14 @@ model Place {
 // 도로명 주소
 model RoadAdress {
   id             String   @id @default(cuid())
-  place          Place    @relation(fields: [placeId], references: [id])
+  place          Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
   placeId        String   @unique
   latitude       Float
   longitude      Float
   addressName    String
   regionName     String[]
   roadName       String
-  undergroundYn  String?
+  undergroundYn  String
   mainBuildingNo String
   subBuildingNO  String
   buildingName   String

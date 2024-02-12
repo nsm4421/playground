@@ -14,6 +14,18 @@ const ApiRoute = {
     getRoadAddressFromCoordinate: {
         method: "get",
         url: "/api/place/coordinate2address"
+    },
+    getLikeCount : {
+        method:"get",
+        url : "/api/post/emotion"
+    },
+    likePost : {
+        method:"post",
+        url : "/api/post/emotion"
+    },
+    cancelLike : {
+        method:"delete",
+        url : "/api/post/emotion"
     }
 }
 
