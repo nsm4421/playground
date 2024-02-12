@@ -1,16 +1,16 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]";
-import prisma from "../../../../prisma/prisma_client";
+import { NextApiRequest, NextApiResponse } from "next"
+import { getServerSession } from "next-auth"
+import { authOptions } from "../auth/[...nextauth]"
+import prisma from "../../../../prisma/prisma_client"
 
 interface RequestProps {
-    content: string;
-    hashtags: string[];
-    images: string[];
+    content: string
+    hashtags: string[]
+    images: string[]
 }
 
 interface ResponseProps {
-    message: string;
+    message: string
 }
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse<ResponseProps>) {
@@ -18,7 +18,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse<Res
         // 로그인 여부 검사
         const session = await getServerSession(req, res, authOptions)
         if (!session) {
-            res.status(401).json({ message: '인증되지 않은 사용자입니다' });
+            res.status(401).json({ message: '인증되지 않은 사용자입니다' })
             return
         }
 
