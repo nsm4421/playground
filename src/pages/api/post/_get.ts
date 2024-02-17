@@ -13,6 +13,7 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse<Resp
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
         const skip = (page - 1) * pageSize
+        console.debug(`get post request page : ${page} pageSize : ${pageSize}`)
 
         // 포스팅 페이지 조회
         const posts: PostModel[] = (await prisma.post.findMany({
@@ -31,8 +32,10 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse<Resp
             createdAt: post.createdAt
         } as PostModel))
 
+        console.debug('success to get post')
         res.status(200).json({ posts, message: "success to get posts" })
     } catch (err) {
+        console.error(err)
         res.status(500).json({ posts: [], message: "internal server error" })
     }
 }

@@ -25,8 +25,10 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse<Res
 
         // 게시글 조회
         const { content, postId }: RequestProps = req.body
-        const post = await prisma.post.findUniqueOrThrow({where:{id:postId}})
-        
+        console.debug(`부모댓글 작성 요청 : ${postId}`)
+        await prisma.post.findUniqueOrThrow({ where: { id: postId } })
+        console.debug('포스팅 존재여부 확인')
+
         // 부모 댓글 저장
         const id = uuid()
         await prisma.comment.create({
@@ -39,6 +41,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse<Res
                 authorId
             }
         })
+        console.debug('부모댓글 작성성공')
 
         res.status(200).json({ message: 'success to save comment' })
     } catch (err) {

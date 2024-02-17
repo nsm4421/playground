@@ -2,16 +2,18 @@ import PostModel from "@/data/model/post_model"
 import { faComment, faEllipsisVertical, faHashtag, faMessage } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import LikeIcon from "./like_icon";
+import { Dispatch, SetStateAction } from "react";
 
 interface PostItemProps {
-    post: PostModel
+    post: PostModel,
+    setCurrentPostId: Dispatch<SetStateAction<string | null>>
 }
 
-export default function PostItem({ post }: PostItemProps) {
+export default function PostItem({ post, setCurrentPostId }: PostItemProps) {
 
     // TODO
     const handleMoreButton = async () => { }
-    const handleCommentButton = async () => { }
+    const handleCommentButton = () => setCurrentPostId(post.id)
     const handleDirectMessageButton = async () => { }
 
     return <li className="rounded-lg bg-slate-200 px-2 py-1 mt-4 mx-1">

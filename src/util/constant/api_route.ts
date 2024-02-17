@@ -3,9 +3,25 @@ const ApiRoute = {
         method: "get",
         url: "/api/post"
     },
+    getParentComments : {
+        method : "get",
+        url:"/api/post/comment"
+    },
+    getChildComments : {
+        method : "get",
+        url:"/api/post/comment/child"
+    },
     createPost: {
         method: "post",
         url: "/api/post"
+    },
+    createParentComment: {
+        method: "post",
+        url: "/api/post/comment"
+    },
+    createChildComment: {
+        method: "post",
+        url: "/api/post/comment/child"
     },
     createPlace: {
         method: "post",

@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction, useCallback, useState } from "react";
 
 interface InputProps {
-    label: string;
+    label?: string;
     content: string;
     setContent: Dispatch<SetStateAction<string>>
     maxLength: number;
@@ -25,7 +25,9 @@ export default function Input({
     }, [content])
 
     return <div className="mt-3">
-        <h3 className="text-xl font-semibold bg-slate-700 rounded-lg px-2 py-1 text-white inline">{label}</h3>
+        {
+            label && <h3 className="text-xl font-semibold bg-slate-700 rounded-lg px-2 py-1 text-white inline">{label}</h3>
+        }
         <input className="mt-3 tracking-wider text-lg w-full max-h-10em resize-none border rounded-md focus:outline-none focus:ring focus:border-blue-100 p-2"
             onChange={handleContent}
             value={content}
