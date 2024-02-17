@@ -4,7 +4,9 @@ import 'package:hot_place/features/splash/chat.screen.dart';
 import 'package:hot_place/features/splash/home.screen.dart';
 import 'package:hot_place/features/splash/setting.screen.dart';
 import 'package:hot_place/features/user/presentation/page/login.screen.dart';
+import 'package:hot_place/features/user/presentation/page/on_boarding.screen.dart';
 import 'package:hot_place/features/user/presentation/page/otp.screen.dart';
+import 'package:hot_place/features/user/presentation/page/phone_number.screen.dart';
 
 import '../../splash/splash.screen.dart';
 import '../../splash/welcome.screen.dart';
@@ -17,6 +19,7 @@ enum Routes {
   welcome("/welcome"),
   otp("/auth/otp"),
   login("/auth/login"),
+  phoneNumber("/auth/phone-number"),
   onboarding("/auth/onboarding"),
 
   // home
@@ -54,6 +57,20 @@ final GoRouter routerConfig = GoRouter(
       path: Routes.otp.path,
       builder: (BuildContext context, GoRouterState state) {
         return const OtpScreen();
+      },
+    ),
+    GoRoute(
+      name: Routes.phoneNumber.name,
+      path: Routes.phoneNumber.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const PhoneNumberScreen();
+      },
+    ),
+    GoRoute(
+      name: Routes.onboarding.name,
+      path: Routes.onboarding.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const OnBoardingScreen();
       },
     ),
     GoRoute(

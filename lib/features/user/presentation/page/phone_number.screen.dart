@@ -16,25 +16,16 @@ class PhoneNumberScreen extends StatefulWidget {
 
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   static const String _defaultCountryCode = "82";
+
   Country _currentCountry =
-  CountryPickerUtils.getCountryByPhoneCode(_defaultCountryCode);
-  late TextEditingController _phoneTextEditingController;
+      CountryPickerUtils.getCountryByPhoneCode(_defaultCountryCode);
 
-  @override
-  void initState() {
-    super.initState();
-    _phoneTextEditingController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _phoneTextEditingController.dispose();
-  }
+  final TextEditingController _phoneTextEditingController =
+      TextEditingController();
 
   _setCurrentCountry(Country country) => setState(() {
-    _currentCountry = country;
-  });
+        _currentCountry = country;
+      });
 
   _goToOtpPage() => context.push(Routes.otp.path);
 
@@ -42,64 +33,61 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text("전화번호 인증"),
-      centerTitle: true,
-    ),
-    body: Column(children: [
-      const SizedBox(height: 20),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("국가를 선택해주세요",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium
-                    ?.copyWith(color: Colors.grey)),
-            SelectCountryCodeWidget(
-                country: _currentCountry, setCountry: _setCurrentCountry),
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text("전화번호 인증"),
+        centerTitle: true,
       ),
-      const SizedBox(height: 20),
-      Padding(
+      body: Column(children: [
+        const SizedBox(height: 20),
+        Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("-없이 전화번호를 입력해주세요",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Colors.grey)),
-                TextField(
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(10),
-                    ],
-                    controller: _phoneTextEditingController,
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: _clearText,
-                            icon: const Icon(Icons.clear)),
-                        hintText: "010-0000-0000",
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        )))
-              ]))
-    ]),
-    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToOtpPage,
-        label: Text(
-          "NEXT",
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        )),
-  );
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("국가를 선택해주세요",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.copyWith(color: Colors.grey)),
+              SelectCountryCodeWidget(
+                  country: _currentCountry, setCountry: _setCurrentCountry),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text("-없이 전화번호를 입력해주세요",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.copyWith(color: Colors.grey)),
+              TextField(
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                  controller: _phoneTextEditingController,
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: _clearText, icon: const Icon(Icons.clear)),
+                      hintText: "010-0000-0000",
+                      border: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      )))
+            ]))
+      ]),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: _goToOtpPage,
+          label: Text(
+            "NEXT",
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          )));
 }
