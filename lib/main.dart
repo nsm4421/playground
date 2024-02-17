@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hot_place/features/splash/splash.screen.dart';
-
+import 'package:hot_place/features/app/constant/route.constant.dart';
 import 'features/app/theme/custom_palette.theme.dart';
 
 void main() {
@@ -9,10 +8,10 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: routerConfig,
       title: 'Karma',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
           color: CustomPalette.appBarColor,
         )
       ),
-      home: const SplashScreen()
     );
   }
 }
