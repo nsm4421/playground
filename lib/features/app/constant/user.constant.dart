@@ -1,3 +1,5 @@
+import 'package:hot_place/features/app/constant/route.constant.dart';
+
 enum UserStatus {
   online("접속중"),
   offline("미접속중"),
@@ -7,4 +9,16 @@ enum UserStatus {
   final String description;
 
   const UserStatus(this.description);
+}
+
+enum AuthStatus {
+  authenticated,
+  unAuthenticated;
+}
+
+enum SignUpStep {
+  initial,
+  phoneNumber,
+  otp,
+  onBoarding;
 }
