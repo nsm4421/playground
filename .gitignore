@@ -1,4 +1,6 @@
 pubspec.lock
+**.g.dart
+**.freezed.dart
 
 # Miscellaneous
 *.class
