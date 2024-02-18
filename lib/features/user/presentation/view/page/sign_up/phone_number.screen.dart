@@ -2,10 +2,8 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hot_place/features/user/presentation/widget/select_country_code.widget.dart';
+import 'package:hot_place/features/user/presentation/view/widget/select_country_code.widget.dart';
 
-import '../../../app/constant/route.constant.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
   const PhoneNumberScreen({super.key});
@@ -27,7 +25,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         _currentCountry = country;
       });
 
-  _goToOtpPage() => context.push(Routes.otp.path);
+  _goToOtpPage() => () {};
 
   _clearText() => _phoneTextEditingController.clear();
 
