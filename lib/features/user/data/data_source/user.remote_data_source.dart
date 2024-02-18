@@ -1,8 +1,8 @@
-import 'package:hot_place/features/user/domain/entity/contact/contact.entity.dart';
-import 'package:hot_place/features/user/domain/entity/user/user.entity.dart';
+import '../../domain/entity/contact/contact.entity.dart';
+import '../../domain/entity/user/user.entity.dart';
 
-abstract class UserRepository {
-  // 전화번호 인증
+abstract class RemoteUserDataSource {
+// 전화번호 인증
   Future<void> verifyPhoneNumber(String phoneNumber);
 
   // 회원가입
@@ -26,7 +26,6 @@ abstract class UserRepository {
   // 유저 목록 stream
   Stream<List<UserEntity>> get allUserStream;
 
-  // 특정 유저 stream
   Stream<UserEntity> getUserStream(String uid);
 
   // 연락처 가져오기
