@@ -1,5 +1,6 @@
 enum UserStatus {
-  active("활동중"),
+  online("접속중"),
+  offline("미접속중"),
   dormant("휴면"),
   withdrawal("탈퇴");
 

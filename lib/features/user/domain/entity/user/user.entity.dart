@@ -28,12 +28,5 @@ extension UserEntityEx on UserEntity {
       email: email ?? '',
       username: username ?? '',
       phoneNumber: phoneNumber ?? '',
-      status: status ?? UserStatus.active);
-
-  static UserEntity fromModel(UserModel user) => UserEntity(
-      uid: user.uid,
-      email: user.email,
-      username: user.username,
-      phoneNumber: user.phoneNumber,
-      status: user.status);
+      status: status ?? UserStatus.offline);
 }
