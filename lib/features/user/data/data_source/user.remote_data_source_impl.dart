@@ -7,6 +7,7 @@ import 'package:hot_place/features/user/data/model/user/user.model.dart';
 
 import 'package:hot_place/features/user/domain/entity/contact/contact.entity.dart';
 import 'package:hot_place/features/user/domain/entity/user/user.entity.dart';
+import 'package:logger/logger.dart';
 
 import '../../../app/util/uuid.util.dart';
 
@@ -22,41 +23,43 @@ class RemoteUserDataSourceImpl extends RemoteUserDataSource {
   String _verificationId = "";
   static const _verificationDuration = 180;
 
+  final _logger = Logger();
+
   @override
   Future<void> verifyPhoneNumber(String phoneNumber) async =>
       // TODO : 인증실패 처리
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
           verificationCompleted: (AuthCredential authCredential) {
-            debugPrint("인증완료");
+            _logger.d("인증완료");
           },
           verificationFailed: (FirebaseAuthException firebaseAuthException) {
-            debugPrint("인증 실패");
+            _logger.w("인증 실패");
           },
           timeout: const Duration(seconds: _verificationDuration),
           codeSent: (String verificationId, int? forceResendingToken) {
-            debugPrint("인증코드 보냄");
+            _logger.d("인증코드 보냄");
             _verificationId = verificationId;
           },
           codeAutoRetrievalTimeout: (String verificationId) {
             _verificationId = verificationId;
-            debugPrint("시간초과");
+            _logger.w("시간초과");
           });
 
   @override
-  Future<void> signInWithPhoneNumber(String otpCode) async {
+  Future<void> verifyOtpNumber(String otpCode) async {
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
           smsCode: otpCode, verificationId: _verificationId);
-
       await _auth.signInWithCredential(credential);
-      //   TODO : 에러 처리
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'invalid-verification-code') {
-        debugPrint("인증코드 오류");
-      } else if (e.code == 'quota-exceeded') {}
-    } catch (e) {
-      debugPrint(e.toString());
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-verification-code') {
+        _logger.e("인증코드 오류", err);
+      } else if (err.code == 'quota-exceeded') {
+        _logger.e("쿼터 초과", err);
+      }
+    } catch (err) {
+      _logger.e(err);
     }
   }
 
@@ -76,7 +79,7 @@ class RemoteUserDataSourceImpl extends RemoteUserDataSource {
     try {
       await _fireStore.collection(CollectionName.user).doc(uid).set(json);
     } catch (err) {
-      debugPrint(err.toString());
+      _logger.e(err);
       throw Exception("유저 데이터 넣는 중 오류 발생");
     }
   }
@@ -90,7 +93,7 @@ class RemoteUserDataSourceImpl extends RemoteUserDataSource {
       final json = user.toModel().toJson();
       await _fireStore.collection(CollectionName.user).doc(user.uid).set(json);
     } catch (err) {
-      debugPrint(err.toString());
+      _logger.e(err);
       throw Exception("유저 수정 중 오류 발생");
     }
   }

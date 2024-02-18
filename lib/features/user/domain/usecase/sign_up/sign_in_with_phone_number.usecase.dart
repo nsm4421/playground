@@ -6,5 +6,5 @@ class SignInWithPhoneNumberUseCase {
   SignInWithPhoneNumberUseCase(this.repository);
 
   Future<void> call(String otpCode) async =>await
-      repository.signInWithPhoneNumber(otpCode);
+      repository.verifyOtpNumber(otpCode);
 }

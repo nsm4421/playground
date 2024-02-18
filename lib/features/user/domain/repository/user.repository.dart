@@ -6,7 +6,7 @@ abstract class UserRepository {
   Future<void> verifyPhoneNumber(String phoneNumber);
 
   // 회원가입
-  Future<void> signInWithPhoneNumber(String otpCode);
+  Future<void> verifyOtpNumber(String otpCode);
 
   // 로그인 여부 반환
   bool get isAuthorized;

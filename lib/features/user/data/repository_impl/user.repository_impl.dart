@@ -13,8 +13,8 @@ class UserRepositoryImpl extends UserRepository {
       await userDataSource.verifyPhoneNumber(phoneNumber);
 
   @override
-  Future<void> signInWithPhoneNumber(String otpCode) async =>
-      await userDataSource.signInWithPhoneNumber(otpCode);
+  Future<void> verifyOtpNumber(String otpCode) async =>
+      await userDataSource.verifyOtpNumber(otpCode);
 
   @override
   bool get isAuthorized => userDataSource.isAuthorized;
