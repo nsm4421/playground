@@ -7,5 +7,5 @@ class InsertUserUseCase {
 
   InsertUserUseCase(this.repository);
 
-  Future<void> call(UserEntity user) async => repository.insertUser(user);
+  Future<void> call(UserEntity user) async => await repository.insertUser(user);
 }

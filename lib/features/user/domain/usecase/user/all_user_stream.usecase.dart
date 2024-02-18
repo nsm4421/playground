@@ -1,3 +1,5 @@
+import 'package:hot_place/features/user/domain/entity/user/user.entity.dart';
+
 import '../../repository/user.repository.dart';
 
 class AllUserStream {
@@ -5,5 +7,5 @@ class AllUserStream {
 
   AllUserStream(this.repository);
 
-  Future<void> call() async => repository.allUserStream();
+  Stream<List<UserEntity>> call() => repository.allUserStream;
 }

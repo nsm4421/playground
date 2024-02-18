@@ -5,5 +5,5 @@ class IsAuthorizedUseCase {
 
   IsAuthorizedUseCase(this.repository);
 
-  Future<bool> call() async => repository.isAuthorized();
+  bool call() => repository.isAuthorized;
 }

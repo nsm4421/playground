@@ -5,5 +5,5 @@ class GetDeviceNumberUseCase {
 
   GetDeviceNumberUseCase(this.repository);
 
-  Future<void> call() async => repository.getDeviceNumber();
+  Future<void> call() async => await repository.getDeviceNumber();
 }

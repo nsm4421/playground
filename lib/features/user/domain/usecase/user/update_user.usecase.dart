@@ -7,5 +7,5 @@ class UpdateUserUseCase {
 
   UpdateUserUseCase(this.repository);
 
-  Future<void> call(UserEntity user) async => repository.updateUser(user);
+  Future<void> call(UserEntity user) async => await repository.updateUser(user);
 }

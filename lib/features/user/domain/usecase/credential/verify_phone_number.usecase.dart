@@ -6,5 +6,5 @@ class VerifyPhoneNumberUseCase {
   VerifyPhoneNumberUseCase(this.repository);
 
   Future<void> call(String phoneNumber) async =>
-      repository.verifyPhoneNumber(phoneNumber);
+      await repository.verifyPhoneNumber(phoneNumber);
 }

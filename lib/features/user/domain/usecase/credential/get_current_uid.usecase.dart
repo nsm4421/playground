@@ -5,5 +5,5 @@ class GetCurrentUidUseCase {
 
   GetCurrentUidUseCase(this.repository);
 
-  Future<String> call() async => repository.getCurrentUid();
+  String? call() => repository.currentUid;
 }
