@@ -1,5 +1,8 @@
+import 'package:injectable/injectable.dart';
+
 import '../../repository/user.repository.dart';
 
+@singleton
 class GetDeviceNumberUseCase {
   final UserRepository repository;
 

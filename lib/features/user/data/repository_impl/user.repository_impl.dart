@@ -2,7 +2,9 @@ import 'package:hot_place/features/user/data/data_source/user.remote_data_source
 import 'package:hot_place/features/user/domain/entity/contact/contact.entity.dart';
 import 'package:hot_place/features/user/domain/entity/user/user.entity.dart';
 import 'package:hot_place/features/user/domain/repository/user.repository.dart';
+import 'package:injectable/injectable.dart';
 
+@Singleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
   final RemoteUserDataSource userDataSource;
 
