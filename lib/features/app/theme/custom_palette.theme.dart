@@ -4,6 +4,7 @@ class CustomPalette {
   static get backgroundColor => const Color.fromRGBO(19, 28, 33, 1);
   static get textColor => const Color.fromRGBO(241, 241, 242, 1);
   static get appBarColor => const Color.fromRGBO(31, 44, 52, 1);
+  static get appBarTextColor => const Color.fromRGBO(171, 221, 231, 1.0);
   static get bottomAttachContainerColor => const Color.fromRGBO(38, 54, 65, 1.0);
   static get webAppBarColor => const Color.fromRGBO(42, 47, 50, 1);
   static get messageColor => const Color.fromRGBO(5, 96, 98, 1);
