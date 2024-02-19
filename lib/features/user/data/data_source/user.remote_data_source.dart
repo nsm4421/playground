@@ -19,7 +19,7 @@ class RemoteUserDataSource {
         _fireStore = fireStore;
 
   String _verificationId = "";
-  static const _verificationDuration = 180;
+  static const _verificationDuration = 120;
 
   final _logger = Logger();
 

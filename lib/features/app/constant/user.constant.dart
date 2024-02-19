@@ -22,3 +22,19 @@ enum SignUpStep {
   otp,
   onBoarding;
 }
+
+extension SignUpStepEx on SignUpStep {
+  String get label {
+    switch (this) {
+      case SignUpStep.initial:
+      case SignUpStep.phoneNumber:
+        return "전화번호인증";
+      case SignUpStep.otp:
+        return "OTP인증";
+      case SignUpStep.onBoarding:
+        return "프로필 작성";
+      default:
+        return "ERROR";
+    }
+  }
+}
