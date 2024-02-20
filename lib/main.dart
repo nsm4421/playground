@@ -1,8 +1,9 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/features/app/constant/route.constant.dart';
-import 'package:hot_place/features/user/presentation/bloc/cubit/auth/auth.cubit.dart';
+import 'package:hot_place/features/user/presentation/bloc/auth/auth.cubit.dart';
 import 'features/app/theme/custom_palette.theme.dart';
 import 'firebase_options.dart';
 import 'features/app/dependency_injection/dependency_injection.dart';
@@ -12,6 +13,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.appAttest,
   );
   // 의존성 주입
   configureDependencies();

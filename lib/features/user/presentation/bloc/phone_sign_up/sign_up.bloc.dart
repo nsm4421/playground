@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/features/app/constant/user.constant.dart';
 import 'package:hot_place/features/user/domain/usecase/sign_up/verify_phone_number.usecase.dart';
-import 'package:hot_place/features/user/presentation/bloc/cubit/sign_up/sign_up.event.dart';
-import 'package:hot_place/features/user/presentation/bloc/cubit/sign_up/sign_up.state.dart';
+import 'package:hot_place/features/user/presentation/bloc/phone_sign_up/sign_up.event.dart';
+import 'package:hot_place/features/user/presentation/bloc/phone_sign_up/sign_up.state.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 

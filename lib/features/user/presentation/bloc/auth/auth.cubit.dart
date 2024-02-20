@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/features/app/constant/user.constant.dart';
-import 'package:hot_place/features/user/presentation/bloc/cubit/auth/auth.state.dart';
+import 'package:hot_place/features/user/presentation/bloc/auth/auth.state.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-import '../../../../domain/usecase/auth/get_current_uid.usecase.dart';
-import '../../../../domain/usecase/auth/is_authroized.usecase.dart';
-import '../../../../domain/usecase/auth/sign_out.usecase.dart';
+import '../../../domain/usecase/auth/get_current_uid.usecase.dart';
+import '../../../domain/usecase/auth/is_authroized.usecase.dart';
+import '../../../domain/usecase/auth/sign_out.usecase.dart';
 
 @singleton
 class AuthCubit extends Cubit<AuthState> {

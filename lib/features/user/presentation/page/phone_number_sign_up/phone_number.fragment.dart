@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/features/app/util/toast.util.dart';
-import 'package:hot_place/features/user/presentation/bloc/cubit/sign_up/sign_up.bloc.dart';
-import 'package:hot_place/features/user/presentation/bloc/cubit/sign_up/sign_up.event.dart';
-import 'package:hot_place/features/user/presentation/view/widget/select_country_code.widget.dart';
+import 'package:hot_place/features/user/presentation/bloc/phone_sign_up/sign_up.bloc.dart';
+import 'package:hot_place/features/user/presentation/component/select_country_code.widget.dart';
+
+import '../../bloc/phone_sign_up/sign_up.event.dart';
 
 class PhoneNumberFragment extends StatefulWidget {
   const PhoneNumberFragment({super.key});
@@ -43,7 +44,8 @@ class _PhoneNumberFragmentState extends State<PhoneNumberFragment> {
   // OTP페이지로 이동
   _handleGoNext() {
     try {
-      debugPrint('+${_currentCountry.phoneCode}${_phoneTextEditingController.text}');
+      debugPrint(
+          '+${_currentCountry.phoneCode}${_phoneTextEditingController.text}');
       context.read<SignUpBloc>().add(VerifyPhoneNumber(
           "+${_currentCountry.phoneCode}${_phoneTextEditingController.text}"));
     } catch (err) {

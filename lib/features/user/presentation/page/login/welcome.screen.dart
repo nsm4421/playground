@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../app/constant/route.constant.dart';
+import '../../../../app/constant/route.constant.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -58,7 +58,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   onPressed: goToSignUpPage,
                   child: Center(
                     child: Text(
-                      "회원가입 페이지로",
+                      "전화번호로 회원가입하기",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+
+                ElevatedButton(
+                  onPressed: (){
+                    context.go(Routes.home.path);
+                  },
+                  child: Center(
+                    child: Text(
+                      "TEST",
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge

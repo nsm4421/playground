@@ -3,11 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:hot_place/features/splash/chat.screen.dart';
 import 'package:hot_place/features/splash/home.screen.dart';
 import 'package:hot_place/features/splash/setting.screen.dart';
-import 'package:hot_place/features/user/presentation/view/page/sign_up/sign_up.screen.dart';
-import 'package:hot_place/features/user/presentation/view/page/login/welcome.screen.dart';
+import 'package:hot_place/features/user/presentation/page/phone_number_sign_up/phone_sign_up.screen.dart';
+import 'package:hot_place/features/user/presentation/page/login/welcome.screen.dart';
 
-import '../../user/presentation/view/page/login/login.screen.dart';
-import '../../user/presentation/view/page/splash/splash.screen.dart';
+import '../../user/presentation/page/login/login.screen.dart';
+import '../../user/presentation/page/splash/splash.screen.dart';
 
 enum Routes {
   // splash
@@ -60,7 +60,7 @@ final GoRouter routerConfig = GoRouter(
       name: Routes.signUp.name,
       path: Routes.signUp.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const SignUpScreen();
+        return const PhoneSignUpScreen();
       },
     ),
     GoRoute(
