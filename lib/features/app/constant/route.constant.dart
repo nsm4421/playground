@@ -3,24 +3,21 @@ import 'package:go_router/go_router.dart';
 import 'package:hot_place/features/splash/chat.screen.dart';
 import 'package:hot_place/features/splash/home.screen.dart';
 import 'package:hot_place/features/splash/setting.screen.dart';
-import 'package:hot_place/features/user/presentation/page/login.screen.dart';
-import 'package:hot_place/features/user/presentation/page/on_boarding.screen.dart';
-import 'package:hot_place/features/user/presentation/page/otp.screen.dart';
-import 'package:hot_place/features/user/presentation/page/phone_number.screen.dart';
+import 'package:hot_place/features/user/presentation/page/phone_number_sign_up/phone_sign_up.screen.dart';
+import 'package:hot_place/features/user/presentation/page/login/welcome.screen.dart';
 
-import '../../splash/splash.screen.dart';
-import '../../splash/welcome.screen.dart';
+import '../../user/presentation/page/login/login.screen.dart';
+import '../../user/presentation/page/splash/splash.screen.dart';
 
 enum Routes {
   // splash
   init("/"),
 
-  // authentication
   welcome("/welcome"),
-  otp("/auth/otp"),
   login("/auth/login"),
-  phoneNumber("/auth/phone-number"),
-  onboarding("/auth/onboarding"),
+
+  // sign up
+  signUp("/auth/sign-up"),
 
   // home
   home("/home"),
@@ -53,31 +50,17 @@ final GoRouter routerConfig = GoRouter(
       },
     ),
     GoRoute(
-      name: Routes.otp.name,
-      path: Routes.otp.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const OtpScreen();
-      },
-    ),
-    GoRoute(
-      name: Routes.phoneNumber.name,
-      path: Routes.phoneNumber.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const PhoneNumberScreen();
-      },
-    ),
-    GoRoute(
-      name: Routes.onboarding.name,
-      path: Routes.onboarding.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const OnBoardingScreen();
-      },
-    ),
-    GoRoute(
       name: Routes.login.name,
       path: Routes.login.path,
       builder: (BuildContext context, GoRouterState state) {
         return const LoginScreen();
+      },
+    ),
+    GoRoute(
+      name: Routes.signUp.name,
+      path: Routes.signUp.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const PhoneSignUpScreen();
       },
     ),
     GoRoute(
