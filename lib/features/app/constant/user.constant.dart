@@ -44,3 +44,7 @@ class Profile {
 
   Profile({this.uid = "", this.username, this.profileImage});
 }
+
+enum Provider {
+  kakao,google;
+}
