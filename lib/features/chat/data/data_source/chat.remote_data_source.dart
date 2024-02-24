@@ -27,7 +27,7 @@ class RemoteChatDataSource {
         return null;
       }
       return _fireStore
-          .collection(CollectionName.chat)
+          .collection(CollectionName.chat.name)
           .where("uid", isEqualTo: currentUid)
           .snapshots()
           .asyncMap((event) => event.docs
@@ -43,7 +43,7 @@ class RemoteChatDataSource {
     try {
       final chatId = UuidUtil.uuid();
       await _fireStore
-          .collection(CollectionName.chat)
+          .collection(CollectionName.chat.name)
           .doc(chatId)
           .set(chat.toJson());
       _logger.d("채팅방 $chatId 만들기 성공");
@@ -59,9 +59,9 @@ class RemoteChatDataSource {
     try {
       final messageId = UuidUtil.uuid();
       await _fireStore
-          .collection(CollectionName.chat)
+          .collection(CollectionName.chat.name)
           .doc(message.chatId)
-          .collection(CollectionName.message)
+          .collection(CollectionName.message.name)
           .doc(messageId)
           .set(message.toJson());
       _logger.d("메세지 $messageId 만들기 성공");
@@ -76,7 +76,10 @@ class RemoteChatDataSource {
   Future<String?> deleteChat(String chatId) async {
     try {
       // TODO : 권한 검사
-      await _fireStore.collection(CollectionName.chat).doc(chatId).delete();
+      await _fireStore
+          .collection(CollectionName.chat.name)
+          .doc(chatId)
+          .delete();
       _logger.d("채팅방 $chatId 삭제 성공");
       return chatId;
     } catch (err) {
@@ -90,9 +93,9 @@ class RemoteChatDataSource {
     try {
       // TODO : 권한 검사
       await _fireStore
-          .collection(CollectionName.chat)
+          .collection(CollectionName.chat.name)
           .doc(message.chatId)
-          .collection(CollectionName.message)
+          .collection(CollectionName.message.name)
           .doc(message.id)
           .delete();
       _logger.d("메세지 삭제 성공");

@@ -15,14 +15,15 @@ class CredentialRepositoryImpl extends CredentialRepository {
 
   @override
   Future<UserCredential> kakaoLogin() async {
-    final Kakao.User kakaoUser = await Kakao.UserApi.instance.me();
+    Kakao.User kakaoUser = await Kakao.UserApi.instance.me();
     final user = BaseUserModel(
         uid: kakaoUser.id.toString() ?? '',
         username: kakaoUser.kakaoAccount?.name,
         email: kakaoUser.kakaoAccount?.email,
         profileImageUrl: kakaoUser.kakaoAccount?.profile?.profileImageUrl);
-    final String token = await credentialDataSource.createToken(
+    final String? token = await credentialDataSource.createToken(
         user: user, provider: Provider.kakao);
+    if (token == null) throw Exception('token is not given');
     return await credentialDataSource.signInWithCustomToken(token);
   }
 }
