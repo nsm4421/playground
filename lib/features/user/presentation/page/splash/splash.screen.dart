@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final destination =
           context.read<AuthCubit>().state.status == AuthStatus.authenticated
               ? Routes.home.path
-              : Routes.welcome.path;
+              : Routes.login.path;
       context.pushReplacement(destination);
     });
     super.initState();

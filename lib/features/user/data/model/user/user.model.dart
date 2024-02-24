@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/features/user/domain/entity/user/user.entity.dart';
@@ -15,8 +14,7 @@ class UserModel with _$UserModel {
     @Default('') String uid,
     @Default('') String email,
     @Default('') String username,
-    @Default('') String phoneNumber,
-    @Default('') String profileImageUrl,
+    @Default('') String photoUrl,
     @Default(UserStatus.offline) UserStatus status,
   }) = _UserModel;
 
@@ -29,6 +27,6 @@ extension UserModelEx on UserModel {
       uid: uid,
       email: email,
       username: username,
-      phoneNumber: phoneNumber,
+      photoUrl: photoUrl,
       status: status);
 }

@@ -1,4 +1,5 @@
 enum UserStatus {
+  onBoarding("온보딩"),
   online("접속중"),
   offline("미접속중"),
   dormant("휴면"),
@@ -14,37 +15,6 @@ enum AuthStatus {
   unAuthenticated;
 }
 
-enum SignUpStep {
-  initial,
-  phoneNumber,
-  otp,
-  onBoarding;
-}
-
-extension SignUpStepEx on SignUpStep {
-  String get label {
-    switch (this) {
-      case SignUpStep.initial:
-      case SignUpStep.phoneNumber:
-        return "전화번호인증";
-      case SignUpStep.otp:
-        return "OTP인증";
-      case SignUpStep.onBoarding:
-        return "프로필 작성";
-      default:
-        return "ERROR";
-    }
-  }
-}
-
-class Profile {
-  final String uid;
-  final String? username;
-  final String? profileImage;
-
-  Profile({this.uid = "", this.username, this.profileImage});
-}
-
 enum Provider {
-  kakao,google;
+  google;
 }

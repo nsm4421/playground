@@ -1,66 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hot_place/features/app/constant/firebase.constant.dart';
+import 'package:hot_place/features/user/data/data_source/base/user.data_source.dart';
 import 'package:hot_place/features/user/data/model/user/user.model.dart';
-
 import 'package:hot_place/features/user/domain/entity/user/user.entity.dart';
-import 'package:logger/logger.dart';
 
 import '../../../app/util/uuid.util.dart';
 
-class RemoteUserDataSource {
-  final FirebaseAuth _auth;
+class RemoteUserDataSource extends UserDataSource {
   final FirebaseFirestore _fireStore;
 
-  RemoteUserDataSource(
-      {required FirebaseAuth auth, required FirebaseFirestore fireStore})
-      : _auth = auth,
-        _fireStore = fireStore;
+  RemoteUserDataSource({required FirebaseFirestore fireStore})
+      : _fireStore = fireStore;
 
-  final _logger = Logger();
+  @override
+  Future<UserModel> findUserById(String uid) async => await _fireStore
+      .collection(CollectionName.user.name)
+      .doc(uid)
+      .get()
+      .then((snapshot) => snapshot.data())
+      .then((json) => UserModel.fromJson(json ?? {}));
 
-  bool get isAuthorized => (_auth.currentUser?.uid != null);
+  @override
+  Future<void> insertUser(UserModel user) async => await _fireStore
+      .collection(CollectionName.user.name)
+      .doc(user.uid)
+      .set(user.toJson());
 
-  String? get currentUid => _auth.currentUser?.uid;
-
-  Future<void> signOut() async => await _auth.signOut();
-
-  Future<void> insertUser(UserEntity user) async {
-    final uid = UuidUtil.uuid();
-    final json = user.toModel().copyWith(uid: uid).toJson();
-    try {
-      await _fireStore.collection(CollectionName.user.name).doc(uid).set(json);
-    } catch (err) {
-      _logger.e(err);
-      throw Exception("유저 데이터 넣는 중 오류 발생");
+  @override
+  Future<void> updateUser(UserModel user) async {
+    if (user.uid.isEmpty) {
+      throw Exception("유저 id가 주어지지 않음");
     }
+    await _fireStore
+        .collection(CollectionName.user.name)
+        .doc(user.uid)
+        .set(user.toJson());
   }
 
-  Future<void> updateUser(UserEntity user) async {
-    try {
-      if (user.uid == null) {
-        throw Exception("유저 id가 주어지지 않음");
-      }
-      final json = user.toModel().toJson();
-      await _fireStore
-          .collection(CollectionName.user.name)
-          .doc(user.uid)
-          .set(json);
-    } catch (err) {
-      _logger.e(err);
-      throw Exception("유저 수정 중 오류 발생");
-    }
-  }
-
+  @override
   Stream<List<UserEntity>> get allUserStream => _fireStore
       .collection(CollectionName.user.name)
       .snapshots()
       .map((snapshot) => snapshot.docs
           .map((e) => e.data())
-          .map((json) => UserModel.fromJson(json))
-          .map((model) => model.toEntity())
+          .map((json) => UserModel.fromJson(json).toEntity())
           .toList());
 
+  @override
   Stream<UserEntity> getUserStream(String uid) => _fireStore
       .collection(CollectionName.user.name)
       .doc(uid)

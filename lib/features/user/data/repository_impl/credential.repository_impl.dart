@@ -1,29 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hot_place/features/user/data/model/user/base_user.model.dart';
+import 'package:hot_place/features/user/data/data_source/base/user.data_source.dart';
 import 'package:injectable/injectable.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as Kakao;
-
-import '../../../app/constant/user.constant.dart';
 import '../../domain/repository/credential.repository.dart';
-import '../data_source/credential.remote_data_source.dart';
+import '../data_source/base/credential.data_source.dart';
 
 @Singleton(as: CredentialRepository)
 class CredentialRepositoryImpl extends CredentialRepository {
-  final RemoteCredentialDataSource credentialDataSource;
+  final CredentialDataSource credentialDataSource;
+  final UserDataSource userDataSource;
 
-  CredentialRepositoryImpl(this.credentialDataSource);
+  CredentialRepositoryImpl(
+      {required this.credentialDataSource, required this.userDataSource});
 
   @override
-  Future<UserCredential> kakaoLogin() async {
-    Kakao.User kakaoUser = await Kakao.UserApi.instance.me();
-    final user = BaseUserModel(
-        uid: kakaoUser.id.toString() ?? '',
-        username: kakaoUser.kakaoAccount?.name,
-        email: kakaoUser.kakaoAccount?.email,
-        profileImageUrl: kakaoUser.kakaoAccount?.profile?.profileImageUrl);
-    final String? token = await credentialDataSource.createToken(
-        user: user, provider: Provider.kakao);
-    if (token == null) throw Exception('token is not given');
-    return await credentialDataSource.signInWithCustomToken(token);
-  }
+  bool get isAuthenticated => currentUid != null;
+
+  @override
+  String? get currentUid => credentialDataSource.currentUid;
+
+  @override
+  Stream<User?> get currentUserStream => credentialDataSource.currentUserStream;
+
+  @override
+  Future<void> signOut() async => await credentialDataSource.signOut();
+
+  @override
+  Future<UserCredential> googleSignIn() async =>
+      await credentialDataSource.googleSignIn();
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/features/splash/chat.screen.dart';
-import 'package:hot_place/features/splash/home.screen.dart';
+import 'package:hot_place/features/app/presentation/home.screen.dart';
 import 'package:hot_place/features/splash/setting.screen.dart';
 import 'package:hot_place/features/user/presentation/page/login/login.screen.dart';
 import '../../user/presentation/page/splash/splash.screen.dart';
@@ -9,7 +9,9 @@ import '../../user/presentation/page/splash/splash.screen.dart';
 enum Routes {
   // splash
   init("/"),
-  welcome("/welcome"),
+
+  // login page
+  login("/login"),
 
   // home
   home("/home"),
@@ -35,8 +37,8 @@ final GoRouter routerConfig = GoRouter(
       },
     ),
     GoRoute(
-      name: Routes.welcome.name,
-      path: Routes.welcome.path,
+      name: Routes.login.name,
+      path: Routes.login.path,
       builder: (BuildContext context, GoRouterState state) {
         return const LoginScreen();
       },

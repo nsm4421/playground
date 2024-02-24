@@ -10,5 +10,7 @@ class AuthState with _$AuthState {
   const factory AuthState({
     String? uid,
     @Default(AuthStatus.unAuthenticated) AuthStatus status,
+    String? username,
+    String? photoUrl,
   }) = _AuthState;
 }

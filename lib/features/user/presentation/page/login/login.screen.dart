@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hot_place/features/app/dependency_injection/dependency_injection.dart';
+import 'package:hot_place/features/user/presentation/bloc/sign_up/sign_up.bloc.dart';
+import 'package:hot_place/features/user/presentation/bloc/sign_up/sign_up.event.dart';
+import 'package:hot_place/features/user/presentation/page/login/welcome.screen.dart';
 
-import '../../../../app/constant/route.constant.dart';
+import '../../bloc/sign_up/sign_up.state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,47 +15,33 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // TODO
-  handleGoogleSignIn() {}
-
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    "Login",
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
-                const SizedBox(height: 25),
-                const Divider(
-                  indent: 30,
-                  endIndent: 30,
-                  thickness: 1,
-                  color: Colors.blueGrey,
-                ),
-                const SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: handleGoogleSignIn,
-                  child: Center(
-                    child: Text(
-                      "Google 계정으로 로그인하기",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+  Widget build(BuildContext context) => BlocProvider(
+        create: (context) => getIt<SignUpBloc>()..add(InitSignUpEvent()),
+        child: BlocBuilder<SignUpBloc, SignUpState>(
+          builder: (context, state) {
+            // TODO : 로딩중, 에러 UI
+            // 로딩중
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            // 에러
+            if (state.isError) {
+              return Center(
+                  child: Column(
+                children: [
+                  Text("ERROR"),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.read<SignUpBloc>().add(InitSignUpEvent());
+                      },
+                      child: Text("BACK"))
+                ],
+              ));
+            }
+            // 환영 페이지
+            return const WelcomeScreen();
+          },
         ),
       );
 }
