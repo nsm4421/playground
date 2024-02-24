@@ -1,5 +1,3 @@
-import 'package:hot_place/features/app/constant/route.constant.dart';
-
 enum UserStatus {
   online("접속중"),
   offline("미접속중"),
@@ -37,4 +35,16 @@ extension SignUpStepEx on SignUpStep {
         return "ERROR";
     }
   }
+}
+
+class Profile {
+  final String uid;
+  final String? username;
+  final String? profileImage;
+
+  Profile({this.uid = "", this.username, this.profileImage});
+}
+
+enum Provider {
+  kakao,google;
 }

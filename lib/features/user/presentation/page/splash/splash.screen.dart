@@ -31,14 +31,25 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  // TODO : Splash 페이지 디자인
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Splash Screen"),
-        ),
         body: Column(
-          children: [Text("Splash Screen")],
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 1 / 3,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Hot Place",
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayLarge
+                        ?.copyWith(fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ],
         ),
       );
 }

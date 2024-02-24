@@ -16,6 +16,7 @@ class UserModel with _$UserModel {
     @Default('') String email,
     @Default('') String username,
     @Default('') String phoneNumber,
+    @Default('') String profileImageUrl,
     @Default(UserStatus.offline) UserStatus status,
   }) = _UserModel;
 
