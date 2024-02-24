@@ -27,6 +27,7 @@ dependencies:
 
   # oAuth
   kakao_flutter_sdk_user: ^1.1.1
+  google_sign_in: ^5.4.1
 
   # firebase
   firebase_core: ^2.24.2
