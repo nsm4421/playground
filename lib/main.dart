@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hot_place/features/app/constant/route.constant.dart';
-import 'package:hot_place/features/app/constant/user.constant.dart';
-import 'package:hot_place/features/user/presentation/bloc/auth/auth.cubit.dart';
-import 'features/app/theme/custom_palette.theme.dart';
+import 'package:hot_place/core/constant/route.constant.dart';
+import 'package:hot_place/core/constant/user.constant.dart';
+import 'package:hot_place/presentation/auth/cubit/auth.cubit.dart';
+import 'core/theme/custom_palette.theme.dart';
 import 'firebase_options.dart';
-import 'features/app/dependency_injection/dependency_injection.dart';
+import 'core/di/dependency_injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
