@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hot_place/presentation/auth/cubit/auth.cubit.dart';
-import 'package:hot_place/presentation/auth/bloc/sign_up.bloc.dart';
-import 'package:hot_place/presentation/auth/bloc/sign_up.event.dart';
+import 'package:hot_place/presentation/main/cubit/auth.cubit.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
-  handleGoogleSignIn(BuildContext context) => () {
-        context.read<SignUpBloc>().add(GoogleSignUpEvent());
-        context.read<AuthCubit>().startApp();
-      };
+  handleGoogleSignIn(BuildContext context) =>
+      () async => await context.read<AuthCubit>().googleSignIn();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -40,34 +36,6 @@ class WelcomeScreen extends StatelessWidget {
                   child: Center(
                     child: Text(
                       "Google 계정으로 로그인하기",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthCubit>().logout();
-                  },
-                  child: Center(
-                    child: Text(
-                      "Sign Out",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    debugPrint(context.read<AuthCubit>().state.toString());
-                  },
-                  child: Center(
-                    child: Text(
-                      "TEST",
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge

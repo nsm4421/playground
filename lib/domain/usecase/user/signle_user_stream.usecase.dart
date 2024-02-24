@@ -5,9 +5,9 @@ import '../../repository/user/user.repository.dart';
 
 @singleton
 class SingleUserStreamUseCase {
-  final UserRepository repository;
+  final UserRepository _repository;
 
-  SingleUserStreamUseCase({required this.repository});
+  SingleUserStreamUseCase(this._repository);
 
-  Stream<UserEntity> call(String uid) => repository.getUserStream(uid);
+  Stream<UserEntity> call(String uid) => _repository.getUserStream(uid);
 }

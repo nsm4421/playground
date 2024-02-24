@@ -4,9 +4,9 @@ import '../../repository/user/credential.repository.dart';
 
 @singleton
 class IsAuthenticatedUseCase {
-  final CredentialRepository repository;
+  final CredentialRepository _repository;
 
-  IsAuthenticatedUseCase(this.repository);
+  IsAuthenticatedUseCase(this._repository);
 
-  bool call() => repository.isAuthenticated;
+  bool call() => _repository.isAuthenticated;
 }

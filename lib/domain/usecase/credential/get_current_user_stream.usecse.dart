@@ -4,9 +4,9 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class GetCurrentUserStreamUseCase {
-  final CredentialRepository repository;
+  final CredentialRepository _repository;
 
-  GetCurrentUserStreamUseCase(this.repository);
+  GetCurrentUserStreamUseCase(this._repository);
 
-  Stream<User?> call() => repository.currentUserStream;
+  Stream<User?> call() => _repository.currentUserStream;
 }

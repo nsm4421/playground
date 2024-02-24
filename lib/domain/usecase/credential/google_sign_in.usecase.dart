@@ -4,10 +4,10 @@ import 'package:injectable/injectable.dart';
 import '../../repository/user/credential.repository.dart';
 
 @singleton
-class GoogleSignUpUseCase {
+class GoogleSignInUseCase {
   final CredentialRepository _repository;
 
-  GoogleSignUpUseCase(this._repository);
+  GoogleSignInUseCase(this._repository);
 
   Future<UserCredential> call() async => await _repository.googleSignIn();
 }

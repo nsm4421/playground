@@ -6,25 +6,29 @@ import '../../data_source/user/credential.data_source.dart';
 
 @Singleton(as: CredentialRepository)
 class CredentialRepositoryImpl extends CredentialRepository {
-  final CredentialDataSource credentialDataSource;
-  final UserDataSource userDataSource;
+  final CredentialDataSource _credentialDataSource;
+  final UserDataSource _userDataSource;
 
   CredentialRepositoryImpl(
-      {required this.credentialDataSource, required this.userDataSource});
+      {required CredentialDataSource credentialDataSource,
+      required UserDataSource userDataSource})
+      : _credentialDataSource = credentialDataSource,
+        _userDataSource = userDataSource;
 
   @override
   bool get isAuthenticated => currentUid != null;
 
   @override
-  String? get currentUid => credentialDataSource.currentUid;
+  String? get currentUid => _credentialDataSource.currentUid;
 
   @override
-  Stream<User?> get currentUserStream => credentialDataSource.currentUserStream;
+  Stream<User?> get currentUserStream =>
+      _credentialDataSource.currentUserStream;
 
   @override
-  Future<void> signOut() async => await credentialDataSource.signOut();
+  Future<void> signOut() async => await _credentialDataSource.signOut();
 
   @override
   Future<UserCredential> googleSignIn() async =>
-      await credentialDataSource.googleSignIn();
+      await _credentialDataSource.googleSignIn();
 }

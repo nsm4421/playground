@@ -3,9 +3,9 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class GetCurrentUidUseCase {
-  final CredentialRepository repository;
+  final CredentialRepository _repository;
 
-  GetCurrentUidUseCase(this.repository);
+  GetCurrentUidUseCase(this._repository);
 
-  String? call() => repository.currentUid;
+  String? call() => _repository.currentUid;
 }
