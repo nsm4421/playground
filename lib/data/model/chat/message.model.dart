@@ -15,7 +15,7 @@ class MessageModel with _$MessageModel {
     @Default('') String senderUid,
     @Default('') String receiverUid,
     @Default(MessageType.text) MessageType messageType,
-    @Default('') String message,
+    @Default('') String content,
     DateTime? createdAt,
     @Default(false) bool isSeen,
   }) = _MessageModel;

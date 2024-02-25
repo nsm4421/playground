@@ -6,13 +6,15 @@ abstract class ChatDataSource {
 
   Stream<List<MessageModel>> getMessageStream(String chatId);
 
-  Future<void> createChat(ChatModel chat);
+  Future<ChatModel> findChatById(String chatId);
 
-  Future<void> createMessage(MessageModel message);
+  Future<String> createChat(ChatModel chat);
+
+  Future<String> createMessage(MessageModel message);
 
   Future<void> seenMessageUpdate(MessageModel message);
 
-  Future<void> deleteChat(ChatModel chat);
+  Future<String> deleteChat(ChatModel chat);
 
-  Future<void> deleteMessage(MessageModel message);
+  Future<String> deleteMessage(MessageModel message);
 }

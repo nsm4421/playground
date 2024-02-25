@@ -8,6 +8,6 @@ class GetChatStreamUseCase {
 
   GetChatStreamUseCase(this._repository);
 
-  Stream<List<ChatEntity>> call(ChatEntity chat) =>
-      _repository.getChatStream(chat);
+  Future<Stream<List<ChatEntity>>> call() async =>
+      await _repository.getChatStream();
 }

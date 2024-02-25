@@ -9,11 +9,11 @@ part 'chat.model.g.dart';
 class ChatModel with _$ChatModel {
   const factory ChatModel({
     @Default('') String id,
-    @Default('') String senderUid,
-    @Default('') String receiverUid,
     @Default('') String lastMessage,
     DateTime? createdAt,
     @Default(0) num unReadCount,
+    @Default('') String hostUid,
+    @Default('') String guestUid,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

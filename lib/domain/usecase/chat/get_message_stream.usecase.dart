@@ -8,6 +8,6 @@ class GetMessageStreamUseCase {
 
   GetMessageStreamUseCase(this._repository);
 
-  Stream<List<MessageEntity>> call(MessageEntity message) =>
-      _repository.getMessageStream(message);
+  Future<Stream<List<MessageEntity>>> call(MessageEntity message) async =>
+      await _repository.getMessageStream(message);
 }

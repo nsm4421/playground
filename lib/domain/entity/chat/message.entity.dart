@@ -17,13 +17,29 @@ class MessageEntity with _$MessageEntity {
     UserEntity? sender,
     UserEntity? receiver,
     MessageType? messageType,
-    String? message,
+    String? content,
     DateTime? createdAt,
     bool? isSeen,
   }) = _MessageEntity;
 
   factory MessageEntity.fromJson(Map<String, dynamic> json) =>
       _$MessageEntityFromJson(json);
+
+  static fromModel({
+    required MessageModel model,
+    required UserEntity sender,
+    required UserEntity receiver,
+  }) =>
+      MessageEntity(
+        id: model.id,
+        chatId: model.chatId,
+        sender: sender,
+        receiver: receiver,
+        messageType: model.messageType,
+        content: model.content,
+        createdAt: model.createdAt,
+        isSeen: model.isSeen,
+      );
 }
 
 extension MessageEntityEx on MessageEntity {
@@ -33,7 +49,7 @@ extension MessageEntityEx on MessageEntity {
         senderUid: sender?.uid ?? '',
         receiverUid: receiver?.uid ?? '',
         messageType: messageType ?? MessageType.text,
-        message: message ?? '',
+        content: content ?? '',
         createdAt: createdAt,
         isSeen: isSeen ?? false,
       );

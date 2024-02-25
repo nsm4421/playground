@@ -2,11 +2,11 @@ import '../../entity/chat/chat.entity.dart';
 import '../../entity/chat/message.entity.dart';
 
 abstract class ChatRepository {
-  Stream<List<ChatEntity>> getChatStream(ChatEntity chat);
+  Future<Stream<List<ChatEntity>>> getChatStream();
 
-  Stream<List<MessageEntity>> getMessageStream(MessageEntity message);
+  Future<ChatEntity> findChatById(String chatId);
 
-  Future<void> createChat(ChatEntity chat);
+  Future<Stream<List<MessageEntity>>> getMessageStream(MessageEntity message);
 
   Future<void> sendMessage(MessageEntity message);
 

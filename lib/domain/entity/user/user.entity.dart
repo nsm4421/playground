@@ -28,6 +28,13 @@ class UserEntity with _$UserEntity {
         username: credential.user?.displayName,
         photoUrl: credential.user?.photoURL,
       );
+
+  static UserEntity fromModel(UserModel model) => UserEntity(
+        uid: model.uid,
+        email: model.email,
+        username: model.username,
+        photoUrl: model.photoUrl,
+      );
 }
 
 extension UserEntityEx on UserEntity {
