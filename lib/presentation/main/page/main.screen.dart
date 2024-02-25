@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hot_place/presentation/main/bloc/auth.bloc.dart';
-import 'package:hot_place/presentation/main/bloc/auth.event.dart';
+import 'package:hot_place/presentation/main/bloc/auth/auth.bloc.dart';
+import 'package:hot_place/presentation/main/bloc/auth/auth.event.dart';
+import 'package:hot_place/presentation/main/bloc/bottom_nav/bottom_nav.cubit.dart';
 import 'package:hot_place/presentation/main/page/home.screen.dart';
 import 'package:hot_place/presentation/main/page/login.screen.dart';
 
@@ -12,9 +13,12 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-        // 앱 전역에서 인증상태 cubit에 접근
-        create: (context) => getIt<AuthBloc>()..add(UpdateAuthEvent()),
+  Widget build(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => getIt<AuthBloc>()..add(UpdateAuthEvent())),
+          BlocProvider(create: (context) => getIt<BottomNavCubit>())
+        ],
         child: StreamBuilder<User?>(
             stream: getIt<AuthBloc>().currentUserStream,
             builder: (ctx, snapshot) {

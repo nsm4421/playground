@@ -2,16 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/domain/usecase/credential/sign_in_with_email_and_password.usecase.dart';
 import 'package:hot_place/domain/usecase/credential/sign_up_with_email_and_password.usecase.dart';
-import 'package:hot_place/presentation/main/bloc/auth.event.dart';
-import 'package:hot_place/presentation/main/bloc/auth.state.dart';
+import 'package:hot_place/presentation/main/bloc/auth/auth.event.dart';
+import 'package:hot_place/presentation/main/bloc/auth/auth.state.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-import '../../../core/constant/user.constant.dart';
-import '../../../domain/usecase/credential/get_current_user_stream.usecse.dart';
-import '../../../domain/usecase/credential/google_sign_in.usecase.dart';
-import '../../../domain/usecase/credential/is_authenticated.usecase.dart';
-import '../../../domain/usecase/credential/sign_out.usecase.dart';
+import '../../../../core/constant/user.constant.dart';
+import '../../../../domain/usecase/credential/get_current_user_stream.usecse.dart';
+import '../../../../domain/usecase/credential/google_sign_in.usecase.dart';
+import '../../../../domain/usecase/credential/is_authenticated.usecase.dart';
+import '../../../../domain/usecase/credential/sign_out.usecase.dart';
 
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
