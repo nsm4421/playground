@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
+import 'package:hot_place/presentation/post/page/add_post.screen.dart';
 
 import '../../presentation/splash.screen.dart';
 
 enum Routes {
   splash("/"),
-  main("/main");
+  main("/main"),
+  addPost("/post/add");
 
   final String path;
 
@@ -27,6 +29,13 @@ final GoRouter routerConfig = GoRouter(
       path: Routes.main.path,
       builder: (BuildContext context, GoRouterState state) {
         return const MainScreen();
+      },
+    ),
+    GoRoute(
+      name: Routes.addPost.name,
+      path: Routes.addPost.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const AddPostScreen();
       },
     ),
   ],
