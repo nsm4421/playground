@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hot_place/presentation/main/cubit/auth.cubit.dart';
+import 'package:hot_place/presentation/main/bloc/auth.bloc.dart';
+import 'package:hot_place/presentation/main/bloc/auth.event.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   handleGoogleSignIn(BuildContext context) =>
-      () async => await context.read<AuthCubit>().googleSignIn();
+      () => context.read<AuthBloc>().add(GoogleSignInEvent());
 
   @override
   Widget build(BuildContext context) => Scaffold(

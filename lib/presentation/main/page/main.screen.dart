@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hot_place/presentation/main/bloc/auth.bloc.dart';
+import 'package:hot_place/presentation/main/bloc/auth.event.dart';
 import 'package:hot_place/presentation/main/page/home.screen.dart';
 import 'package:hot_place/presentation/main/page/login.screen.dart';
 
 import '../../../core/di/dependency_injection.dart';
-import '../cubit/auth.cubit.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -13,9 +14,9 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider(
         // 앱 전역에서 인증상태 cubit에 접근
-        create: (context) => getIt<AuthCubit>()..updateAuthStatus(),
+        create: (context) => getIt<AuthBloc>()..add(UpdateAuthEvent()),
         child: StreamBuilder<User?>(
-            stream: getIt<AuthCubit>().currentUserStream,
+            stream: getIt<AuthBloc>().currentUserStream,
             builder: (ctx, snapshot) {
               // 로딩중
               if (snapshot.connectionState != ConnectionState.active) {

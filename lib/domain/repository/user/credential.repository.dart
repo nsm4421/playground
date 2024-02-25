@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../entity/user/user.entity.dart';
+
 abstract class CredentialRepository {
   // 인증 상태
   bool get isAuthenticated;
@@ -13,5 +15,5 @@ abstract class CredentialRepository {
   Future<void> signOut();
 
   // 구글계정으로 회원가입
-  Future<UserCredential> googleSignIn();
+  Future<UserEntity> googleSignIn();
 }
