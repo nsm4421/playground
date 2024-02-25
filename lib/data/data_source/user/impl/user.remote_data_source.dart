@@ -4,7 +4,6 @@ import 'package:hot_place/data/data_source/user/user.data_source.dart';
 import 'package:hot_place/data/model/user/user.model.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 
-import '../../../../core/util/uuid.util.dart';
 
 class RemoteUserDataSource extends UserDataSource {
   final FirebaseFirestore _fireStore;

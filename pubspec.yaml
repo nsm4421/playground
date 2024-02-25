@@ -1,5 +1,5 @@
 name: hot_place
-description: "recomment hot place"
+description: "recommend hot place"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -28,6 +28,7 @@ dependencies:
   # oAuth
   kakao_flutter_sdk_user: ^1.1.1
   google_sign_in: ^5.4.1
+  flutter_naver_login: ^1.6.0
 
   # firebase
   firebase_core: ^2.24.2

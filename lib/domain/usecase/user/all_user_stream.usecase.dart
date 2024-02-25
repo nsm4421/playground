@@ -5,9 +5,9 @@ import '../../repository/user/user.repository.dart';
 
 @singleton
 class AllUserStream {
-  final UserRepository repository;
+  final UserRepository _repository;
 
-  AllUserStream(this.repository);
+  AllUserStream(this._repository);
 
-  Stream<List<UserEntity>> call() => repository.allUserStream;
+  Stream<List<UserEntity>> call() => _repository.allUserStream;
 }

@@ -27,4 +27,18 @@ class RemoteCredentialDataSource extends CredentialDataSource {
     );
     return await _auth.signInWithCredential(credential);
   }
+
+  @override
+  Future<UserCredential> emailAndPasswordSignUp(
+      {required String email, required String password}) async {
+    return await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+  }
+
+  @override
+  Future<UserCredential> emailAndPasswordSignIn(
+      {required String email, required String password}) async {
+    return await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+  }
 }

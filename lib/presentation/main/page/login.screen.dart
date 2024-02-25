@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hot_place/presentation/auth/cubit/auth.cubit.dart';
-import 'package:hot_place/presentation/auth/bloc/sign_up.bloc.dart';
-import 'package:hot_place/presentation/auth/bloc/sign_up.event.dart';
+import 'package:hot_place/presentation/main/bloc/auth/auth.bloc.dart';
+import 'package:hot_place/presentation/main/bloc/auth/auth.event.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
-  handleGoogleSignIn(BuildContext context) => () {
-        context.read<SignUpBloc>().add(GoogleSignUpEvent());
-        context.read<AuthCubit>().startApp();
+  handleGoogleSignIn(BuildContext context) =>
+      () => context.read<AuthBloc>().add(GoogleSignInEvent());
+
+  // TODO : 이메일, 비밀번호 인증화면 만들기
+  handleSignUpWithEmailAndPassword(BuildContext context) => () {
+        context.read<AuthBloc>().add(SignUpWithEmailAndPasswordEvent(
+            email: 'test1@naver.com', password: '1q2w3e4r!!'));
+      };
+
+  handleSignInWithEmailAndPassword(BuildContext context) => () {
+        context.read<AuthBloc>().add(SignInWithEmailAndPasswordEvent(
+            email: 'test1@naver.com', password: '1q2w3e4r!!'));
       };
 
   @override
@@ -47,13 +55,19 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 25),
+                const Divider(
+                  indent: 30,
+                  endIndent: 30,
+                  thickness: 1,
+                  color: Colors.blueGrey,
+                ),
+                const SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthCubit>().logout();
-                  },
+                  onPressed: handleSignUpWithEmailAndPassword(context),
                   child: Center(
                     child: Text(
-                      "Sign Out",
+                      "이메일,비밀번호 회원가입하기",
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
@@ -61,13 +75,12 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: () {
-                    debugPrint(context.read<AuthCubit>().state.toString());
-                  },
+                  onPressed: handleSignInWithEmailAndPassword(context),
                   child: Center(
                     child: Text(
-                      "TEST",
+                      "이메일,비밀번호 로그인하기",
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge

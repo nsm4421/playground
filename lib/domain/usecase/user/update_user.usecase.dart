@@ -5,9 +5,9 @@ import '../../repository/user/user.repository.dart';
 
 @singleton
 class UpdateUserUseCase {
-  final UserRepository repository;
+  final UserRepository _repository;
 
-  UpdateUserUseCase(this.repository);
+  UpdateUserUseCase(this._repository);
 
-  Future<void> call(UserEntity user) async => await repository.updateUser(user);
+  Future<void> call(UserEntity user) async => await _repository.updateUser(user);
 }
