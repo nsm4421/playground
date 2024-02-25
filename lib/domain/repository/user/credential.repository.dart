@@ -16,4 +16,12 @@ abstract class CredentialRepository {
 
   // 구글계정으로 회원가입
   Future<UserEntity> googleSignIn();
+
+  // 이메일, 패스워드 회원가입
+  Future<void> signUpWithEmailAndPassword(
+      {required String email, required String password});
+
+  // 이메일, 패스워드 로그인
+  Future<UserEntity> signInWithEmailAndPassword(
+      {required String email, required String password});
 }

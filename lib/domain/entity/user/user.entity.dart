@@ -22,7 +22,7 @@ class UserEntity with _$UserEntity {
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
       _$UserEntityFromJson(json);
 
-  static UserEntity fromGoogleAccount(UserCredential credential) => UserEntity(
+  static UserEntity fromCredential(UserCredential credential) => UserEntity(
         uid: credential.user?.uid,
         email: credential.user?.email,
         username: credential.user?.displayName,

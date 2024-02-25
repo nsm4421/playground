@@ -7,5 +7,11 @@ abstract class CredentialDataSource {
 
   Future<void> signOut();
 
+  Future<UserCredential> emailAndPasswordSignUp(
+      {required String email, required String password});
+
+  Future<UserCredential> emailAndPasswordSignIn(
+      {required String email, required String password});
+
   Future<UserCredential> googleSignIn();
 }

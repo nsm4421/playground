@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hot_place/domain/usecase/credential/sign_in_with_email_and_password.usecase.dart';
+import 'package:hot_place/domain/usecase/credential/sign_up_with_email_and_password.usecase.dart';
 import 'package:hot_place/presentation/main/bloc/auth.event.dart';
 import 'package:hot_place/presentation/main/bloc/auth.state.dart';
 import 'package:injectable/injectable.dart';
@@ -17,21 +19,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       {required GoogleSignInUseCase googleSignUpUseCase,
       required IsAuthenticatedUseCase isAuthenticatedUseCase,
       required GetCurrentUserStreamUseCase getCurrentUserStreamUseCase,
-      required SignOutUseCase signOutUseCase})
+      required SignOutUseCase signOutUseCase,
+      required SignInWithEmailAndPasswordUseCase
+          signInWithEmailAndPasswordUseCase,
+      required SignUpWithEmailAndPasswordUseCase
+          signUpWithEmailAndPasswordUseCase})
       : _googleSignUpUseCase = googleSignUpUseCase,
         _isAuthenticatedUseCase = isAuthenticatedUseCase,
         _getCurrentUserStreamUseCase = getCurrentUserStreamUseCase,
         _signOutUseCase = signOutUseCase,
+        _signInWithEmailAndPasswordUseCase = signInWithEmailAndPasswordUseCase,
+        _signUpWithEmailAndPasswordUseCase = signUpWithEmailAndPasswordUseCase,
         super(const AuthState()) {
     on<UpdateAuthEvent>(_onUpdateAuth);
     on<SignOutEvent>(_onSignOut);
     on<GoogleSignInEvent>(_googleSignIn);
+    on<SignInWithEmailAndPasswordEvent>(_signInWithEmailAndPassword);
+    on<SignUpWithEmailAndPasswordEvent>(_signUpWithEmailAndPassword);
   }
 
   final IsAuthenticatedUseCase _isAuthenticatedUseCase;
   final GetCurrentUserStreamUseCase _getCurrentUserStreamUseCase;
   final SignOutUseCase _signOutUseCase;
   final GoogleSignInUseCase _googleSignUpUseCase;
+  final SignInWithEmailAndPasswordUseCase _signInWithEmailAndPasswordUseCase;
+  final SignUpWithEmailAndPasswordUseCase _signUpWithEmailAndPasswordUseCase;
   final _logger = Logger();
 
   Stream<User?> get currentUserStream => _getCurrentUserStreamUseCase();
@@ -73,7 +85,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final user = await _googleSignUpUseCase();
       emit(state.copyWith(status: AuthStatus.authenticated, currentUser: user));
-      _logger.d("log out");
+      _logger.d("google sign in success");
+    } catch (err) {
+      _logger.e(err);
+    } finally {
+      emit(state.copyWith(status: AuthStatus.unAuthenticated));
+    }
+  }
+
+  Future<void> _signUpWithEmailAndPassword(
+    SignUpWithEmailAndPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      await _signUpWithEmailAndPasswordUseCase(
+          email: event.email, password: event.password);
+    } catch (err) {
+      _logger.e(err);
+    } finally {
+      emit(state.copyWith(status: AuthStatus.unAuthenticated));
+    }
+  }
+
+  Future<void> _signInWithEmailAndPassword(
+    SignInWithEmailAndPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      final user = await _signInWithEmailAndPasswordUseCase(
+          email: event.email, password: event.password);
+      emit(state.copyWith(status: AuthStatus.authenticated, currentUser: user));
+      _logger.d("email and password sign in success");
     } catch (err) {
       _logger.e(err);
     } finally {

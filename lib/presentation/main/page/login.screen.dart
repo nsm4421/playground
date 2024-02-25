@@ -9,6 +9,17 @@ class LoginScreen extends StatelessWidget {
   handleGoogleSignIn(BuildContext context) =>
       () => context.read<AuthBloc>().add(GoogleSignInEvent());
 
+  // TODO : 이메일, 비밀번호 인증화면 만들기
+  handleSignUpWithEmailAndPassword(BuildContext context) => () {
+        context.read<AuthBloc>().add(SignUpWithEmailAndPasswordEvent(
+            email: 'test1@naver.com', password: '1q2w3e4r!!'));
+      };
+
+  handleSignInWithEmailAndPassword(BuildContext context) => () {
+        context.read<AuthBloc>().add(SignInWithEmailAndPasswordEvent(
+            email: 'test1@naver.com', password: '1q2w3e4r!!'));
+      };
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
@@ -37,6 +48,39 @@ class LoginScreen extends StatelessWidget {
                   child: Center(
                     child: Text(
                       "Google 계정으로 로그인하기",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                const Divider(
+                  indent: 30,
+                  endIndent: 30,
+                  thickness: 1,
+                  color: Colors.blueGrey,
+                ),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: handleSignUpWithEmailAndPassword(context),
+                  child: Center(
+                    child: Text(
+                      "이메일,비밀번호 회원가입하기",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: handleSignInWithEmailAndPassword(context),
+                  child: Center(
+                    child: Text(
+                      "이메일,비밀번호 로그인하기",
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge

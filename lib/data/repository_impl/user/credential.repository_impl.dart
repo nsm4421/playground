@@ -36,9 +36,27 @@ class CredentialRepositoryImpl extends CredentialRepository {
     final uid = credential.user?.uid;
     UserModel model = await _userDataSource.findUserById(uid!);
     if (model.uid.isEmpty) {
-      model = UserEntity.fromGoogleAccount(credential).toModel();
+      model = UserEntity.fromCredential(credential).toModel();
       await _userDataSource.insertUser(model);
     }
     return UserEntity.fromModel(model);
+  }
+
+  @override
+  Future<UserEntity> signInWithEmailAndPassword(
+      {required String email, required String password}) async {
+    final credential = await _credentialDataSource.emailAndPasswordSignIn(
+        email: email, password: password);
+    final model = await _userDataSource.findUserById(credential.user!.uid);
+    return UserEntity.fromModel(model);
+  }
+
+  @override
+  Future<void> signUpWithEmailAndPassword(
+      {required String email, required String password}) async {
+    final credential = await _credentialDataSource.emailAndPasswordSignUp(
+        email: email, password: password);
+    final user = UserEntity.fromCredential(credential).toModel();
+    await _userDataSource.insertUser(user);
   }
 }
