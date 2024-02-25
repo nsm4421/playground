@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
+import 'package:hot_place/data/data_source/chat/impl/chat.remote_data_source.dart';
 import 'package:hot_place/data/data_source/user/impl/credential.remote_data_source.dart';
 import 'package:injectable/injectable.dart';
 
@@ -19,4 +21,8 @@ abstract class DataSource {
   @singleton
   CredentialDataSource get credentialRemoteSource =>
       RemoteCredentialDataSource(auth: _auth);
+
+  @singleton
+  ChatDataSource get chatRepository =>
+      RemoteChatDataSource(auth: _auth, fireStore: _fireStore);
 }
