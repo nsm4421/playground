@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/post/page/add_post.screen.dart';
+import 'package:hot_place/presentation/setting/page/edit_profile.screen.dart';
 
 import '../../presentation/splash.screen.dart';
 
 enum Routes {
   splash("/"),
   main("/main"),
-  addPost("/post/add");
+  addPost("/post/add"),
+  editProfile("/setting/edit-profile");
 
   final String path;
 
@@ -36,6 +38,12 @@ final GoRouter routerConfig = GoRouter(
       path: Routes.addPost.path,
       builder: (BuildContext context, GoRouterState state) {
         return const AddPostScreen();
+      },
+    ),    GoRoute(
+      name: Routes.editProfile.name,
+      path: Routes.editProfile.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const EditProfileScreen();
       },
     ),
   ],
