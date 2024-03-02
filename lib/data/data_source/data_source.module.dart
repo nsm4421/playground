@@ -5,6 +5,8 @@ import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
 import 'package:hot_place/data/data_source/chat/impl/chat.remote_data_source.dart';
 import 'package:hot_place/data/data_source/map/impl/map.remote_data_source.dart';
 import 'package:hot_place/data/data_source/map/map.data_source.dart';
+import 'package:hot_place/data/data_source/post/impl/post.remote_data_source.dart';
+import 'package:hot_place/data/data_source/post/post.data_source.dart';
 import 'package:hot_place/data/data_source/user/impl/credential.remote_data_source.dart';
 import 'package:injectable/injectable.dart';
 
@@ -27,10 +29,14 @@ abstract class DataSource {
       RemoteCredentialDataSource(auth: _auth);
 
   @singleton
-  ChatDataSource get chatRepository =>
+  ChatDataSource get chatRemoteDataSource =>
       RemoteChatDataSource(auth: _auth, fireStore: _fireStore);
 
   @singleton
-  MapDataSource get mapDataSource => RemoteMapDatSource(
+  PostDataSource get postRemoteDataSource =>
+      RemotePostDataSource(auth: _auth, fireStore: _fireStore);
+
+  @singleton
+  MapDataSource get mapRemoteDataSource => RemoteMapDatSource(
       auth: _auth, fireStore: _fireStore, geoLocator: _geoLocator);
 }
