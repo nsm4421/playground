@@ -48,6 +48,10 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_serializable: ^6.7.1
 
+  # map
+  kakao_map_plugin:
+  geolocator: ^7.0.3
+
   flutter_dotenv: ^5.1.0
   uuid: ^3.0.7
   logger: ^1.1.0
@@ -76,6 +80,8 @@ dependencies:
   go_router: ^9.1.0
   firebase_app_check: ^0.2.1+8
   http: ^1.2.1
+  webview_flutter: ^4.7.0
+  flutter_inappwebview: ^6.0.0
 
 dev_dependencies:
   flutter_test:

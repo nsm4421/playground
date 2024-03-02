@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/presentation/chat/page/chat.fragment.dart';
 import 'package:hot_place/presentation/home/page/home.fragment.dart';
+import 'package:hot_place/presentation/map/map.fragment.dart';
 import 'package:hot_place/presentation/setting/page/setting.fragment.dart';
 
 import '../../../core/constant/bottom_nav.constant.dart';
@@ -51,6 +52,8 @@ class _Body extends StatelessWidget {
         return const HomeFragment();
       case BottomNav.feed:
         return const PostFragment();
+      case BottomNav.map:
+        return const MapFragment();
       case BottomNav.chat:
         return const ChatFragment();
       case BottomNav.setting:
