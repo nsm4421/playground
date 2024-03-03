@@ -23,25 +23,25 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     InitMap event,
     Emitter<MapState> emit,
   ) async {
+    emit(state.copyWith(isLoading: true));
     try {
       // 위치 권한
       LocationPermission permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        emit(state.copyWith(isPermitted: false));
+        emit(state.copyWith(isError: false));
         return;
       }
 
-      // 현재 위치
-      final location = await _getCurrentLocationUseCase();
-      _logger.d('현재 위치 : 위도 ${location.latitude} 경도 ${location.longitude}');
-      emit(state.copyWith(
-        isPermitted: true,
-        lat: location.latitude,
-        lng: location.longitude,
-      ));
+      // 현재 위치 설정
+      final currentLocation = await _getCurrentLocationUseCase();
+      emit(state.copyWith(currentLocation: currentLocation));
+      _logger.d(
+          '현재 위치 : 위도 ${currentLocation.latitude} 경도 ${currentLocation.longitude}');
     } catch (err) {
       _logger.e(err);
-      emit(state.copyWith(isError: false));
+      emit(state.copyWith(isLoading: false));
+    } finally {
+      emit(state.copyWith(isLoading: false));
     }
   }
 }
