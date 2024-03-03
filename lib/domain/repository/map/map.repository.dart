@@ -1,11 +1,11 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:hot_place/data/model/map/place/place.model.dart';
+import 'package:hot_place/domain/entity/map/place.entity.dart';
 
 import '../../../core/util/page.util.dart';
 
-abstract class MapDataSource {
+abstract class MapRepository {
   Future<Position> getCurrentLocation();
 
-  Future<CustomPageable<PlaceModel>> searchPlaces(String keyword,
+  Future<CustomPageable<PlaceEntity>> searchPlaces(String keyword,
       {int? page, int? size});
 }

@@ -13,11 +13,13 @@ import 'package:injectable/injectable.dart';
 import 'user/credential.data_source.dart';
 import 'user/user.data_source.dart';
 import 'user/impl/user.remote_data_source.dart';
+import 'package:dio/dio.dart';
 
 @module
 abstract class DataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final Dio _dio = Dio();
   final Geolocator _geoLocator = Geolocator();
 
   @singleton
@@ -38,5 +40,5 @@ abstract class DataSource {
 
   @singleton
   MapDataSource get mapRemoteDataSource => RemoteMapDatSource(
-      auth: _auth, fireStore: _fireStore, geoLocator: _geoLocator);
+      auth: _auth, fireStore: _fireStore, geoLocator: _geoLocator, dio:_dio);
 }
