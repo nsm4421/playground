@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/map/widget/map_view.widget.dart';
+import 'package:hot_place/presentation/map/widget/search_place.widget.dart';
 
 import '../../core/di/dependency_injection.dart';
 import 'bloc/map.bloc.dart';
@@ -19,7 +19,11 @@ class GoogleMapScreen extends StatefulWidget {
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
   _pop() => context.pop();
 
-  _goToSearchPage() {}
+  _goToSearchPage() => showModalBottomSheet(
+      context: context,
+      builder: (_) => SearchPlaceWidget(),
+      isScrollControlled: true,
+      enableDrag: true);
 
   @override
   Widget build(BuildContext context) => BlocProvider(
@@ -49,7 +53,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 debugPrint("현재 위치정보를 조회하지 못함. 일단 우리 동네로 현재 위치 조회");
               }
 
-              return MapViewWidget(
+              return const MapViewWidget(
                   initialLatitude: 37.502,
                   // context.read<MapBloc>().state.currentLocation?.latitude!
                   initialLongitude:

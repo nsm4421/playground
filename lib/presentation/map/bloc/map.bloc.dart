@@ -9,8 +9,9 @@ import 'map.state.dart';
 
 @injectable
 class MapBloc extends Bloc<MapEvent, MapState> {
-  MapBloc({required GetCurrentLocationUseCase getCurrentLocationUseCase})
-      : _getCurrentLocationUseCase = getCurrentLocationUseCase,
+  MapBloc({
+    required GetCurrentLocationUseCase getCurrentLocationUseCase,
+  })  : _getCurrentLocationUseCase = getCurrentLocationUseCase,
         super(const MapState()) {
     on<InitMap>(_onInit);
   }
@@ -39,7 +40,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           '현재 위치 : 위도 ${currentLocation.latitude} 경도 ${currentLocation.longitude}');
     } catch (err) {
       _logger.e(err);
-      emit(state.copyWith(isLoading: false));
+      emit(state.copyWith(isLoading: false, isError: true));
     } finally {
       emit(state.copyWith(isLoading: false));
     }

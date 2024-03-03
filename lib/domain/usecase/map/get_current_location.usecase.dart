@@ -1,5 +1,5 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:hot_place/domain/repository/map/Map.repository.dart';
+import 'package:hot_place/domain/repository/map/map.repository.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton

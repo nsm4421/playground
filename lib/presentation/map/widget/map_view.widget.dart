@@ -33,7 +33,7 @@ class _MapViewWidgetState extends State<MapViewWidget> {
         onLongPress: (LatLng location) {},
         myLocationEnabled: false,
         initialCameraPosition: CameraPosition(
-            zoom: 20,
+            zoom: 15,
             target: LatLng(widget.initialLatitude, widget.initialLongitude)),
       ),
     );
