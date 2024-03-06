@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
-import 'package:hot_place/presentation/component/content_text_field.widget.dart';
-import 'package:hot_place/presentation/component/hashtag_text_field.widget.dart';
 import 'package:hot_place/presentation/post/bloc/upload_post/create_post.cubit.dart';
+import 'package:hot_place/presentation/post/page/detail.fragment.dart';
+import 'package:hot_place/presentation/post/page/image.fragment.dart';
 
 import '../../../core/constant/status.costant.dart';
 import '../bloc/upload_post/create_post.state.dart';
@@ -53,73 +53,37 @@ class _CreatePostView extends StatefulWidget {
 }
 
 class _CreatePostViewState extends State<_CreatePostView> {
-  late TextEditingController _tec;
-  late List<String> _hashtags;
+  late PageController _pageController;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
-    _tec = TextEditingController();
-    _hashtags = [];
+    _pageController = PageController();
   }
 
   @override
   dispose() {
     super.dispose();
-    _tec.dispose();
+    _pageController.dispose();
   }
 
-  _setHashtags(List<String> hashtags) => setState(() {
-        _hashtags = hashtags;
-      });
-
-  // 포스팅 업로드
-  _upload() => context.read<CreatePostCubit>()
-    ..setContent(_tec.text)
-    ..setHashtags(_hashtags)
-    ..upload();
+  // TODO : 이미지 업로드 기능 추가
+  _upload() {
+    try {
+      context.read<CreatePostCubit>().upload();
+    } catch (err) {
+      debugPrint(err.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title:
-              Text("포스팅 작성하기", style: Theme.of(context).textTheme.titleLarge),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: _upload,
-              icon: Icon(Icons.upload,
-                  color: Theme.of(context).colorScheme.primary, size: 30),
-              tooltip: "제출하기",
-            )
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // 포스팅 본문
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: ContentTextField(
-                  label: "CONTENT",
-                  tec: _tec,
-                  placeholder: "포스팅 본문을 입력해주세요",
-                ),
-              ),
-              const Divider(indent: 10, endIndent: 10, thickness: 1),
-
-              // 해시태그
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: HashtagTextField(
-                    label: "HASHTAG",
-                    hashtags: _hashtags,
-                    setHashtag: _setHashtags),
-              )
-            ],
-          ),
-        ),
+            title:
+                Text("포스팅 작성하기", style: Theme.of(context).textTheme.titleLarge),
+            centerTitle: true),
+        body: PageView.builder(
+            itemBuilder: (_, index) =>
+                index == 0 ? const ImageFragment() : const DetailFragment()),
       );
 }
