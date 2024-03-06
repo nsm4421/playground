@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/map/google_map.screen.dart';
-import 'package:hot_place/presentation/post/page/add_post.screen.dart';
+import 'package:hot_place/presentation/post/page/create_post.screen.dart';
 import 'package:hot_place/presentation/setting/page/edit_profile.screen.dart';
 
 import '../../presentation/splash.screen.dart';
@@ -39,7 +39,7 @@ final GoRouter routerConfig = GoRouter(
       name: Routes.addPost.name,
       path: Routes.addPost.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const AddPostScreen();
+        return const CreatePostScreen();
       },
     ),
     GoRoute(

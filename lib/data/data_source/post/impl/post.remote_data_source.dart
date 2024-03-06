@@ -18,11 +18,8 @@ class RemotePostDataSource extends PostDataSource {
   Future<String> createPost(PostModel post) async {
     final currentUid = _getCurrentUidOrElseThrow();
     final postId = post.id.isNotEmpty ? post.id : UuidUtil.uuid();
-    if (post.authorUid != currentUid) {
-      throw Exception('author and login user are not same');
-    }
     await _fireStore.collection(CollectionName.post.name).doc(postId).set(post
-        .copyWith(authorUid: currentUid, createdAt: DateTime.now())
+        .copyWith(id: postId, authorUid: currentUid, createdAt: DateTime.now())
         .toJson());
     return postId;
   }
