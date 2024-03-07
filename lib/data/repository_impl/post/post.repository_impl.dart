@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
 import 'package:hot_place/data/data_source/user/user.data_source.dart';
 import 'package:hot_place/domain/entity/post/post.entity.dart';
@@ -35,4 +38,8 @@ class PostRepositoryImpl extends PostRepository {
   @override
   Future<String> modifyPost(PostEntity post) async =>
       await _postDataSource.modifyPost(post.toModel());
+
+  @override
+  Future<List<String>> uploadImages(List<File> images) => Future.wait(
+      images.map((e) async => await _postDataSource.uploadImage(e)));
 }

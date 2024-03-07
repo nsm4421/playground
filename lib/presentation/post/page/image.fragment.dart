@@ -39,15 +39,22 @@ class _ImageFragmentState extends State<ImageFragment> {
             // 제목
             Padding(
                 padding: const EdgeInsets.only(left: 10.0, top: 10, bottom: 5),
-                child: Text("Image",
-                    style: Theme.of(context).textTheme.titleLarge)),
-
+                child: Row(
+                  children: [
+                    Text("Image",
+                        style: Theme.of(context).textTheme.titleLarge),
+                    const Spacer(),
+                    if (context.read<CreatePostCubit>().state.assets.isNotEmpty)
+                      IconButton(
+                          onPressed: _selectImage,
+                          icon: const Icon(Icons.add_a_photo))
+                  ],
+                )),
             Padding(
                 padding: const EdgeInsets.only(left: 10.0, bottom: 20),
                 child: Text("최대 3개의 이미지를 업로드 할 수 있습니다",
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: Theme.of(context).colorScheme.secondary))),
-
             // 이미지
             Container(
                 decoration: BoxDecoration(

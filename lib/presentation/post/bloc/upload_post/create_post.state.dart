@@ -8,7 +8,6 @@ part 'create_post.state.freezed.dart';
 class CreatePostState with _$CreatePostState {
   const factory CreatePostState({
     @Default(Status.initial) Status status,
-    @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,
     @Default(<XFile>[]) List<XFile> assets,

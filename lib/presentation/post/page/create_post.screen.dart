@@ -67,22 +67,38 @@ class _CreatePostViewState extends State<_CreatePostView> {
     _pageController.dispose();
   }
 
-  // TODO : 이미지 업로드 기능 추가
-  _upload() {
-    try {
-      context.read<CreatePostCubit>().upload();
-    } catch (err) {
-      debugPrint(err.toString());
+  _uploadPost() {
+    if (context.read<CreatePostCubit>().tec.text.trim().isEmpty) {
+      ToastUtil.toast("본문을 입력해주세요");
+      return;
     }
+    context.read<CreatePostCubit>().uploadPost();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-            title:
-                Text("포스팅 작성하기", style: Theme.of(context).textTheme.titleLarge),
-            centerTitle: true),
+          title:
+              Text("포스팅 작성하기", style: Theme.of(context).textTheme.titleLarge),
+          centerTitle: true,
+          actions: [
+            Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.primaryContainer),
+              child: IconButton(
+                onPressed: _uploadPost,
+                icon: Icon(Icons.upload,
+                    color: Theme.of(context).colorScheme.primary),
+                tooltip: "업로드",
+              ),
+            )
+          ],
+        ),
         body: PageView.builder(
+            controller: _pageController,
+            pageSnapping: true,
+            itemCount: 2,
             itemBuilder: (_, index) =>
                 index == 0 ? const ImageFragment() : const DetailFragment()),
       );

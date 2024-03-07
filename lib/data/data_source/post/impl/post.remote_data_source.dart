@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hot_place/core/constant/firebase.constant.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
@@ -8,11 +11,15 @@ import 'package:hot_place/data/model/post/post.model.dart';
 class RemotePostDataSource extends PostDataSource {
   final FirebaseAuth _auth;
   final FirebaseFirestore _fireStore;
+  final FirebaseStorage _storage;
 
   RemotePostDataSource(
-      {required FirebaseAuth auth, required FirebaseFirestore fireStore})
+      {required FirebaseAuth auth,
+      required FirebaseFirestore fireStore,
+      required FirebaseStorage storage})
       : _auth = auth,
-        _fireStore = fireStore;
+        _fireStore = fireStore,
+        _storage = storage;
 
   @override
   Future<String> createPost(PostModel post) async {
@@ -64,6 +71,13 @@ class RemotePostDataSource extends PostDataSource {
         .doc(post.id)
         .set(post.copyWith(authorUid: currentUid).toJson());
     return post.id;
+  }
+
+  @override
+  Future<String> uploadImage(File image) async {
+    final ref = _storage.ref().child('images/${UuidUtil.uuid()}.png');
+    await ref.putFile(image);
+    return await ref.getDownloadURL();
   }
 
   String _getCurrentUidOrElseThrow() {

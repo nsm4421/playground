@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hot_place/data/model/post/post.model.dart';
 
 abstract class PostDataSource {
@@ -8,4 +10,6 @@ abstract class PostDataSource {
   Future<String> modifyPost(PostModel post);
 
   Future<String> deletePostById(String postId);
+
+  Future<String> uploadImage(File image);
 }

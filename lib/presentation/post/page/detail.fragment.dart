@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hot_place/core/util/toast.util.dart';
 
 import '../../component/content_text_field.widget.dart';
 import '../../component/hashtag_text_field.widget.dart';
@@ -13,7 +14,6 @@ class DetailFragment extends StatefulWidget {
 }
 
 class _DetailFragmentState extends State<DetailFragment> {
-
   _setHashtags(List<String> hashtags) => setState(() {
         context.read<CreatePostCubit>().setHashtags(hashtags);
       });
@@ -40,7 +40,13 @@ class _DetailFragmentState extends State<DetailFragment> {
                   label: "HASHTAG",
                   hashtags: context.read<CreatePostCubit>().state.hashtags,
                   setHashtag: _setHashtags),
-            )
+            ),
+
+            const SizedBox(height: 20),
+            const Divider(indent: 10, endIndent: 10, thickness: 1),
+            const SizedBox(height: 20),
+
+
           ],
         ),
       );

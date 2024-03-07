@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hot_place/domain/entity/post/post.entity.dart';
 
 abstract class PostRepository {
@@ -8,4 +10,6 @@ abstract class PostRepository {
   Future<String> modifyPost(PostEntity post);
 
   Future<String> deletePostById(String postId);
+
+  Future<List<String>> uploadImages(List<File> images);
 }

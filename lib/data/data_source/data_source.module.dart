@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
 import 'package:hot_place/data/data_source/chat/impl/chat.remote_data_source.dart';
@@ -19,6 +20,7 @@ import 'package:dio/dio.dart';
 abstract class DataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   final Dio _dio = Dio();
   final Geolocator _geoLocator = Geolocator();
 
@@ -35,10 +37,10 @@ abstract class DataSource {
       RemoteChatDataSource(auth: _auth, fireStore: _fireStore);
 
   @singleton
-  PostDataSource get postRemoteDataSource =>
-      RemotePostDataSource(auth: _auth, fireStore: _fireStore);
+  PostDataSource get postRemoteDataSource => RemotePostDataSource(
+      auth: _auth, fireStore: _fireStore, storage: _storage);
 
   @singleton
   MapDataSource get mapRemoteDataSource => RemoteMapDatSource(
-      auth: _auth, fireStore: _fireStore, geoLocator: _geoLocator, dio:_dio);
+      auth: _auth, fireStore: _fireStore, geoLocator: _geoLocator, dio: _dio);
 }
