@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
 import 'package:hot_place/data/data_source/user/user.data_source.dart';
+import 'package:hot_place/data/model/user/user.model.dart';
 import 'package:hot_place/domain/entity/post/post.entity.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:hot_place/domain/repository/post/post.repository.dart';
@@ -18,6 +18,17 @@ class PostRepositoryImpl extends PostRepository {
       required UserDataSource userDataSource})
       : _postDataSource = postDataSource,
         _userDataSource = userDataSource;
+
+  @override
+  Stream<List<PostEntity>> getPostStream({int skip = 0, int take = 100}) =>
+      _postDataSource
+          .getPostStream(skip: skip, take: take)
+          .asyncMap((posts) async => await Future.wait(posts.map((post) async {
+                final author =
+                    await _userDataSource.findUserById(post.authorUid);
+                return PostEntity.fromModel(
+                    post: post, author: author.toEntity());
+              })));
 
   @override
   Future<String> createPost(PostEntity post) async =>

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/map/google_map.screen.dart';
-import 'package:hot_place/presentation/post/page/create_post.screen.dart';
+import 'package:hot_place/presentation/post/page/create_post/create_post.screen.dart';
 import 'package:hot_place/presentation/setting/page/edit_profile.screen.dart';
 
 import '../../presentation/splash.screen.dart';
@@ -10,7 +10,7 @@ import '../../presentation/splash.screen.dart';
 enum Routes {
   splash("/"),
   main("/main"),
-  addPost("/post/add"),
+  createPost("/post/create"),
   googleMap("/map/google"),
   editProfile("/setting/edit-profile");
 
@@ -36,8 +36,8 @@ final GoRouter routerConfig = GoRouter(
       },
     ),
     GoRoute(
-      name: Routes.addPost.name,
-      path: Routes.addPost.path,
+      name: Routes.createPost.name,
+      path: Routes.createPost.path,
       builder: (BuildContext context, GoRouterState state) {
         return const CreatePostScreen();
       },

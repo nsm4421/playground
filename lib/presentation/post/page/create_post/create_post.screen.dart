@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
-import 'package:hot_place/presentation/post/bloc/upload_post/create_post.cubit.dart';
-import 'package:hot_place/presentation/post/page/detail.fragment.dart';
-import 'package:hot_place/presentation/post/page/image.fragment.dart';
+import 'package:hot_place/presentation/post/page/create_post/detail.fragment.dart';
 
-import '../../../core/constant/status.costant.dart';
-import '../bloc/upload_post/create_post.state.dart';
+import '../../../../core/constant/status.costant.dart';
+import '../../bloc/create_post/create_post.cubit.dart';
+import '../../bloc/create_post/create_post.state.dart';
+import 'image.fragment.dart';
 
 class CreatePostScreen extends StatelessWidget {
   const CreatePostScreen({super.key});

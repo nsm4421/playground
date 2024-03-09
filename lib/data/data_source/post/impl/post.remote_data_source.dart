@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hot_place/core/constant/firebase.constant.dart';
+import 'package:hot_place/core/util/page.util.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
 import 'package:hot_place/data/model/post/post.model.dart';
@@ -79,6 +80,17 @@ class RemotePostDataSource extends PostDataSource {
     await ref.putFile(image);
     return await ref.getDownloadURL();
   }
+
+  @override
+  Stream<List<PostModel>> getPostStream({int skip = 0, int take = 100}) =>
+      _fireStore
+          .collection(CollectionName.post.name)
+          .snapshots()
+          .skip(skip)
+          .take(take)
+          .asyncMap((snapshot) => snapshot.docs
+              .map((doc) => PostModel.fromJson(doc.data()))
+              .toList());
 
   String _getCurrentUidOrElseThrow() {
     final currentUid = _auth.currentUser?.uid;

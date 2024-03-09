@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/presentation/component/image.widget.dart';
-import 'package:hot_place/presentation/post/bloc/upload_post/create_post.cubit.dart';
+
+import '../../bloc/create_post/create_post.cubit.dart';
 
 class ImageFragment extends StatefulWidget {
   const ImageFragment({super.key});
