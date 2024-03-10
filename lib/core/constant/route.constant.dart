@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/map/google_map.screen.dart';
+import 'package:hot_place/presentation/map/search_by_category.screen.dart';
 import 'package:hot_place/presentation/post/page/create_post/create_post.screen.dart';
 import 'package:hot_place/presentation/setting/page/edit_profile.screen.dart';
 
@@ -12,6 +13,7 @@ enum Routes {
   main("/main"),
   createPost("/post/create"),
   googleMap("/map/google"),
+  searchByCategory("/map/category"),
   editProfile("/setting/edit-profile");
 
   final String path;
@@ -47,6 +49,13 @@ final GoRouter routerConfig = GoRouter(
       path: Routes.googleMap.path,
       builder: (BuildContext context, GoRouterState state) {
         return const GoogleMapScreen();
+      },
+    ),
+    GoRoute(
+      name: Routes.searchByCategory.name,
+      path: Routes.searchByCategory.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const SearchByCategoryScreen();
       },
     ),
     GoRoute(

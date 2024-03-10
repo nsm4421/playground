@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../core/constant/map.constant.dart';
+import '../../../../../core/constant/map.constant.dart';
 
 part 'road_address.model.freezed.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/core/constant/map.constant.dart';
-import 'package:hot_place/data/model/map/address/address.model.dart';
-import 'package:hot_place/data/model/map/road_address/road_address.model.dart';
-import 'package:hot_place/domain/entity/map/place.entity.dart';
+import 'package:hot_place/data/model/map/place/address/address.model.dart';
+import 'package:hot_place/data/model/map/place/road_address/road_address.model.dart';
+import 'package:hot_place/domain/entity/map/place/place.entity.dart';
 
 part 'place.model.freezed.dart';
 
