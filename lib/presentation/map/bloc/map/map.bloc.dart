@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hot_place/domain/usecase/map/get_current_location.usecase.dart';
-import 'package:hot_place/presentation/map/bloc/map.event.dart';
+import 'package:hot_place/presentation/map/bloc/map/map.event.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 

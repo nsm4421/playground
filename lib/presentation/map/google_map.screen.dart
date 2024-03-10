@@ -5,9 +5,9 @@ import 'package:hot_place/presentation/map/widget/map_view.widget.dart';
 import 'package:hot_place/presentation/map/widget/search_place.widget.dart';
 
 import '../../core/di/dependency_injection.dart';
-import 'bloc/map.bloc.dart';
-import 'bloc/map.event.dart';
-import 'bloc/map.state.dart';
+import 'bloc/map/map.bloc.dart';
+import 'bloc/map/map.event.dart';
+import 'bloc/map/map.state.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   const GoogleMapScreen({super.key});
@@ -53,6 +53,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 debugPrint("현재 위치정보를 조회하지 못함. 일단 우리 동네로 현재 위치 조회");
               }
 
+              // TODO : 위치정보 수정하기
               return const MapViewWidget(
                   initialLatitude: 37.502,
                   // context.read<MapBloc>().state.currentLocation?.latitude!

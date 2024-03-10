@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
-import 'package:hot_place/presentation/map/bloc/map.event.dart';
+import 'package:hot_place/presentation/map/bloc/map/map.event.dart';
 import '../../core/constant/route.constant.dart';
-import 'bloc/map.bloc.dart';
+import 'bloc/map/map.bloc.dart';
 
 class MapFragment extends StatelessWidget {
   const MapFragment({super.key});
@@ -18,7 +18,7 @@ class MapFragment extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(title: Text("Map")),
           body: ElevatedButton(onPressed: () {
-            context.push(Routes.googleMap.path);
+            context.push(Routes.searchByCategory.path);
           }, child: Text("test"),),
         ),
       );

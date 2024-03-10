@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/domain/usecase/map/search_places.usecase.dart';
 
-import '../../../domain/entity/map/place.entity.dart';
+import '../../../domain/entity/map/place/place.entity.dart';
 
 class SearchPlaceWidget extends StatefulWidget {
   const SearchPlaceWidget({super.key});
