@@ -76,8 +76,13 @@ class _PostItem extends StatelessWidget {
         // 유저명
         Row(
           children: [
-            // TODO : 유저 프로필 이미지
+            CircleAvatar(
+                child: _post.author?.photoUrl != null
+                    ? Image.network(_post.author!.photoUrl!)
+                    : const Icon(Icons.account_circle_outlined)),
+            const SizedBox(width: 5),
             Text(_post.author?.username ?? _post.author?.email ?? "Unknown",
+                softWrap: true,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w700)),
@@ -89,17 +94,22 @@ class _PostItem extends StatelessWidget {
 
         // 이미지
         if (_post.images.isNotEmpty)
-          PageView.builder(
-              itemBuilder: (_, index) => Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(_post.images[index]))))),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: PageView.builder(
+                itemCount: _post.images.length,
+                itemBuilder: (_, index) => Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(_post.images[index]))))),
+          ),
 
         // 본문
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 20),
           child: Text(
             _post.content ?? "",
             softWrap: true,

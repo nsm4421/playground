@@ -25,8 +25,8 @@ class UserModel with _$UserModel {
 extension UserModelEx on UserModel {
   UserEntity toEntity() => UserEntity(
       uid: uid,
-      email: email,
-      username: username,
-      photoUrl: photoUrl,
+      email: email.isNotEmpty ? email : null,
+      username: username.isNotEmpty ? username : null,
+      photoUrl: photoUrl.isNotEmpty ? photoUrl : null,
       status: status);
 }
