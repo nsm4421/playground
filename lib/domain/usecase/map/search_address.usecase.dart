@@ -1,4 +1,4 @@
-import 'package:hot_place/core/util/response.util.dart';
+import 'package:hot_place/data/model/map/response/kakao_map_api_response.model.dart';
 import 'package:hot_place/domain/repository/map/map.repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -10,7 +10,7 @@ class SearchAddressUseCase {
 
   SearchAddressUseCase(this._repository);
 
-  Future<KakaoApiResponseWrapper<AddressEntity>> call(String keyword,
+  Future<KakaoMapApiResponseModel<AddressEntity>> call(String keyword,
           {int? page, int? size}) async =>
       await _repository.searchAddress(keyword, page: page, size: size);
 }

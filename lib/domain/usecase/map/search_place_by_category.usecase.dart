@@ -1,19 +1,19 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:hot_place/core/constant/map.constant.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../core/util/response.util.dart';
+import '../../../core/constant/map.constant.dart';
+import '../../../data/model/map/response/kakao_map_api_response.model.dart';
 import '../../entity/map/place/place.entity.dart';
 import '../../repository/map/map.repository.dart';
 
 @singleton
-class SearchPlacesByCategoryUseCase {
+class SearchPlaceByCategoryUseCase {
   final MapRepository _repository;
 
-  SearchPlacesByCategoryUseCase(this._repository);
+  SearchPlaceByCategoryUseCase(this._repository);
 
-  Future<KakaoApiResponseWrapper<PlaceEntity>> call({
-    required CategoryGroupCode category,
+  Future<KakaoMapApiResponseModel<PlaceEntity>> call({
+  required  CategoryGroupCode category,
     Position? position,
     int? radius,
     int? page,

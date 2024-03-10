@@ -6,11 +6,12 @@ import 'package:hot_place/core/constant/map.constant.dart';
 import 'package:hot_place/data/data_source/map/map.data_source.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:hot_place/data/model/map/place/same_name/same_name.model.dart';
 import 'package:logger/logger.dart';
 
-import '../../../../core/util/response.util.dart';
 import '../../../model/map/address/address.model.dart';
 import '../../../model/map/place/place.model.dart';
+import '../../../model/map/response/kakao_map_api_response.model.dart';
 
 class RemoteMapDatSource extends MapDataSource {
   final FirebaseAuth _auth;
@@ -38,7 +39,7 @@ class RemoteMapDatSource extends MapDataSource {
 
   /// 검색어로 조회해서 행정동 조회
   @override
-  Future<KakaoApiResponseWrapper<AddressModel>> searchAddress(String keyword,
+  Future<KakaoMapApiResponseModel<AddressModel>> searchAddress(String keyword,
       {int? page, int? size}) async {
     _logger.d("장소 검색 키워드 $keyword / page : $page / size : $size");
     return await _dio
@@ -52,48 +53,98 @@ class RemoteMapDatSource extends MapDataSource {
             options: Options(headers: {
               'Authorization': 'KakaoAK ${dotenv.env['KAKAO_REST_API_KEY']}'
             }))
-        .then((res) => KakaoApiResponseWrapper<AddressModel>(
+        .then((res) => KakaoMapApiResponseModel<AddressModel>(
             totalCount: res.data['meta']['total_count'],
             data: (res.data['documents'] as List)
                 .map((e) => AddressModel.fromJson(e))
                 .toList()));
   }
 
+  /// 키워드로 장소 검색
   @override
-  Future<KakaoApiResponseWrapper<PlaceModel>> searchPlaceByCategory({
+  Future<KakaoMapApiResponseModel<PlaceModel>>
+      searchPlacesByCategoryAndKeyword({
+    required String keyword,
+    CategoryGroupCode? category,
+    required double latitude,
+    required double longitude,
+    int? page,
+    int? radius,
+    int? size,
+  }) async =>
+          await _dio
+              .get('https://dapi.kakao.com/v2/local/search/keyword.json',
+                  queryParameters: {
+                    'query': keyword,
+                    if (category != null) 'category_group_code': category.name,
+                    'page': page ?? 1, // 1~45 사이의 값 (기본값: 1)
+                    'size': size ?? 10, // 1~15 사이의 값 (기본값: 15)
+                    'radius': radius ?? 1000,
+                    'y': dotenv.env['ENVIRONMENT'] == 'development'
+                        ? '37.494705526855'
+                        : latitude.toString(),
+                    'x': dotenv.env['ENVIRONMENT'] == 'development'
+                        ? '126.95994559383'
+                        : longitude.toString(),
+                    'sort': 'distance' // distance, accuracy(default)
+                  },
+                  options: Options(headers: {
+                    'Authorization':
+                        'KakaoAK ${dotenv.env['KAKAO_REST_API_KEY']}'
+                  }))
+              .then((res) {
+            _logger.d(res.data);
+            final sameName = res.data['meta']['same_name'];
+            return KakaoMapApiResponseModel<PlaceModel>(
+                totalCount: res.data['meta']['total_count'],
+                pageableCount: res.data['meta']['pageable_count'],
+                isEnd: res.data['meta']['is_end'],
+                sameName:
+                    sameName != null ? SameNameModel.fromJson(sameName) : null,
+                data: (res.data['documents'] as List)
+                    .map((e) => PlaceModel.fromJson(e))
+                    .toList());
+          });
+
+  /// 카테고리로 장소 검색
+  @override
+  Future<KakaoMapApiResponseModel<PlaceModel>> searchPlaceByCategory({
     required CategoryGroupCode category,
     required double latitude,
     required double longitude,
     int? page,
     int? radius,
     int? size,
-  }) async {
-    _logger.d(
-        "카테고리 검색 - page : $page / size : $size / 카테고리 : ${category.description}");
-    return await _dio
-        .get('https://dapi.kakao.com/v2/local/search/category.json',
-            queryParameters: {
-              'category_group_code': category.name,
-              'page': page ?? 1, // 1~45 사이의 값 (기본값: 1)
-              'size': size ?? 10, // 1~15 사이의 값 (기본값: 15)
-              'radius': radius ?? 200,
-              // TODO : 위치 정보 수정하기 (일단 상도동 기준으로 검색하도록 설정해놓음)
-              'y': '37.494705526855',
-              'x': '126.95994559383',
-              // 'y': latitude.toString(),
-              // 'x': longitude.toString(),
-              'sort': 'distance' // distance, accuracy(default)
-            },
-            options: Options(headers: {
-              'Authorization': 'KakaoAK ${dotenv.env['KAKAO_REST_API_KEY']}'
-            }))
-        .then((res) {
-      _logger.d(res.data);
-      return KakaoApiResponseWrapper<PlaceModel>(
-          totalCount: res.data['meta']['total_count'],
-          data: (res.data['documents'] as List)
-              .map((e) => PlaceModel.fromJson(e))
-              .toList());
-    });
-  }
+  }) async =>
+      await _dio
+          .get('https://dapi.kakao.com/v2/local/search/category.json',
+              queryParameters: {
+                'category_group_code': category.name,
+                'page': page ?? 1, // 1~45 사이의 값 (기본값: 1)
+                'size': size ?? 10, // 1~15 사이의 값 (기본값: 15)
+                'radius': radius ?? 1000,
+                'y': dotenv.env['ENVIRONMENT'] == 'development'
+                    ? '37.494705526855'
+                    : latitude.toString(),
+                'x': dotenv.env['ENVIRONMENT'] == 'development'
+                    ? '126.95994559383'
+                    : longitude.toString(),
+                'sort': 'distance' // distance, accuracy(default)
+              },
+              options: Options(headers: {
+                'Authorization': 'KakaoAK ${dotenv.env['KAKAO_REST_API_KEY']}'
+              }))
+          .then((res) {
+        _logger.d(res.data);
+        final sameName = res.data['meta']['same_name'];
+        return KakaoMapApiResponseModel<PlaceModel>(
+            totalCount: res.data['meta']['total_count'],
+            pageableCount: res.data['meta']['pageable_count'],
+            isEnd: res.data['meta']['is_end'],
+            sameName:
+                sameName != null ? SameNameModel.fromJson(sameName) : null,
+            data: (res.data['documents'] as List)
+                .map((e) => PlaceModel.fromJson(e))
+                .toList());
+      });
 }
