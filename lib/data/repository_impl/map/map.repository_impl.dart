@@ -2,12 +2,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hot_place/core/constant/map.constant.dart';
 import 'package:hot_place/core/util/response.util.dart';
 import 'package:hot_place/data/data_source/map/map.data_source.dart';
-import 'package:hot_place/data/model/map/categorized_place/categorized_place.model.dart';
+import 'package:hot_place/data/model/map/address/address.model.dart';
 import 'package:hot_place/data/model/map/place/place.model.dart';
-import 'package:hot_place/domain/entity/map/categorized_place/categorized_place.entity.dart';
-import 'package:hot_place/domain/entity/map/place/place.entity.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../domain/entity/map/address/address.entity.dart';
+import '../../../domain/entity/map/place/place.entity.dart';
 import '../../../domain/repository/map/map.repository.dart';
 
 @Singleton(as: MapRepository)
@@ -22,23 +22,22 @@ class MapRepositoryImpl extends MapRepository {
       await _mapDataSource.getCurrentLocation();
 
   @override
-  Future<KakaoApiResponseWrapper<PlaceEntity>> searchPlaces(String keyword,
+  Future<KakaoApiResponseWrapper<AddressEntity>> searchAddress(String keyword,
       {int? page, int? size}) async {
     final res =
-        await _mapDataSource.searchPlaces(keyword, page: page, size: size);
-    return KakaoApiResponseWrapper<PlaceEntity>(
+        await _mapDataSource.searchAddress(keyword, page: page, size: size);
+    return KakaoApiResponseWrapper<AddressEntity>(
         totalCount: res.totalCount,
         data: res.data.map((e) => e.toEntity()).toList());
   }
 
   @override
-  Future<KakaoApiResponseWrapper<CategorizedPlaceEntity>>
-      searchPlacesByCategory(
-          {required CategoryGroupCode category,
-          Position? position,
-          int? radius,
-          int? page,
-          int? size}) async {
+  Future<KakaoApiResponseWrapper<PlaceEntity>> searchPlacesByCategory(
+      {required CategoryGroupCode category,
+      Position? position,
+      int? radius,
+      int? page,
+      int? size}) async {
     final pos = position ?? await getCurrentLocation();
     final res = await _mapDataSource.searchPlaceByCategory(
         category: category, latitude: pos.latitude, longitude: pos.longitude);

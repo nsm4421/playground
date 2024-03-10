@@ -3,14 +3,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/constant/map.constant.dart';
 
-part 'address.model.freezed.dart';
+part 'detail_address.model.freezed.dart';
 
-part 'address.model.g.dart';
+part 'detail_address.model.g.dart';
 
-// https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord-response-body-document-address
 @freezed
-class AddressModel with _$AddressModel {
-  const factory AddressModel({
+class DetailAddressModel with _$DetailAddressModel {
+  const factory DetailAddressModel({
     String? address_name,
     String? region_1depth_name,
     String? region_2depth_name,
@@ -23,8 +22,8 @@ class AddressModel with _$AddressModel {
     String? sub_address_no,
     String? x,
     String? y,
-  }) = _AddressModel;
+  }) = _DetailAddressModel;
 
-  factory AddressModel.fromJson(Map<String, dynamic> json) =>
-      _$AddressModelFromJson(json);
+  factory DetailAddressModel.fromJson(Map<String, dynamic> json) =>
+      _$DetailAddressModelFromJson(json);
 }

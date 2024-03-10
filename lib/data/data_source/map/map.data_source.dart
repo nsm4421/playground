@@ -1,17 +1,16 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:hot_place/data/model/map/place/place.model.dart';
-
 import '../../../core/constant/map.constant.dart';
 import '../../../core/util/response.util.dart';
-import '../../model/map/categorized_place/categorized_place.model.dart';
+import '../../model/map/address/address.model.dart';
+import '../../model/map/place/place.model.dart';
 
 abstract class MapDataSource {
   Future<Position> getCurrentLocation();
 
-  Future<KakaoApiResponseWrapper<PlaceModel>> searchPlaces(String keyword,
+  Future<KakaoApiResponseWrapper<AddressModel>> searchAddress(String keyword,
       {int? page, int? size});
 
-  Future<KakaoApiResponseWrapper<CategorizedPlaceModel>> searchPlaceByCategory({
+  Future<KakaoApiResponseWrapper<PlaceModel>> searchPlaceByCategory({
     required CategoryGroupCode category,
     required double latitude,
     required double longitude,

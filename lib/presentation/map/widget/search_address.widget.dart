@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
-import 'package:hot_place/domain/usecase/map/search_places.usecase.dart';
+import 'package:hot_place/domain/usecase/map/search_address.usecase.dart';
 
-import '../../../domain/entity/map/place/place.entity.dart';
+import '../../../domain/entity/map/address/address.entity.dart';
 
-class SearchPlaceWidget extends StatefulWidget {
-  const SearchPlaceWidget({super.key});
+
+class SearchAddressWidget extends StatefulWidget {
+  const SearchAddressWidget({super.key});
 
   @override
-  State<SearchPlaceWidget> createState() => _SearchPlaceWidgetState();
+  State<SearchAddressWidget> createState() => _SearchAddressWidgetState();
 }
 
-class _SearchPlaceWidgetState extends State<SearchPlaceWidget> {
+class _SearchAddressWidgetState extends State<SearchAddressWidget> {
   late TextEditingController _controller;
   bool _isLoading = false;
   String? _keyword;
   String? _errorText;
-  List<PlaceEntity> _places = [];
+  List<AddressEntity> _addresses = [];
 
   @override
   void initState() {
@@ -37,9 +38,9 @@ class _SearchPlaceWidgetState extends State<SearchPlaceWidget> {
 
   _search() async {
     try {
-      final fetched = await getIt<SearchPlacesUseCase>()(_controller.text);
+      final fetched = await getIt<SearchAddressUseCase>()(_controller.text);
       setState(() {
-        _places = fetched.data;
+        _addresses = fetched.data;
         _keyword = _controller.text;
         _errorText = null;
       });
@@ -120,17 +121,17 @@ class _SearchPlaceWidgetState extends State<SearchPlaceWidget> {
                         color: Theme.of(context).colorScheme.tertiary),
                   ),
                   const SizedBox(height: 10),
-                  if (_places.isNotEmpty)
+                  if (_addresses.isNotEmpty)
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 3,
                       child: ListView.separated(
                           itemBuilder: (_, index) {
                             return ListTile(
-                              title: Text(_places[index].addressName ?? ''),
+                              title: Text(_addresses[index].addressName ?? ''),
                             );
                           },
                           separatorBuilder: (_, __) => const Divider(),
-                          itemCount: _places.length),
+                          itemCount: _addresses.length),
                     )
                 ],
               ),

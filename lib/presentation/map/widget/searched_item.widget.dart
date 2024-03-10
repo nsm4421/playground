@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/entity/map/categorized_place/categorized_place.entity.dart';
+import '../../../domain/entity/map/place/place.entity.dart';
 
 class SearchedItem extends StatelessWidget {
   const SearchedItem(this._places, {super.key});
 
-  final List<CategorizedPlaceEntity> _places;
+  final List<PlaceEntity> _places;
 
   @override
   Widget build(BuildContext context) => Expanded(
@@ -36,7 +36,7 @@ class SearchedItem extends StatelessWidget {
 class _DetailView extends StatelessWidget {
   const _DetailView(this._place, {super.key});
 
-  final CategorizedPlaceEntity _place;
+  final PlaceEntity _place;
 
   @override
   Widget build(BuildContext context) => Container(

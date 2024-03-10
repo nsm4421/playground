@@ -6,11 +6,11 @@ import 'package:hot_place/core/constant/map.constant.dart';
 import 'package:hot_place/data/data_source/map/map.data_source.dart';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:hot_place/data/model/map/categorized_place/categorized_place.model.dart';
-import 'package:hot_place/data/model/map/place/place.model.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../core/util/response.util.dart';
+import '../../../model/map/address/address.model.dart';
+import '../../../model/map/place/place.model.dart';
 
 class RemoteMapDatSource extends MapDataSource {
   final FirebaseAuth _auth;
@@ -38,7 +38,7 @@ class RemoteMapDatSource extends MapDataSource {
 
   /// 검색어로 조회해서 행정동 조회
   @override
-  Future<KakaoApiResponseWrapper<PlaceModel>> searchPlaces(String keyword,
+  Future<KakaoApiResponseWrapper<AddressModel>> searchAddress(String keyword,
       {int? page, int? size}) async {
     _logger.d("장소 검색 키워드 $keyword / page : $page / size : $size");
     return await _dio
@@ -52,15 +52,15 @@ class RemoteMapDatSource extends MapDataSource {
             options: Options(headers: {
               'Authorization': 'KakaoAK ${dotenv.env['KAKAO_REST_API_KEY']}'
             }))
-        .then((res) => KakaoApiResponseWrapper<PlaceModel>(
+        .then((res) => KakaoApiResponseWrapper<AddressModel>(
             totalCount: res.data['meta']['total_count'],
             data: (res.data['documents'] as List)
-                .map((e) => PlaceModel.fromJson(e))
+                .map((e) => AddressModel.fromJson(e))
                 .toList()));
   }
 
   @override
-  Future<KakaoApiResponseWrapper<CategorizedPlaceModel>> searchPlaceByCategory({
+  Future<KakaoApiResponseWrapper<PlaceModel>> searchPlaceByCategory({
     required CategoryGroupCode category,
     required double latitude,
     required double longitude,
@@ -89,10 +89,10 @@ class RemoteMapDatSource extends MapDataSource {
             }))
         .then((res) {
       _logger.d(res.data);
-      return KakaoApiResponseWrapper<CategorizedPlaceModel>(
+      return KakaoApiResponseWrapper<PlaceModel>(
           totalCount: res.data['meta']['total_count'],
           data: (res.data['documents'] as List)
-              .map((e) => CategorizedPlaceModel.fromJson(e))
+              .map((e) => PlaceModel.fromJson(e))
               .toList());
     });
   }

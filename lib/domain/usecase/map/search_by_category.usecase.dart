@@ -1,9 +1,9 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:hot_place/core/constant/map.constant.dart';
-import 'package:hot_place/domain/entity/map/categorized_place/categorized_place.entity.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/util/response.util.dart';
+import '../../entity/map/place/place.entity.dart';
 import '../../repository/map/map.repository.dart';
 
 @singleton
@@ -12,7 +12,7 @@ class SearchPlacesByCategoryUseCase {
 
   SearchPlacesByCategoryUseCase(this._repository);
 
-  Future<KakaoApiResponseWrapper<CategorizedPlaceEntity>> call({
+  Future<KakaoApiResponseWrapper<PlaceEntity>> call({
     required CategoryGroupCode category,
     Position? position,
     int? radius,

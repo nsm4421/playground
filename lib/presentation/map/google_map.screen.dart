@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/map/widget/map_view.widget.dart';
-import 'package:hot_place/presentation/map/widget/search_place.widget.dart';
+import 'package:hot_place/presentation/map/widget/search_address.widget.dart';
 
 import '../../core/di/dependency_injection.dart';
 import 'bloc/map/map.bloc.dart';
@@ -21,7 +21,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
   _goToSearchPage() => showModalBottomSheet(
       context: context,
-      builder: (_) => SearchPlaceWidget(),
+      builder: (_) => SearchAddressWidget(),
       isScrollControlled: true,
       enableDrag: true);
 
