@@ -10,17 +10,20 @@ class MapFragment extends StatelessWidget {
   const MapFragment({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      BlocProvider(
-        create: (context) =>
-        getIt<MapBloc>()
-          ..add(InitMap()),
+  Widget build(BuildContext context) => BlocProvider(
+        create: (context) => getIt<MapBloc>()..add(InitMap()),
         child: Scaffold(
           appBar: AppBar(title: Text("Map")),
-          body: ElevatedButton(onPressed: () {
-            context.push(Routes.searchByCategory.path);
-          }, child: Text("test"),),
+          body: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  context.push(Routes.searchPlace.path);
+                },
+                child: Text("Search"),
+              ),
+            ],
+          ),
         ),
       );
 }
-

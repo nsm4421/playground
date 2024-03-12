@@ -57,10 +57,16 @@ class SearchPlaceBloc extends Bloc<SearchPlaceEvent, SearchPlaceState> {
   ) async {
     emit(state.copyWith(status: Status.loading));
     try {
+      final radius = event.radius ?? state.radius;
       final res = await _searchPlaceByCategoryUseCase(
-          category: event.category, position: state.currentLocation);
+          category: event.category,
+          position: state.currentLocation,
+          radius: radius);
       emit(state.copyWith(
-          category: event.category, places: res.data, status: Status.success));
+          category: event.category,
+          places: res.data,
+          radius: radius,
+          status: Status.success));
     } catch (err) {
       _logger.e(err);
       emit(state.copyWith(status: Status.error));
@@ -73,12 +79,19 @@ class SearchPlaceBloc extends Bloc<SearchPlaceEvent, SearchPlaceState> {
   ) async {
     emit(state.copyWith(status: Status.loading));
     try {
+      final radius = event.radius ?? state.radius;
       final res = await _searchPlaceByCategoryAndKeywordUseCase(
           category: event.category,
           keyword: event.keyword,
+          radius: radius,
           position: state.currentLocation);
+      _logger.d(event.toString());
       emit(state.copyWith(
-          category: event.category, places: res.data, status: Status.success));
+          category: event.category,
+          keyword: event.keyword,
+          places: res.data,
+          radius: radius,
+          status: Status.success));
     } catch (err) {
       _logger.e(err);
       emit(state.copyWith(status: Status.error));

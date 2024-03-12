@@ -6,13 +6,16 @@ class InitSearch extends SearchPlaceEvent {}
 
 class SearchByCategory extends SearchPlaceEvent {
   final CategoryGroupCode category;
+  final int? radius;
 
-  SearchByCategory(this.category);
+  SearchByCategory({required this.category, this.radius});
 }
 
 class SearchByCategoryAndKeyword extends SearchPlaceEvent {
   final CategoryGroupCode? category;
   final String keyword;
+  final int? radius;
 
-  SearchByCategoryAndKeyword({this.category, required this.keyword});
+  SearchByCategoryAndKeyword(
+      {this.category, required this.keyword, this.radius});
 }

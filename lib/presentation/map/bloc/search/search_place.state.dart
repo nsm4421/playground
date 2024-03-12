@@ -14,6 +14,7 @@ class SearchPlaceState with _$SearchPlaceState {
     @Default(Status.initial) Status status,
     Position? currentLocation,
     String? keyword,
+    @Default(200) int radius,
     CategoryGroupCode? category,
     @Default(<PlaceEntity>[]) List<PlaceEntity> places,
   }) = _SearchPlaceState;
