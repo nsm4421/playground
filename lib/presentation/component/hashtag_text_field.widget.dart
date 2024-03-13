@@ -67,7 +67,7 @@ class _HashtagTextFieldState extends State<HashtagTextField> {
               Row(children: [
                 Text(widget._label!,
                     style: Theme.of(context).textTheme.titleLarge),
-                Spacer(),
+                const Spacer(),
                 Text(
                   "(${widget._hashtags.length}/${widget._maxHashtagNum})",
                   style: Theme.of(context)

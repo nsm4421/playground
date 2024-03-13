@@ -48,7 +48,7 @@ class _PostFragmentState extends State<PostFragment> {
 }
 
 class _PostView extends StatelessWidget {
-  const _PostView(this._posts, {super.key});
+  const _PostView(this._posts);
 
   final List<PostEntity> _posts;
 
@@ -66,7 +66,7 @@ class _PostView extends StatelessWidget {
 }
 
 class _PostItem extends StatelessWidget {
-  const _PostItem(this._post, {super.key});
+  const _PostItem(this._post);
 
   final PostEntity _post;
 

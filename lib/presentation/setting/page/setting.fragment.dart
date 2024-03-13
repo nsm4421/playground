@@ -29,14 +29,14 @@ class SettingFragment extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.secondary)),
             trailing: IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: goToEditPage(context),
               tooltip: "프로필 수정하기",
             ),
           ),
-          SizedBox(height: 10),
-          Divider(indent: 20, endIndent: 20),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          const Divider(indent: 20, endIndent: 20),
+          const SizedBox(height: 10),
         ],
       );
 }

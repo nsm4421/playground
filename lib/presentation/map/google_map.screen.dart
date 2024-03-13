@@ -21,7 +21,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
   _goToSearchPage() => showModalBottomSheet(
       context: context,
-      builder: (_) => SearchAddressWidget(),
+      builder: (_) => const SearchAddressWidget(),
       isScrollControlled: true,
       enableDrag: true);
 
@@ -31,7 +31,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: Text("Google Map"),
+              title: const Text("Google Map"),
               // 뒤로가기 버튼
               leading:
                   IconButton(icon: const Icon(Icons.clear), onPressed: _pop),

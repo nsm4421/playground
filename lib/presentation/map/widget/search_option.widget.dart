@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hot_place/presentation/component/swip_button.widget.dart';
 import 'package:hot_place/presentation/map/bloc/search/search_place.state.dart';
 
 import '../../../core/constant/map.constant.dart';

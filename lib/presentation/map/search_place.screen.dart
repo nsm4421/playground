@@ -40,7 +40,7 @@ class _SearchPlaceScreenState extends State<SearchPlaceScreen> {
 }
 
 class _SearchView extends StatefulWidget {
-  const _SearchView({super.key});
+  const _SearchView();
 
   @override
   State<_SearchView> createState() => _SearchViewState();

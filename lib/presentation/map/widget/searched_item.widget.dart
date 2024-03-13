@@ -18,7 +18,7 @@ class SearchedItem extends StatelessWidget {
 }
 
 class _ListView extends StatelessWidget {
-  const _ListView(this._places, {super.key});
+  const _ListView(this._places);
 
   final List<PlaceEntity> _places;
 
@@ -38,7 +38,7 @@ class _ListView extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           trailing: item.distance != null
-              ? Text("${item.distance!.toInt().toString()}m" ?? "")
+              ? Text("${item.distance!.toInt().toString()}m")
               : null,
         );
       },
@@ -48,7 +48,7 @@ class _ListView extends StatelessWidget {
 
 /// 장소 목록을 선택하면 나오게 할 팝업(상세정보)
 class _DetailView extends StatelessWidget {
-  const _DetailView(this._place, {super.key});
+  const _DetailView(this._place);
 
   final PlaceEntity _place;
 

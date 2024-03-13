@@ -46,7 +46,7 @@ class CreatePostScreen extends StatelessWidget {
 }
 
 class _CreatePostView extends StatefulWidget {
-  const _CreatePostView({super.key});
+  const _CreatePostView();
 
   @override
   State<_CreatePostView> createState() => _CreatePostViewState();

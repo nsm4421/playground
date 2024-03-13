@@ -13,14 +13,14 @@ class MapFragment extends StatelessWidget {
   Widget build(BuildContext context) => BlocProvider(
         create: (context) => getIt<MapBloc>()..add(InitMap()),
         child: Scaffold(
-          appBar: AppBar(title: Text("Map")),
+          appBar: AppBar(title: const Text("Map")),
           body: Column(
             children: [
               ElevatedButton(
                 onPressed: () {
                   context.push(Routes.searchPlace.path);
                 },
-                child: Text("Search"),
+                child: const Text("Search"),
               ),
             ],
           ),
