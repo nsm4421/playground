@@ -1,3 +1,4 @@
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,5 +10,7 @@ class UpdateUserUseCase {
 
   UpdateUserUseCase(this._repository);
 
-  Future<void> call(UserEntity user) async => await _repository.updateUser(user);
+  Future<ResultEntity<void>> call(UserEntity user) async => await _repository
+      .updateUser(user)
+      .then((res) => ResultEntity.fromResponse(res));
 }

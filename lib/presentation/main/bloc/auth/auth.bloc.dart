@@ -83,9 +83,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      final user = await _googleSignUpUseCase();
-      emit(state.copyWith(status: AuthStatus.authenticated, currentUser: user));
-      _logger.d("google sign in success");
+      (await _googleSignUpUseCase()).when(success: (data) {
+        emit(state.copyWith(
+            status: AuthStatus.authenticated, currentUser: data));
+      }, failure: (code, description) {
+        throw Exception("error-code:$code: ($description)");
+      });
     } catch (err) {
       _logger.e(err);
     } finally {
@@ -98,8 +101,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      await _signUpWithEmailAndPasswordUseCase(
-          email: event.email, password: event.password);
+      (await _signUpWithEmailAndPasswordUseCase(
+              email: event.email, password: event.password))
+          .when(
+              success: (data) {},
+              failure: (code, description) {
+                throw Exception("error-code:$code: ($description)");
+              });
     } catch (err) {
       _logger.e(err);
     } finally {
@@ -112,10 +120,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      final user = await _signInWithEmailAndPasswordUseCase(
-          email: event.email, password: event.password);
-      emit(state.copyWith(status: AuthStatus.authenticated, currentUser: user));
-      _logger.d("email and password sign in success");
+      (await _signInWithEmailAndPasswordUseCase(
+              email: event.email, password: event.password))
+          .when(success: (data) {
+        emit(state.copyWith(
+            status: AuthStatus.authenticated, currentUser: data));
+      }, failure: (code, description) {
+        throw Exception("error-code:$code: ($description)");
+      });
     } catch (err) {
       _logger.e(err);
     } finally {

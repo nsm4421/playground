@@ -1,3 +1,4 @@
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,5 +10,6 @@ class AllUserStream {
 
   AllUserStream(this._repository);
 
-  Stream<List<UserEntity>> call() => _repository.allUserStream;
+  ResultEntity<Stream<List<UserEntity>>> call() =>
+      ResultEntity.fromResponse(_repository.getAllUserStream());
 }

@@ -1,3 +1,4 @@
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,8 +10,9 @@ class SignInWithEmailAndPasswordUseCase {
 
   SignInWithEmailAndPasswordUseCase(this._repository);
 
-  Future<UserEntity> call(
+  Future<ResultEntity<UserEntity>> call(
           {required String email, required String password}) async =>
-      await _repository.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _repository
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then(ResultEntity<UserEntity>.fromResponse);
 }

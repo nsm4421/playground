@@ -1,3 +1,4 @@
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,5 +10,7 @@ class SingleUserStreamUseCase {
 
   SingleUserStreamUseCase(this._repository);
 
-  Stream<UserEntity> call(String uid) => _repository.getUserStream(uid);
+  ResultEntity<Stream<UserEntity>> call(String uid) =>
+      ResultEntity<Stream<UserEntity>>.fromResponse(
+          _repository.getUserStream(uid));
 }

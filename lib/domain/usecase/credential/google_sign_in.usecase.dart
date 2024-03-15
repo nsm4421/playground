@@ -1,3 +1,4 @@
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../entity/user/user.entity.dart';
@@ -9,5 +10,6 @@ class GoogleSignInUseCase {
 
   GoogleSignInUseCase(this._repository);
 
-  Future<UserEntity> call() async => await _repository.googleSignIn();
+  Future<ResultEntity<UserEntity>> call() async =>
+      await _repository.googleSignIn().then(ResultEntity.fromResponse);
 }
