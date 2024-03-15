@@ -1,4 +1,5 @@
 import 'package:hot_place/domain/entity/post/post.entity.dart';
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../repository/post/post.repository.dart';
@@ -9,6 +10,7 @@ class GetPostStreamUseCase {
 
   GetPostStreamUseCase(this._postRepository);
 
-  Stream<List<PostEntity>> call({int skip = 0, int take = 100}) =>
-      _postRepository.getPostStream(skip: skip, take: take);
+  ResultEntity<Stream<List<PostEntity>>> call({int skip = 0, int take = 100}) =>
+      ResultEntity<Stream<List<PostEntity>>>.fromResponse(
+          _postRepository.getPostStream(skip: skip, take: take));
 }

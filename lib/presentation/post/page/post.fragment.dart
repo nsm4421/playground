@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/domain/entity/post/post.entity.dart';
 import 'package:hot_place/domain/usecase/post/get_post_stream.usecase.dart';
+import 'package:hot_place/presentation/post/widget/post_item.widget.dart';
 
 import '../../../core/constant/route.constant.dart';
-import '../../component/hashtag_list.widget.dart';
 
 class PostFragment extends StatefulWidget {
   const PostFragment({super.key});
@@ -17,17 +17,24 @@ class PostFragment extends StatefulWidget {
 class _PostFragmentState extends State<PostFragment> {
   _goToCreatePostPage() => context.push(Routes.createPost.path);
 
+  // TODO : 검색 페이지로
+  _goToSearchPostPage() {}
+
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text("POST"),
         actions: [
           IconButton(
-              onPressed: _goToCreatePostPage, icon: const Icon(Icons.add))
+              onPressed: _goToSearchPostPage, icon: const Icon(Icons.search)),
+          IconButton(
+              onPressed: _goToCreatePostPage, icon: const Icon(Icons.create))
         ],
       ),
       body: StreamBuilder<List<PostEntity>>(
-          stream: getIt<GetPostStreamUseCase>().call(),
+          // TODO : 추후 수정
+          //   stream: getIt<GetPostStreamUseCase>()(),
+          stream: null,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -59,67 +66,8 @@ class _PostView extends StatelessWidget {
               .map((post) => Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                  child: _PostItem(post)))
+                  child: PostItemWidget(post)))
               .toList(),
         ),
       );
-}
-
-class _PostItem extends StatelessWidget {
-  const _PostItem(this._post);
-
-  final PostEntity _post;
-
-  @override
-  Widget build(BuildContext context) =>
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        // 유저명
-        Row(
-          children: [
-            CircleAvatar(
-                child: _post.author?.photoUrl != null
-                    ? Image.network(_post.author!.photoUrl!)
-                    : const Icon(Icons.account_circle_outlined)),
-            const SizedBox(width: 5),
-            Text(_post.author?.username ?? _post.author?.email ?? "Unknown",
-                softWrap: true,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w700)),
-            const Spacer(),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
-          ],
-        ),
-        const SizedBox(height: 20),
-
-        // 이미지
-        if (_post.images.isNotEmpty)
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: PageView.builder(
-                itemCount: _post.images.length,
-                itemBuilder: (_, index) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(_post.images[index]))))),
-          ),
-
-        // 본문
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 20),
-          child: Text(
-            _post.content ?? "",
-            softWrap: true,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-        ),
-
-        // 해시태그
-        if (_post.hashtags.isNotEmpty) HashtagListWidget(_post.hashtags),
-        const SizedBox(height: 15),
-        const Divider(indent: 10, endIndent: 10)
-      ]);
 }

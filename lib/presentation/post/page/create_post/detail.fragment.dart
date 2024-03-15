@@ -6,7 +6,9 @@ import '../../../component/hashtag_text_field.widget.dart';
 import '../../bloc/create_post/create_post.cubit.dart';
 
 class DetailFragment extends StatefulWidget {
-  const DetailFragment({super.key});
+  const DetailFragment(this._tec, {super.key});
+
+  final TextEditingController _tec;
 
   @override
   State<DetailFragment> createState() => _DetailFragmentState();
@@ -26,7 +28,7 @@ class _DetailFragmentState extends State<DetailFragment> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: ContentTextField(
                 label: "CONTENT",
-                tec: context.read<CreatePostCubit>().tec,
+                tec: widget._tec,
                 placeholder: "포스팅 본문을 입력해주세요",
               ),
             ),

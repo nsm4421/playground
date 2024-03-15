@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/presentation/component/image.widget.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/util/toast.util.dart';
 import '../../bloc/create_post/create_post.cubit.dart';
 
 class ImageFragment extends StatefulWidget {
-  const ImageFragment({super.key});
+  const ImageFragment(this._imagePicker, {super.key});
+
+  final ImagePicker _imagePicker;
 
   @override
   State<ImageFragment> createState() => _ImageFragmentState();
@@ -14,12 +18,18 @@ class ImageFragment extends StatefulWidget {
 class _ImageFragmentState extends State<ImageFragment> {
   int _currentImageIndex = 0;
 
-  _selectImage() async {
-    await context.read<CreatePostCubit>().selectImages();
-    setState(() {
-      _currentImageIndex = 0;
-    });
-  }
+  static const _maxImageCount = 3;
+
+  _selectImages() async =>
+      await widget._imagePicker.pickMultiImage().then((assets) {
+        // 최대 3개의 이미지 선택 가능
+        if (assets.length > _maxImageCount) {
+          assets = assets.sublist(0, _maxImageCount);
+          ToastUtil.toast('최대 $_maxImageCount개의 이미지를 선택할 수 있습니다');
+        }
+        context.read<CreatePostCubit>().setAssets(assets);
+        setState(() {});
+      });
 
   _changeCurrentImage(int index) => () => setState(() {
         _currentImageIndex = index;
@@ -47,7 +57,7 @@ class _ImageFragmentState extends State<ImageFragment> {
                     const Spacer(),
                     if (context.read<CreatePostCubit>().state.assets.isNotEmpty)
                       IconButton(
-                          onPressed: _selectImage,
+                          onPressed: _selectImages,
                           icon: const Icon(Icons.add_a_photo))
                   ],
                 )),
@@ -67,7 +77,7 @@ class _ImageFragmentState extends State<ImageFragment> {
                 height: MediaQuery.of(context).size.width,
                 child: context.read<CreatePostCubit>().state.assets.isEmpty
                     ? InkWell(
-                        onTap: _selectImage,
+                        onTap: _selectImages,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

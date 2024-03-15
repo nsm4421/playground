@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
 import 'package:hot_place/presentation/post/page/create_post/detail.fragment.dart';
+import 'package:image_picker/image_picker.dart';
 
-import '../../../../core/constant/status.costant.dart';
+import '../../../../core/constant/response.constant.dart';
 import '../../bloc/create_post/create_post.cubit.dart';
 import '../../bloc/create_post/create_post.state.dart';
 import 'image.fragment.dart';
@@ -54,24 +55,31 @@ class _CreatePostView extends StatefulWidget {
 
 class _CreatePostViewState extends State<_CreatePostView> {
   late PageController _pageController;
+  late TextEditingController _tec;
+  late ImagePicker _imagePicker;
 
   @override
   initState() {
     super.initState();
     _pageController = PageController();
+    _tec = TextEditingController();
+    _imagePicker = ImagePicker();
   }
 
   @override
   dispose() {
     super.dispose();
     _pageController.dispose();
+    _tec.dispose();
   }
 
   _uploadPost() {
-    if (context.read<CreatePostCubit>().tec.text.trim().isEmpty) {
+    final content = _tec.text.trim();
+    if (content.isEmpty) {
       ToastUtil.toast("본문을 입력해주세요");
       return;
     }
+    context.read<CreatePostCubit>().setContent(content);
     context.read<CreatePostCubit>().uploadPost();
   }
 
@@ -99,7 +107,8 @@ class _CreatePostViewState extends State<_CreatePostView> {
             controller: _pageController,
             pageSnapping: true,
             itemCount: 2,
-            itemBuilder: (_, index) =>
-                index == 0 ? const ImageFragment() : const DetailFragment()),
+            itemBuilder: (_, index) => index == 0
+                ? ImageFragment(_imagePicker)
+                : DetailFragment(_tec)),
       );
 }

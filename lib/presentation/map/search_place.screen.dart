@@ -8,7 +8,7 @@ import 'package:hot_place/presentation/map/bloc/search/search_place.state.dart';
 import 'package:hot_place/presentation/map/widget/search_option.widget.dart';
 import 'package:hot_place/presentation/map/widget/searched_item.widget.dart';
 
-import '../../core/constant/status.costant.dart';
+import '../../core/constant/response.constant.dart';
 import '../../core/util/toast.util.dart';
 import 'bloc/search/search_place.bloc.dart';
 

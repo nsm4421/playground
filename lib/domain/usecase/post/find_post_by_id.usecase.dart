@@ -1,4 +1,5 @@
 import 'package:hot_place/domain/entity/post/post.entity.dart';
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/repository/post/post.repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,6 +9,8 @@ class FindPostByIdUseCase {
 
   FindPostByIdUseCase(this._postRepository);
 
-  Future<PostEntity> call({required String postId}) async =>
-      await _postRepository.findPostById(postId);
+  Future<ResultEntity<PostEntity>> call({required String postId}) async =>
+      await _postRepository
+          .findPostById(postId)
+          .then((res) => ResultEntity<PostEntity>.fromResponse(res));
 }

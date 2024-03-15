@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../../../core/constant/map.constant.dart';
-import '../../../../core/constant/status.costant.dart';
+import '../../../../core/constant/response.constant.dart';
 import '../../../../domain/entity/map/place/place.entity.dart';
 
 part 'search_place.state.freezed.dart';

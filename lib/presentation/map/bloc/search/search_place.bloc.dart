@@ -6,7 +6,7 @@ import 'package:hot_place/presentation/map/bloc/search/search_place.event.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-import '../../../../core/constant/status.costant.dart';
+import '../../../../core/constant/response.constant.dart';
 import '../../../../domain/usecase/map/get_current_location.usecase.dart';
 import 'search_place.state.dart';
 
