@@ -15,35 +15,27 @@ class ChatEntity with _$ChatEntity {
     String? lastMessage,
     DateTime? createdAt,
     num? unReadCount,
-    UserEntity? host,
-    UserEntity? guest,
+    UserEntity? opponent,
   }) = _ChatEntity;
 
   factory ChatEntity.fromJson(Map<String, dynamic> json) =>
       _$ChatEntityFromJson(json);
 
-  static fromModel({
-    required ChatModel model,
-    required UserEntity host,
-    required UserEntity guest,
-  }) =>
+  static fromModel({required ChatModel model, required UserEntity opponent}) =>
       ChatEntity(
         id: model.id,
         lastMessage: model.lastMessage,
         createdAt: model.createdAt,
         unReadCount: model.unReadCount,
-        host: host,
-        guest: guest,
+        opponent: opponent,
       );
 }
 
 extension ChatEntityEx on ChatEntity {
   ChatModel toModel() => ChatModel(
-        id: id ?? '',
-        lastMessage: lastMessage ?? '',
-        createdAt: createdAt,
-        unReadCount: unReadCount ?? 0,
-        hostUid: host?.uid ?? '',
-        guestUid: guest?.uid ?? '',
-      );
+      id: id ?? '',
+      lastMessage: lastMessage ?? '',
+      createdAt: createdAt,
+      unReadCount: unReadCount ?? 0,
+      opponentUid: opponent?.uid ?? '');
 }

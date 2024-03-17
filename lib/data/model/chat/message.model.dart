@@ -17,7 +17,7 @@ class MessageModel with _$MessageModel {
     @Default(MessageType.text) MessageType messageType,
     @Default('') String content,
     DateTime? createdAt,
-    @Default(false) bool isSeen,
+    DateTime? seenAt,
   }) = _MessageModel;
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>

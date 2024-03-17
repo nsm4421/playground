@@ -29,29 +29,17 @@ class ChatRepositoryImpl extends ChatRepository {
         _credentialDataSource = credentialDataSource,
         _chatDataSource = chatDataSource;
 
+  /// stream 가져오기
   @override
   Future<ResponseModel<Stream<List<ChatEntity>>>> getChatStream() async {
     try {
-      final currentUid = _credentialDataSource.currentUid;
-      final currentUser =
-          UserEntity.fromModel(await _userDataSource.findUserById(currentUid!));
-      final stream = _chatDataSource
-          .getChatStream()
-          .asyncMap((List<ChatModel> chatModels) async {
-        List<ChatEntity> chatEntities = [];
-        bool isHost = false;
-        for (final model in chatModels) {
-          isHost = currentUid == model.hostUid;
-          final opponent = UserEntity.fromModel(await _userDataSource
-              .findUserById(isHost ? model.guestUid : model.hostUid));
-          final entity = ChatEntity.fromModel(
-              model: model,
-              host: isHost ? currentUser : opponent,
-              guest: isHost ? opponent : currentUser);
-          chatEntities.add(entity);
-        }
-        return chatEntities;
-      });
+      final stream = _chatDataSource.getChatStream().asyncMap(
+          (List<ChatModel> chatModels) async => await Future.wait(chatModels
+              .map((chat) async => ChatEntity.fromModel(
+                  model: chat,
+                  opponent: UserEntity.fromModel(
+                      await _userDataSource.findUserById(chat.opponentUid))))
+              .toList()) as List<ChatEntity>);
       return ResponseModel<Stream<List<ChatEntity>>>.success(
           responseType: ResponseType.ok, data: stream);
     } catch (err) {
@@ -62,35 +50,24 @@ class ChatRepositoryImpl extends ChatRepository {
 
   @override
   Future<ResponseModel<Stream<List<MessageEntity>>>> getMessageStream(
-      MessageEntity message) async {
+      String chatId) async {
     try {
-      final chatEntity = (await findChatById(message.chatId!)).data;
-      final currentUid = _credentialDataSource.currentUid;
-      if (chatEntity?.host?.uid == null || chatEntity?.guest?.uid == null) {
-        return ResponseModel<Stream<List<MessageEntity>>>.error(
-            responseType: ResponseType.badRequest,
-            message: 'host or guest of chat entity is null');
-      }
-      final currentUser = chatEntity?.host?.uid == currentUid
-          ? chatEntity?.host
-          : chatEntity?.guest;
-      final opponent = chatEntity?.host?.uid == currentUid
-          ? chatEntity?.guest
-          : chatEntity?.host;
-      final stream = _chatDataSource
-          .getMessageStream(message.chatId!)
-          .asyncMap((List<MessageModel> messageModels) async {
-        List<MessageEntity> messageEntities = [];
-        for (final model in messageModels) {
-          final entity = MessageEntity.fromModel(
-              model: model,
-              sender: model.senderUid == currentUid ? currentUser! : opponent!,
-              receiver:
-                  model.receiverUid == currentUid ? currentUser! : opponent!);
-          messageEntities.add(entity);
-        }
-        return messageEntities;
-      });
+      final chatEntity = (await findChatById(chatId)).data;
+      final currentUser = UserEntity.fromModel(await _userDataSource
+          .findUserById(_credentialDataSource.currentUid!));
+      final opponent = UserEntity.fromModel(
+          await _userDataSource.findUserById(chatEntity!.opponent!.uid!));
+      final stream = _chatDataSource.getMessageStream(chatId).asyncMap(
+          (List<MessageModel> messageModels) => messageModels
+              .map((model) => MessageEntity.fromModel(
+                  model: model,
+                  sender: model.senderUid == currentUser.uid
+                      ? currentUser
+                      : opponent,
+                  receiver: model.senderUid == currentUser.uid
+                      ? opponent
+                      : currentUser))
+              .toList());
       return ResponseModel<Stream<List<MessageEntity>>>.success(data: stream);
     } catch (err) {
       _logger.e(err);
@@ -98,6 +75,7 @@ class ChatRepositoryImpl extends ChatRepository {
     }
   }
 
+  /// id로 단건 조회
   @override
   Future<ResponseModel<ChatEntity>> findChatById(String chatId) async {
     try {
@@ -106,10 +84,8 @@ class ChatRepositoryImpl extends ChatRepository {
           id: chatModel.id,
           lastMessage: chatModel.lastMessage,
           unReadCount: chatModel.unReadCount,
-          host: UserEntity.fromModel(
-              await _userDataSource.findUserById(chatModel.hostUid)),
-          guest: UserEntity.fromModel(
-              await _userDataSource.findUserById(chatModel.guestUid)));
+          opponent: UserEntity.fromModel(
+              await _userDataSource.findUserById(chatModel.opponentUid)));
       return ResponseModel.success(data: chat);
     } catch (err) {
       _logger.e(err);
@@ -118,13 +94,33 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
+  Future<ResponseModel<MessageEntity>> findMessageById(
+      {required String chatId, required String messageId}) async {
+    try {
+      final model = await _chatDataSource.findMessageById(
+          chatId: chatId, messageId: messageId);
+      final sender = UserEntity.fromModel(
+          await _userDataSource.findUserById(model.senderUid));
+      final receiver = UserEntity.fromModel(
+          await _userDataSource.findUserById(model.receiverUid));
+      final message = MessageEntity.fromModel(
+          model: model, sender: sender, receiver: receiver);
+      return ResponseModel.success(data: message);
+    } catch (err) {
+      _logger.e(err);
+      return ResponseModel<MessageEntity>.error();
+    }
+  }
+
+  /// Create
+  @override
   Future<ResponseModel<void>> sendMessage(MessageEntity message) async {
     try {
       final chatId = message.chatId ??
           // 채팅방 id가 주어지지 않은 경우, 채팅방을 새로 개설 후 id 가져오기
           await _chatDataSource.createChat(ChatEntity(
                   lastMessage: "채팅방이 개설되었습니다",
-                  guest: UserEntity(uid: message.receiver?.uid))
+                  opponent: UserEntity(uid: message.receiver?.uid))
               .toModel());
       await _chatDataSource
           .createMessage(message.copyWith(chatId: chatId).toModel());
@@ -135,10 +131,20 @@ class ChatRepositoryImpl extends ChatRepository {
     }
   }
 
+  /// Read
+  /// Update
+
+  // TODO : 채팅메시지 읽은 경우 처리
+  @override
+  Future<ResponseModel<void>> seenMessageUpdate(MessageEntity message) async {
+    throw UnimplementedError();
+  }
+
+  /// Delete
   @override
   Future<ResponseModel<void>> deleteChat(ChatEntity chat) async {
     try {
-      await _chatDataSource.deleteChat(chat.toModel());
+      await _chatDataSource.deleteChatById(chat.id!);
       return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);
@@ -149,18 +155,12 @@ class ChatRepositoryImpl extends ChatRepository {
   @override
   Future<ResponseModel<void>> deleteMessage(MessageEntity message) async {
     try {
+      final currentUid = _credentialDataSource.currentUid;
+      if (message.sender?.uid != currentUid) {
+        return ResponseModel<void>.error(
+            responseType: ResponseType.unAuthorized);
+      }
       await _chatDataSource.deleteMessage(message.toModel());
-      return ResponseModel<void>.success(data: null);
-    } catch (err) {
-      _logger.e(err);
-      return ResponseModel<void>.error();
-    }
-  }
-
-  @override
-  Future<ResponseModel<void>> seenMessageUpdate(MessageEntity message) async {
-    try {
-      await _chatDataSource.seenMessageUpdate(message.toModel());
       return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);

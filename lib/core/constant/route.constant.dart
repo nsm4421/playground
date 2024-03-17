@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hot_place/domain/entity/chat/chat.entity.dart';
+import 'package:hot_place/domain/entity/user/user.entity.dart';
+import 'package:hot_place/presentation/chat/page/chat_room.screen.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/map/google_map.screen.dart';
 import 'package:hot_place/presentation/map/search_place.screen.dart';
@@ -14,6 +19,7 @@ enum Routes {
   createPost("/post/create"),
   googleMap("/map/google"),
   searchPlace("/map/search"),
+  chatRoom("/chat-room"),
   editProfile("/setting/edit-profile");
 
   final String path;
@@ -56,6 +62,13 @@ final GoRouter routerConfig = GoRouter(
       path: Routes.searchPlace.path,
       builder: (BuildContext context, GoRouterState state) {
         return const SearchPlaceScreen();
+      },
+    ),
+    GoRoute(
+      name: Routes.chatRoom.name,
+      path: '${Routes.chatRoom.path}/:chatId',
+      builder: (BuildContext context, GoRouterState state) {
+        return ChatRoomScreen(state.pathParameters['chatId']!);
       },
     ),
     GoRoute(

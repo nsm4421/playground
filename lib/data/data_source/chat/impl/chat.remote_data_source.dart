@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hot_place/core/constant/firebase.constant.dart';
+import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
 import 'package:hot_place/data/model/chat/chat.model.dart';
 import 'package:hot_place/data/model/chat/message.model.dart';
@@ -51,84 +52,109 @@ class RemoteChatDataSource extends ChatDataSource {
       .then((json) => ChatModel.fromJson(json ?? {}));
 
   @override
+  Future<MessageModel> findMessageById(
+          {required String chatId, required String messageId}) async =>
+      await _fireStore
+          .collection(CollectionName.user.name)
+          .doc(_getCurrentUidOrElseThrow())
+          .collection(CollectionName.chat.name)
+          .doc(chatId)
+          .collection(CollectionName.message.name)
+          .doc(messageId)
+          .get()
+          .then((snapshot) => snapshot.data())
+          .then((data) => MessageModel.fromJson(data ?? {}));
+
+  @override
   Future<String> createChat(ChatModel chat) async {
     final currentUid = _getCurrentUidOrElseThrow();
+    final opponentUid = chat.opponentUid;
+
+    // 현재 유저 컬렉션에 채팅 정보 저장
     await _fireStore
         .collection(CollectionName.user.name)
         .doc(currentUid)
         .collection(CollectionName.chat.name)
         .doc(chat.id)
-        .set(chat.copyWith(createdAt: DateTime.now()).toJson());
+        .set(chat
+            .copyWith(createdAt: chat.createdAt ?? DateTime.now())
+            .toJson());
+    // 상대방 컬렉션에 채팅 정보 저장
     await _fireStore
         .collection(CollectionName.user.name)
-        .doc(chat.guestUid)
+        .doc(opponentUid)
         .collection(CollectionName.chat.name)
         .doc(chat.id)
-        .set(chat.copyWith(createdAt: DateTime.now()).toJson());
+        .set(chat
+            .copyWith(
+                opponentUid: currentUid,
+                createdAt: chat.createdAt ?? DateTime.now())
+            .toJson());
     return chat.id;
   }
 
   @override
   Future<String> createMessage(MessageModel message) async {
-    final currentUid = _getCurrentUidOrElseThrow();
-    if (message.senderUid != currentUid) {
-      throw Exception('sender uid is not matched');
-    }
+    final senderUid = _getCurrentUidOrElseThrow();  // sender는 현재 로그인한 유저
+    final receiverUid = message.receiverUid;
+    final messageId = message.id.isNotEmpty ? message.id : UuidUtil.uuid();
+    // sender user 컬렉션에 메세지 정보 저장
     await _fireStore
         .collection(CollectionName.user.name)
-        .doc(message.senderUid)
+        .doc(senderUid)
         .collection(CollectionName.chat.name)
         .doc(message.chatId)
         .collection(CollectionName.message.name)
-        .doc(message.id)
-        .set(
-            message.copyWith(isSeen: true, createdAt: DateTime.now()).toJson());
+        .doc(messageId)
+        .set(message
+            .copyWith(
+                seenAt: DateTime.now(),
+                createdAt: message.createdAt ?? DateTime.now())
+            .toJson());
+    // receiver user 컬렉션에 메세지 정보 저장
     await _fireStore
         .collection(CollectionName.user.name)
-        .doc(message.receiverUid)
+        .doc(receiverUid)
         .collection(CollectionName.chat.name)
         .doc(message.chatId)
         .collection(CollectionName.message.name)
-        .doc(message.id)
-        .set(message.copyWith(createdAt: DateTime.now()).toJson());
-    return message.id;
+        .doc(messageId)
+        .set(message
+            .copyWith(createdAt: message.createdAt ?? DateTime.now())
+            .toJson());
+    return messageId;
+  }
+
+  // TODO
+  @override
+  Future<void> seenMessageUpdate(
+      {required String chatId, required String messageId}) async {
+    throw UnimplementedError();
+    // await _fireStore
+    //     .collection(CollectionName.user.name)
+    //     .doc(_getCurrentUidOrElseThrow())
+    //     .collection(CollectionName.chat.name)
+    //     .doc(chatId)
+    //     .collection(CollectionName.message.name)
+    //     .doc(messageId)
+    //     .update({});
   }
 
   @override
-  Future<void> seenMessageUpdate(MessageModel message) async {
-    await _fireStore
-        .collection(CollectionName.user.name)
-        .doc(message.senderUid)
-        .collection(CollectionName.chat.name)
-        .doc(message.chatId)
-        .collection(CollectionName.message.name)
-        .doc(message.id)
-        .update(message.copyWith(isSeen: true).toJson());
-    await _fireStore
-        .collection(CollectionName.user.name)
-        .doc(message.receiverUid)
-        .collection(CollectionName.chat.name)
-        .doc(message.chatId)
-        .collection(CollectionName.message.name)
-        .doc(message.id)
-        .update(message.copyWith(isSeen: true).toJson());
-  }
-
-  @override
-  Future<String> deleteChat(ChatModel chat) async {
+  Future<String> deleteChatById(String chatId) async {
     final currentUid = _getCurrentUidOrElseThrow();
-    if (chat.guestUid != currentUid || chat.hostUid != currentUid) {
-      throw Exception('current user not belongs to chat');
-    }
+    final chat = await findChatById(chatId);
+    // 현재 유저 컬렉션에 채팅 정보 삭제
     await _fireStore
         .collection(CollectionName.user.name)
-        .doc(chat.hostUid)
+        .doc(currentUid)
         .collection(CollectionName.chat.name)
         .doc(chat.id)
         .delete();
+    // 상대방 유저 컬렉션에 채팅 정보 삭제
     await _fireStore
         .collection(CollectionName.user.name)
-        .doc(chat.guestUid)
+        .doc(chat.opponentUid)
         .collection(CollectionName.chat.name)
         .doc(chat.id)
         .delete();
@@ -137,10 +163,6 @@ class RemoteChatDataSource extends ChatDataSource {
 
   @override
   Future<String> deleteMessage(MessageModel message) async {
-    final currentUid = _getCurrentUidOrElseThrow();
-    if (message.senderUid != currentUid) {
-      throw Exception('sender uid not match current uid');
-    }
     await _fireStore
         .collection(CollectionName.user.name)
         .doc(message.senderUid)

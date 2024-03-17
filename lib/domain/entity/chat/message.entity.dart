@@ -19,13 +19,13 @@ class MessageEntity with _$MessageEntity {
     MessageType? messageType,
     String? content,
     DateTime? createdAt,
-    bool? isSeen,
+    DateTime? seenAt,
   }) = _MessageEntity;
 
   factory MessageEntity.fromJson(Map<String, dynamic> json) =>
       _$MessageEntityFromJson(json);
 
-  static fromModel({
+  static MessageEntity fromModel({
     required MessageModel model,
     required UserEntity sender,
     required UserEntity receiver,
@@ -38,7 +38,7 @@ class MessageEntity with _$MessageEntity {
         messageType: model.messageType,
         content: model.content,
         createdAt: model.createdAt,
-        isSeen: model.isSeen,
+        seenAt: model.seenAt,
       );
 }
 
@@ -51,6 +51,6 @@ extension MessageEntityEx on MessageEntity {
         messageType: messageType ?? MessageType.text,
         content: content ?? '',
         createdAt: createdAt,
-        isSeen: isSeen ?? false,
+        seenAt: seenAt,
       );
 }

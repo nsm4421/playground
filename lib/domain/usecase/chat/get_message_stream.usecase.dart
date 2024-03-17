@@ -10,8 +10,8 @@ class GetMessageStreamUseCase {
   GetMessageStreamUseCase(this._repository);
 
   Future<ResultEntity<Stream<List<MessageEntity>>>> call(
-          MessageEntity message) async =>
+          String chatRoomId) async =>
       await _repository
-          .getMessageStream(message)
+          .getMessageStream(chatRoomId)
           .then(ResultEntity.fromResponse);
 }

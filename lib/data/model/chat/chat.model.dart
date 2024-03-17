@@ -12,8 +12,7 @@ class ChatModel with _$ChatModel {
     @Default('') String lastMessage,
     DateTime? createdAt,
     @Default(0) num unReadCount,
-    @Default('') String hostUid,
-    @Default('') String guestUid,
+    @Default('') String opponentUid,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>
