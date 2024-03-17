@@ -7,6 +7,8 @@ enum Status {
 
 enum ResponseType {
   ok(isSuccess: true, code: 200, description: "success"),
+  badRequest(
+      isSuccess: false, code: 400, description: "bad request"),
   internalError(
       isSuccess: false, code: 500, description: "internal server error");
 

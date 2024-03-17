@@ -1,4 +1,5 @@
 import 'package:hot_place/domain/entity/chat/message.entity.dart';
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/repository/chat/chat.repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,6 +9,6 @@ class SeenMessageUpdateUseCase {
 
   SeenMessageUpdateUseCase(this._repository);
 
-  Future<void> call(MessageEntity message) =>
-      _repository.seenMessageUpdate(message);
+  Future<ResultEntity<void>> call(MessageEntity message) =>
+      _repository.seenMessageUpdate(message).then(ResultEntity.fromResponse);
 }

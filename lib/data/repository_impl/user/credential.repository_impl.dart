@@ -35,12 +35,10 @@ class CredentialRepositoryImpl extends CredentialRepository {
   Future<ResponseModel<void>> signOut() async {
     try {
       await _credentialDataSource.signOut();
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.ok);
+      return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<void>.error();
     }
   }
 
@@ -54,12 +52,11 @@ class CredentialRepositoryImpl extends CredentialRepository {
         user = UserEntity.fromCredential(credential).toModel();
         await _userDataSource.insertUser(user);
       }
-      return ResponseModel<UserEntity>.fromResponseType(
-          responseType: ResponseType.ok, data: UserEntity.fromModel(user));
+      return ResponseModel<UserEntity>.success(
+          data: UserEntity.fromModel(user));
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<UserEntity>.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<UserEntity>.error();
     }
   }
 
@@ -70,12 +67,11 @@ class CredentialRepositoryImpl extends CredentialRepository {
       final credential = await _credentialDataSource.emailAndPasswordSignIn(
           email: email, password: password);
       final user = await _userDataSource.findUserById(credential.user!.uid);
-      return ResponseModel<UserEntity>.fromResponseType(
-          responseType: ResponseType.ok, data: UserEntity.fromModel(user));
+      return ResponseModel<UserEntity>.success(
+          data: UserEntity.fromModel(user));
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<UserEntity>.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<UserEntity>.error();
     }
   }
 
@@ -87,12 +83,10 @@ class CredentialRepositoryImpl extends CredentialRepository {
           email: email, password: password);
       final user = UserEntity.fromCredential(credential).toModel();
       await _userDataSource.insertUser(user);
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.ok);
+      return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<void>.error();
     }
   }
 }

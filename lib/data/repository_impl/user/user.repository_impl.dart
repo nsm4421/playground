@@ -4,7 +4,6 @@ import 'package:hot_place/domain/repository/user/user.repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-import '../../../core/constant/response.constant.dart';
 import '../../data_source/user/user.data_source.dart';
 
 @Singleton(as: UserRepository)
@@ -18,12 +17,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<ResponseModel<void>> insertUser(UserEntity user) async {
     try {
       await _userDataSource.insertUser(user.toModel());
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.ok);
+      return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<void>.error();
     }
   }
 
@@ -31,12 +28,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<ResponseModel<void>> updateUser(UserEntity user) async {
     try {
       await _userDataSource.updateUser(user.toModel());
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.ok);
+      return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<void>.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<void>.error();
     }
   }
 
@@ -44,12 +39,10 @@ class UserRepositoryImpl extends UserRepository {
   ResponseModel<Stream<List<UserEntity>>> getAllUserStream() {
     try {
       final stream = _userDataSource.allUserStream;
-      return ResponseModel.fromResponseType(
-          data: stream, responseType: ResponseType.ok);
+      return ResponseModel.success(data: stream);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<Stream<List<UserEntity>>>.error();
     }
   }
 
@@ -57,12 +50,10 @@ class UserRepositoryImpl extends UserRepository {
   ResponseModel<Stream<UserEntity>> getUserStream(String uid) {
     try {
       final stream = _userDataSource.getUserStream(uid);
-      return ResponseModel.fromResponseType(
-          data: stream, responseType: ResponseType.ok);
+      return ResponseModel.success(data: stream);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<Stream<UserEntity>>.error();
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/constant/map.constant.dart';
@@ -12,7 +13,7 @@ class SearchPlaceByCategoryAndKeywordUseCase {
 
   SearchPlaceByCategoryAndKeywordUseCase(this._repository);
 
-  Future<KakaoMapApiResponseModel<PlaceEntity>> call({
+  Future<ResultEntity<KakaoMapApiResponseModel<PlaceEntity>>> call({
     required String keyword,
     CategoryGroupCode? category,
     Position? position,
@@ -20,11 +21,14 @@ class SearchPlaceByCategoryAndKeywordUseCase {
     int? page,
     int? size,
   }) async =>
-      await _repository.searchPlacesByCategoryAndKeyword(
-          keyword: keyword,
-          category: category,
-          position: position,
-          radius: radius,
-          page: page,
-          size: size);
+      await _repository
+          .searchPlacesByCategoryAndKeyword(
+              keyword: keyword,
+              category: category,
+              position: position,
+              radius: radius ?? 200,
+              page: page ?? 1,
+              size: size ?? 20)
+          .then(
+              ResultEntity<KakaoMapApiResponseModel<PlaceEntity>>.fromResponse);
 }

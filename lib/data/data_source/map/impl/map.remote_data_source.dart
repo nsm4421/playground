@@ -39,16 +39,16 @@ class RemoteMapDatSource extends MapDataSource {
 
   /// 검색어로 조회해서 행정동 조회
   @override
-  Future<KakaoMapApiResponseModel<AddressModel>> searchAddress(String keyword,
-      {int? page, int? size}) async {
+  Future<KakaoMapApiResponseModel<AddressModel>> searchAddress(
+      {required String keyword, required int page, required int size}) async {
     _logger.d("장소 검색 키워드 $keyword / page : $page / size : $size");
     return await _dio
         .get('https://dapi.kakao.com/v2/local/search/address.json',
             queryParameters: {
               'query': keyword,
               'analyze_type': 'similar', // similar, exact
-              'page': page ?? 1, // 최소: 1, 최대: 45, 기본값: 1
-              'size': size ?? 10 // 최소: 1, 최대: 30, 기본값: 10
+              'page': page, // 최소: 1, 최대: 45, 기본값: 1
+              'size': size // 최소: 1, 최대: 30, 기본값: 10
             },
             options: Options(headers: {
               'Authorization': 'KakaoAK ${dotenv.env['KAKAO_REST_API_KEY']}'
@@ -68,18 +68,18 @@ class RemoteMapDatSource extends MapDataSource {
     CategoryGroupCode? category,
     required double latitude,
     required double longitude,
-    int? page,
-    int? radius,
-    int? size,
+    required int page,
+    required int radius,
+    required int size,
   }) async =>
           await _dio
               .get('https://dapi.kakao.com/v2/local/search/keyword.json',
                   queryParameters: {
                     'query': keyword,
                     if (category != null) 'category_group_code': category.name,
-                    'page': page ?? 1, // 1~45 사이의 값 (기본값: 1)
-                    'size': size ?? 10, // 1~15 사이의 값 (기본값: 15)
-                    'radius': radius ?? 1000,
+                    'page': page, // 1~45 사이의 값 (기본값: 1)
+                    'size': size, // 1~15 사이의 값 (기본값: 15)
+                    'radius': radius,
                     'y': dotenv.env['ENVIRONMENT'] == 'development'
                         ? '37.494705526855'
                         : latitude.toString(),
@@ -112,17 +112,17 @@ class RemoteMapDatSource extends MapDataSource {
     required CategoryGroupCode category,
     required double latitude,
     required double longitude,
-    int? page,
-    int? radius,
-    int? size,
+    required int page,
+    required int radius,
+    required int size,
   }) async =>
       await _dio
           .get('https://dapi.kakao.com/v2/local/search/category.json',
               queryParameters: {
                 'category_group_code': category.name,
-                'page': page ?? 1, // 1~45 사이의 값 (기본값: 1)
-                'size': size ?? 10, // 1~15 사이의 값 (기본값: 15)
-                'radius': radius ?? 1000,
+                'page': page, // 1~45 사이의 값 (기본값: 1)
+                'size': size, // 1~15 사이의 값 (기본값: 15)
+                'radius': radius,
                 'y': dotenv.env['ENVIRONMENT'] == 'development'
                     ? '37.494705526855'
                     : latitude.toString(),

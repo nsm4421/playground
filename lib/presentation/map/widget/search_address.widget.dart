@@ -5,7 +5,6 @@ import 'package:hot_place/domain/usecase/map/search_address.usecase.dart';
 
 import '../../../domain/entity/map/address/address.entity.dart';
 
-
 class SearchAddressWidget extends StatefulWidget {
   const SearchAddressWidget({super.key});
 
@@ -38,17 +37,23 @@ class _SearchAddressWidgetState extends State<SearchAddressWidget> {
 
   _search() async {
     try {
-      final fetched = await getIt<SearchAddressUseCase>()(_controller.text);
-      setState(() {
-        _addresses = fetched.data;
-        _keyword = _controller.text;
-        _errorText = null;
+      (await getIt<SearchAddressUseCase>()(_controller.text)).when(
+          success: (data) {
+        setState(() {
+          _addresses = data.data;
+          _keyword = _controller.text;
+          _errorText = null;
+        });
+        _hideKeyboard();
+        _controller.clear();
+      }, failure: (_, __) {
+        setState(() {
+          _errorText = "검색에 실패하였습니다";
+        });
       });
-      _hideKeyboard();
-      _controller.clear();
     } catch (err) {
       setState(() {
-        _errorText = "검색에 실패하였습니다";
+        _errorText = "알수 없는 에러가 발생했습니다";
       });
       debugPrint(err.toString());
     } finally {

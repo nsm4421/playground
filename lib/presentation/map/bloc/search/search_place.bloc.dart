@@ -58,15 +58,19 @@ class SearchPlaceBloc extends Bloc<SearchPlaceEvent, SearchPlaceState> {
     emit(state.copyWith(status: Status.loading));
     try {
       final radius = event.radius ?? state.radius;
-      final res = await _searchPlaceByCategoryUseCase(
-          category: event.category,
-          position: state.currentLocation,
-          radius: radius);
-      emit(state.copyWith(
-          category: event.category,
-          places: res.data,
-          radius: radius,
-          status: Status.success));
+      (await _searchPlaceByCategoryUseCase(
+              category: event.category,
+              position: state.currentLocation,
+              radius: radius))
+          .when(success: (data) {
+        emit(state.copyWith(
+            category: event.category,
+            places: data.data,
+            radius: radius,
+            status: Status.success));
+      }, failure: (code, description) {
+        throw Exception("error-code:$code: ($description)");
+      });
     } catch (err) {
       _logger.e(err);
       emit(state.copyWith(status: Status.error));
@@ -80,18 +84,21 @@ class SearchPlaceBloc extends Bloc<SearchPlaceEvent, SearchPlaceState> {
     emit(state.copyWith(status: Status.loading));
     try {
       final radius = event.radius ?? state.radius;
-      final res = await _searchPlaceByCategoryAndKeywordUseCase(
-          category: event.category,
-          keyword: event.keyword,
-          radius: radius,
-          position: state.currentLocation);
-      _logger.d(event.toString());
-      emit(state.copyWith(
-          category: event.category,
-          keyword: event.keyword,
-          places: res.data,
-          radius: radius,
-          status: Status.success));
+      (await _searchPlaceByCategoryAndKeywordUseCase(
+              category: event.category,
+              keyword: event.keyword,
+              radius: radius,
+              position: state.currentLocation))
+          .when(success: (data) {
+        emit(state.copyWith(
+            category: event.category,
+            keyword: event.keyword,
+            places: data.data,
+            radius: radius,
+            status: Status.success));
+      }, failure: (code, description) {
+        throw Exception("error-code:$code: ($description)");
+      });
     } catch (err) {
       _logger.e(err);
       emit(state.copyWith(status: Status.error));
@@ -103,6 +110,10 @@ class SearchPlaceBloc extends Bloc<SearchPlaceEvent, SearchPlaceState> {
     if (permission == LocationPermission.denied) {
       throw Exception('not permitted');
     }
-    return await _getCurrentLocationUseCase();
+    return (await _getCurrentLocationUseCase()).when(
+        success: (data) => data,
+        failure: (code, description) {
+          throw Exception("error-code:$code: ($description)");
+        });
   }
 }

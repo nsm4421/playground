@@ -1,4 +1,5 @@
 import 'package:hot_place/domain/entity/chat/message.entity.dart';
+import 'package:hot_place/domain/entity/result/result.entity.dart';
 import 'package:hot_place/domain/repository/chat/chat.repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,6 +9,9 @@ class GetMessageStreamUseCase {
 
   GetMessageStreamUseCase(this._repository);
 
-  Future<Stream<List<MessageEntity>>> call(MessageEntity message) async =>
-      await _repository.getMessageStream(message);
+  Future<ResultEntity<Stream<List<MessageEntity>>>> call(
+          MessageEntity message) async =>
+      await _repository
+          .getMessageStream(message)
+          .then(ResultEntity.fromResponse);
 }

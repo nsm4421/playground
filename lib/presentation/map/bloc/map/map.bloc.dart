@@ -34,13 +34,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
 
       // 현재 위치 설정
-      final currentLocation = await _getCurrentLocationUseCase();
-      emit(state.copyWith(currentLocation: currentLocation));
-      _logger.d(
-          '현재 위치 : 위도 ${currentLocation.latitude} 경도 ${currentLocation.longitude}');
+      (await _getCurrentLocationUseCase()).when(success: (data) {
+        emit(state.copyWith(currentLocation: data));
+      }, failure: (code, description) {
+        throw Exception("error-code:$code: ($description)");
+      });
     } catch (err) {
       _logger.e(err);
-      emit(state.copyWith(isLoading: false, isError: true));
+      emit(state.copyWith(isError: true));
     } finally {
       emit(state.copyWith(isLoading: false));
     }

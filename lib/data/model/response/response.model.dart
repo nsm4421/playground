@@ -17,14 +17,26 @@ class ResponseModel<T> with _$ResponseModel<T> {
     T? data,
   }) = _ResponseModel;
 
-  factory ResponseModel.fromResponseType(
-          {required ResponseType responseType, T? data, String? message}) =>
+  factory ResponseModel.success(
+          {ResponseType responseType = ResponseType.ok,
+          required T data,
+          String? message}) =>
       ResponseModel(
-          isSuccess: responseType.isSuccess,
+          isSuccess: true,
           code: responseType.code,
           description: responseType.description,
           message: message,
           data: data);
+
+  factory ResponseModel.error(
+          {ResponseType responseType = ResponseType.internalError,
+          String? message}) =>
+      ResponseModel(
+          isSuccess: false,
+          code: responseType.code,
+          description: responseType.description,
+          message: message,
+          data: null);
 
   factory ResponseModel.fromJson(
           Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>

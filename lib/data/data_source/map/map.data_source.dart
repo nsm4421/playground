@@ -7,8 +7,8 @@ import '../../model/map/response/kakao_map_api_response.model.dart';
 abstract class MapDataSource {
   Future<Position> getCurrentLocation();
 
-  Future<KakaoMapApiResponseModel<AddressModel>> searchAddress(String keyword,
-      {int? page, int? size});
+  Future<KakaoMapApiResponseModel<AddressModel>> searchAddress(
+      {required String keyword, required int page, required int size});
 
   Future<KakaoMapApiResponseModel<PlaceModel>>
       searchPlacesByCategoryAndKeyword({
@@ -16,17 +16,17 @@ abstract class MapDataSource {
     CategoryGroupCode? category,
     required double latitude,
     required double longitude,
-    int? page,
-    int? radius,
-    int? size,
+    required int radius,
+    required int page,
+    required int size,
   });
 
   Future<KakaoMapApiResponseModel<PlaceModel>> searchPlaceByCategory({
     required CategoryGroupCode category,
     required double latitude,
     required double longitude,
-    int? page,
-    int? radius,
-    int? size,
+    required int radius,
+    required int page,
+    required int size,
   });
 }

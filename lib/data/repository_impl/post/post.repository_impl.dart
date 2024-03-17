@@ -37,12 +37,10 @@ class PostRepositoryImpl extends PostRepository {
                 return PostEntity.fromModel(
                     post: post, author: author.toEntity());
               })));
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.ok, data: stream);
+      return ResponseModel.success(data: stream);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<Stream<List<PostEntity>>>.error();
     }
   }
 
@@ -50,12 +48,10 @@ class PostRepositoryImpl extends PostRepository {
   Future<ResponseModel<String>> createPost(PostEntity post) async {
     try {
       final postId = await _postDataSource.createPost(post.toModel());
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.ok, data: postId);
+      return ResponseModel<String>.success(data: postId);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<String>.error();
     }
   }
 
@@ -63,12 +59,11 @@ class PostRepositoryImpl extends PostRepository {
   Future<ResponseModel<String>> deletePostById(String postId) async {
     try {
       final savedPostId = await _postDataSource.deletePostById(postId);
-      return ResponseModel.fromResponseType(
+      return ResponseModel.success(
           responseType: ResponseType.ok, data: savedPostId);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<String>.error();
     }
   }
 
@@ -80,12 +75,10 @@ class PostRepositoryImpl extends PostRepository {
           await _userDataSource.findUserById(postModel.authorUid));
       final postEntity =
           PostEntity.fromModel(post: postModel, author: userEntity);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.ok, data: postEntity);
+      return ResponseModel.success(data: postEntity);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<PostEntity>.error();
     }
   }
 
@@ -93,12 +86,10 @@ class PostRepositoryImpl extends PostRepository {
   Future<ResponseModel<String>> modifyPost(PostEntity post) async {
     try {
       final postId = await _postDataSource.modifyPost(post.toModel());
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.ok, data: postId);
+      return ResponseModel.success(data: postId);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<String>.error();
     }
   }
 
@@ -108,12 +99,10 @@ class PostRepositoryImpl extends PostRepository {
       final futures =
           images.map((e) async => await _postDataSource.uploadImage(e));
       final urls = await Future.wait(futures);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.ok, data: urls);
+      return ResponseModel.success(data: urls);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel.fromResponseType(
-          responseType: ResponseType.internalError);
+      return ResponseModel<List<String>>.error();
     }
   }
 }
