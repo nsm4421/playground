@@ -58,16 +58,14 @@ class ChatRepositoryImpl extends ChatRepository {
       final opponent = UserEntity.fromModel(
           await _userDataSource.findUserById(chatEntity!.opponent!.uid!));
       final stream = _chatDataSource.getMessageStream(chatId).asyncMap(
-          (List<MessageModel> messageModels) => messageModels
-              .map((model) => MessageEntity.fromModel(
-                  model: model,
-                  sender: model.senderUid == currentUser.uid
-                      ? currentUser
-                      : opponent,
-                  receiver: model.senderUid == currentUser.uid
-                      ? opponent
-                      : currentUser))
-              .toList());
+          (List<MessageModel> messageModels) => messageModels.map((model) {
+                final bool isSender = model.senderUid == currentUser.uid;
+                return MessageEntity.fromModel(
+                    model: model,
+                    isSender: isSender,
+                    sender: isSender ? currentUser : opponent,
+                    receiver: isSender ? opponent : currentUser);
+              }).toList());
       return ResponseModel<Stream<List<MessageEntity>>>.success(data: stream);
     } catch (err) {
       _logger.e(err);
@@ -104,7 +102,10 @@ class ChatRepositoryImpl extends ChatRepository {
       final receiver = UserEntity.fromModel(
           await _userDataSource.findUserById(model.receiverUid));
       final message = MessageEntity.fromModel(
-          model: model, sender: sender, receiver: receiver);
+          model: model,
+          sender: sender,
+          receiver: receiver,
+          isSender: model.senderUid == _credentialDataSource.currentUid);
       return ResponseModel.success(data: message);
     } catch (err) {
       _logger.e(err);

@@ -15,6 +15,7 @@ class MessageEntity with _$MessageEntity {
     String? id,
     String? chatId,
     UserEntity? sender,
+    @Default(true) bool isSender, // 현재 로그인한 유저가 보낸 메세지인지 여부
     UserEntity? receiver,
     MessageType? messageType,
     String? content,
@@ -29,11 +30,13 @@ class MessageEntity with _$MessageEntity {
     required MessageModel model,
     required UserEntity sender,
     required UserEntity receiver,
+    required bool isSender,
   }) =>
       MessageEntity(
         id: model.id,
         chatId: model.chatId,
         sender: sender,
+        isSender: isSender,
         receiver: receiver,
         messageType: model.messageType,
         content: model.content,

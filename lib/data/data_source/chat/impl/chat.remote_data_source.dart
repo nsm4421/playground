@@ -34,7 +34,7 @@ class RemoteChatDataSource extends ChatDataSource {
       .collection(CollectionName.chat.name)
       .doc(chatId)
       .collection(CollectionName.message.name)
-      .orderBy('createdAt', descending: true)
+      .orderBy('createdAt', descending: false)
       .snapshots()
       .map((snapshot) => snapshot.docs
           .map((doc) => doc.data())
@@ -95,7 +95,7 @@ class RemoteChatDataSource extends ChatDataSource {
 
   @override
   Future<String> createMessage(MessageModel message) async {
-    final senderUid = _getCurrentUidOrElseThrow();  // sender는 현재 로그인한 유저
+    final senderUid = _getCurrentUidOrElseThrow(); // sender는 현재 로그인한 유저
     final receiverUid = message.receiverUid;
     final messageId = message.id.isNotEmpty ? message.id : UuidUtil.uuid();
     // sender user 컬렉션에 메세지 정보 저장
@@ -108,6 +108,9 @@ class RemoteChatDataSource extends ChatDataSource {
         .doc(messageId)
         .set(message
             .copyWith(
+                id: messageId,
+                senderUid: senderUid,
+                receiverUid: receiverUid,
                 seenAt: DateTime.now(),
                 createdAt: message.createdAt ?? DateTime.now())
             .toJson());
@@ -120,7 +123,11 @@ class RemoteChatDataSource extends ChatDataSource {
         .collection(CollectionName.message.name)
         .doc(messageId)
         .set(message
-            .copyWith(createdAt: message.createdAt ?? DateTime.now())
+            .copyWith(
+                id: messageId,
+                senderUid: senderUid,
+                receiverUid: receiverUid,
+                createdAt: message.createdAt ?? DateTime.now())
             .toJson());
     return messageId;
   }
