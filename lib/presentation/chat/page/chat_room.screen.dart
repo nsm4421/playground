@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/constant/response.constant.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/domain/entity/chat/message.entity.dart';
@@ -22,10 +25,10 @@ class ChatRoomScreen extends StatelessWidget {
           builder: (_, state) {
             switch (state.status) {
               case Status.initial:
-              case Status.success:
-                return const _ChatRoomView();
               case Status.loading:
                 return const Center(child: CircularProgressIndicator());
+              case Status.success:
+                return const _ChatRoomView();
               case Status.error:
                 return Center(
                     child: Text("Error",
@@ -45,90 +48,84 @@ class _ChatRoomView extends StatefulWidget {
 
 class _ChatRoomViewState extends State<_ChatRoomView> {
   late TextEditingController _tec;
+  late ScrollController _sc;
 
   @override
   void initState() {
     super.initState();
     _tec = TextEditingController();
+    _sc = ScrollController();
   }
 
   @override
   void dispose() {
     super.dispose();
     _tec.dispose();
+    _sc.dispose();
   }
 
-  _handleSend() async {
-    context.read<ChatRoomBloc>().add(SendMessage(content: _tec.text));
-    _tec.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text(
-            context.read<ChatRoomBloc>().state.opponent.username ?? "Unknown"),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-              child: _MessageList(context.read<ChatRoomBloc>().state.stream!)),
-          TextField(
-            controller: _tec,
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-              onPressed: _handleSend,
-              icon: Icon(Icons.send),
-            )),
-          )
-        ],
-      ));
-}
-
-class _MessageList extends StatefulWidget {
-  const _MessageList(this.stream, {super.key});
-
-  final Stream<List<MessageEntity>> stream;
-
-  @override
-  State<_MessageList> createState() => _MessageListState();
-}
-
-class _MessageListState extends State<_MessageList> {
-  final ScrollController _sc = ScrollController();
-
-  _jumpToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _sc.animateTo(
+  // 맨 아래로 스크롤
+  _jumpToBottom() => _sc.animateTo(
         _sc.position.maxScrollExtent,
         duration: const Duration(milliseconds: 100),
         curve: Curves.easeInOut,
       );
-    });
+
+  // 메세지 보내기
+  _handleSend() async {
+    context.read<ChatRoomBloc>().add(SendMessage(content: _tec.text));
+    _jumpToBottom();
+    _tec.clear();
   }
 
-  @override
-  dispose() {
-    super.dispose();
-    _sc.dispose();
-  }
+  // 화면 닫기
+  _handlePop() => context.pop();
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<MessageEntity>>(
-      stream: widget.stream,
-      builder: (_, snapshot) {
-        if (snapshot.hasError || !snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final data = snapshot.data;
-        _jumpToBottom();
-        return ListView.builder(
-            controller: _sc,
-            shrinkWrap: true,
-            itemCount: data?.length ?? 0,
-            itemBuilder: (_, index) => MessageItem(data![index]));
-      },
-    );
+    return Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+            leading: const CircleAvatar(child: null),
+            title: Text(context.read<ChatRoomBloc>().state.opponent.username ??
+                "Unknown"),
+            actions: [
+              IconButton(onPressed: _handlePop, icon: const Icon(Icons.clear))
+            ]),
+        body: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder<List<MessageEntity>>(
+                stream: context.read<ChatRoomBloc>().state.stream,
+                builder: (_, snapshot) {
+                  if (snapshot.hasError || !snapshot.hasData) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _jumpToBottom();
+                    });
+                    return ListView.builder(
+                        controller: _sc,
+                        physics: const ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (_, index) =>
+                            MessageItem(snapshot.data![index]));
+                  }
+                },
+              ),
+            ),
+
+            // 채팅 입력창
+            TextField(
+                controller: _tec,
+                minLines: 1,
+                maxLines: 5,
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                        onPressed: _handleSend, icon: const Icon(Icons.send))))
+          ],
+        ));
   }
 }

@@ -70,8 +70,6 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     Emitter<ChatRoomState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: Status.loading));
-
       // 전송할 메시지 전송
       (await _sendMessageUseCase(MessageEntity(
               chatId: state.chatId,
