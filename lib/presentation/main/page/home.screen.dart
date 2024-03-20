@@ -6,7 +6,7 @@ import 'package:hot_place/presentation/map/map.fragment.dart';
 import 'package:hot_place/presentation/setting/page/setting.fragment.dart';
 
 import '../../../core/constant/bottom_nav.constant.dart';
-import '../../post/page/post.fragment.dart';
+import '../../post/page/post_list/post.fragment.dart';
 import '../bloc/bottom_nav/bottom_nav.cubit.dart';
 
 class HomeScreen extends StatelessWidget {
