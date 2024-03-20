@@ -16,4 +16,9 @@ abstract class PostRepository {
   Future<ResponseModel<String>> deletePostById(String postId);
 
   Future<ResponseModel<List<String>>> uploadImages(List<File> images);
+
+  Future<ResponseModel<String>> likePost(String postId);
+
+  Future<ResponseModel<String>> cancelLikePost(
+      {required String postId, required String likeId});
 }

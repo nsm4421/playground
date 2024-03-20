@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hot_place/core/constant/firebase.constant.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
+import 'package:hot_place/data/model/post/like/like.model.dart';
 import 'package:hot_place/data/model/post/post.model.dart';
 
 class RemotePostDataSource extends PostDataSource {
@@ -90,6 +91,71 @@ class RemotePostDataSource extends PostDataSource {
           .asyncMap((snapshot) => snapshot.docs
               .map((doc) => PostModel.fromJson(doc.data()))
               .toList());
+
+  @override
+  Future<LikeModel?> getLike(String postId) async => await _fireStore
+      .collection(CollectionName.post.name)
+      .doc(postId)
+      .collection(CollectionName.like.name)
+      .where("uid", isEqualTo: _getCurrentUidOrElseThrow())
+      .get()
+      .then((snapshot) => snapshot.docs.isNotEmpty
+          ? LikeModel.fromJson(snapshot.docs.first.data())
+          : null);
+
+  @override
+  Future<String> likePost(String postId) async {
+    // like 저장
+    final likeId = UuidUtil.uuid();
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .collection(CollectionName.like.name)
+        .doc(likeId)
+        .set(LikeModel(
+                id: likeId,
+                uid: _getCurrentUidOrElseThrow(),
+                postId: postId,
+                createdAt: DateTime.now())
+            .toJson());
+    // post에서 numLike필드 증가
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .update({'numLike': FieldValue.increment(1)});
+    return likeId;
+  }
+
+  @override
+  Future<String> cancelLikePost(
+      {required String postId, required String likeId}) async {
+    // 좋아요 조회
+    final fetched = await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .collection(CollectionName.like.name)
+        .doc(likeId)
+        .get()
+        .then((snapshot) => snapshot.data())
+        .then((data) => LikeModel.fromJson(data ?? {}));
+    // 좋아요 누른 유저와 로그인한 유저가 동일 유저인지 검사
+    if (fetched.uid != _getCurrentUidOrElseThrow()) {
+      throw Exception('login user and like user is not matched');
+    }
+    // 좋아요 삭제
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .collection(CollectionName.like.name)
+        .doc(likeId)
+        .delete();
+    // post에서 numLike필드 감소
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .update({'numLike': FieldValue.increment(-1)});
+    return likeId;
+  }
 
   String _getCurrentUidOrElseThrow() {
     final currentUid = _auth.currentUser?.uid;

@@ -34,8 +34,9 @@ class PostRepositoryImpl extends PostRepository {
           .asyncMap((posts) async => await Future.wait(posts.map((post) async {
                 final author =
                     await _userDataSource.findUserById(post.authorUid);
+                final like = await _postDataSource.getLike(post.id);
                 return PostEntity.fromModel(
-                    post: post, author: author.toEntity());
+                    post: post, author: author.toEntity(), like: like);
               })));
       return ResponseModel.success(data: stream);
     } catch (err) {
@@ -89,7 +90,7 @@ class PostRepositoryImpl extends PostRepository {
       return ResponseModel.success(data: postId);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<String>.error();
+      return ResponseModel.error();
     }
   }
 
@@ -102,7 +103,32 @@ class PostRepositoryImpl extends PostRepository {
       return ResponseModel.success(data: urls);
     } catch (err) {
       _logger.e(err);
-      return ResponseModel<List<String>>.error();
+      return ResponseModel.error();
+    }
+  }
+
+  @override
+  Future<ResponseModel<String>> likePost(String postId) async {
+    try {
+      final likeId = await _postDataSource.likePost(postId);
+      return ResponseModel.success(data: likeId);
+    } catch (err) {
+      _logger.e(err);
+      return ResponseModel.error();
+    }
+  }
+
+  @override
+  Future<ResponseModel<String>> cancelLikePost({
+    required String postId,
+    required String likeId,
+  }) async {
+    try {
+      await _postDataSource.cancelLikePost(postId: postId, likeId: likeId);
+      return ResponseModel.success(data: likeId);
+    } catch (err) {
+      _logger.e(err);
+      return ResponseModel.error();
     }
   }
 }

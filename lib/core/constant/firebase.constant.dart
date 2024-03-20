@@ -1,5 +1,6 @@
 enum CollectionName {
   user("users"),
+  like("likes"),
   chat("chats"),
   post("posts"),
   message("messages");

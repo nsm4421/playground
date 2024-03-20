@@ -5,7 +5,6 @@ import 'package:hot_place/data/model/user/user.model.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import '../../../core/constant/response.constant.dart';
 import '../../../domain/repository/user/credential.repository.dart';
 import '../../data_source/user/credential.data_source.dart';
 

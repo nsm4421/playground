@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:hot_place/data/model/post/post.model.dart';
+import '../../model/post/like/like.model.dart';
+import '../../model/post/post.model.dart';
 
 abstract class PostDataSource {
   Stream<List<PostModel>> getPostStream({int skip, int take});
@@ -14,4 +15,11 @@ abstract class PostDataSource {
   Future<String> deletePostById(String postId);
 
   Future<String> uploadImage(File image);
+
+  Future<LikeModel?> getLike(String postId);
+
+  Future<String> likePost(String postId);
+
+  Future<String> cancelLikePost(
+      {required String postId, required String likeId});
 }

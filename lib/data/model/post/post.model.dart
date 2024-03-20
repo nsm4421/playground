@@ -13,6 +13,7 @@ class PostModel with _$PostModel {
     @Default('') String authorUid,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,
+    @Default(0) int numLike,
     DateTime? createdAt,
   }) = _PostModel;
 
