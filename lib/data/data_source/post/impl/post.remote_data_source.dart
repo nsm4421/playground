@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hot_place/core/constant/firebase.constant.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
+import 'package:hot_place/data/model/post/comment/post_comment.model.dart';
 import 'package:hot_place/data/model/post/like/like.model.dart';
 import 'package:hot_place/data/model/post/post.model.dart';
 
@@ -23,6 +24,14 @@ class RemotePostDataSource extends PostDataSource {
         _storage = storage;
 
   @override
+  Future<PostModel> findPostById(String postId) async => await _fireStore
+      .collection(CollectionName.post.name)
+      .doc(postId)
+      .get()
+      .then((snapshot) => snapshot.data())
+      .then((data) => PostModel.fromJson(data ?? {}));
+
+  @override
   Future<String> createPost(PostModel post) async {
     final currentUid = _getCurrentUidOrElseThrow();
     final postId = post.id.isNotEmpty ? post.id : UuidUtil.uuid();
@@ -33,45 +42,23 @@ class RemotePostDataSource extends PostDataSource {
   }
 
   @override
-  Future<String> deletePostById(String postId) async {
-    final post = await _fireStore
-        .collection(CollectionName.post.name)
-        .doc(postId)
-        .get()
-        .then((snapshot) => snapshot.data())
-        .then((data) => PostModel.fromJson(data ?? {}));
-    if (post.authorUid != _getCurrentUidOrElseThrow()) {
-      throw Exception('author and login user are not same');
-    }
-    await _fireStore.collection(CollectionName.post.name).doc(postId).delete();
-    return postId;
+  Future<String> modifyPost(PostModel post) async {
+    final fetched = await _getPostIfAuthorOrElseThrow(post.id);
+    await _fireStore.collection(CollectionName.post.name).doc(post.id).set(
+        fetched
+            .copyWith(
+                content: post.content,
+                images: post.images,
+                hashtags: post.hashtags)
+            .toJson());
+    return post.id;
   }
 
   @override
-  Future<PostModel> findPostById(String postId) async => await _fireStore
-      .collection(CollectionName.post.name)
-      .doc(postId)
-      .get()
-      .then((snapshot) => snapshot.data())
-      .then((data) => PostModel.fromJson(data ?? {}));
-
-  @override
-  Future<String> modifyPost(PostModel post) async {
-    final currentUid = _getCurrentUidOrElseThrow();
-    final fetched = await _fireStore
-        .collection(CollectionName.post.name)
-        .doc(post.id)
-        .get()
-        .then((snapshot) => snapshot.data())
-        .then((data) => PostModel.fromJson(data ?? {}));
-    if (fetched.authorUid != _getCurrentUidOrElseThrow()) {
-      throw Exception('author and login user are not same');
-    }
-    await _fireStore
-        .collection(CollectionName.post.name)
-        .doc(post.id)
-        .set(post.copyWith(authorUid: currentUid).toJson());
-    return post.id;
+  Future<String> deletePostById(String postId) async {
+    await _getPostIfAuthorOrElseThrow(postId);
+    await _fireStore.collection(CollectionName.post.name).doc(postId).delete();
+    return postId;
   }
 
   @override
@@ -157,11 +144,103 @@ class RemotePostDataSource extends PostDataSource {
     return likeId;
   }
 
+  @override
+  Stream<List<PostCommentModel>> getCommentStream(
+          {required String postId, String? parentCommentId}) =>
+      _fireStore
+          .collection(CollectionName.post.name)
+          .doc(postId)
+          .collection(CollectionName.postComment.name)
+          // parentCommentId = null -> 댓글 조회
+          // parentCommentId != null -> 대댓글 조회
+          .where("parentCommentId", isEqualTo: parentCommentId)
+          // parentCommentId = null -> 작성시간별 내림차순
+          // parentCommentId != null -> 작성시간별 오름차순
+          .orderBy("createdAt", descending: parentCommentId == null)
+          .snapshots()
+          .asyncMap((snapshot) => snapshot.docs
+              .map((doc) => PostCommentModel.fromJson(doc.data()))
+              .toList());
+
+  @override
+  Future<String> createComment(PostCommentModel comment) async {
+    final commentId = comment.id.isNotEmpty ? comment.id : UuidUtil.uuid();
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(comment.postId)
+        .collection(CollectionName.postComment.name)
+        .doc(commentId)
+        .set(comment
+            .copyWith(
+                id: commentId,
+                uid: _getCurrentUidOrElseThrow(),
+                createdAt: DateTime.now())
+            .toJson());
+    return commentId;
+  }
+
+  @override
+  Future<String> modifyComment(PostCommentModel comment) async {
+    final fetched = await _getCommentIfAuthorOrElseThrow(
+        postId: comment.postId, commentId: comment.id);
+    // 본문 수정
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(comment.postId)
+        .collection(CollectionName.postComment.name)
+        .doc(comment.id)
+        .set(fetched.copyWith(content: comment.content).toJson());
+    return comment.id;
+  }
+
+  @override
+  Future<String> deleteComment(
+      {required String postId, required String commentId}) async {
+    await _getCommentIfAuthorOrElseThrow(postId: postId, commentId: commentId);
+    // 댓글 삭제
+    await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .collection(CollectionName.postComment.name)
+        .doc(commentId)
+        .delete();
+    return commentId;
+  }
+
   String _getCurrentUidOrElseThrow() {
     final currentUid = _auth.currentUser?.uid;
     if (currentUid == null) {
       throw Exception('not login');
     }
     return currentUid;
+  }
+
+  Future<PostModel> _getPostIfAuthorOrElseThrow(String postId) async {
+    final post = await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .get()
+        .then((snapshot) => snapshot.data())
+        .then((data) => PostModel.fromJson(data ?? {}));
+    if (post.authorUid != _getCurrentUidOrElseThrow()) {
+      throw Exception('author and login user are not same');
+    }
+    return post;
+  }
+
+  Future<PostCommentModel> _getCommentIfAuthorOrElseThrow(
+      {required String postId, required String commentId}) async {
+    final comment = await _fireStore
+        .collection(CollectionName.post.name)
+        .doc(postId)
+        .collection(CollectionName.postComment.name)
+        .doc(commentId)
+        .get()
+        .then((snapshot) => snapshot.data())
+        .then((data) => PostCommentModel.fromJson(data ?? {}));
+    if (comment.uid != _getCurrentUidOrElseThrow()) {
+      throw Exception('author and login user are not same');
+    }
+    return comment;
   }
 }

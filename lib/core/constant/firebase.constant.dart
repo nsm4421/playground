@@ -2,6 +2,7 @@ enum CollectionName {
   user("users"),
   like("likes"),
   chat("chats"),
+  postComment("post-comments"),
   post("posts"),
   message("messages");
 
