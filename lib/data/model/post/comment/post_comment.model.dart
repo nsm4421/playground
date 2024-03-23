@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hot_place/domain/entity/post/comment/post_comment.entity.dart';
 
 part 'post_comment.model.freezed.dart';
 
@@ -18,4 +19,13 @@ class PostCommentModel with _$PostCommentModel {
 
   factory PostCommentModel.fromJson(Map<String, dynamic> json) =>
       _$PostCommentModelFromJson(json);
+
+  factory PostCommentModel.fromEntity(PostCommentEntity entity) =>
+      PostCommentModel(
+          id: entity.id ?? '',
+          postId: entity.postId ?? '',
+          parentCommentId: entity.parentCommentId,
+          uid: entity.user?.uid ?? '',
+          content: entity.content ?? '',
+          createdAt: entity.createdAt);
 }

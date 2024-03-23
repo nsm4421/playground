@@ -35,14 +35,3 @@ class PostEntity with _$PostEntity {
         createdAt: post.createdAt,
       );
 }
-
-extension PostEntityEx on PostEntity {
-  PostModel toModel() => PostModel(
-      id: id ?? '',
-      content: content ?? '',
-      authorUid: author?.uid ?? '',
-      hashtags: hashtags,
-      numLike: numLike ?? 0,
-      images: images,
-      createdAt: createdAt);
-}

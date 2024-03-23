@@ -4,7 +4,6 @@ import 'package:hot_place/data/data_source/user/user.data_source.dart';
 import 'package:hot_place/data/model/user/user.model.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 
-
 class RemoteUserDataSource extends UserDataSource {
   final FirebaseFirestore _fireStore;
 
@@ -12,12 +11,12 @@ class RemoteUserDataSource extends UserDataSource {
       : _fireStore = fireStore;
 
   @override
-  Future<UserModel> findUserById(String uid) async => await _fireStore
+  Future<UserModel?> findUserById(String uid) async => await _fireStore
       .collection(CollectionName.user.name)
       .doc(uid)
       .get()
       .then((snapshot) => snapshot.data())
-      .then((json) => UserModel.fromJson(json ?? {}));
+      .then((json) => json == null ? null : UserModel.fromJson(json));
 
   @override
   Future<void> insertUser(UserModel user) async => await _fireStore
@@ -42,7 +41,7 @@ class RemoteUserDataSource extends UserDataSource {
       .snapshots()
       .map((snapshot) => snapshot.docs
           .map((e) => e.data())
-          .map((json) => UserModel.fromJson(json).toEntity())
+          .map((json) => UserEntity.fromModel(UserModel.fromJson(json)))
           .toList());
 
   @override
@@ -50,5 +49,6 @@ class RemoteUserDataSource extends UserDataSource {
       .collection(CollectionName.user.name)
       .doc(uid)
       .snapshots()
-      .asyncMap((e) => UserModel.fromJson(e.data() ?? {}).toEntity());
+      .asyncMap(
+          (e) => UserEntity.fromModel(UserModel.fromJson(e.data() ?? {})));
 }

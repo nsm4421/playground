@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 import '../../data_source/user/user.data_source.dart';
+import '../../model/user/user.model.dart';
 
 @Singleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
@@ -16,7 +17,7 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<ResponseModel<void>> insertUser(UserEntity user) async {
     try {
-      await _userDataSource.insertUser(user.toModel());
+      await _userDataSource.insertUser(UserModel.fromEntity(user));
       return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);
@@ -27,7 +28,7 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<ResponseModel<void>> updateUser(UserEntity user) async {
     try {
-      await _userDataSource.updateUser(user.toModel());
+      await _userDataSource.updateUser(UserModel.fromEntity(user));
       return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);

@@ -3,7 +3,7 @@ import 'package:hot_place/domain/entity/user/user.entity.dart';
 import '../../model/user/user.model.dart';
 
 abstract class UserDataSource {
-  Future<UserModel> findUserById(String uid);
+  Future<UserModel?> findUserById(String uid);
 
   Future<void> insertUser(UserModel user);
 

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../core/constant/message.constant.dart';
+import '../../../domain/entity/chat/message.entity.dart';
 
 part 'message.model.freezed.dart';
 
@@ -22,4 +23,15 @@ class MessageModel with _$MessageModel {
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>
       _$MessageModelFromJson(json);
+
+  factory MessageModel.fromEntity(MessageEntity entity) => MessageModel(
+        id: entity.id ?? '',
+        chatId: entity.chatId ?? '',
+        senderUid: entity.sender?.uid ?? '',
+        receiverUid: entity.receiver?.uid ?? '',
+        messageType: entity.messageType ?? MessageType.text,
+        content: entity.content ?? '',
+        createdAt: entity.createdAt,
+        seenAt: entity.seenAt,
+      );
 }

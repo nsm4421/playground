@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:hot_place/core/constant/response.constant.dart';
 import 'package:hot_place/data/data_source/post/post.data_source.dart';
 import 'package:hot_place/data/data_source/user/user.data_source.dart';
-import 'package:hot_place/data/model/user/user.model.dart';
+import 'package:hot_place/data/model/post/comment/post_comment.model.dart';
+import 'package:hot_place/domain/entity/post/comment/post_comment.entity.dart';
 import 'package:hot_place/domain/entity/post/post.entity.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
 import 'package:hot_place/domain/repository/post/post.repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+import '../../model/post/post.model.dart';
 import '../../model/response/response.model.dart';
 
 @Singleton(as: PostRepository)
@@ -25,6 +27,7 @@ class PostRepositoryImpl extends PostRepository {
 
   final _logger = Logger();
 
+  /// post
   @override
   ResponseModel<Stream<List<PostEntity>>> getPostStream(
       {int skip = 0, int take = 100}) {
@@ -32,11 +35,10 @@ class PostRepositoryImpl extends PostRepository {
       final stream = _postDataSource
           .getPostStream(skip: skip, take: take)
           .asyncMap((posts) async => await Future.wait(posts.map((post) async {
-                final author =
-                    await _userDataSource.findUserById(post.authorUid);
+                final author = await _findUserByIdOrElseThrow(post.authorUid);
                 final like = await _postDataSource.getLike(post.id);
                 return PostEntity.fromModel(
-                    post: post, author: author.toEntity(), like: like);
+                    post: post, author: author, like: like);
               })));
       return ResponseModel.success(data: stream);
     } catch (err) {
@@ -48,7 +50,8 @@ class PostRepositoryImpl extends PostRepository {
   @override
   Future<ResponseModel<String>> createPost(PostEntity post) async {
     try {
-      final postId = await _postDataSource.createPost(post.toModel());
+      final postId =
+          await _postDataSource.createPost(PostModel.fromEntity(post));
       return ResponseModel<String>.success(data: postId);
     } catch (err) {
       _logger.e(err);
@@ -72,8 +75,7 @@ class PostRepositoryImpl extends PostRepository {
   Future<ResponseModel<PostEntity>> findPostById(String postId) async {
     try {
       final postModel = await _postDataSource.findPostById(postId);
-      final userEntity = UserEntity.fromModel(
-          await _userDataSource.findUserById(postModel.authorUid));
+      final userEntity = await _findUserByIdOrElseThrow(postModel.authorUid);
       final postEntity =
           PostEntity.fromModel(post: postModel, author: userEntity);
       return ResponseModel.success(data: postEntity);
@@ -86,7 +88,8 @@ class PostRepositoryImpl extends PostRepository {
   @override
   Future<ResponseModel<String>> modifyPost(PostEntity post) async {
     try {
-      final postId = await _postDataSource.modifyPost(post.toModel());
+      final postId =
+          await _postDataSource.modifyPost(PostModel.fromEntity(post));
       return ResponseModel.success(data: postId);
     } catch (err) {
       _logger.e(err);
@@ -107,6 +110,7 @@ class PostRepositoryImpl extends PostRepository {
     }
   }
 
+  /// like
   @override
   Future<ResponseModel<String>> likePost(String postId) async {
     try {
@@ -130,5 +134,78 @@ class PostRepositoryImpl extends PostRepository {
       _logger.e(err);
       return ResponseModel.error();
     }
+  }
+
+  /// comment
+  @override
+  Future<ResponseModel<Stream<List<PostCommentEntity>>>> getChildCommentStream(
+      {required String postId, required String parentCommentId}) {
+    throw UnimplementedError();
+    // try {
+    //   final stream = _postDataSource
+    //       .getCommentStream(postId: postId, parentCommentId: parentCommentId)
+    //       .asyncMap((comments) async {
+    //     comments.map((model) async {
+    //       final author = author;
+    //     });
+    //   });
+    // } catch (err) {
+    //   _logger.e(err);
+    //   return ResponseModel.error();
+    // }
+  }
+
+  @override
+  Future<ResponseModel<Stream<List<PostCommentEntity>>>> getParentCommentStream(
+      {required String postId}) {
+    // TODO: implement getParentCommentStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ResponseModel<String>> createPostComment(
+      PostCommentEntity comment) async {
+    try {
+      final commentId = await _postDataSource
+          .createComment(PostCommentModel.fromEntity(comment));
+      return ResponseModel.success(data: commentId);
+    } catch (err) {
+      _logger.e(err);
+      return ResponseModel.error();
+    }
+  }
+
+  @override
+  Future<ResponseModel<String>> deletePostCommentById(
+      {required String postId, required String commentId}) async {
+    try {
+      await _postDataSource.deleteCommentById(
+          postId: postId, commentId: commentId);
+      return ResponseModel.success(data: commentId);
+    } catch (err) {
+      _logger.e(err);
+      return ResponseModel.error();
+    }
+  }
+
+  @override
+  Future<ResponseModel<String>> modifyPostComment(
+      PostCommentEntity comment) async {
+    try {
+      final commentId = await _postDataSource
+          .modifyComment(PostCommentModel.fromEntity(comment));
+      return ResponseModel.success(data: commentId);
+    } catch (err) {
+      _logger.e(err);
+      return ResponseModel.error();
+    }
+  }
+
+  Future<UserEntity> _findUserByIdOrElseThrow(String uid) async {
+    final user = await _userDataSource.findUserById(uid);
+    if (user == null) {
+      throw Exception('user not found');
+    }
+    return UserEntity.fromModel(user);
   }
 }

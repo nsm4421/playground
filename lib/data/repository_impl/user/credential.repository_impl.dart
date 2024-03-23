@@ -44,15 +44,16 @@ class CredentialRepositoryImpl extends CredentialRepository {
   @override
   Future<ResponseModel<UserEntity>> googleSignIn() async {
     try {
+      // fire auth로 구글 로그인
       final credential = await _credentialDataSource.googleSignIn();
-      final uid = credential.user?.uid;
-      UserModel user = await _userDataSource.findUserById(uid!);
-      if (user.uid.isEmpty) {
-        user = UserEntity.fromCredential(credential).toModel();
-        await _userDataSource.insertUser(user);
+      final user = UserEntity.fromCredential(credential);
+      // 유저 DB 조회
+      final fetched = await _userDataSource.findUserById(credential.user!.uid);
+      // 기존에 유저 DB에 없는 경우, 유저 DB에 저장
+      if (fetched == null) {
+        await _userDataSource.insertUser(UserModel.fromCredential(credential));
       }
-      return ResponseModel<UserEntity>.success(
-          data: UserEntity.fromModel(user));
+      return ResponseModel.success(data: user);
     } catch (err) {
       _logger.e(err);
       return ResponseModel<UserEntity>.error();
@@ -65,9 +66,8 @@ class CredentialRepositoryImpl extends CredentialRepository {
     try {
       final credential = await _credentialDataSource.emailAndPasswordSignIn(
           email: email, password: password);
-      final user = await _userDataSource.findUserById(credential.user!.uid);
       return ResponseModel<UserEntity>.success(
-          data: UserEntity.fromModel(user));
+          data: UserEntity.fromCredential(credential));
     } catch (err) {
       _logger.e(err);
       return ResponseModel<UserEntity>.error();
@@ -80,8 +80,7 @@ class CredentialRepositoryImpl extends CredentialRepository {
     try {
       final credential = await _credentialDataSource.emailAndPasswordSignUp(
           email: email, password: password);
-      final user = UserEntity.fromCredential(credential).toModel();
-      await _userDataSource.insertUser(user);
+      await _userDataSource.insertUser(UserModel.fromCredential(credential));
       return ResponseModel<void>.success(data: null);
     } catch (err) {
       _logger.e(err);

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/domain/entity/user/user.entity.dart';
@@ -20,13 +21,18 @@ class UserModel with _$UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
-}
 
-extension UserModelEx on UserModel {
-  UserEntity toEntity() => UserEntity(
-      uid: uid,
-      email: email.isNotEmpty ? email : null,
-      username: username.isNotEmpty ? username : null,
-      photoUrl: photoUrl.isNotEmpty ? photoUrl : null,
-      status: status);
+  factory UserModel.fromEntity(UserEntity entity) => UserModel(
+      uid: entity.uid ?? '',
+      email: entity.email ?? '',
+      username: entity.username ?? '',
+      photoUrl: entity.photoUrl ?? '',
+      status: entity.status ?? UserStatus.offline);
+
+  factory UserModel.fromCredential(UserCredential credential) => UserModel(
+        uid: credential.user?.uid ?? '',
+        email: credential.user?.email ?? '',
+        username: credential.user?.displayName ?? '',
+        photoUrl: credential.user?.photoURL ?? '',
+      );
 }

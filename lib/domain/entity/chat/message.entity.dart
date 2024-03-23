@@ -26,7 +26,7 @@ class MessageEntity with _$MessageEntity {
   factory MessageEntity.fromJson(Map<String, dynamic> json) =>
       _$MessageEntityFromJson(json);
 
-  static MessageEntity fromModel({
+  factory MessageEntity.fromModel({
     required MessageModel model,
     required UserEntity sender,
     required UserEntity receiver,
@@ -42,18 +42,5 @@ class MessageEntity with _$MessageEntity {
         content: model.content,
         createdAt: model.createdAt,
         seenAt: model.seenAt,
-      );
-}
-
-extension MessageEntityEx on MessageEntity {
-  MessageModel toModel() => MessageModel(
-        id: id ?? '',
-        chatId: chatId ?? '',
-        senderUid: sender?.uid ?? '',
-        receiverUid: receiver?.uid ?? '',
-        messageType: messageType ?? MessageType.text,
-        content: content ?? '',
-        createdAt: createdAt,
-        seenAt: seenAt,
       );
 }
