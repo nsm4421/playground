@@ -136,31 +136,7 @@ class PostRepositoryImpl extends PostRepository {
     }
   }
 
-  /// comment
-  @override
-  Future<ResponseModel<Stream<List<PostCommentEntity>>>> getChildCommentStream(
-      {required String postId, required String parentCommentId}) {
-    throw UnimplementedError();
-    // try {
-    //   final stream = _postDataSource
-    //       .getCommentStream(postId: postId, parentCommentId: parentCommentId)
-    //       .asyncMap((comments) async {
-    //     comments.map((model) async {
-    //       final author = author;
-    //     });
-    //   });
-    // } catch (err) {
-    //   _logger.e(err);
-    //   return ResponseModel.error();
-    // }
-  }
-
-  @override
-  Future<ResponseModel<Stream<List<PostCommentEntity>>>> getParentCommentStream(
-      {required String postId}) {
-    // TODO: implement getParentCommentStream
-    throw UnimplementedError();
-  }
+/// comment
 
   @override
   Future<ResponseModel<String>> createPostComment(

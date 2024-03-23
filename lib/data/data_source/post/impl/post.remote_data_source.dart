@@ -194,7 +194,7 @@ class RemotePostDataSource extends PostDataSource {
   }
 
   @override
-  Future<String> deleteComment(
+  Future<String> deleteCommentById(
       {required String postId, required String commentId}) async {
     await _getCommentIfAuthorOrElseThrow(postId: postId, commentId: commentId);
     // 댓글 삭제

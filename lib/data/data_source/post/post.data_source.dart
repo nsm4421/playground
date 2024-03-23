@@ -35,6 +35,6 @@ abstract class PostDataSource {
 
   Future<String> modifyComment(PostCommentModel comment);
 
-  Future<String> deleteComment(
+  Future<String> deleteCommentById(
       {required String postId, required String commentId});
 }

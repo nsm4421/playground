@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:hot_place/domain/entity/post/comment/post_comment.entity.dart';
 import 'package:hot_place/domain/entity/post/post.entity.dart';
 
 import '../../../data/model/response/response.model.dart';
@@ -21,4 +22,11 @@ abstract class PostRepository {
 
   Future<ResponseModel<String>> cancelLikePost(
       {required String postId, required String likeId});
+
+  Future<ResponseModel<String>> createPostComment(PostCommentEntity comment);
+
+  Future<ResponseModel<String>> deletePostCommentById(
+      {required String postId, required String commentId});
+
+  Future<ResponseModel<String>> modifyPostComment(PostCommentEntity comment);
 }
