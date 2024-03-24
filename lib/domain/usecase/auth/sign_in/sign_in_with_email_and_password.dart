@@ -1,15 +1,17 @@
-import '../../../repository/auth/auth.repository.dart';
-import '../../base/base.usecase.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:hot_place/core/error/failure.constant.dart';
+import 'package:hot_place/domain/repository/auth/auth.repository.dart';
+import 'package:injectable/injectable.dart';
 
-class SignInWithEmailAndPasswordUseCase extends BaseUseCase<AuthRepository> {
-  final String email;
-  final String password;
+@lazySingleton
+class SignInWithEmailAndPasswordUseCase {
+  final AuthRepository _repository;
 
-  SignInWithEmailAndPasswordUseCase({
-    required this.email,
-    required this.password,
-  });
+  SignInWithEmailAndPasswordUseCase(this._repository);
 
-  @override
-  Future<void> call(AuthRepository repository) async {}
+  Future<Either<Failure, String>> call(
+      {required String email, required String password}) async {
+    return await _repository.signInWithEmailAndPassword(
+        email: email, password: password);
+  }
 }
