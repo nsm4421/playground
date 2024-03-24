@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/constant/route.constant.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -36,19 +39,29 @@ class _ViewState extends State<_View> {
 
   _handleSignInWithEmailAndPassword() {}
 
+  _handleGoToSignUpPage() {
+    context.push(Routes.signUp.path);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          TextField(
-            controller: _emailTextEditingController,
-          ),
-          TextField(
-            controller: _passwordTextEditingController,
-          ),
-          ElevatedButton(onPressed: _handleSignInWithEmailAndPassword, child: const Text("Login"))
-        ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailTextEditingController,
+            ),
+            TextField(
+              controller: _passwordTextEditingController,
+            ),
+            ElevatedButton(
+                onPressed: _handleSignInWithEmailAndPassword,
+                child: const Text("Login")),
+            ElevatedButton(
+                onPressed: _handleGoToSignUpPage, child: const Text("SignUp"))
+          ],
+        ),
       ),
     );
   }

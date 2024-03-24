@@ -17,35 +17,33 @@ enum Routes {
   const Routes(this.path);
 }
 
-final GoRouter routerConfig = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      name: Routes.splash.name,
-      path: Routes.splash.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const SplashScreen();
-      },
-    ),
-    GoRoute(
-      name: Routes.home.name,
-      path: Routes.home.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const HomeScreen();
-      },
-    ),
-    GoRoute(
-      name: Routes.signUp.name,
-      path: Routes.signUp.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const SignUpScreen();
-      },
-    ),
-    GoRoute(
-      name: Routes.signIn.name,
-      path: Routes.signIn.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const SignInScreen();
-      },
-    )
-  ],
-);
+final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
+  GoRoute(
+    name: Routes.splash.name,
+    path: Routes.splash.path,
+    builder: (BuildContext context, GoRouterState state) {
+      return const SplashScreen();
+    },
+  ),
+  GoRoute(
+    name: Routes.home.name,
+    path: Routes.home.path,
+    builder: (BuildContext context, GoRouterState state) {
+      return const HomeScreen();
+    },
+  ),
+  GoRoute(
+    name: Routes.signUp.name,
+    path: Routes.signUp.path,
+    builder: (BuildContext context, GoRouterState state) {
+      return const SignUpScreen();
+    },
+  ),
+  GoRoute(
+    name: Routes.signIn.name,
+    path: Routes.signIn.path,
+    builder: (BuildContext context, GoRouterState state) {
+      return const SignInScreen();
+    },
+  )
+], initialLocation: Routes.splash.path);
