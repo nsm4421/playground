@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../data/entity/user/user.entity.dart';
-import '../../../domain/usecase/auth/sign_in/sign_in_with_email_and_password.dart';
-import '../../../domain/usecase/auth/sign_up/sign_up_with_email_and_password.usecase.dart';
+import '../../../domain/usecase/auth/sign_in_with_email_and_password.dart';
+import '../../../domain/usecase/auth/sign_up_with_email_and_password.usecase.dart';
 
 part 'auth.event.dart';
 
