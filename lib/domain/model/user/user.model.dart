@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'user.model.freezed.dart';
@@ -19,8 +18,7 @@ class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 
   factory UserModel.fromSession(User sessionUser) => UserModel(
-    id : sessionUser.id,
-    email:  sessionUser.email ?? '',
-    nickname: sessionUser.appMetadata['nickname'] ?? ''
-  );
+      id: sessionUser.id,
+      email: sessionUser.email ?? '',
+      nickname: (sessionUser.userMetadata ?? {})['nickname'] ?? '');
 }

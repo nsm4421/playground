@@ -49,8 +49,6 @@ class AuthRepositoryImpl extends AuthRepository {
       // 회원 추가
       final user = await _authDataSource.signUpWithEmailAndPassword(
           email: email, password: password, nickname: nickname);
-      // 회원정보 저장
-      await _authDataSource.insertUser(user);
       return right(UserEntity.fromModel(user));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));

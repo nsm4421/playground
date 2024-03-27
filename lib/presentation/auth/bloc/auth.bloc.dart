@@ -29,6 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onInit(InitAuthEvent event, Emitter<AuthState> emit) {
+    // TODO : 현재 인증상태 업데이트
     emit(InitialAuthState());
   }
 

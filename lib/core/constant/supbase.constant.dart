@@ -1,5 +1,5 @@
 enum Tables {
-  user('users');
+  user('accounts');
 
   final String name;
 

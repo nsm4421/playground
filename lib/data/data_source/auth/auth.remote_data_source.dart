@@ -72,7 +72,6 @@ class RemoteAuthDataSource extends AuthDataSource {
       {required String email,
       required String password,
       required String nickname}) async {
-    // TODO : 닉네임 중복여부
     try {
       final res = await _auth.signUp(
           email: email, password: password, data: {'nickname': nickname});

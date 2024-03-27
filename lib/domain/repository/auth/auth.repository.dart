@@ -23,6 +23,6 @@ abstract class AuthRepository {
     required String password,
   });
 
-  /// 회원탈퇴
+  /// 로그아웃
   Future<Either<Failure, void>> signOut();
 }
