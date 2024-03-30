@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/util/toast.util.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
 import 'package:hot_place/presentation/auth/widget/text_field.widget.dart';
@@ -13,7 +12,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
+    return BlocBuilder<AuthBloc, AuthenticationState>(
       builder: (context, state) {
         if (state is InitialAuthState || state is AuthSuccessState) {
           return const _View();
@@ -23,12 +22,6 @@ class SignUpScreen extends StatelessWidget {
           return AuthErrorWidget(state.message);
         } else {
           return const AuthErrorWidget("회원가이 중 에러가 발생했습니다");
-        }
-      },
-      listener: (BuildContext context, AuthState state) {
-        // 회원가입 성공 시, 뒤로 가기(로그인 페이지로)
-        if (state is AuthSuccessState) {
-          context.pop();
         }
       },
     );

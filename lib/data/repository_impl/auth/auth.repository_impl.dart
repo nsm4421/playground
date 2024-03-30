@@ -15,7 +15,7 @@ class AuthRepositoryImpl extends AuthRepository {
       : _authDataSource = authDataSource;
 
   @override
-  Stream<AuthState> get authState => _authDataSource.authStream;
+  Stream<AuthState> get authStream => _authDataSource.authStream;
 
   @override
   Either<Failure, UserEntity> getCurrentUserOrElseThrow() {

@@ -5,6 +5,12 @@ sealed class AuthEvent {}
 
 final class InitAuthEvent extends AuthEvent {}
 
+final class UpdateCurrentUserEvent extends AuthEvent {
+  final UserEntity user;
+
+  UpdateCurrentUserEvent(this.user);
+}
+
 final class SignUpWithEmailAndPasswordEvent extends AuthEvent {
   final String email;
   final String password;
@@ -26,3 +32,5 @@ final class SignInWithEmailAndPasswordEvent extends AuthEvent {
     required this.password,
   });
 }
+
+final class SignOutEvent extends AuthEvent {}

@@ -28,7 +28,6 @@ class RemoteAuthDataSource extends AuthDataSource {
         throw CustomException(
             code: ErrorCode.unAuthorized, message: 'session not exists');
       }
-
       return UserModel.fromSession(session.user);
     } catch (err) {
       _logger.e(err);

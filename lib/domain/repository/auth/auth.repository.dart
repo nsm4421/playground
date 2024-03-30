@@ -5,7 +5,7 @@ import '../../../data/entity/user/user.entity.dart';
 
 abstract class AuthRepository {
   /// 인증상태 stream
-  Stream<AuthState> get authState;
+  Stream<AuthState> get authStream;
 
   /// 현재 로그인한 유저
   Either<Failure, UserEntity> getCurrentUserOrElseThrow();

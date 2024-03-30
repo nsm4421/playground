@@ -14,7 +14,8 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+    return BlocBuilder<AuthBloc, AuthenticationState>(
+        builder: (context, state) {
       if (state is InitialAuthState || state is AuthSuccessState) {
         return const _View();
       } else if (state is AuthLoadingState) {
@@ -22,7 +23,7 @@ class SignInScreen extends StatelessWidget {
       } else if (state is AuthFailureState) {
         return AuthErrorWidget(state.message);
       } else {
-        return const AuthErrorWidget("로그인 처지 중 에러가 발생했습니다");
+        return const AuthErrorWidget("로그인 처리 중 에러가 발생했습니다");
       }
     });
   }
@@ -135,7 +136,7 @@ class _ViewState extends State<_View> {
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.bold)),
-                )),
+                ))
           ],
         ),
       ),

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/constant/route.constant.dart';
+import '../../../core/constant/route.constant.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Timer(Duration(seconds: _duration), () {
-      context.pushReplacement(Routes.signIn.path);
+      context.pushReplacement(Routes.main.path);
     });
     super.initState();
   }

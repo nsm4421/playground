@@ -3,13 +3,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../repository/auth/auth.repository.dart';
 
-@lazySingleton
-class GetAuthStateUseCase {
+@singleton
+class GetAuthStreamUseCase {
   final AuthRepository _repository;
 
-  GetAuthStateUseCase(this._repository);
+  GetAuthStreamUseCase(this._repository);
 
   Stream<AuthState> call() {
-    return _repository.authState;
+    return _repository.authStream;
   }
 }

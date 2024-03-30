@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hot_place/core/constant/route.constant.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'core/theme/custom_palette.theme.dart';
+import 'core/constant/route.constant.dart';
 import 'core/di/dependency_injection.dart';
+import 'core/theme/custom_palette.theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,17 +28,19 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-      // 앱 전역에서 Auth Bloc 접근
-      create: (context) => getIt<AuthBloc>()..add(InitAuthEvent()),
-      child: MaterialApp.router(
-          routerConfig: routerConfig,
-          title: 'Karma',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData.dark().copyWith(
-              scaffoldBackgroundColor: CustomPalette.backgroundColor,
-              dialogBackgroundColor: CustomPalette.appBarColor,
-              appBarTheme: AppBarTheme(
-                color: CustomPalette.appBarColor,
-              ))));
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        // 앱 전역에서 Auth Bloc 접근
+        create: (context) => getIt<AuthBloc>(),
+        child: MaterialApp.router(
+            routerConfig: routerConfig,
+            title: 'Karma',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData.dark().copyWith(
+                scaffoldBackgroundColor: CustomPalette.backgroundColor,
+                dialogBackgroundColor: CustomPalette.appBarColor,
+                appBarTheme: AppBarTheme(
+                  color: CustomPalette.appBarColor,
+                ))));
+  }
 }
