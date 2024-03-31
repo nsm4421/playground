@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:hot_place/domain/usecase/auth/get_auth_stream.usecase.dart';
 import 'package:hot_place/domain/usecase/auth/get_current_user.usecase.dart';
 import 'package:injectable/injectable.dart';
@@ -45,6 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   }
 
   Stream<AuthState> get authStream => _getAuthStreamUseCase();
+
+  UserEntity? get currentUser =>
+      _getCurrentUserUserCase().fold((l) => null, (r) => r);
 
   bool get isAuthenticated =>
       _getCurrentUserUserCase().fold((l) => false, (r) => true);
