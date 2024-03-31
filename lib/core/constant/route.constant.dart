@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/auth/page/sign_up/sign_up.screen.dart';
-import 'package:hot_place/presentation/main/page/on_login.screen.dart';
+import 'package:hot_place/presentation/feed/page/upload/upload_feed.screen.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 
-import '../../presentation/auth/page/sign_in/sign_in.screen.dart';
 import '../../presentation/main/page/splash.screen.dart';
 
 enum Routes {
   splash("/"),
   main("/main"),
-  home("/home"),
-  signIn("/sign-in"),
-  signUp("/sign-up");
+  signUp("/sign-up"),
+  uploadFeed("/upload-feed");
 
   final String path;
 
@@ -42,10 +40,10 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     },
   ),
   GoRoute(
-    name: Routes.signIn.name,
-    path: Routes.signIn.path,
+    name: Routes.uploadFeed.name,
+    path: Routes.uploadFeed.path,
     builder: (BuildContext context, GoRouterState state) {
-      return const SignInScreen();
+      return const UploadFeedScreen();
     },
   )
 ], initialLocation: Routes.splash.path);
