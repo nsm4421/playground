@@ -70,10 +70,13 @@ class RemoteAuthDataSource extends AuthDataSource {
   Future<UserModel> signUpWithEmailAndPassword(
       {required String email,
       required String password,
-      required String nickname}) async {
+      required String nickname,
+      required String profileUrl}) async {
     try {
-      final res = await _auth.signUp(
-          email: email, password: password, data: {'nickname': nickname});
+      final res = await _auth.signUp(email: email, password: password, data: {
+        if (nickname.isNotEmpty) 'nickname': nickname,
+        if (profileUrl.isNotEmpty) 'profileUrl': profileUrl
+      });
       final sessionUser = res.user;
       if (sessionUser == null) {
         throw CustomException(

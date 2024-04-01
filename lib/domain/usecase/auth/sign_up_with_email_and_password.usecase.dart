@@ -13,8 +13,12 @@ class SignUpWithEmailAndPasswordUseCase {
   Future<Either<Failure, UserEntity>> call(
       {required String email,
       required String password,
-      required String nickname}) async {
+      required String nickname,
+      required String profileUrl}) async {
     return await _repository.signUpWithEmailAndPassword(
-        email: email, password: password, nickname: nickname);
+        email: email,
+        password: password,
+        nickname: nickname,
+        profileUrl: profileUrl);
   }
 }

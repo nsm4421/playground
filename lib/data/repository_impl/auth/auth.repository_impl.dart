@@ -44,11 +44,15 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, UserEntity>> signUpWithEmailAndPassword(
       {required String email,
       required String password,
-      required String nickname}) async {
+      required String nickname,
+      required String profileUrl}) async {
     try {
       // 회원 추가
       final user = await _authDataSource.signUpWithEmailAndPassword(
-          email: email, password: password, nickname: nickname);
+          email: email,
+          password: password,
+          nickname: nickname,
+          profileUrl: profileUrl);
       return right(UserEntity.fromModel(user));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));

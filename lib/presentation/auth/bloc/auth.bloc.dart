@@ -66,12 +66,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
       Emitter<AuthenticationState> emit) async {
     emit(AuthLoadingState());
     await _signUpWithEmailAndPasswordUseCase(
-      email: event.email,
-      password: event.password,
-      nickname: event.nickname,
-    ).then((value) => value.fold(
-        (l) => emit(AuthFailureState(l.message ?? 'sign up fail')),
-        (r) => emit(AuthSuccessState(r))));
+            email: event.email,
+            password: event.password,
+            nickname: event.nickname,
+            profileUrl: event.profileUrl)
+        .then((value) => value.fold(
+            (l) => emit(AuthFailureState(l.message ?? 'sign up fail')),
+            (r) => emit(AuthSuccessState(r))));
   }
 
   Future<void> _onSignInWithEmailAndPassword(

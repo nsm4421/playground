@@ -15,6 +15,7 @@ abstract class AuthRepository {
     required String email,
     required String password,
     required String nickname,
+    required String profileUrl,
   });
 
   /// 이메일, 비밀번호로 로그인
