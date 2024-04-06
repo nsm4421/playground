@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
+import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/constant/route.constant.dart';
 import 'core/di/dependency_injection.dart';
@@ -29,9 +30,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        // 앱 전역에서 Auth Bloc 접근
-        create: (context) => getIt<AuthBloc>(),
+    return MultiBlocProvider(
+        // 앱 전역에서 접근 가능한 Bloc 접근
+        providers: [
+          BlocProvider(
+              create: (context) => getIt<AuthBloc>()..add(InitAuthEvent())),
+          BlocProvider(
+              create: (context) => getIt<UserBloc>()..add(InitUserEvent()))
+        ],
         child: MaterialApp.router(
             routerConfig: routerConfig,
             title: 'Karma',

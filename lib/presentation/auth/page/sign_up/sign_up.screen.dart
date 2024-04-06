@@ -77,8 +77,9 @@ class _ViewState extends State<_View> {
       return;
     }
     // 회원가입처리
+    // TODO : 프로필 이미지 선택 및 저장 기능 추가 구현하기
     context.read<AuthBloc>().add(SignUpWithEmailAndPasswordEvent(
-        email: email, password: password, nickname: nickname));
+        email: email, password: password, nickname: nickname, profileUrl: ''));
   }
 
   @override

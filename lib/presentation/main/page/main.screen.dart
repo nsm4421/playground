@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/presentation/auth/page/sign_in/sign_in.screen.dart';
-import 'package:hot_place/presentation/home/page/home.screen.dart';
 import 'package:hot_place/presentation/main/page/on_login.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

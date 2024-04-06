@@ -13,16 +13,17 @@ class UserEntity with _$UserEntity {
     String? id,
     String? email,
     String? nickname,
+    String? profileImage,
   }) = _UserEntity;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
       _$UserEntityFromJson(json);
 
   factory UserEntity.fromModel(UserModel user) => UserEntity(
-        id: user.id.isNotEmpty ? user.id : null,
-        email: user.email.isNotEmpty ? user.email : null,
-        nickname: user.nickname.isNotEmpty ? user.nickname : null,
-      );
+      id: user.id.isNotEmpty ? user.id : null,
+      email: user.email.isNotEmpty ? user.email : null,
+      nickname: user.nickname.isNotEmpty ? user.nickname : null,
+      profileImage: user.profileImage.isNotEmpty ? user.profileImage : null);
 
   factory UserEntity.fromSession(User sessionUser) =>
       UserEntity.fromModel(UserModel.fromSession(sessionUser));

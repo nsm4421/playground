@@ -1,7 +1,17 @@
 enum Tables {
-  user('accounts');
+  user('accounts'),
+  feed('feeds');
 
   final String name;
 
   const Tables(this.name);
+}
+
+enum Buckets {
+  user("user"),
+  feed("feed");
+
+  final String name;
+
+  const Buckets(this.name);
 }
