@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'user.model.freezed.dart';
@@ -22,5 +23,12 @@ class UserModel with _$UserModel {
         email: sessionUser.email ?? '',
         nickname: (sessionUser.userMetadata ?? {})['nickname'] ?? '',
         profileImage: (sessionUser.userMetadata ?? {})['profileImage'] ?? '',
+      );
+
+  factory UserModel.fromEntity(UserEntity user) => UserModel(
+        id: user.id!,
+        email: user.email ?? '',
+        nickname: user.nickname ?? '',
+        profileImage: user.profileImage ?? '',
       );
 }
