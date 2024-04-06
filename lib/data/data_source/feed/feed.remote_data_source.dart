@@ -87,13 +87,13 @@ class RemoteFeedDataSource extends FeedDataSource {
     try {
       final currentUid = _auth.currentUser!.id;
       final compressedImage = await ImageUtil.compressImage(image);
-      return await _storage
-          .from(Buckets.feed.name)
-          .upload('$currentUid/$feedId/$filename.jpg', compressedImage,
-              fileOptions: const FileOptions(
-                cacheControl: '3600',
-                upsert: true,
-              ));
+      final path = '$currentUid/$feedId/$filename.jpg';
+      await _storage.from(Buckets.feed.name).upload(path, compressedImage,
+          fileOptions: const FileOptions(
+            cacheControl: '3600',
+            upsert: true,
+          ));
+      return _storage.from(Buckets.feed.name).getPublicUrl(path);
     } catch (err) {
       _logger.e(err);
       throw CustomException(

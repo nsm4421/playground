@@ -8,6 +8,7 @@ enum Tables {
 }
 
 enum Buckets {
+  user("user"),
   feed("feed");
 
   final String name;

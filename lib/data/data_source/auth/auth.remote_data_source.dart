@@ -135,7 +135,7 @@ class RemoteAuthDataSource extends AuthDataSource {
     } catch (err) {
       _logger.e(err);
       throw CustomException(
-          code: ErrorCode.internalServerError, message: 'insert user fails');
+          code: ErrorCode.internalServerError, message: 'modify user fails');
     }
   }
 }

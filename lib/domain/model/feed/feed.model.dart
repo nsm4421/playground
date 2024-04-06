@@ -20,9 +20,10 @@ class FeedModel with _$FeedModel {
       _$FeedModelFromJson(json);
 
   factory FeedModel.fromEntity(FeedEntity feed) => FeedModel(
-      id: feed.id!,
-      userId: feed.user.id!,
-      content: feed.content!,
-      hashtags: feed.hashtags,
-      imageLinks: feed.imageLinks);
+        id: feed.id!,
+        userId: feed.user.id ?? '',
+        content: feed.content ?? '',
+        hashtags: feed.hashtags,
+        imageLinks: feed.imageLinks,
+      );
 }

@@ -12,8 +12,7 @@ enum Routes {
   main("/main"),
   signUp("/sign-up"),
   uploadFeed("/upload-feed"),
-  editProfile("/edit-profile"),
-  ;
+  editProfile("/edit-profile");
 
   final String path;
 
