@@ -1,31 +1,73 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hot_place/core/util/image.util.dart';
+import 'package:hot_place/core/util/toast.util.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
-import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
+import 'package:hot_place/presentation/auth/widget/loading.widget.dart';
+import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
+import 'package:hot_place/presentation/setting/bloc/user.state.dart';
+import 'package:hot_place/presentation/setting/widget/edit_profile_error.widget.dart';
 import 'package:image_picker/image_picker.dart';
 
-class EditProfileScreen extends StatefulWidget {
+import '../../../core/constant/response.constant.dart';
+
+class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  Widget build(BuildContext context) => BlocListener<UserBloc, UserState>(
+        listener: (_, state) {
+          if (state.status == Status.success && context.mounted) {
+            context.pop();
+          }
+        },
+        child: BlocBuilder<UserBloc, UserState>(
+          builder: (_, state) {
+            switch (state.status) {
+              case Status.initial:
+              case Status.success:
+                return const _View();
+              case Status.loading:
+                return const LoadingWidget('Loadings...');
+              case Status.error:
+                return EditProfileErrorWidget(state.error);
+            }
+          },
+        ),
+      );
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _View extends StatefulWidget {
+  const _View({super.key});
+
+  @override
+  State<_View> createState() => _ViewState();
+}
+
+class _ViewState extends State<_View> {
   late UserEntity _currentUser;
   late TextEditingController _textEditingController;
   final ImagePicker _imagePicker = ImagePicker();
-  File? _image;
+  File? _initialImage; // 유저의 기존 프로필 이미지
+  File? _profileImage; // 유저가 선택한 프로필 이미지
 
   @override
   void initState() {
     super.initState();
-    _currentUser = context.read<AuthBloc>().currentUser!;
+    _currentUser = context.read<UserBloc>().state.user;
     _textEditingController = TextEditingController();
     _textEditingController.text = _currentUser.nickname ?? '';
+    // 현재 유저의 기존 프로필 사진 가져오기
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (_currentUser.profileImage != null) {
+        _initialImage =
+            await ImageUtil.downloadImage(_currentUser.profileImage!);
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -38,16 +80,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final res = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (res != null) {
       setState(() {
-        _image = File(res.path);
+        _profileImage = File(res.path);
       });
     }
   }
 
   _handleClearImage() => setState(() {
-        _image = null;
+        _initialImage = null;
+        _profileImage = null;
       });
 
-  _handleSubmit() {}
+  _handleSubmit() {
+    final nickname = _textEditingController.text.trim();
+    if (nickname.isEmpty) {
+      ToastUtil.toast('닉네임을 입력해주세요');
+      return;
+    }
+    context.read<UserBloc>().add(ModifyProfileEvent(
+        currentUser: _currentUser, nickname: nickname, image: _profileImage));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,20 +137,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
 
                 // 이미지
-                if (_image != null)
+                if (_initialImage != null || _profileImage != null)
                   Container(
                     alignment: Alignment.center,
                     width: MediaQuery.of(context).size.width * 1 / 2,
                     height: MediaQuery.of(context).size.width * 1 / 2,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            fit: BoxFit.cover, image: FileImage(_image!)),
+                            fit: BoxFit.cover,
+                            image: FileImage(_profileImage ?? _initialImage!)),
                         shape: BoxShape.circle,
                         color: Theme.of(context).colorScheme.primaryContainer),
                   ),
 
                 // 이미지 취소 버튼
-                if (_image != null)
+                if (_initialImage != null || _profileImage != null)
                   Positioned(
                       right: 5,
                       top: 0,
@@ -136,7 +188,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Padding(
               padding: const EdgeInsets.only(top: 50, right: 15, left: 15),
               child: ElevatedButton(
-                  onPressed: _handleSubmit,
+                  onPressed:
+                      // 로딩중인 경우, 버튼을 누를 수 없음
+                      (context.read<UserBloc>().state.status != Status.loading)
+                          ? _handleSubmit
+                          : null,
                   child: Container(
                       alignment: Alignment.center,
                       width: double.infinity,

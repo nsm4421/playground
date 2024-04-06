@@ -3,18 +3,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
 import 'package:hot_place/presentation/setting/page/profile.widget.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("SETTING"),
-      ),
-      body: Column(
-        children: [ProfileWidget(context.read<AuthBloc>().currentUser!)],
-      ),
-    );
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  _handleSignOut() {
+    context.read<AuthBloc>().add(SignOutEvent());
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text("SETTING"),
+          actions: [
+            IconButton(
+                onPressed: _handleSignOut, icon: const Icon(Icons.logout))
+          ],
+        ),
+        body: Column(
+          children: [ProfileWidget()],
+        ),
+      );
 }

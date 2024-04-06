@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hot_place/data/entity/user/user.entity.dart';
+import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
+import 'package:hot_place/presentation/setting/bloc/user.state.dart';
 
 import '../../../core/constant/route.constant.dart';
 
 class ProfileWidget extends StatefulWidget {
-  const ProfileWidget(this.user, {super.key});
-
-  final UserEntity user;
+  const ProfileWidget({super.key});
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
@@ -19,21 +19,24 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-        leading: CircleAvatar(
-          child: widget.user.profileImage != null
-              ? Image.network(widget.user.profileImage!)
-              : const Icon(Icons.question_mark),
-        ),
-        title: Text("Nickname", style: Theme.of(context).textTheme.titleMedium),
-        subtitle: Text("email@naver.com",
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(color: Theme.of(context).colorScheme.secondary)),
-        trailing: IconButton(
-            onPressed: _handleGoToEditProfilePage,
-            icon: const Icon(Icons.edit)));
-  }
+  Widget build(BuildContext context) => BlocBuilder<UserBloc, UserState>(
+      builder: (_, state) => ListTile(
+          leading: CircleAvatar(
+              child: state.user.profileImage != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: NetworkImage(state.user.profileImage!))))
+                  : const Icon(Icons.question_mark)),
+          title: Text(state.user.nickname ?? "Unknown",
+              style: Theme.of(context).textTheme.titleMedium),
+          subtitle: Text(state.user.email ?? '',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.secondary)),
+          trailing: IconButton(
+              onPressed: _handleGoToEditProfilePage,
+              icon: const Icon(Icons.edit))));
 }
