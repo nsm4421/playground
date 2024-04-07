@@ -27,15 +27,54 @@ class RemoteFeedDataSource extends FeedDataSource {
   final _logger = Logger();
 
   @override
+  Stream<List<FeedWithAuthorModel>> getFeedStream() {
+    try {
+      return _db
+          .from(TableName.feed.name)
+          // 유저 계정 테이블과 피드 테이블을 조인
+          .select("*, author:${TableName.user.name}(*)")
+          // 최신 피드 순으로
+          .order('created_at', ascending: false)
+          .then((json) =>
+              json.map((e) => FeedWithAuthorModel.fromJson(e)).toList())
+          .asStream();
+    } on PostgrestException catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.postgresError,
+          message: 'error occurs when getting feed');
+    } catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.serverRequestFail,
+          message: 'error occurs when getting feed');
+    }
+  }
+
+  @override
   Future<List<FeedWithAuthorModel>> getFeeds(
       {required int skip, required int take}) async {
-    return await _db
-        .from(TableName.feed.name)
-        .select("*, author:${TableName.user.name}(*)")
-        .range(skip, take)
-        .order('created_at', ascending: false)
-        .then((json) =>
-            json.map((e) => FeedWithAuthorModel.fromJson(e)).toList());
+    try {
+      return await _db
+          .from(TableName.feed.name)
+          // 유저 계정 테이블과 피드 테이블을 조인
+          .select("*, author:${TableName.user.name}(*)")
+          .range(skip, take)
+          // 최신 피드 순으로
+          .order('created_at', ascending: false)
+          .then((json) =>
+              json.map((e) => FeedWithAuthorModel.fromJson(e)).toList());
+    } on PostgrestException catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.postgresError,
+          message: 'error occurs when getting feed');
+    } catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.serverRequestFail,
+          message: 'error occurs when getting feed');
+    }
   }
 
   @override

@@ -17,8 +17,8 @@ final class FeedFailureState extends FeedState {
 
 final class UploadingFeedSuccessState extends FeedState {}
 
-final class DisplayingFeedSuccessState extends FeedState {
+final class FetchingFeedSuccessState extends FeedState {
   final List<FeedEntity> feeds;
 
-  const DisplayingFeedSuccessState(this.feeds);
+  const FetchingFeedSuccessState(this.feeds);
 }
