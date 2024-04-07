@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hot_place/core/util/toast.util.dart';
+import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
 
 class HashtagFragment extends StatefulWidget {
   const HashtagFragment({
@@ -88,39 +89,7 @@ class _HashtagFragmentState extends State<HashtagFragment> {
           const SizedBox(height: 10),
 
           // 해시태그 목록
-          Container(
-              alignment: Alignment.topLeft,
-              child: Wrap(
-                  children: widget._hashtags
-                      .map((text) => Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 5),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 3),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer),
-                          child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(Icons.tag,
-                                        size: 25,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary),
-                                    Text(text,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w800))
-                                  ]))))
-                      .toList()))
+          HashtagListWidget(widget._hashtags)
         ],
       );
 }

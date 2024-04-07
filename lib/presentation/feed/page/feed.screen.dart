@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hot_place/presentation/feed/page/feed_list.fragment.dart';
 
 import '../../../core/constant/route.constant.dart';
 
@@ -26,6 +27,7 @@ class _FeedScreenState extends State<FeedScreen> {
               icon: const Icon(Icons.add_box_outlined))
         ],
       ),
+      body: const FeedListFragment(),
     );
   }
 }
