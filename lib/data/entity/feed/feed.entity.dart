@@ -15,6 +15,7 @@ class FeedEntity with _$FeedEntity {
       String? content,
       @Default(<String>[]) List<String> hashtags,
       @Default(<String>[]) List<String> images,
+      int? numLike,
       DateTime? createdAt}) = _FeedEntity;
 
   factory FeedEntity.fromModel(FeedModel feed, UserModel user) => FeedEntity(
@@ -31,5 +32,6 @@ class FeedEntity with _$FeedEntity {
           content: feed.content.isNotEmpty ? feed.content : null,
           hashtags: feed.hashtags,
           images: feed.images,
+          numLike: feed.num_like,
           createdAt: feed.created_at);
 }

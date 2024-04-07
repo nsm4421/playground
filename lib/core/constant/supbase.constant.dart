@@ -1,6 +1,7 @@
 enum TableName {
   user('accounts'),
-  feed('feeds');
+  feed('feeds'),
+  like("likes");
 
   final String name;
 

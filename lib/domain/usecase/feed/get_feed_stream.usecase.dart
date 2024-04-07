@@ -1,7 +1,5 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../core/error/failure.constant.dart';
 import '../../../data/entity/feed/feed.entity.dart';
 import '../../repository/feed/feed.repository.dart';
 
@@ -11,7 +9,5 @@ class GetFeedStreamUseCase {
 
   GetFeedStreamUseCase(this._repository);
 
-  Either<Failure, Stream<List<FeedEntity>>> call() {
-    return _repository.getFeedStream();
-  }
+  Stream<List<FeedEntity>> call() => _repository.feedStream;
 }

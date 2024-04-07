@@ -14,6 +14,7 @@ class FeedWithAuthorModel with _$FeedWithAuthorModel {
     @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,
+    @Default(0) int num_like,
     DateTime? created_at,
   }) = _FeedWithAuthorModel;
 

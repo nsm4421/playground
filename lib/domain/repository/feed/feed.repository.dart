@@ -5,7 +5,7 @@ import 'package:hot_place/core/error/failure.constant.dart';
 import 'package:hot_place/data/entity/feed/feed.entity.dart';
 
 abstract class FeedRepository {
-  Either<Failure, Stream<List<FeedEntity>>> getFeedStream();
+  Stream<List<FeedEntity>> get feedStream;
 
   Future<Either<Failure, List<FeedEntity>>> getFeeds(
       {required int skip, required int take});
