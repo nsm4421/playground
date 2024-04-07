@@ -45,7 +45,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     emit(FeedLoadingState());
     // feed id
     final feedId = UuidUtil.uuid();
-    List<String> imageLinks = [];
+    List<String> images = [];
 
     // 이미지 업로드
     if (event.images.isNotEmpty) {
@@ -53,7 +53,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           await _uploadFeedImagesUseCase(feedId: feedId, images: event.images);
       uploadImageResponse
           .fold((l) => emit(FeedFailureState(l.message ?? 'error...')), (r) {
-        imageLinks = r;
+        images = r;
       });
       if (uploadImageResponse.isLeft()) {
         return;
@@ -65,7 +65,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         user: event.user,
         content: event.content,
         hashtags: event.hashtags,
-        imageLinks: imageLinks));
+        images: images));
     createFeedResponse.fold(
       (l) => emit(FeedFailureState(l.message ?? 'error...')),
       (r) => emit(UploadingFeedSuccessState()),

@@ -1,8 +1,12 @@
 import 'dart:io';
 
 import 'package:hot_place/domain/model/feed/feed.model.dart';
+import 'package:hot_place/domain/model/feed/feed_with_author.model.dart';
 
 abstract class FeedDataSource {
+  Future<List<FeedWithAuthorModel>> getFeeds(
+      {required int skip, required int take});
+
   Future<void> createFeed(FeedModel feed);
 
   Future<void> modifyFeed(FeedModel feed);

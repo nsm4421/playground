@@ -9,12 +9,11 @@ part 'user.entity.g.dart';
 
 @freezed
 class UserEntity with _$UserEntity {
-  const factory UserEntity({
-    String? id,
-    String? email,
-    String? nickname,
-    String? profileImage,
-  }) = _UserEntity;
+  const factory UserEntity(
+      {String? id,
+      String? email,
+      String? nickname,
+      String? profileImage}) = _UserEntity;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
       _$UserEntityFromJson(json);
@@ -23,7 +22,7 @@ class UserEntity with _$UserEntity {
       id: user.id.isNotEmpty ? user.id : null,
       email: user.email.isNotEmpty ? user.email : null,
       nickname: user.nickname.isNotEmpty ? user.nickname : null,
-      profileImage: user.profileImage.isNotEmpty ? user.profileImage : null);
+      profileImage: user.profile_image.isNotEmpty ? user.profile_image : null);
 
   factory UserEntity.fromSession(User sessionUser) =>
       UserEntity.fromModel(UserModel.fromSession(sessionUser));

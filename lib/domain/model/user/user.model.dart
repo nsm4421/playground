@@ -13,22 +13,18 @@ class UserModel with _$UserModel {
       {@Default('') String id,
       @Default('') String email,
       @Default('') String nickname,
-      @Default('') String profileImage}) = _UserModel;
+      @Default('') String profile_image}) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  factory UserModel.fromSession(User sessionUser) => UserModel(
-        id: sessionUser.id,
-        email: sessionUser.email ?? '',
-        nickname: (sessionUser.userMetadata ?? {})['nickname'] ?? '',
-        profileImage: (sessionUser.userMetadata ?? {})['profileImage'] ?? '',
-      );
+  factory UserModel.fromSession(User sessionUser) =>
+      UserModel(id: sessionUser.id, email: sessionUser.email ?? '');
 
   factory UserModel.fromEntity(UserEntity user) => UserModel(
         id: user.id!,
         email: user.email ?? '',
         nickname: user.nickname ?? '',
-        profileImage: user.profileImage ?? '',
+        profile_image: user.profileImage ?? '',
       );
 }

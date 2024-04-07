@@ -10,22 +10,20 @@ part 'feed.entity.g.dart';
 
 @freezed
 class FeedEntity with _$FeedEntity {
-  const factory FeedEntity({
-    String? id,
-    @Default(UserEntity()) UserEntity user,
-    String? content,
-    @Default(<String>[]) List<String> hashtags,
-    @Default(<String>[]) List<String> imageLinks,
-  }) = _FeedEntity;
+  const factory FeedEntity(
+      {String? id,
+      @Default(UserEntity()) UserEntity user,
+      String? content,
+      @Default(<String>[]) List<String> hashtags,
+      @Default(<String>[]) List<String> images}) = _FeedEntity;
 
   factory FeedEntity.fromJson(Map<String, dynamic> json) =>
       _$FeedEntityFromJson(json);
 
   factory FeedEntity.fromModel(FeedModel feed, UserModel user) => FeedEntity(
-        id: feed.id.isNotEmpty ? feed.id : null,
-        user: UserEntity.fromModel(user),
-        content: feed.content.isNotEmpty ? feed.content : null,
-        hashtags: feed.hashtags,
-        imageLinks: feed.imageLinks,
-      );
+      id: feed.id.isNotEmpty ? feed.id : null,
+      user: UserEntity.fromModel(user),
+      content: feed.content.isNotEmpty ? feed.content : null,
+      hashtags: feed.hashtags,
+      images: feed.images);
 }

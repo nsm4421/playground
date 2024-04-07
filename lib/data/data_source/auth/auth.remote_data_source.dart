@@ -120,7 +120,7 @@ class RemoteAuthDataSource extends AuthDataSource {
   @override
   Future<void> insertUser(UserModel user) async {
     try {
-      return await _db.from(Tables.user.name).insert(user.toJson());
+      return await _db.from(TableName.user.name).insert(user.toJson());
     } catch (err) {
       _logger.e(err);
       throw CustomException(
@@ -131,7 +131,7 @@ class RemoteAuthDataSource extends AuthDataSource {
   @override
   Future<void> modifyUser(UserModel user) async {
     try {
-      await _db.from(Tables.user.name).update(user.toJson()).eq('id', user.id);
+      await _db.from(TableName.user.name).update(user.toJson()).eq('id', user.id);
     } catch (err) {
       _logger.e(err);
       throw CustomException(

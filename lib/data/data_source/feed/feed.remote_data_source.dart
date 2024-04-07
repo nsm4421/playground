@@ -4,6 +4,7 @@ import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/util/image.util.dart';
 import 'package:hot_place/data/data_source/feed/feed.data_source.dart';
 import 'package:hot_place/domain/model/feed/feed.model.dart';
+import 'package:hot_place/domain/model/feed/feed_with_author.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -26,9 +27,21 @@ class RemoteFeedDataSource extends FeedDataSource {
   final _logger = Logger();
 
   @override
+  Future<List<FeedWithAuthorModel>> getFeeds(
+      {required int skip, required int take}) async {
+    return await _db
+        .from(TableName.feed.name)
+        .select("*, author:${TableName.user.name}(*)")
+        .range(skip, take)
+        .order('created_at', ascending: false)
+        .then((json) =>
+            json.map((e) => FeedWithAuthorModel.fromJson(e)).toList());
+  }
+
+  @override
   Future<void> createFeed(FeedModel feed) async {
     try {
-      await _db.from(Tables.feed.name).insert(feed.toJson());
+      await _db.from(TableName.feed.name).insert(feed.toJson());
     } on PostgrestException catch (err) {
       _logger.e(err);
       throw CustomException(
@@ -46,7 +59,7 @@ class RemoteFeedDataSource extends FeedDataSource {
   Future<void> modifyFeed(FeedModel feed) async {
     try {
       await _db
-          .from(Tables.feed.name)
+          .from(TableName.feed.name)
           .update(feed.toJson())
           .match({'id': feed.id});
     } on PostgrestException catch (err) {
@@ -65,7 +78,7 @@ class RemoteFeedDataSource extends FeedDataSource {
   @override
   Future<void> deleteFeedById(String feedId) async {
     try {
-      await _db.from(Tables.feed.name).delete().match({'id': feedId});
+      await _db.from(TableName.feed.name).delete().match({'id': feedId});
     } on PostgrestException catch (err) {
       _logger.e(err);
       throw CustomException(
@@ -88,12 +101,12 @@ class RemoteFeedDataSource extends FeedDataSource {
       final currentUid = _auth.currentUser!.id;
       final compressedImage = await ImageUtil.compressImage(image);
       final path = '$currentUid/$feedId/$filename.jpg';
-      await _storage.from(Buckets.feed.name).upload(path, compressedImage,
+      await _storage.from(BucketName.feed.name).upload(path, compressedImage,
           fileOptions: const FileOptions(
             cacheControl: '3600',
             upsert: true,
           ));
-      return _storage.from(Buckets.feed.name).getPublicUrl(path);
+      return _storage.from(BucketName.feed.name).getPublicUrl(path);
     } catch (err) {
       _logger.e(err);
       throw CustomException(
