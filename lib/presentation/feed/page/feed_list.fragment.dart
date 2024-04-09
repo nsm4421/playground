@@ -19,10 +19,7 @@ class _FeedListFragmentState extends State<FeedListFragment> {
   @override
   void initState() {
     super.initState();
-    final res = getIt<GetFeedStreamUseCase>().call();
-    res.fold((l) => null, (r) {
-      _feedStream = r;
-    });
+    _feedStream = getIt<GetFeedStreamUseCase>().call();
   }
 
   @override
