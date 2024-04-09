@@ -29,7 +29,7 @@ class RemoteUserDataSource extends UserDataSource {
   Future<UserModel> findUserById(String uid) async {
     try {
       return await _db
-          .from(Tables.user.name)
+          .from(TableName.user.name)
           .select('*')
           .eq('id', uid)
           .limit(1)
@@ -46,7 +46,7 @@ class RemoteUserDataSource extends UserDataSource {
   @override
   Future<void> modifyUser(UserModel user) async {
     try {
-      await _db.from(Tables.user.name).update(user.toJson()).eq('id', user.id);
+      await _db.from(TableName.user.name).update(user.toJson()).eq('id', user.id);
     } catch (err) {
       _logger.e(err);
       throw CustomException(
@@ -60,12 +60,12 @@ class RemoteUserDataSource extends UserDataSource {
       final currentUid = _auth.currentUser!.id;
       final compressedImage = await ImageUtil.compressImage(image);
       final path = '$currentUid/profile-image.jpg';
-      await _storage.from(Buckets.user.name).upload(path, compressedImage,
+      await _storage.from(BucketName.user.name).upload(path, compressedImage,
           fileOptions: const FileOptions(
             cacheControl: '3600',
             upsert: true,
           ));
-      return _storage.from(Buckets.user.name).getPublicUrl(path);
+      return _storage.from(BucketName.user.name).getPublicUrl(path);
     } catch (err) {
       _logger.e(err);
       throw CustomException(

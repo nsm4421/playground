@@ -1,17 +1,18 @@
-enum Tables {
+enum TableName {
   user('accounts'),
-  feed('feeds');
+  feed('feeds'),
+  like("likes");
 
   final String name;
 
-  const Tables(this.name);
+  const TableName(this.name);
 }
 
-enum Buckets {
+enum BucketName {
   user("user"),
   feed("feed");
 
   final String name;
 
-  const Buckets(this.name);
+  const BucketName(this.name);
 }

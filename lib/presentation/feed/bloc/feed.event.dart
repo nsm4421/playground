@@ -19,4 +19,9 @@ final class UploadingFeedEvent extends FeedEvent {
   });
 }
 
-final class FetchingAllFeedEvent extends FeedEvent {}
+final class FetchingFeedsEvent extends FeedEvent {
+  final int page;
+  final int size;
+
+  FetchingFeedsEvent({required this.page, this.size = 20});
+}

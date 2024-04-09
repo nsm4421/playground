@@ -8,22 +8,21 @@ part 'feed.model.g.dart';
 
 @freezed
 class FeedModel with _$FeedModel {
-  const factory FeedModel({
-    @Default('') String id,
-    @Default('') String userId,
-    @Default('') String content,
-    @Default(<String>[]) List<String> hashtags,
-    @Default(<String>[]) List<String> imageLinks,
-  }) = _FeedModel;
+  const factory FeedModel(
+      {@Default('') String id,
+      @Default('') String user_id,
+      @Default('') String content,
+      @Default(<String>[]) List<String> hashtags,
+      @Default(<String>[]) List<String> images}) = _FeedModel;
 
   factory FeedModel.fromJson(Map<String, dynamic> json) =>
       _$FeedModelFromJson(json);
 
   factory FeedModel.fromEntity(FeedEntity feed) => FeedModel(
         id: feed.id!,
-        userId: feed.user.id ?? '',
+        user_id: feed.user.id ?? '',
         content: feed.content ?? '',
         hashtags: feed.hashtags,
-        imageLinks: feed.imageLinks,
+        images: feed.images,
       );
 }
