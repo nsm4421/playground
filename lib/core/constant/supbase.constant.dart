@@ -1,7 +1,8 @@
 enum TableName {
   user('accounts'),
   feed('feeds'),
-  like("likes");
+  like("likes"),
+  openChat("open_chat");
 
   final String name;
 
@@ -10,7 +11,8 @@ enum TableName {
 
 enum BucketName {
   user("user"),
-  feed("feed");
+  feed("feed"),
+  chat("chat");
 
   final String name;
 

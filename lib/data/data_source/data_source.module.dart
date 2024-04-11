@@ -1,5 +1,7 @@
 import 'package:hot_place/data/data_source/auth/auth.data_source.dart';
 import 'package:hot_place/data/data_source/auth/auth.remote_data_source.dart';
+import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
+import 'package:hot_place/data/data_source/chat/chat.remote_data_source.dart';
 import 'package:hot_place/data/data_source/feed/feed.data_source.dart';
 import 'package:hot_place/data/data_source/feed/feed.remote_data_source.dart';
 import 'package:hot_place/data/data_source/like/like_feed.data_source.dart';
@@ -29,4 +31,8 @@ abstract class DataSource {
   @singleton
   LikeFeedDataSource get likeFeedDataSource =>
       RemoteLikeFeedDataSource(auth: _client.auth, db: _client.rest);
+
+  @singleton
+  ChatDataSource get chatDataSource =>
+      RemoteChatDataSource(auth: _client.auth, db: _client.rest, storage:_client.storage);
 }
