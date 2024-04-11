@@ -72,12 +72,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     }
 
-    final createFeedResponse = await _createFeedUseCase(FeedEntity(
-        id: feedId,
-        user: event.user,
+    // 피드 업로드
+    final createFeedResponse = await _createFeedUseCase(
+        currentUser: event.user,
         content: event.content,
         hashtags: event.hashtags,
-        images: images));
+        images: images);
     createFeedResponse.fold(
       (l) => emit(FeedFailureState(l.message ?? 'error...')),
       (r) => emit(UploadingFeedSuccessState()),

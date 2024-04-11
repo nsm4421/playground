@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hot_place/data/entity/chat/open_chat.entity.dart';
+import 'package:hot_place/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 
 import '../../../../core/constant/route.constant.dart';
@@ -35,7 +35,7 @@ class _OpenChatScreenState extends State<OpenChatScreen> {
           return _OpenChatItem(OpenChatEntity(
               id: '1',
               title: '채팅하기 $index',
-              user: const UserEntity(
+              host: const UserEntity(
                   id: "test",
                   nickname: "test nickname",
                   profileImage:
@@ -73,17 +73,17 @@ class _OpenChatItem extends StatelessWidget {
             // 프로필 이미지
             leading: CircleAvatar(
                 radius: _imageSize,
-                child: _chat.user?.profileImage != null
+                child: _chat.host?.profileImage != null
                     ? Container(
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 image:
-                                    NetworkImage(_chat.user!.profileImage!))))
+                                    NetworkImage(_chat.host!.profileImage!))))
                     : const Icon(Icons.question_mark)),
 
             // 닉네임
-            subtitle: Text(_chat.user?.nickname ?? "Unknown",
+            subtitle: Text(_chat.host?.nickname ?? "Unknown",
                 softWrap: true,
                 style: Theme.of(context)
                     .textTheme
