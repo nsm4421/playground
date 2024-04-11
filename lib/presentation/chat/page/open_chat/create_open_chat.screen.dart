@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
+import 'package:hot_place/domain/usecase/chat/open_chat/create_open_chat.usecase.dart';
+import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
+import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
 
 class CreateOpenChatScreen extends StatefulWidget {
   const CreateOpenChatScreen({super.key});
@@ -54,7 +60,20 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
         });
       };
 
-  _handleCreateOpenChat() async {}
+  _handleCreateOpenChat() async {
+    final title = _titleTextEditingController.text.trim();
+    final currentUser = context.read<AuthBloc>().currentUser!;
+    final res = await getIt<CreateOpenChatUseCase>()
+        .call(title: title, hashtags: _hashtags, currentUser: currentUser);
+    res.fold((l) {
+      ToastUtil.toast(l.message ?? 'error');
+    }, (r) {
+      ToastUtil.toast('success');
+      if (context.mounted) {
+        context.pop();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,52 +145,7 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
             )),
 
         // 해시태그 목록
-        Container(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-                children: _hashtags
-                    .map((text) => Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 3),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer),
-                        child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.tag,
-                                      size: 20,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary),
-                                  const SizedBox(width: 5),
-                                  Text(text,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.w800,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary)),
-                                  IconButton(
-                                      onPressed: _handleDeleteHashtag(text),
-                                      icon: Icon(
-                                        Icons.delete,
-                                        size: 18,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                      ))
-                                ]))))
-                    .toList()))
+        HashtagListWidget(_hashtags, handleDelete: _handleDeleteHashtag)
       ])),
 
       // 제출 버튼

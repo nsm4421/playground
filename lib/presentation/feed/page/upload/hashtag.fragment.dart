@@ -82,8 +82,7 @@ class _HashtagFragmentState extends State<HashtagFragment> {
                 suffixIcon: widget._hashtags.length < _maxHashtag
                     ? IconButton(
                         onPressed: _handleAddNewHashtag,
-                        icon: const Icon(Icons.add_circle_outline),
-                      )
+                        icon: const Icon(Icons.add_circle_outline))
                     : null),
           ),
           const SizedBox(height: 10),

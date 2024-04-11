@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HashtagListWidget extends StatelessWidget {
-  const HashtagListWidget(this.hashtags, {super.key});
+  const HashtagListWidget(this.hashtags, {super.key, this.handleDelete});
 
   final List<String> hashtags;
+  final void Function(String text)? handleDelete;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -24,13 +25,30 @@ class HashtagListWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Icon(Icons.tag,
-                                size: 25,
+                                size: 20,
                                 color: Theme.of(context).colorScheme.secondary),
+                            const SizedBox(width: 5),
                             Text(text,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(fontWeight: FontWeight.w800))
+                                    .titleMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)),
+                            // 삭제 버튼
+                            if (handleDelete != null)
+                              IconButton(
+                                  onPressed: () {
+                                    handleDelete!(text);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    size: 18,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ))
                           ]))))
               .toList()));
 }

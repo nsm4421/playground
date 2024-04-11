@@ -14,6 +14,7 @@ class OpenChatWithUserModel with _$OpenChatWithUserModel {
     @Default(UserModel()) UserModel host,
     @Default('') String title,
     @Default(<String>[]) List<String> hashtags,
+    DateTime? created_at,
   }) = _OpenChatWithUserModel;
 
   factory OpenChatWithUserModel.fromJson(Map<String, dynamic> json) =>

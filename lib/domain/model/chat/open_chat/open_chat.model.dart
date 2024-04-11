@@ -13,7 +13,7 @@ class OpenChatModel with _$OpenChatModel {
     @Default('') String host_id,
     @Default('') String title,
     @Default(<String>[]) List<String> hashtags,
-    DateTime? createdAt,
+    DateTime? created_at,
   }) = _OpenChatModel;
 
   factory OpenChatModel.fromJson(Map<String, dynamic> json) =>
@@ -24,5 +24,5 @@ class OpenChatModel with _$OpenChatModel {
       host_id: openChat.host?.id ?? '',
       title: openChat.title ?? '',
       hashtags: openChat.hashtags,
-      createdAt: openChat.createdAt);
+      created_at: openChat.createdAt);
 }

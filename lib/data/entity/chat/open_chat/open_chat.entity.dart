@@ -25,19 +25,19 @@ class OpenChatEntity with _$OpenChatEntity {
 
   factory OpenChatEntity.fromModel(OpenChatModel openChat, {UserModel? host}) =>
       OpenChatEntity(
-        id: openChat.id.isNotEmpty ? openChat.id : null,
-        host: host != null
-            ? UserEntity.fromModel(host)
-            : UserEntity(id: openChat.host_id),
-        title: openChat.title.isNotEmpty ? openChat.title : null,
-        hashtags: openChat.hashtags.isNotEmpty ? openChat.hashtags : [],
-      );
+          id: openChat.id.isNotEmpty ? openChat.id : null,
+          host: host != null
+              ? UserEntity.fromModel(host)
+              : UserEntity(id: openChat.host_id),
+          title: openChat.title.isNotEmpty ? openChat.title : null,
+          hashtags: openChat.hashtags.isNotEmpty ? openChat.hashtags : [],
+          createdAt: openChat.created_at);
 
   factory OpenChatEntity.fromModelWithUser(OpenChatWithUserModel openChat) =>
       OpenChatEntity(
-        id: openChat.id.isNotEmpty ? openChat.id : null,
-        host: UserEntity.fromModel(openChat.host),
-        title: openChat.title.isNotEmpty ? openChat.title : null,
-        hashtags: openChat.hashtags.isNotEmpty ? openChat.hashtags : [],
-      );
+          id: openChat.id.isNotEmpty ? openChat.id : null,
+          host: UserEntity.fromModel(openChat.host),
+          title: openChat.title.isNotEmpty ? openChat.title : null,
+          hashtags: openChat.hashtags.isNotEmpty ? openChat.hashtags : [],
+          createdAt: openChat.created_at);
 }
