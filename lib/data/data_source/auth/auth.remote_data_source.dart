@@ -7,23 +7,19 @@ import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RemoteAuthDataSource extends AuthDataSource {
-  final GoTrueClient _auth;
-  final PostgrestClient _db;
+  final SupabaseClient _client;
 
-  RemoteAuthDataSource(
-      {required GoTrueClient auth, required PostgrestClient db})
-      : _auth = auth,
-        _db = db;
+  RemoteAuthDataSource(this._client);
 
   final _logger = Logger();
 
   @override
-  Stream<AuthState> get authStream => _auth.onAuthStateChange;
+  Stream<AuthState> get authStream => _client.auth.onAuthStateChange;
 
   @override
   UserModel getCurrentUserOrElseThrow() {
     try {
-      final session = _auth.currentSession;
+      final session = _client.auth.currentSession;
       if (session == null) {
         throw CustomException(
             code: ErrorCode.unAuthorized, message: 'session not exists');
@@ -41,8 +37,8 @@ class RemoteAuthDataSource extends AuthDataSource {
   Future<UserModel> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      final res =
-          await _auth.signInWithPassword(email: email, password: password);
+      final res = await _client.auth
+          .signInWithPassword(email: email, password: password);
       final sessionUser = res.session?.user;
       if (sessionUser == null) {
         throw CustomException(
@@ -73,7 +69,8 @@ class RemoteAuthDataSource extends AuthDataSource {
       required String nickname,
       required String profileUrl}) async {
     try {
-      final res = await _auth.signUp(email: email, password: password, data: {
+      final res =
+          await _client.auth.signUp(email: email, password: password, data: {
         if (nickname.isNotEmpty) 'nickname': nickname,
         if (profileUrl.isNotEmpty) 'profileUrl': profileUrl
       });
@@ -103,7 +100,7 @@ class RemoteAuthDataSource extends AuthDataSource {
   @override
   Future<void> signOut() async {
     try {
-      await _auth.signOut();
+      await _client.auth.signOut();
     } on AuthException catch (err) {
       // supbase 인증오류인경우
       _logger.e(err);
@@ -120,7 +117,7 @@ class RemoteAuthDataSource extends AuthDataSource {
   @override
   Future<void> insertUser(UserModel user) async {
     try {
-      return await _db.from(TableName.user.name).insert(user.toJson());
+      return await _client.rest.from(TableName.user.name).insert(user.toJson());
     } catch (err) {
       _logger.e(err);
       throw CustomException(
@@ -131,7 +128,10 @@ class RemoteAuthDataSource extends AuthDataSource {
   @override
   Future<void> modifyUser(UserModel user) async {
     try {
-      await _db.from(TableName.user.name).update(user.toJson()).eq('id', user.id);
+      await _client.rest
+          .from(TableName.user.name)
+          .update(user.toJson())
+          .eq('id', user.id);
     } catch (err) {
       _logger.e(err);
       throw CustomException(

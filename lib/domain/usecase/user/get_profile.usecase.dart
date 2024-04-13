@@ -5,7 +5,7 @@ import '../../../core/error/failure.constant.dart';
 import '../../../data/entity/user/user.entity.dart';
 import '../../repository/user/user.repository.dart';
 
-@singleton
+@lazySingleton
 class GetProfileUseCase {
   final UserRepository _repository;
 

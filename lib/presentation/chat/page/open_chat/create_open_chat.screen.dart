@@ -6,6 +6,7 @@ import 'package:hot_place/core/util/toast.util.dart';
 import 'package:hot_place/domain/usecase/chat/open_chat/create_open_chat.usecase.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
 import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
+import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 
 class CreateOpenChatScreen extends StatefulWidget {
   const CreateOpenChatScreen({super.key});
@@ -62,7 +63,7 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
 
   _handleCreateOpenChat() async {
     final title = _titleTextEditingController.text.trim();
-    final currentUser = context.read<AuthBloc>().currentUser!;
+    final currentUser = context.read<UserBloc>().state.user;
     final res = await getIt<CreateOpenChatUseCase>()
         .call(title: title, hashtags: _hashtags, currentUser: currentUser);
     res.fold((l) {

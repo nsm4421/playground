@@ -22,7 +22,7 @@ class UserEntity with _$UserEntity {
       id: user.id.isNotEmpty ? user.id : null,
       email: user.email.isNotEmpty ? user.email : null,
       nickname: user.nickname.isNotEmpty ? user.nickname : null,
-      profileImage: user.profile_image.isNotEmpty ? user.profile_image : null);
+      profileImage: user.profile_image);
 
   factory UserEntity.fromSession(User sessionUser) =>
       UserEntity.fromModel(UserModel.fromSession(sessionUser));

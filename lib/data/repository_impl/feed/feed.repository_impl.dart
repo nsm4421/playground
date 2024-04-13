@@ -18,19 +18,16 @@ class FeedRepositoryImpl extends FeedRepository {
       : _feedDataSource = feedDataSource;
 
   @override
-  Stream<List<FeedEntity>> get feedStream =>
-      _feedDataSource.getFeedStream().map((data) =>
-          data.map((model) => FeedEntity.fromModelWithAuthor(model)).toList());
+  Stream<List<FeedEntity>> get feedStream => _feedDataSource
+      .getFeedStream()
+      .map((data) => data.map((model) => FeedEntity.fromModel(model)).toList());
 
   @override
   Future<Either<Failure, List<FeedEntity>>> getFeeds(
       {required int skip, required int take}) async {
     try {
       final feeds = await _feedDataSource.getFeeds(skip: skip, take: take).then(
-              (data) =>
-              data
-                  .map((feed) => FeedEntity.fromModelWithAuthor(feed))
-                  .toList());
+          (data) => data.map((feed) => FeedEntity.fromModel(feed)).toList());
       return right(feeds);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -73,11 +70,11 @@ class FeedRepositoryImpl extends FeedRepository {
     try {
       final futures = List.generate(
           images.length,
-              (index) async =>
-          await _feedDataSource.uploadFeedImageAndReturnDownloadLink(
-              feedId: feedId,
-              filename: '$feedId-$index',
-              image: images[index]));
+          (index) async =>
+              await _feedDataSource.uploadFeedImageAndReturnDownloadLink(
+                  feedId: feedId,
+                  filename: '$feedId-$index',
+                  image: images[index]));
       final downloadLinks = await Future.wait(futures);
       return right(downloadLinks);
     } on CustomException catch (err) {

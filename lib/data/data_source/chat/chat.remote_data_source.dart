@@ -1,7 +1,6 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
 import 'package:hot_place/domain/model/chat/open_chat/open_chat.model.dart';
-import 'package:hot_place/domain/model/chat/open_chat/open_chat_with_user.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -9,35 +8,24 @@ import '../../../core/error/custom_exception.dart';
 import '../../../core/error/failure.constant.dart';
 
 class RemoteChatDataSource extends ChatDataSource {
-  final GoTrueClient _auth;
-  final PostgrestClient _db;
-  final SupabaseStorageClient _storage;
+  final SupabaseClient _client;
 
-  RemoteChatDataSource(
-      {required GoTrueClient auth,
-      required PostgrestClient db,
-      required SupabaseStorageClient storage})
-      : _auth = auth,
-        _db = db,
-        _storage = storage;
+  RemoteChatDataSource(this._client);
 
   final _logger = Logger();
 
   @override
-  Stream<List<OpenChatWithUserModel>> get openChatStream {
-    return _db
-        .from(TableName.openChat.name)
-        .select("*, host:${TableName.user.name}(*)")
-        .order('created_at', ascending: false)
-        .asStream()
-        .map((data) =>
-            data.map((json) => OpenChatWithUserModel.fromJson(json)).toList());
-  }
+  Stream<List<OpenChatModel>> get openChatStream => _client
+      .from(TableName.openChat.name)
+      .stream(primaryKey: ['id'])
+      .order('created_at', ascending: false)
+      .asyncMap((event) =>
+          event.map((json) => OpenChatModel.fromJson(json)).toList());
 
   @override
   Future<OpenChatModel> createOpenChat(OpenChatModel chat) async {
     try {
-      return await _db
+      return await _client.rest
           .from(TableName.openChat.name)
           .insert(chat.toJson())
           .select()
@@ -55,7 +43,10 @@ class RemoteChatDataSource extends ChatDataSource {
   @override
   Future<void> deleteOpenChatById(String openChatId) async {
     try {
-      await _db.from(TableName.openChat.name).delete().eq('id', openChatId);
+      await _client.rest
+          .from(TableName.openChat.name)
+          .delete()
+          .eq('id', openChatId);
     } on PostgrestException catch (err) {
       _logger.e(err);
       throw CustomException(
@@ -69,7 +60,7 @@ class RemoteChatDataSource extends ChatDataSource {
   @override
   Future<String> modifyOpenChat(OpenChatModel chat) async {
     try {
-      return await _db
+      return await _client.rest
           .from(TableName.openChat.name)
           .update(chat.toJson())
           .eq('id', chat.id)

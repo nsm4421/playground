@@ -10,7 +10,9 @@ part 'open_chat.model.g.dart';
 class OpenChatModel with _$OpenChatModel {
   const factory OpenChatModel({
     @Default('') String id,
-    @Default('') String host_id,
+    @Default('') String user_id,
+    @Default('') String nickname,
+    String? profile_image,
     @Default('') String title,
     @Default(<String>[]) List<String> hashtags,
     DateTime? created_at,
@@ -20,9 +22,12 @@ class OpenChatModel with _$OpenChatModel {
       _$OpenChatModelFromJson(json);
 
   factory OpenChatModel.fromEntity(OpenChatEntity openChat) => OpenChatModel(
-      id: openChat.id ?? '',
-      host_id: openChat.host?.id ?? '',
-      title: openChat.title ?? '',
-      hashtags: openChat.hashtags,
-      created_at: openChat.createdAt);
+        id: openChat.id ?? '',
+        user_id: openChat.host?.id ?? '',
+        nickname: openChat.host?.nickname ?? '',
+        profile_image: openChat.host?.profileImage,
+        title: openChat.title ?? '',
+        hashtags: openChat.hashtags,
+        created_at: openChat.createdAt,
+      );
 }

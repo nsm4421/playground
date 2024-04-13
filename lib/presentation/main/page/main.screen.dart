@@ -8,6 +8,7 @@ import 'package:hot_place/presentation/main/page/on_login.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../auth/bloc/auth.bloc.dart';
+import '../../setting/bloc/user.bloc.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -33,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
         context.read<AuthBloc>().add(InitAuthEvent());
       }
     });
+    context.read<UserBloc>().add(InitUserEvent());
   }
 
   @override
@@ -50,6 +52,3 @@ class _MainScreenState extends State<MainScreen> {
         return const SignInScreen();
       });
 }
-
-
-

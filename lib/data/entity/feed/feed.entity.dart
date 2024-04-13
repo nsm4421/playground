@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/model/feed/feed.model.dart';
-import 'package:hot_place/domain/model/feed/feed_with_author.model.dart';
-import 'package:hot_place/domain/model/user/user.model.dart';
 
 part 'feed.entity.freezed.dart';
 
@@ -18,20 +16,14 @@ class FeedEntity with _$FeedEntity {
       int? numLike,
       DateTime? createdAt}) = _FeedEntity;
 
-  factory FeedEntity.fromModel(FeedModel feed, UserModel user) => FeedEntity(
+  factory FeedEntity.fromModel(FeedModel feed) => FeedEntity(
       id: feed.id.isNotEmpty ? feed.id : null,
-      user: UserEntity.fromModel(user),
+      user: UserEntity(
+          id: feed.user_id,
+          nickname: feed.nickname.isNotEmpty ? feed.nickname : null,
+          profileImage: feed.profile_image),
       content: feed.content.isNotEmpty ? feed.content : null,
       hashtags: feed.hashtags,
-      images: feed.images);
-
-  factory FeedEntity.fromModelWithAuthor(FeedWithAuthorModel feed) =>
-      FeedEntity(
-          id: feed.id.isNotEmpty ? feed.id : null,
-          user: UserEntity.fromModel(feed.author),
-          content: feed.content.isNotEmpty ? feed.content : null,
-          hashtags: feed.hashtags,
-          images: feed.images,
-          numLike: feed.num_like,
-          createdAt: feed.created_at);
+      images: feed.images,
+      createdAt: feed.created_at);
 }

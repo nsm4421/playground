@@ -10,6 +10,7 @@ import 'package:hot_place/presentation/feed/bloc/feed.bloc.dart';
 import 'package:hot_place/presentation/feed/page/upload/hashtag.fragment.dart';
 import 'package:hot_place/presentation/feed/page/upload/pick_image.fragment.dart';
 import 'package:hot_place/presentation/feed/widget/feed_error.widget.dart';
+import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'feed_content.fragment.dart';
@@ -76,7 +77,7 @@ class _ViewState extends State<_View> {
       });
 
   _handleUpload() async {
-    final currentUser = context.read<AuthBloc>().currentUser!;
+    final currentUser = context.read<UserBloc>().state.user;
     final content = _textEditingController.text.trim();
 
     context.read<FeedBloc>().add(UploadingFeedEvent(

@@ -15,9 +15,8 @@ class ChatRepositoryImpl extends ChatRepository {
 
   @override
   Stream<List<OpenChatEntity>> get openChatStream =>
-      _chatDataSource.openChatStream.map((data) => data
-          .map((model) => OpenChatEntity.fromModelWithUser(model))
-          .toList());
+      _chatDataSource.openChatStream.map((data) =>
+          data.map((model) => OpenChatEntity.fromModel(model)).toList());
 
   @override
   Future<Either<Failure, OpenChatEntity>> createOpenChat(

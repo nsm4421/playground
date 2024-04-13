@@ -9,22 +9,17 @@ import '../../../core/error/custom_exception.dart';
 import '../../../core/error/failure.constant.dart';
 
 class RemoteLikeFeedDataSource extends LikeFeedDataSource {
-  final GoTrueClient _auth;
-  final PostgrestClient _db;
+  final SupabaseClient _client;
 
-  RemoteLikeFeedDataSource({
-    required GoTrueClient auth,
-    required PostgrestClient db,
-  })  : _auth = auth,
-        _db = db;
+  RemoteLikeFeedDataSource(this._client);
 
   final _logger = Logger();
 
   @override
   Stream<LikeFeedModel?> getLikeStream(String feedId) {
     try {
-      final currentUid = _auth.currentUser!.id;
-      return _db
+      final currentUid = _client.auth.currentUser!.id;
+      return _client.rest
           .from(TableName.like.name)
           .select()
           .eq('user_id', currentUid)
@@ -47,9 +42,9 @@ class RemoteLikeFeedDataSource extends LikeFeedDataSource {
   @override
   Future<String> likeFeed(String feedId) async {
     try {
-      final currentUid = _auth.currentUser!.id;
+      final currentUid = _client.auth.currentUser!.id;
       final likeId = UuidUtil.uuid();
-      await _db.from(TableName.like.name).insert(
+      await _client.rest.from(TableName.like.name).insert(
           LikeFeedModel(id: likeId, user_id: currentUid, feed_id: feedId));
       return likeId;
     } on PostgrestException catch (err) {
@@ -67,7 +62,7 @@ class RemoteLikeFeedDataSource extends LikeFeedDataSource {
   @override
   Future<void> cancelLikeById(String likeId) async {
     try {
-      await _db.from(TableName.like.name).delete().eq('id', likeId);
+      await _client.rest.from(TableName.like.name).delete().eq('id', likeId);
     } on PostgrestException catch (err) {
       _logger.e(err);
       throw CustomException(

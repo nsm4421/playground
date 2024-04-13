@@ -17,22 +17,18 @@ abstract class DataSource {
   final _client = Supabase.instance.client;
 
   @singleton
-  AuthDataSource get authDataSource =>
-      RemoteAuthDataSource(auth: _client.auth, db: _client.rest);
+  AuthDataSource get authDataSource => RemoteAuthDataSource(_client);
 
   @singleton
-  UserDataSource get userDataSource => RemoteUserDataSource(
-      auth: _client.auth, db: _client.rest, storage: _client.storage);
+  UserDataSource get userDataSource => RemoteUserDataSource(_client);
 
   @singleton
-  FeedDataSource get feedDataSource => RemoteFeedDataSource(
-      auth: _client.auth, db: _client.rest, storage: _client.storage);
+  FeedDataSource get feedDataSource => RemoteFeedDataSource(_client);
 
   @singleton
   LikeFeedDataSource get likeFeedDataSource =>
-      RemoteLikeFeedDataSource(auth: _client.auth, db: _client.rest);
+      RemoteLikeFeedDataSource(_client);
 
   @singleton
-  ChatDataSource get chatDataSource =>
-      RemoteChatDataSource(auth: _client.auth, db: _client.rest, storage:_client.storage);
+  ChatDataSource get chatDataSource => RemoteChatDataSource(_client);
 }
