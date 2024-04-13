@@ -1,6 +1,7 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
 import 'package:hot_place/domain/model/chat/open_chat/open_chat.model.dart';
+import 'package:hot_place/domain/model/chat/open_chat/open_chat_with_user.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,6 +22,17 @@ class RemoteChatDataSource extends ChatDataSource {
         _storage = storage;
 
   final _logger = Logger();
+
+  @override
+  Stream<List<OpenChatWithUserModel>> get openChatStream {
+    return _db
+        .from(TableName.openChat.name)
+        .select("*, host:${TableName.user.name}(*)")
+        .order('created_at', ascending: false)
+        .asStream()
+        .map((data) =>
+            data.map((json) => OpenChatWithUserModel.fromJson(json)).toList());
+  }
 
   @override
   Future<OpenChatModel> createOpenChat(OpenChatModel chat) async {
