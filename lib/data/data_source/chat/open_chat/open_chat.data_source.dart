@@ -1,6 +1,6 @@
 import 'package:hot_place/domain/model/chat/open_chat/open_chat.model.dart';
 
-abstract class ChatDataSource {
+abstract class OpenChatDataSource {
   Stream<List<OpenChatModel>> get openChatStream;
 
   Future<OpenChatModel> createOpenChat(OpenChatModel chat);

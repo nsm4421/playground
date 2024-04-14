@@ -1,12 +1,12 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
-import 'package:hot_place/data/data_source/like/like_feed.data_source.dart';
+import 'package:hot_place/data/data_source/feed/like/like_feed.data_source.dart';
 import 'package:hot_place/domain/model/feed/like/like_feed.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../core/error/custom_exception.dart';
-import '../../../core/error/failure.constant.dart';
+import '../../../../core/error/custom_exception.dart';
+import '../../../../core/error/failure.constant.dart';
 
 class RemoteLikeFeedDataSource extends LikeFeedDataSource {
   final SupabaseClient _client;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/auth/page/sign_up/sign_up.screen.dart';
+import 'package:hot_place/presentation/chat/page/chat_room.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/create_open_chat.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat.screen.dart';
 import 'package:hot_place/presentation/feed/page/upload/upload_feed.screen.dart';
@@ -12,11 +13,12 @@ import '../../presentation/main/page/splash.screen.dart';
 enum Routes {
   splash("/"),
   main("/main"),
-  signUp("/sign-up"),
-  uploadFeed("/upload-feed"),
-  editProfile("/edit-profile"),
+  signUp("/auth/sign-up"),
+  uploadFeed("/feed/create"),
+  editProfile("/setting/profile"),
   openChat("/open-chat"),
-  createOpenChat("/open-chat/create");
+  createOpenChat("/open-chat/create"),
+  chatRoom("/chat-room");
 
   final String path;
 
@@ -71,6 +73,13 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     path: Routes.createOpenChat.path,
     builder: (BuildContext context, GoRouterState state) {
       return const CreateOpenChatScreen();
+    },
+  ),
+  GoRoute(
+    name: Routes.chatRoom.name,
+    path: "${Routes.chatRoom.path}/:id",
+    builder: (BuildContext context, GoRouterState state) {
+      return ChatRoomScreen(state.pathParameters['id']!);
     },
   )
 ], initialLocation: Routes.splash.path);

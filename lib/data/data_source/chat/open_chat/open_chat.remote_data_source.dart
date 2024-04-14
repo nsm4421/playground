@@ -1,16 +1,16 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
-import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
 import 'package:hot_place/domain/model/chat/open_chat/open_chat.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../core/error/custom_exception.dart';
-import '../../../core/error/failure.constant.dart';
+import '../../../../core/error/custom_exception.dart';
+import '../../../../core/error/failure.constant.dart';
+import 'open_chat.data_source.dart';
 
-class RemoteChatDataSource extends ChatDataSource {
+class RemoteOpenChatDataSource implements OpenChatDataSource {
   final SupabaseClient _client;
 
-  RemoteChatDataSource(this._client);
+  RemoteOpenChatDataSource(this._client);
 
   final _logger = Logger();
 

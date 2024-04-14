@@ -2,7 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
 import 'package:hot_place/data/entity/chat/open_chat/open_chat.entity.dart';
 
-abstract class ChatRepository {
+abstract class OpenChatRepository {
   Stream<List<OpenChatEntity>> get openChatStream;
 
   Future<Either<Failure, OpenChatEntity>> createOpenChat(
