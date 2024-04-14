@@ -1,16 +1,19 @@
 import 'package:hot_place/data/data_source/auth/auth.data_source.dart';
 import 'package:hot_place/data/data_source/auth/auth.remote_data_source.dart';
-import 'package:hot_place/data/data_source/chat/chat.data_source.dart';
-import 'package:hot_place/data/data_source/chat/chat.remote_data_source.dart';
+import 'package:hot_place/data/data_source/chat/message/chat_message.remote_data_source.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/open_chat.data_source.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/open_chat.remote_data_source.dart';
 import 'package:hot_place/data/data_source/feed/feed.data_source.dart';
 import 'package:hot_place/data/data_source/feed/feed.remote_data_source.dart';
-import 'package:hot_place/data/data_source/like/like_feed.data_source.dart';
-import 'package:hot_place/data/data_source/like/like_feed.remote_data_source.dart';
+import 'package:hot_place/data/data_source/feed/like/like_feed.data_source.dart';
+import 'package:hot_place/data/data_source/feed/like/like_feed.remote_data_source.dart';
 import 'package:hot_place/data/data_source/user/user.data_source.dart';
 import 'package:hot_place/data/data_source/user/user.remote_data_source.dart';
 
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'chat/message/chat_message.data_source.dart';
 
 @module
 abstract class DataSource {
@@ -30,5 +33,9 @@ abstract class DataSource {
       RemoteLikeFeedDataSource(_client);
 
   @singleton
-  ChatDataSource get chatDataSource => RemoteChatDataSource(_client);
+  OpenChatDataSource get chatDataSource => RemoteOpenChatDataSource(_client);
+
+  @singleton
+  ChatMessageDataSource get chatMessageDataSource =>
+      RemoteChatMessageDataSource(_client);
 }

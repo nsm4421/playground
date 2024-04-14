@@ -15,7 +15,7 @@ class OpenChatRepositoryImpl extends OpenChatRepository {
 
   @override
   Stream<List<OpenChatEntity>> get openChatStream =>
-      _openChatDataSource.openChatStream.map((data) =>
+      _openChatDataSource.openChatStream.asyncMap((data) async =>
           data.map((model) => OpenChatEntity.fromModel(model)).toList());
 
   @override
