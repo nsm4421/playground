@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/constant/route.constant.dart';
 import '../../../data/entity/chat/open_chat/open_chat.entity.dart';
 
 class OpenChatItemWidget extends StatelessWidget {
@@ -9,8 +11,9 @@ class OpenChatItemWidget extends StatelessWidget {
 
   static const double _imageSize = 30;
 
-  // TODO : 오픈 채팅방으로 이동
-  _goToOpenChat(BuildContext ctx) => () {};
+  _goToOpenChat(BuildContext ctx) => () {
+        ctx.push("${Routes.chatRoom.path}/${_chat.id}");
+      };
 
   @override
   Widget build(BuildContext context) => Column(

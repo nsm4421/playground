@@ -56,7 +56,7 @@ class RemoteChatMessageDataSource implements ChatMessageDataSource {
     return _client
         .from(TableName.chatMessage.name)
         .stream(primaryKey: ['id'])
-        .order('created_at')
+        .order('created_at', ascending: true)
         .asyncMap((data) async => data.map(ChatMessageModel.fromJson).toList());
   }
 }

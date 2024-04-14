@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/data/entity/chat/open_chat/open_chat.entity.dart';
-import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/usecase/chat/open_chat/get_open_chat_steram.usecase.dart';
 
 import '../../../../core/constant/route.constant.dart';
@@ -63,11 +62,11 @@ class _OpenChatListState extends State<_OpenChatList> {
             case ConnectionState.done:
             case ConnectionState.none:
             case ConnectionState.active:
+              final data = snapshot.data ?? [];
               return ListView.separated(
                 shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) =>
-                    OpenChatItemWidget(snapshot.data![index]),
+                itemCount: data.length,
+                itemBuilder: (_, index) => OpenChatItemWidget(data[index]),
                 separatorBuilder: (_, __) =>
                     const Divider(indent: 30, endIndent: 30),
               );
