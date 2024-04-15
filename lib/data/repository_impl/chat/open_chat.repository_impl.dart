@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 
 @Singleton(as: OpenChatRepository)
 class OpenChatRepositoryImpl extends OpenChatRepository {
-  final OpenChatDataSource _openChatDataSource;
+  final RemoteOpenChatDataSource _openChatDataSource;
 
   OpenChatRepositoryImpl(this._openChatDataSource);
 

@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 
 @Singleton(as: ChatMessageRepository)
 class ChatMessageRepositoryImpl extends ChatMessageRepository {
-  final ChatMessageDataSource _chatMessageDataSource;
+  final RemoteChatMessageDataSource _chatMessageDataSource;
 
   ChatMessageRepositoryImpl(this._chatMessageDataSource);
 

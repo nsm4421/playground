@@ -10,9 +10,9 @@ import '../../../../domain/model/feed/like/like_feed.model.dart';
 
 @Singleton(as: LikeFeedRepository)
 class LikeFeedRepositoryImpl extends LikeFeedRepository {
-  final LikeFeedDataSource _likeFeedDataSource;
+  final RemoteLikeFeedDataSource _likeFeedDataSource;
 
-  LikeFeedRepositoryImpl(LikeFeedDataSource likeFeedDataSource)
+  LikeFeedRepositoryImpl(RemoteLikeFeedDataSource likeFeedDataSource)
       : _likeFeedDataSource = likeFeedDataSource;
 
   @override

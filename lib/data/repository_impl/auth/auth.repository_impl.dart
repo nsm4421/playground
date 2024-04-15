@@ -9,18 +9,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 @Singleton(as: AuthRepository)
 class AuthRepositoryImpl extends AuthRepository {
-  final AuthDataSource _authDataSource;
+  final RemoteAuthDataSource _remoteAuthDataSource;
 
-  AuthRepositoryImpl(AuthDataSource authDataSource)
-      : _authDataSource = authDataSource;
+  AuthRepositoryImpl(RemoteAuthDataSource authDataSource)
+      : _remoteAuthDataSource = authDataSource;
 
   @override
-  Stream<AuthState> get authStream => _authDataSource.authStream;
+  Stream<AuthState> get authStream => _remoteAuthDataSource.authStream;
 
   @override
   Either<Failure, UserEntity> getCurrentUserOrElseThrow() {
     try {
-      final user = _authDataSource.getCurrentUserOrElseThrow();
+      final user = _remoteAuthDataSource.getCurrentUserOrElseThrow();
       return right(UserEntity.fromModel(user));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -31,7 +31,7 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, UserEntity>> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      final user = await _authDataSource
+      final user = await _remoteAuthDataSource
           .signInWithEmailAndPassword(email: email, password: password)
           .then((model) => UserEntity.fromModel(model));
       return right(user);
@@ -48,7 +48,7 @@ class AuthRepositoryImpl extends AuthRepository {
       required String profileUrl}) async {
     try {
       // 회원 추가
-      final user = await _authDataSource.signUpWithEmailAndPassword(
+      final user = await _remoteAuthDataSource.signUpWithEmailAndPassword(
           email: email,
           password: password,
           nickname: nickname,
@@ -62,7 +62,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, void>> signOut() async {
     try {
-      await _authDataSource.signOut();
+      await _remoteAuthDataSource.signOut();
       return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));

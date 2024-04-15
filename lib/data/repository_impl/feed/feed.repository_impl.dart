@@ -12,13 +12,13 @@ import '../../../domain/repository/feed/feed.repository.dart';
 
 @Singleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
-  final FeedDataSource _feedDataSource;
+  final RemoteFeedDataSource _remoteFeedDataSource;
 
-  FeedRepositoryImpl(FeedDataSource feedDataSource)
-      : _feedDataSource = feedDataSource;
+  FeedRepositoryImpl(RemoteFeedDataSource feedDataSource)
+      : _remoteFeedDataSource = feedDataSource;
 
   @override
-  Stream<List<FeedEntity>> get feedStream => _feedDataSource
+  Stream<List<FeedEntity>> get feedStream => _remoteFeedDataSource
       .getFeedStream()
       .map((data) => data.map((model) => FeedEntity.fromModel(model)).toList());
 
@@ -26,8 +26,10 @@ class FeedRepositoryImpl extends FeedRepository {
   Future<Either<Failure, List<FeedEntity>>> getFeeds(
       {required int skip, required int take}) async {
     try {
-      final feeds = await _feedDataSource.getFeeds(skip: skip, take: take).then(
-          (data) => data.map((feed) => FeedEntity.fromModel(feed)).toList());
+      final feeds = await _remoteFeedDataSource
+          .getFeeds(skip: skip, take: take)
+          .then((data) =>
+              data.map((feed) => FeedEntity.fromModel(feed)).toList());
       return right(feeds);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -37,7 +39,7 @@ class FeedRepositoryImpl extends FeedRepository {
   @override
   Future<Either<Failure, void>> createFeed(FeedEntity feed) async {
     try {
-      await _feedDataSource.createFeed(FeedModel.fromEntity(feed));
+      await _remoteFeedDataSource.createFeed(FeedModel.fromEntity(feed));
       return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -47,7 +49,7 @@ class FeedRepositoryImpl extends FeedRepository {
   @override
   Future<Either<Failure, void>> deleteFeedById(String feedId) async {
     try {
-      await _feedDataSource.deleteFeedById(feedId);
+      await _remoteFeedDataSource.deleteFeedById(feedId);
       return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -57,7 +59,7 @@ class FeedRepositoryImpl extends FeedRepository {
   @override
   Future<Either<Failure, void>> modifyFeed(FeedEntity feed) async {
     try {
-      await _feedDataSource.modifyFeed(FeedModel.fromEntity(feed));
+      await _remoteFeedDataSource.modifyFeed(FeedModel.fromEntity(feed));
       return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -71,7 +73,7 @@ class FeedRepositoryImpl extends FeedRepository {
       final futures = List.generate(
           images.length,
           (index) async =>
-              await _feedDataSource.uploadFeedImageAndReturnDownloadLink(
+              await _remoteFeedDataSource.uploadFeedImageAndReturnDownloadLink(
                   feedId: feedId,
                   filename: '$feedId-$index',
                   image: images[index]));

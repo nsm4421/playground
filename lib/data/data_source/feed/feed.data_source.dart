@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:hot_place/domain/model/feed/feed.model.dart';
 
-abstract class FeedDataSource {
+abstract interface class LocalFeedDataSource {}
+
+abstract interface class RemoteFeedDataSource {
   Stream<List<FeedModel>> getFeedStream();
 
   Future<List<FeedModel>> getFeeds({required int skip, required int take});

@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/util/image.util.dart';
-import 'package:hot_place/data/data_source/feed/feed.data_source.dart';
 import 'package:hot_place/domain/model/feed/feed.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/error/custom_exception.dart';
 import '../../../core/error/failure.constant.dart';
+import 'feed.data_source.dart';
 
-class RemoteFeedDataSource extends FeedDataSource {
+class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
   final SupabaseClient _client;
 
-  RemoteFeedDataSource(this._client);
+  RemoteFeedDataSourceImpl(this._client);
 
   final _logger = Logger();
 

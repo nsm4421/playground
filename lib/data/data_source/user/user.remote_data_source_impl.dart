@@ -10,7 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/util/image.util.dart';
 
-class RemoteUserDataSource extends UserDataSource {
+class RemoteUserDataSource implements UserDataSource {
   final SupabaseClient _client;
 
   RemoteUserDataSource(this._client);

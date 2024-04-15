@@ -6,10 +6,10 @@ import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class RemoteAuthDataSource extends AuthDataSource {
+class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   final SupabaseClient _client;
 
-  RemoteAuthDataSource(this._client);
+  RemoteAuthDataSourceImpl(this._client);
 
   final _logger = Logger();
 

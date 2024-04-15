@@ -7,10 +7,10 @@ import '../../../../core/error/custom_exception.dart';
 import '../../../../core/error/failure.constant.dart';
 import 'open_chat.data_source.dart';
 
-class RemoteOpenChatDataSource implements OpenChatDataSource {
+class RemoteOpenChatDataSourceImpl implements RemoteOpenChatDataSource {
   final SupabaseClient _client;
 
-  RemoteOpenChatDataSource(this._client);
+  RemoteOpenChatDataSourceImpl(this._client);
 
   final _logger = Logger();
 

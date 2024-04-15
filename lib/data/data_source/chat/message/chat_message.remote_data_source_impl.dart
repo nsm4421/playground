@@ -7,10 +7,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/error/custom_exception.dart';
 import '../../../../core/error/failure.constant.dart';
 
-class RemoteChatMessageDataSource implements ChatMessageDataSource {
+class RemoteChatMessageDataSourceImpl implements RemoteChatMessageDataSource {
   final SupabaseClient _client;
 
-  RemoteChatMessageDataSource(this._client);
+  RemoteChatMessageDataSourceImpl(this._client);
 
   final _logger = Logger();
 

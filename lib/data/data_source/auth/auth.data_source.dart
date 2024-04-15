@@ -1,7 +1,7 @@
 import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract class AuthDataSource {
+abstract interface class RemoteAuthDataSource {
   Stream<AuthState> get authStream;
 
   UserModel getCurrentUserOrElseThrow();
