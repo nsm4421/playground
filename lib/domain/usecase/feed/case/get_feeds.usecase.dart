@@ -1,11 +1,9 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../core/error/failure.constant.dart';
-import '../../../data/entity/feed/feed.entity.dart';
-import '../../repository/feed/feed.repository.dart';
+import '../../../../core/error/failure.constant.dart';
+import '../../../../data/entity/feed/feed.entity.dart';
+import '../../../repository/feed/feed.repository.dart';
 
-@lazySingleton
 class GetFeedsUseCase {
   final FeedRepository _repository;
 

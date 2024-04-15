@@ -1,13 +1,11 @@
 import 'package:hot_place/data/entity/chat/open_chat/open_chat.entity.dart';
 
 import 'package:hot_place/domain/repository/chat/open_chat.repository.dart';
-import 'package:injectable/injectable.dart';
 
-@lazySingleton
-class GetOpenChatUseCase {
+class GetOpenChatStreamUseCase {
   final OpenChatRepository _repository;
 
-  GetOpenChatUseCase(this._repository);
+  GetOpenChatStreamUseCase(this._repository);
 
   Stream<List<OpenChatEntity>> call() => _repository.openChatStream;
 }

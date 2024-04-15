@@ -5,7 +5,7 @@ import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/repository/chat/open_chat.repository.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/error/failure.constant.dart';
+import '../../../../../core/error/failure.constant.dart';
 
 @lazySingleton
 class CreateOpenChatUseCase {

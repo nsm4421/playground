@@ -1,14 +1,11 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/entity/chat/message/chat_message.entity.dart';
-import 'package:hot_place/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../../core/error/failure.constant.dart';
-import '../../../repository/chat/chat_message.repository.dart';
+import '../../../../../core/error/failure.constant.dart';
+import '../../../../repository/chat/chat_message.repository.dart';
 
-@lazySingleton
 class SendChatMessageUseCase {
   final ChatMessageRepository _repository;
 

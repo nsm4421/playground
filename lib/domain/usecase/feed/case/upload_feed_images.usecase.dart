@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../core/error/failure.constant.dart';
-import '../../repository/feed/feed.repository.dart';
+import '../../../../core/error/failure.constant.dart';
+import '../../../repository/feed/feed.repository.dart';
 
-@lazySingleton
 class UploadFeedImagesUseCase {
   final FeedRepository _repository;
 

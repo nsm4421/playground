@@ -1,10 +1,8 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../core/error/failure.constant.dart';
-import '../../repository/auth/auth.repository.dart';
+import '../../../../core/error/failure.constant.dart';
+import '../../../repository/auth/auth.repository.dart';
 
-@lazySingleton
 class SignOutUseCase {
   final AuthRepository _repository;
 

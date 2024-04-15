@@ -1,11 +1,9 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../core/error/failure.constant.dart';
-import '../../../data/entity/user/user.entity.dart';
-import '../../repository/user/user.repository.dart';
+import '../../../../core/error/failure.constant.dart';
+import '../../../../data/entity/user/user.entity.dart';
+import '../../../repository/user/user.repository.dart';
 
-@lazySingleton
 class ModifyProfileUseCase {
   final UserRepository _repository;
 

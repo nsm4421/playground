@@ -1,9 +1,6 @@
-import 'package:injectable/injectable.dart';
+import '../../../../data/entity/feed/feed.entity.dart';
+import '../../../repository/feed/feed.repository.dart';
 
-import '../../../data/entity/feed/feed.entity.dart';
-import '../../repository/feed/feed.repository.dart';
-
-@lazySingleton
 class GetFeedStreamUseCase {
   final FeedRepository _repository;
 

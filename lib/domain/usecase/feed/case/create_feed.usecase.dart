@@ -3,11 +3,9 @@ import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/data/entity/feed/feed.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/repository/feed/feed.repository.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../core/error/failure.constant.dart';
+import '../../../../core/error/failure.constant.dart';
 
-@lazySingleton
 class CreateFeedUseCase {
   final FeedRepository _repository;
 

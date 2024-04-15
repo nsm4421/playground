@@ -1,10 +1,8 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:injectable/injectable.dart';
 
-import '../../../../core/error/failure.constant.dart';
-import '../../../repository/chat/chat_message.repository.dart';
+import '../../../../../core/error/failure.constant.dart';
+import '../../../../repository/chat/chat_message.repository.dart';
 
-@lazySingleton
 class DeleteChatMessageUseCase {
   final ChatMessageRepository _repository;
 
