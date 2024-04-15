@@ -1,14 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hot_place/domain/usecase/auth/get_auth_stream.usecase.dart';
-import 'package:hot_place/domain/usecase/auth/get_current_user.usecase.dart';
+import 'package:hot_place/domain/usecase/auth/auth.usecase.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../data/entity/user/user.entity.dart';
-import '../../../domain/usecase/auth/sign_in_with_email_and_password.dart';
-import '../../../domain/usecase/auth/sign_out.usecase.dart';
-import '../../../domain/usecase/auth/sign_up_with_email_and_password.usecase.dart';
 
 part 'auth.event.dart';
 
@@ -16,26 +12,9 @@ part 'auth.state.dart';
 
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
-  final GetAuthStreamUseCase _getAuthStreamUseCase;
-  final GetCurrentUserUserCase _getCurrentUserUserCase;
-  final SignInWithEmailAndPasswordUseCase _signInWithEmailAndPasswordUseCase;
-  final SignUpWithEmailAndPasswordUseCase _signUpWithEmailAndPasswordUseCase;
-  final SignOutUseCase _signOutUseCase;
+  final AuthUseCase _authUseCase;
 
-  AuthBloc(
-      {required GetAuthStreamUseCase getAuthStreamUseCase,
-      required GetCurrentUserUserCase getCurrentUserUserCase,
-      required SignInWithEmailAndPasswordUseCase
-          signInWithEmailAndPasswordUseCase,
-      required SignUpWithEmailAndPasswordUseCase
-          signUpWithEmailAndPasswordUseCase,
-      required SignOutUseCase signOutUseCase})
-      : _getAuthStreamUseCase = getAuthStreamUseCase,
-        _getCurrentUserUserCase = getCurrentUserUserCase,
-        _signInWithEmailAndPasswordUseCase = signInWithEmailAndPasswordUseCase,
-        _signUpWithEmailAndPasswordUseCase = signUpWithEmailAndPasswordUseCase,
-        _signOutUseCase = signOutUseCase,
-        super(InitialAuthState()) {
+  AuthBloc(this._authUseCase) : super(InitialAuthState()) {
     on<InitAuthEvent>(_onInit);
     on<UpdateCurrentUserEvent>(_onUpdateCurrentUser);
     on<SignUpWithEmailAndPasswordEvent>(_onSignUpWithEmailAndPassword);
@@ -43,13 +22,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
     on<SignOutEvent>(_onSignOut);
   }
 
-  Stream<AuthState> get authStream => _getAuthStreamUseCase();
+  Stream<AuthState> get authStream => _authUseCase.getAuthStream();
 
   UserEntity? get currentUser =>
-      _getCurrentUserUserCase().fold((l) => null, (r) => r);
+      _authUseCase.getCurrentUser().fold((l) => null, (r) => r);
 
   bool get isAuthenticated =>
-      _getCurrentUserUserCase().fold((l) => false, (r) => true);
+      _authUseCase.getCurrentUser().fold((l) => false, (r) => true);
 
   void _onInit(InitAuthEvent event, Emitter<AuthenticationState> emit) {
     emit(InitialAuthState());
@@ -57,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
 
   Future<void> _onUpdateCurrentUser(
       UpdateCurrentUserEvent event, Emitter<AuthenticationState> emit) async {
-    _getCurrentUserUserCase().fold(
+    _authUseCase.getCurrentUser().fold(
         (l) => emit(InitialAuthState()), (r) => emit(AuthSuccessState(r)));
   }
 
@@ -65,7 +44,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
       SignUpWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
     emit(AuthLoadingState());
-    await _signUpWithEmailAndPasswordUseCase(
+    await _authUseCase
+        .signUpWithEmailAndPassword(
             email: event.email,
             password: event.password,
             nickname: event.nickname,
@@ -78,7 +58,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   Future<void> _onSignInWithEmailAndPassword(
       SignInWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
-    await _signInWithEmailAndPasswordUseCase(
+    await _authUseCase
+        .signInWithEmailAndPassword(
             email: event.email, password: event.password)
         .then((value) => value.fold(
             (l) => emit(AuthFailureState(l.message ?? 'sign in fail')),
@@ -87,7 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
 
   Future<void> _onSignOut(
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
-    await _signOutUseCase().then((value) => value.fold(
+    await _authUseCase.signOut().then((value) => value.fold(
         (l) => emit(AuthFailureState(l.message ?? 'sign out fails')),
         (r) => emit(InitialAuthState())));
   }

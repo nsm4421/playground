@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/data/entity/chat/message/chat_message.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
-import 'package:hot_place/domain/usecase/chat/message/create_chat_message.usecase.dart';
-import 'package:hot_place/domain/usecase/chat/message/delete_chat_message.usecase.dart';
-import 'package:hot_place/domain/usecase/chat/message/get_message_stream.usecase.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../../domain/usecase/chat/message/chat_messsage.usecase.dart';
 
 part 'chat_message.event.dart';
 
@@ -15,19 +14,13 @@ part 'chat_message.state.dart';
 
 class ChatMessageBloc extends Bloc<ChatMessageEvent, ChatMessageState> {
   final String _chatId;
-  final GetMessageStreamUseCase _getMessageStreamUseCase;
-  final SendChatMessageUseCase _sendChatMessageUseCase;
-  final DeleteChatMessageUseCase _deleteChatMessageUseCase;
+  final ChatMessageUseCase _useCase;
 
   ChatMessageBloc(
       {@factoryParam required String chatId,
-      required GetMessageStreamUseCase getMessageStreamUseCase,
-      required SendChatMessageUseCase sendChatMessageUseCase,
-      required DeleteChatMessageUseCase deleteChatMessageUseCase})
+      required ChatMessageUseCase useCase})
       : _chatId = chatId,
-        _getMessageStreamUseCase = getMessageStreamUseCase,
-        _sendChatMessageUseCase = sendChatMessageUseCase,
-        _deleteChatMessageUseCase = deleteChatMessageUseCase,
+        _useCase = useCase,
         super(InitialChatMessageState()) {
     on<InitChatMessageEvent>(_onInit);
     on<SendChatMessageEvent>(_onSendMessage);
@@ -35,7 +28,7 @@ class ChatMessageBloc extends Bloc<ChatMessageEvent, ChatMessageState> {
   }
 
   Stream<List<ChatMessageEntity>> get messageStream =>
-      _getMessageStreamUseCase(_chatId);
+      _useCase.getChatMessageStream(_chatId);
 
   Future<void> _onInit(
       InitChatMessageEvent event, Emitter<ChatMessageState> emit) async {
@@ -51,7 +44,7 @@ class ChatMessageBloc extends Bloc<ChatMessageEvent, ChatMessageState> {
       SendChatMessageEvent event, Emitter<ChatMessageState> emit) async {
     try {
       emit(ChatMessageLoadingState());
-      final res = await _sendChatMessageUseCase(
+      final res = await _useCase.sendChatMessage(
           chatId: event.chatId,
           content: event.content,
           currentUser: event.currentUser);
@@ -67,7 +60,7 @@ class ChatMessageBloc extends Bloc<ChatMessageEvent, ChatMessageState> {
       DeleteChatMessageEvent event, Emitter<ChatMessageState> emit) async {
     try {
       emit(ChatMessageLoadingState());
-      final res = await _deleteChatMessageUseCase(event.messageId);
+      final res = await _useCase.deleteChatMessage(event.messageId);
       res.fold(
           (l) => emit(
               ChatMessageFailureState(l.message ?? l.message ?? '메세지 삭제 실패')),

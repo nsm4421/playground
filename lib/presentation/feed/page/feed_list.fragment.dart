@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
-import 'package:hot_place/domain/usecase/feed/get_feed_stream.usecase.dart';
+import 'package:hot_place/domain/usecase/feed/feed.usecase.dart';
 
 import 'package:hot_place/presentation/feed/widget/feed_item.widget.dart';
 
@@ -19,7 +19,7 @@ class _FeedListFragmentState extends State<FeedListFragment> {
   @override
   void initState() {
     super.initState();
-    _feedStream = getIt<GetFeedStreamUseCase>().call();
+    _feedStream = getIt<FeedUseCase>().feedStream();
   }
 
   @override
