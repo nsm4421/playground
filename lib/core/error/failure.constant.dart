@@ -3,6 +3,7 @@ enum ErrorCode {
   unAuthorized("un authorized"),
   serverRequestFail("request on server fails"),
   postgresError("exception occurs on postgres database"),
+  hiveError("exception occurs on local database"),
   storageError("exception occurs on storage"),
   internalServerError("internal server error");
 

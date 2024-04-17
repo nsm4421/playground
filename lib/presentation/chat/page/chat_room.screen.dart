@@ -20,9 +20,15 @@ class ChatRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ChatBlocModule>().chatMessageBloc(_chatId),
+      create: (_) => getIt<ChatBlocModule>().chatMessageBloc(_chatId)
+        ..add(InitChatMessageEvent()),
       child: BlocConsumer<ChatMessageBloc, ChatMessageState>(
         builder: (BuildContext context, ChatMessageState state) {
+          if (state is InitialChatMessageState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ChatMessageFailureState) {
+            return const Center(child: Text("ERROR"));
+          }
           return _View(_chatId);
         },
         listener: (BuildContext context, ChatMessageState state) {
@@ -46,19 +52,22 @@ class _View extends StatefulWidget {
 }
 
 class _ViewState extends State<_View> {
-  late Stream<List<ChatMessageEntity>> _chatMessageStream;
   late ScrollController _scrollController;
   late TextEditingController _textEditingController;
   late UserEntity _currentUser;
+  late StreamSubscription<List<ChatMessageEntity>> _subscription;
 
   @override
   void initState() {
     super.initState();
-    _chatMessageStream = context.read<ChatMessageBloc>().messageStream;
     _scrollController = ScrollController();
     _textEditingController = TextEditingController();
     _textEditingController.addListener(_scrollToBottom);
     _currentUser = context.read<UserBloc>().state.user;
+    _subscription =
+        context.read<ChatMessageBloc>().messageStream.listen((event) {
+      context.read<ChatMessageBloc>().add(NewChatMessageEvent(event));
+    });
   }
 
   @override
@@ -67,6 +76,7 @@ class _ViewState extends State<_View> {
     _textEditingController.removeListener(_scrollToBottom);
     _textEditingController.dispose();
     _scrollController.dispose();
+    _subscription.cancel();
   }
 
   _scrollToBottom() {
@@ -96,7 +106,8 @@ class _ViewState extends State<_View> {
         children: [
           Expanded(
             child: StreamBuilder<List<ChatMessageEntity>>(
-                stream: _chatMessageStream,
+                stream: context.read<ChatMessageBloc>().messageStream,
+                initialData: context.read<ChatMessageBloc>().messages,
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final data = snapshot.data ?? [];

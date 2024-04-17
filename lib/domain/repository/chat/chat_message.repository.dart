@@ -8,4 +8,10 @@ abstract class ChatMessageRepository {
   Future<Either<Failure, String>> createChatMessage(ChatMessageEntity chat);
 
   Future<Either<Failure, String>> deleteChatMessageById(String messageId);
+
+  Future<Either<Failure, List<ChatMessageEntity>>> getChatMessagesFromLocalDB(
+      String chatId);
+
+  Future<Either<Failure, void>> saveChatMessageInLocalDB(
+      Iterable<ChatMessageEntity> messages);
 }

@@ -5,6 +5,12 @@ sealed class ChatMessageEvent {}
 
 final class InitChatMessageEvent extends ChatMessageEvent {}
 
+final class NewChatMessageEvent extends ChatMessageEvent {
+  final List<ChatMessageEntity> messages;
+
+  NewChatMessageEvent(this.messages);
+}
+
 final class SendChatMessageEvent extends ChatMessageEvent {
   final String content;
   final String chatId;
