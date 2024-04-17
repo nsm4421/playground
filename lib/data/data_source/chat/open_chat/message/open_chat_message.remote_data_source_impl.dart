@@ -19,7 +19,7 @@ class RemoteOpenChatMessageDataSourceImpl
   Future<String> createChatMessage(OpenChatMessageModel chat) async {
     try {
       return await _client.rest
-          .from(TableName.chatMessage.name)
+          .from(TableName.openChatMessage.name)
           .insert(chat.toJson())
           .select()
           .limit(1)
@@ -38,7 +38,7 @@ class RemoteOpenChatMessageDataSourceImpl
   Future<String> deleteChatMessageById(String messageId) async {
     try {
       return await _client.rest
-          .from(TableName.chatMessage.name)
+          .from(TableName.openChatMessage.name)
           .delete()
           .eq('id', messageId)
           .then((_) => messageId);
@@ -55,7 +55,7 @@ class RemoteOpenChatMessageDataSourceImpl
   @override
   Stream<List<OpenChatMessageModel>> getChatMessageStream(String chatId) {
     return _client
-        .from(TableName.chatMessage.name)
+        .from(TableName.openChatMessage.name)
         .stream(primaryKey: ['id'])
         .order('created_at', ascending: true)
         .asyncMap(
