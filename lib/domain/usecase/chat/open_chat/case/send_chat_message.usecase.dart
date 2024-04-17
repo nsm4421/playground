@@ -1,13 +1,13 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
-import 'package:hot_place/data/entity/chat/message/chat_message.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 
 import '../../../../../core/error/failure.constant.dart';
-import '../../../../repository/chat/chat_message.repository.dart';
+import '../../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
+import '../../../../repository/chat/open_chat_message.repository.dart';
 
 class SendChatMessageUseCase {
-  final ChatMessageRepository _repository;
+  final OpenChatMessageRepository _repository;
 
   SendChatMessageUseCase(this._repository);
 
@@ -16,7 +16,7 @@ class SendChatMessageUseCase {
       required String content,
       required UserEntity currentUser}) async {
     final messageId = UuidUtil.uuid();
-    return _repository.createChatMessage(ChatMessageEntity(
+    return _repository.createChatMessage(OpenChatMessageEntity(
         chatId: chatId,
         id: messageId,
         content: content,

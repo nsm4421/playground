@@ -1,29 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hot_place/domain/model/chat/message/chat_message.local_model.dart';
 
-import '../../../../domain/model/chat/message/chat_message.model.dart';
-import '../../user/user.entity.dart';
+import '../../../../../domain/model/chat/open_chat/message/open_chat_message.local_model.dart';
+import '../../../../../domain/model/chat/open_chat/message/open_chat_message.model.dart';
+import '../../../user/user.entity.dart';
 
-part 'chat_message.entity.freezed.dart';
-
-part 'chat_message.entity.g.dart';
+part 'open_chat_message.entity.freezed.dart';
 
 @freezed
-class ChatMessageEntity with _$ChatMessageEntity {
-  const factory ChatMessageEntity({
+class OpenChatMessageEntity with _$OpenChatMessageEntity {
+  const factory OpenChatMessageEntity({
     String? id,
     String? chatId,
     UserEntity? sender,
     String? content,
     DateTime? createdAt,
-  }) = _ChatMessageEntity;
+  }) = _OpenChatMessageEntity;
 
-  factory ChatMessageEntity.fromJson(Map<String, dynamic> json) =>
-      _$ChatMessageEntityFromJson(json);
-
-  factory ChatMessageEntity.fromModel(ChatMessageModel model) =>
-      ChatMessageEntity(
+  factory OpenChatMessageEntity.fromModel(OpenChatMessageModel model) =>
+      OpenChatMessageEntity(
           id: model.id,
           chatId: model.chat_id.isNotEmpty ? model.chat_id : null,
           sender: UserEntity(
@@ -33,8 +28,9 @@ class ChatMessageEntity with _$ChatMessageEntity {
           content: model.content.isNotEmpty ? model.content : null,
           createdAt: model.created_at);
 
-  factory ChatMessageEntity.fromLocalModel(LocalChatMessageModel localModel) =>
-      ChatMessageEntity(
+  factory OpenChatMessageEntity.fromLocalModel(
+          LocalOpenChatMessageModel localModel) =>
+      OpenChatMessageEntity(
           id: localModel.id,
           chatId: localModel.chat_id.isNotEmpty ? localModel.chat_id : null,
           sender: UserEntity(

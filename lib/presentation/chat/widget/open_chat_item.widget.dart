@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constant/route.constant.dart';
-import '../../../data/entity/chat/open_chat/open_chat.entity.dart';
+import '../../../data/entity/chat/open_chat/room/open_chat.entity.dart';
 
 class OpenChatItemWidget extends StatelessWidget {
   const OpenChatItemWidget(this._chat, {super.key});

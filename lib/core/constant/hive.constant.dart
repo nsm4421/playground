@@ -1,5 +1,5 @@
 enum BoxNames {
-  message("message");
+  openChatMessages("open_chat_message");
 
   final String boxName;
 

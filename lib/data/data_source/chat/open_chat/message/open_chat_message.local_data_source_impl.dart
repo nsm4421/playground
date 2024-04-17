@@ -1,20 +1,21 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hot_place/data/data_source/chat/message/chat_message.data_source.dart';
-import 'package:hot_place/domain/model/chat/message/chat_message.local_model.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/message/open_chat_message.data_source.dart';
 import 'package:logger/logger.dart';
 
-import '../../../../core/constant/hive.constant.dart';
-import '../../../../core/error/custom_exception.dart';
-import '../../../../core/error/failure.constant.dart';
+import '../../../../../core/constant/hive.constant.dart';
+import '../../../../../core/error/custom_exception.dart';
+import '../../../../../core/error/failure.constant.dart';
+import '../../../../../domain/model/chat/open_chat/message/open_chat_message.local_model.dart';
 
-class LocalChatMessageDataSourceImpl implements LocalChatMessageDataSource {
+class LocalOpenChatMessageDataSourceImpl
+    implements LocalOpenChatMessageDataSource {
   bool _isInitialized = false;
-  late Box<LocalChatMessageModel> _$box;
+  late Box<LocalOpenChatMessageModel> _$box;
   final _logger = Logger();
 
-  Future<Box<LocalChatMessageModel>> _getBox() async {
+  Future<Box<LocalOpenChatMessageModel>> _getBox() async {
     if (!_isInitialized) {
-      _$box = await Hive.openBox(BoxNames.message.name);
+      _$box = await Hive.openBox(BoxNames.openChatMessages.name);
     }
     _isInitialized = true;
     return _$box;
@@ -22,7 +23,7 @@ class LocalChatMessageDataSourceImpl implements LocalChatMessageDataSource {
 
   @override
   Future<void> saveChatMessages(
-      Iterable<LocalChatMessageModel> messages) async {
+      Iterable<LocalOpenChatMessageModel> messages) async {
     try {
       final box = await _getBox();
       for (final message in messages) {
@@ -39,7 +40,7 @@ class LocalChatMessageDataSourceImpl implements LocalChatMessageDataSource {
   }
 
   @override
-  Future<List<LocalChatMessageModel>> getChatMessages(String chatId,
+  Future<List<LocalOpenChatMessageModel>> getChatMessages(String chatId,
       {int? take}) async {
     try {
       final box = await _getBox();

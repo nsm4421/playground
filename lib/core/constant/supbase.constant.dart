@@ -3,7 +3,7 @@ enum TableName {
   feed('feeds'),
   like("likes"),
   openChat("open_chats"),
-  chatMessage("chat_messages");
+  chatMessage("open_chat_messages");
 
   final String name;
 

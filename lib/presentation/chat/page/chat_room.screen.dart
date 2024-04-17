@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
-import 'package:hot_place/data/entity/chat/message/chat_message.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 
+import '../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
 import '../bloc/chat_bloc.module.dart';
-import '../bloc/message/chat_message.bloc.dart';
+import '../bloc/open_chat/open_chat_message.bloc.dart';
 import '../widget/message_item.widget.dart';
 
 class ChatRoomScreen extends StatelessWidget {
@@ -20,10 +20,10 @@ class ChatRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ChatBlocModule>().chatMessageBloc(_chatId)
+      create: (_) => getIt<ChatBlocModule>().openChatMessageBloc(_chatId)
         ..add(InitChatMessageEvent()),
-      child: BlocConsumer<ChatMessageBloc, ChatMessageState>(
-        builder: (BuildContext context, ChatMessageState state) {
+      child: BlocConsumer<OpenChatMessageBloc, OpenChatMessageState>(
+        builder: (BuildContext context, OpenChatMessageState state) {
           if (state is InitialChatMessageState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ChatMessageFailureState) {
@@ -31,10 +31,10 @@ class ChatRoomScreen extends StatelessWidget {
           }
           return _View(_chatId);
         },
-        listener: (BuildContext context, ChatMessageState state) {
+        listener: (BuildContext context, OpenChatMessageState state) {
           if (state is ChatMessageFailureState) {
             ToastUtil.toast(state.message);
-            context.read<ChatMessageBloc>().add(InitChatMessageEvent());
+            context.read<OpenChatMessageBloc>().add(InitChatMessageEvent());
           }
         },
       ),
@@ -55,7 +55,7 @@ class _ViewState extends State<_View> {
   late ScrollController _scrollController;
   late TextEditingController _textEditingController;
   late UserEntity _currentUser;
-  late StreamSubscription<List<ChatMessageEntity>> _subscription;
+  late StreamSubscription<List<OpenChatMessageEntity>> _subscription;
 
   @override
   void initState() {
@@ -65,8 +65,8 @@ class _ViewState extends State<_View> {
     _textEditingController.addListener(_scrollToBottom);
     _currentUser = context.read<UserBloc>().state.user;
     _subscription =
-        context.read<ChatMessageBloc>().messageStream.listen((event) {
-      context.read<ChatMessageBloc>().add(NewChatMessageEvent(event));
+        context.read<OpenChatMessageBloc>().messageStream.listen((event) {
+      context.read<OpenChatMessageBloc>().add(NewChatMessageEvent(event));
     });
   }
 
@@ -87,7 +87,7 @@ class _ViewState extends State<_View> {
   }
 
   _handleSendMessage() async {
-    context.read<ChatMessageBloc>().add(SendChatMessageEvent(
+    context.read<OpenChatMessageBloc>().add(SendChatMessageEvent(
         chatId: widget.chatId,
         content: _textEditingController.text.trim(),
         currentUser: _currentUser));
@@ -98,16 +98,16 @@ class _ViewState extends State<_View> {
   @override
   Widget build(BuildContext context) {
     final bool isLoading =
-        context.read<ChatMessageBloc>().state is ChatMessageLoadingState;
+        context.read<OpenChatMessageBloc>().state is ChatMessageLoadingState;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(),
       body: Column(
         children: [
           Expanded(
-            child: StreamBuilder<List<ChatMessageEntity>>(
-                stream: context.read<ChatMessageBloc>().messageStream,
-                initialData: context.read<ChatMessageBloc>().messages,
+            child: StreamBuilder<List<OpenChatMessageEntity>>(
+                stream: context.read<OpenChatMessageBloc>().messageStream,
+                initialData: context.read<OpenChatMessageBloc>().messages,
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final data = snapshot.data ?? [];

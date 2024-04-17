@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 
 import '../../../../../core/error/failure.constant.dart';
-import '../../../../repository/chat/chat_message.repository.dart';
+import '../../../../repository/chat/open_chat_message.repository.dart';
 
 class DeleteChatMessageUseCase {
-  final ChatMessageRepository _repository;
+  final OpenChatMessageRepository _repository;
 
   DeleteChatMessageUseCase(this._repository);
 

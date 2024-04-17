@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hot_place/core/util/date.util.dart';
-import 'package:hot_place/data/entity/chat/message/chat_message.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
+
+import '../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
 
 class MessageItemWidget extends StatelessWidget {
   const MessageItemWidget(
       {super.key,
-      required ChatMessageEntity chatMessage,
+      required OpenChatMessageEntity chatMessage,
       required UserEntity currentUser})
       : _currentUser = currentUser,
         _chatMessage = chatMessage;
 
-  final ChatMessageEntity _chatMessage;
+  final OpenChatMessageEntity _chatMessage;
   final UserEntity _currentUser;
 
   static const double _avatarSize = 20;

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hot_place/data/entity/chat/open_chat/open_chat.entity.dart';
+import 'package:hot_place/data/entity/chat/open_chat/room/open_chat.entity.dart';
 
 part 'open_chat.model.freezed.dart';
 

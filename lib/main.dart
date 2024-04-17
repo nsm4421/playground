@@ -8,14 +8,15 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/constant/route.constant.dart';
 import 'core/di/dependency_injection.dart';
 import 'core/theme/custom_palette.theme.dart';
-import 'domain/model/chat/message/chat_message.local_model.dart';
+import 'domain/model/chat/open_chat/message/open_chat_message.local_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 로컬 DB 초기화
+  // hive 초기화
   await Hive.initFlutter();
-  Hive.registerAdapter(LocalChatMessageModelAdapter());
+  // adapter 등록
+  Hive.registerAdapter(LocalOpenChatMessageModelAdapter());
 
   // 환경변수 불러오기
   await dotenv.load();

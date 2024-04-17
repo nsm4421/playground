@@ -1,8 +1,8 @@
 import 'package:hot_place/data/data_source/auth/auth.data_source.dart';
 import 'package:hot_place/data/data_source/auth/auth.remote_data_source_impl.dart';
-import 'package:hot_place/data/data_source/chat/message/chat_message.remote_data_source_impl.dart';
-import 'package:hot_place/data/data_source/chat/open_chat/open_chat.data_source.dart';
-import 'package:hot_place/data/data_source/chat/open_chat/open_chat.remote_data_source_impl.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/message/open_chat_message.remote_data_source_impl.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/room/open_chat.data_source.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/room/open_chat.remote_data_source_impl.dart';
 import 'package:hot_place/data/data_source/feed/feed.data_source.dart';
 import 'package:hot_place/data/data_source/feed/feed.remote_data_source_impl.dart';
 import 'package:hot_place/data/data_source/feed/like/like_feed.data_source.dart';
@@ -13,9 +13,9 @@ import 'package:hot_place/data/data_source/user/user.remote_data_source_impl.dar
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'chat/message/chat_message.data_source.dart';
-import 'chat/message/chat_message.local_data_source_impl.dart';
-import 'chat/open_chat/open_chat.local_data_source_impl.dart';
+import 'chat/open_chat/message/open_chat_message.data_source.dart';
+import 'chat/open_chat/message/open_chat_message.local_data_source_impl.dart';
+import 'chat/open_chat/room/open_chat.local_data_source_impl.dart';
 import 'feed/feed.local_data_source_impl.dart';
 
 @module
@@ -49,10 +49,10 @@ abstract class DataSource {
       RemoteOpenChatDataSourceImpl(_client);
 
   @singleton
-  RemoteChatMessageDataSource get remoteChatMessageDataSource =>
-      RemoteChatMessageDataSourceImpl(_client);
+  RemoteOpenChatMessageDataSource get remoteOpenChatMessageDataSource =>
+      RemoteOpenChatMessageDataSourceImpl(_client);
 
   @singleton
-  LocalChatMessageDataSource get localChatMessageDataSource =>
-      LocalChatMessageDataSourceImpl();
+  LocalOpenChatMessageDataSource get localOpenChatMessageDataSource =>
+      LocalOpenChatMessageDataSourceImpl();
 }
