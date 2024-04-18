@@ -15,6 +15,7 @@ class OpenChatEntity with _$OpenChatEntity {
     String? title,
     @Default(<String>[]) List<String> hashtags,
     DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _OpenChatEntity;
 
   factory OpenChatEntity.fromJson(Map<String, dynamic> json) =>
@@ -28,5 +29,6 @@ class OpenChatEntity with _$OpenChatEntity {
           profileImage: openChat.profile_image),
       title: openChat.title.isNotEmpty ? openChat.title : null,
       hashtags: openChat.hashtags.isNotEmpty ? openChat.hashtags : [],
-      createdAt: openChat.created_at);
+      createdAt: openChat.created_at,
+      updatedAt: openChat.updated_at);
 }

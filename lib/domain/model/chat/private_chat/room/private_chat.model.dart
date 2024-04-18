@@ -20,8 +20,8 @@ class PrivateChatModel with _$PrivateChatModel {
       @Default('') opponent_profile_image,
       @Default('') last_message, // 최근 메세지
       @Default(0) int un_read_count, // 읽지 않은 메세지 개수
-      DateTime? created_at // 메세지 전송시간
-      }) = _PrivateChatModel;
+      DateTime? updated_at, // 최근 메세지 전송시간
+      DateTime? created_at}) = _PrivateChatModel;
 
   factory PrivateChatModel.fromJson(Map<String, dynamic> json) =>
       _$PrivateChatModelFromJson(json);
@@ -37,5 +37,18 @@ class PrivateChatModel with _$PrivateChatModel {
           opponent_profile_image: entity.opponent?.profileImage ?? '',
           last_message: entity.lateMessage ?? '',
           un_read_count: entity.unReadCount ?? 0,
+          updated_at: entity.updatedAt,
           created_at: entity.createdAt);
+}
+
+extension PrivateChatModelEx on PrivateChatModel {
+  PrivateChatModel swap(String chatId) => copyWith(
+        id: chatId,
+        user_id: opponent_id,
+        nickname: opponent_nickname,
+        profile_image: opponent_profile_image,
+        opponent_id: user_id,
+        opponent_nickname: nickname,
+        opponent_profile_image: profile_image,
+      );
 }

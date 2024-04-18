@@ -14,8 +14,8 @@ class PrivateChatEntity with _$PrivateChatEntity {
       UserEntity? opponent, // 대화 상대방
       String? lateMessage, // 최근 메세지
       @Default(0) int unReadCount, // 읽지 않은 메세지 개수
-      DateTime? createdAt // 메세지 전송시간
-      }) = _PrivateChatEntity;
+      DateTime? createdAt,
+      DateTime? updatedAt}) = _PrivateChatEntity;
 
   factory PrivateChatEntity.fromModel(PrivateChatModel model) =>
       PrivateChatEntity(
@@ -30,5 +30,6 @@ class PrivateChatEntity with _$PrivateChatEntity {
               profileImage: model.opponent_profile_image),
           lateMessage: model.last_message ?? '',
           unReadCount: model.un_read_count ?? 0,
-          createdAt: model.created_at);
+          createdAt: model.created_at,
+          updatedAt: model.updated_at);
 }

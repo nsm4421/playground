@@ -16,18 +16,19 @@ class OpenChatModel with _$OpenChatModel {
     @Default('') String title,
     @Default(<String>[]) List<String> hashtags,
     DateTime? created_at,
+    DateTime? updated_at,
   }) = _OpenChatModel;
 
   factory OpenChatModel.fromJson(Map<String, dynamic> json) =>
       _$OpenChatModelFromJson(json);
 
   factory OpenChatModel.fromEntity(OpenChatEntity openChat) => OpenChatModel(
-        id: openChat.id ?? '',
-        user_id: openChat.host?.id ?? '',
-        nickname: openChat.host?.nickname ?? '',
-        profile_image: openChat.host?.profileImage,
-        title: openChat.title ?? '',
-        hashtags: openChat.hashtags,
-        created_at: openChat.createdAt,
-      );
+      id: openChat.id ?? '',
+      user_id: openChat.host?.id ?? '',
+      nickname: openChat.host?.nickname ?? '',
+      profile_image: openChat.host?.profileImage,
+      title: openChat.title ?? '',
+      hashtags: openChat.hashtags,
+      created_at: openChat.createdAt,
+      updated_at: openChat.updatedAt);
 }

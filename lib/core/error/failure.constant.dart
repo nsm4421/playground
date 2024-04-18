@@ -1,15 +1,15 @@
 enum ErrorCode {
-  imageCompressFail("compressing image fails"),
+  internalError("internal error"),
+  dioError("dio error"),
+  unKnownError("un known error"),
   unAuthorized("un authorized"),
-  serverRequestFail("request on server fails"),
   postgresError("exception occurs on postgres database"),
   hiveError("exception occurs on local database"),
-  storageError("exception occurs on storage"),
-  internalServerError("internal server error");
+  storageError("exception occurs on storage");
 
-  final String name;
+  final String description;
 
-  const ErrorCode(this.name);
+  const ErrorCode(this.description);
 }
 
 class Failure {
