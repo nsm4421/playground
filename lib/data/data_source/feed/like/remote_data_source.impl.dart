@@ -1,19 +1,21 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
-import 'package:hot_place/data/data_source/feed/like/like_feed.data_source.dart';
+import 'package:hot_place/data/data_source/feed/like/remote_data_source.dart';
 import 'package:hot_place/domain/model/feed/like/like_feed.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/error/custom_exception.dart';
-import '../../../../core/error/failure.constant.dart';
+import '../../../../core/util/exeption.util.dart';
 
 class RemoteLikeFeedDataSourceImpl implements RemoteLikeFeedDataSource {
   final SupabaseClient _client;
 
-  RemoteLikeFeedDataSourceImpl(this._client);
+  final Logger _logger;
 
-  final _logger = Logger();
+  RemoteLikeFeedDataSourceImpl(
+      {required SupabaseClient client, required Logger logger})
+      : _client = client,
+        _logger = logger;
 
   @override
   Stream<LikeFeedModel?> getLikeStream(String feedId) {
@@ -27,15 +29,8 @@ class RemoteLikeFeedDataSourceImpl implements RemoteLikeFeedDataSource {
           .asStream()
           .map((event) =>
               event.isNotEmpty ? LikeFeedModel.fromJson(event.first) : null);
-    } on PostgrestException catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.postgresError, message: 'error occurs on like feed');
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail,
-          message: 'error occurs on like feed');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -47,15 +42,8 @@ class RemoteLikeFeedDataSourceImpl implements RemoteLikeFeedDataSource {
       await _client.rest.from(TableName.like.name).insert(
           LikeFeedModel(id: likeId, user_id: currentUid, feed_id: feedId));
       return likeId;
-    } on PostgrestException catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.postgresError, message: 'error occurs on like feed');
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail,
-          message: 'error occurs on like feed');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -63,16 +51,8 @@ class RemoteLikeFeedDataSourceImpl implements RemoteLikeFeedDataSource {
   Future<void> cancelLikeById(String likeId) async {
     try {
       await _client.rest.from(TableName.like.name).delete().eq('id', likeId);
-    } on PostgrestException catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.postgresError,
-          message: 'error occurs on delete like');
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail,
-          message: 'error occurs on delete like');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 }

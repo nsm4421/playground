@@ -7,14 +7,14 @@ import '../../../core/error/custom_exception.dart';
 import '../../../core/error/failure.constant.dart';
 import '../../../domain/model/user/user.model.dart';
 import '../../../domain/repository/user/user.repository.dart';
-import '../../data_source/user/user.data_source.dart';
+import '../../data_source/user/remote_data_source.dart';
 import '../../entity/user/user.entity.dart';
 
 @Singleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
-  final UserDataSource _userDataSource;
+  final RemoteUserDataSource _userDataSource;
 
-  UserRepositoryImpl(UserDataSource userDataSource)
+  UserRepositoryImpl(RemoteUserDataSource userDataSource)
       : _userDataSource = userDataSource;
 
   @override

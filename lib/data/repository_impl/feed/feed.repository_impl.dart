@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:fpdart/src/either.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/data_source/feed/feed.data_source.dart';
+import 'package:hot_place/data/data_source/feed/data_source.dart';
 import 'package:hot_place/data/entity/feed/feed.entity.dart';
 import 'package:hot_place/domain/model/feed/feed.model.dart';
 import 'package:injectable/injectable.dart';

@@ -1,13 +1,14 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/error/custom_exception.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/data_source/chat/open_chat/message/open_chat_message.data_source.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/message/remote.data_source.dart';
 import 'package:hot_place/data/entity/chat/open_chat/message/open_chat_message.entity.dart';
 import 'package:hot_place/domain/repository/chat/open_chat_message.repository.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/model/chat/open_chat/message/open_chat_message.local_model.dart';
 import '../../../domain/model/chat/open_chat/message/open_chat_message.model.dart';
+import '../../data_source/chat/open_chat/message/local_data_source.dart';
 
 @Singleton(as: OpenChatMessageRepository)
 class OpenChatMessageRepositoryImpl extends OpenChatMessageRepository {

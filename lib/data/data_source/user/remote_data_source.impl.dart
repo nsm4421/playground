@@ -3,19 +3,20 @@ import 'dart:io';
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/error/custom_exception.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/data_source/user/user.data_source.dart';
+import 'package:hot_place/data/data_source/user/remote_data_source.dart';
 import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/util/image.util.dart';
 
-class RemoteUserDataSource implements UserDataSource {
+class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   final SupabaseClient _client;
+  final Logger _logger;
 
-  RemoteUserDataSource(this._client);
-
-  final _logger = Logger();
+  RemoteUserDataSourceImpl({required SupabaseClient client, required Logger logger})
+      : _client = client,
+        _logger = logger;
 
   @override
   Future<UserModel> findUserById(String uid) async {

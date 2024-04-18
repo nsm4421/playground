@@ -1,17 +1,21 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/error/custom_exception.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/data_source/auth/auth.data_source.dart';
+import 'package:hot_place/data/data_source/auth/remote_data_source.dart';
 import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/util/exeption.util.dart';
+
 class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   final SupabaseClient _client;
+  final Logger _logger;
 
-  RemoteAuthDataSourceImpl(this._client);
-
-  final _logger = Logger();
+  RemoteAuthDataSourceImpl(
+      {required SupabaseClient client, required Logger logger})
+      : _client = client,
+        _logger = logger;
 
   @override
   Stream<AuthState> get authStream => _client.auth.onAuthStateChange;
@@ -21,15 +25,11 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     try {
       final session = _client.auth.currentSession;
       if (session == null) {
-        throw CustomException(
-            code: ErrorCode.unAuthorized, message: 'session not exists');
+        throw const AuthException('세션정보가 nulling');
       }
       return UserModel.fromSession(session.user);
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail,
-          message: 'error occurs on getting session');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -41,24 +41,11 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
           .signInWithPassword(email: email, password: password);
       final sessionUser = res.session?.user;
       if (sessionUser == null) {
-        throw CustomException(
-            code: ErrorCode.serverRequestFail,
-            message:
-                'session user not created after email and password sign in');
+        throw const AuthException('세션정보가 null입니다');
       }
       return UserModel.fromSession(sessionUser);
-    } on AuthException catch (err) {
-      // supbase 인증오류인경우
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail, message: err.message);
     } catch (err) {
-      // 그 외 에러
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.internalServerError,
-          message:
-              'internal server error occurs on email and password sign in');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -76,24 +63,11 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       });
       final sessionUser = res.user;
       if (sessionUser == null) {
-        throw CustomException(
-            code: ErrorCode.serverRequestFail,
-            message:
-                'session user not created after email and password sign up');
+        throw const AuthException('세션정보가 nulling');
       }
       return UserModel.fromSession(sessionUser);
-    } on AuthException catch (err) {
-      // supbase 인증오류인경우
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail, message: err.message);
     } catch (err) {
-      // 그 외 에러
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.internalServerError,
-          message:
-              'internal server error occurs on email and password sign up');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -101,16 +75,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   Future<void> signOut() async {
     try {
       await _client.auth.signOut();
-    } on AuthException catch (err) {
-      // supbase 인증오류인경우
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.serverRequestFail, message: err.message);
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.internalServerError,
-          message: 'internal server error occurs on sign out');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -119,9 +85,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     try {
       return await _client.rest.from(TableName.user.name).insert(user.toJson());
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.internalServerError, message: 'insert user fails');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -133,9 +97,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
           .update(user.toJson())
           .eq('id', user.id);
     } catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.internalServerError, message: 'modify user fails');
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 }

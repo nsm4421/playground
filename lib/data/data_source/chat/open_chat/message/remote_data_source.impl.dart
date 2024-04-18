@@ -1,19 +1,19 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
-import 'package:hot_place/data/data_source/chat/open_chat/message/open_chat_message.data_source.dart';
+import 'package:hot_place/core/util/exeption.util.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/message/remote.data_source.dart';
 import 'package:hot_place/domain/model/chat/open_chat/message/open_chat_message.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../../core/error/custom_exception.dart';
-import '../../../../../core/error/failure.constant.dart';
-
 class RemoteOpenChatMessageDataSourceImpl
     implements RemoteOpenChatMessageDataSource {
   final SupabaseClient _client;
+  final Logger _logger;
 
-  RemoteOpenChatMessageDataSourceImpl(this._client);
-
-  final _logger = Logger();
+  RemoteOpenChatMessageDataSourceImpl(
+      {required SupabaseClient client, required Logger logger})
+      : _client = client,
+        _logger = logger;
 
   @override
   Future<String> createChatMessage(OpenChatMessageModel chat) async {
@@ -24,13 +24,8 @@ class RemoteOpenChatMessageDataSourceImpl
           .select()
           .limit(1)
           .then((fetched) => OpenChatMessageModel.fromJson(fetched.first).id);
-    } on PostgrestException catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.postgresError, message: err.message);
     } catch (err) {
-      throw CustomException(
-          code: ErrorCode.serverRequestFail, message: err.toString());
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
@@ -42,23 +37,23 @@ class RemoteOpenChatMessageDataSourceImpl
           .delete()
           .eq('id', messageId)
           .then((_) => messageId);
-    } on PostgrestException catch (err) {
-      _logger.e(err);
-      throw CustomException(
-          code: ErrorCode.postgresError, message: err.message);
     } catch (err) {
-      throw CustomException(
-          code: ErrorCode.serverRequestFail, message: err.toString());
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
   @override
   Stream<List<OpenChatMessageModel>> getChatMessageStream(String chatId) {
-    return _client
-        .from(TableName.openChatMessage.name)
-        .stream(primaryKey: ['id'])
-        .order('created_at', ascending: true)
-        .asyncMap(
-            (data) async => data.map(OpenChatMessageModel.fromJson).toList());
+    try {
+      return _client
+          .from(TableName.openChatMessage.name)
+          .stream(primaryKey: ['id'])
+          .eq('chat_id', chatId)
+          .order('created_at', ascending: true)
+          .asyncMap(
+              (data) async => data.map(OpenChatMessageModel.fromJson).toList());
+    } catch (err) {
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
+    }
   }
 }
