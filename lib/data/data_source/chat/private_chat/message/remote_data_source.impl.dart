@@ -17,23 +17,25 @@ class RemotePrivateChatMessageDataSourceImpl
         _logger = logger;
 
   @override
-  Future<void> createChatMessage(PrivateChatMessageModel chat) async {
+  Future<String> createChatMessage(PrivateChatMessageModel message) async {
     try {
-      await _client.rest
+      return await _client.rest
           .from(TableName.privateChatMessage.name)
-          .insert(chat.toJson());
+          .insert(message.toJson())
+          .then((_) => message.id);
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
   @override
-  Future<void> deleteChatMessageById(String messageId) async {
+  Future<String> deleteChatMessageById(String messageId) async {
     try {
-      await _client.rest
+      return await _client.rest
           .from(TableName.privateChatMessage.name)
           .delete()
-          .eq('id', messageId);
+          .eq('id', messageId)
+          .then((value) => messageId);
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }

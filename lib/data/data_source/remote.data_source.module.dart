@@ -1,11 +1,10 @@
 import 'package:hot_place/data/data_source/auth/remote_data_source.dart';
 import 'package:hot_place/data/data_source/auth/remote_data_source.impl.dart';
-import 'package:hot_place/data/data_source/chat/open_chat/message/remote.data_source.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/message/remote_data_source.dart';
 import 'package:hot_place/data/data_source/chat/open_chat/message/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/chat/open_chat/room/remote_data_source.dart';
 import 'package:hot_place/data/data_source/chat/open_chat/room/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/chat/private_chat/message/remote_data_source.dart';
-import 'package:hot_place/data/data_source/chat/private_chat/room/private_chat_room.data_source.dart';
 import 'package:hot_place/data/data_source/feed/data_source.dart';
 import 'package:hot_place/data/data_source/feed/like/remote_data_source.dart';
 import 'package:hot_place/data/data_source/feed/remote_data_source.impl.dart';
@@ -16,7 +15,8 @@ import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'chat/private_chat/message/remote_data_source.impl.dart';
-import 'chat/private_chat/room/private_chat.remote_data_source_impl.dart';
+import 'chat/private_chat/room/remote.data_source.dart';
+import 'chat/private_chat/room/remote_data_source.impl.dart';
 import 'feed/like/remote_data_source.impl.dart';
 
 @module

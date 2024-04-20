@@ -52,4 +52,14 @@ class LocalOpenChatMessageDataSourceImpl
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
+
+  @override
+  Future<void> deleteChatMessageById(String messageId) async {
+    try {
+      final box = await _getBox();
+      await box.delete(messageId);
+    } catch (err) {
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
+    }
+  }
 }

@@ -1,8 +1,5 @@
-import '../../../../../domain/model/chat/private_chat/message/private_chat_message.model.dart';
+import '../../../../../domain/model/chat/private_chat/message/private_chat_message.local_model.dart';
+import '../../base/message/local.data_source.dart';
 
-abstract interface class LocalPrivateChatMessageDataSource {
-  Future<void> saveChatMessages(Iterable<PrivateChatMessageModel> messages);
-
-  Future<List<PrivateChatMessageModel>> getChatMessages(String chatId,
-      {int? take});
-}
+abstract interface class LocalPrivateChatMessageDataSource
+    implements LocalChatMessageDataSource<LocalPrivateChatMessageModel> {}

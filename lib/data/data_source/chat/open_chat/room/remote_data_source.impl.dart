@@ -16,47 +16,54 @@ class RemoteOpenChatDataSourceImpl implements RemoteOpenChatDataSource {
         _logger = logger;
 
   @override
-  Stream<List<OpenChatModel>> get openChatStream => _client
-      .from(TableName.openChat.name)
-      .stream(primaryKey: ['id'])
-      .order('created_at', ascending: false)
-      .asyncMap((event) =>
-          event.map((json) => OpenChatModel.fromJson(json)).toList());
-
-  @override
-  Future<OpenChatModel> createOpenChat(OpenChatModel chat) async {
+  Stream<List<OpenChatModel>> getChatStream() {
     try {
-      return await _client.rest
+      return _client
           .from(TableName.openChat.name)
-          .insert(chat.toJson())
-          .select()
-          .then((json) => OpenChatModel.fromJson(json.first));
+          .stream(primaryKey: ['id'])
+          .order('created_at', ascending: false)
+          .asyncMap((event) =>
+          event.map((json) => OpenChatModel.fromJson(json)).toList());
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
   @override
-  Future<void> deleteOpenChatById(String openChatId) async {
+  Future<void> createChat(OpenChatModel chat) async {
+    try {
+      return await _client.rest
+          .from(TableName.openChat.name)
+          .insert(chat.toJson());
+    } catch (err) {
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
+    }
+  }
+
+  @override
+  Future<void> deleteChatById(String chatId) async {
     try {
       await _client.rest
           .from(TableName.openChat.name)
           .delete()
-          .eq('id', openChatId);
+          .eq('id', chatId);
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
   }
 
   @override
-  Future<String> modifyOpenChat(OpenChatModel chat) async {
+  Future<String> modifyChat(OpenChatModel chat) async {
     try {
       final s = await _client.rest
           .from(TableName.openChat.name)
           .update(chat.toJson())
           .eq('id', chat.id)
           .select()
-          .then((json) => OpenChatModel.fromJson(json.first).id);
+          .then((json) =>
+      OpenChatModel
+          .fromJson(json.first)
+          .id);
       return s;
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);

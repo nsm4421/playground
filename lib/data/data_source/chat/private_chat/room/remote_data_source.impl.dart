@@ -5,7 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/constant/supbase.constant.dart';
 import '../../../../../core/util/exeption.util.dart';
-import 'private_chat_room.data_source.dart';
+import 'remote.data_source.dart';
 
 class RemotePrivateChatDataSourceImpl implements RemotePrivateChatDataSource {
   final SupabaseClient _client;
@@ -17,13 +17,17 @@ class RemotePrivateChatDataSourceImpl implements RemotePrivateChatDataSource {
         _logger = logger;
 
   @override
-  Stream<List<PrivateChatModel>> getChatStream(String userId) {
+  Stream<List<PrivateChatModel>> getChatStream() {
     try {
+      final currentUid = _client.auth.currentUser?.id;
+      if (currentUid == null) {
+        throw const AuthException('user not login');
+      }
       return _client
           .from(TableName.privateChat.name)
           .stream(primaryKey: ['id'])
-          .eq('user_id', userId)
-
+          .eq('user_id', currentUid)
+          .order('updated_at', ascending: false)
           .asyncMap(
               (data) async => data.map(PrivateChatModel.fromJson).toList());
     } catch (err) {
@@ -44,7 +48,7 @@ class RemotePrivateChatDataSourceImpl implements RemotePrivateChatDataSource {
   }
 
   @override
-  Future<void> deleteChat(String chatId) async {
+  Future<void> deleteChatById(String chatId) async {
     try {
       await _client.rest
           .from(TableName.privateChat.name)

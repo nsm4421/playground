@@ -4,10 +4,8 @@ import 'package:hot_place/domain/model/chat/private_chat/room/private_chat.local
 import 'package:logger/logger.dart';
 
 import '../../../../../core/constant/hive.constant.dart';
-import '../../../../../core/error/custom_exception.dart';
-import '../../../../../core/error/failure.constant.dart';
 import '../../../../../core/util/exeption.util.dart';
-import 'private_chat_room.data_source.dart';
+import 'local_data_source.dart';
 
 class PrivateLocalChatDataSourceImpl implements LocalPrivateChatDataSource {
   bool _isInitialized = false;
@@ -23,7 +21,7 @@ class PrivateLocalChatDataSourceImpl implements LocalPrivateChatDataSource {
   }
 
   @override
-  Future<void> deleteChat(String chatId) async {
+  Future<void> deleteChatById(String chatId) async {
     try {
       final box = await _getBox();
       await box.delete(chatId);
