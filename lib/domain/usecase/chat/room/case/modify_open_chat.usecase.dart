@@ -9,7 +9,7 @@ class ModifyOpenChatUseCase {
 
   ModifyOpenChatUseCase(this._repository);
 
-  Future<Either<Failure, String>> call(OpenChatEntity openChat) async {
-    return await _repository.modifyChat(openChat);
+  Future<Either<Failure, String>> call(OpenChatEntity chat) async {
+    return await _repository.modifyChat(chat);
   }
 }

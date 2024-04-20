@@ -62,7 +62,7 @@ class LocalPrivateChatModel {
           opponent_id: entity.opponent?.id ?? '',
           opponent_nickname: entity.opponent?.nickname ?? '',
           opponent_profile_image: entity.opponent?.profileImage ?? '',
-          last_message: entity.lateMessage ?? '',
+          last_message: entity.lastMessage ?? '',
           un_read_count: entity.unReadCount ?? 0,
           created_at: entity.createdAt,
           updated_at: entity.updatedAt);

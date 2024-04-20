@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
-import 'package:hot_place/domain/usecase/chat/open_chat/case/create_open_chat.usecase.dart';
+import 'package:hot_place/domain/usecase/chat/room/case/create_open_chat.usecase.dart';
 import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 

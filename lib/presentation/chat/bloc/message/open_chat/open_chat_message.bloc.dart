@@ -7,8 +7,8 @@ import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
-import '../../../../domain/usecase/chat/open_chat/open_chat_messsage.usecase.dart';
+import '../../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
+import '../../../../../domain/usecase/chat/message/open_chat_messsage.usecase.dart';
 
 part 'open_chat_message.event.dart';
 
@@ -17,14 +17,14 @@ part 'open_chat_message.state.dart';
 class OpenChatMessageBloc
     extends Bloc<OpenChatMessageEvent, OpenChatMessageState> {
   final String _chatId;
-  final ChatMessageUseCase _useCase;
+  final OpenChatMessageUseCase _useCase;
 
   late Stream<List<OpenChatMessageEntity>> _stream;
   List<OpenChatMessageEntity> _messages = [];
 
   OpenChatMessageBloc(
       {@factoryParam required String chatId,
-      required ChatMessageUseCase useCase})
+      required OpenChatMessageUseCase useCase})
       : _chatId = chatId,
         _useCase = useCase,
         super(InitialChatMessageState()) {

@@ -6,10 +6,10 @@ import '../../../../../core/error/failure.constant.dart';
 import '../../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
 import '../../../../repository/chat/message/open_chat_message.repository.dart';
 
-class SendChatMessageUseCase {
+class SendOpenChatMessageUseCase {
   final OpenChatMessageRepository _repository;
 
-  SendChatMessageUseCase(this._repository);
+  SendOpenChatMessageUseCase(this._repository);
 
   Future<Either<Failure, String>> call(
       {required String chatId,

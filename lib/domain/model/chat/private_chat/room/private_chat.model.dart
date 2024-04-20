@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/data/entity/chat/private_chat/room/private_chat.entity.dart';
+import 'package:hot_place/domain/model/user/user.model.dart';
+
+import '../../../../../core/util/uuid.util.dart';
 
 part 'private_chat.model.freezed.dart';
 
@@ -26,6 +29,19 @@ class PrivateChatModel with _$PrivateChatModel {
   factory PrivateChatModel.fromJson(Map<String, dynamic> json) =>
       _$PrivateChatModelFromJson(json);
 
+  factory PrivateChatModel.newFromUsers(
+          {required UserModel currentUser, required UserModel opponentUser}) =>
+      PrivateChatModel(
+          id: UuidUtil.uuid(),
+          user_id: currentUser.id,
+          nickname: currentUser.nickname,
+          profile_image: currentUser.nickname,
+          opponent_id: opponentUser.id,
+          opponent_nickname: opponentUser.nickname,
+          opponent_profile_image: opponentUser.profile_image,
+          created_at: DateTime.now(),
+          updated_at: DateTime.now());
+
   factory PrivateChatModel.fromEntity(PrivateChatEntity entity) =>
       PrivateChatModel(
           id: entity.id ?? '',
@@ -35,15 +51,15 @@ class PrivateChatModel with _$PrivateChatModel {
           opponent_id: entity.opponent?.id ?? '',
           opponent_nickname: entity.opponent?.nickname ?? '',
           opponent_profile_image: entity.opponent?.profileImage ?? '',
-          last_message: entity.lateMessage ?? '',
+          last_message: entity.lastMessage ?? '',
           un_read_count: entity.unReadCount ?? 0,
           updated_at: entity.updatedAt,
           created_at: entity.createdAt);
 }
 
 extension PrivateChatModelEx on PrivateChatModel {
-  PrivateChatModel swap(String chatId) => copyWith(
-        id: chatId,
+  PrivateChatModel swap({String? chatId}) => copyWith(
+        id: chatId ?? UuidUtil.uuid(),
         user_id: opponent_id,
         nickname: opponent_nickname,
         profile_image: opponent_profile_image,

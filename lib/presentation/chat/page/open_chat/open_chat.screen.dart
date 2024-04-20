@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/data/entity/chat/open_chat/room/open_chat.entity.dart';
-import 'package:hot_place/domain/usecase/chat/open_chat/case/get_open_chat_steram.usecase.dart';
-import 'package:hot_place/domain/usecase/chat/open_chat/open_chat.usecase.dart';
+import 'package:hot_place/domain/usecase/chat/room/case/get_chat_stream.usecase.dart';
+import 'package:hot_place/domain/usecase/chat/room/open_chat.usecase.dart';
 
 import '../../../../core/constant/route.constant.dart';
 import '../../widget/open_chat_item.widget.dart';
@@ -49,7 +49,7 @@ class _OpenChatListState extends State<_OpenChatList> {
   @override
   void initState() {
     super.initState();
-    _stream = getIt<OpenChatUseCase>().openChatStream.call();
+    _stream = getIt<OpenChatUseCase>().chatStream.call();
   }
 
   @override

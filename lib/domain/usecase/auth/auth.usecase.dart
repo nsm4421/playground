@@ -1,4 +1,3 @@
-import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/domain/repository/auth/auth.repository.dart';
 import 'package:hot_place/domain/usecase/auth/case/get_auth_stream.usecase.dart';
 import 'package:hot_place/domain/usecase/auth/case/sign_in_with_email_and_password.dart';

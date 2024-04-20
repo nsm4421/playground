@@ -12,7 +12,7 @@ class PrivateChatEntity with _$PrivateChatEntity {
       {String? id, // 채팅방 id
       UserEntity? currentUser, // 로그인 유저
       UserEntity? opponent, // 대화 상대방
-      String? lateMessage, // 최근 메세지
+      String? lastMessage, // 최근 메세지
       @Default(0) int unReadCount, // 읽지 않은 메세지 개수
       DateTime? createdAt,
       DateTime? updatedAt}) = _PrivateChatEntity;
@@ -28,7 +28,7 @@ class PrivateChatEntity with _$PrivateChatEntity {
               id: model.opponent_id,
               nickname: model.opponent_nickname,
               profileImage: model.opponent_profile_image),
-          lateMessage: model.last_message ?? '',
+          lastMessage: model.last_message ?? '',
           unReadCount: model.un_read_count ?? 0,
           createdAt: model.created_at,
           updatedAt: model.updated_at);

@@ -1,7 +1,9 @@
 import 'package:fpdart/src/either.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
 import 'package:hot_place/data/entity/chat/private_chat/room/private_chat.entity.dart';
+import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/model/chat/private_chat/room/private_chat.model.dart';
+import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:hot_place/domain/repository/chat/room/private_chat.repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -20,14 +22,25 @@ class PrivateChatRepositoryImpl implements PrivateChatRepository {
       .asyncMap((event) => event.map(PrivateChatEntity.fromModel).toList());
 
   @override
-  Future<Either<Failure, void>> createChat(PrivateChatEntity chat) async {
+  Future<Either<Failure, PrivateChatEntity>> getChatByUsers(
+      {required UserEntity currentUser,
+      required UserEntity opponentUser}) async {
     try {
       return await _dataSource
-          .createChat(PrivateChatModel.fromEntity(chat))
-          .then((_) => right(null));
+          .getChatByUser(
+              currentUser: UserModel.fromEntity(currentUser),
+              opponentUser: UserModel.fromEntity(opponentUser))
+          .then((model) => PrivateChatEntity.fromModel(model))
+          .then((entity) => right(entity));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
+  }
+
+  @override
+  Future<Either<Failure, void>> createChat(PrivateChatEntity chat) async {
+    throw UnimplementedError(
+        '채팅방 만들기 기능은 자칫 채팅방을 여러개 생성하게 될 수 있음.오픈채팅은 문제가 안되지만, DM기능 구현시에는 문제가 될 수 있음');
   }
 
   @override
