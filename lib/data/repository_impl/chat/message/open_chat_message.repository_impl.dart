@@ -1,17 +1,17 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/error/custom_exception.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/data_source/chat/open_chat/message/remote.data_source.dart';
+import 'package:hot_place/data/data_source/chat/open_chat/message/remote_data_source.dart';
 import 'package:hot_place/data/entity/chat/open_chat/message/open_chat_message.entity.dart';
-import 'package:hot_place/domain/repository/chat/open_chat_message.repository.dart';
+import 'package:hot_place/domain/repository/chat/message/open_chat_message.repository.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../domain/model/chat/open_chat/message/open_chat_message.local_model.dart';
-import '../../../domain/model/chat/open_chat/message/open_chat_message.model.dart';
-import '../../data_source/chat/open_chat/message/local_data_source.dart';
+import '../../../../domain/model/chat/open_chat/message/open_chat_message.local_model.dart';
+import '../../../../domain/model/chat/open_chat/message/open_chat_message.model.dart';
+import '../../../data_source/chat/open_chat/message/local_data_source.dart';
 
-@Singleton(as: OpenChatMessageRepository)
-class OpenChatMessageRepositoryImpl extends OpenChatMessageRepository {
+@LazySingleton(as: OpenChatMessageRepository)
+class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   final RemoteOpenChatMessageDataSource _remoteDataSource;
   final LocalOpenChatMessageDataSource _localDataSource;
 
@@ -31,9 +31,11 @@ class OpenChatMessageRepositoryImpl extends OpenChatMessageRepository {
   Future<Either<Failure, String>> createChatMessage(
       OpenChatMessageEntity chat) async {
     try {
-      return await _remoteDataSource
-          .createChatMessage(OpenChatMessageModel.fromEntity(chat))
-          .then((messageId) => right(messageId));
+      await _localDataSource
+          .saveChatMessages([LocalOpenChatMessageModel.fromEntity(chat)]);
+      final messageId = await _remoteDataSource
+          .createChatMessage(OpenChatMessageModel.fromEntity(chat));
+      return right(messageId);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
@@ -43,9 +45,9 @@ class OpenChatMessageRepositoryImpl extends OpenChatMessageRepository {
   Future<Either<Failure, String>> deleteChatMessageById(
       String messageId) async {
     try {
-      return await _remoteDataSource
-          .deleteChatMessageById(messageId)
-          .then((messageId) => right(messageId));
+      await _localDataSource.deleteChatMessageById(messageId);
+      await _remoteDataSource.deleteChatMessageById(messageId);
+      return right(messageId);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }

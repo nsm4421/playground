@@ -6,9 +6,8 @@ import 'package:hot_place/domain/repository/feed/like/like_feed.repository.dart'
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/custom_exception.dart';
-import '../../../../domain/model/feed/like/like_feed.model.dart';
 
-@Singleton(as: LikeFeedRepository)
+@LazySingleton(as: LikeFeedRepository)
 class LikeFeedRepositoryImpl extends LikeFeedRepository {
   final RemoteLikeFeedDataSource _likeFeedDataSource;
 

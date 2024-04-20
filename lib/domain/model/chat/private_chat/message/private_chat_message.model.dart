@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hot_place/domain/model/chat/private_chat/message/private_chat_message.local_model.dart';
 
 import '../../../../../data/entity/chat/private_chat/message/private_chat_message.entity.dart';
 
@@ -30,12 +31,26 @@ class PrivateChatMessageModel with _$PrivateChatMessageModel {
       PrivateChatMessageModel(
           id: entity.id ?? '',
           chat_id: entity.chatId ?? '',
-          sender_id: entity?.sender?.id ?? '',
+          sender_id: entity.sender?.id ?? '',
           sender_nickname: entity.sender?.nickname ?? '',
           sender_profile_image: entity.sender?.profileImage ?? '',
-          receiver_id: entity?.receiver?.id ?? '',
+          receiver_id: entity.receiver?.id ?? '',
           receiver_nickname: entity.receiver?.nickname ?? '',
           receiver_profile_image: entity.receiver?.profileImage ?? '',
           content: entity.content ?? '',
           created_at: entity.createdAt);
+
+  factory PrivateChatMessageModel.fromLocalModel(
+          LocalPrivateChatMessageModel model) =>
+      PrivateChatMessageModel(
+          id: model.id,
+          chat_id: model.chat_id,
+          sender_id: model.sender_id,
+          sender_nickname: model.sender_nickname,
+          sender_profile_image: model.sender_profile_image,
+          receiver_id: model.receiver_id,
+          receiver_nickname: model.receiver_nickanme,
+          receiver_profile_image: model.receiver_profile_image,
+          content: model.content,
+          created_at: model.created_at);
 }

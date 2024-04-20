@@ -1,5 +1,5 @@
 import 'package:hot_place/data/entity/chat/open_chat/message/open_chat_message.entity.dart';
-import 'package:hot_place/domain/repository/chat/open_chat_message.repository.dart';
+import 'package:hot_place/domain/repository/chat/message/open_chat_message.repository.dart';
 
 class GetMessageStreamUseCase {
   final OpenChatMessageRepository _repository;

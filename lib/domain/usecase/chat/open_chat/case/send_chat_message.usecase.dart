@@ -4,7 +4,7 @@ import 'package:hot_place/data/entity/user/user.entity.dart';
 
 import '../../../../../core/error/failure.constant.dart';
 import '../../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
-import '../../../../repository/chat/open_chat_message.repository.dart';
+import '../../../../repository/chat/message/open_chat_message.repository.dart';
 
 class SendChatMessageUseCase {
   final OpenChatMessageRepository _repository;

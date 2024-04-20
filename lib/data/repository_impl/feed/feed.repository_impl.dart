@@ -10,7 +10,7 @@ import 'package:injectable/injectable.dart';
 import '../../../core/error/custom_exception.dart';
 import '../../../domain/repository/feed/feed.repository.dart';
 
-@Singleton(as: FeedRepository)
+@LazySingleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
   final RemoteFeedDataSource _remoteFeedDataSource;
 

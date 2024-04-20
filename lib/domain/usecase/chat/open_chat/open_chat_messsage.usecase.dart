@@ -1,4 +1,4 @@
-import 'package:hot_place/domain/repository/chat/open_chat_message.repository.dart';
+import 'package:hot_place/domain/repository/chat/message/open_chat_message.repository.dart';
 import 'package:hot_place/domain/usecase/chat/open_chat/case/delete_chat_message.usecase.dart';
 import 'package:hot_place/domain/usecase/chat/open_chat/case/get_local_chat_messages.usecase.dart';
 import 'package:hot_place/domain/usecase/chat/open_chat/case/get_message_stream.usecase.dart';
