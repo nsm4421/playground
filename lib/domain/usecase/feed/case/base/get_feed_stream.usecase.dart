@@ -1,5 +1,5 @@
-import '../../../../data/entity/feed/feed.entity.dart';
-import '../../../repository/feed/feed.repository.dart';
+import '../../../../../data/entity/feed/base/feed.entity.dart';
+import '../../../../repository/feed/base/feed.repository.dart';
 
 class GetFeedStreamUseCase {
   final FeedRepository _repository;

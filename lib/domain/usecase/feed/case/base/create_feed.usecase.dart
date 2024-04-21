@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
-import 'package:hot_place/data/entity/feed/feed.entity.dart';
+import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
-import 'package:hot_place/domain/repository/feed/feed.repository.dart';
+import 'package:hot_place/domain/repository/feed/base/feed.repository.dart';
 
-import '../../../../core/error/failure.constant.dart';
+import '../../../../../core/error/failure.constant.dart';
 
 class CreateFeedUseCase {
   final FeedRepository _repository;

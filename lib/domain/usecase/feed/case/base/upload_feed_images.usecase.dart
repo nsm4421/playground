@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 
-import '../../../../core/error/failure.constant.dart';
-import '../../../repository/feed/feed.repository.dart';
+import '../../../../../core/error/failure.constant.dart';
+import '../../../../repository/feed/base/feed.repository.dart';
 
 class UploadFeedImagesUseCase {
   final FeedRepository _repository;

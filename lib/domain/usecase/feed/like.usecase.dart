@@ -1,6 +1,6 @@
 import 'package:hot_place/domain/repository/feed/like/like_feed.repository.dart';
-import 'package:hot_place/domain/usecase/like/case/cancel_like_feed.usecase.dart';
-import 'package:hot_place/domain/usecase/like/case/get_like_feed_stream.usecase.dart';
+import 'package:hot_place/domain/usecase/feed/case/like/cancel_like_feed.usecase.dart';
+import 'package:hot_place/domain/usecase/feed/case/like/get_like_feed_stream.usecase.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton

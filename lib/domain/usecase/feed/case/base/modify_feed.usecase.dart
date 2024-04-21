@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:hot_place/data/entity/feed/feed.entity.dart';
-import 'package:hot_place/domain/repository/feed/feed.repository.dart';
-import '../../../../core/error/failure.constant.dart';
+import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
+import 'package:hot_place/domain/repository/feed/base/feed.repository.dart';
+import '../../../../../core/error/failure.constant.dart';
 
 class ModifyFeedUseCase {
   final FeedRepository _repository;
