@@ -1,6 +1,7 @@
 enum ErrorCode {
   internalError("internal error"),
   dioError("dio error"),
+  permissionDenied("permission denied"),
   unKnownError("un known error"),
   unAuthorized("un authorized"),
   postgresError("exception occurs on postgres database"),

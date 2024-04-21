@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:hot_place/core/error/custom_exception.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
@@ -26,6 +27,8 @@ class ExceptionUtil {
       $errorCode = ErrorCode.storageError;
     } else if (err is AuthException) {
       $errorCode = ErrorCode.unAuthorized;
+    } else if (err is PermissionDeniedException) {
+      $errorCode = ErrorCode.permissionDenied;
     }
     // 알수 없는 오류
     else {

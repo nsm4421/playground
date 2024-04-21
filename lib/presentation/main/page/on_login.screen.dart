@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/presentation/chat/page/chat.screen.dart';
 import 'package:hot_place/presentation/feed/page/feed.screen.dart';
+import 'package:hot_place/presentation/geo/geo.screen.dart';
 import 'package:hot_place/presentation/home/page/home.screen.dart';
 import 'package:hot_place/presentation/main/cubit/bottom_nav.cubit.dart';
 import 'package:hot_place/presentation/setting/page/setting.screen.dart';
@@ -61,6 +62,8 @@ class _Body extends StatelessWidget {
         return const HomeScreen();
       case BottomNav.feed:
         return const FeedScreen();
+      case BottomNav.geo:
+        return const GeoScreen();
       case BottomNav.chat:
         return const ChatScreen();
       case BottomNav.setting:

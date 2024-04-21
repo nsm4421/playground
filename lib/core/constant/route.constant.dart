@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/presentation/auth/page/sign_up/sign_up.screen.dart';
-import 'package:hot_place/presentation/chat/page/chat.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat_room.screen.dart';
 import 'package:hot_place/presentation/chat/page/private_Chat/private_chat_room.screen.dart';
