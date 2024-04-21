@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hot_place/presentation/chat/widget/private_chat/private_chat_list.fragment.dart';
 
 import '../../../core/constant/route.constant.dart';
 
@@ -34,6 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // 유저 목록
                 Row(
                   children: List.generate(1000, (index) {
                     return Padding(
@@ -51,7 +53,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     );
                   }),
-                )
+                ),
+
+                // 채팅방 목록
+                const PrivateChatListFragment()
               ],
             ),
           ),

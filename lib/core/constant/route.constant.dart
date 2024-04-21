@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/presentation/auth/page/sign_up/sign_up.screen.dart';
-import 'package:hot_place/presentation/chat/page/chat_room.screen.dart';
-import 'package:hot_place/presentation/chat/page/open_chat/create_open_chat.screen.dart';
+import 'package:hot_place/presentation/chat/page/chat.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat.screen.dart';
+import 'package:hot_place/presentation/chat/page/open_chat/open_chat_room.screen.dart';
+import 'package:hot_place/presentation/chat/page/private_Chat/private_chat_room.screen.dart';
+import 'package:hot_place/presentation/chat/page/open_chat/create_open_chat.screen.dart';
 import 'package:hot_place/presentation/feed/page/upload/upload_feed.screen.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/setting/page/edit_profile.screen.dart';
@@ -18,7 +21,8 @@ enum Routes {
   editProfile("/setting/profile"),
   openChat("/open-chat"),
   createOpenChat("/open-chat/create"),
-  chatRoom("/chat-room");
+  openChatRoom("/open-chat/chat-room"),
+  privateChatRoom("/private-chat/chat-room");
 
   final String path;
 
@@ -76,10 +80,21 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     },
   ),
   GoRoute(
-    name: Routes.chatRoom.name,
-    path: "${Routes.chatRoom.path}/:id",
+    name: Routes.openChatRoom.name,
+    path: "${Routes.openChatRoom.path}/:id",
     builder: (BuildContext context, GoRouterState state) {
-      return ChatRoomScreen(state.pathParameters['id']!);
+      final chatId = state.pathParameters['id']!;
+      return OpenChatRoomScreen(chatId);
+    },
+  ),
+  GoRoute(
+    name: Routes.privateChatRoom.name,
+    path: "${Routes.privateChatRoom.path}/:id",
+    builder: (BuildContext context, GoRouterState state) {
+      final extra = state.extra as Map<String, dynamic>;
+      final receiver = UserEntity.fromJson(extra);
+      final chatId = state.pathParameters['id']!;
+      return PrivateChatRoomScreen(chatId: chatId, receiver: receiver);
     },
   )
 ], initialLocation: Routes.splash.path);

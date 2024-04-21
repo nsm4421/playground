@@ -3,29 +3,29 @@ part of "private_chat_message.bloc.dart";
 @immutable
 sealed class PrivateChatMessageEvent {}
 
-final class InitChatMessageEvent extends PrivateChatMessageEvent {}
+final class InitPrivateChatMessageEvent extends PrivateChatMessageEvent {}
 
-final class NewChatMessageEvent extends PrivateChatMessageEvent {
+final class NewPrivateChatMessageEvent extends PrivateChatMessageEvent {
   final List<PrivateChatMessageEntity> messages;
 
-  NewChatMessageEvent(this.messages);
+  NewPrivateChatMessageEvent(this.messages);
 }
 
-final class SendChatMessageEvent extends PrivateChatMessageEvent {
+final class SendPrivateChatMessageEvent extends PrivateChatMessageEvent {
   final String content;
   final String chatId;
   final UserEntity currentUser;
-  final UserEntity opponentUser;
+  final UserEntity receiver;
 
-  SendChatMessageEvent(
+  SendPrivateChatMessageEvent(
       {required this.content,
       required this.chatId,
       required this.currentUser,
-      required this.opponentUser});
+      required this.receiver});
 }
 
-final class DeleteChatMessageEvent extends PrivateChatMessageEvent {
+final class DeletePrivateChatMessageEvent extends PrivateChatMessageEvent {
   final String messageId;
 
-  DeleteChatMessageEvent(this.messageId);
+  DeletePrivateChatMessageEvent(this.messageId);
 }

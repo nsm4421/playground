@@ -27,11 +27,11 @@ class OpenChatMessageBloc
       required OpenChatMessageUseCase useCase})
       : _chatId = chatId,
         _useCase = useCase,
-        super(InitialChatMessageState()) {
-    on<InitChatMessageEvent>(_onInit);
-    on<SendChatMessageEvent>(_onSendMessage);
-    on<DeleteChatMessageEvent>(_onDeleteMessage);
-    on<NewChatMessageEvent>(_onData);
+        super(InitialOpenChatMessageState()) {
+    on<InitOpenChatMessageEvent>(_onInit);
+    on<SendOpenChatMessageEvent>(_onSendMessage);
+    on<DeleteOpenChatMessageEvent>(_onDeleteMessage);
+    on<NewOpenChatMessageEvent>(_onData);
   }
 
   Stream<List<OpenChatMessageEntity>> get messageStream => _stream;
@@ -39,51 +39,51 @@ class OpenChatMessageBloc
   List<OpenChatMessageEntity> get messages => _messages;
 
   Future<void> _onInit(
-      InitChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
+      InitOpenChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
     try {
-      emit(InitialChatMessageState());
+      emit(InitialOpenChatMessageState());
       _messages = await _useCase.getLocalChatMessages(_chatId);
       _stream = _useCase.getChatMessageStream(_chatId);
-      emit(ChatMessageSuccessState());
+      emit(OpenChatMessageSuccessState());
     } catch (err) {
       debugPrint(err.toString());
-      emit(ChatMessageFailureState('Error...'));
+      emit(OpenChatMessageFailureState('Error...'));
     }
   }
 
   Future<void> _onSendMessage(
-      SendChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
+      SendOpenChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
     try {
-      emit(ChatMessageLoadingState());
+      emit(OpenChatMessageLoadingState());
       final res = await _useCase.sendChatMessage(
           chatId: event.chatId,
           content: event.content,
           currentUser: event.currentUser);
-      res.fold((l) => emit(ChatMessageFailureState(l.message ?? '메세지 전송 실패')),
-          (r) => emit(ChatMessageSuccessState()));
+      res.fold((l) => emit(OpenChatMessageFailureState(l.message ?? '메세지 전송 실패')),
+          (r) => emit(OpenChatMessageSuccessState()));
     } catch (err) {
       debugPrint(err.toString());
-      emit(ChatMessageFailureState('메세지 전송 실패'));
+      emit(OpenChatMessageFailureState('메세지 전송 실패'));
     }
   }
 
   Future<void> _onDeleteMessage(
-      DeleteChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
+      DeleteOpenChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
     try {
-      emit(ChatMessageLoadingState());
+      emit(OpenChatMessageLoadingState());
       final res = await _useCase.deleteChatMessage(event.messageId);
       res.fold(
           (l) => emit(
-              ChatMessageFailureState(l.message ?? l.message ?? '메세지 삭제 실패')),
-          (r) => emit(ChatMessageSuccessState()));
+              OpenChatMessageFailureState(l.message ?? l.message ?? '메세지 삭제 실패')),
+          (r) => emit(OpenChatMessageSuccessState()));
     } catch (err) {
       debugPrint(err.toString());
-      emit(ChatMessageFailureState('메세지 삭제 실패'));
+      emit(OpenChatMessageFailureState('메세지 삭제 실패'));
     }
   }
 
   Future<void> _onData(
-      NewChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
+      NewOpenChatMessageEvent event, Emitter<OpenChatMessageState> emit) async {
     try {
       final idOfSavedMessages = _messages.map((e) => e.id);
       final messagesToSave = event.messages

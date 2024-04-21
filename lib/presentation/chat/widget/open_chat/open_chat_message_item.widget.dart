@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hot_place/core/util/date.util.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 
-import '../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
+import '../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
 
-class MessageItemWidget extends StatelessWidget {
-  const MessageItemWidget(
+class OpenChatMessageItemWidget extends StatelessWidget {
+  const OpenChatMessageItemWidget(
       {super.key,
       required OpenChatMessageEntity chatMessage,
       required UserEntity currentUser})

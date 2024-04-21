@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constant/route.constant.dart';
-import '../../../data/entity/chat/open_chat/room/open_chat.entity.dart';
+import '../../../../core/constant/route.constant.dart';
+import '../../../../data/entity/chat/open_chat/room/open_chat.entity.dart';
 
 class OpenChatItemWidget extends StatelessWidget {
   const OpenChatItemWidget(this._chat, {super.key});
@@ -12,7 +12,7 @@ class OpenChatItemWidget extends StatelessWidget {
   static const double _imageSize = 30;
 
   _goToOpenChat(BuildContext ctx) => () {
-        ctx.push("${Routes.chatRoom.path}/${_chat.id}");
+        ctx.push("${Routes.openChatRoom.path}/${_chat.id}");
       };
 
   @override

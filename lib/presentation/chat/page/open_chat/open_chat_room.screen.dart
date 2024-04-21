@@ -7,13 +7,13 @@ import 'package:hot_place/core/util/toast.util.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 
-import '../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
-import '../bloc/chat_bloc.module.dart';
-import '../bloc/open_chat/open_chat_message.bloc.dart';
-import '../widget/message_item.widget.dart';
+import '../../../../data/entity/chat/open_chat/message/open_chat_message.entity.dart';
+import '../../bloc/chat_bloc.module.dart';
+import '../../bloc/message/open_chat/open_chat_message.bloc.dart';
+import '../../widget/open_chat/open_chat_message_item.widget.dart';
 
-class ChatRoomScreen extends StatelessWidget {
-  const ChatRoomScreen(this._chatId, {super.key});
+class OpenChatRoomScreen extends StatelessWidget {
+  const OpenChatRoomScreen(this._chatId, {super.key});
 
   final String _chatId;
 
@@ -21,20 +21,20 @@ class ChatRoomScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<ChatBlocModule>().openChatMessageBloc(_chatId)
-        ..add(InitChatMessageEvent()),
+        ..add(InitOpenChatMessageEvent()),
       child: BlocConsumer<OpenChatMessageBloc, OpenChatMessageState>(
         builder: (BuildContext context, OpenChatMessageState state) {
-          if (state is InitialChatMessageState) {
+          if (state is InitialOpenChatMessageState) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is ChatMessageFailureState) {
+          } else if (state is OpenChatMessageFailureState) {
             return const Center(child: Text("ERROR"));
           }
           return _View(_chatId);
         },
         listener: (BuildContext context, OpenChatMessageState state) {
-          if (state is ChatMessageFailureState) {
+          if (state is OpenChatMessageFailureState) {
             ToastUtil.toast(state.message);
-            context.read<OpenChatMessageBloc>().add(InitChatMessageEvent());
+            context.read<OpenChatMessageBloc>().add(InitOpenChatMessageEvent());
           }
         },
       ),
@@ -66,7 +66,7 @@ class _ViewState extends State<_View> {
     _currentUser = context.read<UserBloc>().state.user;
     _subscription =
         context.read<OpenChatMessageBloc>().messageStream.listen((event) {
-      context.read<OpenChatMessageBloc>().add(NewChatMessageEvent(event));
+      context.read<OpenChatMessageBloc>().add(NewOpenChatMessageEvent(event));
     });
   }
 
@@ -87,7 +87,7 @@ class _ViewState extends State<_View> {
   }
 
   _handleSendMessage() async {
-    context.read<OpenChatMessageBloc>().add(SendChatMessageEvent(
+    context.read<OpenChatMessageBloc>().add(SendOpenChatMessageEvent(
         chatId: widget.chatId,
         content: _textEditingController.text.trim(),
         currentUser: _currentUser));
@@ -97,8 +97,8 @@ class _ViewState extends State<_View> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoading =
-        context.read<OpenChatMessageBloc>().state is ChatMessageLoadingState;
+    final bool isLoading = context.read<OpenChatMessageBloc>().state
+        is OpenChatMessageLoadingState;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(),
@@ -116,7 +116,7 @@ class _ViewState extends State<_View> {
                         itemCount: data.length,
                         itemBuilder: (_, index) {
                           final message = data[index];
-                          return MessageItemWidget(
+                          return OpenChatMessageItemWidget(
                               chatMessage: message, currentUser: _currentUser);
                         });
                   } else if (snapshot.hasError) {
