@@ -4,7 +4,7 @@ import 'package:hot_place/domain/usecase/feed/feed.usecase.dart';
 
 import 'package:hot_place/presentation/feed/widget/feed_item.widget.dart';
 
-import '../../../data/entity/feed/feed.entity.dart';
+import '../../../data/entity/feed/base/feed.entity.dart';
 
 class FeedListFragment extends StatefulWidget {
   const FeedListFragment({super.key});

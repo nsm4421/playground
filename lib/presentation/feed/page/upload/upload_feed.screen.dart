@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
 import 'package:hot_place/presentation/auth/widget/loading.widget.dart';
-import 'package:hot_place/presentation/feed/bloc/feed.bloc.dart';
+import 'package:hot_place/presentation/feed/bloc/base/feed.bloc.dart';
 import 'package:hot_place/presentation/feed/page/upload/hashtag.fragment.dart';
 import 'package:hot_place/presentation/feed/page/upload/pick_image.fragment.dart';
 import 'package:hot_place/presentation/feed/widget/feed_error.widget.dart';

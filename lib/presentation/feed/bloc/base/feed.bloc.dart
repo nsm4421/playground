@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/core/util/uuid.util.dart';
-import 'package:hot_place/data/entity/feed/feed.entity.dart';
+import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/usecase/feed/feed.usecase.dart';
 import 'package:injectable/injectable.dart';

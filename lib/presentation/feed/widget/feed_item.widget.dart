@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hot_place/data/entity/feed/feed.entity.dart';
+import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
+import 'package:hot_place/presentation/feed/page/comment/feed_comment.screen.dart';
 import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
 
 import '../../../core/util/date.util.dart';
@@ -16,6 +17,13 @@ class FeedItemWidget extends StatefulWidget {
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
   static const double _profileImageSize = 40;
+
+  _handleShowComment() => WidgetsBinding.instance.addPostFrameCallback((_) {
+        showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (_) => FeedCommentScreen(widget._feed));
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +91,21 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
           const SizedBox(height: 20),
 
           // 해시태그
-          HashtagListWidget(widget._feed.hashtags)
+          HashtagListWidget(widget._feed.hashtags),
+          const SizedBox(height: 20),
+
+          // 아이콘
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: IconButton(
+                    onPressed: _handleShowComment,
+                    icon: const Icon(Icons.comment_outlined),
+                  ))
+            ],
+          )
         ],
       ),
     );

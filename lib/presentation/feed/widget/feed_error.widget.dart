@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/feed.bloc.dart';
+import '../bloc/base/feed.bloc.dart';
 
 class FeedErrorWidget extends StatelessWidget {
   const FeedErrorWidget(this.message, {super.key});
