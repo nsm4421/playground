@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:fpdart/src/either.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/data_source/feed/data_source.dart';
-import 'package:hot_place/data/entity/feed/feed.entity.dart';
-import 'package:hot_place/domain/model/feed/feed.model.dart';
+import 'package:hot_place/data/data_source/feed/base/remote_data_source.dart';
+import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
+import 'package:hot_place/domain/model/feed/base/feed.model.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../core/error/custom_exception.dart';
-import '../../../domain/repository/feed/feed.repository.dart';
+import '../../../../core/error/custom_exception.dart';
+import '../../../../domain/repository/feed/base/feed.repository.dart';
 
 @LazySingleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {

@@ -9,7 +9,7 @@ import 'package:hot_place/data/entity/geo/load_address/load_address.entity.dart'
 import 'package:injectable/injectable.dart';
 import '../../../domain/repository/geo/geo.repository.dart';
 
-@Singleton(as: GeoRepository)
+@LazySingleton(as: GeoRepository)
 class GeoRepositoryImpl implements GeoRepository {
   final RemoteGeoDataSource _dataSource;
 

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:hot_place/core/error/failure.constant.dart';
-import 'package:hot_place/data/entity/feed/feed.entity.dart';
+import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 
 abstract class FeedRepository {
   Stream<List<FeedEntity>> get feedStream;

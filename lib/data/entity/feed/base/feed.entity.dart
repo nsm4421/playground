@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
-import 'package:hot_place/domain/model/feed/feed.model.dart';
+import 'package:hot_place/domain/model/feed/base/feed.model.dart';
 
 part 'feed.entity.freezed.dart';
 

@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:hot_place/domain/model/feed/feed.model.dart';
-
-abstract interface class LocalFeedDataSource {}
+import 'package:hot_place/domain/model/feed/base/feed.model.dart';
 
 abstract interface class RemoteFeedDataSource {
   Stream<List<FeedModel>> getFeedStream();

@@ -2,6 +2,7 @@ enum TableName {
   user('accounts'),
   feed('feeds'),
   like("likes"),
+  feedComment("feed_comments"),
   openChat("open_chats"),
   openChatMessage("open_chat_messages"),
   privateChat("private_chats"),

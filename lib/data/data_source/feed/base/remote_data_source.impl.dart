@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:hot_place/core/constant/supbase.constant.dart';
 import 'package:hot_place/core/util/image.util.dart';
-import 'package:hot_place/domain/model/feed/feed.model.dart';
+import 'package:hot_place/domain/model/feed/base/feed.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../core/util/exeption.util.dart';
-import 'data_source.dart';
+import '../../../../core/util/exeption.util.dart';
+import 'remote_data_source.dart';
 
 class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
   final SupabaseClient _client;

@@ -7,9 +7,9 @@ import 'package:hot_place/data/data_source/chat/open_chat/message/remote_data_so
 import 'package:hot_place/data/data_source/chat/open_chat/room/remote_data_source.dart';
 import 'package:hot_place/data/data_source/chat/open_chat/room/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/chat/private_chat/message/remote_data_source.dart';
-import 'package:hot_place/data/data_source/feed/data_source.dart';
+import 'package:hot_place/data/data_source/feed/base/remote_data_source.dart';
 import 'package:hot_place/data/data_source/feed/like/remote_data_source.dart';
-import 'package:hot_place/data/data_source/feed/remote_data_source.impl.dart';
+import 'package:hot_place/data/data_source/feed/base/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/geo/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/user/remote_data_source.dart';
 import 'package:hot_place/data/data_source/user/remote_data_source.impl.dart';
@@ -20,6 +20,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'chat/private_chat/message/remote_data_source.impl.dart';
 import 'chat/private_chat/room/remote.data_source.dart';
 import 'chat/private_chat/room/remote_data_source.impl.dart';
+import 'feed/comment/remote_data_source.dart';
+import 'feed/comment/remote_data_source.impl.dart';
 import 'feed/like/remote_data_source.impl.dart';
 import 'geo/remote_data_source.dart';
 
@@ -41,6 +43,10 @@ abstract class RemoteDataSource {
   @lazySingleton
   RemoteFeedDataSource get feed =>
       RemoteFeedDataSourceImpl(client: _client, logger: _logger);
+
+  @lazySingleton
+  RemoteFeedCommentDataSource get feedComment =>
+      RemoteFeedCommentDataSourceImpl(client: _client, logger: _logger);
 
   @lazySingleton
   RemoteGeoDataSource get geo => RemoteGeoDataSourceImpl(
