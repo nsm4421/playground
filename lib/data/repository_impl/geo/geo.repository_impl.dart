@@ -16,19 +16,24 @@ class GeoRepositoryImpl implements GeoRepository {
   GeoRepositoryImpl(this._dataSource);
 
   @override
-  Future<Position> get getCurrentLocation async =>
-      await _dataSource.getCurrentPosition();
+  Future<Either<Failure, Position>> get getCurrentLocation async {
+    try {
+      final res = await _dataSource.getCurrentPosition();
+      return right(res);
+    } on CustomException catch (err) {
+      return left(Failure(code: err.code, message: err.message));
+    }
+  }
 
   @override
-  Future<Either<Failure, KakaoApiResponseMapper<LoadAddressEntity>>>
-  getCurrentAddressByCoordinate(
-      {required double latitude, required double longitude}) async {
+  Future<Either<Failure, Iterable<LoadAddressEntity>>>
+      getCurrentAddressByCoordinate(
+          {required double latitude, required double longitude}) async {
     try {
       final res = await _dataSource
-          .getCurrentAddressByCoordinate(x: longitude, y: latitude)
-          .then((res) => KakaoApiResponseMapper(
-              meta: res.meta,
-              documents: res.documents.map(LoadAddressEntity.fromModel)));
+          .getCurrentAddressByCoordinate(
+              longitude: longitude, latitude: latitude)
+          .then((res) => res.map((e) => LoadAddressEntity.fromModel(e)));
       return right(res);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));

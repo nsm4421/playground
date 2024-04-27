@@ -1,6 +1,4 @@
 import 'package:hot_place/core/constant/supbase.constant.dart';
-import 'package:hot_place/core/error/custom_exception.dart';
-import 'package:hot_place/core/error/failure.constant.dart';
 import 'package:hot_place/data/data_source/auth/remote_data_source.dart';
 import 'package:hot_place/domain/model/user/user.model.dart';
 import 'package:logger/logger.dart';
@@ -25,7 +23,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     try {
       final session = _client.auth.currentSession;
       if (session == null) {
-        throw const AuthException('세션정보가 nulling');
+        throw const AuthException('세션정보가 null입니다');
       }
       return UserModel.fromSession(session.user);
     } catch (err) {
@@ -63,7 +61,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       });
       final sessionUser = res.user;
       if (sessionUser == null) {
-        throw const AuthException('세션정보가 nulling');
+        throw const AuthException('세션정보가 null임');
       }
       return UserModel.fromSession(sessionUser);
     } catch (err) {

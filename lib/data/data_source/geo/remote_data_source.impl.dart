@@ -28,16 +28,18 @@ class RemoteGeoDataSourceImpl implements RemoteGeoDataSource {
         _logger = logger;
 
   @override
-  Future<KakaoApiResponseMapper<LoadAddressModel>>
-      getCurrentAddressByCoordinate(
-          {required double x, required double y}) async {
+  Future<Iterable<LoadAddressModel>> getCurrentAddressByCoordinate(
+      {required double latitude, required double longitude}) async {
     try {
-      final res = await _dio.get(
-          KakaoMapApiEndPoint.getAddressFromCoordinate.endPoint,
-          queryParameters: {'x': x, 'y': y},
-          options: Options(headers: {'Authorization': kakaoApiKey}));
+      // x: longitude, y : latitude
+      final res = await _dio
+          .get(KakaoMapApiEndPoint.getAddressFromCoordinate.endPoint,
+              queryParameters: {'x': longitude, 'y': latitude},
+              options: Options(headers: {'Authorization': kakaoApiKey}))
+          .then((res) => res.data);
       _logger.d(res);
-      return KakaoApiResponseMapper<LoadAddressModel>.fromResponse(res);
+      return (res['documents'] as Iterable)
+          .map((json) => LoadAddressModel.fromJson(json['road_address']));
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
@@ -46,10 +48,20 @@ class RemoteGeoDataSourceImpl implements RemoteGeoDataSource {
   @override
   Future<Position> getCurrentPosition() async {
     try {
+      // 개발환경에서는 상도동 주소를 현재 위치로 지정함
+      if (dotenv.env['ENVIRONMENT'] == 'DEV') {
+        return Position(
+            longitude: 126.95089037512,
+            latitude: 37.498924913712,
+            timestamp: DateTime.now(),
+            accuracy: 600,
+            altitude: 0,
+            heading: 0,
+            speed: 0,
+            speedAccuracy: 1.5);
+      }
       final pos = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      _logger.d(
-          'current longitude : ${pos.longitude} / latitude : ${pos.latitude}');
       return pos;
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);

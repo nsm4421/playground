@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../../../core/constant/response.constant.dart';
 import '../../../../core/error/failure.constant.dart';
 import '../../../../data/entity/geo/load_address/load_address.entity.dart';
 import '../../../repository/geo/geo.repository.dart';
@@ -11,8 +10,7 @@ class GetCurrentAddressUseCase {
 
   GetCurrentAddressUseCase(this._repository);
 
-  Future<Either<Failure, KakaoApiResponseMapper<LoadAddressEntity>>> call(
-      Position position,
+  Future<Either<Failure, Iterable<LoadAddressEntity>>> call(Position position,
       {int? limit}) async {
     return await _repository
         .getCurrentAddressByCoordinate(
