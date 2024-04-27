@@ -1,21 +1,8 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 @immutable
-sealed class AddressState {
-  const AddressState();
+sealed class AddressEvent {
+  const AddressEvent();
 }
 
-final class InitialAddressState extends AddressState {
-  final bool _isPermitted;
-final Position _position;
-final Address
-  
-}
-
-final class FeedCommentLoadingState extends AddressState {}
-
-final class FeedCommentFailureState extends AddressState {
-  final String message;
-
-  const FeedCommentFailureState(this.message);
-}
-
-final class FeedCommentSuccessState extends AddressState {}
+final class InitAddressEvent extends AddressEvent {}
