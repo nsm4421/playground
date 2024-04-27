@@ -6,6 +6,5 @@ class GetLikeFeedStreamUseCase {
 
   GetLikeFeedStreamUseCase(this._repository);
 
-  Stream<LikeFeedEntity?> call(String feedId) =>
-      _repository.getLikeStream(feedId);
+  Stream<Iterable<LikeFeedEntity>> call() => _repository.getLikeStream();
 }

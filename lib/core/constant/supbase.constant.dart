@@ -1,7 +1,7 @@
 enum TableName {
   user('accounts'),
   feed('feeds'),
-  like("likes"),
+  like("feed_like"),
   feedComment("feed_comments"),
   openChat("open_chats"),
   openChatMessage("open_chat_messages"),

@@ -8,7 +8,7 @@ class CancelLikeFeedUseCase {
 
   CancelLikeFeedUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(String likeId) async {
-    return await _repository.cancelLikeById(likeId);
+  Future<Either<Failure, void>> call(String feedId) async {
+    return await _repository.cancelLike(feedId);
   }
 }

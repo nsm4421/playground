@@ -8,9 +8,9 @@ part 'like_feed.model.g.dart';
 @freezed
 class LikeFeedModel with _$LikeFeedModel {
   const factory LikeFeedModel({
-    @Default('') String id,
     @Default('') String user_id,
     @Default('') String feed_id,
+    DateTime? created_at
   }) = _LikeFeedModel;
 
   factory LikeFeedModel.fromJson(Map<String, dynamic> json) =>

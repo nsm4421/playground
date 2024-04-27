@@ -15,24 +15,24 @@ class LikeFeedRepositoryImpl extends LikeFeedRepository {
       : _likeFeedDataSource = likeFeedDataSource;
 
   @override
-  Stream<LikeFeedEntity?> getLikeStream(String feedId) => _likeFeedDataSource
-      .getLikeStream(feedId)
-      .map((event) => event != null ? LikeFeedEntity.fromModel(event) : null);
+  Stream<Iterable<LikeFeedEntity>> getLikeStream() => _likeFeedDataSource
+      .getLikeStream()
+      .asyncMap((e) => e.map(LikeFeedEntity.fromModel));
 
   @override
-  Future<Either<Failure, String>> likeFeed(String feedId) async {
+  Future<Either<Failure, void>> likeFeed(String feedId) async {
     try {
-      final likeId = await _likeFeedDataSource.likeFeed(feedId);
-      return right(likeId);
+      await _likeFeedDataSource.likeFeed(feedId);
+      return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
   }
 
   @override
-  Future<Either<Failure, void>> cancelLikeById(String likeId) async {
+  Future<Either<Failure, void>> cancelLike(String feedId) async {
     try {
-      await _likeFeedDataSource.cancelLikeById(likeId);
+      await _likeFeedDataSource.cancelLike(feedId);
       return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
