@@ -1,6 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:hot_place/data/entity/geo/load_address/load_address.entity.dart';
+part of 'address.bloc.dart';
 
 @immutable
 sealed class AddressState {

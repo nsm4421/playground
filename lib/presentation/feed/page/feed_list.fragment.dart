@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hot_place/core/di/dependency_injection.dart';
-import 'package:hot_place/domain/usecase/feed/feed.usecase.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hot_place/presentation/feed/bloc/base/feed.bloc.dart';
 
 import 'package:hot_place/presentation/feed/widget/feed_item.widget.dart';
-
-import '../../../data/entity/feed/base/feed.entity.dart';
 
 class FeedListFragment extends StatefulWidget {
   const FeedListFragment({super.key});
@@ -14,18 +12,10 @@ class FeedListFragment extends StatefulWidget {
 }
 
 class _FeedListFragmentState extends State<FeedListFragment> {
-  Stream<List<FeedEntity>>? _feedStream;
-
-  @override
-  void initState() {
-    super.initState();
-    _feedStream = getIt<FeedUseCase>().feedStream();
-  }
-
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
         child: StreamBuilder(
-            stream: _feedStream,
+            stream: context.read<FeedBloc>().feedStream,
             builder: (_, snapshot) {
               // 로딩중
               if (snapshot.connectionState == ConnectionState.waiting) {

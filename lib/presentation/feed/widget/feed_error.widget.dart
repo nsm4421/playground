@@ -9,7 +9,7 @@ class FeedErrorWidget extends StatelessWidget {
   final String message;
 
   _handleInitFeedState(BuildContext ctx) => () {
-        ctx.read<FeedBloc>().add(InitFeedStateEvent());
+        ctx.read<FeedBloc>().add(InitFeedEvent());
       };
 
   @override

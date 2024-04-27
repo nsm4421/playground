@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+part of 'address.bloc.dart';
 
 @immutable
 sealed class AddressEvent {

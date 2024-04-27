@@ -5,8 +5,6 @@ import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hot_place/data/entity/geo/load_address/load_address.entity.dart';
 import 'package:hot_place/presentation/geo/bloc/address/address.bloc.dart';
-import 'package:hot_place/presentation/geo/bloc/address/address.event.dart';
-import 'package:hot_place/presentation/geo/bloc/address/address.state.dart';
 import 'package:hot_place/presentation/geo/widget/geo_appbar.widget.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 

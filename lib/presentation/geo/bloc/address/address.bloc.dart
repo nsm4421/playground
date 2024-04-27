@@ -1,10 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hot_place/domain/usecase/geo/geo.usecase.dart';
-import 'package:hot_place/presentation/geo/bloc/address/address.event.dart';
-import 'package:hot_place/presentation/geo/bloc/address/address.state.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../data/entity/geo/load_address/load_address.entity.dart';
+
+part 'address.event.dart';
+
+part 'address.state.dart';
 
 @injectable
 class AddressBloc extends Bloc<AddressEvent, AddressState> {
