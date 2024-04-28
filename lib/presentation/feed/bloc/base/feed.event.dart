@@ -19,12 +19,18 @@ final class UploadingFeedEvent extends FeedEvent {
   });
 }
 
-final class FetchingFeedsEvent extends FeedEvent {
+/// Search
+
+final class SearchFeedsByHashtagEvent extends FeedEvent {
+  final String hashtag;
   final int page;
   final int size;
 
-  FetchingFeedsEvent({required this.page, this.size = 20});
+  SearchFeedsByHashtagEvent(
+      {required this.hashtag, this.page = 1, this.size = 20});
 }
+
+/// Like
 
 final class LikeFeedEvent extends FeedEvent {
   final String feedId;

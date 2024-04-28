@@ -23,14 +23,14 @@ class FeedRepositoryImpl extends FeedRepository {
       .map((data) => data.map((model) => FeedEntity.fromModel(model)).toList());
 
   @override
-  Future<Either<Failure, List<FeedEntity>>> getFeeds(
-      {required int skip, required int take}) async {
+  Future<Either<Failure, List<FeedEntity>>> getFeedsByHashtag(String hashtag,
+      {int skip = 0, int take = 100}) async {
     try {
-      final feeds = await _remoteFeedDataSource
-          .getFeeds(skip: skip, take: take)
-          .then((data) =>
-              data.map((feed) => FeedEntity.fromModel(feed)).toList());
-      return right(feeds);
+      return await _remoteFeedDataSource
+          .getFeedsByHashtag(hashtag, skip: skip, take: take)
+          .then(
+              (data) => data.map((feed) => FeedEntity.fromModel(feed)).toList())
+          .then((res) => right(res));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
@@ -39,8 +39,9 @@ class FeedRepositoryImpl extends FeedRepository {
   @override
   Future<Either<Failure, void>> createFeed(FeedEntity feed) async {
     try {
-      await _remoteFeedDataSource.createFeed(FeedModel.fromEntity(feed));
-      return right(null);
+      return await _remoteFeedDataSource
+          .createFeed(FeedModel.fromEntity(feed))
+          .then((_) => right(null));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
@@ -49,8 +50,9 @@ class FeedRepositoryImpl extends FeedRepository {
   @override
   Future<Either<Failure, void>> deleteFeedById(String feedId) async {
     try {
-      await _remoteFeedDataSource.deleteFeedById(feedId);
-      return right(null);
+      return await _remoteFeedDataSource
+          .deleteFeedById(feedId)
+          .then((_) => right(null));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
@@ -59,8 +61,9 @@ class FeedRepositoryImpl extends FeedRepository {
   @override
   Future<Either<Failure, void>> modifyFeed(FeedEntity feed) async {
     try {
-      await _remoteFeedDataSource.modifyFeed(FeedModel.fromEntity(feed));
-      return right(null);
+      return await _remoteFeedDataSource
+          .modifyFeed(FeedModel.fromEntity(feed))
+          .then((_) => right(null));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }

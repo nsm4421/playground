@@ -23,20 +23,19 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Stream<Iterable<LikeFeedEntity>> get likeFeedStream => _useCase.likeStream();
 
   FeedBloc(this._useCase) : super(InitialFeedState()) {
-    on<FeedEvent>((event, emit) => emit(FeedLoadingState()));
-    on<FetchingFeedsEvent>(_onFetch);
+    on<InitFeedEvent>(_onInit);
+    on<SearchFeedsByHashtagEvent>(_onSearchByHashtag);
     on<UploadingFeedEvent>(_onUpload);
     on<LikeFeedEvent>(_onLikeFeed);
     on<CancelLikeFeedEvent>(_onCancelLikeFeed);
   }
 
-  void _onFetch(FetchingFeedsEvent event, Emitter<FeedState> emit) async {
-    emit(FeedLoadingState());
-    final res = await _useCase.getFeeds(page: event.page, size: event.size);
-    res.fold((l) => emit(FeedFailureState(l.message ?? 'error...')),
-        (r) => emit(FetchingFeedSuccessState(r)));
+  // 피드 목록 초기화
+  void _onInit(InitFeedEvent event, Emitter<FeedState> emit) async {
+    emit(InitialFeedState());
   }
 
+  // 피드 업로드
   void _onUpload(UploadingFeedEvent event, Emitter<FeedState> emit) async {
     emit(FeedLoadingState());
     // feed id
@@ -68,12 +67,23 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     );
   }
 
+  /// Search
+  void _onSearchByHashtag(
+      SearchFeedsByHashtagEvent event, Emitter<FeedState> emit) async {
+    emit(FeedLoadingState());
+    final res = await _useCase.getFeedsByHashtag(event.hashtag,
+        page: event.page, size: event.size);
+    res.fold((l) => emit(FeedFailureState(l.message ?? 'error...')),
+        (r) => emit(SearchFeedSuccessState(hashtag: event.hashtag, feeds: r)));
+  }
+
+  /// Like
   void _onLikeFeed(LikeFeedEvent event, Emitter<FeedState> emit) async {
-    _useCase.likeFeed(event.feedId);
+    await _useCase.likeFeed(event.feedId);
   }
 
   void _onCancelLikeFeed(
       CancelLikeFeedEvent event, Emitter<FeedState> emit) async {
-    _useCase.cancelLike(event.feedId);
+    await _useCase.cancelLike(event.feedId);
   }
 }

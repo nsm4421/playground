@@ -5,6 +5,7 @@ sealed class FeedState {
   const FeedState();
 }
 
+/// feed
 final class InitialFeedState extends FeedState {}
 
 final class FeedLoadingState extends FeedState {}
@@ -17,8 +18,13 @@ final class FeedFailureState extends FeedState {
 
 final class UploadingFeedSuccessState extends FeedState {}
 
-final class FetchingFeedSuccessState extends FeedState {
+/// Search
+final class SearchFeedSuccessState extends FeedState {
+  final String hashtag;
   final List<FeedEntity> feeds;
 
-  const FetchingFeedSuccessState(this.feeds);
+  const SearchFeedSuccessState({
+    required this.hashtag,
+    required this.feeds,
+  });
 }

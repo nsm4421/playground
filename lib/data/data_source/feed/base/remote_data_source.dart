@@ -5,7 +5,8 @@ import 'package:hot_place/domain/model/feed/base/feed.model.dart';
 abstract interface class RemoteFeedDataSource {
   Stream<List<FeedModel>> getFeedStream();
 
-  Future<List<FeedModel>> getFeeds({required int skip, required int take});
+  Future<List<FeedModel>> getFeedsByHashtag(String hashtag,
+      {int skip = 0, int take = 100});
 
   Future<void> createFeed(FeedModel feed);
 

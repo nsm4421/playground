@@ -7,8 +7,8 @@ import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 abstract class FeedRepository {
   Stream<List<FeedEntity>> get feedStream;
 
-  Future<Either<Failure, List<FeedEntity>>> getFeeds(
-      {required int skip, required int take});
+  Future<Either<Failure, List<FeedEntity>>> getFeedsByHashtag(String hashtag,
+      {int skip = 0, int take = 100});
 
   Future<Either<Failure, void>> createFeed(FeedEntity feed);
 

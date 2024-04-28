@@ -27,22 +27,18 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
           (event) => event.map((json) => FeedModel.fromJson(json)).toList());
 
   @override
-  Future<List<FeedModel>> getFeeds(
-      {required int skip, required int take}) async {
+  Future<List<FeedModel>> getFeedsByHashtag(String hashtag,
+      {int skip = 0, int take = 100}) async {
     try {
       return await _client.rest
           .from(TableName.feed.name)
-          // 유저 계정 테이블과 피드 테이블을 조인
-          .select("*, author:${TableName.user.name}(*)")
+          .select()
+          // 해시태그 검색
+          .contains('hashtags', [hashtag])
           .range(skip, take)
           // 최신 피드 순으로
           .order('created_at', ascending: false)
-          .then((data) => data
-              .map((json) => FeedModel.fromJson(json).copyWith(
-                  user_id: json['user_id'],
-                  nickname: json['nickname'],
-                  profile_image: json['profile_image']))
-              .toList());
+          .then((res) => res.map(FeedModel.fromJson).toList());
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }

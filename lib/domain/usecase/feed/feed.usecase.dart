@@ -2,7 +2,7 @@ import 'package:hot_place/domain/repository/feed/base/feed.repository.dart';
 import 'package:hot_place/domain/usecase/feed/case/base/create_feed.usecase.dart';
 import 'package:hot_place/domain/usecase/feed/case/base/delete_feed_by_id.usecase.dart';
 import 'package:hot_place/domain/usecase/feed/case/base/get_feed_stream.usecase.dart';
-import 'package:hot_place/domain/usecase/feed/case/base/get_feeds.usecase.dart';
+import 'package:hot_place/domain/usecase/feed/case/base/get_feeds_by_hashtag.usecase.dart';
 import 'package:hot_place/domain/usecase/feed/case/base/modify_feed.usecase.dart';
 import 'package:hot_place/domain/usecase/feed/case/base/upload_feed_images.usecase.dart';
 import 'package:injectable/injectable.dart';
@@ -34,7 +34,7 @@ class FeedUseCase {
   GetFeedStreamUseCase get feedStream => GetFeedStreamUseCase(_feedRepository);
 
   @injectable
-  GetFeedsUseCase get getFeeds => GetFeedsUseCase(_feedRepository);
+  GetFeedsByHashtag get getFeedsByHashtag => GetFeedsByHashtag(_feedRepository);
 
   @injectable
   ModifyFeedUseCase get modifyFeed => ModifyFeedUseCase(_feedRepository);
