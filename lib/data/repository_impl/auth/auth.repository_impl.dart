@@ -9,18 +9,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 @Singleton(as: AuthRepository)
 class AuthRepositoryImpl extends AuthRepository {
-  final RemoteAuthDataSource _remoteAuthDataSource;
+  final RemoteAuthDataSource _dataSource;
 
-  AuthRepositoryImpl(RemoteAuthDataSource authDataSource)
-      : _remoteAuthDataSource = authDataSource;
+  AuthRepositoryImpl(RemoteAuthDataSource dataSource)
+      : _dataSource = dataSource;
 
   @override
-  Stream<AuthState> get authStream => _remoteAuthDataSource.authStream;
+  Stream<AuthState> get authStream => _dataSource.authStream;
 
   @override
   Either<Failure, UserEntity> getCurrentUserOrElseThrow() {
     try {
-      final user = _remoteAuthDataSource.getCurrentUserOrElseThrow();
+      final user = _dataSource.getCurrentUserOrElseThrow();
       return right(UserEntity.fromModel(user));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
@@ -31,7 +31,7 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, UserEntity>> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      final user = await _remoteAuthDataSource
+      final user = await _dataSource
           .signInWithEmailAndPassword(email: email, password: password)
           .then((model) => UserEntity.fromModel(model));
       return right(user);
@@ -48,7 +48,7 @@ class AuthRepositoryImpl extends AuthRepository {
       required String profileUrl}) async {
     try {
       // 회원 추가
-      final user = await _remoteAuthDataSource.signUpWithEmailAndPassword(
+      final user = await _dataSource.signUpWithEmailAndPassword(
           email: email,
           password: password,
           nickname: nickname,
@@ -62,7 +62,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, void>> signOut() async {
     try {
-      await _remoteAuthDataSource.signOut();
+      await _dataSource.signOut();
       return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));

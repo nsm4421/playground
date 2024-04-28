@@ -19,7 +19,6 @@ class UserModel with _$UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  @Deprecated('유저 정보는 User테이블에서 가져오도록 수정')
   factory UserModel.fromSession(User sessionUser) =>
       UserModel(id: sessionUser.id, email: sessionUser.email ?? '');
 

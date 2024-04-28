@@ -6,6 +6,7 @@ import 'package:hot_place/presentation/chat/page/open_chat/open_chat.screen.dart
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat_room.screen.dart';
 import 'package:hot_place/presentation/chat/page/private_Chat/private_chat_room.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/create_open_chat.screen.dart';
+import 'package:hot_place/presentation/feed/page/search/search_feed.screen.dart';
 import 'package:hot_place/presentation/feed/page/upload/upload_feed.screen.dart';
 import 'package:hot_place/presentation/main/page/main.screen.dart';
 import 'package:hot_place/presentation/setting/page/edit_profile.screen.dart';
@@ -17,6 +18,7 @@ enum Routes {
   main("/main"),
   signUp("/auth/sign-up"),
   uploadFeed("/feed/create"),
+  searchFeed("/feed/search"),
   editProfile("/setting/profile"),
   openChat("/open-chat"),
   createOpenChat("/open-chat/create"),
@@ -48,6 +50,13 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     path: Routes.signUp.path,
     builder: (BuildContext context, GoRouterState state) {
       return const SignUpScreen();
+    },
+  ),
+  GoRoute(
+    name: Routes.searchFeed.name,
+    path: Routes.searchFeed.path,
+    builder: (BuildContext context, GoRouterState state) {
+      return const SearchFeedScreen();
     },
   ),
   GoRoute(

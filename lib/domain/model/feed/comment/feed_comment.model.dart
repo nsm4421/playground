@@ -14,7 +14,7 @@ class FeedCommentModel with _$FeedCommentModel {
     @Default('') String feed_id,
     @Default('') String user_id,
     @Default('') String nickname,
-    @Default('') String profile_image,
+    String? profile_image,
     @Default('') String content,
     DateTime? created_at,
   }) = _FeedCommentModel;
@@ -24,12 +24,11 @@ class FeedCommentModel with _$FeedCommentModel {
 
   factory FeedCommentModel.fromEntity(FeedCommentEntity entity) =>
       FeedCommentModel(
-        id: entity.id ?? '',
-        feed_id: entity.feedId ?? '',
-        user_id: entity.author?.id ?? '',
-        nickname: entity.author?.nickname ?? '',
-        profile_image: entity.author?.profileImage ?? '',
-        content: entity.content ?? '',
-        created_at: entity.createdAt,
-      );
+          id: entity.id ?? '',
+          feed_id: entity.feedId ?? '',
+          user_id: entity.author?.id ?? '',
+          nickname: entity.author?.nickname ?? '',
+          profile_image: entity.author?.profileImage,
+          content: entity.content ?? '',
+          created_at: entity.createdAt);
 }

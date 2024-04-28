@@ -54,11 +54,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       required String nickname,
       required String profileUrl}) async {
     try {
-      final res =
-          await _client.auth.signUp(email: email, password: password, data: {
-        if (nickname.isNotEmpty) 'nickname': nickname,
-        if (profileUrl.isNotEmpty) 'profileUrl': profileUrl
-      });
+      final res = await _client.auth.signUp(email: email, password: password);
       final sessionUser = res.user;
       if (sessionUser == null) {
         throw const AuthException('세션정보가 null임');

@@ -22,6 +22,7 @@ class RemoteFeedCommentDataSourceImpl implements RemoteFeedCommentDataSource {
       return _client
           .from(TableName.feedComment.name)
           .stream(primaryKey: ['id'])
+          .eq('feed_id', feedId)
           .order('created_at', ascending: ascending)
           .asyncMap((event) async => event.map(FeedCommentModel.fromJson));
     } catch (err) {

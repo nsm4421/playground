@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 
 import 'case/get_current_user.usecase.dart';
 
-@lazySingleton
+@singleton
 class AuthUseCase {
   final AuthRepository _repository;
 

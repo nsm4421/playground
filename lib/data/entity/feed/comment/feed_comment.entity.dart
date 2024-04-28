@@ -25,11 +25,9 @@ class FeedCommentEntity with _$FeedCommentEntity {
           id: model.id.isNotEmpty ? model.id : null,
           feedId: model.feed_id.isNotEmpty ? model.feed_id : null,
           author: UserEntity(
-            id: model.user_id.isNotEmpty ? model.user_id : null,
-            nickname: model.nickname.isNotEmpty ? model.nickname : null,
-            profileImage:
-                model.profile_image.isNotEmpty ? model.profile_image : null,
-          ),
+              id: model.user_id.isNotEmpty ? model.user_id : null,
+              nickname: model.nickname.isNotEmpty ? model.nickname : null,
+              profileImage: model.profile_image),
           content: model.content.isNotEmpty ? model.content : null,
           createdAt: model.created_at);
 }
