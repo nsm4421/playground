@@ -15,6 +15,10 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+  _handleGoToSearchPage() {
+    context.push(Routes.searchFeed.path);
+  }
+
   _handleGoToUploadingFeedPage() {
     context.push(Routes.uploadFeed.path);
   }
@@ -22,11 +26,14 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<FeedBloc>(),
+        create: (_) => getIt<FeedBloc>()..add(InitFeedEvent()),
         child: Scaffold(
           appBar: AppBar(
             title: const Text("FEED"),
             actions: [
+              IconButton(
+                  onPressed: _handleGoToSearchPage,
+                  icon: const Icon(Icons.search)),
               IconButton(
                   onPressed: _handleGoToUploadingFeedPage,
                   icon: const Icon(Icons.add_box_outlined))

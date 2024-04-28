@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 
-import '../page/comment/feed_comment.screen.dart';
+import 'feed_comment.screen.dart';
 
 class FeedCommentIconWidget extends StatefulWidget {
   const FeedCommentIconWidget(this.feed, {super.key});

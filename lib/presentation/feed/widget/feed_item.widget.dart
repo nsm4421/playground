@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 import 'package:hot_place/presentation/feed/widget/favorite_icon.widget.dart';
-import 'package:hot_place/presentation/feed/widget/feed_comment_icon.widget.dart';
+import 'package:hot_place/presentation/feed/page/comment/feed_comment_icon.widget.dart';
 import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
 
 import '../../../core/util/date.util.dart';

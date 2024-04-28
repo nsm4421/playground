@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hot_place/data/entity/feed/comment/feed_comment.entity.dart';
 
-import '../../../core/util/date.util.dart';
+import '../../../../core/util/date.util.dart';
 
 class FeedCommentItemWidget extends StatelessWidget {
   const FeedCommentItemWidget(this._comment, {super.key, this.imageSize = 40});

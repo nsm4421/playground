@@ -10,7 +10,7 @@ import 'package:hot_place/data/entity/feed/comment/feed_comment.entity.dart';
 import 'package:hot_place/presentation/feed/bloc/comment/feed_comment.bloc.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 
-import '../../widget/feed_comment_item.widget.dart';
+import 'feed_comment_item.widget.dart';
 
 class FeedCommentScreen extends StatelessWidget {
   const FeedCommentScreen(this._feed, {super.key});
@@ -41,9 +41,8 @@ class FeedCommentScreen extends StatelessWidget {
   }
 }
 
-// TODO : 댓글 작성 시 키보드가 텍스트 박스 가리는 문제 해결하기
 class _View extends StatefulWidget {
-  const _View({super.key});
+  const _View();
 
   @override
   State<_View> createState() => _ViewState();
@@ -118,13 +117,16 @@ class _ViewState extends State<_View> {
               }),
         ),
         TextField(
-          controller: _textEditingController,
-          maxLength: _maxLength,
-          decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                  onPressed: _handleSendComment, icon: const Icon(Icons.send))),
-        )
+            controller: _textEditingController,
+            maxLength: _maxLength,
+            decoration: InputDecoration(
+                counterText: '',
+                hintText: '최대 $_maxLength자',
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                    onPressed: _handleSendComment,
+                    icon: const Icon(Icons.send)))),
+        SizedBox(height: MediaQuery.of(context).viewInsets.bottom)
       ],
     );
   }
