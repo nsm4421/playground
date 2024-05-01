@@ -3,18 +3,55 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
-import 'package:hot_place/domain/usecase/chat/room/case/create_open_chat.usecase.dart';
+import 'package:hot_place/presentation/auth/widget/loading.widget.dart';
+import 'package:hot_place/presentation/chat/bloc/chat_bloc.module.dart';
+import 'package:hot_place/presentation/chat/bloc/room/open_chat/open_chat.bloc.dart';
 import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 
-class CreateOpenChatScreen extends StatefulWidget {
+import '../../widget/error/open_chat_error.widget.dart';
+
+class CreateOpenChatScreen extends StatelessWidget {
   const CreateOpenChatScreen({super.key});
 
   @override
-  State<CreateOpenChatScreen> createState() => _CreateOpenChatScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) =>
+          getIt<ChatBlocModule>().openChatBloc..add(InitOpenChatEvent()),
+      child: BlocListener<OpenChatBloc, OpenChatState>(
+        listener: (_, state) {
+          // 채팅방 생성에 성공하면 뒤로가기
+          if (state is OpenChatSuccessState && context.mounted) {
+            context.pop();
+          }
+        },
+        child: BlocBuilder<OpenChatBloc, OpenChatState>(
+          builder: (_, OpenChatState state) {
+            if (state is InitialOpenChatState ||
+                state is OpenChatSuccessState) {
+              return const _View();
+            } else if (state is OpenChatLoadingState) {
+              return const LoadingWidget('채팅방을 만드는 중입니다');
+            } else if (state is OpenChatFailureState) {
+              return OpenChatErrorWidget(state.message);
+            }
+            return Text('err');
+          },
+        ),
+      ),
+    );
+  }
 }
 
-class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
+class _View extends StatefulWidget {
+  const _View({super.key});
+
+  @override
+  State<_View> createState() => _ViewState();
+}
+
+class _ViewState extends State<_View> {
   late TextEditingController _titleTextEditingController;
   late TextEditingController _hashtagTextEditingController;
   List<String> _hashtags = [];
@@ -54,25 +91,19 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
     _hashtagTextEditingController.clear();
   }
 
-  _handleDeleteHashtag(String hashtag) => () {
-        setState(() {
-          _hashtags.remove(hashtag);
-        });
-      };
+  _handleDeleteHashtag(String hashtag) => setState(() {
+        _hashtags.remove(hashtag);
+      });
 
-  _handleCreateOpenChat() async {
+  _handleCreateOpenChat() {
     final title = _titleTextEditingController.text.trim();
+    if (title.isEmpty) {
+      ToastUtil.toast('제목을 입력해주세요');
+      return;
+    }
     final currentUser = context.read<UserBloc>().state.user;
-    final res = await getIt<CreateOpenChatUseCase>()
-        .call(title: title, hashtags: _hashtags, currentUser: currentUser);
-    res.fold((l) {
-      ToastUtil.toast(l.message ?? 'error');
-    }, (r) {
-      ToastUtil.toast('success');
-      if (context.mounted) {
-        context.pop();
-      }
-    });
+    context.read<OpenChatBloc>().add(CreateOpenChatEvent(
+        title: title, hashtags: _hashtags, currentUser: currentUser));
   }
 
   @override
