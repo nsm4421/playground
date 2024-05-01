@@ -3,6 +3,7 @@ import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 import 'package:hot_place/presentation/feed/widget/favorite_icon.widget.dart';
 import 'package:hot_place/presentation/feed/page/comment/feed_comment_icon.widget.dart';
 import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
+import 'package:hot_place/presentation/setting/widget/profile_image.widget.dart';
 
 import '../../../core/util/date.util.dart';
 import 'feed_image_carousel.widget.dart';
@@ -34,22 +35,13 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
           Row(
             children: [
               // 프로필 사진
-              if (widget._feed.user.profileImage != null)
-                Container(
-                    width: _profileImageSize,
-                    height: _profileImageSize,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                widget._feed.user.profileImage!)))),
-              if (widget._feed.user.profileImage == null)
-                const SizedBox(
-                    width: _profileImageSize,
-                    height: _profileImageSize,
-                    child: CircleAvatar(child: Icon(Icons.account_circle))),
-              const SizedBox(width: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 15),
+                child: ProfileImageWidget(
+                  widget._feed.user.profileImage,
+                  radius: 20,
+                ),
+              ),
 
               // 닉네임
               Text(widget._feed.user.nickname ?? "Unknown",

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hot_place/presentation/feed/widget/hashtag_list.widget.dart';
+import 'package:hot_place/presentation/setting/widget/profile_image.widget.dart';
 
 import '../../../../core/constant/route.constant.dart';
 import '../../../../data/entity/chat/open_chat/room/open_chat.entity.dart';
@@ -8,8 +10,6 @@ class OpenChatItemWidget extends StatelessWidget {
   const OpenChatItemWidget(this._chat, {super.key});
 
   final OpenChatEntity _chat;
-
-  static const double _imageSize = 30;
 
   _goToOpenChat(BuildContext ctx) => () {
         ctx.push("${Routes.openChatRoom.path}/${_chat.id}");
@@ -27,16 +27,7 @@ class OpenChatItemWidget extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary)),
 
             // 프로필 이미지
-            leading: CircleAvatar(
-                radius: _imageSize,
-                child: _chat.host?.profileImage != null
-                    ? Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image:
-                                    NetworkImage(_chat.host!.profileImage!))))
-                    : const Icon(Icons.question_mark)),
+            leading: ProfileImageWidget(_chat.host?.profileImage, radius: 20),
 
             // 닉네임
             subtitle: Text(_chat.host?.nickname ?? "Unknown",
@@ -55,39 +46,14 @@ class OpenChatItemWidget extends StatelessWidget {
 
           // 해시태그
           if (_chat.hashtags.isNotEmpty)
-            Container(
-                margin: const EdgeInsets.only(top: 8, bottom: 10),
-                padding: const EdgeInsets.only(left: 2 * _imageSize),
-                alignment: Alignment.topLeft,
-                child: Wrap(
-                    children: _chat.hashtags
-                        .map((text) => Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 3),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer),
-                            child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Icon(Icons.tag,
-                                          size: 20,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary),
-                                      Text(text,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium)
-                                    ]))))
-                        .toList()))
+            Padding(
+              padding: const EdgeInsets.only(left: 50),
+              child: HashtagListWidget(
+                _chat.hashtags,
+                textStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+            )
         ],
       );
 }

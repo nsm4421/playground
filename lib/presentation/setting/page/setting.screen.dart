@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
-import 'package:hot_place/presentation/setting/page/profile.widget.dart';
+
+import '../widget/profile.widget.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});

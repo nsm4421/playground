@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 import 'package:hot_place/presentation/setting/bloc/user.state.dart';
+import 'package:hot_place/presentation/setting/widget/profile_image.widget.dart';
 
 import '../../../core/constant/route.constant.dart';
 
@@ -21,14 +22,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) => BlocBuilder<UserBloc, UserState>(
       builder: (_, state) => ListTile(
-          leading: CircleAvatar(
-              child: state.user.profileImage != null
-                  ? Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(state.user.profileImage!))))
-                  : const Icon(Icons.question_mark)),
+          leading: ProfileImageWidget(state.user.profileImage),
           title: Text(state.user.nickname ?? "Unknown",
               style: Theme.of(context).textTheme.titleMedium),
           subtitle: Text(state.user.email ?? '',

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class HashtagListWidget extends StatelessWidget {
-  const HashtagListWidget(this.hashtags, {super.key, this.handleDelete});
+  const HashtagListWidget(this.hashtags,
+      {super.key, this.handleDelete, this.textStyle});
 
   final List<String> hashtags;
   final void Function(String text)? handleDelete;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -29,14 +31,15 @@ class HashtagListWidget extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.secondary),
                             const SizedBox(width: 5),
                             Text(text,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                        fontWeight: FontWeight.w800,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary)),
+                                style: textStyle ??
+                                    Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.w800,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary)),
                             // 삭제 버튼
                             if (handleDelete != null)
                               IconButton(
