@@ -11,6 +11,8 @@ import 'package:hot_place/data/data_source/feed/base/remote_data_source.dart';
 import 'package:hot_place/data/data_source/feed/like/remote_data_source.dart';
 import 'package:hot_place/data/data_source/feed/base/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/geo/remote_data_source.impl.dart';
+import 'package:hot_place/data/data_source/notification/remote_data_source.dart';
+import 'package:hot_place/data/data_source/notification/remote_data_source.impl.dart';
 import 'package:hot_place/data/data_source/user/remote_data_source.dart';
 import 'package:hot_place/data/data_source/user/remote_data_source.impl.dart';
 import 'package:injectable/injectable.dart';
@@ -39,6 +41,10 @@ abstract class RemoteDataSource {
   @singleton
   RemoteUserDataSource get user =>
       RemoteUserDataSourceImpl(client: _client, logger: _logger);
+
+  @singleton
+  RemoteNotificationDataSource get notification =>
+      RemoteNotificationDataSourceImpl(client: _client, logger: _logger);
 
   @lazySingleton
   RemoteFeedDataSource get feed =>
