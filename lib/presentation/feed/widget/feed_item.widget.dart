@@ -87,7 +87,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               // 좋아요 아이콘 버튼
               Padding(
                   padding: const EdgeInsets.only(left: 12),
-                  child: FavoriteIconWidget(widget._feed.id!)),
+                  child: FavoriteIconWidget(widget._feed)),
 
               // 댓글 아이콘 버튼
               Padding(

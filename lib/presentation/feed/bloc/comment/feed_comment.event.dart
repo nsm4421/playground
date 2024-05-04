@@ -10,13 +10,17 @@ final class InitFeedCommentStateEvent extends FeedCommentEvent {
 }
 
 final class CreateFeedCommentEvent extends FeedCommentEvent {
-  final UserEntity currentUser;
-  final String content;
+  final FeedEntity _feed;
+  final UserEntity _currentUser;
+  final String _content;
 
   CreateFeedCommentEvent({
-    required this.currentUser,
-    required this.content,
-  });
+    required FeedEntity feed,
+    required UserEntity currentUser,
+    required String content,
+  })  : _feed = feed,
+        _currentUser = currentUser,
+        _content = content;
 }
 
 final class ModifyFeedCommentEvent extends FeedCommentEvent {

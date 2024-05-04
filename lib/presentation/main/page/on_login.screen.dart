@@ -5,7 +5,7 @@ import 'package:hot_place/presentation/feed/page/feed.screen.dart';
 import 'package:hot_place/presentation/geo/geo.screen.dart';
 import 'package:hot_place/presentation/home/page/home.screen.dart';
 import 'package:hot_place/presentation/main/cubit/bottom_nav.cubit.dart';
-import 'package:hot_place/presentation/notification/notification.screen.dart';
+import 'package:hot_place/presentation/notification/page/notification.screen.dart';
 import 'package:hot_place/presentation/setting/page/setting.screen.dart';
 
 import '../cubit/bottom_nav.dart';

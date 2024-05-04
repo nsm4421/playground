@@ -33,13 +33,20 @@ final class SearchFeedsByHashtagEvent extends FeedEvent {
 /// Like
 
 final class LikeFeedEvent extends FeedEvent {
-  final String feedId;
+  final FeedEntity _feed;
+  final UserEntity _currentUser;
 
-  LikeFeedEvent(this.feedId);
+  LikeFeedEvent({required FeedEntity feed, required UserEntity currentUser})
+      : _feed = feed,
+        _currentUser = currentUser;
 }
 
 final class CancelLikeFeedEvent extends FeedEvent {
-  final String feedId;
+  final FeedEntity _feed;
+  final UserEntity _currentUser;
 
-  CancelLikeFeedEvent(this.feedId);
+  CancelLikeFeedEvent(
+      {required FeedEntity feed, required UserEntity currentUser})
+      : _feed = feed,
+        _currentUser = currentUser;
 }

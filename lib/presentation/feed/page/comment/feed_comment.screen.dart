@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/core/di/dependency_injection.dart';
@@ -36,13 +34,15 @@ class FeedCommentScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.displayMedium));
           }
           // 정상
-          return const _View();
+          return _View(_feed);
         }));
   }
 }
 
 class _View extends StatefulWidget {
-  const _View();
+  const _View(this._feed);
+
+  final FeedEntity _feed;
 
   @override
   State<_View> createState() => _ViewState();
@@ -74,6 +74,7 @@ class _ViewState extends State<_View> {
       return;
     }
     context.read<FeedCommentBloc>().add(CreateFeedCommentEvent(
+        feed: widget._feed,
         currentUser: context.read<UserBloc>().state.user,
         content: _textEditingController.text.trim()));
   }

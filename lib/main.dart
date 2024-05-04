@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
+import 'package:hot_place/presentation/notification/bloc/notification.bloc.dart';
 import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/constant/route.constant.dart';
@@ -43,7 +44,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => getIt<AuthBloc>()..add(InitAuthEvent())),
           BlocProvider(
-              create: (context) => getIt<UserBloc>()..add(InitUserEvent()))
+              create: (context) => getIt<UserBloc>()..add(InitUserEvent())),
+          BlocProvider(
+              create: (context) =>
+                  getIt<NotificationBloc>()..add(InitNotificationEvent()))
         ],
         child: MaterialApp.router(
             routerConfig: routerConfig,
