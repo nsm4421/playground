@@ -14,7 +14,8 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   final SupabaseClient _client;
   final Logger _logger;
 
-  RemoteUserDataSourceImpl({required SupabaseClient client, required Logger logger})
+  RemoteUserDataSourceImpl(
+      {required SupabaseClient client, required Logger logger})
       : _client = client,
         _logger = logger;
 
@@ -69,6 +70,77 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
       throw CustomException(
           code: ErrorCode.storageError,
           message: 'error occurs on uploading profile image');
+    }
+  }
+
+  @override
+  Future<Iterable<UserModel>> searchUserByNickname({
+    required String nickname,
+    bool exact = true,
+    int skip = 0,
+    int take = 100,
+  }) async {
+    try {
+      if (exact) {
+        return await _client.rest
+            .from(TableName.user.name)
+            .select()
+            .eq('nickname', nickname) // 정확히 일치검색
+            .order('last_seen_at', ascending: false)
+            .range(skip, skip + take - 1)
+            .then((data) => data.map(UserModel.fromJson));
+      } else {
+        return await _client.rest
+            .from(TableName.user.name)
+            .select()
+            .ilike('nickname', '%$nickname%') // 유사일치 검색
+            .order('last_seen_at', ascending: false)
+            .range(skip, skip + take - 1)
+            .then((data) => data.map(UserModel.fromJson));
+      }
+    } catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.postgresError, message: 'fail to search user');
+    }
+  }
+
+  @override
+  Future<Iterable<UserModel>> searchUserByHashtag({
+    required String hashtag,
+    int skip = 0,
+    int take = 100,
+  }) async {
+    try {
+      return await _client.rest
+          .from(TableName.user.name)
+          .select()
+          .contains('hashtags', [hashtag])
+          .order('last_seen_at', ascending: false)
+          .range(skip, skip + take - 1)
+          .then((data) => data.map(UserModel.fromJson));
+    } catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.postgresError, message: 'fail to search user');
+    }
+  }
+
+  @override
+  Future<DateTime> updateLastSeenAt() async {
+    try {
+      final lastSeenAt = _client.auth.currentUser?.lastSignInAt ??
+          DateTime.now().toIso8601String();
+      return await _client.rest
+          .from(TableName.user.name)
+          .update({"last_seen_at": lastSeenAt})
+          .eq('id', _client.auth.currentUser!.id)
+          .then((_) => DateTime.parse(lastSeenAt));
+    } catch (err) {
+      _logger.e(err);
+      throw CustomException(
+          code: ErrorCode.postgresError,
+          message: 'fail to update last seen at');
     }
   }
 }

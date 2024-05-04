@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/domain/usecase/auth/auth.usecase.dart';
@@ -43,35 +44,51 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   Future<void> _onSignUpWithEmailAndPassword(
       SignUpWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
-    emit(AuthLoadingState());
-    await _authUseCase
-        .signUpWithEmailAndPassword(
-            email: event.email,
-            password: event.password,
-            nickname: event.nickname,
-            profileUrl: event.profileUrl)
-        .then((value) => value.fold(
-            (l) => emit(AuthFailureState(l.message ?? 'sign up fail')),
-            (r) => emit(AuthSuccessState(r))));
+    try {
+      emit(AuthLoadingState());
+      await _authUseCase
+          .signUpWithEmailAndPassword(
+              email: event.email,
+              password: event.password,
+              nickname: event.nickname,
+              profileUrl: event.profileUrl)
+          .then((value) => value.fold(
+              (l) => emit(AuthFailureState(l.message ?? '회원가입에 실패하였습니다')),
+              (r) => emit(AuthSuccessState(r))));
+    } catch (err) {
+      emit(const AuthFailureState('회원가입에 실패하였습니다'));
+      debugPrint(err.toString());
+    }
   }
 
   Future<void> _onSignInWithEmailAndPassword(
       SignInWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
-    emit(AuthLoadingState());
-    await _authUseCase
-        .signInWithEmailAndPassword(
-            email: event.email, password: event.password)
-        .then((res) {
-      res.fold((l) => emit(AuthFailureState(l.message ?? 'sign in fail')),
-          (r) => emit(AuthSuccessState(r)));
-    });
+    // 로그인
+    try {
+      emit(AuthLoadingState());
+      await _authUseCase
+          .signInWithEmailAndPassword(
+              email: event.email, password: event.password)
+          .then((res) {
+        res.fold((l) => emit(AuthFailureState(l.message ?? '로그인에 실패하였습니다')),
+            (r) => emit(AuthSuccessState(r)));
+      });
+    } catch (err) {
+      emit(const AuthFailureState('로그인에 실패하였습니다'));
+      debugPrint(err.toString());
+    }
   }
 
   Future<void> _onSignOut(
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
-    await _authUseCase.signOut().then((value) => value.fold(
-        (l) => emit(AuthFailureState(l.message ?? 'sign out fails')),
-        (r) => emit(InitialAuthState())));
+    try {
+      await _authUseCase.signOut().then((value) => value.fold(
+          (l) => emit(AuthFailureState(l.message ?? '로그아웃에 실패하였습니다')),
+          (r) => emit(InitialAuthState())));
+    } catch (err) {
+      emit(const AuthFailureState('로그아웃에 실패하였습니다'));
+      debugPrint(err.toString());
+    }
   }
 }

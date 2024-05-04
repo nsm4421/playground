@@ -18,6 +18,42 @@ class UserRepositoryImpl extends UserRepository {
       : _userDataSource = userDataSource;
 
   @override
+  Future<Either<Failure, DateTime>> updateLastSeenAt() async {
+    try {
+      return await _userDataSource.updateLastSeenAt().then((dt) => right(dt));
+    } on CustomException catch (err) {
+      return left(Failure(code: err.code, message: err.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserEntity>>> searchUserByHashtag(
+      {required String hashtag, int skip = 0, int take = 100}) async {
+    try {
+      final fetched = await _userDataSource.searchUserByHashtag(
+          hashtag: hashtag, skip: skip, take: take);
+      return right(fetched.map(UserEntity.fromModel).toList());
+    } on CustomException catch (err) {
+      return left(Failure(code: err.code, message: err.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserEntity>>> searchUserByNickname(
+      {required String nickname,
+      bool exact = true,
+      int skip = 0,
+      int take = 100}) async {
+    try {
+      final fetched = await _userDataSource.searchUserByNickname(
+          nickname: nickname, skip: skip, take: take);
+      return right(fetched.map(UserEntity.fromModel).toList());
+    } on CustomException catch (err) {
+      return left(Failure(code: err.code, message: err.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, UserEntity>> findUserById(String uid) async {
     try {
       final user = await _userDataSource.findUserById(uid);

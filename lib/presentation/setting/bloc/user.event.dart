@@ -7,6 +7,10 @@ final class InitUserEvent extends UserEvent {
   InitUserEvent();
 }
 
+final class SignInEvent extends UserEvent {
+  SignInEvent();
+}
+
 final class UpdateUserEvent extends UserEvent {
   final UserEntity user;
 

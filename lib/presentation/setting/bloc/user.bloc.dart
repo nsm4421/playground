@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
@@ -22,6 +23,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         _userUseCase = userUseCase,
         super(const UserState()) {
     on<InitUserEvent>(_onInit);
+    on<SignInEvent>(_onSignIn);
     on<ModifyProfileEvent>(_onModifyProfile);
   }
 
@@ -38,6 +40,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         (r) => emit(state.copyWith(status: Status.initial, user: r)));
   }
 
+  void _onSignIn(SignInEvent event, Emitter<UserState> emit) async {
+    try {
+      final lastSeenAt =
+          await _userUseCase.updateLastSeenAt().then((res) => res.fold((l) {
+                debugPrint(l.message ?? 'last_seen_at 필드 업데이트 중 오류 발생');
+                return DateTime.now();
+              }, (r) => r));
+      emit(state.copyWith(user: state.user.copyWith(lastSeenAt: lastSeenAt)));
+    } catch (err) {
+      debugPrint(err.toString());
+    }
+  }
+
   void _onModifyProfile(
       ModifyProfileEvent event, Emitter<UserState> emit) async {
     try {
@@ -47,7 +62,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (event.image != null) {
         profileImage = (await _userUseCase.upsertProfileImage(event.image!))
             .getOrElse((l) {
-          throw Exception('프로필 업로드 오류');
+          throw Exception('프로필 업로드 중 오류가 발생했습니다');
         });
       }
       // 유저 정보 저장
@@ -57,11 +72,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           profileImage: profileImage);
       res.fold(
           (l) => emit(state.copyWith(
-              status: Status.error,
-              error: l.message ?? 'error occurs on modify nickname')),
+              status: Status.error, error: l.message ?? '닉네임 수정 중 오류가 발생했습니다')),
           (r) => emit(state.copyWith(status: Status.success, user: r)));
     } catch (err) {
-      emit(state.copyWith(status: Status.error, error: err.toString()));
+      emit(state.copyWith(status: Status.error, error: '닉네임 수정 중 오류가 발생했습니다'));
+      debugPrint(err.toString());
     }
   }
 }
