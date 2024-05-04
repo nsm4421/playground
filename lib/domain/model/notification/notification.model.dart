@@ -16,7 +16,6 @@ class NotificationModel with _$NotificationModel {
     @Default(NotificationType.none) NotificationType type,
     @Default('') String message,
     DateTime? created_at,
-    @Default(false) bool is_seen,
   }) = _NotificationModel;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +29,5 @@ class NotificationModel with _$NotificationModel {
         type: entity.type ?? NotificationType.none,
         message: entity.message ?? '',
         created_at: entity.createdAt,
-        is_seen: entity.isSeen ?? false,
       );
 }

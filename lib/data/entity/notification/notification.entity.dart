@@ -10,15 +10,13 @@ part 'notification.entity.g.dart';
 
 @freezed
 class NotificationEntity with _$NotificationEntity {
-  const factory NotificationEntity({
-    String? id,
-    String? receiverId,
-    String? createdBy,
-    NotificationType? type,
-    String? message,
-    DateTime? createdAt,
-    bool? isSeen,
-  }) = _NotificationEntity;
+  const factory NotificationEntity(
+      {String? id,
+      String? receiverId,
+      String? createdBy,
+      NotificationType? type,
+      String? message,
+      DateTime? createdAt}) = _NotificationEntity;
 
   factory NotificationEntity.fromJson(Map<String, dynamic> json) =>
       _$NotificationEntityFromJson(json);
@@ -30,6 +28,5 @@ class NotificationEntity with _$NotificationEntity {
           createdBy: model.created_by,
           type: model.type,
           message: model.message.isNotEmpty ? model.message : null,
-          createdAt: model.created_at,
-          isSeen: model.is_seen);
+          createdAt: model.created_at);
 }

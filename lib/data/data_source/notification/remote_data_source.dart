@@ -6,4 +6,6 @@ abstract interface class RemoteNotificationDataSource {
   Future<void> createNotification(NotificationModel notification);
 
   Future<void> deleteNotification(String notificationId);
+
+  Future<void> deleteAllNotifications(String currentUid);
 }

@@ -7,7 +7,7 @@ enum TableName {
   openChatMessage("open_chat_messages"),
   privateChat("private_chats"),
   privateChatMessage("private_chat_messages"),
-  notification("notification");
+  notification("notifications");
 
   final String name;
 

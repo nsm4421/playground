@@ -3,11 +3,11 @@ import 'package:hot_place/domain/repository/notification/notification.repository
 
 import '../../../../core/error/failure.constant.dart';
 
-class DeleteNotificationUseCase {
+class DeleteAllNotificationsUseCase {
   final NotificationRepository _repository;
 
-  DeleteNotificationUseCase(this._repository);
+  DeleteAllNotificationsUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(String notificationId) async =>
-      await _repository.deleteNotification(notificationId);
+  Future<Either<Failure, void>> call(String currentUid) async =>
+      await _repository.deleteAllNotifications(currentUid);
 }

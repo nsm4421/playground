@@ -15,6 +15,11 @@ class NotificationRepositoryImpl implements NotificationRepository {
   NotificationRepositoryImpl(this._dataSource);
 
   @override
+  Stream<List<NotificationEntity>> get notificationStream => _dataSource
+      .getNotificationStream()
+      .asyncMap((event) => event.map(NotificationEntity.fromModel).toList());
+
+  @override
   Future<Either<Failure, void>> createNotification(
       NotificationEntity notification) async {
     try {
@@ -39,11 +44,12 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Either<Failure, Stream<List<NotificationEntity>>> getNotificationStream() {
+  Future<Either<Failure, void>> deleteAllNotifications(
+      String currentUid) async {
     try {
-      final stream = _dataSource.getNotificationStream().asyncMap(
-          (event) => event.map(NotificationEntity.fromModel).toList());
-      return right(stream);
+      return await _dataSource
+          .deleteAllNotifications(currentUid)
+          .then((_) => right(null));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }

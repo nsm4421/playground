@@ -21,7 +21,6 @@ class RemoteNotificationDataSourceImpl implements RemoteNotificationDataSource {
       return _client
           .from(TableName.notification.name)
           .stream(primaryKey: ['id'])
-          .neq('is_seen', false)
           .order('created_at', ascending: false)
           .asyncMap(
               (data) => data.map((json) => NotificationModel.fromJson(json)));
@@ -46,7 +45,20 @@ class RemoteNotificationDataSourceImpl implements RemoteNotificationDataSource {
     try {
       await _client.rest
           .from(TableName.notification.name)
-          .update({'is_seen': true}).eq('id', notificationId);
+          .delete()
+          .eq('id', notificationId);
+    } catch (err) {
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
+    }
+  }
+
+  @override
+  Future<void> deleteAllNotifications(String currentUid) async {
+    try {
+      await _client.rest
+          .from(TableName.notification.name)
+          .delete()
+          .eq('receiver_id', currentUid);
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
