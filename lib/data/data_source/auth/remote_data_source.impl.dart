@@ -54,7 +54,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       required String nickname,
       required String profileUrl}) async {
     try {
-      final res = await _client.auth.signUp(email: email, password: password);
+      final res = await _client.auth.signUp(
+          email: email, password: password, data: {"nickname": nickname});
       final sessionUser = res.user;
       if (sessionUser == null) {
         throw const AuthException('세션정보가 null임');
@@ -90,6 +91,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
           .from(TableName.user.name)
           .update(user.toJson())
           .eq('id', user.id);
+      await _client.auth
+          .updateUser(UserAttributes(data: {"nickname": user.nickname}));
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }

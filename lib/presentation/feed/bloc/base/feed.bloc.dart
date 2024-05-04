@@ -103,7 +103,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           receiverId: event._feed.user.id!,
           createdBy: event._currentUser.id!,
           type: NotificationType.like,
-          message: '${event._feed.user.nickname}님이 게시글에 좋아요를 눌렀습니다',
+          message: '${event._currentUser.nickname}님이 게시글에 좋아요를 눌렀습니다',
         );
       }
     } catch (err) {

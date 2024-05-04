@@ -5,6 +5,7 @@ import 'package:hot_place/core/di/dependency_injection.dart';
 import 'package:hot_place/core/util/toast.util.dart';
 import 'package:hot_place/presentation/auth/bloc/auth.bloc.dart';
 import 'package:hot_place/presentation/auth/widget/text_field.widget.dart';
+import 'package:hot_place/presentation/setting/bloc/user.bloc.dart';
 
 import '../../widget/auth_error.widget.dart';
 import '../../widget/loading.widget.dart';
@@ -19,6 +20,7 @@ class SignUpScreen extends StatelessWidget {
       listener: (BuildContext context, state) {
         if (state is AuthSuccessState) {
           ToastUtil.toast('회원가입 성공!');
+          context.read<UserBloc>().add(InitUserEvent());
           context.pop();
         }
       },

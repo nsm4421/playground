@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hot_place/data/entity/feed/base/feed.entity.dart';
 import 'package:hot_place/presentation/feed/widget/favorite_icon.widget.dart';
@@ -31,54 +32,59 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               Theme.of(context).colorScheme.primaryContainer.withOpacity(0.5)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              // 프로필 사진
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 15),
-                child: ProfileImageWidget(
-                  widget._feed.user.profileImage,
-                  radius: 20,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: Row(
+              children: [
+                // 프로필 사진
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 15),
+                  child: ProfileImageWidget(
+                    widget._feed.user.profileImage,
+                    radius: 20,
+                  ),
                 ),
-              ),
 
-              // 닉네임
-              Text(widget._feed.user.nickname ?? "Unknown",
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.bold)),
-              const Spacer(),
+                // 닉네임
+                Text(widget._feed.user.nickname ?? "Unknown",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.bold)),
+                const Spacer(),
 
-              // 작성시간
-              if (widget._feed.createdAt != null)
-                Text(DateUtil.formatTimeAgo(widget._feed.createdAt!),
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary))
-            ],
+                // 작성시간
+                if (widget._feed.createdAt != null)
+                  Text(DateUtil.formatTimeAgo(widget._feed.createdAt!),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.secondary))
+              ],
+            ),
           ),
-          const SizedBox(height: 15),
 
           // 이미지
           if (widget._feed.images.isNotEmpty)
-            FeedImageCarouselWidget(widget._feed.images),
-          const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: FeedImageCarouselWidget(widget._feed.images),
+            ),
 
           // 본문
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              Text(widget._feed.content ?? '',
-                  softWrap: true,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer))
-            ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20, left: 15),
+            child: Text(widget._feed.content ?? '',
+                overflow: TextOverflow.clip,
+                softWrap: true,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer)),
           ),
-          const SizedBox(height: 20),
 
           // 해시태그
-          HashtagListWidget(widget._feed.hashtags),
-          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: HashtagListWidget(widget._feed.hashtags),
+          ),
 
           // 아이콘 버튼
           Row(

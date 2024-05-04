@@ -36,8 +36,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       DeleteNotificationEvent event, Emitter<NotificationState> emit) async {
     try {
       emit(NotificationLoadingState());
-      await _useCase.delete.call(event.notificationId);
-      emit(NotificationSuccessState());
+      final res = await _useCase.delete.call(event.notificationId);
+      res.fold(
+          (l) => emit(
+              NotificationFailureState(l.message ?? '알림정보를 삭제하는데 에러가 발생했습니다')),
+          (r) => emit(NotificationSuccessState()));
     } catch (err) {
       emit(const NotificationFailureState('알림정보를 삭제하는데 에러가 발생했습니다'));
       debugPrint(err.toString());
@@ -48,8 +51,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       Emitter<NotificationState> emit) async {
     try {
       emit(NotificationLoadingState());
-      await _useCase.deleteAll.call(event.currentUid);
-      emit(NotificationSuccessState());
+      final res = await _useCase.deleteAll.call(event.currentUid);
+      res.fold(
+          (l) => emit(NotificationFailureState(
+              l.message ?? '알림정보 전체 삭제하는데 에러가 발생했습니다')),
+          (r) => emit(NotificationSuccessState()));
     } catch (err) {
       emit(const NotificationFailureState('알림정보 전체 삭제하는데 에러가 발생했습니다'));
       debugPrint(err.toString());
