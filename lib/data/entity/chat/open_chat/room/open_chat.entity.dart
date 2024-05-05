@@ -14,8 +14,9 @@ class OpenChatEntity with _$OpenChatEntity {
     UserEntity? host,
     String? title,
     @Default(<String>[]) List<String> hashtags,
+    String? lastMessage,
     DateTime? createdAt,
-    DateTime? updatedAt,
+    DateTime? lastTalkAt,
   }) = _OpenChatEntity;
 
   factory OpenChatEntity.fromJson(Map<String, dynamic> json) =>
@@ -29,6 +30,8 @@ class OpenChatEntity with _$OpenChatEntity {
           profileImage: openChat.profile_image),
       title: openChat.title.isNotEmpty ? openChat.title : null,
       hashtags: openChat.hashtags.isNotEmpty ? openChat.hashtags : [],
+      lastMessage:
+          openChat.last_message.isNotEmpty ? openChat.last_message : null,
       createdAt: openChat.created_at,
-      updatedAt: openChat.updated_at);
+      lastTalkAt: openChat.last_talk_at);
 }

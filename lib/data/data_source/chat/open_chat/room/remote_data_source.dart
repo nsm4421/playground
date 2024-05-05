@@ -4,4 +4,10 @@ import '../../base/room/remote_data_source.dart';
 abstract interface class RemoteOpenChatDataSource
     implements RemoteChatDataSource<OpenChatModel> {
   Future<String> modifyChat(OpenChatModel chat);
+
+  Future<void> updatedLastMessage({
+    required String chatId,
+    required String lastMessage,
+    DateTime? lastTalkAt,
+  });
 }

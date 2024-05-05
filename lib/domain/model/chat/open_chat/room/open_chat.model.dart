@@ -15,20 +15,23 @@ class OpenChatModel with _$OpenChatModel {
     String? profile_image,
     @Default('') String title,
     @Default(<String>[]) List<String> hashtags,
+    @Default('') String last_message,
     DateTime? created_at,
-    DateTime? updated_at,
+    DateTime? last_talk_at,
   }) = _OpenChatModel;
 
   factory OpenChatModel.fromJson(Map<String, dynamic> json) =>
       _$OpenChatModelFromJson(json);
 
   factory OpenChatModel.fromEntity(OpenChatEntity openChat) => OpenChatModel(
-      id: openChat.id ?? '',
-      user_id: openChat.host?.id ?? '',
-      nickname: openChat.host?.nickname ?? '',
-      profile_image: openChat.host?.profileImage,
-      title: openChat.title ?? '',
-      hashtags: openChat.hashtags,
-      created_at: openChat.createdAt,
-      updated_at: openChat.updatedAt);
+        id: openChat.id ?? '',
+        user_id: openChat.host?.id ?? '',
+        nickname: openChat.host?.nickname ?? '',
+        profile_image: openChat.host?.profileImage,
+        title: openChat.title ?? '',
+        hashtags: openChat.hashtags,
+        last_message: openChat.lastMessage ?? '',
+        created_at: openChat.createdAt,
+        last_talk_at: openChat.lastTalkAt,
+      );
 }

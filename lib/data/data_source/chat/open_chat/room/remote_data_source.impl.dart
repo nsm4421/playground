@@ -23,7 +23,7 @@ class RemoteOpenChatDataSourceImpl implements RemoteOpenChatDataSource {
           .stream(primaryKey: ['id'])
           .order('created_at', ascending: false)
           .asyncMap((event) =>
-          event.map((json) => OpenChatModel.fromJson(json)).toList());
+              event.map((json) => OpenChatModel.fromJson(json)).toList());
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
@@ -55,16 +55,27 @@ class RemoteOpenChatDataSourceImpl implements RemoteOpenChatDataSource {
   @override
   Future<String> modifyChat(OpenChatModel chat) async {
     try {
-      final s = await _client.rest
+      return await _client.rest
           .from(TableName.openChat.name)
           .update(chat.toJson())
           .eq('id', chat.id)
           .select()
-          .then((json) =>
-      OpenChatModel
-          .fromJson(json.first)
-          .id);
-      return s;
+          .then((json) => OpenChatModel.fromJson(json.first).id);
+    } catch (err) {
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
+    }
+  }
+
+  @override
+  Future<void> updatedLastMessage(
+      {required String chatId,
+      required String lastMessage,
+      DateTime? lastTalkAt}) async {
+    try {
+      await _client.rest.from(TableName.openChat.name).update({
+        "last_message": lastMessage,
+        if (lastTalkAt != null) "last_talk_at": lastTalkAt.toIso8601String()
+      }).eq('id', chatId);
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }

@@ -1,4 +1,3 @@
-import 'package:hot_place/core/util/uuid.util.dart';
 import 'package:hot_place/domain/model/chat/private_chat/room/private_chat.model.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -55,7 +54,7 @@ class RemotePrivateChatDataSourceImpl implements RemotePrivateChatDataSource {
           .from(TableName.privateChat.name)
           .stream(primaryKey: ['id'])
           .eq('user_id', currentUid)
-          .order('updated_at', ascending: false)
+          .order('last_talk_at', ascending: false)
           .asyncMap(
               (data) async => data.map(PrivateChatModel.fromJson).toList());
     } catch (err) {
@@ -82,6 +81,22 @@ class RemotePrivateChatDataSourceImpl implements RemotePrivateChatDataSource {
           .from(TableName.privateChat.name)
           .delete()
           .eq('id', chatId);
+    } catch (err) {
+      throw ExceptionUtil.toCustomException(err, logger: _logger);
+    }
+  }
+
+  @override
+  Future<void> updatedLastMessage(
+      {required String currentUid,
+      required String opponentUid,
+      required String lastMessage,
+      DateTime? lastTalkAt}) async {
+    try {
+      await _client.rest.from(TableName.privateChat.name).update({
+        "last_message": lastMessage,
+        if (lastTalkAt != null) "lastTalkAt": lastTalkAt.toIso8601String()
+      }).or('user_id.eq.$currentUid,opponent_uid.eq.$opponentUid');
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }

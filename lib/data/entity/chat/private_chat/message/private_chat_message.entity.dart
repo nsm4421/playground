@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hot_place/domain/model/chat/private_chat/message/private_chat_message.local_model.dart';
 import 'package:hot_place/domain/model/chat/private_chat/message/private_chat_message.model.dart';
 import 'package:hot_place/domain/model/chat/private_chat/room/private_chat.model.dart';
 
@@ -35,6 +36,22 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
           receiver: UserEntity(
               id: model.receiver_id,
               nickname: model.receiver_nickname,
+              profileImage: model.receiver_profile_image),
+          content: model.content,
+          createdAt: model.created_at);
+
+  factory PrivateChatMessageEntity.fromLocalModel(
+          LocalPrivateChatMessageModel model) =>
+      PrivateChatMessageEntity(
+          id: model.id,
+          chatId: model.chat_id,
+          sender: UserEntity(
+              id: model.sender_id,
+              nickname: model.sender_nickname,
+              profileImage: model.sender_profile_image),
+          receiver: UserEntity(
+              id: model.receiver_id,
+              nickname: model.receiver_id,
               profileImage: model.receiver_profile_image),
           content: model.content,
           createdAt: model.created_at);

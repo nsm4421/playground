@@ -16,14 +16,11 @@ class RemoteOpenChatMessageDataSourceImpl
         _logger = logger;
 
   @override
-  Future<String> createChatMessage(OpenChatMessageModel chat) async {
+  Future<void> createChatMessage(OpenChatMessageModel message) async {
     try {
       return await _client.rest
           .from(TableName.openChatMessage.name)
-          .insert(chat.toJson())
-          .select()
-          .limit(1)
-          .then((fetched) => OpenChatMessageModel.fromJson(fetched.first).id);
+          .insert(message.toJson());
     } catch (err) {
       throw ExceptionUtil.toCustomException(err, logger: _logger);
     }
