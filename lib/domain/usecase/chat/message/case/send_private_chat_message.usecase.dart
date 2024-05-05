@@ -11,11 +11,12 @@ class SendPrivateChatMessageUseCase {
 
   SendPrivateChatMessageUseCase(this._repository);
 
-  Future<Either<Failure, String>> call({
+  Future<Either<Failure, void>> call({
     required String chatId,
     required String content,
     required UserEntity currentUser,
     required UserEntity receiver,
+    required DateTime createdAt,
   }) async {
     final messageId = UuidUtil.uuid();
     return _repository.createChatMessage(PrivateChatMessageEntity(
@@ -24,6 +25,6 @@ class SendPrivateChatMessageUseCase {
         sender: currentUser,
         receiver: receiver,
         content: content,
-        createdAt: DateTime.now()));
+        createdAt: createdAt));
   }
 }

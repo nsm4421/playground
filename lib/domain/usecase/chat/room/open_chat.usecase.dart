@@ -3,6 +3,7 @@ import 'package:hot_place/domain/repository/chat/room/open_chat.repository.dart'
 import 'package:hot_place/domain/usecase/chat/room/case/create_open_chat.usecase.dart';
 import 'package:hot_place/domain/usecase/chat/room/case/delete_chat.usecase.dart';
 import 'package:hot_place/domain/usecase/chat/room/case/modify_open_chat.usecase.dart';
+import 'package:hot_place/domain/usecase/chat/room/case/update_open_last_message.usecase.dart';
 import 'package:injectable/injectable.dart';
 
 import 'case/get_chat_stream.usecase.dart';
@@ -27,4 +28,8 @@ class OpenChatUseCase {
   @injectable
   ModifyOpenChatUseCase get modifyOpenChat =>
       ModifyOpenChatUseCase(_repository);
+
+  @injectable
+  UpdateOpenLastMessageUseCase get updateLastMessage =>
+      UpdateOpenLastMessageUseCase(_repository);
 }

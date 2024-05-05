@@ -6,6 +6,12 @@ import '../../../../core/error/failure.constant.dart';
 
 abstract interface class OpenChatRepository
     implements ChatRepository<OpenChatEntity> {
-  // 채팅 수정기능은 오픈채팅에서만 구현
+  Future<Either<Failure, OpenChatEntity>> createChat(OpenChatEntity chat);
+
   Future<Either<Failure, String>> modifyChat(OpenChatEntity chat);
+
+  Future<Either<Failure, void>> updateLastMessage(
+      {required String chatId,
+      required String lastMessage,
+      DateTime? lastTalkAt});
 }

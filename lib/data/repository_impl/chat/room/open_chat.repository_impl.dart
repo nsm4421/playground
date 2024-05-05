@@ -20,11 +20,12 @@ class OpenChatRepositoryImpl implements OpenChatRepository {
           data.map((model) => OpenChatEntity.fromModel(model)).toList());
 
   @override
-  Future<Either<Failure, void>> createChat(OpenChatEntity chat) async {
+  Future<Either<Failure, OpenChatEntity>> createChat(
+      OpenChatEntity chat) async {
     try {
       return await _dataSource
           .createChat(OpenChatModel.fromEntity(chat))
-          .then((_) => right(null));
+          .then((_) => right(chat));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
@@ -45,6 +46,21 @@ class OpenChatRepositoryImpl implements OpenChatRepository {
   Future<Either<Failure, void>> deleteChatById(String chatId) async {
     try {
       return await _dataSource.deleteChatById(chatId).then((_) => right(null));
+    } on CustomException catch (err) {
+      return left(Failure(code: err.code, message: err.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateLastMessage(
+      {required String chatId,
+      required String lastMessage,
+      DateTime? lastTalkAt}) async {
+    try {
+      return await _dataSource
+          .updatedLastMessage(
+              chatId: chatId, lastMessage: lastMessage, lastTalkAt: lastTalkAt)
+          .then((_) => right(null));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }

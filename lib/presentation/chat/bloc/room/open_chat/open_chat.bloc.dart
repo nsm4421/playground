@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hot_place/core/error/custom_exception.dart';
 import 'package:hot_place/data/entity/chat/open_chat/room/open_chat.entity.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/domain/usecase/chat/room/open_chat.usecase.dart';
@@ -42,13 +43,16 @@ class OpenChatBloc extends Bloc<OpenChatEvent, OpenChatState> {
       CreateOpenChatEvent event, Emitter<OpenChatState> emit) async {
     try {
       emit(OpenChatLoadingState());
-      final res = await _useCase.createChat.call(
-          title: event.title,
-          hashtags: event.hashtags,
-          currentUser: event.currentUser);
-      res.fold(
-          (l) => emit(OpenChatFailureState(l.message ?? '알수 없는 오류가 발생했습니다')),
-          (r) => emit(OpenChatSuccessState()));
+      await _useCase.createChat
+          .call(
+              title: event.title,
+              hashtags: event.hashtags,
+              currentUser: event.currentUser,
+              createdAt: DateTime.now())
+          .then((res) => res.fold(
+              (l) =>
+                  emit(OpenChatFailureState(l.message ?? '알수 없는 오류가 발생했습니다')),
+              (r) => emit(OpenChatSuccessState())));
     } catch (err) {
       debugPrint(err.toString());
       emit(OpenChatFailureState('알수 없는 오류가 발생했습니다'));

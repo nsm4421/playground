@@ -11,16 +11,18 @@ class SendOpenChatMessageUseCase {
 
   SendOpenChatMessageUseCase(this._repository);
 
-  Future<Either<Failure, String>> call(
-      {required String chatId,
-      required String content,
-      required UserEntity currentUser}) async {
+  Future<Either<Failure, void>> call({
+    required String chatId,
+    required String content,
+    required UserEntity currentUser,
+    required DateTime createdAt,
+  }) async {
     final messageId = UuidUtil.uuid();
     return _repository.createChatMessage(OpenChatMessageEntity(
         chatId: chatId,
         id: messageId,
         content: content,
         sender: currentUser,
-        createdAt: DateTime.now()));
+        createdAt: createdAt));
   }
 }

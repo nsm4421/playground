@@ -28,26 +28,25 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   }
 
   @override
-  Future<Either<Failure, String>> createChatMessage(
-      OpenChatMessageEntity chat) async {
+  Future<Either<Failure, OpenChatMessageEntity>> createChatMessage(
+      OpenChatMessageEntity message) async {
     try {
       await _localDataSource
-          .saveChatMessages([LocalOpenChatMessageModel.fromEntity(chat)]);
-      final messageId = await _remoteDataSource
-          .createChatMessage(OpenChatMessageModel.fromEntity(chat));
-      return right(messageId);
+          .saveChatMessages([LocalOpenChatMessageModel.fromEntity(message)]);
+      return await _remoteDataSource
+          .createChatMessage(OpenChatMessageModel.fromEntity(message))
+          .then((_) => right(message));
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }
   }
 
   @override
-  Future<Either<Failure, String>> deleteChatMessageById(
-      String messageId) async {
+  Future<Either<Failure, void>> deleteChatMessageById(String messageId) async {
     try {
       await _localDataSource.deleteChatMessageById(messageId);
       await _remoteDataSource.deleteChatMessageById(messageId);
-      return right(messageId);
+      return right(null);
     } on CustomException catch (err) {
       return left(Failure(code: err.code, message: err.message));
     }

@@ -6,17 +6,22 @@ import 'package:hot_place/presentation/chat/bloc/message/private_chat/private_ch
 import 'package:hot_place/presentation/chat/bloc/room/open_chat/open_chat.bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../domain/usecase/chat/room/private_chat.usecase.dart';
+
 @lazySingleton
 class ChatBlocModule {
   final OpenChatUseCase _openChatUseCase;
   final OpenChatMessageUseCase _openChatMessageUseCase;
+  final PrivateChatUseCase _privateChatUseCase;
   final PrivateChatMessageUseCase _privateChatMessageUseCase;
 
   ChatBlocModule(
       {required OpenChatUseCase openChatUseCase,
+      required PrivateChatUseCase privateChatUseCase,
       required OpenChatMessageUseCase openChatMessageUseCase,
       required PrivateChatMessageUseCase privateChatMessageUseCase})
       : _openChatUseCase = openChatUseCase,
+        _privateChatUseCase = privateChatUseCase,
         _openChatMessageUseCase = openChatMessageUseCase,
         _privateChatMessageUseCase = privateChatMessageUseCase;
 
@@ -25,10 +30,15 @@ class ChatBlocModule {
 
   @injectable
   OpenChatMessageBloc openChatMessageBloc(@factoryParam String chatId) =>
-      OpenChatMessageBloc(chatId: chatId, useCase: _openChatMessageUseCase);
+      OpenChatMessageBloc(
+          chatId: chatId,
+          chatUseCase: _openChatUseCase,
+          messageUseCase: _openChatMessageUseCase);
 
   @injectable
   PrivateChatMessageBloc privateChatMessageBloc(@factoryParam String chatId) =>
       PrivateChatMessageBloc(
-          chatId: chatId, useCase: _privateChatMessageUseCase);
+          chatId: chatId,
+          chatUseCase: _privateChatUseCase,
+          messageUseCase: _privateChatMessageUseCase);
 }

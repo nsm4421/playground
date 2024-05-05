@@ -9,4 +9,11 @@ abstract interface class PrivateChatRepository
     implements ChatRepository<PrivateChatEntity> {
   Future<Either<Failure, PrivateChatEntity>> getChatByUsers(
       {required UserEntity currentUser, required UserEntity opponentUser});
+
+  Future<Either<Failure, void>> updateLastMessage({
+    required String currentUid,
+    required String opponentUid,
+    required String lastMessage,
+    DateTime? lastTalkAt,
+  });
 }

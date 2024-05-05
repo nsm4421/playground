@@ -5,7 +5,5 @@ import '../../../../core/error/failure.constant.dart';
 abstract interface class ChatRepository<T> {
   Stream<List<T>> get chatStream;
 
-  Future<Either<Failure, void>> createChat(T chat);
-
   Future<Either<Failure, void>> deleteChatById(String chatId);
 }

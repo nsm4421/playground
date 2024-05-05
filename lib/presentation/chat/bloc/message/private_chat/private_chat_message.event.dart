@@ -26,6 +26,13 @@ final class SendPrivateChatMessageEvent extends PrivateChatMessageEvent {
 
 final class DeletePrivateChatMessageEvent extends PrivateChatMessageEvent {
   final String messageId;
+  final String chatId;
+  final UserEntity currentUser;
+  final UserEntity receiver;
 
-  DeletePrivateChatMessageEvent(this.messageId);
+  DeletePrivateChatMessageEvent(
+      {required this.messageId,
+      required this.chatId,
+      required this.currentUser,
+      required this.receiver});
 }

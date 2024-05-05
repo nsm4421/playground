@@ -8,6 +8,6 @@ class DeleteChatMessageUseCase<T extends ChatMessageRepository<S>, S> {
 
   DeleteChatMessageUseCase(this._repository);
 
-  Future<Either<Failure, String>> call(String messageId) =>
+  Future<Either<Failure, void>> call(String messageId) =>
       _repository.deleteChatMessageById(messageId);
 }

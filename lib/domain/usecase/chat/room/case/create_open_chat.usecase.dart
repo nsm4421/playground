@@ -11,10 +11,11 @@ class CreateOpenChatUseCase {
 
   CreateOpenChatUseCase(this._repository);
 
-  Future<Either<Failure, void>> call({
+  Future<Either<Failure, OpenChatEntity>> call({
     required String title,
     required List<String> hashtags,
     required UserEntity currentUser,
+    required DateTime createdAt,
   }) async {
     final id = UuidUtil.uuid();
     return await _repository.createChat(OpenChatEntity(
@@ -22,6 +23,8 @@ class CreateOpenChatUseCase {
         host: currentUser,
         title: title,
         hashtags: hashtags,
-        createdAt: DateTime.now()));
+        createdAt: createdAt,
+        lastMessage: '채팅방이 개설되었습니다',
+        lastTalkAt: createdAt));
   }
 }

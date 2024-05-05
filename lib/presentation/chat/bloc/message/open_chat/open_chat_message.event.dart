@@ -21,7 +21,11 @@ final class SendOpenChatMessageEvent extends OpenChatMessageEvent {
 }
 
 final class DeleteOpenChatMessageEvent extends OpenChatMessageEvent {
+  final String chatId;
   final String messageId;
 
-  DeleteOpenChatMessageEvent(this.messageId);
+  DeleteOpenChatMessageEvent({
+    required this.chatId,
+    required this.messageId,
+  });
 }
