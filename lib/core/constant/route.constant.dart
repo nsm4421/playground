@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hot_place/data/entity/user/user.entity.dart';
 import 'package:hot_place/presentation/auth/page/sign_up/sign_up.screen.dart';
+import 'package:hot_place/presentation/chat/page/search/search_user.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat.screen.dart';
 import 'package:hot_place/presentation/chat/page/open_chat/open_chat_room.screen.dart';
 import 'package:hot_place/presentation/chat/page/private_Chat/private_chat_room.screen.dart';
@@ -19,6 +20,7 @@ enum Routes {
   signUp("/auth/sign-up"),
   uploadFeed("/feed/create"),
   searchFeed("/feed/search"),
+  searchUser("/user/search"),
   editProfile("/setting/profile"),
   openChat("/open-chat"),
   createOpenChat("/open-chat/create"),
@@ -50,6 +52,13 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     path: Routes.signUp.path,
     builder: (BuildContext context, GoRouterState state) {
       return const SignUpScreen();
+    },
+  ),
+  GoRoute(
+    name: Routes.searchUser.name,
+    path: Routes.searchUser.path,
+    builder: (BuildContext context, GoRouterState state) {
+      return const SearchUserScreen();
     },
   ),
   GoRoute(

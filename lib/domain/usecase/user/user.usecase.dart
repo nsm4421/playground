@@ -5,6 +5,8 @@ import 'package:hot_place/domain/usecase/user/case/update_last_seen_at.usecase.d
 import 'package:hot_place/domain/usecase/user/case/upsert_profile_image.usecae.dart';
 import 'package:injectable/injectable.dart';
 
+import 'case/search_user.usecase.dart';
+
 @lazySingleton
 class UserUseCase {
   final UserRepository _repository;
@@ -14,6 +16,9 @@ class UserUseCase {
   @injectable
   UpdateLastSeenAtUseCase get updateLastSeenAt =>
       UpdateLastSeenAtUseCase(_repository);
+
+  @injectable
+  SearchUsersUseCase get searchUser => SearchUsersUseCase(_repository);
 
   @injectable
   GetProfileUseCase get getProfile => GetProfileUseCase(_repository);

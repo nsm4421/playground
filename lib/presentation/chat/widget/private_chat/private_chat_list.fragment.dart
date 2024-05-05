@@ -35,7 +35,9 @@ class _PrivateChatListFragmentState extends State<PrivateChatListFragment> {
     return StreamBuilder<List<PrivateChatEntity>>(
         stream: _stream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && !snapshot.hasError) {
             final data = snapshot.data ?? [];
             return ListView.builder(
                 controller: _scrollController,
@@ -44,11 +46,8 @@ class _PrivateChatListFragmentState extends State<PrivateChatListFragment> {
                   final chat = data[index];
                   return PrivateChatItemWidget(chat);
                 });
-          } else if (snapshot.hasError) {
-            return const Text("ERROR");
-          } else {
-            return const Center(child: CircularProgressIndicator());
           }
+          return const Text("ERROR");
         });
   }
 }

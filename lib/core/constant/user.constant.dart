@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 enum AuthStatus {
   authenticated,
   unAuthenticated;
@@ -15,4 +18,14 @@ enum Sex {
   final String description;
 
   const Sex(this.description);
+}
+
+enum UserSearchType {
+  nickname(label: "닉네임", iconData: Icons.account_circle_outlined),
+  hashtag(label: "해시태그", iconData: Icons.tag);
+
+  final String label;
+  final IconData iconData;
+
+  const UserSearchType({required this.label, required this.iconData});
 }
