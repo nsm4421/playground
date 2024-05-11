@@ -1,8 +1,8 @@
-import GoogleAuthButton from "@/components/atom/google_auth_button";
+import GoogleAuthButton from "@/components/auth/google_auth_button";
 import { User } from "@supabase/supabase-js";
 
 interface Props {
-  currentUser: User | null;
+  user: User | null;
 }
 
 export default function ChatNavbar(props: Props) {

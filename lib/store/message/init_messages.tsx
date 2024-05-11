@@ -1,18 +1,17 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { useEffect, useRef } from "react";
-import { useUser } from "./user";
+import { IMessage, useMessage } from "./message";
 
 interface Props {
-  user: User | null;
+  messages: IMessage[];
 }
 
-export function InitUserState(props: Props) {
+export default function InitMessages(props: Props) {
   const initState = useRef(false);
   useEffect(() => {
     if (!initState.current) {
-      useUser.setState(props);
+      useMessage.setState(props);
     }
     initState.current = true;
     return;

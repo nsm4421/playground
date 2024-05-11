@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-import ThemeProvider from "@/components/theme-provider";
+import ThemeProvider from "@/components/provider/theme-provider";
 import { cn } from "@/lib/utils";
 
 const font = Space_Grotesk({
