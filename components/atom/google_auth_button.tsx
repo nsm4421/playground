@@ -13,8 +13,8 @@ interface Props {
 }
 
 export default function GoogleAuthButton(props: Props) {
-  const [isLoading, setIsLoading] = useState(false);
   const auth = getSupbaseBrowser().auth;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -33,9 +33,10 @@ export default function GoogleAuthButton(props: Props) {
   };
 
   const handleLogOut = async () => {
+    console.log("logout");
     try {
       setIsLoading(true);
-      auth.signOut();
+      await auth.signOut();
     } catch (err) {
       console.error(err);
     } finally {
