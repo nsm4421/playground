@@ -2,10 +2,11 @@
 
 import { User } from "@supabase/supabase-js";
 import { useEffect, useRef } from "react";
-import { useUser } from "./user";
+import { IUser, useUser } from "./user";
 
 interface Props {
-  user: User | null;
+  sessionUser: User | null;
+  currentUser: IUser | null;
 }
 
 export function InitUserState(props: Props) {

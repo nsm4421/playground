@@ -2,13 +2,21 @@ import ChatInput from "@/components/chat/chat_input";
 import ChatMessageListWraaper from "@/components/chat/chat_messages_list_wrapper";
 import ChatNavbar from "@/components/navbar/chat_navbar";
 import { InitUserState } from "@/lib/store/user/init_user_state";
+import { IUser } from "@/lib/store/user/user";
 
 import getSupbaseServer from "@/lib/supabase/server";
 
 export default async function Page() {
   const supabase = getSupbaseServer();
-
-  const sessionUser = await supabase.auth.getUser().then((r) => r.data.user);
+  let sessionUser = await supabase.auth.getUser().then((res) => res.data.user);
+  let currentUser = null;
+  if (sessionUser != null) {
+    currentUser = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", sessionUser.id)
+      .then((res) => (res.data ? (res.data[0] as IUser) : null));
+  }
 
   return (
     <main className="max-w-3xl mx-auto md:py-10 h-screen">
@@ -23,7 +31,7 @@ export default async function Page() {
         </div>
       </div>
       {/* 현재 유저 상태 */}
-      <InitUserState user={sessionUser} />
+      <InitUserState sessionUser={sessionUser} currentUser = {currentUser}/>
     </main>
   );
 }

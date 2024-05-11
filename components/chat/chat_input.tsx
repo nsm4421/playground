@@ -12,7 +12,7 @@ import { useUser } from "@/lib/store/user/user";
 export default function ChatInput() {
   const maxLength = 1000;
   const supabsae = getSupbaseBrowser();
-  const currentUser = useUser((state) => state.user);
+  const currentUser = useUser((state) => state.currentUser);
   const addMessage = useMessage((state) => state.addMessage);
 
   const [content, setContent] = useState<string>("");
@@ -27,7 +27,7 @@ export default function ChatInput() {
 
   const handleSendMessage = async () => {
     // validate
-    if (content === "") {
+    if (content.trim() === "") {
       return;
     }
     setIsLoading(true);
@@ -35,17 +35,11 @@ export default function ChatInput() {
     try {
       const newMessage: IMessage = {
         id: v4(),
-        content,
+        content: content.trim(),
         created_by: currentUser!.id,
         created_at: new Date().toISOString(),
         is_edit: false,
-        user: {
-          id: currentUser!.id,
-          username: currentUser!.user_metadata.name,
-          profile_image: currentUser!.user_metadata.profile_image,
-          created_at: currentUser!.created_at,
-          removed_at: null,
-        },
+        user: currentUser,
         removed_at: null,
       };
 
