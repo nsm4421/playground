@@ -30,7 +30,7 @@ export default function ChatMesssageItem(props: Props) {
       {/* 프로필 이미지 */}
       <div className="w-10 h-10">
         {props.message.user?.profile_image && (
-          <Image
+          <Image     
             width={30}
             height={30}
             src={props.message.user?.profile_image}
@@ -60,7 +60,7 @@ export default function ChatMesssageItem(props: Props) {
                   {/* 삭제 버튼 */}
                   <DropdownMenuItem
                     onClick={handleClickDelete}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:bg-slate-300 rounded-sm"
                   >
                     <DropdownMenuLabel>Delete</DropdownMenuLabel>
                   </DropdownMenuItem>

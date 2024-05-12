@@ -39,7 +39,7 @@ export function DeleteChatMessageDialog() {
         console.error(error);
         return;
       } else {
-        softDeleteMessage({ messageId: actionMessage!.id, removedAt });
+        softDeleteMessage(removedAt);
         setActionMessage(undefined);
         toast.success("메세지를 삭제 성공");
       }

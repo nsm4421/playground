@@ -7,6 +7,7 @@ import getSupbaseBrowser from "@/lib/supabase/browser";
 import { toast } from "sonner";
 import { IUser } from "@/lib/store/user/user";
 import { ArrowDown } from "lucide-react";
+import LoadChatMessage from "./load_chat_message";
 
 export default function ChatMessageList() {
   const supabase = getSupbaseBrowser();
@@ -109,6 +110,10 @@ export default function ChatMessageList() {
     >
       {/* 메세지 목록 */}
       <div className="space-y-7">
+        {/* 메세지 더 가져오기 버튼 */}
+        <div className="my-2">
+          <LoadChatMessage />
+        </div>
         {messages.map((message, index) => (
           <div className="flex gap-2" key={index}>
             <ChatMesssageItem message={message} />

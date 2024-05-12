@@ -9,9 +9,12 @@ interface Props {
 
 export default function InitMessages(props: Props) {
   const initState = useRef(false);
+  const { addAllMessage, size, setIsEnd } = useMessage();
+
   useEffect(() => {
     if (!initState.current) {
-      useMessage.setState(props);
+      addAllMessage(props.messages);
+      setIsEnd(props.messages.length < size);
     }
     initState.current = true;
     return;
