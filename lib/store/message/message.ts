@@ -14,9 +14,9 @@ interface MessageState {
   // pagination
   page: number;
   size: number;
-  isEnd : boolean;
+  isEnd: boolean;
   setPage: (page: number) => void;
-  setIsEnd: (isEnd : boolean) => void;
+  setIsEnd: (isEnd: boolean) => void;
 
   // users
   users: IUser[];
@@ -26,7 +26,13 @@ interface MessageState {
   messages: IMessage[];
   addMessage: (message: IMessage) => void;
   addAllMessage: (messages: IMessage[]) => void;
-  softDeleteMessage: (removedAt:string) => void;
+  softDeleteMessage: ({
+    messageId,
+    removedAt,
+  }: {
+    messageId: string;
+    removedAt: string;
+  }) => void;
 
   // current message
   actionMessage: IMessage | undefined;
@@ -37,7 +43,7 @@ export const useMessage = create<MessageState>()((set) => ({
   // pagination
   page: 1,
   size: 20,
-  isEnd : false,
+  isEnd: false,
   setPage: (page: number) => set(() => ({ page })),
   setIsEnd: (isEnd: boolean) => set(() => ({ isEnd })),
 
@@ -73,13 +79,23 @@ export const useMessage = create<MessageState>()((set) => ({
         messages: [...newMessages, ...state.messages],
       };
     }),
-  softDeleteMessage: (removedAt:string) =>
+  softDeleteMessage: ({
+    messageId,
+    removedAt,
+  }: {
+    messageId: string;
+    removedAt: string;
+  }) =>
     set((state) => {
       return {
         messages: state.messages.map((message) =>
           // soft delete
-          message.id === state.actionMessage?.id
-            ? { ...message, removed_at: removedAt }
+          message.id === messageId
+            ? {
+                ...message,
+                content: "삭제된 메세지 입니다",
+                removed_at: removedAt,
+              }
             : message
         ),
       };

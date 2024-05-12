@@ -22,7 +22,7 @@ export default function ChatMesssageItem(props: Props) {
 
   const handleClickDelete = () => {
     setActionMessage(props.message);
-    document.getElementById(`trigger-delete-${props.message.id}`)?.click();
+    document.getElementById('trigger-delete')?.click();
   };
 
   return (

@@ -8,10 +8,9 @@ import { useState } from "react";
 
 export default function LoadChatMessage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isEnd, setIsEnd] = useState(false);
   const supabase = getSupbaseBrowser();
 
-  const { page, size, addAllMessage, setPage } = useMessage();
+  const { page, size, isEnd, setIsEnd, addAllMessage, setPage } = useMessage();
 
   const fetchMessages = async () => {
     try {
@@ -24,7 +23,7 @@ export default function LoadChatMessage() {
       if (error) {
         toast.error(error.message);
         console.error(error);
-      } else if (data.length === 0) {
+      } else if (data.length < size) {
         setIsEnd(true);
       } else {
         setIsEnd(false);

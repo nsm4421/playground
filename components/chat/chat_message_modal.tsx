@@ -39,7 +39,7 @@ export function DeleteChatMessageDialog() {
         console.error(error);
         return;
       } else {
-        softDeleteMessage(removedAt);
+        softDeleteMessage({ messageId: actionMessage!.id, removedAt });
         setActionMessage(undefined);
         toast.success("메세지를 삭제 성공");
       }
@@ -54,10 +54,7 @@ export function DeleteChatMessageDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <button
-          id={`trigger-delete-${actionMessage?.id}`}
-          disabled={isLoading}
-        ></button>
+        <button id={"trigger-delete"} disabled={isLoading}></button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
