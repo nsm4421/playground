@@ -1,4 +1,3 @@
-import GoogleAuthButton from "@/components/auth/google_auth_button";
 import { InitUserState } from "@/lib/store/user/init_user_state";
 
 import getSupbaseServer from "@/lib/supabase/server";
@@ -15,7 +14,6 @@ export default async function Page() {
       <div className=" h-full border rounded-md flex flex-col">
         <Link href={"/chat"}>CHAT</Link>
       </div>
-      <GoogleAuthButton user={sessionUser} />
       {/* 현재 유저 상태 */}
       <InitUserState sessionUser={sessionUser}/>
     </main>

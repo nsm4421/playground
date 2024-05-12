@@ -31,7 +31,7 @@ export default function ChatMessageList() {
         async (payload) => {
           // 유저 정보 조회
           const userIds = users.map((u) => u.id);
-          if (!userIds.includes(payload.new.user.id)) {
+          if (!userIds.includes(payload.new.created_by)) {
             const { data, error } = await supabase
               .from("users")
               .select("*")
@@ -53,7 +53,7 @@ export default function ChatMessageList() {
             created_at: payload.new.created_at,
             id: payload.new.id,
             removed_at: payload.new.removed_at,
-            sender: user!,
+            sender: user ?? null,
           };
           addMessage(newMessage);
         }
@@ -62,7 +62,7 @@ export default function ChatMessageList() {
       .on(
         "postgres_changes",
         {
-          event: "DELETE",
+          event: "UPDATE", // soft delete
           schema: "public",
           table: "messages",
         },
@@ -77,8 +77,8 @@ export default function ChatMessageList() {
     };
   }, [messages]);
 
-  /// 메세지를 수신 시, 스크롤이 맨 아래 있는 경우, 스크롤 바 맨 아래로 내리기
   useEffect(() => {
+    handleScroll();
     if (isAtBottom) {
       handleJumpToBottom();
     }
@@ -113,11 +113,13 @@ export default function ChatMessageList() {
         <div className="my-2">
           <LoadChatMessage />
         </div>
-        {messages.map((message, index) => (
-          <div className="flex gap-2" key={index}>
-            <ChatMesssageItem message={message} />
-          </div>
-        ))}
+        <ul>
+          {messages.map((message, index) => (
+            <li className="flex gap-2" key={index}>
+              <ChatMesssageItem message={message} />
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* 맨 아래로 버튼 */}

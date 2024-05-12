@@ -7,3 +7,12 @@ Reference
 Script
 
 `npx supabase gen types typescript --project-id "ardjcobuvldtslcgbmxr" --schema public > lib/supabase/types.ts`
+
+
+# Sign Up
+
+BEGIN
+INSERT INTO public.users (id, email, username, avatar_url)
+VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'name', NEW.raw_user_meta_data->>'avatar_url');
+RETURN NEW;
+END;

@@ -17,7 +17,7 @@ export default function LoadChatMessage() {
       setIsLoading(true);
       const { data, error } = await supabase
         .from("messages")
-        .select("*,user:users(*)")
+        .select("*,sender:users(*)")
         .range((page - 1) * size, page * size - 1)
         .order("created_at", { ascending: false });
       if (error) {

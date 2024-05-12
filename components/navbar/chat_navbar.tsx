@@ -3,7 +3,7 @@
 import { BasicUser, useUser } from "@/lib/store/user/user";
 import getSupbaseBrowser from "@/lib/supabase/browser";
 import { useEffect, useState } from "react";
-import GoogleAuthButton from "../auth/google_auth_button";
+import GoogleLoginButton from "../auth/google_login_button";
 
 interface Payload {
   user: BasicUser;

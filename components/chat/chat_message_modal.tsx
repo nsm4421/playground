@@ -19,16 +19,13 @@ import { toast } from "sonner";
 export function DeleteChatMessageDialog() {
   const [isLoading, setIsLoading] = useState(false);
   const supabase = getSupbaseBrowser();
-  const softDeleteMessage = useMessage((state) => state.softDeleteMessage);
-  const actionMessage = useMessage((state) => state.actionMessage);
-
-  const setActionMessage = useMessage((state) => state.setActionMessage);
-
+  const { softDeleteMessage, actionMessage, setActionMessage } = useMessage();
   const handleAction = async () => {
     try {
       setIsLoading(true);
       const removedAt = new Date().toISOString();
-      const { error } = await supabase
+      
+      const { error, data } = await supabase
         .from("messages")
         .update({
           removed_at: removedAt,

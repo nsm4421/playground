@@ -14,7 +14,7 @@ export function InitUserState(props: Props) {
     if (!initState.current) {
       useUser.setState({
         ...props,
-        basicUser: {
+        basicUser: props.sessionUser && {
           id: props.sessionUser!.id,
           username: props.sessionUser?.user_metadata.name,
           avatar_url: props.sessionUser?.user_metadata.avatar_url,
