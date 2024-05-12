@@ -12,8 +12,8 @@ import { useUser } from "@/lib/store/user/user";
 export default function ChatInput() {
   const maxLength = 1000;
   const supabsae = getSupbaseBrowser();
-  const currentUser = useUser((state) => state.currentUser);
-  const addMessage = useMessage((state) => state.addMessage);
+  const { basicUser } = useUser();
+  const { addMessage } = useMessage();
 
   const [content, setContent] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,9 +36,8 @@ export default function ChatInput() {
       const newMessage: IMessage = {
         id: v4(),
         content: content.trim(),
-        created_by: currentUser!.id,
         created_at: new Date().toISOString(),
-        user: currentUser,
+        sender: basicUser,
         removed_at: null,
       };
 

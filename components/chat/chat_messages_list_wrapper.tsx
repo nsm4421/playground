@@ -2,16 +2,15 @@ import getSupabaseServer from "@/lib/supabase/server";
 import { Suspense } from "react";
 import ChatMessageList from "./chat_message_list";
 import InitMessages from "@/lib/store/message/init_messages";
-import { useMessage } from "@/lib/store/message/message";
+import { PAGE_SIZE } from "@/lib/const/constant";
 
 export default async function ChatMessageListWraaper() {
   const supabase = getSupabaseServer();
-  const { size } = useMessage();
 
   const { data } = await supabase
     .from("messages")
-    .select("*,user:users(*)")
-    .range(0, size)
+    .select("*,sender:users(*)")
+    .range(0, PAGE_SIZE)
     .order("created_at", { ascending: false });
 
   return (

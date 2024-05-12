@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { IMessage, useMessage } from "./message";
+import { PAGE_SIZE } from "@/lib/const/constant";
 
 interface Props {
   messages: IMessage[];
@@ -9,12 +10,12 @@ interface Props {
 
 export default function InitMessages(props: Props) {
   const initState = useRef(false);
-  const { addAllMessage, size, setIsEnd } = useMessage();
+  const { addAllMessage, setIsEnd } = useMessage();
 
   useEffect(() => {
     if (!initState.current) {
       addAllMessage(props.messages);
-      setIsEnd(props.messages.length < size);
+      setIsEnd(props.messages.length < PAGE_SIZE);
     }
     initState.current = true;
     return;

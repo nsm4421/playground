@@ -1,21 +1,19 @@
 import { User } from "@supabase/auth-js";
 import { create } from "zustand";
 
-export interface IUser {
-  created_at: string;
-  email: string;
+export type BasicUser = {
   id: string;
-  profile_image: string | null;
-  removed_at: string | null;
   username: string;
-}
+  avatar_url: string | null;
+  created_at : string | undefined;
+};
 
 type UserState = {
-  currentUser: IUser | null;
+  basicUser : BasicUser | null;
   sessionUser: User | null;
 };
 
 export const useUser = create<UserState>()((set) => ({
-  currentUser: null,
+  basicUser:null,
   sessionUser: null,
 }));

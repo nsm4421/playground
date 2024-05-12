@@ -1,13 +1,14 @@
 import { create } from "zustand";
-import { IUser } from "../user/user";
+import { PAGE_SIZE } from "@/lib/const/constant";
+import { BasicUser } from "../user/user";
 
 export type IMessage = {
+  // message
+  id: string;
   content: string;
   created_at: string;
-  created_by: string;
-  id: string;
   removed_at: string | null;
-  user: IUser | null;
+  sender: BasicUser | null;
 };
 
 interface MessageState {
@@ -19,8 +20,8 @@ interface MessageState {
   setIsEnd: (isEnd: boolean) => void;
 
   // users
-  users: IUser[];
-  addUser: (user: IUser) => void;
+  users: BasicUser[];
+  addUser: (user: BasicUser) => void;
 
   // messages
   messages: IMessage[];
@@ -42,7 +43,7 @@ interface MessageState {
 export const useMessage = create<MessageState>()((set) => ({
   // pagination
   page: 1,
-  size: 20,
+  size: PAGE_SIZE,
   isEnd: false,
   setPage: (page: number) => set(() => ({ page })),
   setIsEnd: (isEnd: boolean) => set(() => ({ isEnd })),
@@ -53,13 +54,12 @@ export const useMessage = create<MessageState>()((set) => ({
 
   // messages
   messages: [],
-
   addMessage: (newMessage) =>
     set((state) => {
       let newUsers = [...state.users];
       const userIds = state.users.map((u) => u.id);
-      if (newMessage?.user?.id && !userIds.includes(newMessage?.user.id)) {
-        newUsers.push(newMessage.user);
+      if (newMessage?.sender?.id && !userIds.includes(newMessage?.sender.id)) {
+        newUsers.push(newMessage.sender);
       }
       return { messages: [...state.messages, newMessage], users: newUsers };
     }),
@@ -69,11 +69,11 @@ export const useMessage = create<MessageState>()((set) => ({
       const newUsers = Array.from(
         new Set(
           newMessages
-            .map((message) => message?.user)
+            .map((message) => message?.sender)
             .filter((user) => user != null)
             .filter((user) => !originalUserIds.includes(user!.id))
         )
-      ) as IUser[];
+      ) as BasicUser[];
       return {
         users: [...state.users, ...newUsers],
         messages: [...newMessages, ...state.messages],

@@ -5,14 +5,14 @@ import ChatMesssageItem from "./chat_message_item";
 import { useEffect, useRef, useState } from "react";
 import getSupbaseBrowser from "@/lib/supabase/browser";
 import { toast } from "sonner";
-import { IUser } from "@/lib/store/user/user";
 import { ArrowDown } from "lucide-react";
 import LoadChatMessage from "./load_chat_message";
+import { BasicUser } from "@/lib/store/user/user";
 
 export default function ChatMessageList() {
   const supabase = getSupbaseBrowser();
   const { users, addUser, messages, addMessage, softDeleteMessage } =
-    useMessage((state) => state);
+    useMessage();
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [isAtBottom, setIsAtBottom] = useState(false);
 
@@ -42,21 +42,20 @@ export default function ChatMessageList() {
               console.error(error);
               return;
             } else {
-              addUser(data as IUser);
+              addUser(data as BasicUser);
             }
           }
           const user = users.find((u) => u.id === payload.new.created_by);
 
           // 메세지 추가
-          const newMessage = {
+          const newMessage: IMessage = {
             content: payload.new.content,
             created_at: payload.new.created_at,
-            created_by: payload.new.created_by,
             id: payload.new.id,
             removed_at: payload.new.removed_at,
-            user: user,
+            sender: user!,
           };
-          addMessage(newMessage as IMessage);
+          addMessage(newMessage);
         }
       )
       // 메세지 삭제

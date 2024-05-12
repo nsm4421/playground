@@ -3,7 +3,7 @@
 import { getLocationOrigin } from "next/dist/shared/lib/utils";
 import { Button } from "../ui/button";
 import { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import getSupbaseBrowser from "@/lib/supabase/browser";
 
 interface Props {
