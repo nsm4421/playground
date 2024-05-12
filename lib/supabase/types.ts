@@ -15,7 +15,6 @@ export type Database = {
           created_at: string
           created_by: string
           id: string
-          is_edit: boolean
           removed_at: string | null
         }
         Insert: {
@@ -23,7 +22,6 @@ export type Database = {
           created_at?: string
           created_by?: string
           id?: string
-          is_edit?: boolean
           removed_at?: string | null
         }
         Update: {
@@ -31,7 +29,6 @@ export type Database = {
           created_at?: string
           created_by?: string
           id?: string
-          is_edit?: boolean
           removed_at?: string | null
         }
         Relationships: [
