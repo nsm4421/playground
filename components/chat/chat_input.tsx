@@ -38,7 +38,6 @@ export default function ChatInput() {
         content: content.trim(),
         created_by: currentUser!.id,
         created_at: new Date().toISOString(),
-        is_edit: false,
         user: currentUser,
         removed_at: null,
       };

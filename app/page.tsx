@@ -7,6 +7,8 @@ import { IUser } from "@/lib/store/user/user";
 import getSupbaseServer from "@/lib/supabase/server";
 
 export default async function Page() {
+
+  // 인증정보 및 유저정보 가져오기
   const supabase = getSupbaseServer();
   let sessionUser = await supabase.auth.getUser().then((res) => res.data.user);
   let currentUser = null;
@@ -15,23 +17,21 @@ export default async function Page() {
       .from("users")
       .select("*")
       .eq("id", sessionUser.id)
-      .then((res) => (res.data ? (res.data[0] as IUser) : null));
+      .single()
+      .then((res) => res.data as IUser | null);
   }
 
   return (
     <main className="max-w-3xl mx-auto md:py-10 h-screen">
       <div className=" h-full border rounded-md flex flex-col">
         <ChatNavbar user={sessionUser} />
-        <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto">
-          <div className="flex-1 "></div>
-          <ChatMessageListWraaper />
-        </div>
+        <ChatMessageListWraaper />
         <div className="p-5">
           <ChatInput />
         </div>
       </div>
       {/* 현재 유저 상태 */}
-      <InitUserState sessionUser={sessionUser} currentUser = {currentUser}/>
+      <InitUserState sessionUser={sessionUser} currentUser={currentUser} />
     </main>
   );
 }

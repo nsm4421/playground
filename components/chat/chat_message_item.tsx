@@ -21,8 +21,8 @@ export default function ChatMesssageItem(props: Props) {
   const setActionMessage = useMessage().setActionMessage;
 
   const handleClickDelete = () => {
-    document.getElementById(`trigger-delete-${props.message.id}`)?.click();
     setActionMessage(props.message);
+    document.getElementById(`trigger-delete-${props.message.id}`)?.click();
   };
 
   return (
@@ -58,7 +58,10 @@ export default function ChatMesssageItem(props: Props) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   {/* 삭제 버튼 */}
-                  <DropdownMenuItem onClick={handleClickDelete}>
+                  <DropdownMenuItem
+                    onClick={handleClickDelete}
+                    className="cursor-pointer"
+                  >
                     <DropdownMenuLabel>Delete</DropdownMenuLabel>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -68,7 +71,15 @@ export default function ChatMesssageItem(props: Props) {
         </div>
 
         {/* 본문 */}
-        <p className="text-black dark:text-gray-300">{props.message.content}</p>
+        {props.message.removed_at ? (
+          <p className="text-slate-400 dark:text-gray-800">
+            삭제된 메세지 입니다
+          </p>
+        ) : (
+          <p className="text-black dark:text-gray-300">
+            {props.message.content}
+          </p>
+        )}
       </div>
 
       {/* 모달창 */}

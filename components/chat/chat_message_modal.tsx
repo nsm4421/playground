@@ -16,11 +16,10 @@ import getSupbaseBrowser from "@/lib/supabase/browser";
 import { useState } from "react";
 import { toast } from "sonner";
 
-
 export function DeleteChatMessageDialog() {
   const [isLoading, setIsLoading] = useState(false);
   const supabase = getSupbaseBrowser();
-  const deleteMessageById = useMessage((state) => state.deleteMessageById);
+  const softDeleteMessage = useMessage((state) => state.softDeleteMessage);
   const actionMessage = useMessage((state) => state.actionMessage);
 
   const setActionMessage = useMessage((state) => state.setActionMessage);
@@ -28,16 +27,19 @@ export function DeleteChatMessageDialog() {
   const handleAction = async () => {
     try {
       setIsLoading(true);
+      const removedAt = new Date().toISOString();
       const { error } = await supabase
         .from("messages")
-        .delete()
+        .update({
+          removed_at: removedAt,
+        })
         .eq("id", actionMessage!.id);
       if (error) {
         toast.error(error.message);
         console.error(error);
         return;
       } else {
-        deleteMessageById(actionMessage!.id);
+        softDeleteMessage({ messageId: actionMessage!.id, removedAt });
         setActionMessage(undefined);
         toast.success("메세지를 삭제 성공");
       }
