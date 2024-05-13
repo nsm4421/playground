@@ -13,28 +13,31 @@ export type Database = {
         Row: {
           content: string
           created_at: string
-          created_by: string
           id: string
+          recevier_id: string
           removed_at: string | null
+          sender_id: string
         }
         Insert: {
           content?: string
           created_at?: string
-          created_by?: string
           id?: string
+          recevier_id?: string
           removed_at?: string | null
+          sender_id?: string
         }
         Update: {
           content?: string
           created_at?: string
-          created_by?: string
           id?: string
+          recevier_id?: string
           removed_at?: string | null
+          sender_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "messages_created_by_fkey"
-            columns: ["created_by"]
+            columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -45,18 +48,21 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          email: string | null
           id: string
           username: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          email?: string | null
           id?: string
           username: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          email?: string | null
           id?: string
           username?: string
         }
