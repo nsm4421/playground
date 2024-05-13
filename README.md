@@ -1,3 +1,11 @@
+# Prisma
+
+    npm i pusher-js pusher next-auth @auth/prisma-adapter @prisma/client
+
+    npm i -D prisma
+
+    npx prisma init
+
 # Type Generation
 
 Reference
