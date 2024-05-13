@@ -1,5 +1,3 @@
-// app/providers.tsx
-
 import { NextUIProvider } from "@nextui-org/react";
 
 interface Props {

@@ -4,6 +4,7 @@ import "./globals.css";
 import ClerkProviderWrapper from "@/lib/provider/clerk-provider";
 import TopNavbar from "@/components/top-navbar";
 import { NextUiProviderWrapper } from "@/lib/provider/next-ui-provider";
+import { ToastContainer } from "react-toastify";
 
 // 영어 글씨체
 const glass_antiqua = Glass_Antiqua({
@@ -37,6 +38,7 @@ export default function RootLayout(props: Props) {
             <TopNavbar />
             {props.children}
           </NextUiProviderWrapper>
+          <ToastContainer />
         </body>
       </ClerkProviderWrapper>
     </html>
