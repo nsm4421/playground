@@ -5,3 +5,13 @@
 - 설치
 
     `npm install @clerk/nextjs`
+
+# Design
+
+- Tailwind
+
+- Next UI
+
+    `npm install -g nextui-cli`
+
+    `nextui add --all`
