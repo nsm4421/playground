@@ -2,28 +2,27 @@
 
 import { Input } from "@nextui-org/react";
 import axios from "axios";
-import { useState } from "react";
-import {
-  faSearch,
-  faRefresh,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextEndPoint } from "@/lib/contant/end-point";
-import { CountryCode } from "@/lib/contant/map";
+import { Address, CountryCode } from "@/lib/contant/map";
 import { toast } from "react-toastify";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
   label: string;
   placeholder?: string;
   country: CountryCode;
+  selected: Address | null;
+  setSelected: Dispatch<SetStateAction<Address | null>>;
+  errorMessage?: string;
 }
 
 export default function SelectAddressForm(props: Props) {
   const maxLength: number = 30;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userInput, setAddress] = useState<string>("");
-  const [selected, setSelected] = useState<string | null>(null);
-  const [candidates, setCandidates] = useState<string[]>([]);
+  const [candidates, setCandidates] = useState<Address[]>([]);
 
   const handleAddress = (text: string) => setAddress(text);
 
@@ -44,31 +43,38 @@ export default function SelectAddressForm(props: Props) {
         },
       })
       .then((res) => {
-        const places = res.data.payload.map(
-          (item: { place_formatted: string }) => item.place_formatted
+        const addresses: Address[] = res.data.payload.map(
+          (a: {
+            mapbox_id: string;
+            full_address: string | undefined;
+            place_formatted: string;
+          }) => a as Address
         );
-        setCandidates(places);
-        if (places.length === 0) {
-          toast.warn("Nothing Searched");
+        setCandidates(addresses);
+        if (addresses.length === 0) {
+          toast.info("nothing searched");
         }
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(props.errorMessage ?? "error occurs");
+        console.error(error);
+      });
 
     setIsLoading(false);
   };
 
-  const handleSelect = (address: string) => () => {
-    setSelected(address);
+  const handleSelect = (address: Address) => () => {
+    props.setSelected(address);
     setCandidates([]);
   };
 
   const handleUnSelect = () => {
-    setSelected(null);
+    props.setSelected(null);
   };
 
   return (
     <div>
-      {selected == null ? (
+      {props.selected == null ? (
         // 검색어 입력창
         <Input
           maxLength={maxLength}
@@ -87,7 +93,7 @@ export default function SelectAddressForm(props: Props) {
         // 선택된 주소
         <Input
           maxLength={maxLength}
-          value={selected}
+          value={props.selected.place_formatted}
           isReadOnly
           {...props}
           endContent={
@@ -101,7 +107,7 @@ export default function SelectAddressForm(props: Props) {
       )}
 
       {/* 검색결과 */}
-      <ul className="absolute bg-slate-400 w-full">
+      <ul className="bg-slate-400 w-full">
         {candidates &&
           candidates.map((address, index) => (
             <li key={index} className="p-2 hover:bg-sky-200 hover:font-bold">
@@ -112,7 +118,7 @@ export default function SelectAddressForm(props: Props) {
                   isLoading ? "cursor-wait" : "cursor-pointer"
                 }`}
               >
-                {address}
+                {address.place_formatted}
               </button>
             </li>
           ))}

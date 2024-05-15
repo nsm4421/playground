@@ -21,8 +21,8 @@ export async function GET(request: Request) {
     params: {
       q,
       language: "en",
-      access_token: process.env.MAPBOX_ACCESS_TOKEN,
-      session_token: process.env.MAPBOX_ACCESS_TOKEN,
+      access_token: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
+      session_token: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
       country: country,
       limit: 5,
     },
