@@ -11,7 +11,6 @@ import {
   NavbarMenuItem,
   Link,
 } from "@nextui-org/react";
-import { UserButton } from "@clerk/nextjs";
 import NavItems from "@/lib/contant/nav-items";
 
 export default function TopNavbar() {
@@ -52,7 +51,7 @@ export default function TopNavbar() {
         {/* 유저 버튼 */}
         <NavbarContent justify="end">
           <NavbarItem>
-            <UserButton />
+           <p>TODO : UserButton</p>
           </NavbarItem>
         </NavbarContent>
 
