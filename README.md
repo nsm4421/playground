@@ -15,3 +15,9 @@
     `npm install -g nextui-cli`
 
     `nextui add --all`
+
+# Supabase
+
+    `npm install @supabase/ssr @supabase/supabase-js`
+
+    `npx supabase gen types typescript --project-id "gybcttbxvzbtohwrmqdc" --schema public > lib/supabase/type/types.ts`
