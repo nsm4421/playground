@@ -12,6 +12,8 @@ import {
   Link,
 } from "@nextui-org/react";
 import NavItems from "@/lib/contant/nav-items";
+import UserButton from "../auth/user-button";
+import InitAuth from "@/lib/store/auth/init_auth";
 
 export default function TopNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,7 +53,7 @@ export default function TopNavbar() {
         {/* 유저 버튼 */}
         <NavbarContent justify="end">
           <NavbarItem>
-           <p>TODO : UserButton</p>
+            <UserButton />
           </NavbarItem>
         </NavbarContent>
 
@@ -70,6 +72,7 @@ export default function TopNavbar() {
           ))}
         </NavbarMenu>
       </Navbar>
+      <InitAuth/>
     </nav>
   );
 }
