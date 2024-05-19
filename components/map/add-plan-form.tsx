@@ -1,19 +1,16 @@
 "use client";
 
-import { Address, Countries, Country, CountryCode } from "@/lib/contant/map";
+import { Address, Country } from "@/lib/contant/map";
 import SelectAddressForm from "./select-address-form";
 import { useState } from "react";
-import { Button } from "@nextui-org/react";
 import SelectCountryForm from "./select-country-form";
+import Map, { FullscreenControl, Layer, MapProvider } from "react-map-gl";
+import Marker from "react-map-gl/dist/esm/components/marker";
 
 export default function AddPlanForm() {
   const [country, setCountry] = useState<Country | null>(null);
   const [fromAddress, setFromAddress] = useState<Address | null>(null);
   const [toAddress, setToAddress] = useState<Address | null>(null);
-
-  const handleSearch = () => {
-    // TODO : 검색결과를 지도에 표시하기
-  }
 
   return (
     <div className="w-full rounded-lg px-5 py-2">
@@ -52,10 +49,32 @@ export default function AddPlanForm() {
         </section>
       )}
 
-      {country && fromAddress && toAddress && (
-        <section>
-          <Button onClick={handleSearch}>Handle Search</Button>
-        </section>
+      {/* 지도 */}
+      {fromAddress && toAddress && (
+        <MapProvider>
+          <Map
+            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
+            initialViewState={{
+              longitude:
+                (fromAddress.properties.coordinates.longitude +
+                  toAddress.properties.coordinates.longitude) /
+                2,
+              latitude:
+                (toAddress.properties.coordinates.latitude +
+                  toAddress.properties.coordinates.latitude) /
+                2,
+              zoom: 10,
+            }}
+            attributionControl={false}
+            mapStyle="mapbox://styles/mapbox/streets-v9"
+            style={{ width: 600, height: 400, background: "red" }}
+          >
+            {/* <Marker
+              longitude={fromAddress.properties.coordinates.longitude}
+              latitude={fromAddress.properties.coordinates.latitude}
+            /> */}
+          </Map>
+        </MapProvider>
       )}
     </div>
   );

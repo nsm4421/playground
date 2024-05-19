@@ -12,12 +12,6 @@ export type CountryCode =
   | "DE"
   | "IT";
 
-export type Address = {
-  mapbox_id: string;
-  full_address?: string;
-  place_formatted : string;
-};
-
 export type Country = {
   ko: string;
   label: string;
@@ -38,3 +32,16 @@ export const Countries: Country[] = [
   { ko: "독일", countryCode: "DE", label: "Germany" },
   { ko: "이탈리아", countryCode: "IT", label: "Italy" },
 ];
+
+export type Address = {
+  id: string;
+  properties: {
+    coordinates: {
+      latitude: number;
+      longitude: number;
+    };
+    full_address: string;
+    mapbox_id: string;
+    place_formatted: string;
+  };
+};
