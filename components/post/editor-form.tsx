@@ -1,70 +1,26 @@
 "use client";
 
 import { NextEndPoint } from "@/lib/contant/end-point";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input } from "@nextui-org/react";
+import { Input, Textarea } from "@nextui-org/react";
 import axios from "axios";
-import { ChangeEvent, useMemo, useState } from "react";
-import "react-quill/dist/quill.snow.css";
+import { SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import HashatagForm from "./hashtag-form";
+import CustomInput from "../form/custom-input";
+import CustomTextarea from "../form/custom-textarea";
 
 export default function Write() {
-  const formats = useMemo(
-    () => [
-      "header",
-      "font",
-      "size",
-      "bold",
-      "italic",
-      "underline",
-      "strike",
-      "blockquote",
-      "list",
-      "bullet",
-      "indent",
-      "link",
-      "image",
-    ],
-    []
-  );
-
-  const modules = useMemo(
-    () => ({
-      toolbar: [
-        [{ header: "1" }, { header: "2" }, { font: [] }],
-        [{ size: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [
-          { list: "ordered" },
-          { list: "bullet" },
-          { indent: "-1" },
-          { indent: "+1" },
-        ],
-        ["link", "image"],
-        ["clean"],
-      ],
-    }),
-    []
-  );
+  const MAX_TITLE_LENGTH = 30;
+  const MAX_CONTENT_LENGTH = 1000;
 
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  // TODO : 해시태그 업로드 기능
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  // Referencd : https://m.blog.naver.com/choirj91/222044740530
-  let ReactQuill =
-    typeof window === "object" ? require("react-quill") : () => false;
-
-  const handleTitle = (e: ChangeEvent<HTMLInputElement>) =>
-    setTitle(e.target.value);
-
-  const handleContent = (v: string) => {
-    setContent(v);
-  };
 
   const handleUpload = async () => {
     // validate
@@ -101,17 +57,17 @@ export default function Write() {
   };
 
   return (
-    <section className="bg-slate-100 dark:bg-slate-700 rounded-lg">
-      <div className="p-2 justify-between flex items-center">
-        <div className="w-full mr-3">
-          <Input
-            size="lg"
-            label="TITLE"
-            placeholder="Write Title"
-            value={title}
-            onChange={handleTitle}
-          />
+    <main className="bg-slate-100 dark:bg-slate-700 rounded-lg mt-20">
+      {/* 헤더 */}
+      <section className="p-2 flex justify-between">
+        <div className="flex items-center">
+          <i className="mx-1">
+            <FontAwesomeIcon icon={faPencil} />
+          </i>
+
+          <h1 className="text-xl font-bold "> Write Post</h1>
         </div>
+
         <div
           className={`flex gap-2 text-white bg-green-800 hover:bg-green-600 rounded-lg p-2 ${
             isLoading ? "cursor-wait" : "cursor-pointer "
@@ -121,18 +77,39 @@ export default function Write() {
           <span>UPLOAD</span>
           <FontAwesomeIcon icon={faUpload} />
         </div>
-      </div>
-      <div className="p-2">
-        {ReactQuill && (
-          <ReactQuill
-            modules={modules}
-            formats={formats}
-            onChange={handleContent}
-            value={content}
-            placeholder="Write Article"
-          />
-        )}
-      </div>
-    </section>
+      </section>
+
+      {/* 제목 */}
+      <section className="mt-5 p-2">
+        <CustomInput
+          value={title}
+          setValue={setTitle}
+          maxLength={MAX_TITLE_LENGTH}
+          label="TITLE"
+          placehoder="ENTER TITLE"
+        />
+      </section>
+
+      {/* 본문 */}
+      <section className="mt-5 p-2">
+        <CustomTextarea
+          value={content}
+          setValue={setContent}
+          maxLength={MAX_CONTENT_LENGTH}
+          maxRows={20}
+          label="CONTENT"
+          placehoder="ENTER CONTENT"
+        />
+      </section>
+
+      {/* 해시태그 */}
+      <section className="mt-5 p-2">
+        <HashatagForm
+          hashtags={hashtags}
+          setHashtags={setHashtags}
+          isEdit={false}
+        />
+      </section>
+    </main>
   );
 }

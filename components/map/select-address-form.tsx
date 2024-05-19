@@ -4,7 +4,7 @@ import { Input } from "@nextui-org/react";
 import axios from "axios";
 import { faSearch, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NextEndPoint } from "@/lib/contant/end-point";
+import { RemoteEndPoint } from "@/lib/contant/end-point";
 import { Address, CountryCode } from "@/lib/contant/map";
 import { toast } from "react-toastify";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -32,24 +32,23 @@ export default function SelectAddressForm(props: Props) {
       return;
     }
     setIsLoading(true);
+    // Refernce : https://docs.mapbox.com/api/search/geocoding/
     await axios
-      .get(NextEndPoint.searchAddress, {
+      .get(RemoteEndPoint.searchAddress, {
         params: {
           q,
           country: props.country,
+          language: "en",
+          session_token: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
+          access_token: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
+          limit: 3,
         },
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-        const addresses: Address[] = res.data.payload.map(
-          (a: {
-            mapbox_id: string;
-            full_address: string | undefined;
-            place_formatted: string;
-          }) => a as Address
-        );
+        const addresses: Address[] = res.data.features;
         setCandidates(addresses);
         if (addresses.length === 0) {
           toast.info("nothing searched");
@@ -91,19 +90,14 @@ export default function SelectAddressForm(props: Props) {
         />
       ) : (
         // 선택된 주소
-        <Input
-          maxLength={maxLength}
-          value={props.selected.place_formatted}
-          isReadOnly
-          {...props}
-          endContent={
-            <i className="h-full items-center flex cursor-pointer hover:text-orange-600">
-              <button onClick={handleUnSelect}>
-                <FontAwesomeIcon icon={faRefresh} />
-              </button>
-            </i>
-          }
-        />
+        <div className="flex justify-between">
+          <span>{props.selected.properties.full_address}</span>
+          <i className="h-full items-center flex cursor-pointer hover:text-orange-600">
+            <button onClick={handleUnSelect}>
+              <FontAwesomeIcon icon={faRefresh} />
+            </button>
+          </i>
+        </div>
       )}
 
       {/* 검색결과 */}
@@ -118,7 +112,7 @@ export default function SelectAddressForm(props: Props) {
                   isLoading ? "cursor-wait" : "cursor-pointer"
                 }`}
               >
-                {address.place_formatted}
+                {address.properties.place_formatted}
               </button>
             </li>
           ))}
