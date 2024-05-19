@@ -3,22 +3,25 @@
 import { NextEndPoint } from "@/lib/contant/end-point";
 import { faPencil, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input, Textarea } from "@nextui-org/react";
 import axios from "axios";
-import { SetStateAction, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import HashatagForm from "./hashtag-form";
 import CustomInput from "../form/custom-input";
 import CustomTextarea from "../form/custom-textarea";
+import PickImageForm from "./pick-image-form";
+import { v4 } from "uuid";
+import UploadFileAction from "@/lib/supabase/action/upload-file";
 
 export default function Write() {
   const MAX_TITLE_LENGTH = 30;
   const MAX_CONTENT_LENGTH = 1000;
-
+  const postId = useMemo(() => v4(), []);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -34,12 +37,39 @@ export default function Write() {
       return;
     }
     setIsLoading(true);
+    let images: string[] = [];
+
+    // 아미지 업로드하기
+    try {
+      if (imageFiles) {
+        const futures = imageFiles.map(
+          async (file, index) =>
+            await UploadFileAction({
+              bucketName: "posts",
+              filename: `public/${postId}_${index}.jpg`,
+              file,
+              upsert: false,
+            })
+        );
+        images = await Promise.all(futures);
+      }
+    } catch (error) {
+      toast.error("Image upload fails");
+      console.error(error);
+      return;       // early stop
+    } finally {
+      setIsLoading(false);
+    }
+
+    // 피드 업로드
     try {
       await axios
         .post(NextEndPoint.createPost, {
+          id: postId,
           title,
           content,
           hashtags,
+          images,
         })
         .then(() => {
           toast.success("Success!");
@@ -52,8 +82,9 @@ export default function Write() {
     } catch (error) {
       toast.error("Unknown Error!");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -68,6 +99,7 @@ export default function Write() {
           <h1 className="text-xl font-bold "> Write Post</h1>
         </div>
 
+        {/* 업로드 버튼 */}
         <div
           className={`flex gap-2 text-white bg-green-800 hover:bg-green-600 rounded-lg p-2 ${
             isLoading ? "cursor-wait" : "cursor-pointer "
@@ -108,6 +140,15 @@ export default function Write() {
           hashtags={hashtags}
           setHashtags={setHashtags}
           isEdit={false}
+        />
+      </section>
+
+      {/* 이미지 업로드 */}
+      <section className="mt-5 p-2">
+        <PickImageForm
+          imageFiles={imageFiles}
+          setImageFiles={setImageFiles}
+          maxNumber={3}
         />
       </section>
     </main>

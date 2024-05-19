@@ -2,9 +2,11 @@ import createSupbaseServerClient from "@/lib/supabase/client/server-client";
 import { NextResponse } from "next/server";
 
 interface Props {
+  id: string;
   title: string;
   content: string;
   hashtags: string[];
+  images: string[];
 }
 
 export async function POST(request: Request) {

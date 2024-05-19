@@ -1,7 +1,7 @@
 import createSupabaseBrowerCleint from "../client/browser-client";
 
 export default async function SignOutAction() {
-  const supbase = createSupabaseBrowerCleint();
+  const supabase = createSupabaseBrowerCleint();
 
-  return await supbase.auth.signOut();
+  return await supabase.auth.signOut();
 }

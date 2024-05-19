@@ -28,7 +28,7 @@ export default function HashatagForm(props: Props) {
       return;
     }
     if (props.hashtags.includes(value.trim())) {
-      toast.warn("Duplicated Hastag!");
+      toast.warn("Duplicated Hashtag!");
       return;
     }
     props.setHashtags([...props.hashtags, value]);

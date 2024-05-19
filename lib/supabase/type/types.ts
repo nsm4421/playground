@@ -16,6 +16,7 @@ export type Database = {
           created_by: string | null
           hashtags: string[]
           id: string
+          images: string[]
           title: string | null
         }
         Insert: {
@@ -24,6 +25,7 @@ export type Database = {
           created_by?: string | null
           hashtags: string[]
           id?: string
+          images: string[]
           title?: string | null
         }
         Update: {
@@ -32,6 +34,7 @@ export type Database = {
           created_by?: string | null
           hashtags?: string[]
           id?: string
+          images?: string[]
           title?: string | null
         }
         Relationships: [
