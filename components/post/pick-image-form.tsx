@@ -1,7 +1,8 @@
-import { faImage, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { Image } from "@nextui-org/react";
 
 interface Props {
   imageFiles: File[];
@@ -13,11 +14,23 @@ interface Props {
 export default function PickImageForm(props: Props) {
   const maxSize = 5 * 1024 * 1024; // 5MB
   const ref = useRef<HTMLInputElement | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    const urls = props.imageFiles.map((file) => URL.createObjectURL(file));
+    setImageUrls(urls);
+  }, [props.imageFiles]);
 
   const handleAddPicuture = () => {
     if (ref.current) {
       ref.current.click();
     }
+  };
+
+  const handleCancelPicture = (index: number) => () => {
+    let imageFiles = [...props.imageFiles];
+    imageFiles.splice(index, 1);
+    props.setImageFiles(imageFiles);
   };
 
   const handleSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +53,7 @@ export default function PickImageForm(props: Props) {
 
   return (
     <div>
+      {/* 헤더 */}
       <div className="flex justify-between items-center">
         <div className="flex justify-start items-center">
           <h1 className="text-lg font-bold">Pictures</h1>
@@ -48,7 +62,8 @@ export default function PickImageForm(props: Props) {
           </span>
         </div>
 
-        <div
+        {/* 이미지 추가하기 버튼 */}
+        <button
           onClick={handleAddPicuture}
           className="relative w-12 h-12 rounded-full hover:bg-orange-500"
         >
@@ -60,9 +75,10 @@ export default function PickImageForm(props: Props) {
             icon={faPlus}
             className="absolute top-1 right-1 w-3 h-3"
           />
-        </div>
+        </button>
       </div>
 
+      {/* 숨겨진 이미지 선택창 */}
       <input
         multiple={true}
         type="file"
@@ -71,7 +87,31 @@ export default function PickImageForm(props: Props) {
         onChange={handleSelect}
       />
 
-      {/* TODO : 이미지 미리보기, 선택한 이미지 취소 기능 */}
+      {/* 이미지 미리보기 */}
+      <ul className="flex w-full justify-start item-center mt-3">
+        {imageUrls &&
+          imageUrls.map((url, index) => (
+            <li
+              key={index}
+              className="relative"
+              onClick={handleCancelPicture(index)}
+            >
+              <i className="flex top-0 right-0 absolute hover:text-rose-500">
+                <FontAwesomeIcon icon={faXmark} />
+              </i>
+              <Image
+                isZoomed
+                height={250}
+                width={250}
+                loading="lazy"
+                className="w-20 h-20 rounded-full mx-3"
+                removeWrapper
+                alt={`selected-${index}th-image`}
+                src={url}
+              />
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }

@@ -56,7 +56,7 @@ export default function Write() {
     } catch (error) {
       toast.error("Image upload fails");
       console.error(error);
-      return;       // early stop
+      return; // early stop
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +88,7 @@ export default function Write() {
   };
 
   return (
-    <main className="bg-slate-100 dark:bg-slate-700 rounded-lg mt-20">
+    <main className="bg-slate-100 dark:bg-slate-700 rounded-lg mt-20 py-3">
       {/* 헤더 */}
       <section className="p-2 flex justify-between">
         <div className="flex items-center">
@@ -112,7 +112,7 @@ export default function Write() {
       </section>
 
       {/* 제목 */}
-      <section className="mt-5 p-2">
+      <section className="mt-5 p-2 bg-slate-200 dark:bg-slate-800 rounded-lg mx-2">
         <CustomInput
           value={title}
           setValue={setTitle}
@@ -123,7 +123,7 @@ export default function Write() {
       </section>
 
       {/* 본문 */}
-      <section className="mt-5 p-2">
+      <section className="mt-5 p-2 bg-slate-200 dark:bg-slate-800 rounded-lg mx-2">
         <CustomTextarea
           value={content}
           setValue={setContent}
@@ -135,7 +135,7 @@ export default function Write() {
       </section>
 
       {/* 해시태그 */}
-      <section className="mt-5 p-2">
+      <section className="mt-5 p-2 bg-slate-200 dark:bg-slate-800 rounded-lg mx-2">
         <HashatagForm
           hashtags={hashtags}
           setHashtags={setHashtags}
@@ -144,7 +144,7 @@ export default function Write() {
       </section>
 
       {/* 이미지 업로드 */}
-      <section className="mt-5 p-2">
+      <section className="mt-5 p-2 bg-slate-200 dark:bg-slate-800 rounded-lg mx-2">
         <PickImageForm
           imageFiles={imageFiles}
           setImageFiles={setImageFiles}
