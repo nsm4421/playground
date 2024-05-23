@@ -1,3 +1,5 @@
+import PostList from "@/components/post/post-list";
+import InitPost from "@/lib/store/post/init_post";
 import { faPencil, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -25,6 +27,12 @@ export default function Page() {
           </Link>
         </li>
       </ul>
+
+      {/* 포스팅 목록 */}
+      <PostList />
+
+      {/* 포스팅 목록 초기화 */}
+      <InitPost />
     </main>
   );
 }

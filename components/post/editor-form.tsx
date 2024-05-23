@@ -8,17 +8,14 @@ import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import HashatagForm from "./hashtag-form";
-import CustomInput from "../form/custom-input";
 import CustomTextarea from "../form/custom-textarea";
 import PickImageForm from "./pick-image-form";
 import { v4 } from "uuid";
 import UploadFileAction from "@/lib/supabase/action/upload-file";
 
 export default function Write() {
-  const MAX_TITLE_LENGTH = 30;
   const MAX_CONTENT_LENGTH = 1000;
   const postId = useMemo(() => v4(), []);
-  const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -28,9 +25,6 @@ export default function Write() {
   const handleUpload = async () => {
     // validate
     if (isLoading) {
-      return;
-    } else if (title.trim() === "") {
-      toast.warn("Title is empty...");
       return;
     } else if (content.trim() === "") {
       toast.warn("Content is empty...");
@@ -66,7 +60,6 @@ export default function Write() {
       await axios
         .post(NextEndPoint.createPost, {
           id: postId,
-          title,
           content,
           hashtags,
           images,
@@ -109,17 +102,6 @@ export default function Write() {
           <span>UPLOAD</span>
           <FontAwesomeIcon icon={faUpload} />
         </div>
-      </section>
-
-      {/* 제목 */}
-      <section className="mt-5 p-2 bg-slate-200 dark:bg-slate-800 rounded-lg mx-2">
-        <CustomInput
-          value={title}
-          setValue={setTitle}
-          maxLength={MAX_TITLE_LENGTH}
-          label="TITLE"
-          placehoder="ENTER TITLE"
-        />
       </section>
 
       {/* 본문 */}
