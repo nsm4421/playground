@@ -1,4 +1,5 @@
 export const NextEndPoint = {
+  fetchPosts : "/api/post",
   createPost : "/api/post"
 };
 

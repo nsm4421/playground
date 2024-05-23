@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      post_comments: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          post_id: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          post_id?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_comments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feed_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           content: string | null
@@ -17,7 +56,6 @@ export type Database = {
           hashtags: string[]
           id: string
           images: string[]
-          title: string | null
         }
         Insert: {
           content?: string | null
@@ -26,7 +64,6 @@ export type Database = {
           hashtags: string[]
           id?: string
           images: string[]
-          title?: string | null
         }
         Update: {
           content?: string | null
@@ -35,7 +72,6 @@ export type Database = {
           hashtags?: string[]
           id?: string
           images?: string[]
-          title?: string | null
         }
         Relationships: [
           {

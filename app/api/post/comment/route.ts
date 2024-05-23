@@ -1,4 +1,4 @@
-import { PostWithAuthor } from "@/lib/contant/post";
+import { PostCommentWithAuthor, PostWithAuthor } from "@/lib/contant/post";
 import createSupbaseServerClient from "@/lib/supabase/client/server-client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   const supabase = await createSupbaseServerClient();
   const res = await supabase
-    .from("posts")
+    .from("post_comments")
     .select("*, author:users(*)")
     .order("created_at", {
       ascending: false,
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json(
-    { payload: res.data as PostWithAuthor[] },
+    { payload: res.data as PostCommentWithAuthor[] },
     { status: res.status, statusText: res.statusText }
   );
 }
@@ -37,13 +37,12 @@ export async function POST(request: NextRequest) {
   const props: {
     id: string;
     content: string;
-    hashtags: string[];
-    images: string[];
+    post_id: string;
   } = await request.json();
 
   // upload
   const supabase = await createSupbaseServerClient();
-  const res = await supabase.from("posts").insert({
+  const res = await supabase.from("post_comments").insert({
     ...props,
   });
 
