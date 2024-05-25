@@ -1,6 +1,8 @@
 export const NextEndPoint = {
-  fetchPosts : "/api/post",
-  createPost : "/api/post"
+  fetchPosts: "/api/post",
+  fetchPostComments: "/api/post/comment",
+  createPost: "/api/post",
+  createPostComment: "/api/post/comment",
 };
 
 export const RemoteEndPoint = {

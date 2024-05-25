@@ -1,37 +1,100 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Input,
-  Textarea,
 } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
+import PostCommentInput from "./post-comment-input";
 import {
-  faComment,
-  faMessage,
-  faPaperPlane,
-} from "@fortawesome/free-solid-svg-icons";
+  PostComment,
+  PostCommentWithAuthor,
+  PostWithAuthor,
+} from "@/lib/contant/post";
+import PostCommentList from "./post-comment-list";
+import getSupabaseChannel from "@/lib/supabase/action/get-channel";
+import findByUserId from "@/lib/supabase/action/find-by-user-id";
+import removeSupbaseChannel from "@/lib/supabase/action/remove_channel";
+import axios from "axios";
+import { NextEndPoint } from "@/lib/contant/end-point";
+import { toast } from "react-toastify";
 
 interface Props {
-  postId: string;
+  post: PostWithAuthor;
   size?: "md" | "xl" | "2xl" | "3xl";
   isOpen: boolean;
   onOpenChage: () => void;
 }
 
-export default function PostCommentModel(props: Props) {
-  const maxLength = 500;
-  // TODO
-  const handleSubmitComment = () => {};
+export default function PostCommentModal(props: Props) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [comments, setComments] = useState<PostCommentWithAuthor[]>([]);
+
+  const channel = getSupabaseChannel({
+    channelName: `post-comment-${props.post.id}`,
+    event: "INSERT",
+    schema: "public",
+    table: "post_comments",
+    callback: async (payload) => {
+      const postComment = payload.new as PostComment;
+      const author = await findByUserId({
+        userId: postComment.created_by,
+      });
+      const postCommentWithAuthor = {
+        ...payload.new,
+        author: {
+          id: author?.id ?? "",
+          nickname: author?.nickname ?? "",
+          profile_image: author?.profile_image ?? "",
+        },
+      } as PostCommentWithAuthor;
+      setComments([postCommentWithAuthor, ...comments]);
+    },
+  });
+
+  const fetchInitComments = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await axios
+        .get(NextEndPoint.fetchPostComments, {
+          params: {
+            post_id: props.post.id,
+            page: 1,
+            size: 20,
+          },
+        })
+        .then((res) => res.data.payload)
+        .then(setComments)
+        .catch((error) => {
+          console.error(error);
+          toast.error("Fail to get message");
+        });
+    } catch (error) {
+      console.error(error);
+      toast.error("Unknown error");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInitComments();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      removeSupbaseChannel({ channel });
+    };
+  }, []);
 
   return (
     <Modal
-      className="w-full"
+      className="w-full mx-2 my-2 shadow-lg"
       size={props.size ?? "2xl"}
       isOpen={props.isOpen}
       onOpenChange={props.onOpenChage}
@@ -41,36 +104,31 @@ export default function PostCommentModel(props: Props) {
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className="flex flex-col gap-y-3">
+              {/* 헤더 */}
               <div className="flex justify-start items-center gap-x-2">
                 <i>
                   <FontAwesomeIcon icon={faComment} />
                 </i>
                 <h1 className="text-xl font-bold"> COMMENT</h1>
               </div>
+              {/* 댓글작성 */}
+              <div className="p-1 w-full">
+                <PostCommentInput post={props.post} />
+              </div>
             </ModalHeader>
 
             {/* 댓글 목록 */}
-            <ModalBody>
-                
+            <ModalBody
+              className="overflow-y-auto"
+              style={{ maxHeight: "80vh" }}
+            >
+              {isLoading ? (
+                <h1>Loadings...</h1>
+              ) : (
+                <PostCommentList post={props.post} comments={comments} />
+              )}
             </ModalBody>
-
-            {/* 댓글 작성 */}
-            <ModalFooter>
-              <Input
-                maxLength={maxLength}
-                placeholder="Write Comment"
-                // 댓글 제출 버튼
-                endContent={
-                  <button
-                    className="rounded-full hover:cursor-pointer hover:bg-orange-500 w-10 h-10 p-1"
-                    onClick={handleSubmitComment}
-                  >
-                    <FontAwesomeIcon icon={faPaperPlane} />
-                  </button>
-                }
-              />
-            </ModalFooter>
           </>
         )}
       </ModalContent>
