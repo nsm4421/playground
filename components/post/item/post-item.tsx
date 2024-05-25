@@ -3,7 +3,6 @@
 import { PostWithAuthor } from "@/lib/contant/post";
 import {
   faComment,
-  faHeart,
   faRetweet,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +10,7 @@ import { useDisclosure } from "@nextui-org/react";
 
 import PostCommentModal from "../comment/post-comment-modal";
 import PostItemContent from "./post-item-content";
+import LikeButton from "../like/like-button";
 
 interface Props {
   post: PostWithAuthor;
@@ -20,7 +20,6 @@ export default function PostItem({ post }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // TODO
-  const handleClickLike = () => {};
   const handleClickRetweet = () => {};
 
   return (
@@ -30,7 +29,7 @@ export default function PostItem({ post }: Props) {
       <ul className="mx-5 gap-x-3 flex">
         {/* 좋아요 버튼 */}
         <i className="p-1 rounded-full">
-          <FontAwesomeIcon icon={faHeart} onClick={handleClickLike} />
+          <LikeButton post={post}/>
         </i>
         {/* 댓글 버튼 */}
         <i className="p-1 rounded-full">

@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import PostCommentInput from "./post-comment-input";
@@ -17,7 +11,7 @@ import {
   PostWithAuthor,
 } from "@/lib/contant/post";
 import PostCommentList from "./post-comment-list";
-import getSupabaseChannel from "@/lib/supabase/action/get-channel";
+import { createCommentChannel } from "@/lib/supabase/action/create-channel";
 import findByUserId from "@/lib/supabase/action/find-by-user-id";
 import removeSupbaseChannel from "@/lib/supabase/action/remove_channel";
 import axios from "axios";
@@ -35,12 +29,9 @@ export default function PostCommentModal(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comments, setComments] = useState<PostCommentWithAuthor[]>([]);
 
-  const channel = getSupabaseChannel({
-    channelName: `post-comment-${props.post.id}`,
-    event: "INSERT",
-    schema: "public",
-    table: "post_comments",
-    callback: async (payload) => {
+  const channel = createCommentChannel({
+    postId: props.post.id,
+    callback: async (payload: { new: any }) => {
       const postComment = payload.new as PostComment;
       const author = await findByUserId({
         userId: postComment.created_by,

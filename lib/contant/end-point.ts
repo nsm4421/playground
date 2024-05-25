@@ -3,6 +3,8 @@ export const NextEndPoint = {
   fetchPostComments: "/api/post/comment",
   createPost: "/api/post",
   createPostComment: "/api/post/comment",
+  getLike: "/api/post/like", // get
+  likeOnPost: "/api/post/like",
 };
 
 export const RemoteEndPoint = {

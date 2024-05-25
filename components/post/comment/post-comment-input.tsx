@@ -23,13 +23,11 @@ export default function PostCommentInput({ post }: Props) {
   const handleSubmitComment = async () => {
     try {
       setIsLoading(true);
-      await axios
-        .post(NextEndPoint.createPostComment, {
-          id: v4(),
-          content,
-          post_id: post.id,
-        })
-        .then(console.log);
+      await axios.post(NextEndPoint.createPostComment, {
+        id: v4(),
+        content,
+        post_id: post.id,
+      });
       setContent("");
     } catch (error) {
       console.error(error);
