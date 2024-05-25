@@ -17,6 +17,7 @@ export type PostComment = {
 
 export type PostWithAuthor = Post & {
   author: {
+    id:string;
     nickname: string;
     profile_image: string;
   };
@@ -24,6 +25,7 @@ export type PostWithAuthor = Post & {
 
 export type PostCommentWithAuthor = PostComment & {
   author: {
+    id:string;
     nickname: string;
     profile_image: string;
   };

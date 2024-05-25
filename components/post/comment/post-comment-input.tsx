@@ -2,7 +2,6 @@
 
 import { NextEndPoint } from "@/lib/contant/end-point";
 import { PostWithAuthor } from "@/lib/contant/post";
-import usePostCommentState from "@/lib/store/post/comment/post_comment_state";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input } from "@nextui-org/react";
