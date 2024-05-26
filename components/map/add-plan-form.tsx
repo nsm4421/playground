@@ -4,14 +4,13 @@ import {
   Accordion,
   AccordionItem,
   Button,
-  Chip,
   DateRangePicker,
   DateValue,
   RangeValue,
 } from "@nextui-org/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "@/lib/util/date-format-util";
 import { Address, Country } from "@/lib/contant/map";
 import HashatagForm from "../post/item/hashtag-form";
@@ -71,13 +70,15 @@ export default function AddPlanForm() {
 
       await axios
         .post(NextEndPoint.createTravelPlan, {
-          id: v4(),
-          start_date : dateRange.start.toDate(getLocalTimeZone()),
-          end_date : dateRange.start.toDate(getLocalTimeZone()),
+          start_date: dateRange.start.toDate(getLocalTimeZone()),
+          end_date: dateRange.start.toDate(getLocalTimeZone()),
           country_code: country?.countryCode,
-          mapbox_id : place?.properties.mapbox_id,
-          coordinate: place?.properties?.coordinates,
-          name: place?.properties.place_formatted,
+          mapbox_id: place?.properties.mapbox_id,
+          coordinate: [
+            place?.properties?.coordinates.latitude,
+            place?.properties?.coordinates.longitude,
+          ],
+          place_name: place?.properties.place_formatted,
           title,
           content,
           hashtags,

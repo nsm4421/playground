@@ -1,64 +1,31 @@
 import { ApiErrorType, CustomApiError } from "@/lib/contant/api-error";
-import { PostWithAuthor } from "@/lib/contant/post";
+import { CountryCode } from "@/lib/contant/map";
 import createSupbaseServerClient from "@/lib/supabase/client/server-client";
 import { NextRequest, NextResponse } from "next/server";
 
-/// 포스팅 목록 조회
-export async function GET(request: NextRequest) {
-  try {
-    // parsing
-    const { searchParams } = new URL(request.url);
-    const page = Number(searchParams.get("page")) ?? 1;
-    const size = Number(searchParams.get("size")) ?? 20;
-
-    // db requst
-    const supabase = await createSupbaseServerClient();
-    const res = await supabase
-      .from("posts")
-      .select("*, author:users(*)")
-      .order("created_at", {
-        ascending: false,
-      })
-      .range((page - 1) * size, page * size - 1);
-
-    // on error
-    if (res.error) {
-      throw new CustomApiError({
-        type: ApiErrorType.POSTGREST_ERROR,
-        message: res.error.message,
-      });
-    }
-
-    // on success
-    return NextResponse.json(
-      { payload: (res.data ?? []) as PostWithAuthor[] },
-      { status: res.status, statusText: res.statusText }
-    );
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { error },
-      { status: error instanceof CustomApiError ? error.code : 500 }
-    );
-  }
-}
-
-/// 포스팅 신규작성
+/// 여행계획 작성
 export async function POST(request: NextRequest) {
   try {
     // parsing
     const props: {
       id: string;
-      content: string;
+      start_date: string;
+      end_date: string;
+      country_code: CountryCode;
+      mapbox_id: string;
+      coordinate: number[];
+      place_name: string;
+      title: string;
       hashtags: string[];
-      images: string[];
+      content: string;
     } = await request.json();
+    console.debug(props);
 
     // db request
     const supabase = await createSupbaseServerClient();
-    const res = await supabase.from("posts").insert({
-      ...props,
-    });
+    const res = await supabase
+      .from("travel_plans")
+      .insert({ ...props, coordinate: JSON.stringify(props.coordinate) });
 
     // on error
     if (res.error) {
@@ -69,10 +36,10 @@ export async function POST(request: NextRequest) {
     }
 
     // on success
-    return NextResponse.json(
-      { payload: res.data },
-      { status: res.status, statusText: res.statusText }
-    );
+    return NextResponse.json(res.data, {
+      status: res.status,
+      statusText: res.statusText,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -82,25 +49,23 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/// 포스팅 수정
+/// 여행계획 수정
 export async function PUT(request: NextRequest) {
   try {
     // parsing
     const props: {
       id: string;
-      content: string;
+      title: string;
       hashtags: string[];
-      images: string[];
+      content: string;
     } = await request.json();
+    console.debug(props);
 
     // db request
-    // request요청을 보낸 사람과 작성자가 동일한지는 RLS에 의해 자동으로 체크되므로, 따로 코드작성이 불필요
     const supabase = await createSupbaseServerClient();
     const res = await supabase
-      .from("posts")
-      .upsert({
-        ...props,
-      })
+      .from("travel_plans")
+      .update({ ...props })
       .eq("id", props.id);
 
     // on error
@@ -112,10 +77,10 @@ export async function PUT(request: NextRequest) {
     }
 
     // on success
-    return NextResponse.json(
-      { payload: res.data },
-      { status: res.status, statusText: res.statusText }
-    );
+    return NextResponse.json(res.data, {
+      status: res.status,
+      statusText: res.statusText,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -125,22 +90,23 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-/// 포스팅 삭제
+/// 여행계획 수정
 export async function DELETE(request: NextRequest) {
   try {
     // parsing
     const { searchParams } = new URL(request.url);
-    const post_id = searchParams.get("post_id");
-    if (post_id == null) {
+    const plan_id = searchParams.get("plan_id");
+    console.debug(`plan_id : ${plan_id}`);
+    if (plan_id == null) {
       throw new CustomApiError({
         type: ApiErrorType.BAD_REQUEST,
-        message: "post id is null",
+        message: "plan id is null",
       });
     }
 
     // db request
     const supabase = await createSupbaseServerClient();
-    const res = await supabase.from("posts").delete().eq("id", post_id);
+    const res = await supabase.from("travel_plans").delete().eq("id", plan_id);
 
     // on error
     if (res.error) {
@@ -151,10 +117,10 @@ export async function DELETE(request: NextRequest) {
     }
 
     // on success
-    return NextResponse.json(
-      { payload: res.data },
-      { status: res.status, statusText: res.statusText }
-    );
+    return NextResponse.json(res.data, {
+      status: res.status,
+      statusText: res.statusText,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
