@@ -1,6 +1,6 @@
 "use client";
 
-import useAuth from "@/lib/store/auth/auth_state";
+import useAuth from "@/lib/store/auth/auth-state";
 import {
   faGear,
   faPenToSquare,

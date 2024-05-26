@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import NavItems from "@/lib/contant/nav-items";
 import UserButton from "../auth/user-button";
-import InitAuth from "@/lib/store/auth/init_auth";
+import InitAuth from "@/lib/store/auth/init-auth";
 
 export default function TopNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

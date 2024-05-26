@@ -1,5 +1,5 @@
 import PostList from "@/components/post/post-list";
-import InitPost from "@/lib/store/post/init_post";
+import InitPost from "@/lib/store/post/init-post";
 import { faPencil, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";

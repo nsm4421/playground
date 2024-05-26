@@ -5,11 +5,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import PostCommentInput from "./post-comment-input";
-import {
-  PostComment,
-  PostCommentWithAuthor,
-  PostWithAuthor,
-} from "@/lib/contant/post";
+
 import PostCommentList from "./post-comment-list";
 import { createCommentChannel } from "@/lib/supabase/action/create-channel";
 import findByUserId from "@/lib/supabase/action/find-by-user-id";
@@ -17,6 +13,7 @@ import removeSupbaseChannel from "@/lib/supabase/action/remove_channel";
 import axios from "axios";
 import { NextEndPoint } from "@/lib/contant/end-point";
 import { toast } from "react-toastify";
+import { PostComment, PostCommentWithAuthor, PostWithAuthor } from "@/lib/contant/post";
 
 interface Props {
   post: PostWithAuthor;

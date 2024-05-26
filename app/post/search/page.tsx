@@ -1,6 +1,6 @@
 import PostList from "@/components/post/post-list";
 import PostSearchOption from "@/components/post/search/post-search-option";
-import InitPost from "@/lib/store/post/init_post";
+import InitPost from "@/lib/store/post/init-post";
 
 export default function Page() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import usePostState from "@/lib/store/post/post_state";
+import usePostState from "@/lib/store/post/post-state";
 import PostItem from "./item/post-item";
 
 export default function PostList() {

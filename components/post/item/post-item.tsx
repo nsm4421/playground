@@ -1,16 +1,12 @@
 "use client";
 
-import { PostWithAuthor } from "@/lib/contant/post";
-import {
-  faComment,
-  faRetweet,
-} from "@fortawesome/free-solid-svg-icons";
+import { faComment, faRetweet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDisclosure } from "@nextui-org/react";
-
 import PostCommentModal from "../comment/post-comment-modal";
 import PostItemContent from "./post-item-content";
 import LikeButton from "../like/like-button";
+import { PostWithAuthor } from "@/lib/contant/post";
 
 interface Props {
   post: PostWithAuthor;
@@ -29,7 +25,7 @@ export default function PostItem({ post }: Props) {
       <ul className="mx-5 gap-x-3 flex">
         {/* 좋아요 버튼 */}
         <i className="p-1 rounded-full">
-          <LikeButton post={post}/>
+          <LikeButton post={post} />
         </i>
         {/* 댓글 버튼 */}
         <i className="p-1 rounded-full">

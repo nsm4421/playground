@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import usePostState from "./post_state";
+import usePostState from "./post-state";
 import axios from "axios";
 import { NextEndPoint } from "@/lib/contant/end-point";
 import { toast } from "react-toastify";

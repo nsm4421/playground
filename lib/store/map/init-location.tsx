@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import useMapState from "./map_state";
+import useMapState from "./map-state";
 
 interface Props {}
 

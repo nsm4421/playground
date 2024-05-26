@@ -3,11 +3,11 @@ import { create } from "zustand";
 
 interface PostState {
   // state
-  posts: PostWithAuthor[];
-  page: number;
-  size: number;
-  isEnd: boolean;
-  isFetching: boolean;
+  posts: PostWithAuthor[]; // 현재 조회한 포스팅 목록
+  page: number; // 현재 페이지수
+  size: number; // 현재 페이지당 게시글 수
+  isEnd: boolean; // 마지막 페이지 여부
+  isFetching: boolean; // 로딩중 여부
 
   // setter
   setIsEnd: (isEnd: boolean) => void;
@@ -22,7 +22,7 @@ const usePostState = create<PostState>()((set) => ({
   // state
   posts: [],
   page: 1,
-  size: 20,
+  size: 2,
   isEnd: false,
   isFetching: false,
 
