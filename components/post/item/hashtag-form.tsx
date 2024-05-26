@@ -1,6 +1,6 @@
 "use client";
 
-import { faHashtag, faRemove } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faHashtag, faRemove } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Chip, Input } from "@nextui-org/react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -9,22 +9,28 @@ import { toast } from "react-toastify";
 interface Props {
   hashtags: string[];
   setHashtags: Dispatch<SetStateAction<string[]>>;
-  isEdit: boolean;
+  hideLabel?: boolean;
+  hideCounterText?: boolean;
+  placeholder?: string;
+  isEdit: boolean; // 해시태그 삭제 가능 여부
+  maxLength?: number; // 해시태그 최대길이
+  maxNum?: number; //  해시태그 최대개수
+  minLength?: number; // 해시태그 최소길이
 }
 
 export default function HashatagForm(props: Props) {
-  const MAX_LENGTH = 20;
-  const MIN_LENTH = 3;
-  const MAX_NUM = 3;
-
   const [value, setValue] = useState<string>("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key != "Enter") {
       return;
     }
-    if (value.length < MIN_LENTH) {
-      toast.warn(`minimum length is ${MIN_LENTH}`);
+    handleAdd();
+  };
+
+  const handleAdd = () => {
+    if (props.minLength && value.length < props.minLength) {
+      toast.warn(`minimum length is ${props.minLength}`);
       return;
     }
     if (props.hashtags.includes(value.trim())) {
@@ -45,44 +51,53 @@ export default function HashatagForm(props: Props) {
     <>
       <div>
         <Input
-          disabled={props.hashtags.length >= MAX_NUM}
+          disabled={props.hashtags.length >= (props.maxNum ?? 3)}
           startContent={
             <i className="text-sm">
               <FontAwesomeIcon icon={faHashtag} className="text-sm" />
             </i>
           }
+          endContent={
+            <i className="text-sm" onClick={handleAdd}>
+              <FontAwesomeIcon icon={faAdd} className="text-sm" />
+            </i>
+          }
           label={
-            <div className="flex">
-              <strong>HASHTAG</strong>
-              <span className="mx-2 text-sm text-slate-500">
-                {props.hashtags.length}/{MAX_NUM}
-              </span>
-            </div>
+            !props.hideLabel && (
+              <div className="flex">
+                <strong>HASHTAG</strong>
+                <span className="mx-2 text-sm text-slate-500">
+                  {props.hashtags.length}/{props.maxNum ?? 3}
+                </span>
+              </div>
+            )
           }
           labelPlacement="outside"
           className="w-full"
-          maxLength={MAX_LENGTH}
-          isClearable
+          maxLength={props.maxLength ?? 20}
           radius="lg"
           value={value}
           size="lg"
           onValueChange={setValue}
           onKeyDown={handleKeyDown}
+          placeholder={props.placeholder}
         />
-        <div className="flex justify-end">
-          <span className="text-slate-500 text-sm">
-            {value.length}/{MAX_LENGTH}
-          </span>
-        </div>
+        {!props.hideCounterText && (
+          <div className="flex justify-end">
+            <span className="text-slate-500 text-sm">
+              {value.length}/{props.maxLength ?? 20}
+            </span>
+          </div>
+        )}
       </div>
 
-      <ul className="flex justify-start">
+      <ul className="flex justify-start mt-2">
         {props.hashtags.map((hashtag, index) => (
           <li key={index}>
             <Chip
               className="mx-2 hover:bg-orange-400"
               endContent={
-                !props.isEdit && (
+                props.isEdit && (
                   <i
                     onClick={handleDelete(index)}
                     className="text-rose-400 rounded-full hover:cursor-pointer hover:text-white"

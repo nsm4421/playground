@@ -8,7 +8,7 @@ import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import HashatagForm from "./hashtag-form";
-import CustomTextarea from "../../form/custom-textarea";
+import CustomTextarea from "../../common/custom-textarea";
 import PickImageForm from "./pick-image-form";
 import { v4 } from "uuid";
 import UploadFileAction from "@/lib/supabase/action/upload-file";
@@ -121,7 +121,7 @@ export default function Write() {
         <HashatagForm
           hashtags={hashtags}
           setHashtags={setHashtags}
-          isEdit={false}
+          isEdit={true}
         />
       </section>
 

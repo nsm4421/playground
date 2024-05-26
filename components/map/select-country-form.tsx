@@ -3,7 +3,6 @@ import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
 import CountryFlag from "react-country-flag";
-import Select from "react-select";
 
 interface Props {
   country: Country | null;
@@ -11,36 +10,23 @@ interface Props {
 }
 
 export default function SelectCountryForm(props: Props) {
+  const handleSelct = (country: Country) => () => props.setCountry(country);
   const handleCancel = () => props.setCountry(null);
 
   return (
-    <>
-      {props.country ? (
-        <div className="flex justify-between p-2">
-          <div>
-            <CountryFlag countryCode={props.country.countryCode} svg />
-            <span className="ml-3 text-md">{props.country.label}</span>
-            <span className="ml-3 text-slate-700 dark:text-slate-400 text-sm">
-              {props.country.ko}
-            </span>
-          </div>
-          <div
-            className="cursor-pointer px-1 hover:bg-orange-500 rounded-full"
-            onClick={handleCancel}
+    <ul className="h-40 overflow-y-auto bg-slate-200 rounded-lg">
+      {Countries.map((country, index) => (
+        <li key={index}>
+          <button
+            onClick={handleSelct(country)}
+            className="flex gap-x-2 items-center justify-start my-2 hover:bg-orange-500 w-full rounded-lg p-2"
           >
-            <FontAwesomeIcon icon={faRefresh} />
-          </div>
-        </div>
-      ) : (
-        <Select
-          options={Countries}
-          value={props.country}
-          onChange={(e) => {
-            props.setCountry(e);
-          }}
-          placeholder="Select country"
-        />
-      )}
-    </>
+            <CountryFlag countryCode={country.countryCode} svg />
+            <span className="font-semibold text-lg">{country.label}</span>
+            <span className="text-sm text-slate-500">({country.ko})</span>
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }

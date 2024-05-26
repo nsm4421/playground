@@ -1,5 +1,5 @@
 import { PostWithAuthor } from "@/lib/contant/post";
-import dateFormatUtil from "@/lib/util/date-format-util";
+import { formatDateToKorean } from "@/lib/util/date-format-util";
 import { Avatar, Chip } from "@nextui-org/react";
 import { Carousel } from "flowbite-react";
 import Image from "next/image";
@@ -18,7 +18,11 @@ export default function PostItemContent({ post }: Props) {
           <h3 className="text-medium text-slate-500">{post.author.nickname}</h3>
         </div>
         {/* 작성시간 */}
-        {post.created_at && <span className="text-slate-500 text-sm">{dateFormatUtil(post.created_at)}</span>}
+        {post.created_at && (
+          <span className="text-slate-500 text-sm">
+            {formatDateToKorean(post.created_at)}
+          </span>
+        )}
       </div>
 
       {/* Carousel */}

@@ -1,5 +1,5 @@
 import { PostCommentWithAuthor, PostWithAuthor } from "@/lib/contant/post";
-import dateFormatUtil from "@/lib/util/date-format-util";
+import { formatDateToKorean } from "@/lib/util/date-format-util";
 import { Avatar } from "@nextui-org/react";
 
 interface Props {
@@ -28,7 +28,7 @@ export default function PostCommentList(props: Props) {
               {/* 작성시간 */}
               {comment.created_at && (
                 <span className="text-sm text-slate-500">
-                  {dateFormatUtil(comment.created_at)}
+                  {formatDateToKorean(comment.created_at)}
                 </span>
               )}
             </div>

@@ -10,9 +10,9 @@ import { toast } from "react-toastify";
 import { Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
-  label: string;
+  label?: string;
   placeholder?: string;
-  country: CountryCode;
+  country?: CountryCode;
   selected: Address | null;
   setSelected: Dispatch<SetStateAction<Address | null>>;
   errorMessage?: string;

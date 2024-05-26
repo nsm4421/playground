@@ -1,4 +1,14 @@
-export default function dateFormatUtil(timestampStr: string): string {
+/// 날짜를 2024-12-08와 같은 형태로 변경
+export function formatDate({ dt, sep }: { dt: Date; sep?: string }) {
+  const _sep = sep ?? "-";
+  const year = dt.getFullYear();
+  const month = String(dt.getMonth() + 1).padStart(2, "0");
+  const day = String(dt.getDate()).padStart(2, "0");
+  return `${year}${_sep}${month}${_sep}${day}`;
+}
+
+/// 날짜를 한국어로(~초전, ~분전, ~시간전, ...) 포맷팅하기
+export function formatDateToKorean(timestampStr: string): string {
   const now = new Date();
   const timestamp = new Date(timestampStr);
 
