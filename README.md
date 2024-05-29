@@ -1,16 +1,6 @@
-# my_app
+> 구글 소셜 로그인
 
-A new Flutter project.
+- Firebase에서 Google Sign In 사용 설정
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 디지털 지문 설정
+  - keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android
