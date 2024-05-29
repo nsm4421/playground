@@ -9,12 +9,12 @@ const NavItems: NavItem[] = [
     href: "/post",
   },
   {
-    label: "MAP",
-    href: "/map",
+    label: "Travel",
+    href: "/travel",
   },
   {
     label: "CHATTING",
-    href: "/post",
+    href: "/chat",
   },
   {
     label: "ACTIVITY",

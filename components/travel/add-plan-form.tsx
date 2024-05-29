@@ -86,7 +86,7 @@ export default function AddPlanForm() {
         .then(() => {
           // on success
           toast.success("Success");
-          router.replace("/map");
+          router.replace("/travel");
         })
         .catch((error) => {
           // on failure

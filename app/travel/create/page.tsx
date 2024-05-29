@@ -1,4 +1,4 @@
-import AddPlanForm from "@/components/map/add-plan-form";
+import AddPlanForm from "@/components/travel/add-plan-form";
 import InitLocation from "@/lib/store/map/init-location";
 
 export default function Page() {
