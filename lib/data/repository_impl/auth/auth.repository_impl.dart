@@ -15,14 +15,17 @@ class AuthRepositoryImpl implements AuthRepository {
       : _remoteDataSource = remoteAuthDataSource;
 
   @override
+  User? get currentUser => _remoteDataSource.currentUser;
+
+  @override
   Stream<User?> get authStream => _remoteDataSource.authStream;
 
   @override
-  Future<Either<Failure, void>> signInWithGoogle() async {
+  Future<Either<Failure, User>> signInWithGoogle() async {
     try {
       return await _remoteDataSource
           .signInWithGoogle()
-          .then((_) => right(null));
+          .then((user) => right(user));
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }

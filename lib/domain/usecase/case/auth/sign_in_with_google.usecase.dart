@@ -1,11 +1,11 @@
-part of '../../module/auth.usecase.dart';
+part of '../../module/auth/auth.usecase.dart';
 
 class SignInWithGoogleUseCase {
   final AuthRepository _repository;
 
   SignInWithGoogleUseCase(this._repository);
 
-  Future<Either<Failure, void>> call() async {
+  Future<Either<Failure, User>> call() async {
     return await _repository.signInWithGoogle();
   }
 }

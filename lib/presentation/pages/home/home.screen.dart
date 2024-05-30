@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/presentation/bloc/auth/auth.bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,9 +19,7 @@ class _View extends StatefulWidget {
 }
 
 class _ViewState extends State<_View> {
-  _handleSignOut() {
-    context.read<AuthenticationBloc>().add(SignOutEvent());
-  }
+  _handleSignOut() => context.read<AuthCubit>().signOut();
 
   @override
   Widget build(BuildContext context) {

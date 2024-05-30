@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/presentation/bloc/auth/auth.bloc.dart';
+import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -19,9 +19,7 @@ class _View extends StatefulWidget {
 }
 
 class _ViewState extends State<_View> {
-  _handleGoogleSignIn() {
-    context.read<AuthenticationBloc>().add(SignInWithGoogleEvent());
-  }
+  _handleGoogleSignIn() => context.read<AuthCubit>().signInWithGoogle();
 
   @override
   Widget build(BuildContext context) {

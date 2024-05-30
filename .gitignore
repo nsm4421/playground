@@ -10,6 +10,8 @@ pubspec.lock
 lib/firebase_options.dart
 firebase.json
 assets/*
+*.g.dart
+*.freezed.dart
 
 *.config.dart
 *.class

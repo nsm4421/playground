@@ -22,10 +22,13 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         _googleSignIn = googleSignIn;
 
   @override
+  User? get currentUser => _auth.currentUser;
+
+  @override
   Stream<User?> get authStream => _auth.authStateChanges();
 
   @override
-  Future<void> signInWithGoogle() async {
+  Future<User> signInWithGoogle() async {
     try {
       final credential = await _googleSignIn
           .signIn()
@@ -34,12 +37,12 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
                 accessToken: auth?.accessToken,
                 idToken: auth?.idToken,
               ));
-      await _auth.signInWithCredential(credential);
+      return await _auth
+          .signInWithCredential(credential)
+          .then((res) => res.user!);
     } catch (error) {
       throw CustomException.from(error,
-          errorCode: ErrorCode.authError,
-          logger: _logger,
-          message: 'google sign in fail');
+          logger: _logger, message: 'google sign in fail');
     }
   }
 
@@ -49,9 +52,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       await _auth.signOut();
     } catch (error) {
       throw CustomException.from(error,
-          errorCode: ErrorCode.authError,
-          logger: _logger,
-          message: 'sign out fail');
+          logger: _logger, message: 'sign out fail');
     }
   }
 }

@@ -1,4 +1,4 @@
-part of '../../module/auth.usecase.dart';
+part of '../../module/auth/auth.usecase.dart';
 
 class GetAuthStreamUseCase {
   final AuthRepository _repository;
