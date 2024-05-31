@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:my_app/core/exception/failure.dart';
 import 'package:my_app/data/entity/user/user.entity.dart';
@@ -8,4 +10,10 @@ abstract interface class UserRepository {
   Future<Either<Failure, void>> upsertUser(UserEntity entity);
 
   Future<Either<Failure, void>> deleteUser();
+
+  Future<Either<Failure, bool>> checkIsDuplicatedNickname(String nickname);
+
+  Future<Either<Failure, String>> getProfileImageDownloadUrl();
+
+  Future<Either<Failure, void>> saveProfileImage(File image);
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/custom_exeption.dart';
@@ -20,7 +22,7 @@ class UserRepositoryImpl implements UserRepository {
       return await _remoteDataSource
           .getCurrentUser()
           .then((model) => UserEntity.fromModel(model))
-          .then((entity) => right(entity));
+          .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }
@@ -30,8 +32,8 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, void>> upsertUser(UserEntity entity) async {
     try {
       return await _remoteDataSource
-          .upsertUser(UserModel.fronEntity(entity))
-          .then((_) => right(null));
+          .upsertUser(UserModel.fromEntity(entity))
+          .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }
@@ -40,9 +42,37 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Failure, void>> deleteUser() async {
     try {
+      return await _remoteDataSource.deleteUser().then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkIsDuplicatedNickname(
+      String nickname) async {
+    try {
       return await _remoteDataSource
-          .deleteUser()
-          .then((_) => right(null));
+          .checkIsDuplicatedNickname(nickname)
+          .then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getProfileImageDownloadUrl() async {
+    try {
+      return await _remoteDataSource.getProfileImageDownloadUrl().then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveProfileImage(File image) async {
+    try {
+      return await _remoteDataSource.saveProfileImage(image).then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }

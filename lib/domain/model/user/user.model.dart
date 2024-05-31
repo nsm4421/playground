@@ -12,16 +12,16 @@ class UserModel with _$UserModel {
     @Default('') String id,
     @Default('') String nickname,
     @Default('') String profileUrl,
-    @Default('') String introduce,
+    @Default('') String description,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  factory UserModel.fronEntity(UserEntity entity) => UserModel(
+  factory UserModel.fromEntity(UserEntity entity) => UserModel(
         id: entity.id ?? '',
         nickname: entity.nickname ?? '',
         profileUrl: entity.profileUrl ?? '',
-        introduce: entity.introduce ?? '',
+        description: entity.description ?? '',
       );
 }

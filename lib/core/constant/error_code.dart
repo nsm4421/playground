@@ -1,6 +1,6 @@
 enum ErrorCode {
   internalServerError("INTERNAL_SERVER_ERROR"),
-  authError("AUTHENTICATION_ERROR"),
+  notSignIn("NOT_SIGN_IN"),
   notGranted("NOT_GRANTED"),
   notFound('NOT_FOUND'),
   // bad request

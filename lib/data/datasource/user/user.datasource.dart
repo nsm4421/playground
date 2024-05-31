@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:my_app/domain/model/user/user.model.dart';
 
 abstract interface class UserDataSource {}
@@ -10,4 +12,11 @@ abstract interface class RemoteUserDataSource implements UserDataSource {
   Future<void> upsertUser(UserModel user);
 
   Future<void> deleteUser();
+
+  /// on boarding
+  Future<bool> checkIsDuplicatedNickname(String nickname);
+
+  Future<String> getProfileImageDownloadUrl();
+
+  Future<void> saveProfileImage(File image);
 }

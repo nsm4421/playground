@@ -12,7 +12,7 @@ class UserEntity with _$UserEntity {
     String? id,
     String? nickname,
     String? profileUrl,
-    String? introduce,
+    String? description,
   }) = _UserEntity;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
@@ -22,6 +22,6 @@ class UserEntity with _$UserEntity {
         id: model.id.isEmpty ? null : model.id,
         nickname: model.nickname.isEmpty ? null : model.nickname,
         profileUrl: model.profileUrl.isEmpty ? null : model.profileUrl,
-        introduce: model.introduce.isEmpty ? null : model.introduce,
+        description: model.description.isEmpty ? null : model.description,
       );
 }
