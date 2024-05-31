@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/presentation/pages/main.screen.dart';
+import 'package:my_app/presentation/pages/entry.screen.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
 import 'firebase_options.dart';
@@ -28,9 +28,12 @@ class RootWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My Short App',
       theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: const MainScreen(),
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blueGrey,
+            brightness: Brightness.dark,
+          )),
+      home: const EntryScreen(),
     );
   }
 }

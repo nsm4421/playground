@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
 import 'package:my_app/presentation/pages/auth/auth.screen.dart';
-import 'package:my_app/presentation/pages/home/home.screen.dart';
+import 'package:my_app/presentation/pages/main/main.screen.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+class EntryScreen extends StatelessWidget {
+  const EntryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _View extends StatelessWidget {
               return const AuthScreen();
             } else {
               // TODO : Bloc Builder를 사용해 On boarding 페이지를 보여주거나, Home 화면을 보여주도록 수정
-              return const HomeScreen();
+              return const MainScreen();
             }
           }),
     );
