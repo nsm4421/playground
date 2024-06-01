@@ -52,9 +52,9 @@ class _MainScreenState extends State<MainScreen> {
               case BottomNav.feed:
                 return const FeedScreeen();
               case BottomNav.short:
-                return const ChatScreen();
-              case BottomNav.chat:
                 return const ShortScreen();
+              case BottomNav.chat:
+                return const ChatScreen();
               case BottomNav.setting:
                 return const SettingScreen();
             }
