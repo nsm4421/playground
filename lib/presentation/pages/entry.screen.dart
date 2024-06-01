@@ -11,28 +11,14 @@ import 'package:my_app/presentation/pages/auth/auth.screen.dart';
 import 'package:my_app/presentation/pages/main/main.screen.dart';
 import 'package:my_app/presentation/pages/on_board/on_board.screen.dart';
 
-class EntryScreen extends StatelessWidget {
+class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // 앱 전역에서 접근할 수 있는 Bloc
-    return MultiBlocProvider(providers: [
-      // 인증상태 Bloc
-      BlocProvider(create: (context) => getIt<AuthCubit>()),
-      BlocProvider(create: (context) => getIt<UserBloc>()..add(InitUserEvent()))
-    ], child: const _View());
-  }
+  State<EntryScreen> createState() => _EntryScreenState();
 }
 
-class _View extends StatefulWidget {
-  const _View({super.key});
-
-  @override
-  State<_View> createState() => _ViewState();
-}
-
-class _ViewState extends State<_View> {
+class _EntryScreenState extends State<EntryScreen> {
   late Stream<User?> _authStream;
   late StreamSubscription<User?> _authSubscription;
 

@@ -32,6 +32,9 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_serializable: ^6.7.1
 
+  # routing
+  go_router: ^6.2.0
+
   cupertino_icons: ^1.0.2
   ffmpeg_kit_flutter: ^6.0.2
   fpdart: ^1.1.0
