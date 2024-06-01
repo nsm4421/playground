@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/constant/routes.dart';
-import 'package:my_app/presentation/pages/entry.screen.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
 import 'firebase_options.dart';

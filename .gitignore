@@ -12,6 +12,7 @@ firebase.json
 assets/*
 *.g.dart
 *.freezed.dart
+devtools_options.yaml
 
 *.config.dart
 *.class

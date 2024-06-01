@@ -27,15 +27,23 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   Future<void> _handleSelectVideo() async {
-    final result = await FilePicker.platform.pickFiles(
-        dialogTitle: "PICK VIDEO",
-        allowMultiple: false,
-        allowCompression: true,
-        type: FileType.video);
-    if (result != null && result.files.isNotEmpty) {
-      final file = result.files.first;
+    final filePath = await FilePicker.platform
+        .pickFiles(
+            dialogTitle: "PICK VIDEO",
+            allowMultiple: false,
+            allowCompression: true,
+            type: FileType.video)
+        .then((res) => res?.files.first.path);
+    // 파일을 선택하지 않은 경우
+    if (filePath == null) {
+      return;
+    }
+    // 파일을 선택한 경우
+    else {
+      final file = File(filePath);
+      widget.setVideo(file);
       _isPlaying = true;
-      _controller = VideoPlayerController.file(File(file.path!))
+      _controller = VideoPlayerController.file(file)
         ..initialize().then((_) {
           setState(() {});
           _controller!.play();
