@@ -5,16 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/presentation/bloc/short/upload/upload_short.cubit.dart';
+import 'package:my_app/presentation/components/error.fragment.dart';
+import 'package:my_app/presentation/components/loading.fragment.dart';
 
 import '../../../../../core/constant/status.dart';
 import '../../../../bloc/short/upload/upload_short.state.dart';
-import '../../../../components/video_player.widget.dart';
+import '../../../../components/video_preview/video_preview_for_upload.widget.dart';
 
-part 'upload_short_view.widget.dart';
-
-part 'upload_short_loading.widget.dart';
-
-part 'upload_short_error.widget.dart';
+part 'upload_short_view.fragment.dart';
 
 class UploadShortScreen extends StatelessWidget {
   const UploadShortScreen({super.key});
@@ -34,11 +32,11 @@ class UploadShortScreen extends StatelessWidget {
             switch (state.status) {
               case Status.initial:
               case Status.success:
-                return const UploadShortViewWidget();
+                return const UploadShortViewFragment();
               case Status.loading:
-                return UploadShortLoadingWidget(state);
+                return const LoadingFragment();
               case Status.error:
-                return const UploadShortErrorWidget();
+                return const ErrorFragment();
             }
           },
         ),

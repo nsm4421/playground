@@ -1,13 +1,14 @@
 part of 'upload_short.screen.dart';
 
-class UploadShortViewWidget extends StatefulWidget {
-  const UploadShortViewWidget({super.key});
+class UploadShortViewFragment extends StatefulWidget {
+  const UploadShortViewFragment({super.key});
 
   @override
-  State<UploadShortViewWidget> createState() => _UploadShortViewWidgetState();
+  State<UploadShortViewFragment> createState() =>
+      _UploadShortViewFragmentState();
 }
 
-class _UploadShortViewWidgetState extends State<UploadShortViewWidget> {
+class _UploadShortViewFragmentState extends State<UploadShortViewFragment> {
   static const _maxLengthTitle = 30;
   static const _maxLengthContent = 300;
 
@@ -57,7 +58,7 @@ class _UploadShortViewWidgetState extends State<UploadShortViewWidget> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: VideoPlayerWidget(
+              child: VideoPreviewForUploadWidget(
                 setVideo: _setVideo,
                 width: MediaQuery.of(context).size.width,
               ),
