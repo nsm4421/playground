@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:my_app/core/constant/firebase.dart';
 import 'package:my_app/core/exception/custom_exeption.dart';
 import 'package:my_app/data/datasource/short/short.datasource.dart';
 import 'package:my_app/domain/model/short/short.model.dart';
@@ -18,8 +19,6 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
   final FirebaseStorage _storage;
   final Logger _logger;
 
-  static const colName = "shorts";
-  static const bucketName = "shorts";
   static const orderBy = "createdAt";
 
   RemoteShortDataSourceImpl(
@@ -37,7 +36,7 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
       {String? afterAt, bool? descending}) {
     try {
       return _db
-          .collection(colName)
+          .collection(CollectionName.short.name)
           .orderBy(orderBy, descending: descending ?? true)
           .where(orderBy,
               isLessThanOrEqualTo: afterAt ?? DateTime.now().toIso8601String())
@@ -56,7 +55,7 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
       {String? afterAt, int? take, bool? descending}) async {
     try {
       return await _db
-          .collection(colName)
+          .collection(CollectionName.short.name)
           .orderBy(orderBy, descending: descending ?? true)
           .where(orderBy,
               isLessThan: afterAt ?? DateTime.now().toIso8601String())
@@ -73,7 +72,7 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
   Future<void> saveShort(ShortModel model) async {
     try {
       await _db
-          .collection(colName)
+          .collection(CollectionName.short.name)
           .doc(model.id)
           .set(_auditing(model).toJson());
     } catch (error) {
@@ -84,7 +83,7 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
   @override
   Future<void> saveVideo({required id, required File video}) async {
     try {
-      final ref = _storage.ref('$bucketName/$id');
+      final ref = _storage.ref('${BucketName.short.name}/$id');
       await ref.putFile(video);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
@@ -94,7 +93,7 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
   @override
   Future<String> getShortDownloadUrl(String id) async {
     try {
-      final ref = _storage.ref('$bucketName/$id');
+      final ref = _storage.ref('${BucketName.short.name}/$id');
       return await ref.getDownloadURL();
     } catch (error) {
       throw CustomException.from(error, logger: _logger);

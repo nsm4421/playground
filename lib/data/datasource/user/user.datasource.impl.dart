@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:my_app/core/constant/firebase.dart';
 import 'package:my_app/data/datasource/user/user.datasource.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 
@@ -17,9 +18,6 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   final FirebaseFirestore _db;
   final FirebaseStorage _storage;
   final Logger _logger;
-
-  static const colName = "users";
-  static const bucketName = "users";
 
   RemoteUserDataSourceImpl(
       {required FirebaseAuth auth,
@@ -35,7 +33,7 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   Future<UserModel> getCurrentUser() async {
     try {
       final json = await _db
-          .collection(colName)
+          .collection(CollectionName.user.name)
           .doc(_auth.currentUser!.uid)
           .get()
           .then((res) => res.data());
@@ -53,7 +51,7 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   Future<void> upsertUser(UserModel user) async {
     try {
       await _db
-          .collection(colName)
+          .collection(CollectionName.user.name)
           .doc(_auth.currentUser!.uid)
           .set(user.copyWith(id: _auth.currentUser!.uid).toJson());
     } catch (error) {
@@ -65,7 +63,10 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   @override
   Future<void> deleteUser() async {
     try {
-      await _db.collection(colName).doc(_auth.currentUser?.uid).delete();
+      await _db
+          .collection(CollectionName.user.name)
+          .doc(_auth.currentUser?.uid)
+          .delete();
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
@@ -75,7 +76,7 @@ class RemoteUserDataSourceImpl implements RemoteUserDataSource {
   Future<bool> checkIsDuplicatedNickname(String nickname) async {
     try {
       final QuerySnapshot snapshot = await _db
-          .collection(colName)
+          .collection(CollectionName.user.name)
           .where('nickname', isEqualTo: nickname)
           .limit(1)
           .get();
