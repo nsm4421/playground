@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'package:my_app/presentation/bloc/bottom_nav/bottm_nav.cubit.dart';
 
 enum BottomNav {
   home(

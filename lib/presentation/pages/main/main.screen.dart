@@ -1,76 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/core/constant/bottm_nav.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/presentation/pages/main/chat/chat.screen.dart';
 import 'package:my_app/presentation/pages/main/feed/feed.screen.dart';
 import 'package:my_app/presentation/pages/main/home/home.screen.dart';
 import 'package:my_app/presentation/pages/main/setting/setting.screen.dart';
 import 'package:my_app/presentation/pages/main/short/short.screen.dart';
 
-class MainScreen extends StatefulWidget {
+import '../../bloc/bottom_nav/bottm_nav.cubit.dart';
+
+class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (_) => getIt<BottomNavCubit>(),
+        child: BlocBuilder<BottomNavCubit, BottomNav>(
+            builder: (BuildContext context, BottomNav state) {
+          return Scaffold(
+              body: _Body(state),
+              bottomNavigationBar: BottomNavigationBar(
+                onTap: (int index) {
+                  context.read<BottomNavCubit>().handleIndex(index);
+                },
+                currentIndex: context.read<BottomNavCubit>().state.index,
+                type: BottomNavigationBarType.fixed,
+                items: BottomNav.values
+                    .map((e) => BottomNavigationBarItem(
+                        label: e.label,
+                        icon: Icon(e.iconData),
+                        activeIcon: Icon(e.activeIconData)))
+                    .toList(),
+              ));
+        }));
+  }
 }
 
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-  late PageController _pageController;
+class _Body extends StatelessWidget {
+  const _Body(this.state, {super.key});
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
-
-  _handleOnPageChanged(int index) {
-    _pageController.animateToPage(index,
-        duration: const Duration(microseconds: 500), curve: Curves.easeIn);
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+  final BottomNav state;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView.builder(
-          pageSnapping: true,
-          itemCount: BottomNav.values.length,
-          controller: _pageController,
-          onPageChanged: _handleOnPageChanged,
-          itemBuilder: (context, index) {
-            switch (BottomNav.values[index]) {
-              case BottomNav.home:
-                return const HomeScreen();
-              case BottomNav.feed:
-                return const FeedScreeen();
-              case BottomNav.short:
-                return const ShortScreen();
-              case BottomNav.chat:
-                return const ChatScreen();
-              case BottomNav.setting:
-                return const SettingScreen();
-            }
-          }),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _handleOnPageChanged,
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        items: BottomNav.values
-            .map((e) => BottomNavigationBarItem(
-                label: e.label,
-                icon: Icon(e.iconData),
-                activeIcon: Icon(e.activeIconData)))
-            .toList(),
-      ),
-    );
-    ;
+    switch (state) {
+      case BottomNav.home:
+        return const HomeScreen();
+      case BottomNav.feed:
+        return const FeedScreeen();
+      case BottomNav.short:
+        return const ShortScreen();
+      case BottomNav.chat:
+        return const ChatScreen();
+      case BottomNav.setting:
+        return const SettingScreen();
+    }
   }
 }

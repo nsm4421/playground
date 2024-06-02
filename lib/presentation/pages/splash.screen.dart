@@ -21,7 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: _duration), () {
       context.pushReplacement(Routes.entry.path);
     });
-    super.initState();
   }
 
   @override

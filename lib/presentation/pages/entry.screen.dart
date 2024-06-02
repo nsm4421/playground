@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
+import 'package:my_app/presentation/components/loading.fragment.dart';
 import 'package:my_app/presentation/pages/auth/auth.screen.dart';
 import 'package:my_app/presentation/pages/main/main.screen.dart';
 import 'package:my_app/presentation/pages/on_board/on_board.screen.dart';
@@ -68,7 +69,7 @@ class _EntryScreenState extends State<EntryScreen> {
                 if (state is UserFailureState && state.message != null) {
                   log('user bloc 오류 발생 : ${state.message}');
                 }
-                return Scaffold(appBar: AppBar(title: const Text("ERROR")));
+                return const LoadingFragment();
               });
             }
           }),
