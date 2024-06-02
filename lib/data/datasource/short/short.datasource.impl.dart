@@ -20,6 +20,7 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
 
   static const colName = "shorts";
   static const bucketName = "shorts";
+  static const orderBy = "createdAt";
 
   RemoteShortDataSourceImpl(
       {required FirebaseAuth auth,
@@ -30,6 +31,43 @@ class RemoteShortDataSourceImpl implements RemoteShortDataSource {
         _db = db,
         _storage = storage,
         _logger = logger;
+
+  @override
+  Stream<Iterable<ShortModel>> getShortStream(
+      {String? afterAt, bool? descending}) {
+    try {
+      return _db
+          .collection(colName)
+          .orderBy(orderBy, descending: descending ?? true)
+          .where(orderBy,
+              isLessThanOrEqualTo: afterAt ?? DateTime.now().toIso8601String())
+          .snapshots()
+          .asyncMap((event) => event.docs.map((doc) {
+                _logger.d(doc.data());
+                return ShortModel.fromJson(doc.data());
+              }));
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
+
+  @override
+  Future<Iterable<ShortModel>> getShorts(
+      {String? afterAt, int? take, bool? descending}) async {
+    try {
+      return await _db
+          .collection(colName)
+          .orderBy(orderBy, descending: descending ?? true)
+          .where(orderBy,
+              isLessThan: afterAt ?? DateTime.now().toIso8601String())
+          .limitToLast(take ?? 10)
+          .get()
+          .then(
+              (res) => res.docs.map((doc) => ShortModel.fromJson(doc.data())));
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
 
   @override
   Future<void> saveShort(ShortModel model) async {

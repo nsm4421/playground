@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fpdart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
@@ -17,6 +16,24 @@ class ShortRepositoryImpl implements ShortRepository {
 
   ShortRepositoryImpl({required RemoteShortDataSource remoteDataSource})
       : _remoteDataSource = remoteDataSource;
+
+  @override
+  Stream<List<ShortEntity>> get shortStream => _remoteDataSource
+      .getShortStream()
+      .asyncMap((event) => event.map(ShortEntity.fromModel).toList());
+
+  @override
+  Future<Either<Failure, List<ShortEntity>>> getShorts(
+      {String? afterAt, int? take, bool? descending}) async {
+    try {
+      return await _remoteDataSource
+          .getShorts(afterAt: afterAt, take: take, descending: descending)
+          .then((res) => res.map(ShortEntity.fromModel).toList())
+          .then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
 
   @override
   Future<Either<Failure, void>> saveShort(ShortEntity entity) async {
