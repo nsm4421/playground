@@ -1,13 +1,13 @@
 import 'dart:io';
-
 import 'package:fpdart/src/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/core/exception/custom_exeption.dart';
+import 'package:my_app/core/exception/custom_exception.dart';
 import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/datasource/user/user.datasource.dart';
 import 'package:my_app/data/entity/user/user.entity.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
-import 'package:my_app/domain/repository/user/user.repository.dart';
+import '../../datasource/user/user.datasource_impl.dart';
+
+part 'package:my_app/domain/repository/user/user.repository.dart';
 
 @Singleton(as: UserRepository)
 class UserRepositoryImpl implements UserRepository {

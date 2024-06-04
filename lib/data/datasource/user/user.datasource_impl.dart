@@ -5,11 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:my_app/core/constant/firebase.dart';
-import 'package:my_app/data/datasource/user/user.datasource.dart';
 import 'package:my_app/domain/model/user/user.model.dart';
 
 import '../../../core/constant/error_code.dart';
-import '../../../core/exception/custom_exeption.dart';
+import '../../../core/exception/custom_exception.dart';
+
+part 'user.datasource.dart';
 
 class LocalUserDataSourceImpl implements LocalUserDataSource {}
 

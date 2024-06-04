@@ -1,11 +1,11 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/data/entity/chat/chat_message.entity.dart';
-import 'package:my_app/domain/repository/chat/chat.repository.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/exception/failure.dart';
 import '../../../../data/entity/chat/chat.entity.dart';
+import '../../../../data/repository_impl/chat/chat.repository_impl.dart';
 
 part '../../case/chat/get_chat_stream.usecase.dart';
 

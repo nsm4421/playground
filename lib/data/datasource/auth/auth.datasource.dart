@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+part of 'auth.datasource_impl.dart';
 
 abstract interface class AuthDataSource {}
 

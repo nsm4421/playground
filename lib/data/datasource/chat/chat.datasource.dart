@@ -1,5 +1,4 @@
-import 'package:my_app/domain/model/chat/chat.model.dart';
-import 'package:my_app/domain/model/chat/chat_message.model.dart';
+part of 'chat.datasource_impl.dart';
 
 abstract interface class ChatDataSource {}
 

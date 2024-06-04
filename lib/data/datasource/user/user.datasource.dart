@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:my_app/domain/model/user/user.model.dart';
+part of 'user.datasource_impl.dart';
 
 abstract interface class UserDataSource {}
 

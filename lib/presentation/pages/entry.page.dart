@@ -4,22 +4,21 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
 import 'package:my_app/presentation/pages/auth/auth.screen.dart';
 import 'package:my_app/presentation/pages/main/main.screen.dart';
-import 'package:my_app/presentation/pages/on_board/on_board.screen.dart';
+import 'package:my_app/presentation/pages/on_board/on_board.page.dart';
 
-class EntryScreen extends StatefulWidget {
-  const EntryScreen({super.key});
+class EntryPage extends StatefulWidget {
+  const EntryPage({super.key});
 
   @override
-  State<EntryScreen> createState() => _EntryScreenState();
+  State<EntryPage> createState() => _EntryPageState();
 }
 
-class _EntryScreenState extends State<EntryScreen> {
+class _EntryPageState extends State<EntryPage> {
   late Stream<User?> _authStream;
   late StreamSubscription<User?> _authSubscription;
 

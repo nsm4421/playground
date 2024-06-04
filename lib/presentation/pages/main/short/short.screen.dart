@@ -1,24 +1,4 @@
-import 'dart:async';
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_app/core/dependency_injection/dependency_injection.dart';
-import 'package:my_app/data/entity/short/short.entity.dart';
-import 'package:my_app/presentation/bloc/short/short.bloc.dart';
-import 'package:my_app/presentation/components/error.fragment.dart';
-import 'package:my_app/presentation/components/loading.fragment.dart';
-import 'package:my_app/presentation/components/stream_builder.widget.dart';
-import 'package:my_app/presentation/components/video_preview/video_preview_item.widget.dart';
-
-import '../../../../core/constant/routes.dart';
-
-part 'short_item.widget.dart';
-
-part 'short_list.widget.dart';
-
-part 'short_view.fragment.dart';
+part of 'short.page.dart';
 
 class ShortScreen extends StatefulWidget {
   const ShortScreen({super.key});
@@ -28,37 +8,36 @@ class ShortScreen extends StatefulWidget {
 }
 
 class _ShortScreenState extends State<ShortScreen> {
-
-  // late Stream<List<ShortEntity>> _stream;
+  late Stream<List<ShortEntity>> _stream;
   List<ShortEntity> _shorts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _stream = context.read<ShortBloc>().shortStream;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("SHORT"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.push("/${Routes.uploadShort.path}");
-              },
-              icon: const Icon(Icons.upload))
-        ],
-      ),
-      body: BlocProvider(
-        create: (context) => getIt<ShortBloc>(),
-        child: BlocBuilder<ShortBloc, ShortState>(
-          builder: (BuildContext context, ShortState state) {
-            if ((state is InitialShortState) || (state is ShortSuccessState)) {
-              return const ShortViewFragment();
-            } else if (State is ShortLoadingState) {
-              return const LoadingFragment();
-            } else {
-              return const ErrorFragment();
+      body: BlocListener<ShortBloc, ShortState>(
+          listenWhen: (previous, current) {
+            return (current is InitialShortState) ||
+                (current is ShortSuccessState);
+          },
+          listener: (_, state) {
+            if (state is InitialShortState) {
+              context.read<ShortBloc>().add(FetchShortEvent());
+            } else if (state is ShortSuccessState) {
+              _shorts.addAll(state.shorts);
             }
           },
-        ),
-      ),
+          child: StreamBuilderWidget<List<ShortEntity>>(
+              initData: _shorts,
+              stream: _stream,
+              onSuccessWidgetBuilder: (List<ShortEntity> data) {
+                return ShortListFragment([...data, ..._shorts]);
+              })),
     );
   }
 }

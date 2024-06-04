@@ -6,8 +6,9 @@ import 'package:my_app/core/constant/error_code.dart';
 import 'package:my_app/domain/model/chat/chat.model.dart';
 import 'package:my_app/domain/model/chat/chat_message.model.dart';
 import '../../../core/constant/firebase.dart';
-import '../../../core/exception/custom_exeption.dart';
-import 'chat.datasource.dart';
+import '../../../core/exception/custom_exception.dart';
+
+part 'chat.datasource.dart';
 
 class LocalChatDataSourceImpl implements LocalChatDataSource {}
 
@@ -21,11 +22,10 @@ class RemoteChatDataSourceImpl implements RemoteChatDataSource {
   static const orderByForChat = "lastTalkAt";
   static const orderByForMessage = "createdAt";
 
-  RemoteChatDataSourceImpl(
-      {required FirebaseAuth auth,
-      required FirebaseFirestore db,
-      required FirebaseStorage storage,
-      required Logger logger})
+  RemoteChatDataSourceImpl({required FirebaseAuth auth,
+    required FirebaseFirestore db,
+    required FirebaseStorage storage,
+    required Logger logger})
       : _auth = auth,
         _db = db,
         _storage = storage,
@@ -42,7 +42,7 @@ class RemoteChatDataSourceImpl implements RemoteChatDataSource {
           .orderBy(orderByForChat)
           .snapshots()
           .asyncMap((event) =>
-              event.docs.map((doc) => ChatModel.fromJson(doc.data())));
+          event.docs.map((doc) => ChatModel.fromJson(doc.data())));
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
@@ -60,7 +60,7 @@ class RemoteChatDataSourceImpl implements RemoteChatDataSource {
           .orderBy(orderByForMessage)
           .snapshots()
           .asyncMap((event) =>
-              event.docs.map((doc) => ChatMessageModel.fromJson(doc.data())));
+          event.docs.map((doc) => ChatMessageModel.fromJson(doc.data())));
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

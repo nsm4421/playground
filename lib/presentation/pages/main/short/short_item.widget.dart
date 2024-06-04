@@ -1,4 +1,4 @@
-part of 'short.screen.dart';
+part of 'short.page.dart';
 
 class ShortItemWidget extends StatefulWidget {
   const ShortItemWidget(this.entity, {super.key});

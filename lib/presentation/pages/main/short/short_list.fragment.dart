@@ -1,7 +1,7 @@
-part of 'short.screen.dart';
+part of 'short.page.dart';
 
-class ShortListWidget extends StatelessWidget {
-  const ShortListWidget(this._shorts, {super.key});
+class ShortListFragment extends StatelessWidget {
+  const ShortListFragment(this._shorts, {super.key});
 
   final List<ShortEntity> _shorts;
 

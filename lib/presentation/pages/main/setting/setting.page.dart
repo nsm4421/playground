@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
 
-class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
 
   @override
-  State<SettingScreen> createState() => _SettingScreenState();
+  State<SettingPage> createState() => _SettingPageState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingPageState extends State<SettingPage> {
   _handleSignOut() {
     context.read<AuthCubit>().signOut();
   }

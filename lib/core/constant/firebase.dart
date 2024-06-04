@@ -1,6 +1,6 @@
 enum CollectionName {
   user("users"),
-  short("shorts"),
+  feed("feeds"),
   chat("chats"),
   message("messages");
 
@@ -11,7 +11,7 @@ enum CollectionName {
 
 enum BucketName {
   user("users"),
-  short("shorts"),
+  feed("feeds"),
   chat("chats"),
   message("messages");
 

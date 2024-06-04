@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:my_app/core/exception/failure.dart';
+part of 'package:my_app/data/repository_impl/auth/auth.repository_impl.dart';
 
 abstract interface class AuthRepository {
   User? get currentUser;

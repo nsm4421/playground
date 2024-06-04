@@ -1,14 +1,14 @@
 import 'package:fpdart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/datasource/chat/chat.datasource.dart';
 import 'package:my_app/data/entity/chat/chat.entity.dart';
 import 'package:my_app/data/entity/chat/chat_message.entity.dart';
 import 'package:my_app/domain/model/chat/chat.model.dart';
 import 'package:my_app/domain/model/chat/chat_message.model.dart';
-import 'package:my_app/domain/repository/chat/chat.repository.dart';
+import '../../../core/exception/custom_exception.dart';
+import '../../datasource/chat/chat.datasource_impl.dart';
 
-import '../../../core/exception/custom_exeption.dart';
+part 'package:my_app/domain/repository/chat/chat.repository.dart';
 
 @LazySingleton(as: ChatRepository)
 class ChatRepositoryImpl implements ChatRepository {

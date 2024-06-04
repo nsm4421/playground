@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:my_app/core/exception/custom_exeption.dart';
-import 'package:my_app/data/datasource/auth/auth.datasource.dart';
+import 'package:my_app/core/exception/custom_exception.dart';
+
+part 'auth.datasource.dart';
 
 class LocalAuthDataSourceImpl implements LocalAuthDataSource {}
 

@@ -1,8 +1,4 @@
-import 'dart:io';
-
-import 'package:fpdart/fpdart.dart';
-import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/entity/user/user.entity.dart';
+part of 'package:my_app/data/repository_impl/user/user.repository_impl.dart';
 
 abstract interface class UserRepository {
   Future<Either<Failure, UserEntity>> getCurrentUser();
