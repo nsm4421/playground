@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/data/entity/short/short.entity.dart';
 import 'package:my_app/presentation/components/video_preview/video.widget.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreviewItemWidget extends StatefulWidget {
-  const VideoPreviewItemWidget(this.short,
-      {super.key, this.width, this.height});
+  const VideoPreviewItemWidget(this.url, {super.key, this.width, this.height});
 
-  final ShortEntity short;
+  final String url;
   final double? width;
   final double? height;
 
@@ -23,14 +21,13 @@ class _VideoPreviewItemWidgetState extends State<VideoPreviewItemWidget> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.networkUrl(Uri.parse(widget.short.shortUrl!))
-          ..initialize().then((_) {
-            setState(() {
-              _controller.play();
-              _totalDuration = _controller.value.duration;
-            });
-          });
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
+      ..initialize().then((_) {
+        setState(() {
+          _controller.play();
+          _totalDuration = _controller.value.duration;
+        });
+      });
   }
 
   @override
