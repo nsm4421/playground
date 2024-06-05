@@ -16,24 +16,18 @@ part "feed.event.dart";
 @injectable
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
   final FeedUseCase _useCase;
-
-  late DateTime _afterAt;
-  late Stream<List<FeedEntity>> _feedStream;
+  DateTime _afterAt = DateTime.now();
 
   FeedBloc({required FeedUseCase useCase})
       : _useCase = useCase,
         super(InitialFeedState()) {
-    _afterAt = DateTime.now();
-    _feedStream =
-        _useCase.feedStream.call(afterAt: _afterAt.toIso8601String())!;
     on<InitFeedEvent>(_onInit);
     on<FetchFeedEvent>(_onFetch);
     on<UploadFeedEvent>(_onUpload);
   }
 
-  DateTime get afterAt => _afterAt;
-
-  Stream<List<FeedEntity>> get feedStream => _feedStream;
+  Stream<List<FeedEntity>> get feedStream =>
+      _useCase.feedStream.call(afterAt: _afterAt.toIso8601String());
 
   Future<void> _onInit(InitFeedEvent event, Emitter<FeedState> emit) async {
     try {
@@ -78,7 +72,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       if (event._images.isNotEmpty) {
         await _useCase
             .uploadImages(feedId: feedId, images: event._images)
-            .then((res) => res.fold((l) =>throw l.toCustomException(), (r) {
+            .then((res) => res.fold((l) => throw l.toCustomException(), (r) {
                   imageUrls = r;
                 }));
       }
@@ -87,21 +81,22 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       if (event._video != null) {
         await _useCase
             .uploadVideo(feedId: feedId, video: event._video)
-            .then((res) => res.fold((l) =>throw l.toCustomException(), (r) {
+            .then((res) => res.fold((l) => throw l.toCustomException(), (r) {
                   videoUrl = r;
                 }));
       }
 
       // save feed
-      await _useCase.saveFeed(FeedEntity(
-          id: (const Uuid()).v4(),
-          text: event._text,
-          hashtags: event._hashtags,
-          imageUrls: imageUrls,
-          videoUrl: videoUrl,
-          createdAt: DateTime.now())).then((res)=>
-      res.fold((l)=>throw l.toCustomException(), (r)=>UploadFeedSuccessState())
-      );
+      await _useCase
+          .saveFeed(FeedEntity(
+              id: (const Uuid()).v4(),
+              text: event._text,
+              hashtags: event._hashtags,
+              imageUrls: imageUrls,
+              videoUrl: videoUrl,
+              createdAt: DateTime.now()))
+          .then((res) => res.fold((l) => throw l.toCustomException(),
+              (r) => emit(UploadFeedSuccessState())));
     } catch (error) {
       log(error.toString());
       emit(FeedFailureState('getting short fails'));

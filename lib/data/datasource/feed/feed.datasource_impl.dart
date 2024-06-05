@@ -89,7 +89,7 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
   @override
   Future<void> uploadFile({required String path, required File file}) async {
     try {
-      await _storage.ref('${BucketName.feed}/$path').putFile(file);
+      await _storage.ref('${BucketName.feed.name}/$path').putFile(file);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

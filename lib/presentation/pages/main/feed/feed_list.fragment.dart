@@ -1,19 +1,19 @@
-part of 'short.page.dart';
+part of 'feed.page.dart';
 
-class ShortListFragment extends StatelessWidget {
-  const ShortListFragment(this._shorts, {super.key});
+class FeedListFragment extends StatelessWidget {
+  const FeedListFragment(this._feeds, {super.key});
 
-  final List<ShortEntity> _shorts;
+  final List<FeedEntity> _feeds;
 
   @override
   Widget build(BuildContext context) {
-    return _shorts.isEmpty
+    return _feeds.isEmpty
         ? const _OnEmpty()
         : ListView.builder(
-            itemCount: _shorts.length,
+            itemCount: _feeds.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return ShortItemWidget(_shorts[index]);
+              return FeedItemWidget(_feeds[index]);
             });
   }
 }
@@ -24,7 +24,7 @@ class _OnEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("NO VIDEO FOUNDED",
+      child: Text("NO FEED FOUNDED",
           style: Theme.of(context).textTheme.displayLarge),
     );
   }

@@ -25,9 +25,9 @@ class FeedModel with _$FeedModel {
   factory FeedModel.fromEntity(FeedEntity entity) => FeedModel(
         id: entity.id ?? '',
         text: entity.text ?? '',
-        videoUrl: entity.videoUrl ?? '',
+        videoUrl: entity.videoUrl,
         imageUrls: entity.imageUrls,
-        hashtags: entity.hashtags ?? [],
+        hashtags: entity.hashtags,
         createdAt: entity.createdAt?.toIso8601String(),
         createdBy: entity.createdBy,
       );

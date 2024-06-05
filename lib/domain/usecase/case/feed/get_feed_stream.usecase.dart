@@ -5,11 +5,12 @@ class GetFeedStreamUseCase {
 
   GetFeedStreamUseCase(this._repository);
 
-  Stream<List<FeedEntity>>? call(
+  Stream<List<FeedEntity>> call(
       {required String afterAt, bool descending = false}) {
     return _repository
         .getFeedStream(afterAt: afterAt, descending: descending)
-        .getRight()
-        .toNullable();
+        .fold((l) {
+      throw l.toCustomException();
+    }, (r) => r);
   }
 }

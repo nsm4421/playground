@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
@@ -13,9 +14,9 @@ part 'package:my_app/domain/repository/feed/feed.repository.dart';
 
 @LazySingleton(as: FeedRepository)
 class FeedRepositoryImpl implements FeedRepository {
-  final RemoteFeedDataSourceImpl _remoteDataSource;
+  final RemoteFeedDataSource _remoteDataSource;
 
-  FeedRepositoryImpl({required RemoteFeedDataSourceImpl remoteDataSource})
+  FeedRepositoryImpl({required RemoteFeedDataSource remoteDataSource})
       : _remoteDataSource = remoteDataSource;
 
   @override

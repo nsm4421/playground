@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_app/data/entity/chat/chat.entity.dart';
 import 'package:my_app/presentation/pages/entry.page.dart';
 import 'package:my_app/presentation/pages/main/chat/room/chat_room.page.dart';
-import 'package:my_app/presentation/pages/main/feed/upload/upload_short.page.dart';
+import 'package:my_app/presentation/pages/main/feed/upload/upload_feed.page.dart';
 import 'package:my_app/presentation/pages/splash.page.dart';
 
 enum Routes {
@@ -35,7 +35,7 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     name: Routes.uploadFeed.name,
     path: Routes.uploadFeed.path,
     builder: (BuildContext context, GoRouterState state) {
-      return const UploadFeedScreen();
+      return const UploadFeedPage();
     },
   ),
   GoRoute(

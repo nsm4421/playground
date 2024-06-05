@@ -6,7 +6,9 @@ class FetchFeedsUseCase {
   FetchFeedsUseCase(this._repository);
 
   Future<Either<Failure, List<FeedEntity>>> call(
-          {required String afterAt, int take = 20, bool descending = false}) =>
-      _repository.fetchFeeds(
+          {required String afterAt,
+          int take = 20,
+          bool descending = false}) async =>
+      await _repository.fetchFeeds(
           afterAt: afterAt, take: take, descending: descending);
 }
