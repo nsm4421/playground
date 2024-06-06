@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_app/core/constant/media.dart';
 import 'package:my_app/data/datasource/feed/feed.datasource_impl.dart';
 import 'package:my_app/data/entity/feed/feed.entity.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
@@ -57,26 +57,13 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<Either<Failure, List<String>>> saveImages(
-      {required feedId, required List<File> images}) async {
+  Future<Either<Failure, String>> saveMedia(
+      {required feedId,
+      required MediaType type,
+      required File file}) async {
     try {
-      final futures = List.generate(images.length, (index) async {
-        final path = '$feedId/image_$index';
-        await _remoteDataSource.uploadFile(path: path, file: images[index]);
-        return _remoteDataSource.getDownloadUrl(path);
-      });
-      return await Future.wait(futures).then(right);
-    } on CustomException catch (error) {
-      return left(Failure(code: error.code, message: error.message));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> saveVideo(
-      {required feedId, required File video}) async {
-    try {
-      final path = '$feedId/video';
-      await _remoteDataSource.uploadFile(path: path, file: video);
+      final path = '$feedId/${type.name}';
+      await _remoteDataSource.uploadFile(path: path, file: file);
       return await _remoteDataSource.getDownloadUrl(path).then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));

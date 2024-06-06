@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_app/domain/model/feed/feed.model.dart';
 
+import '../../../core/constant/media.dart';
+
 part 'feed.entity.freezed.dart';
 
 part 'feed.entity.g.dart';
@@ -10,9 +12,10 @@ part 'feed.entity.g.dart';
 class FeedEntity with _$FeedEntity {
   const factory FeedEntity({
     String? id,
-    String? text,
-    String? videoUrl,
-    @Default(<String>[]) List<String> imageUrls,
+    String? content,
+    String? caption,
+    String? media,
+    @Default(MediaType.image) MediaType type,
     @Default(<String>[]) List<String> hashtags,
     DateTime? createdAt,
     String? createdBy,
@@ -23,9 +26,10 @@ class FeedEntity with _$FeedEntity {
 
   factory FeedEntity.fromModel(FeedModel model) => FeedEntity(
       id: model.id.isEmpty ? null : model.id,
-      text: model.text.isEmpty ? null : model.text,
-      videoUrl: model.videoUrl,
-      imageUrls: model.imageUrls,
+      content: model.content.isEmpty ? null : model.content,
+      caption: model.caption.isEmpty ? null : model.caption,
+      media: model.media,
+      type: model.type,
       hashtags: model.hashtags,
       createdAt:
           model.createdAt == null ? null : DateTime.parse(model.createdAt!),

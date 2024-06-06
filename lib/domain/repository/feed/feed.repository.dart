@@ -9,9 +9,6 @@ abstract interface class FeedRepository {
 
   Future<Either<Failure, void>> saveFeed(FeedEntity entity);
 
-  Future<Either<Failure, List<String>>> saveImages(
-      {required feedId, required List<File> images});
-
-  Future<Either<Failure, String>> saveVideo(
-      {required feedId, required File video});
+  Future<Either<Failure, String>> saveMedia(
+      {required feedId, required MediaType type, required File file});
 }
