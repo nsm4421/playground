@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/presentation/pages/main/chat/chat.screen.dart';
-import 'package:my_app/presentation/pages/main/feed/feed.screen.dart';
-import 'package:my_app/presentation/pages/main/home/home.screen.dart';
-import 'package:my_app/presentation/pages/main/setting/setting.screen.dart';
-import 'package:my_app/presentation/pages/main/short/short.screen.dart';
+import 'package:my_app/presentation/pages/main/home/home.page.dart';
+import 'package:my_app/presentation/pages/main/setting/setting.page.dart';
 
 import '../../bloc/bottom_nav/bottm_nav.cubit.dart';
+import 'feed/feed.page.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -46,15 +45,13 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (state) {
       case BottomNav.home:
-        return const HomeScreen();
+        return const HomePage();
       case BottomNav.feed:
-        return const FeedScreeen();
-      case BottomNav.short:
-        return const ShortScreen();
+        return const FeedPage();
       case BottomNav.chat:
         return const ChatScreen();
       case BottomNav.setting:
-        return const SettingScreen();
+        return const SettingPage();
     }
   }
 }

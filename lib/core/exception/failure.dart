@@ -1,4 +1,4 @@
-import 'package:my_app/core/exception/custom_exeption.dart';
+import 'package:my_app/core/exception/custom_exception.dart';
 
 import '../constant/error_code.dart';
 

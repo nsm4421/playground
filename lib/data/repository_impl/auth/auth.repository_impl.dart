@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/datasource/auth/auth.datasource.dart';
+import '../../../core/exception/custom_exception.dart';
+import '../../datasource/auth/auth.datasource_impl.dart';
 
-import '../../../core/exception/custom_exeption.dart';
-import '../../../domain/repository/auth/auth.repository.dart';
+part 'package:my_app/domain/repository/auth/auth.repository.dart';
 
 @Singleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {

@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/core/exception/custom_exeption.dart';
+import 'package:my_app/core/exception/custom_exception.dart';
 import 'package:my_app/data/entity/user/user.entity.dart';
 
 import '../../../../core/constant/error_code.dart';
 import '../../../../core/exception/failure.dart';
-import '../../../repository/user/user.repository.dart';
+import '../../../../data/repository_impl/user/user.repository_impl.dart';
 
 part '../../case/user/get_current_user.usecase.dart';
 

@@ -5,10 +5,6 @@ enum BottomNav {
       label: 'HOME', iconData: Icons.home_outlined, activeIconData: Icons.home),
   feed(
       label: 'FEED', iconData: Icons.feed_outlined, activeIconData: Icons.feed),
-  short(
-      label: 'SHORT',
-      iconData: Icons.play_circle_outline,
-      activeIconData: Icons.play_circle),
   chat(
       label: 'CHAT',
       iconData: Icons.chat_bubble_outline,

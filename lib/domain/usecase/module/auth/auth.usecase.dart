@@ -3,7 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/exception/failure.dart';
-import '../../../repository/auth/auth.repository.dart';
+import '../../../../data/repository_impl/auth/auth.repository_impl.dart';
 
 part '../../case/auth/sign_in_with_google.usecase.dart';
 
