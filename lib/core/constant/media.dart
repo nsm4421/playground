@@ -1,11 +1,11 @@
-import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 enum MediaType {
   image,
   video;
 }
 
-extension XFileExtension on XFile {
+extension FileExtension on File {
   MediaType mediaType() {
     String fileExtension = path.split('.').last.toLowerCase();
     if (['jpg', 'jpeg', 'png', 'gif'].contains(fileExtension)) {

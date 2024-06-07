@@ -10,7 +10,6 @@ class FeedItemWidget extends StatefulWidget {
 }
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
-
   // TODO : 버튼 이벤트 기능 구현하기
   _handleClickMore() {}
 
@@ -32,42 +31,28 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
             ],
           ),
 
+          // Image
+          if (widget._feed.type == MediaType.image &&
+              widget._feed.media != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: CachedNetworkImage(imageUrl: widget._feed.media!),
+            ),
+
           // Video
-          if (widget._feed.videoUrl != null)
+          if (widget._feed.type == MediaType.video &&
+              widget._feed.media != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: VideoPreviewItemWidget(widget._feed.videoUrl!),
+              child: VideoPreviewItemWidget(widget._feed.media!),
             ),
+          //
 
-          // 이미지
-          if (widget._feed.imageUrls.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: PageView.builder(itemBuilder: (context, index) {
-                final imageUrl = widget._feed.imageUrls[index];
-                return CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                          colorFilter: const ColorFilter.mode(
-                              Colors.blueGrey, BlendMode.colorBurn)),
-                    ),
-                  ),
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                );
-              }),
-            ),
-
-          // Text
-          if (widget._feed.text != null)
+          // Content
+          if (widget._feed.content != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              child: Text(widget._feed.text ?? ''),
+              child: Text(widget._feed.content ?? ''),
             ),
 
           // 해시태그
@@ -90,6 +75,18 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                 child: IconButton(
                     onPressed: _handleClickFavorite,
                     icon: const Icon(Icons.favorite_border)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: IconButton(
+                    onPressed: _handleClickFavorite,
+                    icon: const Icon(Icons.mode_comment_outlined)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: IconButton(
+                    onPressed: _handleClickFavorite,
+                    icon: const Icon(Icons.share_rounded)),
               )
             ],
           )

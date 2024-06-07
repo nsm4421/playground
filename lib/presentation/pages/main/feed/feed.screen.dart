@@ -14,10 +14,10 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    _stream = context.read<FeedBloc>().feedStream;
+    _stream = context.read<DisplayFeedBloc>().feedStream;
   }
 
-  _handleGoToUploadPage(){
+  _handleGoToUploadPage() {
     context.push(Routes.uploadFeed.path);
   }
 
@@ -27,16 +27,18 @@ class _FeedScreenState extends State<FeedScreen> {
       appBar: AppBar(
         title: Text("FEED"),
         actions: [
-          IconButton(onPressed: _handleGoToUploadPage, icon: const Icon(Icons.add))
+          IconButton(
+              onPressed: _handleGoToUploadPage, icon: const Icon(Icons.add))
         ],
       ),
-      body: BlocListener<FeedBloc, FeedState>(
+      body: BlocListener<DisplayFeedBloc, DisplayFeedState>(
           listenWhen: (previous, current) {
-            return (current is FetchFeedSuccessState);
+            return (current is DisplayFeedSuccessState);
           },
           listener: (context, state) {
-            if (state is FetchFeedSuccessState) {
+            if (state is DisplayFeedSuccessState) {
               _feeds.addAll(state.feeds);
+              context.read<DisplayFeedBloc>().add(InitDisplayFeedEvent());
             }
           },
           child: StreamBuilderWidget<List<FeedEntity>>(

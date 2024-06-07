@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/presentation/bloc/feed/upload/upload_feed.state.dart';
@@ -13,7 +14,11 @@ class UploadFeedCubit extends Cubit<UploadFeedState> {
 
   UploadFeedCubit(this._useCase) : super(const UploadFeedState());
 
+  setFile(File? file) => emit(state.copyWith(file: file));
+
   setContent(String content) => emit(state.copyWith(content: content));
+
+  setCaption(String caption) => emit(state.copyWith(caption: caption));
 
   setHashtags(List<String> hashtags) =>
       emit(state.copyWith(hashtags: hashtags));

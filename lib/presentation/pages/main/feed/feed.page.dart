@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/core/constant/media.dart';
 import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/data/entity/feed/feed.entity.dart';
+import 'package:my_app/presentation/bloc/feed/display/display_feed.bloc.dart';
 import 'package:my_app/presentation/components/error.fragment.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
 import 'package:my_app/presentation/components/stream_builder.widget.dart';
@@ -24,12 +26,14 @@ class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<FeedBloc>()..add(InitFeedEvent()),
-      child: BlocBuilder<FeedBloc, FeedState>(
-        builder: (BuildContext context, FeedState state) {
-          if ((state is InitialFeedState) || (state is FeedSuccessState)) {
+      create: (context) =>
+          getIt<FeedBloc>().display..add(InitDisplayFeedEvent()),
+      child: BlocBuilder<DisplayFeedBloc, DisplayFeedState>(
+        builder: (BuildContext context, DisplayFeedState state) {
+          if ((state is InitialDisplayFeedState) ||
+              (state is DisplayFeedSuccessState)) {
             return const FeedScreen();
-          } else if (State is FeedLoadingState) {
+          } else if (State is DisplayFeedLoadingState) {
             return const LoadingFragment();
           } else {
             return const ErrorFragment();

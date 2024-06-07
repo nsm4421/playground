@@ -28,7 +28,7 @@ class FeedEntity with _$FeedEntity {
       id: model.id.isEmpty ? null : model.id,
       content: model.content.isEmpty ? null : model.content,
       caption: model.caption.isEmpty ? null : model.caption,
-      media: model.media,
+      media: model.media.isEmpty ? null : model.media,
       type: model.type,
       hashtags: model.hashtags,
       createdAt:
