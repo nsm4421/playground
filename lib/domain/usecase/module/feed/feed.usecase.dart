@@ -22,11 +22,15 @@ class FeedUseCase {
 
   FeedUseCase(this._repository);
 
+  @injectable
   GetFeedStreamUseCase get feedStream => GetFeedStreamUseCase(_repository);
 
+  @injectable
   FetchFeedsUseCase get fetchFeeds => FetchFeedsUseCase(_repository);
 
+  @injectable
   SaveFeedUseCase get saveFeed => SaveFeedUseCase(_repository);
 
+  @injectable
   SaveMediaUseCase get saveMedia => SaveMediaUseCase(_repository);
 }

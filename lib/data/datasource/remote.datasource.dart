@@ -8,6 +8,7 @@ import 'package:my_app/data/datasource/chat/chat.datasource_impl.dart';
 
 import 'auth/auth.datasource_impl.dart';
 import 'feed/feed.datasource_impl.dart';
+import 'feed/feed_comment.datasource_impl.dart';
 import 'user/user.datasource_impl.dart';
 
 @module
@@ -29,6 +30,11 @@ abstract class RemoteDataSource {
   @lazySingleton
   RemoteFeedDataSource get feed => RemoteFeedDataSourceImpl(
       auth: _auth, db: _db, storage: _storage, logger: _logger);
+
+  @lazySingleton
+  RemoteFeedCommentDataSource get feedComment =>
+      RemoteFeedCommentDataSourceImpl(
+          auth: _auth, db: _db, storage: _storage, logger: _logger);
 
   @lazySingleton
   RemoteChatDataSource get chat => RemoteChatDataSourceImpl(

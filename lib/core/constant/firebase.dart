@@ -1,6 +1,7 @@
 enum CollectionName {
   user("users"),
   feed("feeds"),
+  feedComment("feedComments"),
   chat("chats"),
   message("messages");
 
