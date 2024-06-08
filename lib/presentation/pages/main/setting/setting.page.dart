@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
+import 'package:my_app/presentation/bloc/user/auth/auth.cubit.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../data/entity/feed/feed.entity.dart';
+import '../../../../data/entity/feed/base/feed.entity.dart';
 import '../../../../domain/usecase/module/feed/feed.usecase.dart';
 
 part 'display_feed.event.dart';

@@ -6,7 +6,7 @@ import 'package:my_app/presentation/bloc/feed/upload/upload_feed.state.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/status.dart';
-import '../../../../data/entity/feed/feed.entity.dart';
+import '../../../../data/entity/feed/base/feed.entity.dart';
 import '../../../../domain/usecase/module/feed/feed.usecase.dart';
 
 class UploadFeedCubit extends Cubit<UploadFeedState> {

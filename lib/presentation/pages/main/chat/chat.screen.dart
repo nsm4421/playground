@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/data/entity/chat/chat.entity.dart';
+import 'package:my_app/data/entity/chat/base/chat.entity.dart';
 
 import '../../../../core/constant/routes.dart';
 

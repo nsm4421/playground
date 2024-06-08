@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/constant/status.dart';
-import '../../../../../data/entity/feed/feed_comment.entity.dart';
+import '../../../../../data/entity/feed/comment/feed_comment.entity.dart';
 import '../../../../../domain/usecase/module/feed/feed_comment.usecase.dart';
 import 'upload_feed_comment.state.dart';
 

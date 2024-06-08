@@ -4,15 +4,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
-import 'package:my_app/presentation/bloc/user/user.bloc.dart';
+import 'package:my_app/presentation/bloc/user/auth/auth.cubit.dart';
+import 'package:my_app/presentation/bloc/user/account/account.bloc.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+    return BlocBuilder<AccountBloc, AccountState>(builder: (context, state) {
       if (state is OnBoardingLoadingState) {
         return const _OnLoading();
       } else if (state is OnBoardingFailureState) {
@@ -79,7 +79,7 @@ class _OnInitialState extends State<_OnInitial> {
     } else if (_xFile?.path == null) {
       return;
     }
-    context.read<UserBloc>().add(OnBoardingEvent(
+    context.read<AccountBloc>().add(OnBoardingEvent(
         sessionUser: context.read<AuthCubit>().currentUser!,
         image: File(_xFile!.path),
         nickname: _nicknameTec.text.trim(),
@@ -214,7 +214,7 @@ class _OnError extends StatelessWidget {
         ElevatedButton(
             onPressed: () {
               final sessionUser = context.read<AuthCubit>().currentUser;
-              context.read<UserBloc>().add(InitOnBoardingEvent(sessionUser!));
+              context.read<AccountBloc>().add(InitOnBoardingEvent(sessionUser!));
             },
             child: const Text("INIT"))
       ],

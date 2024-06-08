@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
-import 'package:my_app/presentation/bloc/user/user.bloc.dart';
+import 'package:my_app/presentation/bloc/user/auth/auth.cubit.dart';
+import 'package:my_app/presentation/bloc/user/account/account.bloc.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
 import 'package:my_app/presentation/pages/auth/auth.screen.dart';
 import 'package:my_app/presentation/pages/main/main.screen.dart';
 import 'package:my_app/presentation/pages/on_board/on_board.page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EntryPage extends StatefulWidget {
   const EntryPage({super.key});
@@ -25,12 +25,13 @@ class _EntryPageState extends State<EntryPage> {
   @override
   void initState() {
     super.initState();
-    _authStream = context.read<AuthCubit>().authStream;
+    // TODO : auth stream 코드 수정하기
+    // _authStream = context.read<AuthCubit>().authStream;
     _authSubscription = _authStream.listen((event) {
       if (event == null) {
-        context.read<UserBloc>().add(SignOutEvent());
+        context.read<AccountBloc>().add(SignOutEvent());
       } else {
-        context.read<UserBloc>().add(SignInEvent(event));
+        context.read<AccountBloc>().add(SignInEvent(event));
       }
     });
   }
@@ -58,7 +59,7 @@ class _EntryPageState extends State<EntryPage> {
               return const AuthScreen();
             } else {
               // on login
-              return BlocBuilder<UserBloc, UserState>(
+              return BlocBuilder<AccountBloc, AccountState>(
                   builder: (context, state) {
                 if (state is OnBoardingState) {
                   return const OnBoardingScreen();
