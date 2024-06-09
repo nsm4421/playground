@@ -1,4 +1,4 @@
-part of '../../../module/user/user.usecase.dart';
+part of '../../../module/user/account.usecase.dart';
 
 class OnBoardingUseCase {
   final AccountRepository _repository;
@@ -20,7 +20,7 @@ class OnBoardingUseCase {
               }, (r) {
                 if (r) {
                   throw CustomException(
-                      errorCode: ErrorCode.firebaseAlreadyExists,
+                      errorCode: ErrorCode.duplicatedEntity,
                       message: '중복된 닉네임입니다');
                 }
               }));

@@ -5,7 +5,7 @@ class SignInWithGoogleUseCase {
 
   SignInWithGoogleUseCase(this._repository);
 
-  Future<Either<Failure, User>> call() async {
+  Future<Either<Failure, User?>> call() async {
     return await _repository.signInWithGoogle();
   }
 }

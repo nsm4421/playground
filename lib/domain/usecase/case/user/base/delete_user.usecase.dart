@@ -1,4 +1,4 @@
-part of '../../../module/user/user.usecase.dart';
+part of '../../../module/user/account.usecase.dart';
 
 class DeleteUserUseCase {
   final AccountRepository _repository;

@@ -5,5 +5,5 @@ class GetAuthStreamUseCase {
 
   GetAuthStreamUseCase(this._repository);
 
-  Stream<AuthState> call() => _repository.authStream;
+  Stream<User?> call() => _repository.authStream;
 }

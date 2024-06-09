@@ -7,7 +7,13 @@ abstract interface class RemoteAuthDataSource implements AuthDataSource {
 
   Stream<AuthState> get authStream;
 
-  Future<User> signInWithGoogle();
+  Future<User?> signUpWithEmailAndPassword(
+      {required String email, required String password});
+
+  Future<User?> signInWithEmailAndPassword(
+      {required String email, required String password});
+
+  Future<User?> signInWithGoogle();
 
   Future<void> signOut();
 }

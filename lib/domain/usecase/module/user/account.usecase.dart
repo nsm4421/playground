@@ -19,10 +19,10 @@ part '../../case/user/base/delete_user.usecase.dart';
 part '../../case/user/base/on_boarding.usecase.dart';
 
 @lazySingleton
-class UserUseCase {
+class AccountUseCase {
   final AccountRepository _repository;
 
-  UserUseCase(this._repository);
+  AccountUseCase(this._repository);
 
   @injectable
   GetCurrentUserUseCase get getCurrentUser =>

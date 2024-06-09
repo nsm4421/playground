@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
@@ -18,14 +20,49 @@ class AuthRepositoryImpl implements AuthRepository {
   User? get currentUser => _remoteDataSource.currentUser;
 
   @override
-  Stream<AuthState> get authStream => _remoteDataSource.authStream;
+  Stream<User?> get authStream => _remoteDataSource.authStream.asyncMap((data) {
+        switch (data.event) {
+          case AuthChangeEvent.initialSession:
+          case AuthChangeEvent.signedIn:
+          case AuthChangeEvent.passwordRecovery:
+          case AuthChangeEvent.tokenRefreshed:
+          case AuthChangeEvent.userUpdated:
+          case AuthChangeEvent.mfaChallengeVerified:
+            return data.session?.user;
+          case AuthChangeEvent.signedOut:
+          case AuthChangeEvent.userDeleted:
+            return null;
+        }
+      });
 
   @override
-  Future<Either<Failure, User>> signInWithGoogle() async {
+  Future<Either<Failure, User?>> signInWithGoogle() async {
+    try {
+      return await _remoteDataSource.signInWithGoogle().then((r) => right(r));
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User?>> signUpWithEmailAndPassword(
+      {required String email, required String password}) async {
     try {
       return await _remoteDataSource
-          .signInWithGoogle()
-          .then((user) => right(user));
+          .signUpWithEmailAndPassword(email: email, password: password)
+          .then((r) => right(r));
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User?>> signInWithEmailAndPassword(
+      {required String email, required String password}) async {
+    try {
+      return await _remoteDataSource
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((r) => right(r));
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }
