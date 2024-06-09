@@ -5,15 +5,15 @@ abstract interface class FeedDataSource {}
 abstract interface class LocalFeedDataSource implements FeedDataSource {}
 
 abstract interface class RemoteFeedDataSource implements FeedDataSource {
-  Stream<Iterable<FeedModel>> getFeedStream(
-      {required String afterAt, bool descending = false});
+  Future<Iterable<FeedWithAuthorModel>> fetchFeeds(
+      {required DateTime beforeAt,
+      bool ascending = false,
+      int from = 0,
+      int to = 20});
 
-  Future<Iterable<FeedModel>> fetchFeeds(
-      {required String afterAt, int take = 20, bool descending = false});
+  Future<void> deleteFeed(String feedId);
 
   Future<void> saveFeed(FeedModel model);
 
-  Future<void> uploadFile({required String path, required File file});
-
-  Future<String> getDownloadUrl(String path);
+  Future<String> uploadFile({required String feedId, required File file});
 }

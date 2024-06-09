@@ -17,8 +17,8 @@ class FeedModel with _$FeedModel {
     @Default('') String media,
     @Default(MediaType.image) MediaType type,
     @Default(<String>[]) List<String> hashtags,
-    String? createdAt,
-    String? createdBy,
+    @Default('') String createdAt,
+    @Default('') String createdBy,
   }) = _FeedModel;
 
   factory FeedModel.fromJson(Map<String, dynamic> json) =>
@@ -31,7 +31,9 @@ class FeedModel with _$FeedModel {
         media: entity.media ?? '',
         type: entity.type,
         hashtags: entity.hashtags,
-        createdAt: entity.createdAt?.toIso8601String(),
-        createdBy: entity.createdBy,
+        createdAt: entity.createdAt == null
+            ? DateTime.now().toIso8601String()
+            : entity.createdAt!.toIso8601String(),
+        createdBy: entity.createdBy ?? entity.author?.id ?? '',
       );
 }

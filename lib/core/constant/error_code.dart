@@ -1,5 +1,6 @@
 enum ErrorCode {
   databaseError('DATABASE_ERROR'),
+  storageError('STORAGE_ERROR'),
   networkConnectionError("NETWORK_CONNECTION_ERROR"),
   internalServerError("INTERNAL_SERVER_ERROR"),
   notSignIn("NOT_SIGN_IN"),

@@ -5,10 +5,12 @@ class FetchFeedsUseCase {
 
   FetchFeedsUseCase(this._repository);
 
-  Future<Either<Failure, List<FeedEntity>>> call(
-          {required String afterAt,
-          int take = 20,
-          bool descending = false}) async =>
+  Future<Either<Failure, List<FeedEntity>>> call({
+    required DateTime beforeAt,
+    bool ascending = false,
+    int from = 0,
+    int to = 20,
+  }) async =>
       await _repository.fetchFeeds(
-          afterAt: afterAt, take: take, descending: descending);
+          beforeAt: beforeAt, ascending: ascending, from: from, to: to);
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/domain/model/feed/base/feed.model.dart';
+import 'package:my_app/domain/model/feed/base/feed_with_author.model.dart';
 
 import '../../../../core/constant/media.dart';
 
@@ -19,6 +21,7 @@ class FeedEntity with _$FeedEntity {
     @Default(<String>[]) List<String> hashtags,
     DateTime? createdAt,
     String? createdBy,
+    AccountEntity? author,
   }) = _FeedEntity;
 
   factory FeedEntity.fromJson(Map<String, dynamic> json) =>
@@ -32,6 +35,19 @@ class FeedEntity with _$FeedEntity {
       type: model.type,
       hashtags: model.hashtags,
       createdAt:
-          model.createdAt == null ? null : DateTime.parse(model.createdAt!),
-      createdBy: model.createdBy);
+          model.createdAt.isEmpty ? null : DateTime.parse(model.createdAt),
+      createdBy: model.createdBy.isEmpty ? null : model.createdBy);
+
+  factory FeedEntity.fromModelWithAuthor(FeedWithAuthorModel model) =>
+      FeedEntity(
+          id: model.id.isEmpty ? null : model.id,
+          content: model.content.isEmpty ? null : model.content,
+          caption: model.caption.isEmpty ? null : model.caption,
+          media: model.media.isEmpty ? null : model.media,
+          type: model.type,
+          hashtags: model.hashtags,
+          createdAt:
+              model.createdAt.isEmpty ? null : DateTime.parse(model.createdAt),
+          createdBy: model.author.id.isEmpty ? null : model.author.id,
+          author: AccountEntity.fromModel(model.author));
 }

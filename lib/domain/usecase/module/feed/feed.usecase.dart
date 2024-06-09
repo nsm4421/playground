@@ -8,22 +8,19 @@ import 'package:uuid/uuid.dart';
 import '../../../../core/exception/failure.dart';
 import '../../../../data/repository_impl/feed/feed.repository_impl.dart';
 
-part '../../case/feed/get_feed_stream.usecase.dart';
-
 part '../../case/feed/fetch_feeds.usecase.dart';
 
 part '../../case/feed/save_media.usecase.dart';
 
 part '../../case/feed/save_feed.usecase.dart';
 
+part '../../case/feed/delete_feed.usecase.dart';
+
 @lazySingleton
 class FeedUseCase {
   final FeedRepository _repository;
 
   FeedUseCase(this._repository);
-
-  @injectable
-  GetFeedStreamUseCase get feedStream => GetFeedStreamUseCase(_repository);
 
   @injectable
   FetchFeedsUseCase get fetchFeeds => FetchFeedsUseCase(_repository);
@@ -33,4 +30,7 @@ class FeedUseCase {
 
   @injectable
   SaveMediaUseCase get saveMedia => SaveMediaUseCase(_repository);
+
+  @injectable
+  DeleteFeedUseCase get delete => DeleteFeedUseCase(_repository);
 }

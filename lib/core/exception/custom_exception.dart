@@ -36,6 +36,10 @@ class CustomException implements Exception {
       return CustomException(
           errorCode: ErrorCode.databaseError,
           message: message ?? ErrorCode.databaseError.name);
+    } else if (error is StorageException) {
+      return CustomException(
+          errorCode: ErrorCode.storageError,
+          message: message ?? ErrorCode.storageError.name);
     } else if (error is ArgumentError) {
       // bad request
       return CustomException(
