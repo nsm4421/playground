@@ -1,4 +1,5 @@
 import 'package:logger/logger.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../constant/error_code.dart';
 
@@ -17,11 +18,16 @@ class CustomException implements Exception {
   static CustomException from(dynamic error,
       {String? message, ErrorCode? errorCode, Logger? logger}) {
     if (logger != null) {
-      logger.e(error);
+      logger.e(error.toString());
     }
     if (errorCode != null) {
       return CustomException(
           errorCode: errorCode, message: message ?? errorCode.name);
+    } else if (error is AuthException) {
+      // bad request
+      return CustomException(
+          errorCode: ErrorCode.authError,
+          message: message ?? ErrorCode.authError.name);
     } else if (error is ArgumentError) {
       // bad request
       return CustomException(

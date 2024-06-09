@@ -25,10 +25,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO : splash screen 디지인
     return Center(
-      child:
-          Text("SPLASH PAGE", style: Theme.of(context).textTheme.displayLarge),
+      child: Text("Karma App", style: Theme.of(context).textTheme.displayLarge),
     );
   }
 }

@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/presentation/bloc/user/auth/auth.cubit.dart';
-import 'package:my_app/presentation/bloc/user/account/account.bloc.dart';
+import 'package:my_app/presentation/bloc/user/user.bloc.dart';
+import 'package:my_app/presentation/components/error.fragment.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
-import 'package:my_app/presentation/pages/auth/auth.screen.dart';
+import 'package:my_app/presentation/pages/auth/auth.page.dart';
 import 'package:my_app/presentation/pages/main/main.screen.dart';
 import 'package:my_app/presentation/pages/on_board/on_board.page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -20,18 +19,15 @@ class EntryPage extends StatefulWidget {
 
 class _EntryPageState extends State<EntryPage> {
   late Stream<User?> _authStream;
-  late StreamSubscription<User?> _authSubscription;
+  late StreamSubscription<User?> _authStreamSubscription;
 
   @override
   void initState() {
     super.initState();
-    // TODO : auth stream 코드 수정하기
-    // _authStream = context.read<AuthCubit>().authStream;
-    _authSubscription = _authStream.listen((event) {
-      if (event == null) {
-        context.read<AccountBloc>().add(SignOutEvent());
-      } else {
-        context.read<AccountBloc>().add(SignInEvent(event));
+    _authStream = context.read<UserBloc>().authStream;
+    _authStreamSubscription = _authStream.listen((data) {
+      if (data != null) {
+        context.read<UserBloc>().add(FetchAccountEvent(data));
       }
     });
   }
@@ -39,40 +35,36 @@ class _EntryPageState extends State<EntryPage> {
   @override
   void dispose() {
     super.dispose();
-    _authSubscription.cancel();
+    _authStreamSubscription.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<User?>(
-          stream: _authStream,
-          builder: (_, snapshot) {
-            if (snapshot.hasError) {
-              // on error
-              return const Center(child: Text("ERROR"));
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              // on loading
-              return const Center(child: CircularProgressIndicator());
-            } else if (!snapshot.hasData) {
-              // not session user
-              return const AuthScreen();
-            } else {
-              // on login
-              return BlocBuilder<AccountBloc, AccountState>(
-                  builder: (context, state) {
-                if (state is OnBoardingState) {
+        body: BlocListener<UserBloc, UserState>(
+            listenWhen: (prev, curr) =>
+                (prev is NotAuthenticatedState) && (curr is OnBoardingState),
+            listener: (BuildContext context, state) {
+              if (state is OnBoardingState) {
+                context
+                    .read<UserBloc>()
+                    .add(FetchAccountEvent(state.sessionUser));
+              }
+            },
+            child: BlocBuilder<UserBloc, UserState>(
+              builder: (BuildContext context, UserState state) {
+                if (state is NotAuthenticatedState) {
+                  return const AuthPage();
+                } else if (state is OnBoardingState) {
                   return const OnBoardingScreen();
                 } else if (state is UserLoadedState) {
                   return const MainScreen();
+                } else if (state is UserLoadingState) {
+                  return const LoadingFragment();
+                } else {
+                  return const ErrorFragment();
                 }
-                if (state is UserFailureState && state.message != null) {
-                  log('user bloc 오류 발생 : ${state.message}');
-                }
-                return const LoadingFragment();
-              });
-            }
-          }),
-    );
+              },
+            )));
   }
 }

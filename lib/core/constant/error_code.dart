@@ -3,16 +3,10 @@ enum ErrorCode {
   notSignIn("NOT_SIGN_IN"),
   notGranted("NOT_GRANTED"),
   notFound('NOT_FOUND'),
-  // bad request
-  invalidArgs("INVALID_ARGUMENT"),
-  // firebase
+  authError("AUTH_ERROR"),
+  invalidArgs("INVALID_ARGUMENTS"),
   firebaseAuthException("FIREBASE_AUTH_ERROR"),
-  firebasePermissionDenied("FIREBASE_PERMISSION_DENIED"),
-  firebaseAlreadyExists("FIREBASE_ALREADY_EXISTS"),
-  firebaseUnavailable("FIREBASE_UNAVAILABLE"),
-  firebaseNotFound("FIREBASE_NOT_FOUND"),
-  firebaseUnKnown("FIREBASE_UNKNOWN_ERROR"),
-  // else
+  duplicatedEntity("DUPLICATED_ENTITY"),
   unKnownError("UNKNOWN_ERROR"),
   ;
 

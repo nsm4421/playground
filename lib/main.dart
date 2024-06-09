@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_app/core/constant/routes.dart';
+import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
-import 'presentation/bloc/user/auth/auth.cubit.dart';
-import 'presentation/bloc/user/account/account.bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,13 +30,8 @@ class RootWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        // 앱 전역에서 접근할 수 있는 Bloc
-        BlocProvider(create: (context) => getIt<AuthCubit>()),
-        BlocProvider(
-            create: (context) => getIt<AccountBloc>()..add(InitAccountEvent()))
-      ],
+    return BlocProvider(
+      create: (context) => getIt<UserBloc>()..add(InitUserEvent()),
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'My Short App',
