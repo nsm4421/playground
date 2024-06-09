@@ -106,10 +106,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<void> _onFetchAccount(
       FetchAccountEvent event, Emitter<UserState> emit) async {
     try {
-      assert((state is OnBoardingState) || (state is UserLoadedState));
       emit(UserLoadingState());
       await _accountUseCase.getCurrentUser().then((res) => res.fold(
-          (l) => throw l.toCustomException(),
+          // 세션 정보는 있으나, 유저 정보가 없는 경우 OnBoarding 페이지로
+          (l) => emit(OnBoardingState(event.sessionUser)),
+          // 세션 정보는 및 유저 정보가 있는 경우, Main 페이지로
           (r) => emit(
               UserLoadedState(sessionUser: event.sessionUser, account: r))));
     } catch (error) {

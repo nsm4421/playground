@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/util/toast.util.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
+import 'package:my_app/presentation/components/error.fragment.dart';
+import 'package:my_app/presentation/components/loading.fragment.dart';
 
 class SignUpWithEmailAndPasswordScreen extends StatefulWidget {
   const SignUpWithEmailAndPasswordScreen({super.key});
@@ -18,8 +20,8 @@ class _SignUpWithEmailAndPasswordScreenState
   late TextEditingController _emailTec;
   late TextEditingController _passwordTec;
   late TextEditingController _passwordConfirmTec;
-  bool _isPasswordVisible = false;
-  bool _isPasswordConfirmVisible = false;
+  bool _isPasswordVisible = true;
+  bool _isPasswordConfirmVisible = true;
 
   @override
   void initState() {
@@ -96,7 +98,7 @@ class _SignUpWithEmailAndPasswordScreenState
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocListener<UserBloc, UserState>(
       listenWhen: (prev, curr) {
         return (prev is NotAuthenticatedState) && (curr is OnBoardingState);
       },
@@ -105,83 +107,96 @@ class _SignUpWithEmailAndPasswordScreenState
           context.pop();
         }
       },
-      child: Scaffold(
-        appBar: AppBar(title: const Text("Email & Password Sign In")),
-        body: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                // 이메일
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
-                    child: TextFormField(
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(decorationThickness: 0),
-                      controller: _emailTec,
-                      validator: _handleValidateEmail,
-                      decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.email),
-                          labelText: "이메일",
-                          suffixIcon: IconButton(
-                              onPressed: _handleClearEmail,
-                              icon: const Icon(Icons.clear))),
-                    )),
+      child: BlocBuilder<UserBloc, UserState>(
+        builder: (BuildContext context, state) {
+          if (state is UserLoadingState) {
+            return const LoadingFragment();
+          } else if (state is UserFailureState) {
+            return const ErrorFragment();
+          }
+          return Scaffold(
+            appBar: AppBar(title: const Text("Email & Password Sign In")),
+            body: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // 이메일
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15),
+                        child: TextFormField(
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(decorationThickness: 0),
+                          controller: _emailTec,
+                          validator: _handleValidateEmail,
+                          decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.email),
+                              labelText: "이메일",
+                              suffixIcon: IconButton(
+                                  onPressed: _handleClearEmail,
+                                  icon: const Icon(Icons.clear))),
+                        )),
 
-                // 비밀번호
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
-                    child: TextFormField(
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(decorationThickness: 0),
-                      controller: _passwordTec,
-                      validator: _handleValidatePassword,
-                      obscureText: _isPasswordVisible,
-                      decoration: InputDecoration(
-                          labelText: "비밀번호",
-                          prefixIcon: const Icon(Icons.key),
-                          suffixIcon: IconButton(
-                              onPressed: _handlePasswordVisibility,
-                              icon: _isPasswordVisible
-                                  ? const Icon(Icons.visibility_off)
-                                  : const Icon(Icons.visibility))),
-                    )),
+                    // 비밀번호
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15),
+                        child: TextFormField(
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(decorationThickness: 0),
+                          controller: _passwordTec,
+                          validator: _handleValidatePassword,
+                          obscureText: _isPasswordVisible,
+                          decoration: InputDecoration(
+                              labelText: "비밀번호",
+                              helperText: "6자 이상으로 작명해주세요",
+                              prefixIcon: const Icon(Icons.key),
+                              suffixIcon: IconButton(
+                                  onPressed: _handlePasswordVisibility,
+                                  icon: _isPasswordVisible
+                                      ? const Icon(Icons.visibility_off)
+                                      : const Icon(Icons.visibility))),
+                        )),
 
-                // 비밀번호 확인
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
-                    child: TextFormField(
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(decorationThickness: 0),
-                      controller: _passwordTec,
-                      validator: _handleValidatePasswordConfirm,
-                      decoration: InputDecoration(
-                          labelText: "비밀번호 확인",
-                          prefixIcon: const Icon(Icons.key_rounded),
-                          suffixIcon: IconButton(
-                              onPressed: _handlePasswordConfirmVisibility,
-                              icon: _isPasswordVisible
-                                  ? const Icon(Icons.visibility_off)
-                                  : const Icon(Icons.visibility))),
-                    )),
-              ],
+                    // 비밀번호 확인
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15),
+                        child: TextFormField(
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(decorationThickness: 0),
+                          controller: _passwordConfirmTec,
+                          validator: _handleValidatePasswordConfirm,
+                          obscureText: _isPasswordConfirmVisible,
+                          decoration: InputDecoration(
+                              labelText: "비밀번호 확인",
+                              helperText: "비밀번호를 다시 입력해주세요",
+                              prefixIcon: const Icon(Icons.key_rounded),
+                              suffixIcon: IconButton(
+                                  onPressed: _handlePasswordConfirmVisibility,
+                                  icon: _isPasswordConfirmVisible
+                                      ? const Icon(Icons.visibility_off)
+                                      : const Icon(Icons.visibility))),
+                        )),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Text("회원가입"),
-          onPressed: _handleSignUp,
-        ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton.extended(
+              label: const Text("회원가입"),
+              onPressed: _handleSignUp,
+            ),
+          );
+        },
       ),
     );
   }

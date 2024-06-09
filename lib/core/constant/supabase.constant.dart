@@ -1,5 +1,5 @@
 enum TableName {
-  user("users"),
+  user("accounts"),
   feed("feeds"),
   feedComment("feedComments"),
   chat("chats"),
