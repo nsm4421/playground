@@ -13,13 +13,11 @@ class _UploadFeedScreenState extends State<UploadFeedScreen> {
   static const _maxLengthCaption = 30;
   static const _maxCountHashtag = 3;
 
+  late GlobalKey<FormState> _formKey;
+
   late TextEditingController _hashtagTec;
 
   File? get _file => context.read<UploadFeedCubit>().state.file;
-
-  String get _caption => context.read<UploadFeedCubit>().state.caption;
-
-  String get _content => context.read<UploadFeedCubit>().state.content;
 
   List<String> get _hashtags => context.read<UploadFeedCubit>().state.hashtags;
 
@@ -27,6 +25,7 @@ class _UploadFeedScreenState extends State<UploadFeedScreen> {
   void initState() {
     super.initState();
     _hashtagTec = TextEditingController();
+    _formKey = GlobalKey<FormState>();
   }
 
   @override
@@ -71,19 +70,30 @@ class _UploadFeedScreenState extends State<UploadFeedScreen> {
     }
   }
 
+  String? _handleValidateContent(String? content) {
+    if (content == null || content.isEmpty) {
+      return "본문을 입력해주세요";
+    }
+    return null;
+  }
+
+  String? _handleValidateCaption(String? caption) {
+    if (caption == null || caption.isEmpty) {
+      return "캡션을 입력해주세요";
+    }
+    return null;
+  }
+
   _handleUpload() {
     // Validation
     if (_file == null) {
       ToastUtil.toast('이미지나 동영상을 선택해주세요');
       return;
-    } else if (_content.trim().isEmpty) {
-      ToastUtil.toast('캡션을 입력해주세요');
+    } else if (!_formKey.currentState!.validate()) {
       return;
-    } else if (_caption.trim().isEmpty) {
-      ToastUtil.toast('캡션을 입력해주세요');
-      return;
+    } else {
+      context.read<UploadFeedCubit>().upload();
     }
-    context.read<UploadFeedCubit>().upload();
   }
 
   @override
@@ -132,92 +142,113 @@ class _UploadFeedScreenState extends State<UploadFeedScreen> {
           const Padding(
               padding: EdgeInsets.symmetric(vertical: 20), child: Divider()),
 
-          /// Caption 텍스트 필드
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(width: 10),
-              Icon(Icons.closed_caption,
-                  size: 20, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 10),
-              Text('CAPTION',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Theme.of(context).colorScheme.primary)),
-            ],
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          Form(
+              key: _formKey,
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                        maxLength: _maxLengthCaption,
-                        minLines: 1,
-                        maxLines: 1,
-                        onChanged: _handleChangeCaption,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(decorationThickness: 0),
-                        decoration:
-                            const InputDecoration(helperText: "캡션을 입력해주세요"))
-                  ])),
-          const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20), child: Divider()),
+                children: [
+                  /// Caption 텍스트 필드
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 10),
+                      Icon(Icons.closed_caption,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary),
+                      const SizedBox(width: 10),
+                      Text('CAPTION',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.primary)),
+                    ],
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 10),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                                validator: _handleValidateCaption,
+                                maxLength: _maxLengthCaption,
+                                minLines: 1,
+                                maxLines: 1,
+                                onChanged: _handleChangeCaption,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(decorationThickness: 0),
+                                decoration: const InputDecoration(
+                                    helperText: "캡션을 입력해주세요"))
+                          ])),
+                  const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Divider()),
 
-          /// CONTENT 텍스트 필드
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(width: 10),
-              Icon(Icons.abc,
-                  size: 20, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 10),
-              Text('CONTENT',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Theme.of(context).colorScheme.primary)),
-            ],
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      maxLength: _maxLengthContent,
-                      minLines: 3,
-                      maxLines: 10,
-                      onChanged: _handleChangeContent,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(decorationThickness: 0),
-                      decoration:
-                          const InputDecoration(helperText: "본몬을 입력해주세요"),
-                    )
-                  ])),
-          const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20), child: Divider()),
+                  /// CONTENT 텍스트 필드
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 10),
+                      Icon(Icons.abc,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary),
+                      const SizedBox(width: 10),
+                      Text('CONTENT',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.primary)),
+                    ],
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 10),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              validator: _handleValidateContent,
+                              maxLength: _maxLengthContent,
+                              minLines: 3,
+                              maxLines: 10,
+                              onChanged: _handleChangeContent,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(decorationThickness: 0),
+                              decoration: const InputDecoration(
+                                  helperText: "본몬을 입력해주세요"),
+                            )
+                          ])),
+                  const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Divider()),
 
-          /// 해시태그 텍스트 필드
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(width: 10),
-              Icon(Icons.tag,
-                  size: 20, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 10),
-              Text('HASHTAG',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Theme.of(context).colorScheme.primary)),
-            ],
-          ),
+                  /// 해시태그 텍스트 필드
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 10),
+                      Icon(Icons.tag,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary),
+                      const SizedBox(width: 10),
+                      Text('HASHTAG',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.primary)),
+                    ],
+                  ),
+                ],
+              )),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               child: TextFormField(

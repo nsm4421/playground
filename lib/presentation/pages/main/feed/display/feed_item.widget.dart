@@ -20,11 +20,20 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // TODO : 작성자 아바타, 닉네임 가져오기
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(widget._feed.createdBy ?? 'UNKNOWN'),
+              // 프로필 사진
+              AvatarWidget(widget._feed.author!.profileUrl!),
+              const SizedBox(width: 8),
+
+              // 닉네임
+              Text(widget._feed.author?.nickname ?? 'Unknown'),
+              const Spacer(),
+
+              // 더보기 버튼
               IconButton(
                   onPressed: _handleClickMore,
                   icon: const Icon(Icons.more_vert))
@@ -34,25 +43,32 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
           // Image
           if (widget._feed.type == MediaType.image &&
               widget._feed.media != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: CachedNetworkImage(imageUrl: widget._feed.media!),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: CachedNetworkImage(imageUrl: widget._feed.media!),
+              ),
             ),
 
           // Video
           if (widget._feed.type == MediaType.video &&
               widget._feed.media != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: VideoPreviewItemWidget(widget._feed.media!),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: VideoPreviewItemWidget(widget._feed.media!),
+              ),
             ),
-          //
 
-          // Content
+          // 본문
           if (widget._feed.content != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              child: Text(widget._feed.content ?? ''),
+              child: Text(widget._feed.content ?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Theme.of(context).colorScheme.primary)),
             ),
 
           // 해시태그
@@ -61,7 +77,29 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               child: Wrap(
                 children: widget._feed.hashtags
-                    .map((text) => Chip(label: Text(text)))
+                    .map((text) => Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.tag, size: 20),
+                            const SizedBox(width: 5),
+                            Text(text,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSecondaryContainer)),
+                          ],
+                        )))
                     .toList(),
               ),
             ),

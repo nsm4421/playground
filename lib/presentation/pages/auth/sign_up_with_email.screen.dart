@@ -115,7 +115,7 @@ class _SignUpWithEmailAndPasswordScreenState
             return const ErrorFragment();
           }
           return Scaffold(
-            appBar: AppBar(title: const Text("Email & Password Sign In")),
+            appBar: AppBar(title: const Text("회원가입")),
             body: SingleChildScrollView(
               child: Form(
                 key: _formKey,

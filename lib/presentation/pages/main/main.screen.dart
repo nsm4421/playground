@@ -6,7 +6,7 @@ import 'package:my_app/presentation/pages/main/home/home.page.dart';
 import 'package:my_app/presentation/pages/main/setting/setting.page.dart';
 
 import '../../bloc/bottom_nav/bottm_nav.cubit.dart';
-import 'feed/feed.page.dart';
+import 'feed/display/feed.page.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

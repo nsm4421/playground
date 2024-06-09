@@ -32,7 +32,7 @@ class UploadFeedPage extends StatelessWidget {
       child: BlocListener<UploadFeedCubit, UploadFeedState>(
         listener: (context, state) {
           if (state.status == Status.success && context.mounted) {
-            context.replace(Routes.entry.path);
+            context.pop();
           }
         },
         child: BlocBuilder<UploadFeedCubit, UploadFeedState>(
