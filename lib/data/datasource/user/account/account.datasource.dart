@@ -12,9 +12,9 @@ abstract interface class RemoteAccountDataSource implements AccountDataSource {
   Future<void> deleteUser();
 
   /// on boarding
-  Future<bool> checkIsDuplicatedNickname(String nickname);
+  Future<bool> isDuplicatedNickname(String nickname);
 
-  Future<String> getProfileImageDownloadUrl();
+  String get profileImageUrl;
 
   Future<void> saveProfileImage(File image);
 }

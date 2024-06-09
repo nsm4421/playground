@@ -11,7 +11,7 @@ enum TableName {
 }
 
 enum BucketName {
-  user("users"),
+  user("accounts"),
   feed("feeds"),
   chat("chats"),
   message("messages");

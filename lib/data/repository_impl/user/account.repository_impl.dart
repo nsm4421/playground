@@ -17,6 +17,13 @@ class AccountRepositoryImpl implements AccountRepository {
       : _remoteDataSource = remoteUserDataSource;
 
   @override
+  String get profileImageUrl => _remoteDataSource.profileImageUrl;
+
+  @override
+  Future<bool> isDuplicatedNickname(String nickname) async =>
+      await _remoteDataSource.isDuplicatedNickname(nickname);
+
+  @override
   Future<Either<Failure, AccountEntity>> getCurrentUser() async {
     try {
       return await _remoteDataSource
@@ -43,27 +50,6 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, void>> deleteUser() async {
     try {
       return await _remoteDataSource.deleteUser().then(right);
-    } on CustomException catch (error) {
-      return left(Failure(code: error.code, message: error.message));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> checkIsDuplicatedNickname(
-      String nickname) async {
-    try {
-      return await _remoteDataSource
-          .checkIsDuplicatedNickname(nickname)
-          .then(right);
-    } on CustomException catch (error) {
-      return left(Failure(code: error.code, message: error.message));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> getProfileImageDownloadUrl() async {
-    try {
-      return await _remoteDataSource.getProfileImageDownloadUrl().then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }

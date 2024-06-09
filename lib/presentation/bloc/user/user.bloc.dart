@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_app/core/constant/error_code.dart';
 import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/domain/usecase/module/user/account.usecase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/exception/custom_exception.dart';
 import '../../../domain/usecase/module/user/auth.usecase.dart';
 
 part 'user.event.dart';
@@ -33,6 +35,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<SignInWithGoogleEvent>(_onSignInWithGoogle);
     on<SignInWithEmailAndPasswordEvent>(_onSignInWithEmailAndPassword);
     on<SignUpWithEmailAndPasswordEvent>(_onSignUpWithEmailAndPassword);
+    on<OnBoardingEvent>(_onOnBoarding);
     on<FetchAccountEvent>(_onFetchAccount);
     on<SignOutEvent>(_onSignOut);
   }
@@ -43,7 +46,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(NotAuthenticatedState());
     } catch (error) {
       log(error.toString());
-      emit(UserFailureState());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '인증상태 초기화 실패'));
     }
   }
 
@@ -61,7 +65,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               }));
     } catch (error) {
       log(error.toString());
-      emit(UserFailureState());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '구글 로그인 실패'));
     }
   }
 
@@ -80,7 +85,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               }));
     } catch (error) {
       log(error.toString());
-      emit(UserFailureState());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '로그인 실패'));
     }
   }
 
@@ -99,7 +105,27 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               }));
     } catch (error) {
       log(error.toString());
-      emit(UserFailureState());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '회원가입 실패'));
+    }
+  }
+
+  Future<void> _onOnBoarding(
+      OnBoardingEvent event, Emitter<UserState> emit) async {
+    try {
+      final sessionUser = currentUser!;
+      emit(UserLoadingState());
+      final res = await _accountUseCase.onBoarding(
+          sessionUser: sessionUser,
+          image: event.image,
+          nickname: event.nickname,
+          description: event.description);
+      res.fold((l) => throw l.toCustomException(),
+          (r) => emit(UserLoadedState(sessionUser: sessionUser, account: r)));
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : 'OnBoarding 중 오류 발생'));
     }
   }
 
@@ -108,14 +134,26 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserLoadingState());
       await _accountUseCase.getCurrentUser().then((res) => res.fold(
-          // 세션 정보는 있으나, 유저 정보가 없는 경우 OnBoarding 페이지로
-          (l) => emit(OnBoardingState(event.sessionUser)),
-          // 세션 정보는 및 유저 정보가 있는 경우, Main 페이지로
+          (l) => throw l.toCustomException(),
           (r) => emit(
               UserLoadedState(sessionUser: event.sessionUser, account: r))));
     } catch (error) {
       log(error.toString());
-      emit(UserFailureState());
+      if (error is CustomException) {
+        switch (error.code) {
+          case ErrorCode.databaseError:
+            emit(OnBoardingState(event.sessionUser));
+            return;
+          case ErrorCode.networkConnectionError:
+            emit(const UserFailureState('네트워크 오류'));
+            return;
+          default:
+            emit(const UserFailureState('알수 없는 오류 오류'));
+            return;
+        }
+      } else {
+        emit(const UserFailureState('알수 없는 오류 오류'));
+      }
     }
   }
 
@@ -126,7 +164,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(NotAuthenticatedState());
     } catch (error) {
       log(error.toString());
-      emit(UserFailureState());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '로그아웃 실패'));
     }
   }
 }

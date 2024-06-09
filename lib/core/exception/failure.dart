@@ -8,6 +8,6 @@ class Failure {
 
   Failure({required this.code, this.message});
 
-  CustomException toCustomException() =>
-      CustomException(errorCode: code, message: message);
+  CustomException toCustomException({String? message}) =>
+      CustomException(errorCode: code, message: message ?? message);
 }

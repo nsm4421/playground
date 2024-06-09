@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,8 @@ class _EntryPageState extends State<EntryPage> {
     _authStreamSubscription = _authStream.listen((data) {
       if (data != null) {
         context.read<UserBloc>().add(FetchAccountEvent(data));
+      } else {
+        context.read<UserBloc>().add(InitUserEvent());
       }
     });
   }

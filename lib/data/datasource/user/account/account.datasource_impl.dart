@@ -29,34 +29,77 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
           .eq('id', _getCurrentUidOrElseThrow)
           .limit(1);
       if (fetched.isEmpty) {
-        throw const AuthException('user not found from database');
+        throw const PostgrestException(message: 'user not found from database');
       } else {
         return AccountModel.fromJson(fetched[0]);
       }
     } catch (error) {
-      throw CustomException.from(error,
-          logger: _logger, message: 'user not found from database');
+      throw CustomException.from(error, logger: _logger);
     }
   }
 
   @override
-  Future<void> upsertUser(AccountModel user) async =>
-      throw UnimplementedError();
+  Future<void> upsertUser(AccountModel user) async {
+    try {
+      await _client.rest.from(TableName.user.name).upsert(user.toJson());
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
 
   @override
-  Future<void> deleteUser() async => throw UnimplementedError();
+  Future<void> deleteUser() async {
+    try {
+      await _client.rest
+          .from(TableName.user.name)
+          .delete()
+          .eq("id", _getCurrentUidOrElseThrow);
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
 
   @override
-  Future<bool> checkIsDuplicatedNickname(String nickname) async =>
-      throw UnimplementedError();
+  Future<bool> isDuplicatedNickname(String nickname) async {
+    try {
+      final count = await _client.rest
+          .from(TableName.user.name)
+          .count()
+          .eq("id", _getCurrentUidOrElseThrow)
+          .limit(1);
+      return count > 0;
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
 
   @override
-  Future<String> getProfileImageDownloadUrl() async =>
-      throw UnimplementedError();
+  String get profileImageUrl {
+    try {
+      return _client.storage
+          .from(BucketName.user.name)
+          .getPublicUrl(_profileImagePath);
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
 
   @override
-  Future<void> saveProfileImage(File image) async => throw UnimplementedError();
+  Future<void> saveProfileImage(File image) async {
+    try {
+      await _client.storage
+          .from(BucketName.user.name)
+          .upload(_profileImagePath, image);
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
 
+  // 프로필 이미지 저장 경로
+  String get _profileImagePath =>
+      '$_getCurrentUidOrElseThrow/profile_image.jpg';
+
+  // 현재 로그인 유저의 id
   String get _getCurrentUidOrElseThrow {
     final currentUid = _client.auth.currentUser?.id;
     if (currentUid == null) {

@@ -8,49 +8,26 @@ class OnBoardingUseCase {
   Future<Either<Failure, AccountEntity>> call({
     required User sessionUser,
     required String nickname,
-    required File image, // 프로필 이미지
+    required File image,
     required String description,
   }) async {
     try {
-      // 닉네임 중복검사
-      await _repository
-          .checkIsDuplicatedNickname(nickname)
-          .then((res) => res.fold((l) {
-                throw l.toCustomException();
-              }, (r) {
-                if (r) {
-                  throw CustomException(
-                      errorCode: ErrorCode.duplicatedEntity,
-                      message: '중복된 닉네임입니다');
-                }
-              }));
-
       // Storage에 이미지 저장
-      await _repository
-          .saveProfileImage(image)
-          .then((res) => res.getOrElse((l) {
-                throw l.toCustomException();
-              }));
-
-      // 프로필 이미지 다운로드 링크
-      final profileUrl = await _repository
-          .getProfileImageDownloadUrl()
-          .then((res) => res.getOrElse((l) {
-                throw l.toCustomException();
-              }));
+      final profileUrl = await _repository.saveProfileImage(image).then((res) =>
+          res.fold(
+              (l) => throw l.toCustomException(message: '프로필 이미지 저장 중 오류 발생'),
+              (r) => _repository.profileImageUrl));
 
       // DB에 유저정보 저장
-      await _repository.upsertUser(AccountEntity(
-          nickname: nickname,
-          profileUrl: profileUrl,
-          description: description));
-
-      // 유저정보 반환
-      return right(AccountEntity(
+      final account = AccountEntity(
           id: sessionUser.id,
           nickname: nickname,
           profileUrl: profileUrl,
-          description: description));
+          description: description);
+      await _repository.upsertUser(account).then((res) => res.fold(
+          (l) => throw l.toCustomException(message: '유저 정보 저장중 오류가 발생했습니다'),
+          (r) => r));
+      return right(account);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }

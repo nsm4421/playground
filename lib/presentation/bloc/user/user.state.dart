@@ -22,4 +22,8 @@ final class UserLoadedState extends UserState {
 
 final class UserLoadingState extends UserState {}
 
-final class UserFailureState extends UserState {}
+final class UserFailureState extends UserState {
+  final String message;
+
+  const UserFailureState(this.message);
+}

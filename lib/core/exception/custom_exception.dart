@@ -24,10 +24,18 @@ class CustomException implements Exception {
       return CustomException(
           errorCode: errorCode, message: message ?? errorCode.name);
     } else if (error is AuthException) {
-      // bad request
+      if (message == 'AuthRetryableFetchError') {
+        return CustomException(
+            errorCode: ErrorCode.networkConnectionError,
+            message: message ?? ErrorCode.networkConnectionError.name);
+      }
       return CustomException(
           errorCode: ErrorCode.authError,
           message: message ?? ErrorCode.authError.name);
+    } else if (error is PostgrestException) {
+      return CustomException(
+          errorCode: ErrorCode.databaseError,
+          message: message ?? ErrorCode.databaseError.name);
     } else if (error is ArgumentError) {
       // bad request
       return CustomException(

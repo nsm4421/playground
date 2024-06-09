@@ -97,6 +97,7 @@ class _SignInWithEmailAndPasswordFragmentState
                     .titleMedium
                     ?.copyWith(decorationThickness: 0),
                 controller: _passwordTec,
+                obscureText: true,
                 validator: _handleValidatePassword,
                 decoration: InputDecoration(
                     labelText: "비밀번호",
