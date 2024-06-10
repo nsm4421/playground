@@ -1,88 +1,171 @@
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/constant/error_code.dart';
-import 'package:my_app/domain/usecase/module/auth/auth.usecase.dart';
-import 'package:my_app/domain/usecase/module/user/user.usecase.dart';
+import 'package:my_app/data/entity/user/account.entity.dart';
+import 'package:my_app/domain/usecase/module/user/account.usecase.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../data/entity/user/user.entity.dart';
+import '../../../core/exception/custom_exception.dart';
+import '../../../domain/usecase/module/user/auth.usecase.dart';
 
-part "user.event.dart";
+part 'user.event.dart';
 
-part "user.state.dart";
+part 'user.state.dart';
 
 @singleton
 class UserBloc extends Bloc<UserEvent, UserState> {
   final AuthUseCase _authUseCase;
-  final UserUseCase _userUseCase;
+  final AccountUseCase _accountUseCase;
 
-  UserBloc({required AuthUseCase authUseCase, required UserUseCase userUseCase})
+  User? get currentUser => _authUseCase.currentUser();
+
+  Stream<User?> get authStream => _authUseCase.authStream();
+
+  UserBloc(
+      {required AuthUseCase authUseCase,
+      required AccountUseCase accountUseCase})
       : _authUseCase = authUseCase,
-        _userUseCase = userUseCase,
-        super(NotSignInState()) {
+        _accountUseCase = accountUseCase,
+        super(NotAuthenticatedState()) {
     on<InitUserEvent>(_onInit);
-    on<SignInEvent>(_onSignIn);
-    on<SignOutEvent>(_onSignOut);
-    on<InitOnBoardingEvent>(_onInitOnBoarding);
+    on<SignInWithGoogleEvent>(_onSignInWithGoogle);
+    on<SignInWithEmailAndPasswordEvent>(_onSignInWithEmailAndPassword);
+    on<SignUpWithEmailAndPasswordEvent>(_onSignUpWithEmailAndPassword);
     on<OnBoardingEvent>(_onOnBoarding);
+    on<FetchAccountEvent>(_onFetchAccount);
+    on<SignOutEvent>(_onSignOut);
   }
 
   Future<void> _onInit(InitUserEvent event, Emitter<UserState> emit) async {
-    final sessionUser = _authUseCase.currentUser();
-    // 로그인 하지 않은 경우
-    if (sessionUser == null) {
-      emit(NotSignInState());
-      return;
+    try {
+      emit(UserLoadingState());
+      emit(NotAuthenticatedState());
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '인증상태 초기화 실패'));
     }
-    // 로그인한 경우
-    final res = await _userUseCase.getCurrentUser();
-    res.fold((l) {
-      if (l.code == ErrorCode.notSignIn) {
-        emit(InitialOnBoardingState(sessionUser));
-      } else {
-        emit(UserFailureState(sessionUser, message: l.message));
-      }
-    }, (r) {
-      emit(UserLoadedState(sessionUser, r));
-    });
   }
 
-  Future<void> _onSignIn(SignInEvent event, Emitter<UserState> emit) async {
-    final res = await _userUseCase.getCurrentUser();
-    res.fold((l) {
-      if (l.code == ErrorCode.notSignIn) {
-        emit(InitialOnBoardingState(event.user));
-      } else {
-        emit(UserFailureState(event.user, message: l.message));
-      }
-    }, (r) {
-      emit(UserLoadedState(event.user, r));
-    });
+  Future<void> _onSignInWithGoogle(
+      SignInWithGoogleEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoadingState());
+      await _authUseCase
+          .signInWithGoogle()
+          .then((res) => res.fold((l) => throw l.toCustomException(), (r) {
+                final sessionUser = _authUseCase.currentUser();
+                sessionUser != null
+                    ? emit(OnBoardingState(sessionUser))
+                    : emit(NotAuthenticatedState());
+              }));
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '구글 로그인 실패'));
+    }
   }
 
-  Future<void> _onSignOut(SignOutEvent event, Emitter<UserState> emit) async {
-    emit(NotSignInState());
+  Future<void> _onSignInWithEmailAndPassword(
+      SignInWithEmailAndPasswordEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoadingState());
+      await _authUseCase
+          .signInWithEmailAndPassword(
+              email: event.email, password: event.password)
+          .then((res) => res.fold((l) => throw l.toCustomException(), (r) {
+                final sessionUser = _authUseCase.currentUser();
+                sessionUser != null
+                    ? emit(OnBoardingState(sessionUser))
+                    : emit(NotAuthenticatedState());
+              }));
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '로그인 실패'));
+    }
   }
 
-  Future<void> _onInitOnBoarding(
-      InitOnBoardingEvent event, Emitter<UserState> emit) async {
-    emit(InitialOnBoardingState(event.sessionUser));
+  Future<void> _onSignUpWithEmailAndPassword(
+      SignUpWithEmailAndPasswordEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoadingState());
+      await _authUseCase
+          .signUpWithEmailAndPassword(
+              email: event.email, password: event.password)
+          .then((res) => res.fold((l) => throw l.toCustomException(), (r) {
+                final sessionUser = _authUseCase.currentUser();
+                sessionUser != null
+                    ? emit(OnBoardingState(sessionUser))
+                    : emit(NotAuthenticatedState());
+              }));
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '회원가입 실패'));
+    }
   }
 
   Future<void> _onOnBoarding(
       OnBoardingEvent event, Emitter<UserState> emit) async {
-    emit(OnBoardingLoadingState(event.sessionUser));
-    final res = await _userUseCase.onBoarding(
-        sessionUser: event.sessionUser,
-        nickname: event.nickname,
-        image: event.image,
-        description: event.description);
-    res.fold(
-        (l) =>
-            emit(OnBoardingFailureState(event.sessionUser, message: l.message)),
-        (r) => emit(UserLoadedState(event.sessionUser, r)));
+    try {
+      final sessionUser = currentUser!;
+      emit(UserLoadingState());
+      final res = await _accountUseCase.onBoarding(
+          sessionUser: sessionUser,
+          image: event.image,
+          nickname: event.nickname,
+          description: event.description);
+      res.fold((l) => throw l.toCustomException(),
+          (r) => emit(UserLoadedState(sessionUser: sessionUser, account: r)));
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : 'OnBoarding 중 오류 발생'));
+    }
+  }
+
+  Future<void> _onFetchAccount(
+      FetchAccountEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoadingState());
+      await _accountUseCase.getCurrentUser().then((res) => res.fold(
+          (l) => throw l.toCustomException(),
+          (r) => emit(
+              UserLoadedState(sessionUser: event.sessionUser, account: r))));
+    } catch (error) {
+      log(error.toString());
+      if (error is CustomException) {
+        switch (error.code) {
+          case ErrorCode.databaseError:
+            emit(OnBoardingState(event.sessionUser));
+            return;
+          case ErrorCode.networkConnectionError:
+            emit(const UserFailureState('네트워크 오류'));
+            return;
+          default:
+            emit(const UserFailureState('알수 없는 오류 오류'));
+            return;
+        }
+      } else {
+        emit(const UserFailureState('알수 없는 오류 오류'));
+      }
+    }
+  }
+
+  Future<void> _onSignOut(SignOutEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoadingState());
+      await _authUseCase.signOut();
+      emit(NotAuthenticatedState());
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '로그아웃 실패'));
+    }
   }
 }

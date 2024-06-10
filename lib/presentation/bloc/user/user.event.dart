@@ -1,34 +1,43 @@
-part of "user.bloc.dart";
+part of 'user.bloc.dart';
 
 @immutable
 sealed class UserEvent {}
 
 final class InitUserEvent extends UserEvent {}
 
-final class SignInEvent extends UserEvent {
-  final User user;
+final class SignUpWithEmailAndPasswordEvent extends UserEvent {
+  final String email;
+  final String password;
 
-  SignInEvent(this.user);
+  SignUpWithEmailAndPasswordEvent(
+      {required this.email, required this.password});
 }
 
-final class SignOutEvent extends UserEvent {}
+final class SignInEvent extends UserEvent {}
 
-final class InitOnBoardingEvent extends UserEvent {
-  final User sessionUser;
+final class SignInWithGoogleEvent extends SignInEvent {}
 
-  InitOnBoardingEvent(this.sessionUser);
+final class SignInWithEmailAndPasswordEvent extends SignInEvent {
+  final String email;
+  final String password;
+
+  SignInWithEmailAndPasswordEvent(
+      {required this.email, required this.password});
 }
 
 final class OnBoardingEvent extends UserEvent {
-  final User sessionUser;
   final File image;
   final String nickname;
   final String description;
 
-  OnBoardingEvent({
-    required this.sessionUser,
-    required this.image,
-    required this.nickname,
-    required this.description,
-  });
+  OnBoardingEvent(
+      {required this.image, required this.nickname, required this.description});
 }
+
+final class FetchAccountEvent extends UserEvent {
+  final User sessionUser;
+
+  FetchAccountEvent(this.sessionUser);
+}
+
+final class SignOutEvent extends UserEvent {}

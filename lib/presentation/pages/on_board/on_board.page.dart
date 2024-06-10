@@ -4,33 +4,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_app/presentation/bloc/auth/auth.cubit.dart';
+import 'package:my_app/core/util/toast.util.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 
-class OnBoardingScreen extends StatelessWidget {
+class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-      if (state is OnBoardingLoadingState) {
-        return const _OnLoading();
-      } else if (state is OnBoardingFailureState) {
-        return const _OnError();
-      }
-      return const _OnInitial();
-    });
-  }
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnInitial extends StatefulWidget {
-  const _OnInitial({super.key});
-
-  @override
-  State<_OnInitial> createState() => _OnInitialState();
-}
-
-class _OnInitialState extends State<_OnInitial> {
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   static const int _maxLengthNickname = 20;
   static const int _maxLengthDescription = 300;
 
@@ -71,16 +55,17 @@ class _OnInitialState extends State<_OnInitial> {
   }
 
   _handleSubmit() {
-    // TODO : validation 실패시 toast 띄우기
     if (_nicknameTec.text.trim().isEmpty) {
+      ToastUtil.toast('닉네임을 입력해주세요');
       return;
     } else if (_descriptionTec.text.trim().isEmpty) {
+      ToastUtil.toast('자기소개를 입력해주세요');
       return;
     } else if (_xFile?.path == null) {
+      ToastUtil.toast('프로필 사진을 등록해주세요');
       return;
     }
     context.read<UserBloc>().add(OnBoardingEvent(
-        sessionUser: context.read<AuthCubit>().currentUser!,
         image: File(_xFile!.path),
         nickname: _nicknameTec.text.trim(),
         description: _descriptionTec.text.trim()));
@@ -188,36 +173,5 @@ class _OnInitialState extends State<_OnInitial> {
         ),
       ),
     );
-  }
-}
-
-class _OnLoading extends StatelessWidget {
-  const _OnLoading({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
-  }
-}
-
-class _OnError extends StatelessWidget {
-  const _OnError({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('ERROR'), 
-        const SizedBox(height: 20),
-        ElevatedButton(
-            onPressed: () {
-              final sessionUser = context.read<AuthCubit>().currentUser;
-              context.read<UserBloc>().add(InitOnBoardingEvent(sessionUser!));
-            },
-            child: const Text("INIT"))
-      ],
-    ));
   }
 }

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/constant/media.dart';
-import 'package:my_app/data/datasource/feed/feed.datasource_impl.dart';
-import 'package:my_app/data/entity/feed/feed.entity.dart';
-import 'package:my_app/domain/model/feed/feed.model.dart';
+import 'package:my_app/data/datasource/feed/base/feed.datasource_impl.dart';
+import 'package:my_app/data/entity/feed/base/feed.entity.dart';
+import 'package:my_app/domain/model/feed/base/feed.model.dart';
 
 import '../../../core/exception/custom_exception.dart';
 import '../../../core/exception/failure.dart';
@@ -20,26 +20,19 @@ class FeedRepositoryImpl implements FeedRepository {
       : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<Either<Failure, List<FeedEntity>>> fetchFeeds(
-      {required String afterAt, int take = 20, bool descending = false}) async {
+  Future<Either<Failure, List<FeedEntity>>> fetchFeeds({
+    required DateTime beforeAt,
+    bool ascending = false,
+    int from = 0,
+    int to = 20,
+  }) async {
     try {
       return await _remoteDataSource
-          .fetchFeeds(afterAt: afterAt, take: take, descending: descending)
-          .then((event) => event.map(FeedEntity.fromModel).toList())
+          .fetchFeeds(
+              beforeAt: beforeAt, ascending: ascending, from: from, to: to)
+          .then(
+              (fetched) => fetched.map(FeedEntity.fromModelWithAuthor).toList())
           .then(right);
-    } on CustomException catch (error) {
-      return left(Failure(code: error.code, message: error.message));
-    }
-  }
-
-  @override
-  Either<Failure, Stream<List<FeedEntity>>> getFeedStream(
-      {required String afterAt, bool descending = false}) {
-    try {
-      final stream = _remoteDataSource
-          .getFeedStream(afterAt: afterAt, descending: descending)
-          .asyncMap((event) => event.map(FeedEntity.fromModel).toList());
-      return right(stream);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }
@@ -57,14 +50,22 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<Either<Failure, String>> saveMedia(
-      {required feedId,
-      required MediaType type,
-      required File file}) async {
+  Future<Either<Failure, void>> deleteFeed(FeedEntity feed) async {
     try {
-      final path = '$feedId/${type.name}';
-      await _remoteDataSource.uploadFile(path: path, file: file);
-      return await _remoteDataSource.getDownloadUrl(path).then(right);
+      // TODO : Storage에 저장된 이미지나 동영상 삭제
+      return await _remoteDataSource.deleteFeed(feed.id!).then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> saveMedia(
+      {required feedId, required MediaType type, required File file}) async {
+    try {
+      return await _remoteDataSource
+          .uploadFile(feedId: feedId, file: file)
+          .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }

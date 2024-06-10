@@ -5,8 +5,10 @@ sealed class DisplayFeedEvent {}
 
 final class InitDisplayFeedEvent extends DisplayFeedEvent {}
 
-final class FetchDisplayFeedEvent extends DisplayFeedEvent {
-  final int _take;
+final class FetchDisplayFeedEvent extends DisplayFeedEvent {}
 
-  FetchDisplayFeedEvent(this._take);
+final class DeleteDisplayFeedEvent extends DisplayFeedEvent {
+  final FeedEntity feed;
+
+  DeleteDisplayFeedEvent(this.feed);
 }

@@ -1,50 +1,29 @@
-part of "user.bloc.dart";
+part of 'user.bloc.dart';
 
 @immutable
-sealed class UserState {}
+sealed class UserState {
+  const UserState();
+}
 
-/// 1. 로그인하지 않은 경우
-final class NotSignInState extends UserState {}
+final class NotAuthenticatedState extends UserState {}
 
-/// 2. 로그인 한 경우
-final class _SignInState extends UserState {
+final class OnBoardingState extends UserState {
   final User sessionUser;
 
-  _SignInState(this.sessionUser);
+  const OnBoardingState(this.sessionUser);
 }
 
-/// 2-1. 유저정보(닉네임, 프로필)를 등록하지 않은 경우
-final class OnBoardingState extends _SignInState {
-  OnBoardingState(super.sessionUser);
+final class UserLoadedState extends UserState {
+  final User sessionUser;
+  final AccountEntity account;
+
+  const UserLoadedState({required this.sessionUser, required this.account});
 }
 
-/// 2-1-1. 유저정보(닉네임, 프로필)를 등록하지 않은 경우
-final class InitialOnBoardingState extends OnBoardingState {
-  InitialOnBoardingState(super.sessionUser);
-}
+final class UserLoadingState extends UserState {}
 
-/// 2-1-2. 유저정보(닉네임, 프로필)를 등록하지 않은 경우
-final class OnBoardingLoadingState extends OnBoardingState {
-  OnBoardingLoadingState(super.sessionUser);
-}
+final class UserFailureState extends UserState {
+  final String message;
 
-/// 2-1-3. 유저정보(닉네임, 프로필)를 등록하지 않은 경우
-final class OnBoardingFailureState extends OnBoardingState {
-  final String? message;
-
-  OnBoardingFailureState(super.sessionUser, {this.message});
-}
-
-/// 2-2. 유저정보(닉네임, 프로필)가 등록된 정상유저인 경우
-final class UserLoadedState extends _SignInState {
-  final UserEntity currentUser;
-
-  UserLoadedState(super.sessionUser, this.currentUser);
-}
-
-/// 2-3. 에러가 발생한 경우
-final class UserFailureState extends _SignInState {
-  final String? message;
-
-  UserFailureState(super.sessionUser, {this.message});
+  const UserFailureState(this.message);
 }

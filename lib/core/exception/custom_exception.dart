@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../constant/error_code.dart';
 
@@ -18,45 +18,33 @@ class CustomException implements Exception {
   static CustomException from(dynamic error,
       {String? message, ErrorCode? errorCode, Logger? logger}) {
     if (logger != null) {
-      logger.e(error);
+      logger.e(error.toString());
     }
     if (errorCode != null) {
       return CustomException(
           errorCode: errorCode, message: message ?? errorCode.name);
+    } else if (error is AuthException) {
+      if (message == 'AuthRetryableFetchError') {
+        return CustomException(
+            errorCode: ErrorCode.networkConnectionError,
+            message: message ?? ErrorCode.networkConnectionError.name);
+      }
+      return CustomException(
+          errorCode: ErrorCode.authError,
+          message: message ?? ErrorCode.authError.name);
+    } else if (error is PostgrestException) {
+      return CustomException(
+          errorCode: ErrorCode.databaseError,
+          message: message ?? ErrorCode.databaseError.name);
+    } else if (error is StorageException) {
+      return CustomException(
+          errorCode: ErrorCode.storageError,
+          message: message ?? ErrorCode.storageError.name);
     } else if (error is ArgumentError) {
       // bad request
       return CustomException(
           errorCode: ErrorCode.invalidArgs,
           message: message ?? ErrorCode.invalidArgs.name);
-    } else if (error is FirebaseAuthException) {
-      // firebase auth
-      return CustomException(
-          errorCode: ErrorCode.firebaseAuthException,
-          message: message ?? ErrorCode.firebaseAuthException.name);
-    } else if (error is FirebaseException) {
-      // firestore
-      switch (error.code) {
-        case 'permission-denied':
-          return CustomException(
-              errorCode: ErrorCode.firebasePermissionDenied,
-              message: message ?? error.message);
-        case 'unavailable':
-          return CustomException(
-              errorCode: ErrorCode.firebaseUnavailable,
-              message: message ?? error.message);
-        case 'not-found':
-          return CustomException(
-              errorCode: ErrorCode.firebaseNotFound,
-              message: message ?? error.message);
-        case 'already-exists':
-          return CustomException(
-              errorCode: ErrorCode.firebaseAlreadyExists,
-              message: message ?? error.message);
-        default:
-          return CustomException(
-              errorCode: ErrorCode.firebaseUnKnown,
-              message: message ?? error.message);
-      }
     } else {
       // un known
       return CustomException(

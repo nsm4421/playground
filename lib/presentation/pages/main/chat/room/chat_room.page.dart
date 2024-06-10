@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/dependency_injection/dependency_injection.dart';
-import 'package:my_app/data/entity/chat/chat.entity.dart';
-import 'package:my_app/presentation/bloc/chat/message.bloc.dart';
+import 'package:my_app/data/entity/chat/base/chat.entity.dart';
+import 'package:my_app/presentation/bloc/chat/message/message.bloc.dart';
 import 'package:my_app/presentation/components/error.fragment.dart';
 import 'package:my_app/presentation/components/stream_builder.widget.dart';
 
-import '../../../../../data/entity/chat/chat_message.entity.dart';
+import '../../../../../data/entity/chat/message/chat_message.entity.dart';
 
 part 'chat_room.screen.dart';
 
