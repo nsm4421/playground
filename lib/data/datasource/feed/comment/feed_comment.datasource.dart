@@ -7,16 +7,17 @@ abstract interface class LocalFeedCommentDataSource
 
 abstract interface class RemoteFeedCommentDataSource
     implements FeedCommentDataSource {
-  Stream<Iterable<FeedCommentModel>> getCommentStream(
-      {required String afterAt,
+  Future<Iterable<FeedCommentWithAuthorModel>> fetchComments(
+      {required DateTime beforeAt,
       required String feedId,
-      bool descending = false});
-
-  Future<Iterable<FeedCommentModel>> fetchComments(
-      {required String afterAt,
-      required String feedId,
-      int take = 20,
-      bool descending = false});
+      required int from,
+      required int to,
+      bool ascending = false});
 
   Future<void> saveComment(FeedCommentModel model);
+
+  Future<void> modifyComment(
+      {required String commentId, required String content});
+
+  Future<void> deleteComment(String commentId);
 }

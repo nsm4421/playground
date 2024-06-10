@@ -4,7 +4,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/constant/media.dart';
 import 'package:my_app/data/entity/feed/base/feed.entity.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../core/exception/failure.dart';
 import '../../../../data/repository_impl/feed/feed.repository_impl.dart';
 

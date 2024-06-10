@@ -17,18 +17,21 @@ class FeedCommentRepositoryImpl implements FeedCommentRepository {
 
   @override
   Future<Either<Failure, List<FeedCommentEntity>>> fetchComments(
-      {required String afterAt,
+      {required DateTime beforeAt,
       required String feedId,
-      int take = 20,
-      bool descending = false}) async {
+      required int from,
+      required int to,
+      bool ascending = false}) async {
     try {
       return await _remoteDataSource
           .fetchComments(
-              afterAt: afterAt,
-              take: take,
+              beforeAt: beforeAt,
               feedId: feedId,
-              descending: descending)
-          .then((event) => event.map(FeedCommentEntity.fromModel).toList())
+              from: from,
+              to: to,
+              ascending: ascending)
+          .then(
+              (res) => res.map(FeedCommentEntity.fromModelWithAuthor).toList())
           .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
@@ -36,16 +39,21 @@ class FeedCommentRepositoryImpl implements FeedCommentRepository {
   }
 
   @override
-  Either<Failure, Stream<List<FeedCommentEntity>>> getCommentStream(
-      {required String afterAt,
-      required String feedId,
-      bool descending = false}) {
+  Future<Either<Failure, void>> deleteComment(String commentId) async {
     try {
-      final stream = _remoteDataSource
-          .getCommentStream(
-              afterAt: afterAt, feedId: feedId, descending: descending)
-          .asyncMap((event) => event.map(FeedCommentEntity.fromModel).toList());
-      return right(stream);
+      return await _remoteDataSource.deleteComment(commentId).then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> modifyComment(
+      {required String commentId, required String content}) async {
+    try {
+      return await _remoteDataSource
+          .modifyComment(commentId: commentId, content: content)
+          .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
     }
