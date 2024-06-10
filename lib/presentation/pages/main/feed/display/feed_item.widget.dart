@@ -15,6 +15,17 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
 
   _handleClickFavorite() {}
 
+  _handleClickComment() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: FeedCommentPage(widget._feed)));
+  }
+
+  _handleClickShare() {}
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -117,13 +128,13 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: IconButton(
-                    onPressed: _handleClickFavorite,
+                    onPressed: _handleClickComment,
                     icon: const Icon(Icons.mode_comment_outlined)),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: IconButton(
-                    onPressed: _handleClickFavorite,
+                    onPressed: _handleClickShare,
                     icon: const Icon(Icons.share_rounded)),
               )
             ],

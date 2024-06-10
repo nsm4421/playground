@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/data/entity/feed/base/feed.entity.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/constant/status.dart';
@@ -10,24 +11,25 @@ import 'upload_feed_comment.state.dart';
 
 class UploadFeedCommentCubit extends Cubit<UploadFeedCommentState> {
   final FeedCommentUseCase _useCase;
+  final FeedEntity _feed;
 
-  final String _feedId;
-
-  UploadFeedCommentCubit(this._feedId, {required FeedCommentUseCase useCase})
-      : _useCase = useCase,
-        super(const UploadFeedCommentState());
+  UploadFeedCommentCubit(
+      {required FeedEntity feed, required FeedCommentUseCase useCase})
+      : _feed = feed,
+        _useCase = useCase,
+        super(UploadFeedCommentState(feedId: feed.id!));
 
   setContent(String content) => emit(state.copyWith(content: content));
 
   Future<void> upload() async {
     try {
-      assert(_feedId == state.feedId);
+      assert(_feed.id == state.feedId);
       emit(state.copyWith(status: Status.loading));
 
       await _useCase
           .saveFeed(FeedCommentEntity(
               id: (const Uuid()).v4(),
-              feedId: _feedId,
+              feedId: _feed.id,
               content: state.content,
               createdAt: DateTime.now()))
           .then((res) => res.fold((l) => throw l.toCustomException(),

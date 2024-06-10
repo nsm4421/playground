@@ -13,7 +13,7 @@ part 'display_feed.state.dart';
 
 class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
   final FeedUseCase _useCase;
-  final DateTime _beforeAt = DateTime.now();
+  DateTime _beforeAt = DateTime.now();
   int _page = 0;
   bool _isEnd = false;
   static const int _pageSize = 10;
@@ -29,6 +29,9 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
   Future<void> _onInit(
       InitDisplayFeedEvent event, Emitter<DisplayFeedState> emit) async {
     try {
+      _beforeAt = DateTime.now();
+      _page = 0;
+      _isEnd = false;
       emit(InitialDisplayFeedState());
     } catch (error) {
       log(error.toString());
