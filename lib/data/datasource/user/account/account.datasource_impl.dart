@@ -22,11 +22,16 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
 
   @override
   Future<AccountModel> getCurrentUser() async {
+    return await findByUserId(_getCurrentUidOrElseThrow);
+  }
+
+  @override
+  Future<AccountModel> findByUserId(String userId) async {
     try {
       final fetched = await _client.rest
           .from(TableName.user.name)
           .select("*")
-          .eq('id', _getCurrentUidOrElseThrow)
+          .eq('id', userId)
           .limit(1);
       if (fetched.isEmpty) {
         throw const PostgrestException(message: 'user not found from database');

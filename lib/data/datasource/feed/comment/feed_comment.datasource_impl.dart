@@ -76,6 +76,24 @@ class RemoteFeedCommentDataSourceImpl implements RemoteFeedCommentDataSource {
     }
   }
 
+  @override
+  RealtimeChannel getCommentChannel(
+      {required String feedId,
+      required PostgresChangeEvent changeEvent,
+      required void Function(PostgresChangePayload p) callback}) {
+    return _client
+        .channel('${TableName.feedComment.name}:$feedId')
+        .onPostgresChanges(
+            event: changeEvent,
+            schema: 'public',
+            table: TableName.feedComment.name,
+            filter: PostgresChangeFilter(
+                type: PostgresChangeFilterType.eq,
+                column: "feedId",
+                value: feedId),
+            callback: callback);
+  }
+
   // 현재 로그인 유저의 id
   String get _getCurrentUidOrElseThrow {
     final currentUid = _client.auth.currentUser?.id;

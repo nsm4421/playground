@@ -1,6 +1,13 @@
 part of 'package:my_app/data/repository_impl/feed/feed_comment.repository_impl.dart';
 
 abstract interface class FeedCommentRepository {
+  RealtimeChannel getCommentChannel(
+      {required String feedId,
+      required PostgresChangeEvent changeEvent,
+      required void Function(
+              FeedCommentEntity? oldRecord, FeedCommentEntity? newRecord)
+          callback});
+
   Future<Either<Failure, List<FeedCommentEntity>>> fetchComments(
       {required DateTime beforeAt,
       required String feedId,

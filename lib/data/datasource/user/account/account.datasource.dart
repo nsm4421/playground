@@ -7,6 +7,8 @@ abstract interface class LocalAccountDataSource implements AccountDataSource {}
 abstract interface class RemoteAccountDataSource implements AccountDataSource {
   Future<AccountModel> getCurrentUser();
 
+  Future<AccountModel> findByUserId(String userId);
+
   Future<void> upsertUser(AccountModel user);
 
   Future<void> deleteUser();

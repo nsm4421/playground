@@ -20,4 +20,9 @@ abstract interface class RemoteFeedCommentDataSource
       {required String commentId, required String content});
 
   Future<void> deleteComment(String commentId);
+
+  RealtimeChannel getCommentChannel(
+      {required String feedId,
+      required PostgresChangeEvent changeEvent,
+      required void Function(PostgresChangePayload p) callback});
 }
