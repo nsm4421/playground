@@ -5,6 +5,7 @@ import 'package:my_app/presentation/pages/auth/sign_up_with_email.screen.dart';
 import 'package:my_app/presentation/pages/entry.page.dart';
 import 'package:my_app/presentation/pages/main/chat/room/chat_room.page.dart';
 import 'package:my_app/presentation/pages/main/feed/upload/upload_feed.page.dart';
+import 'package:my_app/presentation/pages/main/setting/edit/edit_profile.page.dart';
 import 'package:my_app/presentation/pages/splash.page.dart';
 
 enum Routes {
@@ -12,7 +13,8 @@ enum Routes {
   signUpWithEmailAndPassword("/auth/sign-up"),
   entry("/"),
   uploadFeed("/feed/upload"),
-  chatRoom("/chat/:chatId");
+  chatRoom("/chat/:chatId"),
+  editProfile("/setting/edit");
 
   final String path;
 
@@ -52,6 +54,13 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
     builder: (context, state) {
       final chat = state.extra as ChatEntity;
       return ChatRoomPage(chat);
+    },
+  ),
+  GoRoute(
+    name: Routes.editProfile.name,
+    path: Routes.editProfile.path,
+    builder: (context, state) {
+      return const EditProfilePage();
     },
   )
 ], initialLocation: Routes.splash.path);

@@ -89,7 +89,7 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
     try {
       await _client.storage
           .from(BucketName.user.name)
-          .upload(_profileImagePath, image);
+          .update(_profileImagePath, image);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
