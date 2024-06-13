@@ -10,10 +10,33 @@ class FeedItemWidget extends StatefulWidget {
 }
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
+  late StreamSubscription<Iterable<String>> _subscription;
+  bool _isLike = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = context.read<DisplayFeedBloc>().likeStream.listen((event) {
+      setState(() {
+        _isLike = event.contains(widget._feed.id);
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _subscription.cancel();
+  }
+
   // TODO : 버튼 이벤트 기능 구현하기
   _handleClickMore() {}
 
-  _handleClickFavorite() {}
+  _handleClickFavorite() {
+    context.read<DisplayFeedBloc>().add(_isLike
+        ? DeleteLikeOnFeedEvent(widget._feed)
+        : SendLikeOnFeedEvent(widget._feed));
+  }
 
   _handleClickComment() {
     showModalBottomSheet(
@@ -123,7 +146,14 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                 padding: const EdgeInsets.only(left: 8),
                 child: IconButton(
                     onPressed: _handleClickFavorite,
-                    icon: const Icon(Icons.favorite_border)),
+                    icon: _isLike
+                        ? Icon(Icons.favorite,
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer)
+                        : Icon(Icons.favorite_border,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .tertiaryContainer)),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8),

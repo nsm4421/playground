@@ -12,3 +12,17 @@ final class DeleteDisplayFeedEvent extends DisplayFeedEvent {
 
   DeleteDisplayFeedEvent(this.feed);
 }
+
+final class LikeOnFeedEvent extends DisplayFeedEvent {
+  final FeedEntity feed;
+
+  LikeOnFeedEvent(this.feed);
+}
+
+final class SendLikeOnFeedEvent extends LikeOnFeedEvent {
+  SendLikeOnFeedEvent(super.feed);
+}
+
+final class DeleteLikeOnFeedEvent extends LikeOnFeedEvent {
+  DeleteLikeOnFeedEvent(super.feed);
+}

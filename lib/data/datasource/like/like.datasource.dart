@@ -5,7 +5,11 @@ abstract interface class LikeDataSource {}
 abstract interface class LocalLikeDataSource implements LikeDataSource {}
 
 abstract interface class RemoteLikeDataSource implements LikeDataSource {
-  Future<void> like();
+  Stream<Iterable<LikeModel>> get likeOnFeedStream;
 
-  Future<void> cancelLike(LikeModel user);
+  Future<void> saveLikeOnFeed(String feedId);
+
+  Future<void> deleteLikeOnFeed(String feedId);
+
+  Future<void> deleteLikeById(String likeId);
 }
