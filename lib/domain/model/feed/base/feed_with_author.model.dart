@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_app/domain/model/user/account.model.dart';
 
-import '../../../../core/constant/media.dart';
+import '../../../../core/constant/dto.constant.dart';
 
 part 'feed_with_author.model.freezed.dart';
 

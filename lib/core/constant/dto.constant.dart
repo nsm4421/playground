@@ -1,5 +1,20 @@
 import 'dart:io';
 
+enum LikeType {
+  feed("FEED"),
+  feedComment("FEED_COMMENT");
+
+  final String name;
+
+  const LikeType(this.name);
+}
+
+enum ChatMessageType {
+  text,
+  image,
+  video;
+}
+
 enum MediaType {
   image,
   video;

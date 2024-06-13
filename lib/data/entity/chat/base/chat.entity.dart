@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/core/constant/chat.dart';
 import 'package:my_app/data/entity/chat/message/chat_message.entity.dart';
 
 import '../../../../domain/model/chat/base/chat.model.dart';

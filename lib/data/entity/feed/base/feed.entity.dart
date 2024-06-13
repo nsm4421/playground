@@ -4,7 +4,7 @@ import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/domain/model/feed/base/feed.model.dart';
 import 'package:my_app/domain/model/feed/base/feed_with_author.model.dart';
 
-import '../../../../core/constant/media.dart';
+import '../../../../core/constant/dto.constant.dart';
 
 part 'feed.entity.freezed.dart';
 

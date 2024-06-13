@@ -16,4 +16,5 @@ abstract interface class RemoteFeedDataSource implements FeedDataSource {
   Future<void> saveFeed(FeedModel model);
 
   Future<String> uploadFile({required String feedId, required File file});
+
 }

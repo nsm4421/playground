@@ -23,6 +23,19 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
       : _client = client,
         _logger = logger;
 
+  // 피드 이미지/동영상 저장 경로
+  String _mediaPath(String feedId) =>
+      '$_getCurrentUidOrElseThrow/$feedId/media';
+
+  // 현재 로그인 유저의 id
+  String get _getCurrentUidOrElseThrow {
+    final currentUid = _client.auth.currentUser?.id;
+    if (currentUid == null) {
+      throw const AuthException('NOT LOGIN');
+    }
+    return currentUid;
+  }
+
   @override
   Future<Iterable<FeedWithAuthorModel>> fetchFeeds({
     required DateTime beforeAt,
@@ -79,18 +92,5 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
-  }
-
-  // 피드 이미지/동영상 저장 경로
-  String _mediaPath(String feedId) =>
-      '$_getCurrentUidOrElseThrow/$feedId/media';
-
-  // 현재 로그인 유저의 id
-  String get _getCurrentUidOrElseThrow {
-    final currentUid = _client.auth.currentUser?.id;
-    if (currentUid == null) {
-      throw const AuthException('NOT LOGIN');
-    }
-    return currentUid;
   }
 }

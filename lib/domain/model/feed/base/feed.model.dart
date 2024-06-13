@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/core/constant/media.dart';
 
+import '../../../../core/constant/dto.constant.dart';
 import '../../../../data/entity/feed/base/feed.entity.dart';
 
 part 'feed.model.freezed.dart';

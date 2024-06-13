@@ -3,7 +3,8 @@ enum TableName {
   feed("feeds"),
   feedComment("feedComments"),
   chat("chats"),
-  message("messages");
+  message("messages"),
+  like("likes");
 
   final String name;
 
