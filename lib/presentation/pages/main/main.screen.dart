@@ -25,6 +25,7 @@ class MainScreen extends StatelessWidget {
                 },
                 currentIndex: context.read<BottomNavCubit>().state.index,
                 type: BottomNavigationBarType.fixed,
+                showUnselectedLabels: false,
                 items: BottomNav.values
                     .map((e) => BottomNavigationBarItem(
                         label: e.label,
