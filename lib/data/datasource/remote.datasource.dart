@@ -1,7 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
+import 'package:my_app/data/datasource/chat/open_chat_message/open_chat_message.datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'chat/open_chat/open_chat.datasource_impl.dart';
 import 'like/like.datasource_impl.dart';
 import 'user/account/account.datasource_impl.dart';
 import 'user/auth/auth.datasource_impl.dart';
@@ -33,4 +35,11 @@ abstract class RemoteDataSource {
   RemoteLikeDataSource get like =>
       RemoteLikeDataSourceImpl(client: _client, logger: _logger);
 
+  @lazySingleton
+  RemoteOpenChatDataSource get openChat =>
+      RemoteOpenChatDataSourceImpl(client: _client, logger: _logger);
+
+  @lazySingleton
+  RemoteOpenChatMessageDataSource get openChatMessage =>
+      RemoteOpenChatMessageDataSourceImpl(client: _client, logger: _logger);
 }
