@@ -74,9 +74,9 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
   Future<String> uploadFile(
       {required String feedId, required File file}) async {
     try {
-      await _client.storage
-          .from(BucketName.feed.name)
-          .upload(_mediaPath(feedId), file);
+      await _client.storage.from(BucketName.feed.name).upload(
+          _mediaPath(feedId), file,
+          fileOptions: const FileOptions(cacheControl: '3600', upsert: true));
       return _client.storage
           .from(BucketName.feed.name)
           .getPublicUrl(_mediaPath(feedId));

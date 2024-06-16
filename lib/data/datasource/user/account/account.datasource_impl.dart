@@ -92,9 +92,9 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
   @override
   Future<void> saveProfileImage(File image) async {
     try {
-      await _client.storage
-          .from(BucketName.user.name)
-          .update(_profileImagePath, image);
+      await _client.storage.from(BucketName.user.name).upload(
+          _profileImagePath, image,
+          fileOptions: const FileOptions(cacheControl: '3600', upsert: true));
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
