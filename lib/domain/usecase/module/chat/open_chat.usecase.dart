@@ -10,6 +10,8 @@ part '../../case/chat/open_chat/get_open_chat_stream.usecase.dart';
 
 part '../../case/chat/open_chat/delete_open_chat.usecase.dart';
 
+part '../../case/chat/open_chat/modify_open_chat.usecase.dart';
+
 @lazySingleton
 class OpenChatUseCase {
   final OpenChatRepository _repository;
@@ -17,6 +19,8 @@ class OpenChatUseCase {
   OpenChatUseCase(this._repository);
 
   CreateOpenChatUseCase get createChat => CreateOpenChatUseCase(_repository);
+
+  ModifyOpenChatUseCase get modifyChat => ModifyOpenChatUseCase(_repository);
 
   GetOpenChatStreamUseCase get chatStream =>
       GetOpenChatStreamUseCase(_repository);

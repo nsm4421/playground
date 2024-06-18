@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_app/core/constant/routes.dart';
-import 'package:my_app/core/util/time.util.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -10,8 +9,6 @@ import 'core/dependency_injection/dependency_injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  TimeUtil.setLocalMessages();
 
   // 환경변수 초기화
   await dotenv.load();

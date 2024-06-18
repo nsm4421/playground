@@ -5,7 +5,6 @@ import 'package:my_app/core/dependency_injection/dependency_injection.dart';
 import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:my_app/presentation/bloc/chat/chat.bloc.dart';
 import 'package:my_app/presentation/bloc/chat/display_open_chat/display_open_chat.bloc.dart';
-import 'package:my_app/presentation/bloc/chat/display_open_chat_message/display_open_chat_message.bloc.dart';
 import 'package:my_app/presentation/components/error.fragment.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
 import 'package:my_app/presentation/components/stream_builder.widget.dart';

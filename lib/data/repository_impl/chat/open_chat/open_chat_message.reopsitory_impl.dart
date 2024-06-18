@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/core/exception/failure.dart';
 import 'package:my_app/data/datasource/chat/open_chat_message/open_chat_message.datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/exception/custom_exception.dart';
+import '../../../../core/exception/failure.dart';
 import '../../../../domain/model/chat/message/open_chat_message.model.dart';
 import '../../../entity/chat/chat_message/open_chat_message.entity.dart';
 
@@ -17,22 +17,18 @@ class OpenChatRepositoryImpl implements OpenChatMessageRepository {
   OpenChatRepositoryImpl(this._remoteDataSource);
 
   @override
-  RealtimeChannel getMessageChannel(
-      {required String chatId,
-      required PostgresChangeEvent changeEvent,
-      required void Function(OpenChatMessageEntity? oldRecord,
-              OpenChatMessageEntity? newRecord)
-          callback}) {
+  RealtimeChannel getMessageChannel({
+    required String chatId,
+    required void Function(OpenChatMessageEntity entity) onInsert,
+  }) {
     return _remoteDataSource.getMessageChannel(
         chatId: chatId,
-        changeEvent: changeEvent,
-        callback: (PostgresChangePayload p) {
-          final oldRecord = OpenChatMessageEntity.fromModel(
-              OpenChatMessageModel.fromJson(p.oldRecord));
-          final newRecord = OpenChatMessageEntity.fromModel(
-              OpenChatMessageModel.fromJson(p.newRecord));
-          callback(oldRecord.id == null ? null : oldRecord,
-              newRecord.id == null ? null : newRecord);
+        onInsert: (PostgresChangePayload payload) {
+          final entity = OpenChatMessageEntity.fromModel(
+              OpenChatMessageModel.fromJson(payload.newRecord));
+          if (entity.id != null) {
+            onInsert(entity);
+          }
         });
   }
 

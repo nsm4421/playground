@@ -9,8 +9,7 @@ abstract interface class RemoteOpenChatMessageDataSource
     implements OpenChatMessageDataSource {
   RealtimeChannel getMessageChannel(
       {required String chatId,
-      required PostgresChangeEvent changeEvent,
-      required void Function(PostgresChangePayload p) callback});
+      required void Function(PostgresChangePayload) onInsert});
 
   Future<void> saveChatMessage(OpenChatMessageModel model);
 

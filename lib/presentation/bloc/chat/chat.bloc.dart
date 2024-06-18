@@ -36,5 +36,7 @@ class ChatBloc {
 
   @injectable
   SendOpenChatMessageCubit sendOpenChatMessage(OpenChatEntity openChat) =>
-      SendOpenChatMessageCubit(openChat, useCase: _openChatMessageUseCase);
+      SendOpenChatMessageCubit(openChat,
+          chatUseCase: _openChatUseCase,
+          messageUseCase: _openChatMessageUseCase);
 }

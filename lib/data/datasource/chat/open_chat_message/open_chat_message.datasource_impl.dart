@@ -60,18 +60,14 @@ class RemoteOpenChatMessageDataSourceImpl
   @override
   RealtimeChannel getMessageChannel(
       {required String chatId,
-      required PostgresChangeEvent changeEvent,
-      required void Function(PostgresChangePayload p) callback}) {
+      required void Function(PostgresChangePayload) onInsert}) {
+    final key = '${TableName.openChatMessage.name}:$chatId';
     return _client
-        .channel('${TableName.openChatMessage.name}:$chatId')
+        .channel(key, opts: RealtimeChannelConfig(key: key))
         .onPostgresChanges(
-            event: changeEvent,
+            event: PostgresChangeEvent.insert,
             schema: 'public',
             table: TableName.openChatMessage.name,
-            filter: PostgresChangeFilter(
-                type: PostgresChangeFilterType.eq,
-                column: "chatId",
-                value: chatId),
-            callback: callback);
+            callback: onInsert);
   }
 }

@@ -5,14 +5,9 @@ class GetOpenChatMessageChannelUseCase {
 
   GetOpenChatMessageChannelUseCase(this._repository);
 
-  RealtimeChannel call({
-    required String chatId,
-    required PostgresChangeEvent changeEvent,
-    required void Function(
-            OpenChatMessageEntity? oldRecored, OpenChatMessageEntity? newRecord)
-        callback,
-  }) {
-    return _repository.getMessageChannel(
-        chatId: chatId, changeEvent: changeEvent, callback: callback);
+  RealtimeChannel call(
+      {required String chatId,
+      required void Function(OpenChatMessageEntity entity) onInsert}) {
+    return _repository.getMessageChannel(chatId: chatId, onInsert: onInsert);
   }
 }

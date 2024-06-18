@@ -18,22 +18,19 @@ class _OpenChatItemWidgetState extends State<OpenChatItemWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: _handleGoToChatRoom,
-      title: Text(widget._chat.title ?? ''),
+      title: Text(widget._chat.title ?? '',
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.primary)),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(widget._chat.lastMessage ?? '',
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
-          Text(widget._chat.lastTalkAt?.toIso8601String() ?? '',
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  fontWeight: FontWeight.w400)),
         ],
       ),
     );
