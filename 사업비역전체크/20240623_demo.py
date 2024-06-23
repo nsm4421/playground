@@ -1,27 +1,58 @@
 from itertools import combinations
+from enum import Enum
+import copy
 
+class Jong(Enum):
+    # 종(납입면제유형별) 순서 내림차순
+    납면고급형=1
+    납면적용형=2
+    납면미적용형=3
+    
+    def __eq__(cls, other:object)->bool:
+        if not isinstance(other, cls.__class__):
+            raise Exception('Type Error')
+        return cls.value == other.value
+    
+    def __lt__(cls, other:object)->bool:
+        if not isinstance(other, cls.__class__):
+            raise Exception('Type Error')
+        return cls.value < other.value
+    
+    # Table상 종과 납입면제 유형 매핑
+    @staticmethod
+    def fromDigit(jong:int):
+        if jong == 1:
+            return Jong.납면고급형
+        elif jong == 2:
+            return Jong.납면적용형
+        elif jong == 5:
+            return Jong.납면미적용형
+        else:
+            raise Exception(f'NOT SUPPORTED - 종이 {jong}으로 주어짐')
+    
 # 가입조건
 class Condition:
     def __init__(cls, **kds):
         cls.covSeq = int(kds.get('covSeq'))         # 담보순번
-        cls.jong = int(kds.get('jong'))             # 종
-        cls.hyung = int(kds.get('hyung'))           # 형
-        cls.re = int(kds.get('re'))                 # 신규갱신
-        cls.reTerm = int(kds.get('reTerm'))         # 갱신주기
-        cls.n = int(kds.get('n'))                   # 만기
-        cls.nn = int(kds.get('nn'))                 # 실만기
-        cls.m = int(kds.get('m'))                   # 납기
-        cls.mm = int(kds.get('mm'))                 # 실납기        
+        cls.superCovSeq :list[int] = list(map(int, kds.get('superCovSeq'))) \
+            if ('superCovSeq' in kds.keys()) else []    # 상위담보순번
+        cls.jong = kds.get('jong')                      # 종
+        cls.hyung = int(kds.get('hyung'))               # 형
+        cls.re = int(kds.get('re'))                     # 신규갱신
+        cls.reTerm = int(kds.get('reTerm'))             # 갱신주기
+        cls.n = int(kds.get('n'))                       # 만기
+        cls.nn = int(kds.get('nn'))                     # 실만기
+        cls.m = int(kds.get('m'))                       # 납기
+        cls.mm = int(kds.get('mm'))                     # 실납기        
         for k in kds.keys():
-            assert k in ['covSeq', 'jong', 'hyung', 're', 'reTerm', 'n', 'nn', 'm', 'mm'] 
+            assert k in ['covSeq', 'superCovSeq', 'jong', 'hyung', 're', 'reTerm', 'n', 'nn', 'm', 'mm'] 
          
     def __repr__(cls) -> str:
         return f'담보순번:{cls.covSeq}|종:{cls.jong}|형:{cls.hyung}|신규갱신:{cls.re}|갱신주기:{cls.reTerm}|만기:{cls.n}|실만기:{cls.nn}|납기:{cls.m}|실납기:{cls.mm}'
   
     def __eq__(cls, other: object) -> bool:
-        # type 오류인 경우 -> False
         if not isinstance(other, cls.__class__):
-            Exception('Type Error')
+            raise Exception('Type Error')
         return (other.covSeq == cls.covSeq) and \
             (other.jong == cls.jong) and \
             (other.hyung == cls.hyung) and \
@@ -31,49 +62,51 @@ class Condition:
             (other.nn == cls.nn) and \
             (other.m == cls.m) and \
             (other.mm == cls.mm)
-     
-    # TODO : 담보별, 종별 포함관계, 세만기 케이스에 대해 가입조건 구현 필요함
-    def __gt__(cls, other:object) -> bool:
-        """
-        1) 사업비 대소관계가 존재하지 않는 경우 False
-        2) 사업비 대소관계가 존재하고, 더 큰 경우 True
-        2) 사업비 대소관계가 존재하고, 더 작은 경우 False
-        """
-        if not isinstance(other, cls.__class__):
-            Exception('Type Error')
-        # 가입조건 비교가 불가(담보순번, 종, 형, 신규갱신 불일치) -> False   
-        elif not((other.covSeq == cls.covSeq) and \
-            (other.jong == cls.jong) and \
-            (other.hyung == cls.hyung) and \
-            (other.re == cls.re)):
-            return False
-        # 납만기 동일하고, 갱신주기만 다른 경우 -> 갱신주기로 비교
-        elif ((cls.n >= other.n) and (cls.nn >= other.nn) and (cls.m >= other.m) and (cls.mm >= other.mm)):
-            return cls.reTerm >= other.reTerm
-        # 갱신주기가 동일하나 납만기가 다른 경우
-        else:
-            return (cls.n >= other.n) and (cls.nn >= other.nn) and (cls.m >= other.m) and (cls.mm >= other.mm) 
     
     def __lt__(cls, other:object) -> bool:
         """
-        1) 사업비 대소관계가 존재하지 않는 경우 False
-        2) 사업비 대소관계가 존재하고, 더 작은 경우 True
-        2) 사업비 대소관계가 존재하고, 더 큰 경우 False
+        비교 가입조건보다 더 작아야하는 경우 True
+        알수 없거나 더 클수도 있는 경우는 False
         """
         if not isinstance(other, cls.__class__):
-            Exception('Type Error')
-        elif not((other.covSeq == cls.covSeq) and \
-            (other.jong == cls.jong) and \
-            (other.hyung == cls.hyung) and \
-            (other.re == cls.re)):
+            raise Exception('Type Error')
+        # 1. 가입조건이 같음 -> False
+        elif other == cls:
             return False
-        # 납만기 동일하고, 갱신주기만 다른 경우 -> 갱신주기로 비교
-        elif ((cls.n >= other.n) and (cls.nn >= other.nn) and (cls.m >= other.m) and (cls.mm >= other.mm)):
-            return cls.reTerm <= other.reTerm
-        # 갱신주기가 동일하나 납만기가 다른 경우
-        else:
-            return (cls.n <= other.n) and (cls.nn <= other.nn) and (cls.m <= other.m) and (cls.mm <= other.mm) 
-        
+        # 2. 담보순번이 다른 경우
+        elif other.covSeq != cls.covSeq:
+            # 2-1. 상위담보가 주어진 경우 -> 담보순번이 동일할 때 기준으로 비교
+            if other.covSeq in cls.superCovSeq:
+                condition = copy.deepcopy(other)
+                condition.covSeq = cls.covSeq
+                return condition > cls
+            # 2-2. 관계없는 담보인 경우 -> False
+            else:
+                return False
+        # 3. 담보순번은 동일하나, 종이 다른 경우
+        elif other.jong != cls.jong:
+            otherJong = Jong.fromDigit(other.jong)
+            thisJong = Jong.fromDigit(cls.jong)
+            # 3-1. 비교대상이 더 사업비 작게 잡아야 하는 종인 경우 -> False
+            if (otherJong<thisJong):
+                return False
+            # 3-2. 비교대상이 더 사업바 크게 잡아야 하는 종인 경우 -> 종이 동일할 때 기준으로 비교
+            else:
+                condition = copy.deepcopy(other)
+                condition.jong = cls.jong
+                return not (cls > condition)
+        # 4. 담보순번, 종은 동일하나 형이나 신규갱신이 다른 경우 -> False
+        elif cls.hyung != other.hyung or cls.re != other.re:
+            return False
+        # 5. 담보순번, 종, 형, 신규갱신 동일한 경우
+        elif cls.reTerm > other.reTerm:
+            return False
+        elif cls.reTerm <= other.reTerm:
+            return (cls.n <= other.n) or \
+                (cls.nn <= other.nn) or \
+                (cls.m <= other.m) or \
+                (cls.mm <= other.mm)
+
 # 사업비
 class Expense:
     def __init__(cls, **kds):
@@ -99,7 +132,7 @@ class Expense:
         새로운 사업비(상위 사업비)가 주어지면 사업비 업데이트
         """
         if not (isinstance(lessThan, Expense)):
-            Exception('Type Error')
+            raise Exception('Type Error')
         cls.a1 = min(lessThan.a1, cls.a1)
         cls.a2 = min(lessThan.a2, cls.a2)
         cls.a3 = min(lessThan.a3, cls.a3)
@@ -115,9 +148,8 @@ class Expense:
         return f'a1:{cls.a1}|a2:{cls.a2}|a3:{cls.a3}|a4:{cls.a4}|b1:{cls.b1}|b2:{cls.b2}|b3:{cls.b3}|r1:{cls.r}|ce1:{cls.ce1}|ce2:{cls.ce2}'
 
     def __eq__(cls, other:object) -> bool:
-        # type 오류인 경우 -> False
         if not isinstance(other, cls.__class__):
-            Exception('Type Error') 
+            raise Exception('Type Error') 
         return (cls.a1 == other.a1) and \
             (cls.a2 == other.a2) and \
             (cls.a3 == other.a3) and \
@@ -128,51 +160,10 @@ class Expense:
             (cls.r == other.r) and \
             (cls.ce1 == other.ce1) and \
             (cls.ce2 == other.ce2) 
-
-    def __gt__(cls, other:object) -> bool:
-        """
-        1) 사업비 대소관계가 존재하지 않는 경우 False
-        2) 사업비 대소관계가 존재하고, 더 큰 경우 True
-        2) 사업비 대소관계가 존재하고, 더 작은 경우 False
-        """
-        # type 오류인 경우 -> False
-        if not isinstance(other, cls.__class__):
-            Exception('Type Error')
-        return (cls.a1 > other.a1) and \
-            (cls.a2 > other.a2) and \
-            (cls.a3 > other.a3) and \
-            (cls.a4 > other.a4) and \
-            (cls.b1 > other.b1) and \
-            (cls.b2 > other.b2) and \
-            (cls.b3 > other.b3) and \
-            (cls.r > other.r) and \
-            (cls.ce1 > other.ce1) and \
-            (cls.ce2 > other.ce2) 
-
-    def __lt__(cls, other:object) -> bool:
-        """
-        1) 사업비 대소관계가 존재하지 않는 경우 False
-        2) 사업비 대소관계가 존재하고, 더 작은 경우 True
-        2) 사업비 대소관계가 존재하고, 더 큰 경우 False
-        """
-        # type 오류인 경우 -> False
-        if not isinstance(other, cls.__class__):
-            Exception('Type Error')
-        return (cls.a1 < other.a1) and \
-            (cls.a2 < other.a2) and \
-            (cls.a3 < other.a3) and \
-            (cls.a4 < other.a4) and \
-            (cls.b1 < other.b1) and \
-            (cls.b2 < other.b2) and \
-            (cls.b3 < other.b3) and \
-            (cls.r < other.r) and \
-            (cls.ce1 < other.ce1) and \
-            (cls.ce2 < other.ce2) 
             
     def __le__(cls, other:object)->bool:
-        # type 오류인 경우 -> False
         if not isinstance(other, cls.__class__):
-            Exception('Type Error')
+            raise Exception('Type Error')
         return (cls.a1 <= other.a1) and \
             (cls.a2 <= other.a2) and \
             (cls.a3 <= other.a3) and \
@@ -183,21 +174,6 @@ class Expense:
             (cls.r <= other.r) and \
             (cls.ce1 <= other.ce1) and \
             (cls.ce2 <= other.ce2) 
-
-    def __ge__(cls, other:object)->bool:
-        # type 오류인 경우 -> False
-        if not isinstance(other, cls.__class__):
-            Exception('Type Error')
-        return (cls.a1 >= other.a1) and \
-            (cls.a2 >= other.a2) and \
-            (cls.a3 >= other.a3) and \
-            (cls.a4 >= other.a4) and \
-            (cls.b1 >= other.b1) and \
-            (cls.b2 >= other.b2) and \
-            (cls.b3 >= other.b3) and \
-            (cls.r >= other.r) and \
-            (cls.ce1 >= other.ce1) and \
-            (cls.ce2 >= other.ce2) 
     
 # 노드
 class Node:
@@ -294,25 +270,33 @@ if __name__ == '__main__':
     # 테스트용 데이터
     nodes : list[Node] = [
         Node(
-            condition=Condition(covSeq=1, jong = 1, hyung = 1, n=0, nn=5, m=5, mm=5, re=1, reTerm=5), 
-            expense=Expense(a1=30, a2=0, a3=0, a4=80, b1=0.2, b2=0, b3=0, r=0.06, ce1=0.05, ce2=0)
+            condition=Condition(covSeq=1, jong = 1, hyung = 1, n=5, nn=5, m=5, mm=5, re=1, reTerm=5), 
+            expense=Expense(a1=100, a2=0, a3=0, a4=100, b1=0, b2=0, b3=0, r=0, ce1=0, ce2=0)
+        ),
+        Node(
+            condition=Condition(covSeq=1, jong = 2, hyung = 1, n=5, nn=5, m=5, mm=5, re=1, reTerm=5), 
+            expense=Expense(a1=50, a2=0, a3=0, a4=200, b1=0, b2=0, b3=0, r=0, ce1=0, ce2=0)
+        ),
+        Node(
+            condition=Condition(covSeq=1, jong = 5, hyung = 1, n=5, nn=5, m=5, mm=5, re=1, reTerm=5), 
+            expense=Expense(a1=300, a2=0, a3=0, a4=40, b1=0, b2=0, b3=0, r=0, ce1=0, ce2=0)
         ),
         Node(
             condition=Condition(covSeq=1, jong = 1, hyung = 1, n=10, nn=10, m=10, mm=10, re=1, reTerm=10), 
-            expense=Expense(a1=30, a2=0, a3=0, a4=50, b1=0.2, b2=0, b3=0, r=0.04, ce1=0.05, ce2=0)
+            expense=Expense(a1=80, a2=0, a3=0, a4=80, b1=0, b2=0, b3=0, r=0, ce1=0, ce2=0)
         ),
         Node(
-            condition=Condition(covSeq=1, jong = 1, hyung = 1, n=20, nn=20, m=20, mm=20, re=1, reTerm=20), 
-            expense=Expense(a1=20, a2=0, a3=0, a4=30, b1=0.5, b2=0, b3=0, r=0.03, ce1=0.05, ce2=0)
+            condition=Condition(covSeq=1, jong = 2, hyung = 1, n=10, nn=10, m=10, mm=10, re=1, reTerm=10), 
+            expense=Expense(a1=70, a2=0, a3=0, a4=70, b1=0, b2=0, b3=0, r=0, ce1=0, ce2=0)
         ),
         Node(
-            condition=Condition(covSeq=1, jong = 1, hyung = 1, n=30, nn=30, m=30, mm=30, re=1, reTerm=30), 
-            expense=Expense(a1=30, a2=0, a3=0, a4=10, b1=0.50, b2=0, b3=0, r=0.01, ce1=0.05, ce2=0)
-        )
+            condition=Condition(covSeq=1, jong = 5, hyung = 1, n=10, nn=10, m=10, mm=10, re=1, reTerm=10), 
+            expense=Expense(a1=60, a2=0, a3=0, a4=60, b1=0, b2=0, b3=0, r=0, ce1=0, ce2=0)
+        ),        
     ]
     
-    print('='*10, '사업비 변경전', '='*10)
     graph = Graph(nodes=nodes)
+    print('='*10, '사업비 변경전', '='*10)
     print(graph.foramt(header=True))
     print('='*10, '사업비 변경후', '='*10)
     graph.update()
