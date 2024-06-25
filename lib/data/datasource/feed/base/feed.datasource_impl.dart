@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:my_app/domain/model/feed/base/feed_with_author.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constant/supabase.constant.dart';
+import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
 import '../../../../domain/model/feed/base/feed.model.dart';
 

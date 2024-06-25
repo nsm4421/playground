@@ -4,6 +4,7 @@ enum TableName {
   feedComment("feedComments"),
   openChat("openChats"),
   openChatMessage("openChatMessages"),
+  privateChatMessage("privateChatMessages"),
   like("likes");
 
   final String name;
@@ -15,9 +16,18 @@ enum BucketName {
   user("accounts"),
   feed("feeds"),
   openChat("openChats"),
-  openChatMessage("openChatMessage");
+  openChatMessage("openChatMessage"),
+  privateChatMessage("privateChatMessage");
 
   final String name;
 
   const BucketName(this.name);
+}
+
+enum BoxName {
+  privateChat("privateChat");
+
+  final String name;
+
+  const BoxName(this.name);
 }

@@ -2,7 +2,7 @@ import 'package:logger/logger.dart';
 import 'package:my_app/domain/model/chat/base/open_chat.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constant/supabase.constant.dart';
+import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
 
 part 'open_chat.datasource.dart';

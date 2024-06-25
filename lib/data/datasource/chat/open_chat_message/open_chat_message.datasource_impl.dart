@@ -2,7 +2,7 @@ import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/constant/supabase.constant.dart';
+import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
 import '../../../../domain/model/chat/message/open_chat_message.model.dart';
 
@@ -51,7 +51,7 @@ class RemoteOpenChatMessageDataSourceImpl
       return await _client.rest
           .from(TableName.openChatMessage.name)
           .delete()
-          .eq("chatId", messageId);
+          .eq("id", messageId);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

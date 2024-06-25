@@ -8,7 +8,6 @@ import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/exception/custom_exception.dart';
-import '../../../../data/entity/user/presence.entity.dart';
 import '../../../../domain/usecase/module/chat/open_chat.usecase.dart';
 import '../../../../domain/usecase/module/chat/open_chat_message.usecase.dart';
 
@@ -32,15 +31,10 @@ class DisplayOpenChatMessageBloc
     on<InitOpenChatMessageEvent>(_onInit);
   }
 
-  List<PresenceEntity> _presences = [];
-
-  Iterable<PresenceEntity> get presences => _presences;
-
   RealtimeChannel getMessageChannel(
           void Function(OpenChatMessageEntity entity) onInsert) =>
-      _openChatMessageUseCase
-          .getMessageChannel(chatId: _chat.id!, onInsert: onInsert)
-       ;
+      _openChatMessageUseCase.getMessageChannel(
+          chatId: _chat.id!, onInsert: onInsert);
 
   Future<void> _onInit(InitOpenChatMessageEvent event,
       Emitter<DisplayOpenChatMessageState> emit) async {
