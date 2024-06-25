@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:my_app/core/constant/database.constant.dart';
 import 'package:my_app/core/constant/routes.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,6 +15,12 @@ void main() async {
 
   // 환경변수 초기화
   await dotenv.load();
+
+  // 로컬 DB 초기화
+  await Hive.initFlutter();
+  for (final box in BoxName.values) {
+    await Hive.openLazyBox(box.name);
+  }
 
   // Supabase 초기화
   await Supabase.initialize(

@@ -4,6 +4,7 @@ import 'package:my_app/data/datasource/chat/open_chat_message/open_chat_message.
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'chat/open_chat/open_chat.datasource_impl.dart';
+import 'chat/private_chat_message/private_chat_message.datasource_impl.dart';
 import 'like/like.datasource_impl.dart';
 import 'user/account/account.datasource_impl.dart';
 import 'user/auth/auth.datasource_impl.dart';
@@ -42,4 +43,8 @@ abstract class RemoteDataSource {
   @lazySingleton
   RemoteOpenChatMessageDataSource get openChatMessage =>
       RemoteOpenChatMessageDataSourceImpl(client: _client, logger: _logger);
+
+  @lazySingleton
+  RemotePrivateChatMessageDataSource get privateChatMessage =>
+      RemotePrivateChatMessageDataSourceImpl(client: _client, logger: _logger);
 }

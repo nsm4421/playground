@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:logger/logger.dart';
-import 'package:my_app/core/constant/supabase.constant.dart';
+import 'package:my_app/core/constant/database.constant.dart';
 import 'package:my_app/domain/model/user/account.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
