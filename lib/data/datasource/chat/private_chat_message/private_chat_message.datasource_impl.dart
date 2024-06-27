@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
@@ -11,18 +12,21 @@ part 'private_chat_message.datasource.dart';
 
 class LocalPrivateChatMessageDataSourceImpl
     implements LocalPrivateChatMessageDataSource {
-  final Box _box;
+  final String _boxName;
   final Logger _logger;
 
   LocalPrivateChatMessageDataSourceImpl(
-      {required Box box, required Logger logger})
-      : _box = box,
+      {required String boxName, required Logger logger})
+      : _boxName = boxName,
         _logger = logger;
+
+  Future<Box<LocalPrivateChatMessageModel>> get _$box async =>
+      await Hive.openBox<LocalPrivateChatMessageModel>(_boxName);
 
   @override
   Future<void> deleteMessageById(String messageId) async {
     try {
-      return await _box.delete(messageId);
+      return await (await _$box).delete(messageId);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
@@ -31,7 +35,7 @@ class LocalPrivateChatMessageDataSourceImpl
   @override
   Future<void> saveChatMessage(LocalPrivateChatMessageModel model) async {
     try {
-      return await _box.put(model.id, model);
+      return await (await _$box).put(model.id, model);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
@@ -74,9 +78,14 @@ class RemotePrivateChatMessageDataSourceImpl
   @override
   Future<void> saveChatMessage(PrivateChatMessageModel model) async {
     try {
-      return await _client.rest
-          .from(TableName.privateChatMessage.name)
-          .insert(model.toJson());
+      print(model);
+      return await _client.rest.from(TableName.privateChatMessage.name).insert(
+          model
+              .copyWith(
+                  id: model.id.isEmpty ? const Uuid().v4() : model.id,
+                  senderUid: _getCurrentUidOrElseThrow,
+                  createdAt: model.createdAt ?? DateTime.now())
+              .toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

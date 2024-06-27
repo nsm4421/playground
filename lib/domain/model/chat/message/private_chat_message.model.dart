@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_app/data/entity/chat/chat_message/private_chat_message.entity.dart';
 
 import '../../../../core/constant/dto.constant.dart';
 
@@ -20,4 +21,14 @@ class PrivateChatMessageModel with _$PrivateChatMessageModel {
 
   factory PrivateChatMessageModel.fromJson(Map<String, dynamic> json) =>
       _$PrivateChatMessageModelFromJson(json);
+
+  factory PrivateChatMessageModel.fromEntity(PrivateChatMessageEntity entity) =>
+      PrivateChatMessageModel(
+        id: entity.id ?? '',
+        createdAt: entity.createdAt,
+        senderUid: entity.senderUid ?? '',
+        receiverUid: entity.receiverUid ?? '',
+        content: entity.content ?? '',
+        type: entity.type,
+      );
 }

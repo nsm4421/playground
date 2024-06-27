@@ -13,6 +13,7 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
     String? id,
     DateTime? createdAt,
     String? createdBy,
+    String? senderUid,
     String? receiverUid,
     String? content,
     @Default(ChatMessageType.text) ChatMessageType type,

@@ -16,8 +16,8 @@ enum BucketName {
   user("accounts"),
   feed("feeds"),
   openChat("openChats"),
-  openChatMessage("openChatMessage"),
-  privateChatMessage("privateChatMessage");
+  openChatMessage("openChatMessages"),
+  privateChatMessage("privateChatMessages");
 
   final String name;
 
