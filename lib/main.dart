@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:my_app/core/constant/database.constant.dart';
 import 'package:my_app/core/constant/routes.dart';
+import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,11 +16,11 @@ void main() async {
   // 환경변수 초기화
   await dotenv.load();
 
+  // TODO : adapter 등록 못하는 버그 수정하기
   // 로컬 DB 초기화
   await Hive.initFlutter();
-  for (final box in BoxName.values) {
-    await Hive.openLazyBox(box.name);
-  }
+  Hive.registerAdapter<LocalPrivateChatMessageModel>(
+      LocalPrivateChatMessageModelAdapter());
 
   // Supabase 초기화
   await Supabase.initialize(
