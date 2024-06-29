@@ -1,12 +1,6 @@
-part of 'feed_comment.datasource_impl.dart';
+part of '../impl/feed_comment.remote_datasource_impl.dart';
 
-abstract interface class FeedCommentDataSource {}
-
-abstract interface class LocalFeedCommentDataSource
-    implements FeedCommentDataSource {}
-
-abstract interface class RemoteFeedCommentDataSource
-    implements FeedCommentDataSource {
+abstract interface class RemoteFeedCommentDataSource {
   Future<Iterable<FeedCommentWithAuthorModel>> fetchComments(
       {required DateTime beforeAt,
       required String feedId,

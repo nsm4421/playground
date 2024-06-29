@@ -3,13 +3,11 @@ import 'package:my_app/core/constant/dto.constant.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/constant/database.constant.dart';
-import '../../../core/exception/custom_exception.dart';
-import '../../../domain/model/like/like.model.dart';
+import '../../../../core/constant/database.constant.dart';
+import '../../../../core/exception/custom_exception.dart';
+import '../../../../domain/model/like/like.model.dart';
 
-part 'like.datasource.dart';
-
-class LocalLikeDataSourceImpl implements LocalLikeDataSource {}
+part '../abstract/like.remote_datasource.dart';
 
 class RemoteLikeDataSourceImpl implements RemoteLikeDataSource {
   final SupabaseClient _client;

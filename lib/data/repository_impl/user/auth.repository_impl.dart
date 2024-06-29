@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/exception/custom_exception.dart';
-import '../../datasource/user/auth/auth.datasource_impl.dart';
+import '../../datasource/user/impl/auth.remote_datasource_impl.dart';
 
 part 'package:my_app/domain/repository/user/auth.repository.dart';
 

@@ -6,9 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/exception/custom_exception.dart';
 import '../../../../domain/model/feed/comment/feed_comment_with_author.model.dart';
 
-part 'feed_comment.datasource.dart';
-
-class LocalFeedCommentDataSourceImpl implements LocalFeedCommentDataSource {}
+part '../abstract/feed_comment.remote_datasource.dart';
 
 class RemoteFeedCommentDataSourceImpl implements RemoteFeedCommentDataSource {
   final SupabaseClient _client;

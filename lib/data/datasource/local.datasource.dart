@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-import 'chat/private_chat_message/impl/local_private_chat_message.datasource_impl.dart';
+import 'chat/impl/private_chat_message.local_datasource_impl.dart';
 
 @module
 abstract class LocalDataSource {

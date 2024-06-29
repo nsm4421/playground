@@ -1,12 +1,12 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/datasource/chat/private_chat_message/impl/remote_private_chat_message.datasource_impl.dart';
+import 'package:my_app/data/datasource/chat/impl/private_chat_message.remote_datasource_impl.dart';
 import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
 import 'package:my_app/domain/model/chat/message/private_chat_message.model.dart';
 
 import '../../../../core/exception/custom_exception.dart';
-import '../../../datasource/chat/private_chat_message/impl/local_private_chat_message.datasource_impl.dart';
+import '../../../datasource/chat/impl/private_chat_message.local_datasource_impl.dart';
 import '../../../entity/chat/chat_message/private_chat_message.entity.dart';
 
 part 'package:my_app/domain/repository/chat/private_chat/private_chat_message.repository.dart';

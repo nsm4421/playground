@@ -8,9 +8,7 @@ import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
 import '../../../../domain/model/feed/base/feed.model.dart';
 
-part 'feed.datasource.dart';
-
-class LocalFeedDataSourceImpl implements LocalFeedDataSource {}
+part '../abstract/feed.remote_datasource.dart';
 
 class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
   final SupabaseClient _client;

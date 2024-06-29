@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../core/exception/custom_exception.dart';
 import '../../../core/exception/failure.dart';
-import '../../datasource/like/like.datasource_impl.dart';
+import '../../datasource/feed/impl/like.remote_datasource_impl.dart';
 
 part '../../../domain/repository/like/like.repository.dart';
 

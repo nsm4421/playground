@@ -1,7 +1,6 @@
-part of '../impl/remote_open_chat.datasource_impl.dart';
+part of '../impl/open_chat.remote_datasource_impl.dart';
 
-abstract interface class RemoteOpenChatDataSource
-    implements OpenChatDataSource {
+abstract interface class RemoteOpenChatDataSource {
   Stream<Iterable<OpenChatModel>> get chatStream;
 
   Future<void> saveChat(OpenChatModel model);

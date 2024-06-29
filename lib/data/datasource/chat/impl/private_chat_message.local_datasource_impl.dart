@@ -2,11 +2,11 @@ import 'package:logger/logger.dart';
 import 'package:my_app/core/util/box_mixin.dart';
 import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
 
-import '../../../../../core/constant/database.constant.dart';
-import '../../../../../core/exception/custom_exception.dart';
+import '../../../../core/constant/database.constant.dart';
+import '../../../../core/exception/custom_exception.dart';
 import '../abstract/private_chat_message.datasource.dart';
 
-part '../abstract/local_private_chat_message.datasource.dart';
+part '../abstract/private_chat_message.local_datasource.dart';
 
 class LocalPrivateChatMessageDataSourceImpl
     with BoxMixin<LocalPrivateChatMessageModel>

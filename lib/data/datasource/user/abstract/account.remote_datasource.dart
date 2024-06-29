@@ -1,10 +1,6 @@
-part of 'account.datasource_impl.dart';
+part of '../impl/account.remote_datasource_impl.dart';
 
-abstract interface class AccountDataSource {}
-
-abstract interface class LocalAccountDataSource implements AccountDataSource {}
-
-abstract interface class RemoteAccountDataSource implements AccountDataSource {
+abstract interface class RemoteAccountDataSource {
   Future<AccountModel> getCurrentUser();
 
   Future<AccountModel> findByUserId(String userId);

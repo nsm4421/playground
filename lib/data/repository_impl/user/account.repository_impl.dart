@@ -5,7 +5,7 @@ import 'package:my_app/core/exception/custom_exception.dart';
 import 'package:my_app/core/exception/failure.dart';
 import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/domain/model/user/account.model.dart';
-import '../../datasource/user/account/account.datasource_impl.dart';
+import '../../datasource/user/impl/account.remote_datasource_impl.dart';
 
 part 'package:my_app/domain/repository/user/account.repository.dart';
 

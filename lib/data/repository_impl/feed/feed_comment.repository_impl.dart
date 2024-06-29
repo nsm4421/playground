@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/datasource/feed/comment/feed_comment.datasource_impl.dart';
-import 'package:my_app/data/datasource/user/account/account.datasource_impl.dart';
+import 'package:my_app/data/datasource/feed/impl/feed_comment.remote_datasource_impl.dart';
+import 'package:my_app/data/datasource/user/impl/account.remote_datasource_impl.dart';
 import 'package:my_app/data/entity/feed/comment/feed_comment.entity.dart';
 import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/domain/model/feed/comment/feed_comment.model.dart';

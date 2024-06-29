@@ -7,9 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/exception/custom_exception.dart';
 
-part 'account.datasource.dart';
-
-class LocalAccountDataSourceImpl implements LocalAccountDataSource {}
+part '../abstract/account.remote_datasource.dart';
 
 class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
   final SupabaseClient _client;

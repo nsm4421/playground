@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/data/datasource/feed/base/feed.datasource_impl.dart';
+import 'package:my_app/data/datasource/feed/impl/feed.remote_datasource_impl.dart';
 import 'package:my_app/data/entity/feed/base/feed.entity.dart';
 import 'package:my_app/domain/model/feed/base/feed.model.dart';
 

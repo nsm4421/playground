@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
 import 'package:my_app/domain/model/chat/base/open_chat.model.dart';
 import '../../../../core/exception/custom_exception.dart';
-import '../../../datasource/chat/open_chat/impl/remote_open_chat.datasource_impl.dart';
+import '../../../datasource/chat/impl/open_chat.remote_datasource_impl.dart';
 import '../../../entity/chat/open_chat/open_chat.entity.dart';
 
 part '../../../../domain/repository/chat/open_chat/open_chat.repository.dart';

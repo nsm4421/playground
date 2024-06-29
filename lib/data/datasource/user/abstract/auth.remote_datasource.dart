@@ -1,8 +1,6 @@
-part of 'auth.datasource_impl.dart';
+part of '../impl/auth.remote_datasource_impl.dart';
 
-abstract interface class AuthDataSource {}
-
-abstract interface class RemoteAuthDataSource implements AuthDataSource {
+abstract interface class RemoteAuthDataSource {
   User? get currentUser;
 
   Stream<AuthState> get authStream;
@@ -17,5 +15,3 @@ abstract interface class RemoteAuthDataSource implements AuthDataSource {
 
   Future<void> signOut();
 }
-
-abstract interface class LocalAuthDataSource implements AuthDataSource {}

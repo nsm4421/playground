@@ -1,15 +1,15 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:my_app/data/datasource/chat/open_chat_message/impl/remote_open_chat_message.datasource_impl.dart';
+import 'package:my_app/data/datasource/chat/impl/open_chat_message.remote_datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'chat/open_chat/impl/remote_open_chat.datasource_impl.dart';
-import 'chat/private_chat_message/impl/remote_private_chat_message.datasource_impl.dart';
-import 'like/like.datasource_impl.dart';
-import 'user/account/account.datasource_impl.dart';
-import 'user/auth/auth.datasource_impl.dart';
-import 'feed/base/feed.datasource_impl.dart';
-import 'feed/comment/feed_comment.datasource_impl.dart';
+import 'chat/impl/open_chat.remote_datasource_impl.dart';
+import 'chat/impl/private_chat_message.remote_datasource_impl.dart';
+import 'feed/impl/like.remote_datasource_impl.dart';
+import 'user/impl/account.remote_datasource_impl.dart';
+import 'user/impl/auth.remote_datasource_impl.dart';
+import 'feed/impl/feed.remote_datasource_impl.dart';
+import 'feed/impl/feed_comment.remote_datasource_impl.dart';
 
 @module
 abstract class RemoteDataSource {

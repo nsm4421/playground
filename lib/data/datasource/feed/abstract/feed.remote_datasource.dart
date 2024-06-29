@@ -1,10 +1,6 @@
-part of 'feed.datasource_impl.dart';
+part of '../impl/feed.remote_datasource_impl.dart';
 
-abstract interface class FeedDataSource {}
-
-abstract interface class LocalFeedDataSource implements FeedDataSource {}
-
-abstract interface class RemoteFeedDataSource implements FeedDataSource {
+abstract interface class RemoteFeedDataSource {
   Future<Iterable<FeedWithAuthorModel>> fetchFeeds(
       {required DateTime beforeAt,
       bool ascending = false,
@@ -16,5 +12,4 @@ abstract interface class RemoteFeedDataSource implements FeedDataSource {
   Future<void> saveFeed(FeedModel model);
 
   Future<String> uploadFile({required String feedId, required File file});
-
 }

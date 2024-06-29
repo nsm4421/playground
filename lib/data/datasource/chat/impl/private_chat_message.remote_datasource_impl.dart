@@ -4,12 +4,12 @@ import 'package:my_app/domain/model/chat/message/local_private_chat_message.mode
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../core/constant/database.constant.dart';
-import '../../../../../core/exception/custom_exception.dart';
-import '../../../../../domain/model/chat/message/private_chat_message.model.dart';
+import '../../../../core/constant/database.constant.dart';
+import '../../../../core/exception/custom_exception.dart';
+import '../../../../domain/model/chat/message/private_chat_message.model.dart';
 import '../abstract/private_chat_message.datasource.dart';
 
-part '../abstract/remote_private_chat_message.datasource.dart';
+part '../abstract/private_chat_message.remote_datasource.dart';
 
 class RemotePrivateChatMessageDataSourceImpl
     implements RemotePrivateChatMessageDataSource {
