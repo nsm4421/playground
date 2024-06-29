@@ -3,6 +3,7 @@ import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/domain/usecase/module/chat/open_chat.usecase.dart';
 import 'package:my_app/presentation/bloc/chat/create_open_chat/create_open_chat.cubit.dart';
 import 'package:my_app/presentation/bloc/chat/display_open_chat_message/display_open_chat_message.bloc.dart';
+import 'package:my_app/presentation/bloc/chat/display_private_chat_message/display_private_chat_message.bloc.dart';
 import 'package:my_app/presentation/bloc/chat/send_private_chat_message/send_private_chat_message.cubit.dart';
 
 import '../../../data/entity/chat/open_chat/open_chat.entity.dart';
@@ -49,4 +50,9 @@ class ChatBloc {
   @lazySingleton
   SendPrivateChatMessageCubit get sendPrivateChat =>
       SendPrivateChatMessageCubit(_privateChatMessageUseCase);
+
+
+  @lazySingleton
+  DisplayPrivateChatMessageBloc get displayPrivateChat =>
+      DisplayPrivateChatMessageBloc(_privateChatMessageUseCase);
 }

@@ -5,7 +5,7 @@ class DeletePrivateChatMessageUseCase {
 
   DeletePrivateChatMessageUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(String messageId) {
-    return _repository.deleteChatMessage(messageId);
+  Future<Either<Failure, void>> call(String messageId) async {
+    return await _repository.deleteChatMessage(messageId);
   }
 }

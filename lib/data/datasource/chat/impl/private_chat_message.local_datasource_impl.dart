@@ -18,6 +18,40 @@ class LocalPrivateChatMessageDataSourceImpl
   }
 
   @override
+  Future<List<LocalPrivateChatMessageModel>> fetchLastMessages() async {
+    try {
+      final box = await getBox();
+      Map<String, LocalPrivateChatMessageModel> latestMessages = {};
+      for (final item in box.values) {
+        if (latestMessages.containsKey(item.chatId) &&
+            (latestMessages[item.chatId]!
+                .createdAt!
+                .isBefore(item.createdAt!))) {
+          latestMessages[item.chatId] = item;
+        } else if (!latestMessages.containsKey(item.chatId)) {
+          latestMessages[item.chatId] = item;
+        }
+      }
+      final messages = latestMessages.values.toList();
+      messages.sort((a, b) => (b.createdAt!).compareTo(a.createdAt!));
+      return messages;
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
+
+  @override
+  Future<Iterable<LocalPrivateChatMessageModel>> fetchMessagesByUser(
+      String opponentUid) async {
+    try {
+      return (await getBox()).values.where((item) =>
+          (item.senderUid == opponentUid) || (item.receiverUid == opponentUid));
+    } catch (error) {
+      throw CustomException.from(error, logger: _logger);
+    }
+  }
+
+  @override
   Future<void> deleteMessageById(String messageId) async {
     try {
       return await (await getBox()).delete(messageId);
@@ -29,6 +63,14 @@ class LocalPrivateChatMessageDataSourceImpl
   @override
   Future<void> saveChatMessage(LocalPrivateChatMessageModel model) async {
     try {
+      // chat id
+      String chatId = model.chatId;
+      if (chatId.isEmpty) {
+        final users = [model.senderUid, model.receiverUid];
+        users.sort();
+        chatId = users.join();
+      }
+      model.chatId = chatId;
       return await (await getBox()).put(model.id, model);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);

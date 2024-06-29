@@ -5,6 +5,10 @@ import 'package:my_app/data/repository_impl/chat/private_chat/private_chat_messa
 import 'package:uuid/uuid.dart';
 import '../../../../core/exception/failure.dart';
 
+part '../../case/chat/private_chat_message/fetch_latest_messages.usecase.dart';
+
+part '../../case/chat/private_chat_message/fetch_private_chat_messages_by_user.usecase.dart';
+
 part '../../case/chat/private_chat_message/send_private_chat_message.usecase.dart';
 
 part '../../case/chat/private_chat_message/delete_private_chat_message.usecase.dart';
@@ -15,6 +19,15 @@ class PrivateChatMessageUseCase {
 
   PrivateChatMessageUseCase(this._repository);
 
+  FetchLatestMessagesUseCase get fetchLatest =>
+      FetchLatestMessagesUseCase(_repository);
+
+  FetchPrivateChatMessagesByUserUseCase get fetchByUser =>
+      FetchPrivateChatMessagesByUserUseCase(_repository);
+
   SendPrivateChatMessageUseCase get sendMessage =>
       SendPrivateChatMessageUseCase(_repository);
+
+  DeletePrivateChatMessageUseCase get deleteMessage =>
+      DeletePrivateChatMessageUseCase(_repository);
 }

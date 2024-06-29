@@ -1,4 +1,5 @@
 import 'package:logger/logger.dart';
+import 'package:my_app/core/constant/error_code.dart';
 import 'package:my_app/core/util/box_mixin.dart';
 import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -47,13 +48,27 @@ class RemotePrivateChatMessageDataSourceImpl
   @override
   Future<void> saveChatMessage(PrivateChatMessageModel model) async {
     try {
-      print(model);
+      // uid 검사
+      final senderUid = _getCurrentUidOrElseThrow;
+      if (model.receiverUid.isEmpty) {
+        throw CustomException(
+            errorCode: ErrorCode.invalidArgs,
+            message: 'receiver uid is not given');
+      }
+      // chat id
+      String chatId = model.chatId;
+      if (chatId.isEmpty) {
+        final users = [senderUid, model.receiverUid];
+        users.sort();
+        chatId = users.join();
+      }
       return await _client.rest.from(TableName.privateChatMessage.name).insert(
           model
               .copyWith(
                   id: model.id.isEmpty ? const Uuid().v4() : model.id,
                   senderUid: _getCurrentUidOrElseThrow,
-                  createdAt: model.createdAt ?? DateTime.now())
+                  createdAt: model.createdAt ?? DateTime.now(),
+                  chatId: chatId)
               .toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);

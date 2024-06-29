@@ -23,6 +23,38 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
         _remoteDataSource = remoteDataSource;
 
   @override
+  Future<Either<Failure, List<PrivateChatMessageEntity>>>
+      fetchLatestMessages() async {
+    try {
+      return await _localDataSource
+          .fetchLastMessages()
+          .then((res) => res
+              .map(PrivateChatMessageModel.fromLocalModel)
+              .map(PrivateChatMessageEntity.fromModel)
+              .toList())
+          .then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PrivateChatMessageEntity>>> fetchMessagesByUser(
+      String opponentUid) async {
+    try {
+      return await _localDataSource
+          .fetchMessagesByUser(opponentUid)
+          .then((res) => res
+              .map(PrivateChatMessageModel.fromLocalModel)
+              .map(PrivateChatMessageEntity.fromModel)
+              .toList())
+          .then(right);
+    } on CustomException catch (error) {
+      return left(Failure(code: error.code, message: error.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteChatMessage(String messageId) async {
     try {
       await _remoteDataSource.deleteMessageById(messageId);
