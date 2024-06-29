@@ -1,10 +1,10 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:my_app/data/datasource/chat/open_chat_message/open_chat_message.datasource_impl.dart';
+import 'package:my_app/data/datasource/chat/open_chat_message/impl/remote_open_chat_message.datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'chat/open_chat/open_chat.datasource_impl.dart';
-import 'chat/private_chat_message/private_chat_message.datasource_impl.dart';
+import 'chat/open_chat/impl/remote_open_chat.datasource_impl.dart';
+import 'chat/private_chat_message/impl/remote_private_chat_message.datasource_impl.dart';
 import 'like/like.datasource_impl.dart';
 import 'user/account/account.datasource_impl.dart';
 import 'user/auth/auth.datasource_impl.dart';

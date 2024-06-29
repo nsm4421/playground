@@ -2,12 +2,11 @@ import 'package:logger/logger.dart';
 import 'package:my_app/domain/model/chat/base/open_chat.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constant/database.constant.dart';
-import '../../../../core/exception/custom_exception.dart';
+import '../../../../../core/constant/database.constant.dart';
+import '../../../../../core/exception/custom_exception.dart';
+import '../abstract/open_chat.datasource.dart';
 
-part 'open_chat.datasource.dart';
-
-class LocalOpenChatDataSourceImpl implements LocalOpenChatDataSource {}
+part '../abstract/remote_open_chat.datasource.dart';
 
 class RemoteOpenChatDataSourceImpl implements RemoteOpenChatDataSource {
   final SupabaseClient _client;

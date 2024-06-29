@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/data/datasource/chat/open_chat_message/open_chat_message.datasource_impl.dart';
+import 'package:my_app/data/datasource/chat/open_chat_message/impl/remote_open_chat_message.datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/exception/custom_exception.dart';

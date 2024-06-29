@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/failure.dart';
-import 'package:my_app/data/datasource/chat/open_chat/open_chat.datasource_impl.dart';
 import 'package:my_app/domain/model/chat/base/open_chat.model.dart';
 import '../../../../core/exception/custom_exception.dart';
+import '../../../datasource/chat/open_chat/impl/remote_open_chat.datasource_impl.dart';
 import '../../../entity/chat/open_chat/open_chat.entity.dart';
 
 part '../../../../domain/repository/chat/open_chat/open_chat.repository.dart';
@@ -15,9 +15,8 @@ class OpenChatRepositoryImpl implements OpenChatRepository {
   OpenChatRepositoryImpl(this._remoteDataSource);
 
   @override
-  Stream<List<OpenChatEntity>> get chatStream =>
-      _remoteDataSource.chatStream
-          .asyncMap((event) => event.map(OpenChatEntity.fromModel).toList());
+  Stream<List<OpenChatEntity>> get chatStream => _remoteDataSource.chatStream
+      .asyncMap((event) => event.map(OpenChatEntity.fromModel).toList());
 
   @override
   Future<Either<Failure, void>> saveChat(OpenChatEntity entity) async {

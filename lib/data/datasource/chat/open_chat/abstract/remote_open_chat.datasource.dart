@@ -1,9 +1,4 @@
-part of 'open_chat.datasource_impl.dart';
-
-abstract interface class OpenChatDataSource {}
-
-abstract interface class LocalOpenChatDataSource
-    implements OpenChatDataSource {}
+part of '../impl/remote_open_chat.datasource_impl.dart';
 
 abstract interface class RemoteOpenChatDataSource
     implements OpenChatDataSource {

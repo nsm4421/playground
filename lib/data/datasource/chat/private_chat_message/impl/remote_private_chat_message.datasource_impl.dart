@@ -1,46 +1,15 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:my_app/core/util/box_mixin.dart';
 import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/constant/database.constant.dart';
-import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/model/chat/message/private_chat_message.model.dart';
+import '../../../../../core/constant/database.constant.dart';
+import '../../../../../core/exception/custom_exception.dart';
+import '../../../../../domain/model/chat/message/private_chat_message.model.dart';
+import '../abstract/private_chat_message.datasource.dart';
 
-part 'private_chat_message.datasource.dart';
-
-class LocalPrivateChatMessageDataSourceImpl
-    implements LocalPrivateChatMessageDataSource {
-  final String _boxName;
-  final Logger _logger;
-
-  LocalPrivateChatMessageDataSourceImpl(
-      {required String boxName, required Logger logger})
-      : _boxName = boxName,
-        _logger = logger;
-
-  Future<Box<LocalPrivateChatMessageModel>> get _$box async =>
-      await Hive.openBox<LocalPrivateChatMessageModel>(_boxName);
-
-  @override
-  Future<void> deleteMessageById(String messageId) async {
-    try {
-      return await (await _$box).delete(messageId);
-    } catch (error) {
-      throw CustomException.from(error, logger: _logger);
-    }
-  }
-
-  @override
-  Future<void> saveChatMessage(LocalPrivateChatMessageModel model) async {
-    try {
-      return await (await _$box).put(model.id, model);
-    } catch (error) {
-      throw CustomException.from(error, logger: _logger);
-    }
-  }
-}
+part '../abstract/remote_private_chat_message.datasource.dart';
 
 class RemotePrivateChatMessageDataSourceImpl
     implements RemotePrivateChatMessageDataSource {
