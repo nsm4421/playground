@@ -2,8 +2,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_app/data/entity/chat/chat_message/private_chat_message.entity.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/constant/dto.constant.dart';
-
 part 'local_private_chat_message.model.g.dart';
 
 @HiveType(typeId: 0)
@@ -18,30 +16,55 @@ class LocalPrivateChatMessageModel {
   String senderUid;
 
   @HiveField(3)
-  String receiverUid;
+  String senderNickname;
 
   @HiveField(4)
-  String content;
+  String senderProfileUrl;
 
   @HiveField(5)
-  ChatMessageType type;
+  String receiverUid;
+
+  @HiveField(6)
+  String receiverNickname;
+
+  @HiveField(7)
+  String receiverProfileUrl;
+
+  @HiveField(8)
+  String content;
+
+  @HiveField(9)
+  String type;
+
+  @HiveField(10)
+  String chatId;
 
   LocalPrivateChatMessageModel({
     required this.id,
     required this.createdAt,
     required this.senderUid,
+    required this.senderNickname,
+    required this.senderProfileUrl,
     required this.receiverUid,
+    required this.receiverNickname,
+    required this.receiverProfileUrl,
     required this.content,
     required this.type,
+    required this.chatId,
   });
 
-  static LocalPrivateChatMessageModel fromEntity(PrivateChatMessageEntity entity) =>
+  factory LocalPrivateChatMessageModel.fromEntity(
+          PrivateChatMessageEntity entity) =>
       LocalPrivateChatMessageModel(
-        id: entity.id ?? const Uuid().v4(),
-        createdAt: entity.createdAt ?? DateTime.now(),
-        senderUid: entity.senderUid ?? '',
-        receiverUid: entity.receiverUid ?? '',
-        content: entity.content ?? '',
-        type: entity.type,
-      );
+          id: entity.id ?? const Uuid().v4(),
+          createdAt: entity.createdAt ?? DateTime.now(),
+          senderUid: entity.sender?.id ?? '',
+          senderNickname: entity.sender?.nickname ?? '',
+          senderProfileUrl: entity.sender?.profileUrl ?? '',
+          receiverUid: entity.receiver?.id ?? '',
+          receiverNickname: entity.receiver?.nickname ?? '',
+          receiverProfileUrl: entity.receiver?.profileUrl ?? '',
+          content: entity.content ?? '',
+          type: entity.type.name,
+          chatId: entity.chatId ?? '');
 }
