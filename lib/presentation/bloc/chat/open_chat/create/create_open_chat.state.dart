@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../core/constant/status.dart';
+import '../../../../../core/constant/status.dart';
 
 part 'create_open_chat.state.freezed.dart';
 

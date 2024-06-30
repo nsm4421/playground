@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/data/entity/chat/chat_message/private_chat_message.entity.dart';
-import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
-import 'package:my_app/data/entity/user/account.entity.dart';
-import 'package:my_app/presentation/pages/auth/sign_up_with_email.screen.dart';
-import 'package:my_app/presentation/pages/entry.page.dart';
-import 'package:my_app/presentation/pages/main/chat/open/create/create_open_chat.page.dart';
-import 'package:my_app/presentation/pages/main/chat/open/open_chat.page.dart';
-import 'package:my_app/presentation/pages/main/chat/open/room/open_chat_room.page.dart';
-import 'package:my_app/presentation/pages/main/chat/private/private_chat.page.dart';
-import 'package:my_app/presentation/pages/main/feed/upload/upload_feed.page.dart';
-import 'package:my_app/presentation/pages/main/setting/edit/edit_profile.page.dart';
-import 'package:my_app/presentation/pages/splash.page.dart';
+
+import '../../data/entity/chat/open_chat/open_chat.entity.dart';
+import '../../data/entity/user/account.entity.dart';
+import '../../presentation/pages/auth/sign_up/sign_up_with_email.screen.dart';
+import '../../presentation/pages/entry/entry.page.dart';
+import '../../presentation/pages/entry/splash.page.dart';
+import '../../presentation/pages/main/chat/open/create/create_open_chat.page.dart';
+import '../../presentation/pages/main/chat/open/entry/open_chat.page.dart';
+import '../../presentation/pages/main/chat/open/room/open_chat_room.page.dart';
+import '../../presentation/pages/main/chat/private/private_chat.page.dart';
+import '../../presentation/pages/main/feed/upload/upload_feed.page.dart';
+import '../../presentation/pages/main/setting/edit/edit_profile.page.dart';
 
 enum Routes {
   /// auth
@@ -42,66 +41,46 @@ final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
   GoRoute(
     name: Routes.splash.name,
     path: Routes.splash.path,
-    builder: (BuildContext context, GoRouterState state) {
-      return const SplashPage();
-    },
+    builder: (_, __) => const SplashPage(),
   ),
   GoRoute(
       name: Routes.entry.name,
       path: Routes.entry.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const EntryPage();
-      }),
+      builder: (_, __) => const EntryPage()),
   GoRoute(
       name: Routes.signUpWithEmailAndPassword.name,
       path: Routes.signUpWithEmailAndPassword.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const SignUpWithEmailAndPasswordScreen();
-      }),
+      builder: (_, __) => const SignUpWithEmailAndPasswordScreen()),
   GoRoute(
     name: Routes.uploadFeed.name,
     path: Routes.uploadFeed.path,
-    builder: (BuildContext context, GoRouterState state) {
-      return const UploadFeedPage();
-    },
+    builder: (_, __) => const UploadFeedPage(),
   ),
   GoRoute(
     name: Routes.editProfile.name,
     path: Routes.editProfile.path,
-    builder: (context, state) {
-      return const EditProfilePage();
-    },
+    builder: (_, __) => const EditProfilePage(),
   ),
 
   /// chat
   GoRoute(
     name: Routes.openChat.name,
     path: Routes.openChat.path,
-    builder: (context, state) {
-      return const OpenChatPage();
-    },
+    builder: (_, __) => const OpenChatPage(),
   ),
   GoRoute(
     name: Routes.createOpenChat.name,
     path: Routes.createOpenChat.path,
-    builder: (context, state) {
-      return const CreateOpenChatPage();
-    },
+    builder: (_, __) => const CreateOpenChatPage(),
   ),
   GoRoute(
     name: Routes.openChatRoom.name,
     path: Routes.openChatRoom.path,
-    builder: (context, state) {
-      final openChat = state.extra as OpenChatEntity;
-      return OpenChatRoomPage(openChat);
-    },
+    builder: (_, state) => OpenChatRoomPage(state.extra as OpenChatEntity),
   ),
   GoRoute(
     name: Routes.privateChatRoom.name,
     path: Routes.privateChatRoom.path,
-    builder: (context, state) {
-      final opponent = state.extra as AccountEntity;
-      return PrivateChatPage(opponent);
-    },
+    builder: (_, state) => PrivateChatPage(state.extra as AccountEntity),
   ),
 ], initialLocation: Routes.splash.path);

@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_app/data/entity/user/account.entity.dart';
-
-import '../../../../core/constant/routes.dart';
+part of 'chat.page.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -12,6 +8,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  List<PrivateChatMessageEntity> _latestMessages = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +29,20 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: const Icon(Icons.add))
         ],
       ),
+      body: BlocListener<DisplayPrivateChatMessageBloc,
+              DisplayPrivateChatMessageState>(
+          // 가장 최근 메세지 목록 가져오기
+          listenWhen: (prev, curr) =>
+              (prev is! LatestPrivateChatMessagesFetchedState) &&
+              (curr is LatestPrivateChatMessagesFetchedState),
+          listener: (context, state) {
+            if (state is LatestPrivateChatMessagesFetchedState) {
+              setState(() {
+                _latestMessages.addAll(state.messages);
+              });
+            }
+          },
+          child: PrivateChatListFragment(_latestMessages)),
     );
   }
 }

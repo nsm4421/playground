@@ -5,7 +5,7 @@ import 'package:my_app/data/entity/user/account.entity.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:my_app/presentation/components/user/avatar.widget.dart';
 
-import '../../../../core/constant/routes.dart';
+import '../../../../../core/constant/routes.dart';
 
 part 'setting.screen.dart';
 

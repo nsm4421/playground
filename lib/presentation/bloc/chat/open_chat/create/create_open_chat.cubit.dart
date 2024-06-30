@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:my_app/domain/usecase/module/chat/open_chat.usecase.dart';
-import 'package:my_app/presentation/bloc/chat/create_open_chat/create_open_chat.state.dart';
+import 'package:my_app/presentation/bloc/chat/open_chat/create/create_open_chat.state.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../core/constant/status.dart';
+import '../../../../../core/constant/status.dart';
 
 class CreateOpenChatCubit extends Cubit<CreateOpenChatState> {
   final OpenChatUseCase _useCase;

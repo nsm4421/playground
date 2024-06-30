@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/constant/routes.dart';
+import '../../../core/constant/routes.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

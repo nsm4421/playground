@@ -7,9 +7,9 @@ import 'package:my_app/data/entity/chat/chat_message/open_chat_message.entity.da
 import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/usecase/module/chat/open_chat.usecase.dart';
-import '../../../../domain/usecase/module/chat/open_chat_message.usecase.dart';
+import '../../../../../core/exception/custom_exception.dart';
+import '../../../../../domain/usecase/module/chat/open_chat.usecase.dart';
+import '../../../../../domain/usecase/module/chat/open_chat_message.usecase.dart';
 
 part 'display_open_chat_message.event.dart';
 

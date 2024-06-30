@@ -28,10 +28,8 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
     try {
       return await _localDataSource
           .fetchLastMessages()
-          .then((res) => res
-              .map(PrivateChatMessageModel.fromLocalModel)
-              .map(PrivateChatMessageEntity.fromModel)
-              .toList())
+          .then((res) =>
+              res.map(PrivateChatMessageEntity.fromLocalModel).toList())
           .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));

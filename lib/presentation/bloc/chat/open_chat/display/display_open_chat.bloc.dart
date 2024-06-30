@@ -6,7 +6,7 @@ import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:my_app/domain/usecase/module/chat/open_chat.usecase.dart';
 import 'package:my_app/domain/usecase/module/chat/open_chat_message.usecase.dart';
 
-import '../../../../core/exception/custom_exception.dart';
+import '../../../../../core/exception/custom_exception.dart';
 
 part 'display_open_chat.state.dart';
 

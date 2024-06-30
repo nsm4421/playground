@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:my_app/presentation/components/error.fragment.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
-import 'package:my_app/presentation/pages/auth/auth.page.dart';
+import 'package:my_app/presentation/pages/auth/entry/auth.page.dart';
 import 'package:my_app/presentation/pages/main/main.screen.dart';
-import 'package:my_app/presentation/pages/on_board/on_board.page.dart';
+import 'package:my_app/presentation/pages/auth/on_board/on_board.page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EntryPage extends StatefulWidget {

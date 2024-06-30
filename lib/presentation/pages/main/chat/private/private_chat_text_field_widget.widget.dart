@@ -26,10 +26,21 @@ class _PrivateChatTextFieldState extends State<PrivateChatTextField> {
   }
 
   _handleSubmit() {
-    final content = _tec.text.trim();
-    context
-        .read<SendPrivateChatMessageCubit>()
-        .send(receiverUid: widget._opponent.id!, content: content);
+    try {
+      final content = _tec.text.trim();
+      if (content.isEmpty) {
+        return;
+      }
+      final sender =
+          (context.read<UserBloc>().state as UserLoadedState).account;
+      context
+          .read<SendPrivateChatMessageCubit>()
+          .send(sender: sender, receiver: widget._opponent, content: content);
+      _tec.clear();
+    } catch (error) {
+      log(error.toString());
+      ToastUtil.toast('메세지 전송 실패');
+    }
   }
 
   @override

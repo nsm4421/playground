@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/presentation/bloc/chat/chat.bloc.dart';
-import 'package:my_app/presentation/bloc/chat/create_open_chat/create_open_chat.cubit.dart';
-import 'package:my_app/presentation/bloc/chat/create_open_chat/create_open_chat.state.dart';
+import 'package:my_app/presentation/bloc/chat/open_chat/create/create_open_chat.cubit.dart';
+import 'package:my_app/presentation/bloc/chat/open_chat/create/create_open_chat.state.dart';
 
 import '../../../../../../core/constant/status.dart';
 import '../../../../../../core/dependency_injection/dependency_injection.dart';

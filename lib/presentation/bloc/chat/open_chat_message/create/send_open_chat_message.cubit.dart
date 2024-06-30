@@ -5,9 +5,9 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/data/entity/chat/open_chat/open_chat.entity.dart';
 import 'package:my_app/domain/usecase/module/chat/open_chat.usecase.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../core/constant/status.dart';
-import '../../../../data/entity/chat/chat_message/open_chat_message.entity.dart';
-import '../../../../domain/usecase/module/chat/open_chat_message.usecase.dart';
+import '../../../../../core/constant/status.dart';
+import '../../../../../data/entity/chat/chat_message/open_chat_message.entity.dart';
+import '../../../../../domain/usecase/module/chat/open_chat_message.usecase.dart';
 import 'send_open_chat_message.state.dart';
 
 class SendOpenChatMessageCubit extends Cubit<SendOpenChatMessageState> {

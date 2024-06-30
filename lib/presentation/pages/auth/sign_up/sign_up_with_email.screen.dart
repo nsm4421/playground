@@ -99,9 +99,6 @@ class _SignUpWithEmailAndPasswordScreenState
   @override
   Widget build(BuildContext context) {
     return BlocListener<UserBloc, UserState>(
-      listenWhen: (prev, curr) {
-        return (prev is NotAuthenticatedState) && (curr is OnBoardingState);
-      },
       listener: (context, state) {
         if (state is OnBoardingState && context.mounted) {
           context.pop();
