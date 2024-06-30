@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:my_app/core/exception/custom_exception.dart';
 import 'package:my_app/core/exception/failure.dart';
 import 'package:my_app/data/entity/user/account.entity.dart';
-import 'package:my_app/domain/model/user/account.model.dart';
+import '../../../domain/model/user/account.dto.dart';
 import '../../datasource/user/impl/account.remote_datasource_impl.dart';
 
 part 'package:my_app/domain/repository/user/account.repository.dart';
@@ -28,7 +28,7 @@ class AccountRepositoryImpl implements AccountRepository {
     try {
       return await _remoteDataSource
           .getCurrentUser()
-          .then((model) => AccountEntity.fromModel(model))
+          .then(AccountEntity.fromDto)
           .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
@@ -39,7 +39,7 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, void>> upsertUser(AccountEntity entity) async {
     try {
       return await _remoteDataSource
-          .upsertUser(AccountModel.fromEntity(entity))
+          .upsertUser(AccountDto.fromEntity(entity))
           .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));

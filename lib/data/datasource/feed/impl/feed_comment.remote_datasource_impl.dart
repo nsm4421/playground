@@ -1,10 +1,10 @@
 import 'package:logger/logger.dart';
 import 'package:my_app/core/constant/database.constant.dart';
-import 'package:my_app/domain/model/feed/comment/feed_comment.model.dart';
+import 'package:my_app/domain/model/feed/comment/fetch_feed_comment_response.dto.dart';
+import 'package:my_app/domain/model/feed/comment/save_feed_comment_request.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/model/feed/comment/feed_comment_with_author.model.dart';
 
 part '../abstract/feed_comment.remote_datasource.dart';
 
@@ -20,7 +20,7 @@ class RemoteFeedCommentDataSourceImpl implements RemoteFeedCommentDataSource {
         _logger = logger;
 
   @override
-  Future<Iterable<FeedCommentWithAuthorModel>> fetchComments(
+  Future<Iterable<FetchFeedCommentResponseDto>> fetchComments(
       {required DateTime beforeAt,
       required String feedId,
       required int from,
@@ -34,17 +34,16 @@ class RemoteFeedCommentDataSourceImpl implements RemoteFeedCommentDataSource {
           .eq('feedId', feedId)
           .order(_orderByField, ascending: ascending)
           .range(from, to)
-          .then((fetched) => fetched.map(FeedCommentWithAuthorModel.fromJson));
+          .then((fetched) => fetched.map(FetchFeedCommentResponseDto.fromJson));
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
   }
 
   @override
-  Future<void> saveComment(FeedCommentModel model) async {
+  Future<void> saveComment(SaveFeedCommentRequestDto dto) async {
     try {
-      await _client.rest.from(TableName.feedComment.name).insert(
-          model.copyWith(createdBy: _getCurrentUidOrElseThrow).toJson());
+      await _client.rest.from(TableName.feedComment.name).insert(dto.toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
@@ -90,14 +89,5 @@ class RemoteFeedCommentDataSourceImpl implements RemoteFeedCommentDataSource {
                 column: "feedId",
                 value: feedId),
             callback: callback);
-  }
-
-  // 현재 로그인 유저의 id
-  String get _getCurrentUidOrElseThrow {
-    final currentUid = _client.auth.currentUser?.id;
-    if (currentUid == null) {
-      throw const AuthException('NOT LOGIN');
-    }
-    return currentUid;
   }
 }

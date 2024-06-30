@@ -5,7 +5,7 @@ class CreateOpenChatUseCase {
 
   CreateOpenChatUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(OpenChatEntity entity) async {
-    return await _repository.saveChat(entity);
+  Future<Either<Failure, void>> call(String title) async {
+    return await _repository.saveChat(title);
   }
 }

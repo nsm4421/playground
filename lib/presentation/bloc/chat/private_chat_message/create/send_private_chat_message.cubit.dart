@@ -11,16 +11,7 @@ class SendPrivateChatMessageCubit extends Cubit<SendPrivateChatMessageState> {
   SendPrivateChatMessageCubit(this._useCase)
       : super(const SendPrivateChatMessageState());
 
-  send(
-      {required AccountEntity sender,
-      required AccountEntity receiver,
-      required String content,
-      ChatMessageType type = ChatMessageType.text}) async {
-    await _useCase.sendMessage(PrivateChatMessageEntity(
-      sender: sender,
-      receiver: receiver,
-      content: content,
-      type: type,
-    ));
+  send(PrivateChatMessageEntity message) async {
+    await _useCase.sendMessage(message);
   }
 }

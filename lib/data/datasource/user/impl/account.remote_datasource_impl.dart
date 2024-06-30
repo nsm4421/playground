@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:logger/logger.dart';
 import 'package:my_app/core/constant/database.constant.dart';
-import 'package:my_app/domain/model/user/account.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/exception/custom_exception.dart';
+import '../../../../domain/model/user/account.dto.dart';
 
 part '../abstract/account.remote_datasource.dart';
 
@@ -19,12 +19,12 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
         _logger = logger;
 
   @override
-  Future<AccountModel> getCurrentUser() async {
+  Future<AccountDto> getCurrentUser() async {
     return await findByUserId(_getCurrentUidOrElseThrow);
   }
 
   @override
-  Future<AccountModel> findByUserId(String userId) async {
+  Future<AccountDto> findByUserId(String userId) async {
     try {
       final fetched = await _client.rest
           .from(TableName.user.name)
@@ -34,7 +34,7 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
       if (fetched.isEmpty) {
         throw const PostgrestException(message: 'user not found from database');
       } else {
-        return AccountModel.fromJson(fetched[0]);
+        return AccountDto.fromJson(fetched[0]);
       }
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
@@ -42,7 +42,7 @@ class RemoteAccountDataSourceImpl implements RemoteAccountDataSource {
   }
 
   @override
-  Future<void> upsertUser(AccountModel user) async {
+  Future<void> upsertUser(AccountDto user) async {
     try {
       await _client.rest.from(TableName.user.name).upsert(user.toJson());
     } catch (error) {

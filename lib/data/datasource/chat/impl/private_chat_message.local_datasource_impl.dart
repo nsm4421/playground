@@ -1,15 +1,13 @@
 import 'package:logger/logger.dart';
 import 'package:my_app/core/util/box_mixin.dart';
-import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
-
 import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
-import '../abstract/private_chat_message.datasource.dart';
+import '../../../../domain/model/chat/message/local_private_chat_message.dto.dart';
 
 part '../abstract/private_chat_message.local_datasource.dart';
 
 class LocalPrivateChatMessageDataSourceImpl
-    with BoxMixin<LocalPrivateChatMessageModel>
+    with BoxMixin<LocalPrivateChatMessageDto>
     implements LocalPrivateChatMessageDataSource {
   final Logger _logger;
 
@@ -18,10 +16,10 @@ class LocalPrivateChatMessageDataSourceImpl
   }
 
   @override
-  Future<List<LocalPrivateChatMessageModel>> fetchLastMessages() async {
+  Future<List<LocalPrivateChatMessageDto>> fetchLastMessages() async {
     try {
       final box = await getBox();
-      Map<String, LocalPrivateChatMessageModel> latestMessages = {};
+      Map<String, LocalPrivateChatMessageDto> latestMessages = {};
       for (final item in box.values) {
         if (latestMessages.containsKey(item.chatId) &&
             (latestMessages[item.chatId]!
@@ -41,7 +39,7 @@ class LocalPrivateChatMessageDataSourceImpl
   }
 
   @override
-  Future<Iterable<LocalPrivateChatMessageModel>> fetchMessagesByUser(
+  Future<Iterable<LocalPrivateChatMessageDto>> fetchMessagesByUser(
       String opponentUid) async {
     try {
       return (await getBox()).values.where((item) =>
@@ -61,7 +59,7 @@ class LocalPrivateChatMessageDataSourceImpl
   }
 
   @override
-  Future<void> saveChatMessage(LocalPrivateChatMessageModel model) async {
+  Future<void> saveChatMessage(LocalPrivateChatMessageDto model) async {
     try {
       // chat id
       String chatId = model.chatId;

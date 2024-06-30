@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:logger/logger.dart';
-import 'package:my_app/domain/model/feed/base/feed_with_author.model.dart';
+import 'package:my_app/domain/model/feed/base/fetch_feed_response.dto.dart';
+import 'package:my_app/domain/model/feed/base/save_feed_request.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/model/feed/base/feed.model.dart';
 
 part '../abstract/feed.remote_datasource.dart';
 
@@ -35,7 +35,7 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
   }
 
   @override
-  Future<Iterable<FeedWithAuthorModel>> fetchFeeds({
+  Future<Iterable<FetchFeedResponseDto>> fetchFeeds({
     required DateTime beforeAt,
     bool ascending = false,
     int from = 0,
@@ -49,20 +49,16 @@ class RemoteFeedDataSourceImpl implements RemoteFeedDataSource {
           .lt('createdAt', beforeAt)
           .order(_orderByField, ascending: ascending)
           .range(from, to)
-          .then((fetched) => fetched.map(FeedWithAuthorModel.fromJson));
+          .then((fetched) => fetched.map(FetchFeedResponseDto.fromJson));
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
   }
 
   @override
-  Future<void> saveFeed(FeedModel model) async {
+  Future<void> saveFeed(SaveFeedRequestDto dto) async {
     try {
-      return await _client.rest.from(TableName.feed.name).insert(model
-          .copyWith(
-              createdBy: _getCurrentUidOrElseThrow,
-              createdAt: DateTime.now().toIso8601String())
-          .toJson());
+      return await _client.rest.from(TableName.feed.name).insert(dto.toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

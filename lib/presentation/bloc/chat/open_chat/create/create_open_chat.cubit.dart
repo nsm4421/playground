@@ -17,10 +17,7 @@ class CreateOpenChatCubit extends Cubit<CreateOpenChatState> {
   upload() async {
     try {
       emit(state.copyWith(status: Status.loading));
-      await _useCase.createChat(OpenChatEntity(
-          id: const Uuid().v4(),
-          title: state.title,
-          createdAt: DateTime.now()));
+      await _useCase.createChat(state.title);
       emit(state.copyWith(status: Status.success));
     } catch (error) {
       log(error.toString());

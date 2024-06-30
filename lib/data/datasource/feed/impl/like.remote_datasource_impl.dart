@@ -1,11 +1,10 @@
 import 'package:logger/logger.dart';
-import 'package:my_app/core/constant/dto.constant.dart';
+import 'package:my_app/domain/model/like/likeOnFeed.dto.dart';
+import 'package:my_app/domain/model/like/save_like_request.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
-
 import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/model/like/like.model.dart';
+import '../../../../domain/model/like/delete_like_request.dto.dart';
 
 part '../abstract/like.remote_datasource.dart';
 
@@ -28,35 +27,32 @@ class RemoteLikeDataSourceImpl implements RemoteLikeDataSource {
   }
 
   @override
-  Stream<Iterable<LikeModel>> get likeOnFeedStream => _client
+  Stream<Iterable<LikeOnFeedDto>> get likeOnFeedStream => _client
       .from(TableName.like.name)
       .stream(primaryKey: ['id'])
       .eq("createdBy", _getCurrentUidOrElseThrow)
-      .asyncMap((event) => event.map(LikeModel.fromJson));
+      .asyncMap((event) => event.map(LikeOnFeedDto.fromJson));
 
   @override
-  Future<void> saveLikeOnFeed(String feedId) async {
+  Future<void> saveLike(SaveLikeRequestDto dto) async {
     try {
-      await _client.rest.from(TableName.like.name).insert(LikeModel(
-              id: const Uuid().v4(),
-              referenceId: feedId,
-              type: LikeType.feed,
-              createdAt: DateTime.now().toIso8601String(),
-              createdBy: _getCurrentUidOrElseThrow)
-          .toJson());
+      await _client.rest.from(TableName.like.name).insert(
+          SaveLikeRequestDto(referenceId: dto.referenceId, type: dto.type)
+              .toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
   }
 
   @override
-  Future<void> deleteLikeOnFeed(String feedId) async {
+  Future<void> deleteLike(DeleteLikeRequestDto dto) async {
     try {
       await _client.rest
           .from(TableName.like.name)
           .delete()
-          .eq("referenceId", feedId)
-          .eq("type", LikeType.feed.name);
+          .eq('referenceId', dto.referenceId)
+          .eq('type', dto.type.name)
+          .eq('createdBy', _getCurrentUidOrElseThrow);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }
@@ -65,7 +61,7 @@ class RemoteLikeDataSourceImpl implements RemoteLikeDataSource {
   @override
   Future<void> deleteLikeById(String likeId) async {
     try {
-      await _client.rest.from(TableName.like.name).delete().eq("id", likeId);
+      await _client.rest.from(TableName.like.name).delete().eq('id', likeId);
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

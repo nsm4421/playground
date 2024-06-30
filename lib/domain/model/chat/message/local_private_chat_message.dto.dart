@@ -2,10 +2,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_app/data/entity/chat/chat_message/private_chat_message.entity.dart';
 import 'package:uuid/uuid.dart';
 
-part 'local_private_chat_message.model.g.dart';
+part 'local_private_chat_message.dto.g.dart';
 
 @HiveType(typeId: 0)
-class LocalPrivateChatMessageModel {
+class LocalPrivateChatMessageDto {
   @HiveField(0)
   String id;
 
@@ -39,23 +39,27 @@ class LocalPrivateChatMessageModel {
   @HiveField(10)
   String chatId;
 
-  LocalPrivateChatMessageModel({
-    required this.id,
-    required this.createdAt,
-    required this.senderUid,
-    required this.senderNickname,
-    required this.senderProfileUrl,
-    required this.receiverUid,
-    required this.receiverNickname,
-    required this.receiverProfileUrl,
-    required this.content,
-    required this.type,
-    required this.chatId,
-  });
+  @HiveField(11)
+  bool isSuccess;
 
-  factory LocalPrivateChatMessageModel.fromEntity(
-          PrivateChatMessageEntity entity) =>
-      LocalPrivateChatMessageModel(
+  LocalPrivateChatMessageDto(
+      {required this.id,
+        required this.createdAt,
+        required this.senderUid,
+        required this.senderNickname,
+        required this.senderProfileUrl,
+        required this.receiverUid,
+        required this.receiverNickname,
+        required this.receiverProfileUrl,
+        required this.content,
+        required this.type,
+        required this.chatId,
+        required this.isSuccess});
+
+  factory LocalPrivateChatMessageDto.fromEntity(
+      PrivateChatMessageEntity entity,
+      {bool isSuccess = true}) =>
+      LocalPrivateChatMessageDto(
           id: entity.id ?? const Uuid().v4(),
           createdAt: entity.createdAt ?? DateTime.now(),
           senderUid: entity.sender?.id ?? '',
@@ -66,5 +70,6 @@ class LocalPrivateChatMessageModel {
           receiverProfileUrl: entity.receiver?.profileUrl ?? '',
           content: entity.content ?? '',
           type: entity.type.name,
-          chatId: entity.chatId ?? '');
+          chatId: entity.chatId ?? '',
+          isSuccess: isSuccess);
 }

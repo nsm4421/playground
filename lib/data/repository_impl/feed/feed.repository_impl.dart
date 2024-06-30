@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_app/data/datasource/feed/impl/feed.remote_datasource_impl.dart';
 import 'package:my_app/data/entity/feed/base/feed.entity.dart';
-import 'package:my_app/domain/model/feed/base/feed.model.dart';
+import 'package:my_app/domain/model/feed/base/save_feed_request.dto.dart';
 
 import '../../../core/constant/dto.constant.dart';
 import '../../../core/exception/custom_exception.dart';
@@ -31,7 +31,7 @@ class FeedRepositoryImpl implements FeedRepository {
           .fetchFeeds(
               beforeAt: beforeAt, ascending: ascending, from: from, to: to)
           .then(
-              (fetched) => fetched.map(FeedEntity.fromModelWithAuthor).toList())
+              (fetched) => fetched.map(FeedEntity.fromFetchFeedResponseDto).toList())
           .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));
@@ -42,7 +42,7 @@ class FeedRepositoryImpl implements FeedRepository {
   Future<Either<Failure, void>> saveFeed(FeedEntity entity) async {
     try {
       return await _remoteDataSource
-          .saveFeed(FeedModel.fromEntity(entity))
+          .saveFeed(SaveFeedRequestDto.fromEntity(entity))
           .then(right);
     } on CustomException catch (error) {
       return left(Failure(code: error.code, message: error.message));

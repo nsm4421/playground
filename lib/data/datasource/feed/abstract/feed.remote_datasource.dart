@@ -1,7 +1,7 @@
 part of '../impl/feed.remote_datasource_impl.dart';
 
 abstract interface class RemoteFeedDataSource {
-  Future<Iterable<FeedWithAuthorModel>> fetchFeeds(
+  Future<Iterable<FetchFeedResponseDto>> fetchFeeds(
       {required DateTime beforeAt,
       bool ascending = false,
       int from = 0,
@@ -9,7 +9,7 @@ abstract interface class RemoteFeedDataSource {
 
   Future<void> deleteFeed(String feedId);
 
-  Future<void> saveFeed(FeedModel model);
+  Future<void> saveFeed(SaveFeedRequestDto model);
 
   Future<String> uploadFile({required String feedId, required File file});
 }

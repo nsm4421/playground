@@ -1,15 +1,10 @@
 import 'package:logger/logger.dart';
 import 'package:my_app/core/constant/error_code.dart';
-import 'package:my_app/core/util/box_mixin.dart';
-import 'package:my_app/domain/model/chat/message/local_private_chat_message.model.dart';
+import 'package:my_app/domain/model/chat/private_chat/save_private_chat_message_request.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/model/chat/message/private_chat_message.model.dart';
-import '../abstract/private_chat_message.datasource.dart';
-
 part '../abstract/private_chat_message.remote_datasource.dart';
 
 class RemotePrivateChatMessageDataSourceImpl
@@ -46,30 +41,25 @@ class RemotePrivateChatMessageDataSourceImpl
   }
 
   @override
-  Future<void> saveChatMessage(PrivateChatMessageModel model) async {
+  Future<void> saveChatMessage(SavePrivateChatMessageRequestDto dto) async {
     try {
       // uid 검사
       final senderUid = _getCurrentUidOrElseThrow;
-      if (model.receiverUid.isEmpty) {
+      if (dto.receiverUid.isEmpty) {
         throw CustomException(
             errorCode: ErrorCode.invalidArgs,
             message: 'receiver uid is not given');
       }
       // chat id
-      String chatId = model.chatId;
+      String chatId = dto.chatId;
       if (chatId.isEmpty) {
-        final users = [senderUid, model.receiverUid];
+        final users = [senderUid, dto.receiverUid];
         users.sort();
         chatId = users.join();
       }
-      return await _client.rest.from(TableName.privateChatMessage.name).insert(
-          model
-              .copyWith(
-                  id: model.id.isEmpty ? const Uuid().v4() : model.id,
-                  senderUid: _getCurrentUidOrElseThrow,
-                  createdAt: model.createdAt ?? DateTime.now(),
-                  chatId: chatId)
-              .toJson());
+      return await _client.rest
+          .from(TableName.privateChatMessage.name)
+          .insert(dto.copyWith(chatId: chatId).toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

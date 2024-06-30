@@ -1,9 +1,12 @@
 part of '../impl/private_chat_message.local_datasource_impl.dart';
 
-abstract interface class LocalPrivateChatMessageDataSource
-    implements PrivateChatMessageDataSource<LocalPrivateChatMessageModel> {
-  Future<List<LocalPrivateChatMessageModel>> fetchLastMessages();
+abstract interface class LocalPrivateChatMessageDataSource {
+  Future<void> saveChatMessage(LocalPrivateChatMessageDto dto);
 
-  Future<Iterable<LocalPrivateChatMessageModel>> fetchMessagesByUser(
+  Future<List<LocalPrivateChatMessageDto>> fetchLastMessages();
+
+  Future<Iterable<LocalPrivateChatMessageDto>> fetchMessagesByUser(
       String opponentUid);
+
+  Future<void> deleteMessageById(String messageId);
 }

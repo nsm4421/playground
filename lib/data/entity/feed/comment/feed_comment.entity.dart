@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_app/data/entity/user/account.entity.dart';
-
-import '../../../../domain/model/feed/comment/feed_comment.model.dart';
-import '../../../../domain/model/feed/comment/feed_comment_with_author.model.dart';
+import 'package:my_app/domain/model/feed/comment/feed_comment_payload.dto.dart';
+import 'package:my_app/domain/model/feed/comment/fetch_feed_comment_response.dto.dart';
 
 part 'feed_comment.entity.freezed.dart';
 
@@ -16,30 +15,26 @@ class FeedCommentEntity with _$FeedCommentEntity {
     String? feedId,
     String? content,
     DateTime? createdAt,
-    String? createdBy,
     AccountEntity? author,
   }) = _FeedCommentEntity;
 
   factory FeedCommentEntity.fromJson(Map<String, dynamic> json) =>
       _$FeedCommentEntityFromJson(json);
 
-  factory FeedCommentEntity.fromModel(FeedCommentModel model) =>
+  factory FeedCommentEntity.fromDto(
+          FetchFeedCommentResponseDto dto) =>
       FeedCommentEntity(
-          id: model.id.isEmpty ? null : model.id,
-          feedId: model.feedId.isEmpty ? null : model.feedId,
-          content: model.content.isEmpty ? null : model.content,
-          createdAt:
-              model.createdAt == null ? null : DateTime.parse(model.createdAt!),
-          createdBy: model.createdBy);
+          id: dto.id.isEmpty ? null : dto.id,
+          feedId: dto.feedId.isEmpty ? null : dto.feedId,
+          content: dto.content.isEmpty ? null : dto.content,
+          createdAt: dto.createdAt,
+          author: AccountEntity.fromDto(dto.author));
 
-  factory FeedCommentEntity.fromModelWithAuthor(
-          FeedCommentWithAuthorModel model) =>
+  factory FeedCommentEntity.fromPayload(FeedCommentPayloadDto dto) =>
       FeedCommentEntity(
-          id: model.id.isEmpty ? null : model.id,
-          feedId: model.feedId.isEmpty ? null : model.feedId,
-          content: model.content.isEmpty ? null : model.content,
-          createdAt:
-              model.createdAt == null ? null : DateTime.parse(model.createdAt!),
-          createdBy: model.author.id,
-          author: AccountEntity.fromModel(model.author));
+          id: dto.id.isEmpty ? null : dto.id,
+          feedId: dto.feedId.isEmpty ? null : dto.feedId,
+          content: dto.content.isEmpty ? null : dto.content,
+          createdAt: dto.createdAt,
+          author: AccountEntity(id: dto.createdBy));
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/domain/model/chat/base/open_chat.model.dart';
+import '../../../../domain/model/chat/open_chat/fetch_open_chat_response.dto.dart';
 
 part 'open_chat.entity.freezed.dart';
 
@@ -15,11 +15,16 @@ class OpenChatEntity with _$OpenChatEntity {
     String? lastMessage,
   }) = _OpenChatEntity;
 
-  factory OpenChatEntity.fromModel(OpenChatModel model) => OpenChatEntity(
-      id: model.id.isEmpty ? null : model.id,
-      title: model.title.isEmpty ? null : model.title,
-      createdBy: model.createdBy,
-      createdAt: model.createdAt,
-      lastTalkAt: model.lastTalkAt,
-      lastMessage: model.lastMessage.isEmpty ? null : model.lastMessage);
+  factory OpenChatEntity.fromDto(FetchOpenChatResponseDto dto) {
+    if (dto.id.isEmpty) {
+      throw ArgumentError('chat id is not given');
+    }
+    return OpenChatEntity(
+        id: dto.id.isEmpty ? null : dto.id,
+        title: dto.title.isEmpty ? null : dto.title,
+        createdBy: dto.createdBy,
+        createdAt: dto.createdAt,
+        lastTalkAt: dto.lastTalkAt,
+        lastMessage: dto.lastMessage);
+  }
 }

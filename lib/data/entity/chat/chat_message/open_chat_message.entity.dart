@@ -1,5 +1,6 @@
+import 'package:my_app/domain/model/chat/message/fetch_open_chat_message_response.dto.dart';
+
 import '../../../../core/constant/dto.constant.dart';
-import '../../../../domain/model/chat/message/open_chat_message.model.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,7 +18,8 @@ class OpenChatMessageEntity with _$OpenChatMessageEntity {
     @Default(ChatMessageType.text) ChatMessageType type,
   }) = _OpenChatMessageEntity;
 
-  factory OpenChatMessageEntity.fromModel(OpenChatMessageModel model) =>
+  factory OpenChatMessageEntity.fetchOpenChatMessageResponseDto(
+          FetchOpenChatMessageResponseDto model) =>
       OpenChatMessageEntity(
           id: model.id.isEmpty ? null : model.id,
           createdAt: model.createdAt,

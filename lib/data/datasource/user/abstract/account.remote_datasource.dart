@@ -1,11 +1,11 @@
 part of '../impl/account.remote_datasource_impl.dart';
 
 abstract interface class RemoteAccountDataSource {
-  Future<AccountModel> getCurrentUser();
+  Future<AccountDto> getCurrentUser();
 
-  Future<AccountModel> findByUserId(String userId);
+  Future<AccountDto> findByUserId(String userId);
 
-  Future<void> upsertUser(AccountModel user);
+  Future<void> upsertUser(AccountDto user);
 
   Future<void> deleteUser();
 

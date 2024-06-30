@@ -1,11 +1,10 @@
 import 'package:logger/logger.dart';
+import 'package:my_app/domain/model/chat/open_chat/save_open_chat_message_request.dto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/database.constant.dart';
 import '../../../../core/exception/custom_exception.dart';
-import '../../../../domain/model/chat/message/open_chat_message.model.dart';
-
 part '../abstract/open_chat_message.remote_datasource.dart';
 
 class RemoteOpenChatMessageDataSourceImpl
@@ -28,15 +27,10 @@ class RemoteOpenChatMessageDataSourceImpl
   }
 
   @override
-  Future<void> saveChatMessage(OpenChatMessageModel model) async {
+  Future<void> saveChatMessage(SaveOpenChatMessageRequestDto dto) async {
     try {
       return await _client.rest.from(TableName.openChatMessage.name).insert(
-          model
-              .copyWith(
-                  id: model.id.isEmpty ? const Uuid().v4() : model.id,
-                  createdBy: _getCurrentUidOrElseThrow,
-                  createdAt: DateTime.now())
-              .toJson());
+          dto.toJson());
     } catch (error) {
       throw CustomException.from(error, logger: _logger);
     }

@@ -1,24 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/data/entity/user/account.entity.dart';
 
-part 'account.model.freezed.dart';
+import '../../../data/entity/user/account.entity.dart';
 
-part 'account.model.g.dart';
+part 'account.dto.freezed.dart';
+
+part 'account.dto.g.dart';
 
 @freezed
-class AccountModel with _$AccountModel {
-  const factory AccountModel({
+class AccountDto with _$AccountDto {
+  const factory AccountDto({
     @Default('') String id,
     @Default('') String nickname,
     @Default('') String profileUrl,
     @Default('') String description,
-  }) = _AccountModel;
+  }) = _AccountDto;
 
-  factory AccountModel.fromJson(Map<String, dynamic> json) =>
-      _$AccountModelFromJson(json);
+  factory AccountDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountDtoFromJson(json);
 
-  factory AccountModel.fromEntity(AccountEntity entity) => AccountModel(
+  factory AccountDto.fromEntity(AccountEntity entity) => AccountDto(
         id: entity.id ?? '',
         nickname: entity.nickname ?? '',
         profileUrl: entity.profileUrl ?? '',

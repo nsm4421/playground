@@ -6,5 +6,5 @@ class SendLikeOnFeedUseCase {
   SendLikeOnFeedUseCase(this._repository);
 
   Future<Either<Failure, void>> call(String feedId) =>
-      _repository.sendLikeOnFeed(feedId);
+      _repository.sendLike(referenceId: feedId, type: LikeType.feed);
 }
