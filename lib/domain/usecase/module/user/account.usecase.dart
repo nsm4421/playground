@@ -35,6 +35,10 @@ class AccountUseCase {
   UpsertUserUseCase get upsertUser => UpsertUserUseCase(_repository);
 
   @injectable
+  UpsertProfileImageUseCase get upsertProfileImage =>
+      UpsertProfileImageUseCase(_repository);
+
+  @injectable
   DeleteUserUseCase get deleteUser => DeleteUserUseCase(_repository);
 
   @injectable

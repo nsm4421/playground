@@ -9,6 +9,30 @@ class CommentListFragment extends StatefulWidget {
 
 class _CommentListFragmentState extends State<CommentListFragment> {
   List<FeedCommentEntity> _comments = [];
+  late RealtimeChannel _channel;
+
+  @override
+  void initState() {
+    super.initState();
+    // DB에 insert가 발생한 경우
+    _channel = context.read<DisplayFeedCommentBloc>().createChannel(
+        changeEvent: PostgresChangeEvent.insert, callback: _callback);
+    _channel.subscribe();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _channel.unsubscribe();
+  }
+
+  _callback(FeedCommentEntity? oldRecord, FeedCommentEntity? newRecord) {
+    if (newRecord != null) {
+      setState(() {
+        _comments = [newRecord, ..._comments];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

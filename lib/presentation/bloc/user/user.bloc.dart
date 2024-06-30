@@ -38,6 +38,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<OnBoardingEvent>(_onOnBoarding);
     on<FetchAccountEvent>(_onFetchAccount);
     on<SignOutEvent>(_onSignOut);
+    on<EditProfileEvent>(_onEditProfile);
   }
 
   Future<void> _onInit(InitUserEvent event, Emitter<UserState> emit) async {
@@ -166,6 +167,35 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       log(error.toString());
       emit(UserFailureState(
           (error is CustomException) ? error.message : '로그아웃 실패'));
+    }
+  }
+
+  Future<void> _onEditProfile(
+      EditProfileEvent event, Emitter<UserState> emit) async {
+    try {
+      if (state is! UserLoadedState) {
+        throw const AuthException('로그인하지 않은 유저');
+      }
+      final temp = state as UserLoadedState;
+      String profileUrl = temp.account.profileUrl!;
+      emit(UserLoadingState());
+      if (event.image != null) {
+        await _accountUseCase
+            .upsertProfileImage(event.image!)
+            .then((res) => res.fold((l) => emit(temp), (r) {
+                  profileUrl = r;
+                }));
+      }
+      // 유저 정보 수정
+      final account = event.account.copyWith(profileUrl: profileUrl);
+      await _accountUseCase.upsertUser(account).then((res) => res.fold(
+          (l) => emit(temp),
+          (r) => emit(UserLoadedState(
+              sessionUser: temp.sessionUser, account: account))));
+    } catch (error) {
+      log(error.toString());
+      emit(UserFailureState(
+          (error is CustomException) ? error.message : '알수 없는 오류'));
     }
   }
 }

@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:injectable/injectable.dart';
 import 'package:my_app/data/entity/feed/base/feed.entity.dart';
 import 'package:my_app/domain/usecase/module/feed/feed_comment.usecase.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/exception/custom_exception.dart';
 import '../../../../../data/entity/feed/comment/feed_comment.entity.dart';
@@ -22,6 +22,14 @@ class DisplayFeedCommentBloc
   bool _isEnd = false;
   static const int _pageSize = 10;
 
+  RealtimeChannel createChannel(
+          {required PostgresChangeEvent changeEvent,
+          required void Function(
+                  FeedCommentEntity? oldRecored, FeedCommentEntity? newRecord)
+              callback}) =>
+      _useCase.channel(
+          feedId: _feed.id!, changeEvent: changeEvent, callback: callback);
+
   DisplayFeedCommentBloc(
       {required FeedEntity feed, required FeedCommentUseCase useCase})
       : _feed = feed,
@@ -32,6 +40,8 @@ class DisplayFeedCommentBloc
     on<ModifyDisplayFeedCommentEvent>(_onModify);
     on<DeleteDisplayFeedCommentEvent>(_onDelete);
   }
+
+  String get feedId => _feed.id!;
 
   bool get isEnd => _isEnd;
 

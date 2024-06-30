@@ -1,13 +1,15 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:my_app/data/datasource/chat/base/chat.datasource_impl.dart';
+import 'package:my_app/data/datasource/chat/impl/open_chat_message.remote_datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'chat/message/chat_message.datasource_impl.dart';
-import 'user/account/account.datasource_impl.dart';
-import 'user/auth/auth.datasource_impl.dart';
-import 'feed/base/feed.datasource_impl.dart';
-import 'feed/comment/feed_comment.datasource_impl.dart';
+import 'chat/impl/open_chat.remote_datasource_impl.dart';
+import 'chat/impl/private_chat_message.remote_datasource_impl.dart';
+import 'feed/impl/like.remote_datasource_impl.dart';
+import 'user/impl/account.remote_datasource_impl.dart';
+import 'user/impl/auth.remote_datasource_impl.dart';
+import 'feed/impl/feed.remote_datasource_impl.dart';
+import 'feed/impl/feed_comment.remote_datasource_impl.dart';
 
 @module
 abstract class RemoteDataSource {
@@ -31,10 +33,18 @@ abstract class RemoteDataSource {
       RemoteFeedCommentDataSourceImpl(client: _client, logger: _logger);
 
   @lazySingleton
-  RemoteChatDataSource get chat =>
-      RemoteChatDataSourceImpl(client: _client, logger: _logger);
+  RemoteLikeDataSource get like =>
+      RemoteLikeDataSourceImpl(client: _client, logger: _logger);
 
   @lazySingleton
-  RemoteChatMessageDataSource get chatMessage =>
-      RemoteChatMessageDataSourceImpl(client: _client, logger: _logger);
+  RemoteOpenChatDataSource get openChat =>
+      RemoteOpenChatDataSourceImpl(client: _client, logger: _logger);
+
+  @lazySingleton
+  RemoteOpenChatMessageDataSource get openChatMessage =>
+      RemoteOpenChatMessageDataSourceImpl(client: _client, logger: _logger);
+
+  @lazySingleton
+  RemotePrivateChatMessageDataSource get privateChatMessage =>
+      RemotePrivateChatMessageDataSourceImpl(client: _client, logger: _logger);
 }

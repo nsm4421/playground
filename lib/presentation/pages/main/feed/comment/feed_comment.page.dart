@@ -9,6 +9,7 @@ import 'package:my_app/presentation/bloc/feed/comment/upload/upload_feed_comment
 import 'package:my_app/presentation/components/error.fragment.dart';
 import 'package:my_app/presentation/components/loading.fragment.dart';
 import 'package:my_app/presentation/components/user/avatar.widget.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'feed_comment.screen.dart';
 

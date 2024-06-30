@@ -41,3 +41,10 @@ final class FetchAccountEvent extends UserEvent {
 }
 
 final class SignOutEvent extends UserEvent {}
+
+final class EditProfileEvent extends UserEvent {
+  final AccountEntity account;
+  final File? image;
+
+  EditProfileEvent({required this.account, this.image});
+}

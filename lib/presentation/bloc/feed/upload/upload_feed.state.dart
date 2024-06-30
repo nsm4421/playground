@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/core/constant/media.dart';
 
+import '../../../../core/constant/dto.constant.dart';
 import '../../../../core/constant/status.dart';
 
 part 'upload_feed.state.freezed.dart';

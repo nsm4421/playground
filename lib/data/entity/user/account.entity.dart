@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/domain/model/user/account.model.dart';
+
+import '../../../domain/model/user/account.dto.dart';
 
 part 'account.entity.freezed.dart';
 
@@ -18,10 +19,10 @@ class AccountEntity with _$AccountEntity {
   factory AccountEntity.fromJson(Map<String, dynamic> json) =>
       _$AccountEntityFromJson(json);
 
-  factory AccountEntity.fromModel(AccountModel model) => AccountEntity(
-        id: model.id.isEmpty ? null : model.id,
-        nickname: model.nickname.isEmpty ? null : model.nickname,
-        profileUrl: model.profileUrl.isEmpty ? null : model.profileUrl,
-        description: model.description.isEmpty ? null : model.description,
+  factory AccountEntity.fromDto(AccountDto dto) => AccountEntity(
+        id: dto.id.isEmpty ? null : dto.id,
+        nickname: dto.nickname.isEmpty ? null : dto.nickname,
+        profileUrl: dto.profileUrl.isEmpty ? null : dto.profileUrl,
+        description: dto.description.isEmpty ? null : dto.description,
       );
 }

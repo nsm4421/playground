@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_app/core/constant/routes.dart';
 import 'package:my_app/presentation/bloc/user/user.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
+import 'domain/model/chat/message/local_private_chat_message.dto.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 환경변수 초기화
   await dotenv.load();
+
+  // 로컬 DB 초기화
+  await Hive.initFlutter();
+  Hive.registerAdapter<LocalPrivateChatMessageDto>(
+      LocalPrivateChatMessageDtoAdapter());
 
   // Supabase 초기화
   await Supabase.initialize(
