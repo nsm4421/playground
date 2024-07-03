@@ -1,4 +1,5 @@
 package-lock.json
+components/ui
 
 # dependencies
 /node_modules
