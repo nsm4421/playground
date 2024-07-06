@@ -10,7 +10,7 @@ export default function LoginPage() {
         <div className="mt-5">
           <LoginButton provider="github" />
         </div>
-        <Link href={"/auth/signup"}>
+        <Link href={"/signup"}>
           <p className="mt-3 text-slate-300 hover:text-rose-500">Want Create Account?</p>
         </Link>
       </section>

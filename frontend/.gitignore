@@ -1,5 +1,6 @@
 package-lock.json
 components/ui
+.env
 
 # dependencies
 /node_modules
