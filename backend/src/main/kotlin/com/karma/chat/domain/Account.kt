@@ -1,6 +1,7 @@
 package com.karma.chat.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.karma.chat.constant.UserRole
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import jakarta.persistence.*
@@ -8,11 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
 
 @Entity
-class Account {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id : Long = 0
+class Account(): AuditingFields() {
 
     @Column
     var username :String = ""
@@ -28,6 +25,9 @@ class Account {
             val passwordEncoder = BCryptPasswordEncoder();
             field = passwordEncoder.encode(rawPassword)
         }
+
+    @Enumerated(EnumType.STRING)
+    var role : UserRole = UserRole.USER
 
     fun comparePassword(rawPassword:String):Boolean{
         return BCryptPasswordEncoder().matches(rawPassword, password)
