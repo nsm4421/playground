@@ -1,11 +1,9 @@
 plugins {
 	id("org.springframework.boot") version "3.3.1"
 	id("io.spring.dependency-management") version "1.1.5"
-	id("org.graalvm.buildtools.native") version "0.10.2"
+	kotlin("plugin.jpa") version "1.9.24"
 	kotlin("jvm") version "1.9.24"
 	kotlin("plugin.spring") version "1.9.24"
-	kotlin("plugin.jpa") version "1.8.22"
-	kotlin("kapt") version "1.8.22"
 }
 
 group = "com.karma"
@@ -28,22 +26,19 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
-	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	testImplementation("io.kotest:kotest-runner-junit5:5.6.2")
-	testImplementation("io.kotest:kotest-assertions-core:5.6.2")
-	testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
-	testImplementation("io.kotest.extensions:kotest-extensions-testcontainers:2.0.2")
 }
 
 kotlin {
