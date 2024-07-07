@@ -1,21 +1,41 @@
 package com.karma.chat.service
 
 import com.karma.chat.domain.Account
+import com.karma.chat.domain.CustomUserDetail
 import com.karma.chat.repository.AccountRepository
-import org.springframework.data.repository.findByIdOrNull
+import com.karma.chat.util.JwtUtil
+import jakarta.transaction.Transactional
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class AccountService (
-    private val accountRepository: AccountRepository
-){
-    fun findById(id:Long): Account?{
-        return this.accountRepository.findByIdOrNull(id)
+@Transactional
+class AccountService(
+    private val accountRepository: AccountRepository,
+    private val passwordEncoder: BCryptPasswordEncoder,
+    private val jwtUtil: JwtUtil
+) : UserDetailsService {
+
+    override fun loadUserByUsername(username: String): UserDetails {
+        val account = findByUsername(username)
+            ?: throw UsernameNotFoundException("username is not given")
+        return CustomUserDetail.from(account)
     }
-    fun findByEmail(email:String): Account?{
-        return this.accountRepository.findByEmail(email)
+
+    fun findByUsername(username: String): Account? = this.accountRepository.findByUsername(username)
+
+    fun signUpWithEmailAndPassword(email: String, username: String, rawPassword: String): Long {
+        val account = Account(username = username, email = email, rawPassword = rawPassword)
+        return this.accountRepository.save(account).id
     }
-    fun save(account: Account): Account {
-        return this.accountRepository.save(account)
+
+    fun signInWithEmailAndPassword(email: String, password: String): String {
+        val account = accountRepository.findByEmail(email)
+            ?.takeIf { passwordEncoder.matches(password, it.password) }
+            ?: throw IllegalArgumentException("user not found or password is not matched")
+        return jwtUtil.generateToken(account.subject())
     }
 }

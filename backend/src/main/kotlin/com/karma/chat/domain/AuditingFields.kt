@@ -2,6 +2,7 @@ package com.karma.chat.domain
 
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
+import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 
@@ -11,13 +12,13 @@ abstract class AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id : Long = 0
+    val id : Long = 0
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.MIN
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME")
+    protected lateinit var createdAt: LocalDateTime
 
-    @CreationTimestamp
-    @Column(name = "updated_at", nullable = false)
-    val updatedAt: LocalDateTime = LocalDateTime.MIN
+    @LastModifiedDate
+    @Column(name = "modified_at", nullable = false, columnDefinition = "DATETIME")
+    protected lateinit var modifiedAt: LocalDateTime
 }
