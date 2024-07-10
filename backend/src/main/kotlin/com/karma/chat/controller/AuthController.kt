@@ -1,17 +1,12 @@
 package com.karma.chat.controller
 
 import com.karma.chat.controller.dto.BodyDto
-import com.karma.chat.controller.dto.GetCurrentAccountResponseDto
-import com.karma.chat.controller.dto.SignInWithEmailAndPasswordDto
-import com.karma.chat.controller.dto.SignUpWithEmailAndPasswordDto
+import com.karma.chat.controller.dto.auth.SignInWithEmailAndPasswordDto
+import com.karma.chat.controller.dto.auth.SignUpWithEmailAndPasswordDto
 import com.karma.chat.service.AccountService
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.User
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,14 +21,13 @@ class AuthController(
     @PostMapping("/signup/email")
     fun signUpWithEmailAndPassword(
         @RequestBody req: SignUpWithEmailAndPasswordDto
-    ): ResponseEntity<BodyDto<Long>> {
+    ): ResponseEntity<BodyDto<String>> {
         try {
-            val uid = accountService.signUpWithEmailAndPassword(
-                username = req.username,
+            val username = accountService.signUpWithEmailAndPassword(
                 email = req.email,
                 rawPassword = req.password
             )
-            return ResponseEntity.ok(BodyDto(message = "success", data = uid))
+            return ResponseEntity.ok(BodyDto(message = "success", data = username))
         } catch (e: Exception) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(BodyDto(message = "sign up fail"))
@@ -51,19 +45,6 @@ class AuthController(
         } catch (e: Exception) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(BodyDto(message = "sign in fail"))
-        }
-    }
-
-    @GetMapping("/me")
-    fun getCurrentAccount(@AuthenticationPrincipal user: User): ResponseEntity<BodyDto<GetCurrentAccountResponseDto>> {
-        try {
-            val account = accountService.findByUsername(user.username)
-                ?: throw NotFoundException()
-            return ResponseEntity.ok()
-                .body(BodyDto(message = "success", data = GetCurrentAccountResponseDto.from(account)))
-        } catch (e: Exception) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(BodyDto(message = "getting current account fail"))
         }
     }
 }

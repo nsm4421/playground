@@ -1,7 +1,7 @@
 package com.karma.chat.service
 
-import com.karma.chat.domain.Account
-import com.karma.chat.domain.CustomUserDetail
+import com.karma.chat.domain.auth.Account
+import com.karma.chat.domain.auth.CustomUserDetail
 import com.karma.chat.repository.AccountRepository
 import com.karma.chat.util.JwtUtil
 import jakarta.transaction.Transactional
@@ -27,9 +27,9 @@ class AccountService(
 
     fun findByUsername(username: String): Account? = this.accountRepository.findByUsername(username)
 
-    fun signUpWithEmailAndPassword(email: String, username: String, rawPassword: String): Long {
-        val account = Account(username = username, email = email, rawPassword = rawPassword)
-        return this.accountRepository.save(account).id
+    fun signUpWithEmailAndPassword(email: String, rawPassword: String): String {
+        val account = Account(email = email, rawPassword = rawPassword)
+        return this.accountRepository.save(account).username
     }
 
     fun signInWithEmailAndPassword(email: String, password: String): String {

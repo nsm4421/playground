@@ -1,7 +1,7 @@
 package com.karma.chat.config.security
 
 import com.karma.chat.constant.UserRole
-import com.karma.chat.domain.Account
+import com.karma.chat.domain.auth.Account
 import com.karma.chat.repository.AccountRepository
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -14,7 +14,6 @@ class AdminInitialize(
     override fun run(args: ApplicationArguments?) {
         accountRepository.save(
             Account(
-                username = "admin",
                 email = "nsm4421@naver.com",
                 role = UserRole.ADMIN,
                 rawPassword = "1221",
