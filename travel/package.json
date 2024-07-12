@@ -1,0 +1,51 @@
+{
+  "name": "travel-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@lexical/react": "^0.15.0",
+    "@nextui-org/react": "^2.3.6",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/ssr": "^0.3.0",
+    "@supabase/supabase-js": "^2.43.2",
+    "@types/mapbox-gl": "^3.1.0",
+    "axios": "^1.6.8",
+    "flowbite-react": "^0.9.0",
+    "framer-motion": "^11.1.9",
+    "install": "^0.13.0",
+    "isomorphic-dompurify": "^2.10.0",
+    "mapbox-gl": "^3.3.0",
+    "next": "14.2.3",
+    "quill": "^2.0.2",
+    "react": "^18",
+    "react-country-flag": "^3.1.0",
+    "react-dom": "^18",
+    "react-map-gl": "^7.1.7",
+    "react-select": "^5.8.0",
+    "react-toastify": "^10.0.5",
+    "supabase": "^1.167.4",
+    "uuid": "^9.0.1",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.5"
+  }
+}
