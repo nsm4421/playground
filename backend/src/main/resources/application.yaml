@@ -17,3 +17,11 @@ jwt:
   secret: 67Kg7J207IqkNjTsnbjsvZTrlKntlZzqsJIg7LC+6riwfn5+fn4hQOOFg+OEueOFgeOEtOOFh+OEueOFh+OEtOOFgeOEueOEtOOFgeOFhyDjhLnjhLTjhYfjhYEg44WO44S57ZmN66Gx44S544WO44S044WB44WH44WO44S5
   expire: 3   # hour
   issuer: karma
+
+server:
+  port: 8080
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: 951221
+    keyStoreType: PKCS12
+    keyAlias: tomcat
