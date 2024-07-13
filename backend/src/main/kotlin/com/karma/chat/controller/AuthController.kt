@@ -1,8 +1,8 @@
 package com.karma.chat.controller
 
 import com.karma.chat.controller.dto.BodyDto
-import com.karma.chat.controller.dto.auth.SignInWithEmailAndPasswordDto
-import com.karma.chat.controller.dto.auth.SignUpWithEmailAndPasswordDto
+import com.karma.chat.controller.dto.auth.AuthRequestDto
+import com.karma.chat.controller.dto.auth.SignInResponseDto
 import com.karma.chat.service.AccountService
 import jakarta.servlet.http.HttpServletResponse
 
@@ -20,12 +20,11 @@ class AuthController(
 
     @PostMapping("/signup/email")
     fun signUpWithEmailAndPassword(
-        @RequestBody req: SignUpWithEmailAndPasswordDto
+        @RequestBody req: AuthRequestDto
     ): ResponseEntity<BodyDto<String>> {
         try {
             val username = accountService.signUpWithEmailAndPassword(
-                email = req.email,
-                rawPassword = req.password
+                email = req.email, rawPassword = req.password
             )
             return ResponseEntity.ok(BodyDto(message = "success", data = username))
         } catch (e: Exception) {
@@ -36,12 +35,14 @@ class AuthController(
 
     @PostMapping("/signin/email")
     fun signInWithEmailAndPassword(
-        @RequestBody req: SignInWithEmailAndPasswordDto,
-        response: HttpServletResponse
-    ): ResponseEntity<BodyDto<String>> {
+        @RequestBody req: AuthRequestDto, response: HttpServletResponse
+    ): ResponseEntity<BodyDto<SignInResponseDto>> {
         try {
-            val jwt = this.accountService.signInWithEmailAndPassword(req.email, req.password)
-            return ResponseEntity.ok(BodyDto(message = "success", data = jwt));
+            val account = accountService.signInWithEmailAndPassword(req.email, req.password)
+            val jwt = accountService.generateJwt(account)
+            return ResponseEntity.ok(
+                BodyDto(message = "success", data = SignInResponseDto(jwt = jwt, account = account))
+            )
         } catch (e: Exception) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(BodyDto(message = "sign in fail"))

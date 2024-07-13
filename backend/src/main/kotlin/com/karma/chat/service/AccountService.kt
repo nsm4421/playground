@@ -32,10 +32,9 @@ class AccountService(
         return this.accountRepository.save(account).username
     }
 
-    fun signInWithEmailAndPassword(email: String, password: String): String {
-        val account = accountRepository.findByEmail(email)
-            ?.takeIf { passwordEncoder.matches(password, it.password) }
-            ?: throw IllegalArgumentException("user not found or password is not matched")
-        return jwtUtil.generateToken(account.subject())
-    }
+    fun signInWithEmailAndPassword(email: String, rawPassword: String): Account = accountRepository.findByEmail(email)
+        ?.takeIf { passwordEncoder.matches(rawPassword, it.password) }
+        ?: throw IllegalArgumentException("user not found or password is not matched")
+
+    fun generateJwt(account: Account): String = jwtUtil.generateToken(account.subject())
 }

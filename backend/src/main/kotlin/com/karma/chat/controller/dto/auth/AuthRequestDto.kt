@@ -1,6 +1,6 @@
 package com.karma.chat.controller.dto.auth
 
-data class SignInWithEmailAndPasswordDto(
+data class AuthRequestDto(
     val email:String,
     val password:String
 )
