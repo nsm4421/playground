@@ -1,3 +1,9 @@
+export type UserModel = {
+  username: String;
+  email: String;
+  role?: String;
+};
+
 export type SignUpSuccessResponse = {
   message: string;
   data: string; // jwt

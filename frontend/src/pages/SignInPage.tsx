@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SignInAction from "../action/sign-in";
+import useAuth from "../hook/use-auth";
 
 export default function SignInPage() {
   const router = useNavigate();
+  const { signIn } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -17,15 +18,10 @@ export default function SignInPage() {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await SignInAction({
+      await signIn({
         email,
         password,
-        onSuccess: (data) => {
-          alert(data.message);
-          localStorage.setItem("jwt", data.data.jwt);
-          localStorage.setItem("username", data.data.account.username);
-          router("/");
-        },
+        onSuccess: () => router("/"),
         onError: () => alert("Sign In Fails..."),
       });
     } catch (error) {

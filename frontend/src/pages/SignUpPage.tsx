@@ -1,9 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import SignUpAction from "../action/sign-up";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hook/use-auth";
 
 export default function SignUpPage() {
   const router = useNavigate();
+  const { signUp } = useAuth();
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
@@ -22,14 +23,10 @@ export default function SignUpPage() {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await SignUpAction({
+      await signUp({
         email,
         password,
-        onSuccess: (data) => {
-          alert(data.message);
-          localStorage.setItem("jwt", data.data);
-          router("/");
-        },
+        onSuccess: () => router("/auth/sign-in"),
         onError: () => alert("Sign Up Fails..."),
       });
     } catch (error) {

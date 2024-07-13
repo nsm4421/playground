@@ -3,8 +3,12 @@ import EntryPage from "./pages/EntryPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Navbar from "./components/Navbar";
+import useAuth from "./hook/use-auth";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="text-black dark:text-white h-screen">
       <Navbar />
@@ -13,6 +17,7 @@ function App() {
           <Route path="/" element={<EntryPage />}></Route>
           <Route path="/auth/sign-in" element={<SignInPage />}></Route>
           <Route path="/auth/sign-up" element={<SignUpPage />}></Route>
+          <Route path="/chat" element={<ChatPage />}></Route>
           {/* Redirect */}
           <Route path="*" element={<Navigate to={"/"} />}></Route>
         </Routes>
