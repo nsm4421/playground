@@ -6,16 +6,18 @@ import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <main className="h-screen container mx-auto">
+    <div className="text-black dark:text-white h-screen">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<EntryPage />}></Route>
-        <Route path="/auth/sign-in" element={<SignInPage />}></Route>
-        <Route path="/auth/sign-up" element={<SignUpPage />}></Route>
-        {/* Redirect */}
-        <Route path="*" element={<Navigate to={"/"} />}></Route>
-      </Routes>
-    </main>
+      <div className="container mx-auto px-1">
+        <Routes>
+          <Route path="/" element={<EntryPage />}></Route>
+          <Route path="/auth/sign-in" element={<SignInPage />}></Route>
+          <Route path="/auth/sign-up" element={<SignUpPage />}></Route>
+          {/* Redirect */}
+          <Route path="*" element={<Navigate to={"/"} />}></Route>
+        </Routes>
+      </div>
+    </div>
   );
 }
 
