@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:hot_place/presentation/index.page.dart';
 
 enum Routes {
   splash("/"),
@@ -10,4 +11,5 @@ enum Routes {
 }
 
 final GoRouter routerConfig = GoRouter(routes: <RouteBase>[
+  GoRoute(path: "/", builder: (_, __) => const IndexPage())
 ], initialLocation: Routes.splash.path);
