@@ -12,17 +12,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/chat")
 class ChatController(
     private val accountService: AccountService,
     private val chatService: ChatService,
     private val messagingTemplate: SimpMessagingTemplate
 ) {
-    @MessageMapping
+    @MessageMapping("/message")
     @SendTo("/chat/public")
     fun handlePublicMessage(@Payload req: SendPublicChatMessageRequestDto): BodyDto<OpenChatMessage> {
         val sender = accountService.extractUsernameFromJwt(req.jwt)

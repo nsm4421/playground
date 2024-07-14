@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.*
 @EnableWebSocketMessageBroker
 class WebSocketConfig() : WebSocketMessageBrokerConfigurer {
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("https://localhost:3000").withSockJS()
+        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:3000").withSockJS()
     }
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
         registry.setApplicationDestinationPrefixes("/app")

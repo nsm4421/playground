@@ -29,19 +29,6 @@ class FeedController(
     private val feedService: FeedService
 ) {
 
-    @GetMapping
-    fun fetchFeeds(
-        @PageableDefault pageable: Pageable
-    ): ResponseEntity<BodyDto<Iterable<Feed>>> {
-        try {
-            val feeds = feedService.fetchFeeds(pageable)
-            return ResponseEntity.ok(BodyDto(message = "success", data = feeds))
-        } catch (e: Exception) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(BodyDto(message = "fetch feed fail"))
-        }
-    }
-
     @PostMapping
     fun createFeed(
         @RequestBody req: CreateFeedRequestDto
