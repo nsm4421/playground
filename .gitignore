@@ -1,6 +1,8 @@
 package-lock.json
 
 /supabase
+.env
+components/ui/
 
 # dependencies
 /node_modules
