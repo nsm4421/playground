@@ -16,14 +16,14 @@ interface Body {
   };
 }
 
-export default async function signUpWithEmaiAndPasswordAction({
+export default async function signInWithEmaiAndPasswordAction({
   email,
   password,
   onSuccess,
   onError,
 }: Props) {
-  console.debug(`sign up request email:${email} password:${password}`);
-  await fetch("/api/auth/sign-up", {
+  console.debug(`sign in request email:${email} password:${password}`);
+  await fetch("/api/auth/sign-in", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export default async function signUpWithEmaiAndPasswordAction({
     .then((res) => res.json())
     .then((data: Body) => {
       if (data?.user) {
-        onSuccess(data?.user);
+        onSuccess(data.user);
       } else {
         onError(data.error);
       }
