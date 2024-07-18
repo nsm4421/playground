@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import signUpWithEmaiAndPasswordAction from "@/lib/actions/sign-up";
+import useAuth from "@/lib/hooks/use-auth";
 import useForm from "@/lib/hooks/use-form";
+import { AuthError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -15,26 +16,24 @@ interface InputProps {
 
 export default function SignUpForm() {
   const router = useRouter();
+  const { signUpWithEmailAndPassword } = useAuth();
   const { values, errors, isLoading, handleChange, handleSubmit } =
     useForm<InputProps>({
       initialValues: { email: "", password: "", passwordConfirm: "" },
       onSubmit: async (input) => {
-        await signUpWithEmaiAndPasswordAction({
-          ...input,
-          onSuccess: (user) => {
+        await signUpWithEmailAndPassword(input.email, input.password)
+          .then(() => {
             toast.success("Sign Up Success", {
               position: "top-center",
             });
             router.replace("/sign-in");
-          },
-          onError: (error) => {
+          })
+          .catch((error:AuthError) => {
             toast.error(`${error?.code ?? "error..."}`, {
               position: "top-center",
             });
-          },
-        });
+          });
       },
-      // TODO : 오류메세지 띄우기
       validate: (input) => {
         // 이메일 필드 검사
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

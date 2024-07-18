@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "@/lib/hooks/use-auth";
+import Navbar from "@/components/nav/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("h-screen", inter.className)}>
-        {children}
-        <ToastContainer />
+        <AuthProvider>
+          <Navbar/>
+          {children}
+          <ToastContainer />
+        </AuthProvider>
       </body>
     </html>
   );
