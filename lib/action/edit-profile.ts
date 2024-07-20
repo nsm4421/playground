@@ -49,11 +49,9 @@ export default async function editProfileAction({
   // auth 업데이트
   await browserClient.auth.updateUser({
     data: {
-      user_metadata: {
-        ...user.user_metadata,
-        nickanme: nickname,
-        profile_image: publicUrl,
-      },
+      ...user.user_metadata,
+      nickanme: nickname,
+      profile_image: publicUrl,
     },
   });
 }
