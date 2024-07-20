@@ -1,5 +1,5 @@
 export default function ChatPage(){
-    return <main>
+    return <main className="container">
         CHAT
     </main>
 }
