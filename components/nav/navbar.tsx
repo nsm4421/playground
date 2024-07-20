@@ -1,6 +1,6 @@
 "use client";
 
-import useAuth from "@/lib/hooks/use-auth";
+import useAuth from "@/lib/provider/use-auth";
 import { Button } from "../ui/button";
 import Link from "next/link";
 

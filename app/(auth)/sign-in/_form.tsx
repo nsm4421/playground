@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useAuth from "@/lib/hooks/use-auth";
 import useForm from "@/lib/hooks/use-form";
+import useAuth from "@/lib/provider/use-auth";
 import { AuthError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
