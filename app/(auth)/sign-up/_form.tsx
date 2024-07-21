@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Routes } from "@/lib/constant/routes";
 
 import useForm from "@/lib/hooks/use-form";
 import useAuth from "@/lib/provider/use-auth";
@@ -27,7 +28,7 @@ export default function SignUpForm() {
             toast.success("Sign Up Success", {
               position: "top-center",
             });
-            router.replace("/sign-in");
+            router.replace(Routes.signIn);
           })
           .catch((error: AuthError) => {
             toast.error(`${error?.code ?? "error..."}`, {

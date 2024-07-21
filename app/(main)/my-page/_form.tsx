@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import editProfileAction from "@/lib/action/edit-profile";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { Routes } from "@/lib/constant/routes";
 
 export default function SelectImageForm() {
   const router = useRouter()
@@ -47,7 +48,7 @@ export default function SelectImageForm() {
       }
       setIsLoading(true);
       editProfileAction({ nickname, profileImage });
-      router.push("/")
+      router.push(Routes.index)
       toast.success("profile is updated", {
         position: "top-center",
       });

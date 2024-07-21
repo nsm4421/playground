@@ -10,6 +10,7 @@ import {
   HoverCardContent,
 } from "@radix-ui/react-hover-card";
 import { User } from "@supabase/supabase-js";
+import { Routes } from "@/lib/constant/routes";
 
 export default function Navbar() {
   const { isAuthroized, user, signOut } = useAuth();
@@ -17,7 +18,7 @@ export default function Navbar() {
   return (
     <nav className="flex justify-between items-center px-2">
       <h1 className="text-xl font-semibold hover:text-orange-500">
-        <Link href="/">Karma</Link>
+        <Link href={Routes.index}>Karma</Link>
       </h1>
 
       {isAuthroized && user ? (
@@ -38,7 +39,7 @@ function OnLogin({ user, signOut }: PropsForLogin) {
   return (
     <ul className="flex justify-between items-center gay-x-3">
       <li>
-        <Link href="/chat">
+        <Link href={Routes.chat}>
           <Button variant="ghost" className="hover:text-orange-500">
             Chat
           </Button>
@@ -59,7 +60,7 @@ function OnLogin({ user, signOut }: PropsForLogin) {
               </h1>
               <ul className="flex justify-around p-2 space-x-2">
                 <li>
-                  <Link href={"/my-page"}>
+                  <Link href={Routes.myPage}>
                     <Button variant="outline" className="hover:text-orange-500">
                       My Page
                     </Button>
@@ -88,14 +89,14 @@ function OnNotLogin() {
     <div>
       <ul className="flex justify-center gay-x-3">
         <li>
-          <Link href="/sign-up">
+          <Link href={Routes.signUp}>
             <Button variant="ghost" className="hover:text-orange-500">
               Sign UP
             </Button>
           </Link>
         </li>
         <li>
-          <Link href="/sign-in">
+          <Link href={Routes.signIn}>
             <Button variant="ghost" className="hover:text-orange-500">
               Sign In
             </Button>

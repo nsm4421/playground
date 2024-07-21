@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Routes } from "@/lib/constant/routes";
 import useForm from "@/lib/hooks/use-form";
 import useAuth from "@/lib/provider/use-auth";
 import { AuthError } from "@supabase/supabase-js";
@@ -25,7 +26,7 @@ export default function SignInForm() {
             toast.success("Sign In Success", {
               position: "top-center",
             });
-            router.replace("/");
+            router.replace(Routes.index);
           })
           .catch((error: AuthError) => {
             toast.error(`${error?.code ?? "error..."}`, {
