@@ -13,3 +13,9 @@ build
 .metadata
 
 portfolio.iml
+
+**.g.dart
+**.freezed.dart
+**.config.dart
+
+assets/
