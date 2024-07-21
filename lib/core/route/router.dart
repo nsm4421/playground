@@ -14,7 +14,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: RoutePaths.auth.path,
-      name: 'splash',
+      name: 'auth',
       builder: (context, state) => const AuthPage(),
     ),
   ],
