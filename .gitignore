@@ -5,6 +5,9 @@ ios
 test
 .idea
 .dart_tool
+build
+.flutter-plugins
+.flutter-plugins-dependencies
 
 .env
 .metadata
