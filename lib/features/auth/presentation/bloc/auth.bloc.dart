@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/response/status.dart';
+import '../../../../core/constant/status.dart';
 import '../../domain/usecase/auth.usecase_module.dart';
 import 'auth.state.dart';
 
@@ -23,6 +24,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   }
 
   User? get currentUser => _useCase.currentUser.call();
+
+  AccountEntity? get account {
+    final user = currentUser;
+    return user == null ? null : AccountEntity.fromUser(user);
+  }
 
   Stream<AuthState> get authStream => _useCase.authStream.call();
 

@@ -12,4 +12,12 @@ abstract interface class AuthRepository {
       String email, String password);
 
   Future<ResponseWrapper<void>> signOut();
+
+  Future<ResponseWrapper<void>> insertAccount(AccountEntity entity);
+
+  Future<ResponseWrapper<User>> updateMetaData(
+      {String? nickname, String? profileImage});
+
+  Future<ResponseWrapper<void>> updateAccount(
+      {required String uid, String? nickname, String? profileImage});
 }

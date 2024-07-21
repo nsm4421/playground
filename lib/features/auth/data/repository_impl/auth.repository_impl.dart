@@ -1,7 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:portfolio/core/response/response_wrapper.dart';
+import 'package:portfolio/core/constant/response_wrapper.dart';
 import 'package:portfolio/features/auth/data/datasource/auth.datasource_impl.dart';
+import 'package:portfolio/features/auth/data/model/account.model.dart';
+import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'package:portfolio/features/auth/domain/repository/auth.repository.dart';
@@ -57,6 +59,45 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('sign out fail');
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<void>> insertAccount(AccountEntity entity) async {
+    try {
+      await _dataSource.insertAccount(AccountModel.fromEntity(entity));
+      return ResponseWrapper.success(null);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('insert account fail');
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<User>> updateMetaData(
+      {String? nickname, String? profileImage}) async {
+    try {
+      final user = await _dataSource.updateMetaData(
+          nickname: nickname, profileImage: profileImage);
+      return user == null
+          ? ResponseWrapper.error('update metadata fail')
+          : ResponseWrapper.success(user);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('update metadata fail');
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<void>> updateAccount(
+      {required String uid, String? nickname, String? profileImage}) async {
+    try {
+      await _dataSource.updateAccount(
+          uid: uid, nickname: nickname, profileImage: profileImage);
+      return ResponseWrapper.success(null);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('update account fail');
     }
   }
 }
