@@ -1,8 +1,12 @@
 part of "router.dart";
 
 enum RoutePaths {
-  splash("/"), auth("/auth"), main("/main");
-  final String path;
+  splash("/"),
+  signUp("/auth/sign-up"),
+  main("/main");
 
-  const RoutePaths(this.path);
+  final String path;
+  final String? subPath;
+
+  const RoutePaths(this.path, {this.subPath});
 }
