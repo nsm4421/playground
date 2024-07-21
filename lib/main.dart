@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/dependency_injection/configure_dependencies.dart';
 import 'core/route/router.dart';
 import 'core/theme/custom_theme_data.dart';
 
@@ -19,6 +22,9 @@ Future<void> main() async {
       url: dotenv.env["SUPABASE_URL"]!,
       anonKey: dotenv.env["SUPABASE_ANON_KEY"]!);
 
+  // 의존성 주입
+  configureDependencies();
+
   runApp(const MyApp());
 }
 
@@ -27,10 +33,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: router,
-      theme: CustomThemeData.themeData,
-      debugShowCheckedModeBanner: false,
+    return BlocProvider(
+      create: (_) => getIt<AuthBloc>()..add(InitAuthEvent()),
+      child: MaterialApp.router(
+        routerConfig: router,
+        theme: CustomThemeData.themeData,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

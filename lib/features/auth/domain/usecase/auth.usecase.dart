@@ -31,7 +31,7 @@ class SignInWithEmailAndPasswordUseCase {
   SignInWithEmailAndPasswordUseCase(this._repository);
 
   Future<ResponseWrapper<User>> call(String email, String password) async =>
-      await _repository.signUpWithEmailAndPassword(email, password);
+      await _repository.signInWithEmailAndPassword(email, password);
 }
 
 class SignOutUseCase {

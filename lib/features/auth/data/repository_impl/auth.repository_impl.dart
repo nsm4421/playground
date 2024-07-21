@@ -24,13 +24,13 @@ class AuthRepositoryImpl implements AuthRepository {
       String email, String password) async {
     try {
       final user =
-          await _dataSource.signUpWithEmailAndPassword(email, password);
+          await _dataSource.signInWithEmailAndPassword(email, password);
       return user == null
           ? ResponseWrapper.error('auth response is not valid')
           : ResponseWrapper.success(user);
     } catch (error) {
       _logger.e(error);
-      return ResponseWrapper.error('sign up fail');
+      return ResponseWrapper.error('sign in fail');
     }
   }
 
@@ -39,13 +39,13 @@ class AuthRepositoryImpl implements AuthRepository {
       String email, String password) async {
     try {
       final user =
-          await _dataSource.signInWithEmailAndPassword(email, password);
+          await _dataSource.signUpWithEmailAndPassword(email, password);
       return user == null
           ? ResponseWrapper.error('auth response is not valid')
           : ResponseWrapper.success(user);
     } catch (error) {
       _logger.e(error);
-      return ResponseWrapper.error('sign in fail');
+      return ResponseWrapper.error('sign up fail');
     }
   }
 

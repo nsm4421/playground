@@ -9,13 +9,14 @@ import 'auth.state.dart';
 
 part 'auth.event.dart';
 
-@injectable
+@singleton
 class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   final AuthUseCase _useCase;
 
   AuthBloc({required AuthUseCase useCase})
       : _useCase = useCase,
         super(const AuthenticationState()) {
+    on<InitAuthEvent>(_onInit);
     on<SignUpWithEmailAndPasswordEvent>(_onSignUp);
     on<SignInWithEmailAndPasswordEvent>(_onSignIn);
     on<SignOutEvent>(_onSignOut);
@@ -24,6 +25,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   User? get currentUser => _useCase.currentUser.call();
 
   Stream<AuthState> get authStream => _useCase.authStream.call();
+
+  Future<void> _onInit(
+      InitAuthEvent event, Emitter<AuthenticationState> emit) async {
+    emit(state.copyWith(status: Status.initial));
+  }
 
   Future<void> _onSignUp(SignUpWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
