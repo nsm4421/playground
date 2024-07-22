@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
-import 'package:portfolio/features/auth/presentation/pages/sign_in/sign_in.screen.dart';
+import 'package:portfolio/features/auth/presentation/pages/sign_in/sign_in.page.dart';
 import 'package:portfolio/features/common/presentation/pages/home.screen.dart';
 import 'package:portfolio/features/common/presentation/components/loading.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
             return const LoadingScreen();
           }
           return snapshot.data?.session == null
-              ? const SignInScreen()
+              ? const SignInPage()
               : const HomeScreen();
         });
   }

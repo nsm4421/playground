@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
-
-import '../../../../../core/route/router.dart';
+part of "sign_in.page.dart";
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -33,6 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   _handleSubmit() {
+    _formKey.currentState?.save();
     final ok = _formKey.currentState?.validate() ?? false;
     if (ok) {
       context.read<AuthBloc>().add(SignInWithEmailAndPasswordEvent(
@@ -80,25 +76,28 @@ class _SignInScreenState extends State<SignInScreen> {
                       prefixIconColor: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context)
-                            .colorScheme
-                            .primaryContainer), // 배경 색상 설정
-                  ),
-                  onPressed: _handleSubmit,
-                  child: Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: Text("Login",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary)))),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                          Theme.of(context)
+                              .colorScheme
+                              .primaryContainer), // 배경 색상 설정
+                    ),
+                    onPressed: _handleSubmit,
+                    child: Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: Text("Login",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary)))),
+              ),
               const Padding(
                   padding: EdgeInsets.symmetric(vertical: 3),
                   child: Divider(indent: 10, endIndent: 10, thickness: 0.8)),
@@ -108,26 +107,29 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(height: 20),
                   Text("Want to create account?",
                       style: Theme.of(context).textTheme.labelLarge),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer), // 배경 색상 설정
-                      ),
-                      onPressed: _handleMoveToSignUpPage,
-                      child: Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: Text("Sign Up",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary)))),
+                  const SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer), // 배경 색상 설정
+                        ),
+                        onPressed: _handleMoveToSignUpPage,
+                        child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Text("Sign Up",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary)))),
+                  ),
                 ],
               )
             ],
