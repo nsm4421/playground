@@ -11,6 +11,7 @@ class _SignInScreenState extends State<SignInScreen> {
   late GlobalKey<FormState> _formKey;
   late TextEditingController _emailTec;
   late TextEditingController _passwordTec;
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -37,6 +38,12 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   _handleMoveToSignUpPage() => context.push(RoutePaths.signUp.path);
+
+  _handlePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +76,20 @@ class _SignInScreenState extends State<SignInScreen> {
                       ? null
                       : "Press Password",
                   controller: _passwordTec,
+                  obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                       labelText: "PASSWORD",
                       border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: _isPasswordVisible
+                            ? const Icon(Icons.visibility_off,
+                                color: Colors.blueGrey)
+                            : const Icon(
+                                Icons.visibility,
+                                color: Colors.blueGrey,
+                              ),
+                        onPressed: _handlePasswordVisibility,
+                      ),
                       prefixIcon: const Icon(Icons.password),
                       prefixIconColor: Theme.of(context).colorScheme.primary),
                 ),

@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:portfolio/core/constant/status.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../main/core/constant/status.dart';
 
 part 'auth.state.freezed.dart';
 

@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constant/status.dart';
+import '../../../main/core/constant/status.dart';
 import '../../domain/usecase/auth.usecase_module.dart';
 import 'auth.state.dart';
 

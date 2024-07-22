@@ -6,10 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.state.dart';
-import 'package:portfolio/features/common/presentation/components/loading.screen.dart';
 
-import '../../../../../core/constant/status.dart';
-import '../../../../../core/route/router.dart';
+import '../../../../main/core/constant/status.dart';
+import '../../../../main/core/route/router.dart';
+import '../../../../main/presentation/components/loading.screen.dart';
 
 part "sign_in.screen.dart";
 

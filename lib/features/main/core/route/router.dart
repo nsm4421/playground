@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
-import 'package:portfolio/features/common/presentation/pages/main.page.dart';
-import '../../features/auth/presentation/pages/sign_up/sign-up.page.dart';
-import '../../features/common/presentation/pages/splash.page.dart';
+import '../../../auth/presentation/pages/sign_up/sign-up.page.dart';
+import '../../presentation/pages/main.page.dart';
+import '../../presentation/pages/splash/splash.page.dart';
 
 part "route_path.dart";
 

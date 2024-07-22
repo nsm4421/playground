@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:logger/logger.dart';
 import 'package:portfolio/features/auth/data/model/account.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constant/supabase_constant.dart';
+import '../../../main/core/constant/supabase_constant.dart';
 
 part "auth.datasource.dart";
 

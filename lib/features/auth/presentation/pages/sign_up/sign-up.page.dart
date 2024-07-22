@@ -8,9 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.state.dart';
-import 'package:portfolio/features/common/presentation/components/loading.screen.dart';
 
-import '../../../../../core/constant/status.dart';
+import '../../../../main/core/constant/status.dart';
+import '../../../../main/presentation/components/loading.screen.dart';
 
 part "sign_up.screen.dart";
 

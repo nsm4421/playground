@@ -5,9 +5,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'core/dependency_injection/configure_dependencies.dart';
-import 'core/route/router.dart';
-import 'core/theme/custom_theme_data.dart';
+import 'features/main/core/dependency_injection/configure_dependencies.dart';
+import 'features/main/core/route/router.dart';
+import 'features/main/core/theme/custom_theme_data.dart';
 
 Future<void> main() async {
   // splash 이미지
