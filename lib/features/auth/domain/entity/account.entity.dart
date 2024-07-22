@@ -18,7 +18,7 @@ class AccountEntity with _$AccountEntity {
       id: user.id,
       nickname: (user.userMetadata?.containsKey("nickname") ?? false)
           ? user.userMetadata!["nickname"]
-          : "",
+          : null,
       profileImage: (user.userMetadata?.containsKey("profile_image") ?? false)
           ? user.userMetadata!["profile_image"]
           : null,

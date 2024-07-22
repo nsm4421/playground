@@ -10,6 +10,5 @@ abstract class RemoteDataSource {
   final _client = Supabase.instance.client;
   final _logger = Logger();
 
-  AuthDataSource get auth =>
-      AuthDataSourceImpl(client: _client, logger: _logger);
+  AuthDataSource get auth => AuthDataSourceImpl(_client);
 }

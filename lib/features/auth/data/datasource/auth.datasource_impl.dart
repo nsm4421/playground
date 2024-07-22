@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:logger/logger.dart';
 import 'package:portfolio/features/auth/data/model/account.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -8,11 +10,8 @@ part "auth.datasource.dart";
 
 class AuthDataSourceImpl implements AuthDataSource {
   final SupabaseClient _client;
-  final Logger _logger;
 
-  AuthDataSourceImpl({required SupabaseClient client, required Logger logger})
-      : _client = client,
-        _logger = logger;
+  AuthDataSourceImpl(this._client);
 
   @override
   User? get currentUser => _client.auth.currentUser;
@@ -65,5 +64,23 @@ class AuthDataSourceImpl implements AuthDataSource {
       if (nickname != null) "nickname": nickname,
       if (profileImage != null) "profile_image": profileImage,
     }).eq("id", uid);
+  }
+
+  @override
+  Future<String> upsertProfileImage(
+      {required String uid, required File profileImage}) async {
+    final bytes = await profileImage.readAsBytes();
+    final fileName = 'profile_image_$uid';
+    await _client.storage.from(BucketName.profileImage.name).uploadBinary(
+          fileName,
+          bytes,
+          fileOptions: const FileOptions(
+            cacheControl: '3600',
+            upsert: true,
+          ),
+        );
+    return _client.storage
+        .from(BucketName.profileImage.name)
+        .getPublicUrl(fileName);
   }
 }

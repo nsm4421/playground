@@ -17,4 +17,7 @@ abstract interface class AuthDataSource {
 
   Future<void> updateAccount(
       {required String uid, String? nickname, String? profileImage});
+
+  Future<String> upsertProfileImage(
+      {required String uid, required File profileImage});
 }

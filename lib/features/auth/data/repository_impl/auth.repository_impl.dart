@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:portfolio/core/constant/response_wrapper.dart';
@@ -30,6 +32,9 @@ class AuthRepositoryImpl implements AuthRepository {
       return user == null
           ? ResponseWrapper.error('auth response is not valid')
           : ResponseWrapper.success(user);
+    } on AuthException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('sign in fail');
@@ -45,17 +50,23 @@ class AuthRepositoryImpl implements AuthRepository {
       return user == null
           ? ResponseWrapper.error('auth response is not valid')
           : ResponseWrapper.success(user);
+    } on AuthException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
     } catch (error) {
       _logger.e(error);
-      return ResponseWrapper.error('sign up fail');
+      return ResponseWrapper.error(
+          (error is AuthException) ? error.message : 'sign up fail');
     }
   }
 
   @override
   Future<ResponseWrapper<void>> signOut() async {
     try {
-      await _dataSource.signOut();
-      return ResponseWrapper.success(null);
+      return await _dataSource.signOut().then(ResponseWrapper.success);
+    } on AuthException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('sign out fail');
@@ -65,8 +76,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<ResponseWrapper<void>> insertAccount(AccountEntity entity) async {
     try {
-      await _dataSource.insertAccount(AccountModel.fromEntity(entity));
-      return ResponseWrapper.success(null);
+      return await _dataSource
+          .insertAccount(AccountModel.fromEntity(entity))
+          .then(ResponseWrapper.success);
+    } on PostgrestException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('insert account fail');
@@ -82,6 +97,9 @@ class AuthRepositoryImpl implements AuthRepository {
       return user == null
           ? ResponseWrapper.error('update metadata fail')
           : ResponseWrapper.success(user);
+    } on AuthException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('update metadata fail');
@@ -92,12 +110,32 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<ResponseWrapper<void>> updateAccount(
       {required String uid, String? nickname, String? profileImage}) async {
     try {
-      await _dataSource.updateAccount(
-          uid: uid, nickname: nickname, profileImage: profileImage);
-      return ResponseWrapper.success(null);
+      return await _dataSource
+          .updateAccount(
+              uid: uid, nickname: nickname, profileImage: profileImage)
+          .then(ResponseWrapper.success);
+    } on PostgrestException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('update account fail');
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<String>> upsertProfileImage(
+      {required String uid, required File profileImage}) async {
+    try {
+      return await _dataSource
+          .upsertProfileImage(uid: uid, profileImage: profileImage)
+          .then(ResponseWrapper.success);
+    } on StorageException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('upsert profile image fail');
     }
   }
 }

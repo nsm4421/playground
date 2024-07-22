@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -40,8 +42,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   Future<void> _onSignUp(SignUpWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
     emit(state.copyWith(status: Status.loading));
-    final res =
-        await _useCase.signUpWithEmailAndPassword(event.email, event.password);
+    final res = await _useCase.signUpWithEmailAndPassword(
+        profileImage: event.profileImage,
+        email: event.email,
+        password: event.password);
     if (res.ok && res.data != null) {
       emit(state.copyWith(status: Status.success, user: res.data!));
     } else {

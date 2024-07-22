@@ -5,3 +5,11 @@ enum TableName {
 
   const TableName(this.name);
 }
+
+enum BucketName {
+  profileImage("profile-image");
+
+  final String name;
+
+  const BucketName(this.name);
+}

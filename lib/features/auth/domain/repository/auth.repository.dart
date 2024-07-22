@@ -20,4 +20,7 @@ abstract interface class AuthRepository {
 
   Future<ResponseWrapper<void>> updateAccount(
       {required String uid, String? nickname, String? profileImage});
+
+  Future<ResponseWrapper<String>> upsertProfileImage(
+      {required String uid, required File profileImage});
 }
