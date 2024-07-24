@@ -12,7 +12,7 @@ class EntryFragment extends StatelessWidget {
       case BottomNav.home:
         return const Text("HOME");
       case BottomNav.chat:
-        return const Text("CHAT");
+        return const ChatPage();
       case BottomNav.setting:
         return const Text("SETTING");
     }

@@ -14,6 +14,8 @@ class CustomThemeData {
             primaryContainer: AppColors.primaryContainer.color,
             secondary: AppColors.secondary.color,
             onSecondary: AppColors.onSecondary.color,
+            tertiary: AppColors.tertiary.color,
+            tertiaryContainer: AppColors.tertiaryContainer.color,
             error: AppColors.error.color,
             onError: AppColors.onError.color,
             background: AppColors.background.color,
@@ -131,6 +133,13 @@ class CustomThemeData {
           ),
         ),
         dividerTheme: DividerThemeData(color: AppColors.outline.color),
+        appBarTheme: AppBarTheme(
+            color: AppColors.appbarColor.color,
+            titleTextStyle: TextStyle(
+                color: AppColors.white.color,
+                fontSize: 18,
+                fontWeight: FontWeights.bold.weight),
+            iconTheme: IconThemeData(color: AppColors.white.color)),
         tabBarTheme: TabBarTheme(
           indicator: UnderlineTabIndicator(
             borderSide: BorderSide(color: AppColors.primary.color, width: 2),
