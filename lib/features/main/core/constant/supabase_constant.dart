@@ -1,5 +1,6 @@
 enum TableName {
-  account("accounts");
+  account("accounts"),
+  openChatRoom("open_chat_rooms");
 
   final String name;
 
