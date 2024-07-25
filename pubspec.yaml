@@ -41,6 +41,7 @@ dependencies:
   fluttertoast: ^8.2.6
   image_picker: ^1.1.2
   uuid: ^4.4.2
+  timeago: ^3.0.2
 
 dev_dependencies:
   flutter_test:

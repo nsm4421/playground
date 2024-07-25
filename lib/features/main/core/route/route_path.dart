@@ -6,6 +6,7 @@ enum RoutePaths {
   main("/main"),
   chat("/chat"),
   openChat("/chat/open", subPath: "open"),
+  openChatRoom("/chat/open/room", subPath: "room"),
   createOpenChat("/chat/open/create", subPath: "create");
 
   final String path;

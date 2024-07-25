@@ -55,8 +55,13 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
     });
   }
 
-  // TODO
-  _handleSubmit() {}
+  _handleSubmit() {
+    _formKey.currentState?.save();
+    if (_formKey.currentState!.validate()) {
+      context.read<OpenChatBloc>().add(CreateOpenChatEvent(
+          title: _titleTec.text.trim(), hashtags: _hashtags));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +146,7 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
                                 .textTheme
                                 .titleMedium
                                 ?.copyWith(
+                                    fontWeight: FontWeight.bold,
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onPrimary)),
