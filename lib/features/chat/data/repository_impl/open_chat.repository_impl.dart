@@ -17,6 +17,10 @@ class OpenChatRepositoryImpl implements OpenChatRepository {
   OpenChatRepositoryImpl(this._dataSource);
 
   @override
+  Stream<List<OpenChatEntity>> get chatStream => _dataSource.chatStream
+      .asyncMap((event) => event.map(OpenChatEntity.fromModel).toList());
+
+  @override
   Future<ResponseWrapper<void>> createChat(OpenChatEntity chat) async {
     try {
       await _dataSource.createChat(OpenChatModel.fromEntity(chat));

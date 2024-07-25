@@ -5,7 +5,9 @@ import '../../../main/core/constant/response_wrapper.dart';
 import '../../data/repository_impl/open_chat.repository_impl.dart';
 import '../entity/open_chat.entity.dart';
 
-part "create_open_chat.usecase.dart";
+part "get_chat_stream.usecase.dart";
+
+part "create_chat.usecase.dart";
 
 @lazySingleton
 class ChatUseCase {
@@ -13,6 +15,10 @@ class ChatUseCase {
 
   ChatUseCase({required OpenChatRepository openChatRepository})
       : _openChatRepository = openChatRepository;
+
+  @injectable
+  GetOpenChatStreamUseCase get getOpenChatStream =>
+      GetOpenChatStreamUseCase(_openChatRepository);
 
   @injectable
   CreateOpenChatUseCase get createOpenChat =>
