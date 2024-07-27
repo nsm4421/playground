@@ -13,30 +13,24 @@ class _OpenChatRoomScreenState extends State<OpenChatRoomScreen> {
   late RealtimeChannel _channel;
   late PresenceEntity _currentPresence;
   List<PresenceEntity> _presences = [];
-  List<ChatMessageEntity> _messages = [];
 
   @override
   void initState() {
     super.initState();
     _currentPresence =
         PresenceEntity.fromEntity(context.read<AuthBloc>().account!);
-    _channel = context
-        .read<OpenChatBloc>()
-        .getOpenChatMessageChannel(
-            chatId: widget._chat.id!,
-            onInsert: (message) {
-              setState(() {
-                _messages.add(message);
-              });
-            })
-        // 채널 구독 시 이벤트
-        .subscribe((status, error) async {
+    _channel =
+        context.read<OpenChatRoomBloc>().getOpenChatMessageChannel((message) {
+      context.read<OpenChatRoomBloc>().add(NewOpenChatMessageEvent(message));
+    })
+            // 채널 구독 시 이벤트
+            .subscribe((status, error) async {
       if (status == RealtimeSubscribeStatus.subscribed) {
         await _channel.track(_currentPresence.toJson());
       }
     })
-        // 채팅방 입장 시
-        .onPresenceJoin((RealtimePresenceJoinPayload payload) {
+            // 채팅방 입장 시
+            .onPresenceJoin((RealtimePresenceJoinPayload payload) {
       final newPresences = payload.newPresences
           .map((p) => p.payload)
           .map(PresenceEntity.fromJson);
@@ -44,8 +38,8 @@ class _OpenChatRoomScreenState extends State<OpenChatRoomScreen> {
         _presences.addAll(newPresences);
       });
     })
-        // 채팅방 나가는 경우
-        .onPresenceLeave((RealtimePresenceLeavePayload payload) {
+            // 채팅방 나가는 경우
+            .onPresenceLeave((RealtimePresenceLeavePayload payload) {
       setState(() {
         final letUid = payload.leftPresences
             .map((p) => p.payload)
@@ -61,43 +55,7 @@ class _OpenChatRoomScreenState extends State<OpenChatRoomScreen> {
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-                  child: Text("Presences",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold)),
-                ),
-                const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                    child: Divider()),
-                ListView.separated(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final presence = _presences[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                            radius:
-                                min(25, MediaQuery.of(context).size.width / 10),
-                            backgroundImage: CachedNetworkImageProvider(
-                                presence.profileImage!)),
-                        title: Text(presence.nickname!),
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                        child: Divider()),
-                    itemCount: _presences.length),
-              ],
-            ),
-          );
+          return PresenceListFragment(_presences);
         });
   }
 
@@ -120,27 +78,22 @@ class _OpenChatRoomScreenState extends State<OpenChatRoomScreen> {
       ),
       body: Column(
         children: [
+          // 더 가져오기 버튼
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: FetchMoreButtonWidget(widget._chat.id!),
+          ),
+
           // 메시지 목록
           Expanded(
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: _messages.length,
-                itemBuilder: (context, index) {
-                  final message = _messages[index];
-                  return _currentPresence.id == message.createdBy
-                      ? MyMessageItemWidget(message)
-                      : OtherMessageItemWidget(
-                          message: message,
-                          presence: _presences
-                              .where((p) => p.id == message.createdBy)
-                              .firstOrNull);
-                }),
+            child: OpenChatMessageListFragment(
+                presences: _presences, currentPresence: _currentPresence),
           ),
 
           // 텍스트 입력창
-          Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: OpenChatRoomTextFieldWidget(widget._chat.id!))
+          const Padding(
+              padding: EdgeInsets.only(top: 4.0),
+              child: OpenChatRoomTextFieldWidget())
         ],
       ),
     );

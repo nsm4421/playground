@@ -15,14 +15,13 @@ class EntryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create:  (_) => getIt<BottomNavCubit>(),
+        create: (_) => getIt<BottomNavCubit>(),
         child: BlocBuilder<BottomNavCubit, BottomNav>(
-          builder: (context, state){
+          builder: (context, state) {
             return Scaffold(
-              body: EntryFragment(state),
-              bottomNavigationBar: BottomNavWidget(state)
-            );
+                body: EntryFragment(state),
+                bottomNavigationBar: BottomNavWidget(state));
           },
-        ) );
+        ));
   }
 }

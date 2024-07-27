@@ -13,7 +13,7 @@ class _DisplayOpenChatScreenState extends State<DisplayOpenChatScreen> {
   @override
   void initState() {
     super.initState();
-    _chatStream = context.read<OpenChatBloc>().openChatStream;
+    _chatStream = context.read<DisplayOpenChatCubit>().chatStream;
   }
 
   _handleMoveToChat(OpenChatEntity chat) => () {

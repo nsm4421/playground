@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/features/chat/domain/entity/open_chat.entity.dart';
-import 'package:portfolio/features/chat/presentation/bloc/open_chat.bloc.dart';
+import 'package:portfolio/features/chat/presentation/bloc/chat.bloc_module.dart';
+import 'package:portfolio/features/chat/presentation/bloc/display/display_open_chat.cubit.dart';
 import 'package:portfolio/features/main/presentation/components/hashtags.widget.dart';
 import 'package:portfolio/features/main/presentation/components/loading.screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -19,9 +20,9 @@ class DisplayOpenChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<OpenChatBloc>()..add(InitDisplayOpenChatEvent()),
-        child: BlocBuilder<OpenChatBloc, OpenChatState>(
-            builder: (BuildContext context, OpenChatState state) {
+        create: (_) => getIt<ChatBlocModule>().displayOpenChat,
+        child: BlocBuilder<DisplayOpenChatCubit, DisplayOpenChatState>(
+            builder: (context, state) {
           switch (state.status) {
             case Status.initial:
             case Status.success:

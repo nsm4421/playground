@@ -1,9 +1,7 @@
 part of "open_chat_room.page.dart";
 
 class OpenChatRoomTextFieldWidget extends StatefulWidget {
-  const OpenChatRoomTextFieldWidget(this._chatId, {super.key});
-
-  final String _chatId;
+  const OpenChatRoomTextFieldWidget({super.key});
 
   @override
   State<OpenChatRoomTextFieldWidget> createState() =>
@@ -31,8 +29,9 @@ class _OpenChatRoomTextFieldWidgetState
     if (content.isEmpty) {
       return;
     }
-    context.read<OpenChatBloc>().add(
-        SendOpenChatMessageEvent(content: content, chatId: widget._chatId));
+    context
+        .read<OpenChatRoomBloc>()
+        .add(SendOpenChatMessageEvent(content: content));
     _tec.clear();
   }
 
@@ -62,7 +61,8 @@ class _SendButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OpenChatBloc, OpenChatState>(builder: (context, state) {
+    return BlocBuilder<OpenChatRoomBloc, OpenChatRoomState>(
+        builder: (context, state) {
       switch (state.status) {
         case Status.initial:
         case Status.success:

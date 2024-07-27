@@ -58,8 +58,9 @@ class _CreateOpenChatScreenState extends State<CreateOpenChatScreen> {
   _handleSubmit() {
     _formKey.currentState?.save();
     if (_formKey.currentState!.validate()) {
-      context.read<OpenChatBloc>().add(CreateOpenChatEvent(
-          title: _titleTec.text.trim(), hashtags: _hashtags));
+      context
+          .read<CreateOpenChatCubit>()
+          .create(title: _titleTec.text.trim(), hashtags: _hashtags);
     }
   }
 
