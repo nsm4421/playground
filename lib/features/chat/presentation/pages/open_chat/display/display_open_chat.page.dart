@@ -7,25 +7,25 @@ import 'package:portfolio/features/main/presentation/components/hashtags.widget.
 import 'package:portfolio/features/main/presentation/components/loading.screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../../../main/core/constant/status.dart';
-import '../../../../main/core/dependency_injection/configure_dependencies.dart';
-import '../../../../main/core/route/router.dart';
+import '../../../../../main/core/constant/status.dart';
+import '../../../../../main/core/dependency_injection/configure_dependencies.dart';
+import '../../../../../main/core/route/router.dart';
 
-part 'open_chat.screen.dart';
+part 'display_open_chat.screen.dart';
 
-class OpenChatPage extends StatelessWidget {
-  const OpenChatPage({super.key});
+class DisplayOpenChatPage extends StatelessWidget {
+  const DisplayOpenChatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<OpenChatBloc>(),
+        create: (_) => getIt<OpenChatBloc>()..add(InitDisplayOpenChatEvent()),
         child: BlocBuilder<OpenChatBloc, OpenChatState>(
             builder: (BuildContext context, OpenChatState state) {
           switch (state.status) {
             case Status.initial:
             case Status.success:
-              return const OpenChatScreen();
+              return const DisplayOpenChatScreen();
             case Status.loading:
             case Status.error:
               return const LoadingScreen();

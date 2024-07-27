@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/features/chat/domain/entity/open_chat.entity.dart';
-import 'package:portfolio/features/chat/presentation/pages/open_chat/create_open_chat.page.dart';
-import 'package:portfolio/features/chat/presentation/pages/open_chat/open_chat.page.dart';
-import 'package:portfolio/features/chat/presentation/pages/open_chat/open_chat_room.page.dart';
+import 'package:portfolio/features/chat/presentation/pages/open_chat/create/create_open_chat.page.dart';
+import 'package:portfolio/features/chat/presentation/pages/open_chat/display/display_open_chat.page.dart';
+import 'package:portfolio/features/chat/presentation/pages/open_chat/chat_room/open_chat_room.page.dart';
 import '../../../auth/presentation/pages/sign_up/sign-up.page.dart';
 import '../../presentation/pages/main.page.dart';
 import '../../presentation/pages/splash/splash.page.dart';
@@ -30,7 +30,7 @@ final GoRouter router = GoRouter(routes: [
   GoRoute(
       path: RoutePaths.openChat.path,
       name: 'open-chat',
-      builder: (context, state) => const OpenChatPage(),
+      builder: (context, state) => const DisplayOpenChatPage(),
       routes: [
         GoRoute(
           path: RoutePaths.openChatRoom.subPath!,

@@ -1,13 +1,13 @@
-part of "open_chat.page.dart";
+part of "display_open_chat.page.dart";
 
-class OpenChatScreen extends StatefulWidget {
-  const OpenChatScreen({super.key});
+class DisplayOpenChatScreen extends StatefulWidget {
+  const DisplayOpenChatScreen({super.key});
 
   @override
-  State<OpenChatScreen> createState() => _OpenChatScreenState();
+  State<DisplayOpenChatScreen> createState() => _DisplayOpenChatScreenState();
 }
 
-class _OpenChatScreenState extends State<OpenChatScreen> {
+class _DisplayOpenChatScreenState extends State<DisplayOpenChatScreen> {
   late Stream<List<OpenChatEntity>> _chatStream;
 
   @override

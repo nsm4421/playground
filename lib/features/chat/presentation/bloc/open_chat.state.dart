@@ -12,5 +12,11 @@ class OpenChatState {
   }
 }
 
+/// 오픈 채팅방 목록
+class DisplayOpenChatState extends OpenChatState {}
+
 /// 오픈 채팅방 생성
 class CreateOpenChatState extends OpenChatState {}
+
+/// 오픈 채팅방
+class OpenChatRoomState extends OpenChatState {}

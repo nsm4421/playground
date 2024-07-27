@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:portfolio/features/chat/presentation/bloc/open_chat.bloc.dart';
 import 'package:portfolio/features/main/core/dependency_injection/configure_dependencies.dart';
 import 'package:portfolio/features/main/presentation/components/hashtags.widget.dart';
 import 'package:portfolio/features/main/presentation/components/loading.screen.dart';
 
-import '../../../../main/core/constant/status.dart';
+import '../../../../../main/core/constant/status.dart';
+import '../../../../../main/presentation/components/error.screen.dart';
 
 part 'create_open_chat.screen.dart';
 
@@ -20,7 +20,7 @@ class CreateOpenChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<OpenChatBloc>(),
+        create: (_) => getIt<OpenChatBloc>()..add(InitCreateOpenChatEvent()),
         child: BlocListener<OpenChatBloc, OpenChatState>(
           listener: (BuildContext context, OpenChatState state) {
             if (state.status == Status.success && context.mounted) {
