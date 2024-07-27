@@ -1,6 +1,8 @@
 enum TableName {
   account("accounts"),
-  openChatRoom("open_chat_rooms");
+  openChatRoom("open_chat_rooms"),
+  openChatMessage("open_chat_messages"),
+  ;
 
   final String name;
 

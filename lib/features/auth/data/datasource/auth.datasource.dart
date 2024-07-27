@@ -1,6 +1,14 @@
-part of "auth.datasource_impl.dart";
+import 'dart:io';
 
-abstract interface class AuthDataSource {
+import 'package:portfolio/features/main/core/constant/supabase_constant.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../main/data/datasource/base.datasource.dart';
+import '../model/account.model.dart';
+
+part "auth.datasource_impl.dart";
+
+abstract interface class AuthDataSource implements BaseDataSource {
   User? get currentUser;
 
   Stream<AuthState> get authStream;

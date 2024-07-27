@@ -9,17 +9,17 @@ import '../../../main/core/constant/response_wrapper.dart';
 
 
 
-part "edit_profile.usecase.dart";
+part "scenario/edit_profile.usecase.dart";
 
-part "get_current_user.usecase.dart";
+part "scenario/get_current_user.usecase.dart";
 
-part "get_auth_stream.usecase.dart";
+part "scenario/get_auth_stream.usecase.dart";
 
-part 'sign_up_with_email_and_password.usecase.dart';
+part 'scenario/sign_up_with_email_and_password.usecase.dart';
 
-part "sign_in_with_email_and_password.usecase.dart";
+part "scenario/sign_in_with_email_and_password.usecase.dart";
 
-part "sign_out.usecase.dart";
+part "scenario/sign_out.usecase.dart";
 
 @lazySingleton
 class AuthUseCase {

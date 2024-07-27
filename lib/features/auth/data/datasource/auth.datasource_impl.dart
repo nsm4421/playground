@@ -1,16 +1,12 @@
-import 'dart:io';
-
-import 'package:portfolio/features/auth/data/model/account.model.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../../main/core/constant/supabase_constant.dart';
-
-part "auth.datasource.dart";
+part of "auth.datasource.dart";
 
 class AuthDataSourceImpl implements AuthDataSource {
   final SupabaseClient _client;
 
   AuthDataSourceImpl(this._client);
+
+  @override
+  String get tableName => TableName.account.name;
 
   @override
   User? get currentUser => _client.auth.currentUser;
@@ -41,9 +37,7 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<void> insertAccount(AccountModel account) async {
-    return await _client.rest
-        .from(TableName.account.name)
-        .insert(account.toJson());
+    return await _client.rest.from(tableName).insert(account.toJson());
   }
 
   @override
@@ -59,7 +53,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<void> updateAccount(
       {required String uid, String? nickname, String? profileImage}) async {
-    return await _client.rest.from(TableName.account.name).update({
+    return await _client.rest.from(tableName).update({
       if (nickname != null) "nickname": nickname,
       if (profileImage != null) "profile_image": profileImage,
     }).eq("id", uid);

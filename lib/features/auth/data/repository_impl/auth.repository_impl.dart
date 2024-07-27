@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:portfolio/features/auth/data/datasource/auth.datasource_impl.dart';
 import 'package:portfolio/features/auth/data/model/account.model.dart';
 import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../main/core/constant/response_wrapper.dart';
+import '../datasource/auth.datasource.dart';
 
 part 'package:portfolio/features/auth/domain/repository/auth.repository.dart';
 

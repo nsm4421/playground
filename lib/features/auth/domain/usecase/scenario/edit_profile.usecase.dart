@@ -1,4 +1,4 @@
-part of "auth.usecase_module.dart";
+part of "../auth.usecase_module.dart";
 
 class EditProfileUseCase {
   final AuthRepository _repository;
