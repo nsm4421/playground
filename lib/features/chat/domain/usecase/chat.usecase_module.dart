@@ -15,6 +15,8 @@ part "scenario/get_open_chat_message_channel.usecase.dart";
 
 part "scenario/send_open_chat_message.uscase.dart";
 
+part 'scenario/fetch_open_chat_message.usecase.dart';
+
 @lazySingleton
 class ChatUseCase {
   final OpenChatRepository _openChatRepository;
@@ -31,6 +33,9 @@ class ChatUseCase {
 
   CreateOpenChatUseCase get createOpenChat =>
       CreateOpenChatUseCase(_openChatRepository);
+
+  FetchOpenChatMessageUseCase get fetchOpenChatMessages =>
+      FetchOpenChatMessageUseCase( _openChatMessageRepository);
 
   GetOpenChatMessageChannelUseCase get openChatMessageChannel =>
       GetOpenChatMessageChannelUseCase(_openChatMessageRepository);

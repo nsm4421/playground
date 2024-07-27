@@ -1,6 +1,13 @@
 part of 'package:portfolio/features/chat/data/repository_impl/open_chat_message.repository_impl.dart';
 
 abstract class OpenChatMessageRepository {
+  Future<ResponseWrapper<List<ChatMessageEntity>>> fetchMessages(
+      {required String chatId,
+      required DateTime beforeAt,
+      required int from,
+      required int to,
+      bool ascending = true});
+
   Future<ResponseWrapper<void>> createChatMessage(ChatMessageEntity entity);
 
   RealtimeChannel getMessageChannel({

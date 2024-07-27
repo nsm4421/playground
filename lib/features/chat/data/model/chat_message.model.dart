@@ -24,6 +24,6 @@ class ChatMessageModel with _$ChatMessageModel {
           id: entity.id ?? "",
           chat_id: entity.chatId ?? "",
           content: entity.content ?? "",
-          created_by: entity.createdBy ?? "",
+          created_by: entity.sender?.id ?? "",
           created_at: entity.createdAt);
 }

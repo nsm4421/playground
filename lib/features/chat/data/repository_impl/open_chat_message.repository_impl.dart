@@ -19,6 +19,32 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   OpenChatMessageRepositoryImpl(this._dataSource);
 
   @override
+  Future<ResponseWrapper<List<ChatMessageEntity>>> fetchMessages(
+      {required String chatId,
+      required DateTime beforeAt,
+      required int from,
+      required int to,
+      bool ascending = true}) async {
+    try {
+      return await _dataSource
+          .fetchMessages(
+              chatId: chatId,
+              beforeAt: beforeAt,
+              from: from,
+              to: to,
+              ascending: ascending)
+          .then((res) => res.map(ChatMessageEntity.fromModelWithUser).toList())
+          .then(ResponseWrapper.success);
+    } on PostgrestException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('fetch message fails');
+    }
+  }
+
+  @override
   Future<ResponseWrapper<void>> createChatMessage(
       ChatMessageEntity entity) async {
     try {

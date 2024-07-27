@@ -21,6 +21,23 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
   String get tableName => TableName.openChatMessage.name;
 
   @override
+  Future<Iterable<ChatMessageWithUserModel>> fetchMessages(
+      {required String chatId,
+      required DateTime beforeAt,
+      required int from,
+      required int to,
+      bool ascending = true}) async {
+    return await _client.rest
+        .from(tableName)
+        .select("*, user:${TableName.account.name}(*)")
+        .eq("chat_id", chatId)
+        .lte("created_at", beforeAt)
+        .order("created_at", ascending: ascending)
+        .range(from, to)
+        .then((res) => res.map(ChatMessageWithUserModel.fromJson));
+  }
+
+  @override
   Future<void> createChatMessage(ChatMessageModel model) async {
     final audited = audit(model);
     await _client.rest.from(tableName).insert(audited.toJson());

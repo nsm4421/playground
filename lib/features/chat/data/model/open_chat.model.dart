@@ -21,13 +21,12 @@ class OpenChatModel with _$OpenChatModel {
   factory OpenChatModel.fromJson(Map<String, dynamic> json) =>
       _$OpenChatModelFromJson(json);
 
-  factory OpenChatModel.fromEntity(OpenChatEntity entity) =>
-      OpenChatModel(
-          id: entity.id ?? "",
-          title: entity.title ?? "",
-          last_message: entity.lastMessage ?? "",
-          hashtags: entity.hashtags,
-          created_by: entity.createdBy ?? "",
-          last_talk_at: entity.lastTalkAt,
-          created_at: entity.createdAt);
+  factory OpenChatModel.fromEntity(OpenChatEntity entity) => OpenChatModel(
+      id: entity.id ?? "",
+      title: entity.title ?? "",
+      last_message: entity.lastMessage ?? "",
+      hashtags: entity.hashtags,
+      created_by: entity.createdBy ?? "",
+      last_talk_at: entity.lastTalkAt,
+      created_at: entity.createdAt);
 }
