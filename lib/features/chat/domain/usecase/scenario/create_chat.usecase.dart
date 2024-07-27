@@ -1,4 +1,4 @@
-part of "chat.usecase_module.dart";
+part of "../chat.usecase_module.dart";
 
 class CreateOpenChatUseCase {
   final OpenChatRepository _repository;
