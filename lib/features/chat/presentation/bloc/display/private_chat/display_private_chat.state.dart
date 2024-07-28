@@ -1,11 +1,21 @@
-part of "display_open_chat.cubit.dart";
+part of "display_private_chat.cubit.dart";
 
-class DisplayOpenChatState extends ChatState {
-  DisplayOpenChatState({super.status = Status.initial, super.message});
+class DisplayPrivateChatState extends ChatState {
+  DisplayPrivateChatState(
+      {super.status = Status.initial,
+      super.message,
+      this.chatMessages = const []});
+
+  final List<PrivateChatMessageEntity> chatMessages;
 
   @override
-  DisplayOpenChatState copyWith({Status? status, String? message}) {
-    return DisplayOpenChatState(
-        status: status ?? this.status, message: message ?? this.message);
+  DisplayPrivateChatState copyWith(
+      {Status? status,
+      String? message,
+      List<PrivateChatMessageEntity>? chatMessages}) {
+    return DisplayPrivateChatState(
+        status: status ?? this.status,
+        message: message ?? this.message,
+        chatMessages: chatMessages ?? this.chatMessages);
   }
 }

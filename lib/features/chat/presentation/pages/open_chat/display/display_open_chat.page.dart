@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/features/chat/domain/entity/open_chat.entity.dart';
 import 'package:portfolio/features/chat/presentation/bloc/chat.bloc_module.dart';
-import 'package:portfolio/features/chat/presentation/bloc/display/display_open_chat.cubit.dart';
+import 'package:portfolio/features/chat/presentation/bloc/display/open_chat/display_open_chat.cubit.dart';
 import 'package:portfolio/features/main/presentation/components/hashtags.widget.dart';
 import 'package:portfolio/features/main/presentation/components/loading.screen.dart';
 import 'package:timeago/timeago.dart' as timeago;

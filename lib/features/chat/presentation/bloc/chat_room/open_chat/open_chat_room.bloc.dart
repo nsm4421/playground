@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../main/core/constant/status.dart';
-import '../../../domain/entity/open_chat_message.entity.dart';
-import '../../../domain/usecase/chat.usecase_module.dart';
-import '../chat.bloc_module.dart';
+import '../../../../../main/core/constant/status.dart';
+import '../../../../domain/entity/open_chat_message.entity.dart';
+import '../../../../domain/usecase/chat.usecase_module.dart';
+import '../../chat.bloc_module.dart';
 
 part "open_chat_room.state.dart";
 
