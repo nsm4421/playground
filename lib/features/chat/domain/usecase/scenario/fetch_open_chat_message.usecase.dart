@@ -5,7 +5,7 @@ class FetchOpenChatMessageUseCase {
 
   FetchOpenChatMessageUseCase(this._repository);
 
-  Future<ResponseWrapper<List<ChatMessageEntity>>> call(
+  Future<ResponseWrapper<List<OpenChatMessageEntity>>> call(
       {required String chatId,
       required int page,
       required DateTime beforeAt,

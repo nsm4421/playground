@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:portfolio/features/chat/data/model/chat_message.model.dart';
-import 'package:portfolio/features/chat/domain/entity/chat_message.entity.dart';
+import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message.model.dart';
+import 'package:portfolio/features/chat/domain/entity/open_chat_message.entity.dart';
 import 'package:portfolio/features/main/core/constant/response_wrapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -19,7 +19,7 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   OpenChatMessageRepositoryImpl(this._dataSource);
 
   @override
-  Future<ResponseWrapper<List<ChatMessageEntity>>> fetchMessages(
+  Future<ResponseWrapper<List<OpenChatMessageEntity>>> fetchMessages(
       {required String chatId,
       required DateTime beforeAt,
       required int from,
@@ -33,7 +33,7 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
               from: from,
               to: to,
               ascending: ascending)
-          .then((res) => res.map(ChatMessageEntity.fromModelWithUser).toList())
+          .then((res) => res.map(OpenChatMessageEntity.fromModelWithUser).toList())
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
       _logger.e(error);
@@ -46,9 +46,9 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
 
   @override
   Future<ResponseWrapper<void>> createChatMessage(
-      ChatMessageEntity entity) async {
+      OpenChatMessageEntity entity) async {
     try {
-      await _dataSource.createChatMessage(ChatMessageModel.fromEntity(entity));
+      await _dataSource.createChatMessage(OpenChatMessageModel.fromEntity(entity));
       return ResponseWrapper.success(null);
     } on PostgrestException catch (error) {
       _logger.e(error);
@@ -62,27 +62,27 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   @override
   RealtimeChannel getMessageChannel(
       {required String chatId,
-      void Function(ChatMessageEntity newRecord)? onInsert,
-      void Function(ChatMessageEntity oldRecord, ChatMessageEntity newRecord)?
+      void Function(OpenChatMessageEntity newRecord)? onInsert,
+      void Function(OpenChatMessageEntity oldRecord, OpenChatMessageEntity newRecord)?
           onUpdate,
-      void Function(ChatMessageEntity oldRecord)? onDelete}) {
+      void Function(OpenChatMessageEntity oldRecord)? onDelete}) {
     return _dataSource.getMessageChannel(
       key: "open_chat_message:$chatId",
       onInsert: onInsert == null
           ? null
-          : (ChatMessageModel newModel) {
-              onInsert(ChatMessageEntity.fromModel(newModel));
+          : (OpenChatMessageModel newModel) {
+              onInsert(OpenChatMessageEntity.fromModel(newModel));
             },
       onUpdate: onUpdate == null
           ? null
-          : (ChatMessageModel oldModel, ChatMessageModel newModel) {
-              onUpdate(ChatMessageEntity.fromModel(oldModel),
-                  ChatMessageEntity.fromModel(newModel));
+          : (OpenChatMessageModel oldModel, OpenChatMessageModel newModel) {
+              onUpdate(OpenChatMessageEntity.fromModel(oldModel),
+                  OpenChatMessageEntity.fromModel(newModel));
             },
       onDelete: onDelete == null
           ? null
-          : (ChatMessageModel oldModel) {
-              onDelete(ChatMessageEntity.fromModel(oldModel));
+          : (OpenChatMessageModel oldModel) {
+              onDelete(OpenChatMessageEntity.fromModel(oldModel));
             },
     );
   }

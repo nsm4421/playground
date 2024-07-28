@@ -10,7 +10,7 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
         _logger = logger;
 
   @override
-  ChatMessageModel audit(ChatMessageModel model) {
+  OpenChatMessageModel audit(OpenChatMessageModel model) {
     return model.copyWith(
         id: const Uuid().v4(),
         created_at: DateTime.now().toUtc(),
@@ -21,7 +21,7 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
   String get tableName => TableName.openChatMessage.name;
 
   @override
-  Future<Iterable<ChatMessageWithUserModel>> fetchMessages(
+  Future<Iterable<OpenChatMessageWithUserModel>> fetchMessages(
       {required String chatId,
       required DateTime beforeAt,
       required int from,
@@ -34,11 +34,11 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
         .lte("created_at", beforeAt)
         .order("created_at", ascending: ascending)
         .range(from, to)
-        .then((res) => res.map(ChatMessageWithUserModel.fromJson));
+        .then((res) => res.map(OpenChatMessageWithUserModel.fromJson));
   }
 
   @override
-  Future<void> createChatMessage(ChatMessageModel model) async {
+  Future<void> createChatMessage(OpenChatMessageModel model) async {
     final audited = audit(model);
     await _client.rest.from(tableName).insert(audited.toJson());
   }
@@ -46,10 +46,10 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
   @override
   RealtimeChannel getMessageChannel(
       {required String key,
-      void Function(ChatMessageModel newModel)? onInsert,
-      void Function(ChatMessageModel oldModel, ChatMessageModel newModel)?
+      void Function(OpenChatMessageModel newModel)? onInsert,
+      void Function(OpenChatMessageModel oldModel, OpenChatMessageModel newModel)?
           onUpdate,
-      void Function(ChatMessageModel oldModel)? onDelete}) {
+      void Function(OpenChatMessageModel oldModel)? onDelete}) {
     return _client
         .channel(key, opts: RealtimeChannelConfig(key: key))
         .onPostgresChanges(
@@ -60,7 +60,7 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
                 ? _logger.d
                 : (PostgresChangePayload payload) {
                     _logger.d(payload.newRecord);
-                    onInsert(ChatMessageModel.fromJson(payload.newRecord));
+                    onInsert(OpenChatMessageModel.fromJson(payload.newRecord));
                   })
         .onPostgresChanges(
             event: PostgresChangeEvent.update,
@@ -70,8 +70,8 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
                 ? _logger.d
                 : (PostgresChangePayload payload) {
                     _logger.d(payload.oldRecord, payload.newRecord);
-                    onUpdate(ChatMessageModel.fromJson(payload.oldRecord),
-                        ChatMessageModel.fromJson(payload.newRecord));
+                    onUpdate(OpenChatMessageModel.fromJson(payload.oldRecord),
+                        OpenChatMessageModel.fromJson(payload.newRecord));
                   })
         .onPostgresChanges(
             event: PostgresChangeEvent.delete,
@@ -81,7 +81,7 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
                 ? _logger.d
                 : (PostgresChangePayload payload) {
                     _logger.d(payload.oldRecord, payload.oldRecord);
-                    onDelete(ChatMessageModel.fromJson(payload.oldRecord));
+                    onDelete(OpenChatMessageModel.fromJson(payload.oldRecord));
                   });
   }
 

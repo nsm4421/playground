@@ -16,7 +16,7 @@ final class SendOpenChatMessageEvent extends OpenChatRoomEvent {
 }
 
 final class NewOpenChatMessageEvent extends OpenChatRoomEvent {
-  final ChatMessageEntity message;
+  final OpenChatMessageEntity message;
 
   NewOpenChatMessageEvent(this.message);
 }

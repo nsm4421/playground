@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../main/core/constant/response_wrapper.dart';
 import '../../data/repository_impl/open_chat.repository_impl.dart';
 import '../../data/repository_impl/open_chat_message.repository_impl.dart';
-import '../entity/chat_message.entity.dart';
+import '../entity/open_chat_message.entity.dart';
 import '../entity/open_chat.entity.dart';
 
 part "scenario/get_chat_stream.usecase.dart";

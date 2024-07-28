@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../main/core/constant/status.dart';
-import '../../../domain/entity/chat_message.entity.dart';
+import '../../../domain/entity/open_chat_message.entity.dart';
 import '../../../domain/usecase/chat.usecase_module.dart';
 import '../chat.bloc_module.dart';
 
@@ -29,7 +29,7 @@ class OpenChatRoomBloc extends Bloc<OpenChatRoomEvent, OpenChatRoomState> {
   }
 
   RealtimeChannel getOpenChatMessageChannel(
-          void Function(ChatMessageEntity entity) onInsert) =>
+          void Function(OpenChatMessageEntity entity) onInsert) =>
       _useCase.openChatMessageChannel(chatId: _chatId, onInsert: onInsert);
 
   Future<void> _onInit(

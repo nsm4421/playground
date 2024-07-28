@@ -1,23 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
-import 'package:portfolio/features/chat/data/model/chat_message.model.dart';
-import 'package:portfolio/features/chat/data/model/chat_message_with_user.model.dart';
+import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message.model.dart';
+import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message_with_user.model.dart';
 
-part 'chat_message.entity.freezed.dart';
+part 'open_chat_message.entity.freezed.dart';
 
 @freezed
-class ChatMessageEntity with _$ChatMessageEntity {
-  const factory ChatMessageEntity({
+class OpenChatMessageEntity with _$OpenChatMessageEntity {
+  const factory OpenChatMessageEntity({
     String? id,
     String? chatId,
     String? content,
     AccountEntity? sender,
     DateTime? createdAt,
-  }) = _ChatMessageEntity;
+  }) = _OpenChatMessageEntity;
 
-  factory ChatMessageEntity.fromModel(ChatMessageModel model) =>
-      ChatMessageEntity(
+  factory OpenChatMessageEntity.fromModel(OpenChatMessageModel model) =>
+      OpenChatMessageEntity(
           id: model.id.isNotEmpty ? model.id : null,
           chatId: model.chat_id.isNotEmpty ? model.chat_id : null,
           content: model.content.isNotEmpty ? model.content : null,
@@ -26,8 +26,8 @@ class ChatMessageEntity with _$ChatMessageEntity {
               : null,
           createdAt: model.created_at);
 
-  factory ChatMessageEntity.fromModelWithUser(ChatMessageWithUserModel model) =>
-      ChatMessageEntity(
+  factory OpenChatMessageEntity.fromModelWithUser(OpenChatMessageWithUserModel model) =>
+      OpenChatMessageEntity(
           id: model.id.isNotEmpty ? model.id : null,
           chatId: model.chat_id.isNotEmpty ? model.chat_id : null,
           content: model.content.isNotEmpty ? model.content : null,

@@ -2,7 +2,7 @@ part of "open_chat_room.bloc.dart";
 
 final class OpenChatRoomState extends ChatState {
   final String _chatId;
-  final List<ChatMessageEntity> chatMessages;
+  final List<OpenChatMessageEntity> chatMessages;
   final bool isEnd;
 
   // 최초 fetchAt을 기준으로 이전 채팅메시지를 가져옴
@@ -21,7 +21,7 @@ final class OpenChatRoomState extends ChatState {
       {Status? status,
       String? message,
       bool? isEnd,
-      List<ChatMessageEntity>? chatMessages}) {
+      List<OpenChatMessageEntity>? chatMessages}) {
     return OpenChatRoomState(_chatId,
         status: status ?? this.status,
         message: message ?? this.message,

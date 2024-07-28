@@ -1,6 +1,7 @@
 enum TableName {
   account("accounts"),
   openChatRoom("open_chat_rooms"),
+  privateChatRoom("private_chat_rooms"),
   openChatMessage("open_chat_messages"),
   ;
 

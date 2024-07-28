@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:portfolio/features/auth/domain/entity/presence.entity.dart';
-import 'package:portfolio/features/chat/domain/entity/chat_message.entity.dart';
+import 'package:portfolio/features/chat/domain/entity/open_chat_message.entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class MyMessageItemWidget extends StatelessWidget {
   const MyMessageItemWidget(this._message, {super.key});
 
-  final ChatMessageEntity _message;
+  final OpenChatMessageEntity _message;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class OtherMessageItemWidget extends StatelessWidget {
   const OtherMessageItemWidget(
       {super.key, required this.message, required this.presence});
 
-  final ChatMessageEntity message;
+  final OpenChatMessageEntity message;
   final PresenceEntity? presence;
 
   @override

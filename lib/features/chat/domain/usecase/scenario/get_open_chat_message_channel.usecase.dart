@@ -7,7 +7,7 @@ class GetOpenChatMessageChannelUseCase {
 
   RealtimeChannel call(
       {required String chatId,
-      required void Function(ChatMessageEntity entity) onInsert}) {
+      required void Function(OpenChatMessageEntity entity) onInsert}) {
     return _repository.getMessageChannel(chatId: chatId, onInsert: onInsert);
   }
 }
