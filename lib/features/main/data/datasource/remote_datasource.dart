@@ -20,4 +20,7 @@ abstract class RemoteDataSource {
 
   OpenChatMessageDataSource get openChatMessage =>
       OpenChatMessageDataSourceImpl(client: _client, logger: _logger);
+
+  PrivateChatMessageDataSource get privateChatMessage =>
+      PrivateChatMessageDataSourceImpl(client: _client, logger: _logger);
 }
