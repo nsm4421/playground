@@ -7,12 +7,12 @@ class FetchPrivateChatMessageUseCase {
   FetchPrivateChatMessageUseCase(this._repository);
 
   Future<ResponseWrapper<List<PrivateChatMessageEntity>>> call(
-      {required String receiver,
+      {required String chatId,
       required DateTime beforeAt,
       int take = 20,
       bool ascending = true}) async {
     return await _repository.fetchMessages(
-        receiver: receiver,
+        chatId: chatId,
         beforeAt: beforeAt,
         take: take,
         ascending: ascending);

@@ -1,11 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:portfolio/features/chat/data/datasource/chat_message/chat_message.datasource.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/private_chat_message.model.dart';
+import 'package:portfolio/features/chat/data/model/private_chat_message/private_chat_message.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../main/core/constant/response_wrapper.dart';
 import '../../domain/entity/private_chat_message.entity.dart';
+import '../datasource/private_chat_message/private_chat_message.datasource_impl.dart';
 
 part 'package:portfolio/features/chat/domain/repository/private_chat_message.repository.dart';
 
@@ -69,14 +70,14 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
   @override
   Future<ResponseWrapper<List<PrivateChatMessageEntity>>> fetchMessages(
       {required DateTime beforeAt,
-      required String receiver,
+      required String chatId,
       int take = 20,
       bool ascending = true}) async {
     try {
       return await _dataSource
           .fetchMessages(
               beforeAt: beforeAt,
-              receiver: receiver,
+          chatId: chatId,
               take: take,
               ascending: ascending)
           .then((res) =>
@@ -92,15 +93,35 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
   }
 
   @override
-  RealtimeChannel getMessageChannel(
-      {required String currentUid,
+  RealtimeChannel getConversationChannel(
+      {required String chatId,
+      void Function(PrivateChatMessageEntity newRecord)? onInsert,
+      void Function(PrivateChatMessageEntity oldRecord,
+              PrivateChatMessageEntity newRecord)?
+          onUpdate,
+      void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
+    return _getMessageChannel(key: "conversation-channel:$chatId");
+  }
+
+  @override
+  RealtimeChannel getLastChatChannel(
+      {void Function(PrivateChatMessageEntity newRecord)? onInsert,
+      void Function(PrivateChatMessageEntity oldRecord,
+              PrivateChatMessageEntity newRecord)?
+          onUpdate,
+      void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
+    return _getMessageChannel(key: "last-message-channel:${const Uuid().v4()}");
+  }
+
+  RealtimeChannel _getMessageChannel(
+      {required String key,
       void Function(PrivateChatMessageEntity newRecord)? onInsert,
       void Function(PrivateChatMessageEntity oldRecord,
               PrivateChatMessageEntity newRecord)?
           onUpdate,
       void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
     return _dataSource.getMessageChannel(
-      key: "private_chat_message:$currentUid",
+      key: key,
       onInsert: onInsert == null
           ? null
           : (PrivateChatMessageModel newModel) {

@@ -1,4 +1,12 @@
-part of "chat.datasource.dart";
+import 'package:logger/logger.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../../main/core/constant/supabase_constant.dart';
+import '../../model/open_chat/open_chat.model.dart';
+import '../chat.datasource.dart';
+
+part "open_chat.datasource.dart";
 
 class OpenChatDataSourceImpl implements OpenChatDataSource {
   final SupabaseClient _client;
@@ -42,5 +50,10 @@ class OpenChatDataSourceImpl implements OpenChatDataSource {
       "last_message": lastMessage,
       "last_talk_at": DateTime.now().toUtc().toIso8601String()
     }).eq("id", chatId);
+  }
+
+  @override
+  Future<void> deleteChatById(String chatId) async {
+    await _client.rest.from(tableName).delete().eq("id", chatId);
   }
 }

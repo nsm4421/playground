@@ -1,17 +1,31 @@
 part of "../chat.usecase_module.dart";
 
-class GetPrivateChatMessageChannelUseCase {
+class GetConversationChannelUseCase {
   final PrivateChatMessageRepository _repository;
 
-  GetPrivateChatMessageChannelUseCase(this._repository);
+  GetConversationChannelUseCase(this._repository);
 
   RealtimeChannel call({
-    required String currentUid,
+    required String chatId,
     required void Function(PrivateChatMessageEntity entity) onInsert,
     required void Function(PrivateChatMessageEntity entity) onDelete,
   }) {
-    return _repository.getMessageChannel(
-        currentUid: currentUid, onInsert: onInsert, onDelete: onDelete);
+    return _repository.getConversationChannel(
+        chatId: chatId, onInsert: onInsert, onDelete: onDelete);
+  }
+}
+
+class GetLastChatChannelUseCase {
+  final PrivateChatMessageRepository _repository;
+
+  GetLastChatChannelUseCase(this._repository);
+
+  RealtimeChannel call({
+    required void Function(PrivateChatMessageEntity entity) onInsert,
+    required void Function(PrivateChatMessageEntity entity) onDelete,
+  }) {
+    return _repository.getLastChatChannel(
+        onInsert: onInsert, onDelete: onDelete);
   }
 }
 

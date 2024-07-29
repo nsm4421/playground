@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message.model.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message_with_user.model.dart';
+import 'package:portfolio/features/chat/data/model/open_chat_message/open_chat_message.model.dart';
+import 'package:portfolio/features/chat/data/model/open_chat_message/open_chat_message_with_user.model.dart';
 
 part 'open_chat_message.entity.freezed.dart';
 

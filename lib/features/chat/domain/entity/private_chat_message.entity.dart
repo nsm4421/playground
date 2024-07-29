@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/private_chat_message.model.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/private_chat_message_with_user.model.dart';
+import 'package:portfolio/features/chat/data/model/private_chat_message/private_chat_message.model.dart';
+import 'package:portfolio/features/chat/data/model/private_chat_message/private_chat_message_with_user.model.dart';
 
 import '../../../auth/domain/entity/account.entity.dart';
 
@@ -16,6 +16,7 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
     AccountEntity? sender,
     AccountEntity? receiver,
     DateTime? createdAt,
+    @Default(false) bool isRemoved,
   }) = _PrivateChatMessageEntity;
 
   factory PrivateChatMessageEntity.fromModel(PrivateChatMessageModel model) =>

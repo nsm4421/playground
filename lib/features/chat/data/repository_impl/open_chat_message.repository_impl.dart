@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message.model.dart';
+import 'package:portfolio/features/chat/data/model/open_chat_message/open_chat_message.model.dart';
 import 'package:portfolio/features/chat/domain/entity/open_chat_message.entity.dart';
 import 'package:portfolio/features/main/core/constant/response_wrapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../datasource/chat_message/chat_message.datasource.dart';
+import '../datasource/open_chat_message/open_chat_message.datasource_impl.dart';
 
 part 'package:portfolio/features/chat/domain/repository/open_chat_message.repository.dart';
 
@@ -33,7 +33,8 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
               from: from,
               to: to,
               ascending: ascending)
-          .then((res) => res.map(OpenChatMessageEntity.fromModelWithUser).toList())
+          .then((res) =>
+              res.map(OpenChatMessageEntity.fromModelWithUser).toList())
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
       _logger.e(error);
@@ -48,7 +49,8 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   Future<ResponseWrapper<void>> createChatMessage(
       OpenChatMessageEntity entity) async {
     try {
-      await _dataSource.createChatMessage(OpenChatMessageModel.fromEntity(entity));
+      await _dataSource
+          .createChatMessage(OpenChatMessageModel.fromEntity(entity));
       return ResponseWrapper.success(null);
     } on PostgrestException catch (error) {
       _logger.e(error);
@@ -63,7 +65,8 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
   RealtimeChannel getMessageChannel(
       {required String chatId,
       void Function(OpenChatMessageEntity newRecord)? onInsert,
-      void Function(OpenChatMessageEntity oldRecord, OpenChatMessageEntity newRecord)?
+      void Function(
+              OpenChatMessageEntity oldRecord, OpenChatMessageEntity newRecord)?
           onUpdate,
       void Function(OpenChatMessageEntity oldRecord)? onDelete}) {
     return _dataSource.getMessageChannel(

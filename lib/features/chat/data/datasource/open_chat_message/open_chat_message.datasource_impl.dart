@@ -1,4 +1,13 @@
-part of "chat_message.datasource.dart";
+import 'package:logger/logger.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../../main/core/constant/supabase_constant.dart';
+import '../../model/open_chat_message/open_chat_message.model.dart';
+import '../../model/open_chat_message/open_chat_message_with_user.model.dart';
+import '../chat_message.datasource.dart';
+
+part "open_chat_message.datasource.dart";
 
 class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
   final SupabaseClient _client;
@@ -47,7 +56,8 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
   RealtimeChannel getMessageChannel(
       {required String key,
       void Function(OpenChatMessageModel newModel)? onInsert,
-      void Function(OpenChatMessageModel oldModel, OpenChatMessageModel newModel)?
+      void Function(
+              OpenChatMessageModel oldModel, OpenChatMessageModel newModel)?
           onUpdate,
       void Function(OpenChatMessageModel oldModel)? onDelete}) {
     return _client

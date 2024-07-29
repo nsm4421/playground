@@ -1,4 +1,13 @@
-part of "chat_message.datasource.dart";
+import 'package:logger/logger.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../../main/core/constant/supabase_constant.dart';
+import '../../model/private_chat_message/private_chat_message.model.dart';
+import '../../model/private_chat_message/private_chat_message_with_user.model.dart';
+import '../chat_message.datasource.dart';
+
+part "private_chat_message.datasource.dart";
 
 class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
   final SupabaseClient _client;
@@ -23,7 +32,7 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
     return model.copyWith(
         id: const Uuid().v4(),
         created_at: DateTime.now().toUtc(),
-        chat_id: getChatId(model.receiver, sender: model.sender));
+        chat_id: getChatId(model.receiver));
   }
 
   @override
@@ -48,14 +57,14 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
   @override
   Future<Iterable<PrivateChatMessageWithUserModel>> fetchMessages(
       {required DateTime beforeAt,
-      required String receiver,
+      required String chatId,
       int take = 20,
       bool ascending = true}) async {
     return await _client.rest
         .from(tableName)
         .select(
             "id, chat_id, content, created_at, sender:${TableName.account.name}(*), receiver:${TableName.account.name}(*)")
-        .eq("chat_id", getChatId(receiver))
+        .eq("chat_id", chatId)
         .lte("created_at", beforeAt)
         .order("created_at", ascending: ascending)
         .range(0, take)

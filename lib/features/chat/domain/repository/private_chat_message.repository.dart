@@ -11,12 +11,20 @@ abstract class PrivateChatMessageRepository {
 
   Future<ResponseWrapper<List<PrivateChatMessageEntity>>> fetchMessages(
       {required DateTime beforeAt,
-      required String receiver,
+      required String chatId,
       int take = 20,
       bool ascending = true});
 
-  RealtimeChannel getMessageChannel({
-    required String currentUid,
+  RealtimeChannel getLastChatChannel({
+    void Function(PrivateChatMessageEntity newRecord)? onInsert,
+    void Function(PrivateChatMessageEntity oldRecord,
+            PrivateChatMessageEntity newRecord)?
+        onUpdate,
+    void Function(PrivateChatMessageEntity oldRecord)? onDelete,
+  });
+
+  RealtimeChannel getConversationChannel({
+    required String chatId,
     void Function(PrivateChatMessageEntity newRecord)? onInsert,
     void Function(PrivateChatMessageEntity oldRecord,
             PrivateChatMessageEntity newRecord)?

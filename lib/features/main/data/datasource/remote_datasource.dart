@@ -4,8 +4,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:logger/logger.dart';
 
 import '../../../auth/data/datasource/auth.datasource.dart';
-import '../../../chat/data/datasource/chat/chat.datasource.dart';
-import '../../../chat/data/datasource/chat_message/chat_message.datasource.dart';
+import '../../../chat/data/datasource/open_chat/open_chat.datasource_impl.dart';
+import '../../../chat/data/datasource/open_chat_message/open_chat_message.datasource_impl.dart';
+import '../../../chat/data/datasource/private_chat_message/private_chat_message.datasource_impl.dart';
 
 @module
 abstract class RemoteDataSource {

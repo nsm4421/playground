@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:portfolio/features/chat/data/repository_impl/private_chat_message.repository_impl.dart';
 import 'package:portfolio/features/chat/domain/entity/private_chat_message.entity.dart';
-import 'package:portfolio/features/chat/presentation/bloc/chat_room/private_chat/private_chat_room.bloc.dart';
+import 'package:portfolio/features/chat/presentation/bloc/private_chat/chat_room/private_chat_room.bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../main/core/constant/response_wrapper.dart';
@@ -57,8 +57,11 @@ class ChatUseCase {
       FetchOpenChatMessageUseCase(_openChatMessageRepository);
 
   /// 채널 가져오기
-  GetPrivateChatMessageChannelUseCase get privateChatMessageChannel =>
-      GetPrivateChatMessageChannelUseCase(_privateChatMessageRepository);
+  GetConversationChannelUseCase get conversationChannel =>
+      GetConversationChannelUseCase(_privateChatMessageRepository);
+
+  GetLastChatChannelUseCase get lastChatChannel =>
+      GetLastChatChannelUseCase(_privateChatMessageRepository);
 
   GetOpenChatMessageChannelUseCase get openChatMessageChannel =>
       GetOpenChatMessageChannelUseCase(_openChatMessageRepository);

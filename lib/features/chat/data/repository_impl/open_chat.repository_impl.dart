@@ -1,13 +1,11 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:portfolio/features/chat/data/model/chat_message/open_chat_message.model.dart';
-import 'package:portfolio/features/chat/data/model/chat/open_chat.model.dart';
-import 'package:portfolio/features/chat/domain/entity/open_chat_message.entity.dart';
+import 'package:portfolio/features/chat/data/model/open_chat/open_chat.model.dart';
 import 'package:portfolio/features/chat/domain/entity/open_chat.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../main/core/constant/response_wrapper.dart';
-import '../datasource/chat/chat.datasource.dart';
+import '../datasource/open_chat/open_chat.datasource_impl.dart';
 
 part 'package:portfolio/features/chat/domain/repository/open_chat.repository.dart';
 
