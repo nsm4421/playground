@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/features/chat/presentation/bloc/chat.bloc_module.dart';
-import 'package:portfolio/features/chat/presentation/bloc/create/create_open_chat.cubit.dart';
+import 'package:portfolio/features/chat/presentation/bloc/open_chat/create/create_open_chat.cubit.dart';
 import 'package:portfolio/features/main/core/dependency_injection/configure_dependencies.dart';
 import 'package:portfolio/features/main/presentation/components/hashtags.widget.dart';
 import 'package:portfolio/features/main/presentation/components/loading.screen.dart';

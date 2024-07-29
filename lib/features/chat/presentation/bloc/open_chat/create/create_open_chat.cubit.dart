@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../main/core/constant/status.dart';
-import '../../../domain/usecase/chat.usecase_module.dart';
-import '../chat.bloc_module.dart';
+import '../../../../../main/core/constant/status.dart';
+import '../../../../domain/usecase/chat.usecase_module.dart';
+import '../../chat.bloc_module.dart';
 
 part "create_open_chat.state.dart";
 

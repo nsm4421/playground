@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:portfolio/features/chat/presentation/pages/chat.page.dart';
+import 'package:portfolio/features/chat/presentation/pages/private_chat/display/display_private_chat.page.dart';
 
 import '../../../core/dependency_injection/configure_dependencies.dart';
 import '../../bloc/bottom_nav/bottom_nav.cubit.dart';

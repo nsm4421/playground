@@ -31,12 +31,11 @@ class PrivateChatRoomBloc
   }
 
   RealtimeChannel getPrivateChatMessageChannel({
-    required String currentUid,
     required void Function(PrivateChatMessageEntity entity) onInsert,
     required void Function(PrivateChatMessageEntity entity) onDelete,
   }) =>
-      _useCase.privateChatMessageChannel(
-          currentUid: currentUid, onInsert: onInsert, onDelete: onDelete);
+      _useCase.conversationChannel(
+          chatId: _chatId, onInsert: onInsert, onDelete: onDelete);
 
   Future<void> _onInit(
       InitPrivateChatRoomEvent event, Emitter<ChatState> emit) async {
@@ -97,9 +96,13 @@ class PrivateChatRoomBloc
   Future<void> _onDeletedMessage(AwarePrivateChatMessageDeletedEvent event,
       Emitter<ChatState> emit) async {
     try {
-      final messages = [...state.chatMessages];
-      messages.removeWhere((m) => m.id != event.messageId);
-      emit(state.copyWith(chatMessages: messages));
+      emit(state.copyWith(
+          chatMessages: state.chatMessages
+              .map((e) => (e.id == event.message.id)
+                  ? event.message
+                      .copyWith(content: "Removed Message", isRemoved: true)
+                  : e)
+              .toList()));
     } catch (error) {
       log(error.toString());
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
@@ -109,9 +112,8 @@ class PrivateChatRoomBloc
   Future<void> _onFetch(
       FetchPrivateChatMessageEvent event, Emitter<ChatState> emit) async {
     try {
-      const take = 20;
       final res = await _useCase.fetchPrivateChatMessages(
-          receiver: event.receiver, take: take, beforeAt: event.beforeAt);
+          chatId: _chatId, beforeAt: state.beforeAt, take: event.take);
       if (res.ok) {
         final data = res.data ?? [] as List<PrivateChatMessageEntity>;
         final beforeAt = data
@@ -119,7 +121,7 @@ class PrivateChatRoomBloc
             .createdAt;
         emit(state.copyWith(
             beforeAt: beforeAt,
-            isEnd: data.length < take,
+            isEnd: data.length < event.take,
             chatMessages: [...(res.data ?? []), ...state.chatMessages]));
       } else {
         emit(state.copyWith(status: Status.error));

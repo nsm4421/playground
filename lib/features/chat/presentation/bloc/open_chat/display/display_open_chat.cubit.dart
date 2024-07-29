@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:portfolio/features/chat/domain/entity/open_chat.entity.dart';
 
 import '../../../../../main/core/constant/status.dart';
+import '../../../../domain/entity/open_chat.entity.dart';
 import '../../../../domain/usecase/chat.usecase_module.dart';
 import '../../chat.bloc_module.dart';
 

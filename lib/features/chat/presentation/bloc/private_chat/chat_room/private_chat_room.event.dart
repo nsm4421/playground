@@ -29,16 +29,13 @@ final class AwareNewPrivateChatMessageEvent extends PrivateChatRoomEvent {
 }
 
 final class AwarePrivateChatMessageDeletedEvent extends PrivateChatRoomEvent {
-  final String messageId;
+  final PrivateChatMessageEntity message;
 
-  AwarePrivateChatMessageDeletedEvent(this.messageId);
+  AwarePrivateChatMessageDeletedEvent(this.message);
 }
 
 final class FetchPrivateChatMessageEvent extends PrivateChatRoomEvent {
-  final int page;
-  final String receiver;
-  final DateTime beforeAt;
+  final int take;
 
-  FetchPrivateChatMessageEvent(
-      {required this.page, required this.receiver, required this.beforeAt});
+  FetchPrivateChatMessageEvent({this.take = 20});
 }
