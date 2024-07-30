@@ -5,6 +5,7 @@ class LastPrivateChatListFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUid = context.read<AuthBloc>().currentUser!.id;
     return BlocBuilder<DisplayPrivateChatBloc, DisplayPrivateChatState>(
       builder: (context, state) {
         final messages = state.lastMessages;
@@ -16,8 +17,14 @@ class LastPrivateChatListFragment extends StatelessWidget {
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   final item = messages[index];
+                  final opponent = item.sender?.id == currentUid
+                      ? PresenceEntity.fromEntity(item.receiver!)
+                      : PresenceEntity.fromEntity(item.sender!);
                   return ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      context.push(RoutePaths.privateChatRoom.path,
+                          extra: opponent);
+                    },
                     title: Text(item.content ?? "content"),
                   );
                 });

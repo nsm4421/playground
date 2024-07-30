@@ -8,7 +8,7 @@ import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:portfolio/features/chat/domain/entity/open_chat.entity.dart';
 import 'package:portfolio/features/chat/presentation/bloc/chat.bloc_module.dart';
 import 'package:portfolio/features/chat/presentation/bloc/open_chat/chat_room/open_chat_room.bloc.dart';
-import 'package:portfolio/features/chat/presentation/pages/components/message_item.widget.dart';
+import 'package:portfolio/features/chat/presentation/pages/components/open_chat_message_item.widget.dart';
 import 'package:portfolio/features/main/core/dependency_injection/configure_dependencies.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

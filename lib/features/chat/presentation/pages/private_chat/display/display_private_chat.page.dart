@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:portfolio/features/chat/presentation/bloc/chat.bloc_module.dart';
 import 'package:portfolio/features/chat/presentation/bloc/private_chat/display/display_private_chat.bloc.dart';
 import 'package:portfolio/features/main/core/dependency_injection/configure_dependencies.dart';
@@ -9,6 +10,7 @@ import 'package:portfolio/features/main/presentation/components/error.screen.dar
 import 'package:portfolio/features/main/presentation/components/loading.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../../auth/domain/entity/presence.entity.dart';
 import '../../../../../main/core/constant/status.dart';
 
 part "display_private_chat.screen.dart";

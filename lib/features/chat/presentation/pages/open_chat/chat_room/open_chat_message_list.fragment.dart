@@ -18,13 +18,13 @@ class OpenChatMessageListFragment extends StatelessWidget {
           itemCount: state.chatMessages.length,
           itemBuilder: (context, index) {
             final message = state.chatMessages[index];
-            return _currentPresence.id == message.sender!.id
-                ? MyMessageItemWidget(message)
-                : OtherMessageItemWidget(
-                    message: message,
-                    presence: _presences
-                        .where((p) => p.id == message.sender!.id)
-                        .firstOrNull);
+            return OpenChatMessageItemWidget(
+              message: message,
+              isMine: _currentPresence.id == message.sender!.id,
+              presence: _presences
+                  .where((p) => p.id == message.sender!.id)
+                  .firstOrNull,
+            );
           });
     });
   }

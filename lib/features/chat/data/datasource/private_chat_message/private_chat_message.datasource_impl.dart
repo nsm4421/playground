@@ -51,12 +51,10 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
   @override
   Future<Iterable<PrivateChatMessageWithUserModelForRpc>> fetchLastMessages(
       DateTime afterAt) async {
-    return await _client.rpc("get_latest_private_chat_messages",
-        params: {"after_at": afterAt.toUtc().toIso8601String()}).then((res) {
-      // TODO : 버그수정
-      return [];
-      //   return (res as Iterable<Map<String, dynamic>>)
-      // .map(PrivateChatMessageWithUserModelForRpc.fromJson);
+    return await _client.rpc<List<Map<String, dynamic>>>(
+        "get_latest_private_chat_messages",
+        params: {"after_at": afterAt.toIso8601String()}).then((res) {
+      return res.map(PrivateChatMessageWithUserModelForRpc.fromJson);
     });
   }
 

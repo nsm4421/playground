@@ -44,9 +44,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
               icon: const Icon(Icons.people_alt_outlined))
         ],
       ),
-      body: const Column(
-        children: [LastPrivateChatListFragment()],
-      ),
+      body: const LastPrivateChatListFragment(),
     );
   }
 }

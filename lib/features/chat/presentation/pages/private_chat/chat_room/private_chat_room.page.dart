@@ -4,14 +4,24 @@ import 'package:portfolio/features/auth/domain/entity/presence.entity.dart';
 import 'package:portfolio/features/auth/presentation/bloc/auth.bloc.dart';
 import 'package:portfolio/features/chat/presentation/bloc/chat.bloc_module.dart';
 import 'package:portfolio/features/chat/presentation/bloc/private_chat/chat_room/private_chat_room.bloc.dart';
+import 'package:portfolio/features/chat/presentation/pages/components/private_chat_message_item.widget.dart';
 import 'package:portfolio/features/main/core/dependency_injection/configure_dependencies.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../../../main/core/constant/status.dart';
 
 part "private_chat_room.screen.dart";
 
-class PrivateChatRoomPage extends StatefulWidget {
-  const PrivateChatRoomPage(this.receiver, {super.key});
+part "private_chat_room_text_field.widget.dart";
 
-  final PresenceEntity receiver;
+part "private_chat_message_list.fragment.dart";
+
+part "fetch_more_button.widget.dart";
+
+class PrivateChatRoomPage extends StatefulWidget {
+  const PrivateChatRoomPage(this.opponent, {super.key});
+
+  final PresenceEntity opponent;
 
   @override
   State<PrivateChatRoomPage> createState() => _PrivateChatRoomPageState();
@@ -24,7 +34,7 @@ class _PrivateChatRoomPageState extends State<PrivateChatRoomPage> {
   void initState() {
     super.initState();
     final currentUid = context.read<AuthBloc>().currentUser!.id;
-    _chatId = ({currentUid, widget.receiver.id}.toList()..sort()).join("_");
+    _chatId = ({currentUid, widget.opponent.id}.toList()..sort()).join("_");
   }
 
   @override
@@ -33,6 +43,6 @@ class _PrivateChatRoomPageState extends State<PrivateChatRoomPage> {
         create: (_) => getIt<ChatBlocModule>().privateChatRoom(_chatId)
           ..add(FetchPrivateChatMessageEvent()),
         child:
-            PrivateChatRoomScreen(chatId: _chatId, receiver: widget.receiver));
+            PrivateChatRoomScreen(chatId: _chatId, opponent: widget.opponent));
   }
 }

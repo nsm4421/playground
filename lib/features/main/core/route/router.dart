@@ -48,8 +48,8 @@ final GoRouter router = GoRouter(routes: [
                   path: RoutePaths.privateChatRoom.subPath ?? "room",
                   name: "private-chat-room",
                   builder: (context, state) {
-                    final receiver = state.extra as PresenceEntity;
-                    return PrivateChatRoomPage(receiver);
+                    final opponent = state.extra as PresenceEntity;
+                    return PrivateChatRoomPage(opponent);
                   })
             ]),
 

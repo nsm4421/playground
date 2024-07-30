@@ -6,8 +6,30 @@ import 'package:portfolio/features/chat/domain/entity/open_chat_message.entity.d
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class MyMessageItemWidget extends StatelessWidget {
-  const MyMessageItemWidget(this._message, {super.key});
+class OpenChatMessageItemWidget extends StatelessWidget {
+  const OpenChatMessageItemWidget(
+      {super.key,
+      required OpenChatMessageEntity message,
+      PresenceEntity? presence,
+      isMine = true})
+      : _message = message,
+        _presence = presence,
+        _isMine = isMine;
+
+  final OpenChatMessageEntity _message;
+  final PresenceEntity? _presence;
+  final bool _isMine;
+
+  @override
+  Widget build(BuildContext context) {
+    return _isMine
+        ? _Mine(_message)
+        : _Others(message: _message, presence: _presence);
+  }
+}
+
+class _Mine extends StatelessWidget {
+  const _Mine(this._message, {super.key});
 
   final OpenChatMessageEntity _message;
 
@@ -56,12 +78,16 @@ class MyMessageItemWidget extends StatelessWidget {
   }
 }
 
-class OtherMessageItemWidget extends StatelessWidget {
-  const OtherMessageItemWidget(
-      {super.key, required this.message, required this.presence});
+class _Others extends StatelessWidget {
+  const _Others(
+      {super.key,
+      required OpenChatMessageEntity message,
+      PresenceEntity? presence})
+      : _message = message,
+        _presence = presence;
 
-  final OpenChatMessageEntity message;
-  final PresenceEntity? presence;
+  final OpenChatMessageEntity _message;
+  final PresenceEntity? _presence;
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +99,11 @@ class OtherMessageItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 프로필 사진
-          if (presence?.profileImage != null)
+          if (_presence?.profileImage != null)
             CircleAvatar(
                 radius: min(25, MediaQuery.of(context).size.width / 10),
                 backgroundImage: CachedNetworkImageProvider(
-                  presence!.profileImage!,
+                  _presence!.profileImage!,
                 )),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,10 +111,10 @@ class OtherMessageItemWidget extends StatelessWidget {
               // 닉네임
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                child: Text(presence?.nickname ?? "Left User",
+                child: Text(_presence?.nickname ?? "Left User",
                     overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: presence?.nickname == null
+                        color: _presence?.nickname == null
                             ? Theme.of(context).colorScheme.onSecondaryFixed
                             : Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.w600)),
@@ -110,7 +136,7 @@ class OtherMessageItemWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 3),
-                      child: Text(message.content ?? "",
+                      child: Text(_message.content ?? "",
                           overflow: TextOverflow.clip,
                           style: Theme.of(context)
                               .textTheme
@@ -128,7 +154,7 @@ class OtherMessageItemWidget extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(timeago.format(message.createdAt!),
+                          Text(timeago.format(_message.createdAt!),
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall

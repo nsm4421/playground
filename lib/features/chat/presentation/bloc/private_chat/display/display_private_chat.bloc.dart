@@ -35,8 +35,9 @@ class DisplayPrivateChatBloc
       FetchPrivateChatEvent event, Emitter<ChatState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
+      // TODO : 로컬 DB 기능 구현이 완료되면 afterAt에 local DB에서 가져온 시간을 넣기
       final res =
-          await _useCase.fetchLatestChatMessages(DateTime.now().toUtc());
+          await _useCase.fetchLatestChatMessages(DateTime.parse("1900-01-01 00:00:00.0000+00"));
       if (res.ok) {
         emit(state.copyWith(
             status: Status.success,
