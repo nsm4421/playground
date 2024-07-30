@@ -29,14 +29,17 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
 
   @override
   PrivateChatMessageModel audit(PrivateChatMessageModel model) {
+    final currentUid = _client.auth.currentUser!.id;
     return model.copyWith(
         id: const Uuid().v4(),
         created_at: DateTime.now().toUtc(),
-        chat_id: getChatId(model.receiver));
+        sender: currentUid,
+        chat_id: getChatId(model.receiver, sender: currentUid));
   }
 
   @override
   Future<void> createChatMessage(PrivateChatMessageModel model) async {
+    print(audit(model));
     return await _client.rest.from(tableName).insert(audit(model).toJson());
   }
 
@@ -48,10 +51,13 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
   @override
   Future<Iterable<PrivateChatMessageWithUserModelForRpc>> fetchLastMessages(
       DateTime afterAt) async {
-    return await _client.rpc("get_latest_private_chat_messages", params: {
-      "afterAt": afterAt.toUtc().toIso8601String()
-    }).then((res) => (res as Iterable<Map<String, dynamic>>)
-        .map(PrivateChatMessageWithUserModelForRpc.fromJson));
+    return await _client.rpc("get_latest_private_chat_messages",
+        params: {"after_at": afterAt.toUtc().toIso8601String()}).then((res) {
+      // TODO : 버그수정
+      return [];
+      //   return (res as Iterable<Map<String, dynamic>>)
+      // .map(PrivateChatMessageWithUserModelForRpc.fromJson);
+    });
   }
 
   @override
@@ -62,8 +68,9 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
       bool ascending = true}) async {
     return await _client.rest
         .from(tableName)
-        .select(
-            "id, chat_id, content, created_at, sender:${TableName.account.name}(*), receiver:${TableName.account.name}(*)")
+        .select("id, chat_id, content, created_at, "
+            "sender:${TableName.account.name}!private_chat_messages_sender_fkey(*), "
+            "receiver:${TableName.account.name}!private_chat_messages_receiver_fkey(*)")
         .eq("chat_id", chatId)
         .lte("created_at", beforeAt)
         .order("created_at", ascending: ascending)

@@ -39,6 +39,7 @@ class DisplayPrivateChatBloc
           await _useCase.fetchLatestChatMessages(DateTime.now().toUtc());
       if (res.ok) {
         emit(state.copyWith(
+            status: Status.success,
             lastMessages: event.isAppend
                 ? [...state.lastMessages, ...(res.data ?? [])]
                 : (res.data ?? [])));

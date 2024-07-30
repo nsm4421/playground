@@ -12,7 +12,7 @@ Private Chat Message Model
 ```
 drop function if exists get_latest_private_chat_messages(timestamptz);
 
-create or replace function get_latest_private_chat_messages(afterAt timestamptz)
+create or replace function get_latest_private_chat_messages(after_at timestamptz)
 returns table(id uuid, chat_id text, sender_uid uuid, sender_nickname text, sender_profile_image text, receiver_uid uuid, receiver_nickname text, receiver_profile_image text, content text, created_at timestamptz)
 language sql
 as $$
@@ -39,7 +39,7 @@ as $$
         from
             "private_chat_messages"
         where
-            created_at >= afterAt
+            created_at >= after_at
         ) A 
     join "accounts" B on A.sender = B.id
     join "accounts" C on A.receiver = C.id

@@ -77,7 +77,7 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
       return await _dataSource
           .fetchMessages(
               beforeAt: beforeAt,
-          chatId: chatId,
+              chatId: chatId,
               take: take,
               ascending: ascending)
           .then((res) =>
@@ -100,7 +100,11 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
               PrivateChatMessageEntity newRecord)?
           onUpdate,
       void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
-    return _getMessageChannel(key: "conversation-channel:$chatId");
+    return _getMessageChannel(
+        key: "conversation-channel:$chatId",
+        onInsert: onInsert,
+        onUpdate: onUpdate,
+        onDelete: onDelete);
   }
 
   @override
@@ -110,7 +114,11 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
               PrivateChatMessageEntity newRecord)?
           onUpdate,
       void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
-    return _getMessageChannel(key: "last-message-channel:${const Uuid().v4()}");
+    return _getMessageChannel(
+        key: "last-message-channel:${const Uuid().v4()}",
+        onInsert: onInsert,
+        onUpdate: onUpdate,
+        onDelete: onDelete);
   }
 
   RealtimeChannel _getMessageChannel(

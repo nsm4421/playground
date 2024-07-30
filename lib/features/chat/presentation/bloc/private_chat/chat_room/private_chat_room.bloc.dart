@@ -43,7 +43,7 @@ class PrivateChatRoomBloc
       emit(state.copyWith(
           status: event.status, message: event.message ?? state.message));
     } catch (error) {
-      log(error.toString());
+      log("getPrivateChatMessageChannel ${error.toString()}");
       emit(state.copyWith(
           status: Status.error, message: event.message ?? state.message));
     }
@@ -61,7 +61,7 @@ class PrivateChatRoomBloc
         emit(state.copyWith(status: Status.error, message: res.message));
       }
     } catch (error) {
-      log(error.toString());
+      log("_onSend ${error.toString()}");
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
     }
   }
@@ -77,7 +77,7 @@ class PrivateChatRoomBloc
         emit(state.copyWith(status: Status.error, message: res.message));
       }
     } catch (error) {
-      log(error.toString());
+      log("_onDelete ${error.toString()}");
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
     }
   }
@@ -88,7 +88,7 @@ class PrivateChatRoomBloc
       emit(
           state.copyWith(chatMessages: [...state.chatMessages, event.message]));
     } catch (error) {
-      log(error.toString());
+      log("_onNewMessage ${error.toString()}");
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
     }
   }
@@ -104,7 +104,7 @@ class PrivateChatRoomBloc
                   : e)
               .toList()));
     } catch (error) {
-      log(error.toString());
+      log("_onDeletedMessage ${error.toString()}");
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
     }
   }
@@ -116,9 +116,11 @@ class PrivateChatRoomBloc
           chatId: _chatId, beforeAt: state.beforeAt, take: event.take);
       if (res.ok) {
         final data = res.data ?? [] as List<PrivateChatMessageEntity>;
-        final beforeAt = data
-            .reduce((r, l) => r.createdAt!.isBefore(l.createdAt!) ? r : l)
-            .createdAt;
+        final beforeAt = data.isEmpty
+            ? DateTime.now().toUtc()
+            : data
+                .reduce((r, l) => r.createdAt!.isBefore(l.createdAt!) ? r : l)
+                .createdAt;
         emit(state.copyWith(
             beforeAt: beforeAt,
             isEnd: data.length < event.take,
@@ -127,7 +129,7 @@ class PrivateChatRoomBloc
         emit(state.copyWith(status: Status.error));
       }
     } catch (error) {
-      log(error.toString());
+      log("_onFetch ${error.toString()}");
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
     }
   }
