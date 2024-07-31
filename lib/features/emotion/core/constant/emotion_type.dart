@@ -1,0 +1,4 @@
+enum EmotionType {
+  like,
+  dislike;
+}

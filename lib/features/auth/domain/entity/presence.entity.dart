@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:portfolio/features/auth/data/model/account.model.dart';
 import 'package:portfolio/features/auth/domain/entity/account.entity.dart';
 
 part 'presence.entity.freezed.dart';
@@ -18,4 +19,7 @@ class PresenceEntity with _$PresenceEntity {
       id: entity.id,
       nickname: entity.nickname,
       profileImage: entity.profileImage);
+
+  factory PresenceEntity.fromModel(AccountModel model) =>
+      PresenceEntity.fromEntity(AccountEntity.fromModel(model));
 }

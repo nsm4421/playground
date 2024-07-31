@@ -18,8 +18,8 @@ class LastPrivateChatListFragment extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = messages[index];
                   final opponent = item.sender?.id == currentUid
-                      ? PresenceEntity.fromEntity(item.receiver!)
-                      : PresenceEntity.fromEntity(item.sender!);
+                      ? item.receiver
+                      : item.sender;
                   return ListTile(
                     onTap: () {
                       context.push(RoutePaths.privateChatRoom.path,

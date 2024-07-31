@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:portfolio/features/auth/domain/entity/presence.entity.dart';
 import 'package:portfolio/features/chat/data/model/private_chat_message/private_chat_message.model.dart';
 import 'package:portfolio/features/chat/data/model/private_chat_message/private_chat_message_with_user.model.dart';
-
-import '../../../auth/domain/entity/account.entity.dart';
 
 part 'private_chat_message.entity.freezed.dart';
 
@@ -13,8 +12,8 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
     String? id,
     String? chatId,
     String? content,
-    AccountEntity? sender,
-    AccountEntity? receiver,
+    PresenceEntity? sender,
+    PresenceEntity? receiver,
     DateTime? createdAt,
     @Default(false) bool isRemoved,
   }) = _PrivateChatMessageEntity;
@@ -25,9 +24,9 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
           chatId: model.chat_id.isNotEmpty ? model.chat_id : null,
           content: model.content.isNotEmpty ? model.content : null,
           sender:
-              model.sender.isNotEmpty ? AccountEntity(id: model.sender) : null,
+              model.sender.isNotEmpty ? PresenceEntity(id: model.sender) : null,
           receiver: model.receiver.isNotEmpty
-              ? AccountEntity(id: model.receiver)
+              ? PresenceEntity(id: model.receiver)
               : null,
           createdAt: model.created_at);
 
@@ -38,10 +37,10 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
           chatId: model.chat_id.isNotEmpty ? model.chat_id : null,
           content: model.content.isNotEmpty ? model.content : null,
           sender: model.sender.id.isNotEmpty
-              ? AccountEntity.fromModel(model.sender)
+              ? PresenceEntity.fromModel(model.sender)
               : null,
           receiver: model.receiver.id.isNotEmpty
-              ? AccountEntity.fromModel(model.receiver)
+              ? PresenceEntity.fromModel(model.receiver)
               : null,
           createdAt: model.created_at);
 
@@ -51,7 +50,7 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
           id: model.id.isNotEmpty ? model.id : null,
           chatId: model.chat_id.isNotEmpty ? model.chat_id : null,
           content: model.content.isNotEmpty ? model.content : null,
-          sender: AccountEntity(
+          sender: PresenceEntity(
             id: model.sender_uid.isNotEmpty ? model.sender_uid : null,
             nickname:
                 model.sender_nickname.isNotEmpty ? model.sender_nickname : null,
@@ -59,7 +58,7 @@ class PrivateChatMessageEntity with _$PrivateChatMessageEntity {
                 ? model.sender_profile_image
                 : null,
           ),
-          receiver: AccountEntity(
+          receiver: PresenceEntity(
             id: model.receiver_uid.isNotEmpty ? model.receiver_uid : null,
             nickname: model.receiver_nickname.isNotEmpty
                 ? model.receiver_nickname
