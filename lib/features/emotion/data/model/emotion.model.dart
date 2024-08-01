@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:portfolio/features/emotion/core/constant/emotion_type.dart';
 
+import '../../domain/entity/emotion.entity.dart';
+
 part 'emotion.model.freezed.dart';
 
 part 'emotion.model.g.dart';
@@ -18,4 +20,12 @@ class EmotionModel with _$EmotionModel {
 
   factory EmotionModel.fromJson(Map<String, dynamic> json) =>
       _$EmotionModelFromJson(json);
+
+  factory EmotionModel.fromEntity(EmotionEntity entity) => EmotionModel(
+      id: entity.id ?? "",
+      created_by: entity.createdBy ?? "",
+      type: entity.type,
+      reference_id: entity.referenceId ?? "",
+      reference_table: entity.referenceTable ?? "",
+      created_at: entity.createdAt);
 }
