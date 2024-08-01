@@ -8,7 +8,11 @@ abstract interface class FeedDataSource implements BaseDataSource {
 
   Future<void> createFeed(FeedModel model);
 
-  Future<void> modifyFeed(FeedModel model);
+  Future<void> modifyFeed(
+      {required String feedId,
+      String? content,
+      List<String>? media,
+      List<String>? hashtags});
 
   Future<void> deleteFeedById(String feedId);
 

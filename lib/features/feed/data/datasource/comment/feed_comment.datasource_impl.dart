@@ -1,7 +1,9 @@
 import 'package:logger/logger.dart';
 import 'package:portfolio/features/main/data/datasource/base.datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../../main/core/constant/supabase_constant.dart';
 import '../../model/comment/feed_comment.model.dart';
 import '../../model/comment/feed_comment_for_rpc.model.dart';
 
@@ -17,25 +19,26 @@ class FeedCommentDataSourceImpl implements FeedCommentDataSource {
         _logger = logger;
 
   @override
-  // TODO: implement tableName
-  String get tableName => throw UnimplementedError();
+  String get tableName => TableName.feedComment.name;
 
   @override
   FeedCommentModel audit(FeedCommentModel model) {
-    // TODO: implement audit
-    throw UnimplementedError();
+    return model.copyWith(
+        id: model.id.isNotEmpty ? model.id : const Uuid().v4(),
+        created_by: model.created_by.isNotEmpty
+            ? model.created_by
+            : _client.auth.currentUser!.id,
+        created_at: model.created_at ?? DateTime.now().toUtc());
   }
 
   @override
-  Future<void> createComment(FeedCommentModel model) {
-    // TODO: implement createComment
-    throw UnimplementedError();
+  Future<void> createComment(FeedCommentModel model) async {
+    await _client.rest.from(tableName).insert(audit(model).toJson());
   }
 
   @override
-  Future<void> deleteCommentById(String commentId) {
-    // TODO: implement deleteCommentById
-    throw UnimplementedError();
+  Future<void> deleteCommentById(String commentId) async {
+    await _client.rest.from(tableName).delete().eq("id", commentId);
   }
 
   @override

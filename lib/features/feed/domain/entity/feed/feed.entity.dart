@@ -17,6 +17,7 @@ class FeedEntity with _$FeedEntity {
     EmotionType? emotion,
     PresenceEntity? createdBy,
     @Default(false) isLike,
+    DateTime? createAt
   }) = _FeedEntity;
 
   factory FeedEntity.fromModel(FeedModel model) => FeedEntity(

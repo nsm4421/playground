@@ -14,7 +14,8 @@ enum TableName {
 }
 
 enum BucketName {
-  profileImage("profile-image");
+  profileImage("profile-image"),
+  feed("feed");
 
   final String name;
 

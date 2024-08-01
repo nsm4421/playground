@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:portfolio/features/feed/domain/entity/feed/feed.entity.dart';
 
 part 'feed.model.freezed.dart';
 
@@ -18,4 +19,12 @@ class FeedModel with _$FeedModel {
 
   factory FeedModel.fromJson(Map<String, dynamic> json) =>
       _$FeedModelFromJson(json);
+
+  factory FeedModel.fromEntity(FeedEntity entity) => FeedModel(
+      id: entity.id ?? "",
+      content: entity.content ?? "",
+      media: entity.media,
+      hashtags: entity.hashtags,
+      created_by: entity.createdBy?.id ?? "",
+      created_at: entity.createAt);
 }

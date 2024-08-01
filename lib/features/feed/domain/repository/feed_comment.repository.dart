@@ -7,7 +7,7 @@ abstract interface class FeedCommentRepository {
       int take = 20,
       bool ascending = true});
 
-  Future<void> createComment(FeedCommentEntity model);
+  Future<ResponseWrapper<void>> createComment(FeedCommentEntity model);
 
-  Future<void> deleteCommentById(String commentId);
+  Future<ResponseWrapper<void>> deleteCommentById(String commentId);
 }
