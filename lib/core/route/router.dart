@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:portfolio/domain/entity/chat/open_chat.entity.dart';
+import 'package:portfolio/presentation/pages/feed/create/create_feed.page.dart';
 
 import '../../presentation/pages/main/components/error.screen.dart';
 import '../../presentation/pages/auth/sign_up/sign-up.page.dart';
@@ -29,6 +30,13 @@ final GoRouter router = GoRouter(routes: [
     path: RoutePaths.main.path,
     name: 'main',
     builder: (context, state) => const MainPage(),
+  ),
+
+  /// 피드
+  GoRoute(
+    path: RoutePaths.createFeed.path,
+    name: 'create-feed',
+    builder: (context, state) => const CreateFeedPage(),
   ),
 
   /// 채팅

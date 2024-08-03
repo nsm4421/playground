@@ -5,6 +5,7 @@ enum RoutePaths {
   signUp("/auth/sign-up"),
   main("/main"),
   chat("/chat"),
+  createFeed("/feed/create"),
   privateChat("/chat/private", subPath: "private"),
   privateChatRoom("/chat/private/room", subPath: "room"),
   openChat("/chat/open", subPath: "open"),
