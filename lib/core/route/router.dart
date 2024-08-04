@@ -1,8 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:portfolio/domain/entity/chat/open_chat.entity.dart';
-import 'package:portfolio/presentation/pages/feed/create/create_feed.page.dart';
+import 'package:portfolio/domain/entity/feed/feed.entity.dart';
+import 'package:portfolio/presentation/pages/feed/create/comment/create_feed_comment.page.dart';
+import 'package:portfolio/presentation/pages/feed/create/feed/create_feed.page.dart';
+import 'package:portfolio/presentation/pages/feed/display/comment/display_feed_comment.page.dart';
+import 'package:portfolio/presentation/pages/feed/display/feed/display_feed.page.dart';
 
+import '../../data/model/feed/feed/feed.model.dart';
 import '../../presentation/pages/main/components/error.screen.dart';
 import '../../presentation/pages/auth/sign_up/sign-up.page.dart';
 import '../../presentation/pages/chat/open_chat/chat_room/open_chat_room.page.dart';
@@ -34,10 +39,36 @@ final GoRouter router = GoRouter(routes: [
 
   /// 피드
   GoRoute(
-    path: RoutePaths.createFeed.path,
-    name: 'create-feed',
-    builder: (context, state) => const CreateFeedPage(),
-  ),
+      path: RoutePaths.feed.path,
+      name: 'feed',
+      builder: (context, state) => const DisplayFeedPage(),
+      routes: [
+        // 피드 작성
+        GoRoute(
+          path: RoutePaths.createFeed.subPath!,
+          name: 'create-feed',
+          builder: (context, state) => const CreateFeedPage(),
+        ),
+        // 댓글 목록
+        GoRoute(
+            path: RoutePaths.feedComment.subPath!,
+            name: 'comment',
+            builder: (context, state) {
+              final feed = state.extra as FeedEntity;
+              return DisplayFeedCommentPage(feed);
+            },
+            routes: [
+              // 댓글 작성
+              GoRoute(
+                path: RoutePaths.createComment.subPath!,
+                name: 'create-feed-comment',
+                builder: (context, state) {
+                  final feedId = state.extra as String;
+                  return CreateFeedCommentPage(feedId);
+                },
+              ),
+            ]),
+      ]),
 
   /// 채팅
   GoRoute(

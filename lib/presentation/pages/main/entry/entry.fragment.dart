@@ -10,7 +10,7 @@ class EntryFragment extends StatelessWidget {
     switch (item) {
       // TODO : UI 구현하기
       case BottomNav.home:
-        return const FeedPage();
+        return const DisplayFeedPage();
       case BottomNav.chat:
         return const DisplayPrivateChatPage();
       case BottomNav.setting:
