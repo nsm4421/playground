@@ -9,12 +9,13 @@ class CreateFeedScreen extends StatefulWidget {
 
 class _CreateFeedScreenState extends State<CreateFeedScreen> {
   static const _maxHashtagNum = 5;
+  static const _maxMediaNum = 5;
   late ImagePicker _picker;
   late TextEditingController _contentTec;
   late TextEditingController _hashtagTec;
   late GlobalKey<FormState> _formKey;
-  List<XFile> _xFiles = [];
-  List<String> _hashtags = [];
+  final List<XFile> _xFiles = [];
+  final List<String> _hashtags = [];
 
   @override
   void initState() {
@@ -47,7 +48,12 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   _handleSelectMedia() async {
     await _picker.pickMultiImage(imageQuality: 90).then((res) {
       setState(() {
-        _xFiles.addAll(res);
+        if (_xFiles.length + res.length > _maxMediaNum) {
+          _xFiles.addAll(res.getRange(0, _maxHashtagNum - _xFiles.length));
+          Fluttertoast.showToast(msg: 'Too Many Images');
+        } else {
+          _xFiles.addAll(res);
+        }
       });
     });
   }

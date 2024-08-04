@@ -7,14 +7,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portfolio/core/dependency_injection/configure_dependencies.dart';
-import 'package:portfolio/presentation/bloc/feed/create/create_feed.cubit.dart';
-import 'package:portfolio/presentation/bloc/feed/feed.bolc_module.dart';
+import 'package:portfolio/presentation/bloc/feed/create/feed/create_feed.cubit.dart';
+import 'package:portfolio/presentation/bloc/feed/feed.bloc_module.dart';
 import 'package:portfolio/presentation/pages/main/components/error.screen.dart';
 import 'package:portfolio/presentation/pages/main/components/hashtags.widget.dart';
 import 'package:portfolio/presentation/pages/main/components/loading.screen.dart';
 
-import '../../../../core/constant/status.dart';
-import '../../../bloc/feed/create/create_feed.state.dart';
+import '../../../../../core/constant/status.dart';
+import '../../../../bloc/feed/create/feed/create_feed.state.dart';
 
 part "create_feed.screen.dart";
 
@@ -24,7 +24,7 @@ class CreateFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<FeedBlocModule>().create,
+        create: (_) => getIt<FeedBlocModule>().createFeed,
         child: BlocListener<CreateFeedCubit, CreateFeedState>(
             listener: (BuildContext context, state) {
           if (state.status == Status.success && context.mounted) {
