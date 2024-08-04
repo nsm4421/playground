@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portfolio/domain/usecase/feed/feed.usecase_module.dart';
-import 'package:portfolio/presentation/bloc/feed/create/create_feed.state.dart';
+import 'package:portfolio/presentation/bloc/feed/create/feed/create_feed.state.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/constant/status.dart';
+import '../../../../../core/constant/status.dart';
 
 class CreateFeedCubit extends Cubit<CreateFeedState> {
   CreateFeedCubit(this._feedUseCase) : super(const CreateFeedState());
