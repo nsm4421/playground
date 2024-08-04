@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:portfolio/domain/entity/auth/presence.entity.dart';
-import 'package:portfolio/core/constant/emotion_type.dart';
+import 'package:portfolio/domain/entity/emotion/emotion.entity.dart';
 
 import '../../../data/model/feed/comment/feed_comment.model.dart';
 import '../../../data/model/feed/comment/feed_comment_for_rpc.model.dart';
@@ -15,7 +15,7 @@ class FeedCommentEntity with _$FeedCommentEntity {
     String? feedId,
     String? content,
     PresenceEntity? createdBy,
-    EmotionType? emotion,
+    EmotionEntity? emotion,
     DateTime? createdAt,
   }) = _FeedCommentEntity;
 
@@ -33,7 +33,14 @@ class FeedCommentEntity with _$FeedCommentEntity {
           id: model.id.isNotEmpty ? model.id : null,
           feedId: model.feed_id.isNotEmpty ? model.feed_id : null,
           content: model.content.isNotEmpty ? model.content : null,
-          emotion: model.emotion?.type,
-          createdBy: PresenceEntity.fromModel(model.created_by),
+          emotion: (model.emotion_id != null && model.emotion_type != null)
+              ? EmotionEntity(id: model.emotion_id, type: model.emotion_type!)
+              : null,
+          createdBy: model.author_id.isNotEmpty
+              ? PresenceEntity(
+                  id: model.author_id,
+                  nickname: model.author_nickname,
+                  profileImage: model.author_profile_image)
+              : null,
           createdAt: model.created_at);
 }

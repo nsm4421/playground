@@ -45,9 +45,15 @@ class FeedCommentDataSourceImpl implements FeedCommentDataSource {
   Future<Iterable<FeedCommentModelForRpc>> fetchComments(
       {required DateTime beforeAt,
       required String feedId,
-      int take = 20,
-      bool ascending = true}) {
-    // TODO: implement fetchComments
-    throw UnimplementedError();
+      int take = 20}) async {
+    return await _client
+        .rpc<List<Map<String, dynamic>>>(RpcName.fetchComments.name, params: {
+      'fid': feedId,
+      'before_at': beforeAt.toIso8601String(),
+      'take': take
+    }).then((res) {
+      _logger.d(res);
+      return res.map(FeedCommentModelForRpc.fromJson);
+    });
   }
 }

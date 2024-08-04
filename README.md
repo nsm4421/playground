@@ -1,11 +1,130 @@
-Private Chat Message Model
+# RPC
 
-    Fields
+## Feed Model
+
+    returns
+    
+    - id
+    - content  
+    - media
+    - hashtags
+    - author_id
+    - author_nickname
+    - author_profile_image
+    - created_at
+    - emotion_type
+```
+drop function if exists fetch_feeds(timestamptz, int);
+
+create or replace function fetch_feeds(before_at timestamptz, take int)
+returns table(
+    id uuid, 
+    content text, 
+    media text[], 
+    hashtags text[], 
+    created_at timestamptz,
+    author_id uuid, 
+    author_nickname text, 
+    author_profile_image text, 
+    emotion_id text,
+    emotion_type text
+)
+language sql
+as $$
+    select
+        A.id as feed_id,
+        A.content as content,
+        A.media as media,
+        A.hashtags as hashtags,
+        A.created_at as created_at,
+        B.id as author_id,
+        B.nickname as author_nickname,
+        B.profile_image as author_profile_image,
+        C.id as emotion_id,
+        C.type as emotion_type
+    from (
+            select * 
+            from feeds 
+            where created_at < before_at
+        ) A 
+        left join accounts B on A.created_by = B.id
+        left join (
+            select * 
+            from emotions
+            where reference_table = 'feeds' 
+        ) C on A.created_by = C.created_by and A.id = C.reference_id
+    order by A.created_at desc
+    limit (take);
+$$;
+```
+
+## Feed Comment Model
+
+    returns
+    
+    - comment_id
+    - feed_id
+    - content  
+    - author_id
+    - author_nickname
+    - author_profile_image
+    - created_at
+    - emotion_id
+    - emotion_type
+```
+drop function if exists fetch_comments(uuid, timestamptz, int);
+
+create or replace function fetch_comments(fid uuid, before_at timestamptz, take int)
+returns table(
+    id uuid,
+    feed_id uuid, 
+    content text, 
+    created_at timestamptz,    
+    author_id uuid, 
+    author_nickname text, 
+    author_profile_image text,     
+    emotion_id text,
+    emotion_type text 
+)
+language sql
+as $$
+    select
+        A.id as id,
+        A.feed_id as feed_id,
+        A.content as content,
+        A.created_at as created_at,
+        B.id as author_id,
+        B.nickname as author_nickname,
+        B.profile_image as author_profile_image,
+        C.id as emotion_id,
+        C.type as emotion_type
+    from (
+            select *
+            from feed_comments
+            where created_at < before_at and fid = feed_id
+        ) A left join accounts B on A.created_by = B.id
+        left join (
+            select *
+            from emotions
+            where reference_table = 'feed_comments'
+        ) C on A.created_by = C.created_by and A.id = C.reference_id
+    order by A.created_at desc
+    limit(take);
+$$;
+```
+
+## Private Chat Message Model
+
+    returns
     
     - id
     - chat_id  
-    - sender
-    - receiver
+    - sender_uid
+    - sender_nickname
+    - sender_profile_image    
+    - receiver_uid
+    - receiver_nickname
+    - receiver_profile_image
     - content
     - created_at
 
@@ -47,5 +166,3 @@ as $$
     order by A.created_at desc;
 $$;
 ```
-
-

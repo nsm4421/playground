@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:portfolio/data/model/emotion/emotion.model.dart';
-
-import '../../../../../data/model/auth/account.model.dart';
+import '../../../../core/constant/emotion_type.dart';
 
 part 'feed_model_for_rpc.model.freezed.dart';
+
 part 'feed_model_for_rpc.model.g.dart';
 
 @freezed
@@ -14,8 +13,11 @@ class FeedModelForRpc with _$FeedModelForRpc {
     @Default('') String content,
     @Default(<String>[]) List<String> media,
     @Default(<String>[]) List<String> hashtags,
-    @Default(AccountModel()) AccountModel created_by,
-    EmotionModel? emotion,
+    @Default('') String author_id,
+    @Default('') String author_nickname,
+    @Default('') String author_profile_image,
+    String? emotion_id,
+    EmotionType? emotion_type,
     DateTime? created_at,
   }) = _FeedModelForRpc;
 

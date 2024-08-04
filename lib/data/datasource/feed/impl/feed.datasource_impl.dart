@@ -56,9 +56,12 @@ class FeedDataSourceImpl implements FeedDataSource {
 
   @override
   Future<Iterable<FeedModelForRpc>> fetchFeeds(
-      {required DateTime beforeAt, int take = 20, bool ascending = true}) {
-    // TODO: implement fetchFeeds
-    throw UnimplementedError();
+      {required DateTime beforeAt, int take = 20}) async {
+    return await _client
+        .rpc<List<Map<String, dynamic>>>(RpcName.fetchFeeds.name, params: {
+      "before_at": beforeAt.toIso8601String(),
+      'take': take
+    }).then((res) => res.map(FeedModelForRpc.fromJson));
   }
 
   @override
@@ -78,7 +81,7 @@ class FeedDataSourceImpl implements FeedDataSource {
             ),
           )
           .then((_) => _client.storage
-              .from(BucketName.profileImage.name)
+              .from(BucketName.feed.name)
               .getPublicUrl(fileName));
     }));
   }

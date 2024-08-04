@@ -1,10 +1,8 @@
 part of "../impl/feed.datasource_impl.dart";
 
-abstract interface class FeedDataSource implements BaseDataSource {
-  FeedModel audit(FeedModel model);
-
+abstract interface class FeedDataSource implements BaseDataSource<FeedModel> {
   Future<Iterable<FeedModelForRpc>> fetchFeeds(
-      {required DateTime beforeAt, int take = 20, bool ascending = true});
+      {required DateTime beforeAt, int take = 20});
 
   Future<void> createFeed(FeedModel model);
 

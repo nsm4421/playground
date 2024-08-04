@@ -27,5 +27,5 @@ class FeedModel with _$FeedModel {
       media: entity.media,
       hashtags: entity.hashtags,
       created_by: entity.createdBy?.id ?? "",
-      created_at: entity.createAt);
+      created_at: entity.createdAt);
 }
