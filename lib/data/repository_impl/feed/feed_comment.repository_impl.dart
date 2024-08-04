@@ -49,15 +49,10 @@ class FeedCommentRepositoryImpl implements FeedCommentRepository {
   Future<ResponseWrapper<List<FeedCommentEntity>>> fetchComments(
       {required DateTime beforeAt,
       required String feedId,
-      int take = 20,
-      bool ascending = true}) async {
+      int take = 20}) async {
     try {
       return await _dataSource
-          .fetchComments(
-              beforeAt: beforeAt,
-              feedId: feedId,
-              take: take,
-              ascending: ascending)
+          .fetchComments(beforeAt: beforeAt, feedId: feedId, take: take)
           .then((res) => res.map(FeedCommentEntity.fromRpcModel).toList())
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {

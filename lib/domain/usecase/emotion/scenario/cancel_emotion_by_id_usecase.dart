@@ -1,9 +1,9 @@
 part of "../emotion.usecase_module.dart";
 
-class CancelLikeOnFeedUseCase {
+class CancelEmotionByIdUseCase {
   final EmotionRepository _repository;
 
-  CancelLikeOnFeedUseCase(this._repository);
+  CancelEmotionByIdUseCase(this._repository);
 
   Future<ResponseWrapper<void>> call(String emotionId) async {
     return await _repository.deleteEmotionById(emotionId);

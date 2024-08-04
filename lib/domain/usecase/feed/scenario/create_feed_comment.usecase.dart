@@ -5,7 +5,11 @@ class CreateFeedCommentUseCase {
 
   CreateFeedCommentUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call(FeedCommentEntity entity) async {
-    return await _repository.createComment(entity);
+  Future<ResponseWrapper<void>> call({
+    required String feedId,
+    required String content,
+  }) async {
+    return await _repository
+        .createComment(FeedCommentEntity(feedId: feedId, content: content));
   }
 }

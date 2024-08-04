@@ -2,7 +2,7 @@ part of "../../../data/repository_impl/feed/feed.repository_impl.dart";
 
 abstract interface class FeedRepository {
   Future<ResponseWrapper<List<FeedEntity>>> fetchFeeds(
-      {required DateTime beforeAt, int take = 20, bool ascending = true});
+      {required DateTime beforeAt, int take = 20});
 
   Future<ResponseWrapper<void>> createFeed(FeedEntity entity);
 

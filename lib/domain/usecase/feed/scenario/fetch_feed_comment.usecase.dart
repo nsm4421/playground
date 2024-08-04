@@ -5,12 +5,11 @@ class FetchFeedCommentsUseCase {
 
   FetchFeedCommentsUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call(
+  Future<ResponseWrapper<List<FeedCommentEntity>>> call(
       {required String feedId,
       required DateTime beforeAt,
-      int take = 20,
-      bool ascending = true}) async {
+      int take = 20}) async {
     return _repository.fetchComments(
-        feedId: feedId, beforeAt: beforeAt, take: take, ascending: ascending);
+        feedId: feedId, beforeAt: beforeAt, take: take);
   }
 }

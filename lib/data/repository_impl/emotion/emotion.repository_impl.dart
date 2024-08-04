@@ -32,11 +32,13 @@ class EmotionRepositoryImpl implements EmotionRepository {
   }
 
   @override
-  Future<ResponseWrapper<void>> upsertEmotion(EmotionEntity entity) async {
+  Future<ResponseWrapper<EmotionEntity>> upsertEmotion(
+      EmotionEntity entity) async {
     try {
       return await _dataSource
           .upsertEmotion(EmotionModel.fromEntity(entity))
-          .then((_) => ResponseWrapper.success(null));
+          .then(EmotionEntity.fromModel)
+          .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
       _logger.e(error);
       return ResponseWrapper.error(error.message);

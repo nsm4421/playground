@@ -9,7 +9,7 @@ import '../../../data/repository_impl/emotion/emotion.repository_impl.dart';
 
 part "scenario/like_on_feed.usecase.dart";
 
-part "scenario/cancel_like_on_feed.usecase.dart";
+part "scenario/cancel_emotion_by_id_usecase.dart";
 
 part "scenario/get_emotion_channel.usecase.dart";
 
@@ -24,6 +24,9 @@ class EmotionUseCase {
 
   LikeOnFeedUseCase get likeFeed => LikeOnFeedUseCase(_repository);
 
-  CancelLikeOnFeedUseCase get cancelLikeFeed =>
-      CancelLikeOnFeedUseCase(_repository);
+  LikeOnFeedCommentUseCase get likeFeedComment =>
+      LikeOnFeedCommentUseCase(_repository);
+
+  CancelEmotionByIdUseCase get deleteById =>
+      CancelEmotionByIdUseCase(_repository);
 }

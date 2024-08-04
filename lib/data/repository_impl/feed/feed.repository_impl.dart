@@ -75,11 +75,10 @@ class FeedRepositoryImpl implements FeedRepository {
   @override
   Future<ResponseWrapper<List<FeedEntity>>> fetchFeeds(
       {required DateTime beforeAt,
-      int take = 20,
-      bool ascending = true}) async {
+      int take = 20}) async {
     try {
       return await _dataSource
-          .fetchFeeds(beforeAt: beforeAt, take: take, ascending: ascending)
+          .fetchFeeds(beforeAt: beforeAt, take: take)
           .then((res) => res.map(FeedEntity.fromRpcModel).toList())
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {

@@ -5,11 +5,8 @@ class FetchFeedsUseCase {
 
   FetchFeedsUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call(
-      {required DateTime beforeAt,
-      int take = 20,
-      bool ascending = true}) async {
-    return _repository.fetchFeeds(
-        beforeAt: beforeAt, take: take, ascending: ascending);
+  Future<ResponseWrapper<List<FeedEntity>>> call(
+      {required DateTime beforeAt, int take = 20}) async {
+    return _repository.fetchFeeds(beforeAt: beforeAt, take: take);
   }
 }
