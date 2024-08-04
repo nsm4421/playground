@@ -1,9 +1,8 @@
 part of "../impl/emotion.datasource_impl.dart";
 
-abstract interface class EmotionDataSource implements BaseDataSource {
-  EmotionModel audit(EmotionModel model);
-
-  Future<void> upsertEmotion(EmotionModel model);
+abstract interface class EmotionDataSource
+    implements BaseDataSource<EmotionModel> {
+  Future<EmotionModel> upsertEmotion(EmotionModel model);
 
   Future<void> deleteEmotionById(String id);
 

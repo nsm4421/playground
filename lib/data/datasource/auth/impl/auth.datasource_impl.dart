@@ -1,4 +1,4 @@
-part of "auth.datasource.dart";
+part of "../abstract/auth.datasource.dart";
 
 class AuthDataSourceImpl implements AuthDataSource {
   final SupabaseClient _client;
@@ -76,4 +76,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         .from(BucketName.profileImage.name)
         .getPublicUrl(fileName);
   }
+
+  @override
+  AccountModel audit(AccountModel model) => throw UnimplementedError();
 }

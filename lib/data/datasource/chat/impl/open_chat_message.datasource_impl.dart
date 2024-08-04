@@ -21,9 +21,11 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
   @override
   OpenChatMessageModel audit(OpenChatMessageModel model) {
     return model.copyWith(
-        id: const Uuid().v4(),
-        created_at: DateTime.now().toUtc(),
-        created_by: _client.auth.currentUser!.id);
+        id: model.id.isNotEmpty ? model.id : const Uuid().v4(),
+        created_at: model.created_at ?? DateTime.now().toUtc(),
+        created_by: model.created_by.isNotEmpty
+            ? model.created_by
+            : _client.auth.currentUser!.id);
   }
 
   @override

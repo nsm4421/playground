@@ -1,8 +1,6 @@
 import '../../base/base.datasource.dart';
 
-abstract interface class ChatDataSource<T> implements BaseDataSource {
-  T audit(T model);
-
+abstract interface class ChatDataSource<T> implements BaseDataSource<T> {
   Future<void> createChat(T chatRoom);
 
   Future<void> updateLastMessage(

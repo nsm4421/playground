@@ -23,16 +23,20 @@ class EmotionDataSourceImpl implements EmotionDataSource {
   @override
   EmotionModel audit(EmotionModel model) {
     return model.copyWith(
-        id: const Uuid().v4(),
+        id: [model.reference_id, model.reference_table].join("_"),
         created_by: model.created_by.isNotEmpty
             ? model.created_by
             : _client.auth.currentUser!.id,
-        created_at: DateTime.now().toUtc());
+        created_at: model.created_at ?? DateTime.now().toUtc());
   }
 
   @override
-  Future<void> upsertEmotion(EmotionModel model) async {
-    await _client.rest.from(tableName).upsert(audit(model).toJson());
+  Future<EmotionModel> upsertEmotion(EmotionModel model) async {
+    final audited = audit(model);
+    return await _client.rest
+        .from(tableName)
+        .upsert(audited.toJson())
+        .then((_) => audited);
   }
 
   @override

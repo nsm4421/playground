@@ -6,9 +6,9 @@ import '../../../../core/constant/supabase_constant.dart';
 import '../../base/base.datasource.dart';
 import '../../../model/auth/account.model.dart';
 
-part "auth.datasource_impl.dart";
+part "../impl/auth.datasource_impl.dart";
 
-abstract interface class AuthDataSource implements BaseDataSource {
+abstract interface class AuthDataSource implements BaseDataSource<AccountModel> {
   User? get currentUser;
 
   Stream<AuthState> get authStream;

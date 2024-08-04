@@ -31,9 +31,9 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
   PrivateChatMessageModel audit(PrivateChatMessageModel model) {
     final currentUid = _client.auth.currentUser!.id;
     return model.copyWith(
-        id: const Uuid().v4(),
-        created_at: DateTime.now().toUtc(),
-        sender: currentUid,
+        id: model.id.isNotEmpty ? model.id : const Uuid().v4(),
+        created_at: model.created_at ?? DateTime.now().toUtc(),
+        sender: model.sender.isNotEmpty ? model.sender : currentUid,
         chat_id: getChatId(model.receiver, sender: currentUid));
   }
 
