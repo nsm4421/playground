@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:portfolio/data/model/auth/account.model.dart';
 import 'package:portfolio/domain/entity/auth/account.entity.dart';
+import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/response_wrapper.dart';
@@ -137,6 +138,22 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (error) {
       _logger.e(error);
       return ResponseWrapper.error('upsert profile image fail');
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<PresenceEntity>> findByUid(String uid) async {
+    try {
+      return await _dataSource
+          .findByUid(uid)
+          .then(PresenceEntity.fromModel)
+          .then(ResponseWrapper.success);
+    } on PostgrestException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('find by uid fail');
     }
   }
 }

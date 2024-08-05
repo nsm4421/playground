@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:injectable/injectable.dart';
 import 'package:portfolio/domain/entity/auth/account.entity.dart';
+import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/response_wrapper.dart';
@@ -18,6 +19,8 @@ part 'scenario/sign_up_with_email_and_password.usecase.dart';
 part "scenario/sign_in_with_email_and_password.usecase.dart";
 
 part "scenario/sign_out.usecase.dart";
+
+part "scenario/find_by_uid.usecase.dart";
 
 @lazySingleton
 class AuthUseCase {
@@ -44,4 +47,7 @@ class AuthUseCase {
 
   @injectable
   SignOutUseCase get signOut => SignOutUseCase(_repository);
+
+  @injectable
+  FindByUidUseCase get findByUid => FindByUidUseCase(_repository);
 }

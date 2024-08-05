@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
+import 'package:portfolio/data/datasource/auth/abstract/auth.datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -12,16 +13,22 @@ part '../../../domain/repository/chat/private_chat_message.repository.dart';
 
 @LazySingleton(as: PrivateChatMessageRepository)
 class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
-  final PrivateChatMessageDataSource _dataSource;
+  final AuthDataSource _authDataSource;
+  final PrivateChatMessageDataSource _messageDataSource;
+
   final _logger = Logger();
 
-  PrivateChatMessageRepositoryImpl(this._dataSource);
+  PrivateChatMessageRepositoryImpl(
+      {required AuthDataSource authDataSource,
+      required PrivateChatMessageDataSource messageDataSource})
+      : _authDataSource = authDataSource,
+        _messageDataSource = messageDataSource;
 
   @override
   Future<ResponseWrapper<void>> createChatMessage(
       {required String content, required String receiver}) async {
     try {
-      return await _dataSource
+      return await _messageDataSource
           .createChatMessage(
               PrivateChatMessageModel(content: content, receiver: receiver))
           .then(ResponseWrapper.success);
@@ -37,7 +44,7 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
   @override
   Future<ResponseWrapper<void>> deleteMessageById(String messageId) async {
     try {
-      return await _dataSource
+      return await _messageDataSource
           .deleteChatMessageById(messageId)
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
@@ -53,10 +60,13 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
   Future<ResponseWrapper<List<PrivateChatMessageEntity>>> fetchLastMessages(
       DateTime afterAt) async {
     try {
-      return await _dataSource
+      final currentUid = _authDataSource.currentUser!.id;
+      return await _messageDataSource
           .fetchLastMessages(afterAt)
-          .then(
-              (res) => res.map(PrivateChatMessageEntity.fromRpcModel).toList())
+          .then((res) => res
+              .map((e) => PrivateChatMessageEntity.fromRpcModel(e,
+                  currentUid: currentUid))
+              .toList())
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
       _logger.e(error);
@@ -74,14 +84,17 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
       int take = 20,
       bool ascending = true}) async {
     try {
-      return await _dataSource
+      final currentUid = _authDataSource.currentUser!.id;
+      return await _messageDataSource
           .fetchMessages(
               beforeAt: beforeAt,
               chatId: chatId,
               take: take,
               ascending: ascending)
-          .then((res) =>
-              res.map(PrivateChatMessageEntity.fromWithUserModel).toList())
+          .then((res) => res
+              .map((e) => PrivateChatMessageEntity.fromWithUserModel(e,
+                  currentUid: currentUid))
+              .toList())
           .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
       _logger.e(error);
@@ -128,25 +141,31 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
               PrivateChatMessageEntity newRecord)?
           onUpdate,
       void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
-    return _dataSource.getMessageChannel(
-      key: key,
-      onInsert: onInsert == null
-          ? null
-          : (PrivateChatMessageModel newModel) {
-              onInsert(PrivateChatMessageEntity.fromModel(newModel));
-            },
-      onUpdate: onUpdate == null
-          ? null
-          : (PrivateChatMessageModel oldModel,
-              PrivateChatMessageModel newModel) {
-              onUpdate(PrivateChatMessageEntity.fromModel(oldModel),
-                  PrivateChatMessageEntity.fromModel(newModel));
-            },
-      onDelete: onDelete == null
-          ? null
-          : (PrivateChatMessageModel oldModel) {
-              onDelete(PrivateChatMessageEntity.fromModel(oldModel));
-            },
-    );
+    final currentUid = _authDataSource.currentUser!.id;
+    return _messageDataSource.getMessageChannel(
+        key: key,
+        onInsert: onInsert == null
+            ? null
+            : (PrivateChatMessageModel newModel) {
+                onInsert(PrivateChatMessageEntity.fromModel(newModel,
+                    currentUid: currentUid));
+              },
+        onUpdate: onUpdate == null
+            ? null
+            : (PrivateChatMessageModel oldModel,
+                PrivateChatMessageModel newModel) {
+                onUpdate(
+                    PrivateChatMessageEntity.fromModel(oldModel,
+                        currentUid: currentUid),
+                    PrivateChatMessageEntity.fromModel(newModel,
+                        currentUid: currentUid));
+              },
+        onDelete: onDelete == null
+            ? null
+            : (PrivateChatMessageModel oldModel) {
+                onDelete(PrivateChatMessageEntity.fromModel(oldModel,
+                        currentUid: currentUid)
+                    .copyWith(isRemoved: true));
+              });
   }
 }

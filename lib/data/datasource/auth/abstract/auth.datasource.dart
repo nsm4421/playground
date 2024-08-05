@@ -8,7 +8,8 @@ import '../../../model/auth/account.model.dart';
 
 part "../impl/auth.datasource_impl.dart";
 
-abstract interface class AuthDataSource implements BaseDataSource<AccountModel> {
+abstract interface class AuthDataSource
+    implements BaseDataSource<AccountModel> {
   User? get currentUser;
 
   Stream<AuthState> get authStream;
@@ -28,4 +29,6 @@ abstract interface class AuthDataSource implements BaseDataSource<AccountModel> 
 
   Future<String> upsertProfileImage(
       {required String uid, required File profileImage});
+
+  Future<AccountModel> findByUid(String uid);
 }

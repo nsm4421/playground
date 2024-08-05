@@ -79,4 +79,14 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   AccountModel audit(AccountModel model) => throw UnimplementedError();
+
+  @override
+  Future<AccountModel> findByUid(String uid) async {
+    return await _client.rest
+        .from(tableName)
+        .select("*")
+        .eq("id", uid)
+        .then((res) => res.first)
+        .then(AccountModel.fromJson);
+  }
 }

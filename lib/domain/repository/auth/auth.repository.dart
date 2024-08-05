@@ -23,4 +23,6 @@ abstract interface class AuthRepository {
 
   Future<ResponseWrapper<String>> upsertProfileImage(
       {required String uid, required File profileImage});
+
+  Future<ResponseWrapper<PresenceEntity>> findByUid(String uid);
 }
