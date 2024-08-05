@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:portfolio/domain/entity/auth/presence.entity.dart';
-import 'package:portfolio/presentation/bloc/auth/auth.bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../domain/entity/chat/private_chat_message.entity.dart';
@@ -22,9 +20,7 @@ class PrivateChatMessageItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMine =
-        context.read<AuthBloc>().currentUser?.id == _message.sender?.id;
-    return isMine
+    return (_message.isSender ?? false)
         ? _Mine(_message)
         : _Others(
             message: _message,

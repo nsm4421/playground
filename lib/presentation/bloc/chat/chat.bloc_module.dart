@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:portfolio/domain/usecase/auth/auth.usecase_module.dart';
 import 'package:portfolio/presentation/bloc/chat/private_chat/chat_room/private_chat_room.bloc.dart';
 import 'package:portfolio/presentation/bloc/chat/private_chat/display/display_private_chat.bloc.dart';
 
@@ -15,25 +16,30 @@ part "chat.event.dart";
 
 @lazySingleton
 class ChatBlocModule {
-  final ChatUseCase _useCase;
+  final AuthUseCase _authUseCase;
+  final ChatUseCase _chatUseCase;
 
-  ChatBlocModule(this._useCase);
+  ChatBlocModule(
+      {required AuthUseCase authUseCase, required ChatUseCase chatUseCase})
+      : _authUseCase = authUseCase,
+        _chatUseCase = chatUseCase;
 
   @injectable
   OpenChatRoomBloc openChatRoom(String chatId) =>
-      OpenChatRoomBloc(_useCase, chatId: chatId);
+      OpenChatRoomBloc(_chatUseCase, chatId: chatId);
 
   @injectable
   PrivateChatRoomBloc privateChatRoom(String chatId) =>
-      PrivateChatRoomBloc(_useCase, chatId: chatId);
+      PrivateChatRoomBloc(_chatUseCase, chatId: chatId);
 
   @lazySingleton
-  CreateOpenChatCubit get createOpenChat => CreateOpenChatCubit(_useCase);
+  CreateOpenChatCubit get createOpenChat => CreateOpenChatCubit(_chatUseCase);
 
   @lazySingleton
-  DisplayPrivateChatBloc get displayPrivateChat =>
-      DisplayPrivateChatBloc(_useCase);
+  DisplayPrivateChatBloc get displayPrivateChat => DisplayPrivateChatBloc(
+      authUseCase: _authUseCase, chatUseCase: _chatUseCase);
 
   @lazySingleton
-  DisplayOpenChatCubit get displayOpenChat => DisplayOpenChatCubit(_useCase);
+  DisplayOpenChatCubit get displayOpenChat =>
+      DisplayOpenChatCubit(_chatUseCase);
 }

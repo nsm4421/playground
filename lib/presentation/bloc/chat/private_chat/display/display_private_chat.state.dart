@@ -4,9 +4,7 @@ final class DisplayPrivateChatState extends ChatState {
   final List<PrivateChatMessageEntity> lastMessages;
 
   DisplayPrivateChatState(
-      {super.status,
-      super.message,
-      this.lastMessages = const []});
+      {super.status, super.message, this.lastMessages = const []});
 
   @override
   DisplayPrivateChatState copyWith({

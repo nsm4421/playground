@@ -5,7 +5,6 @@ class LastPrivateChatListFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUid = context.read<AuthBloc>().currentUser!.id;
     return BlocBuilder<DisplayPrivateChatBloc, DisplayPrivateChatState>(
       builder: (context, state) {
         final messages = state.lastMessages;
@@ -17,15 +16,24 @@ class LastPrivateChatListFragment extends StatelessWidget {
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   final item = messages[index];
-                  final opponent = item.sender?.id == currentUid
-                      ? item.receiver
-                      : item.sender;
                   return ListTile(
                     onTap: () {
                       context.push(RoutePaths.privateChatRoom.path,
-                          extra: opponent);
+                          extra: item.opponent);
                     },
-                    title: Text(item.content ?? "content"),
+                    leading: (item.opponent?.profileImage == null)
+                        ? null
+                        : CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(
+                                item.opponent!.profileImage!),
+                          ),
+                    title: Text(
+                      item.content ?? "",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(timeago.format(item.createdAt!),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: Theme.of(context).colorScheme.tertiary)),
                   );
                 });
           case Status.loading:
