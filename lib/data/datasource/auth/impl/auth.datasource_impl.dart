@@ -89,4 +89,10 @@ class AuthDataSourceImpl implements AuthDataSource {
         .then((res) => res.first)
         .then(AccountModel.fromJson);
   }
+
+  @override
+  Future<int> countByField(
+      {required String field, required String value}) async {
+    return await _client.rest.from(tableName).count().eq(field, value);
+  }
 }

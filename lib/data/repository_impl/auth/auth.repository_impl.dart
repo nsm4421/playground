@@ -156,4 +156,20 @@ class AuthRepositoryImpl implements AuthRepository {
       return ResponseWrapper.error('find by uid fail');
     }
   }
+
+  @override
+  Future<ResponseWrapper<int>> countByField(
+      {required String field, required String value}) async {
+    try {
+      return await _dataSource
+          .countByField(field: field, value: value)
+          .then(ResponseWrapper.success);
+    } on PostgrestException catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error(error.message);
+    } catch (error) {
+      _logger.e(error);
+      return ResponseWrapper.error('count query fails');
+    }
+  }
 }

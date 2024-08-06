@@ -3,7 +3,11 @@ part of "auth.bloc.dart";
 @immutable
 sealed class AuthEvent {}
 
-final class InitAuthEvent extends AuthEvent {}
+final class InitAuthEvent extends AuthEvent {
+  final Status? status;
+
+  InitAuthEvent({this.status});
+}
 
 final class AuthChangedEvent extends AuthEvent {
   final User? user;
@@ -34,3 +38,10 @@ final class SignInWithEmailAndPasswordEvent extends AuthEvent {
 }
 
 final class SignOutEvent extends AuthEvent {}
+
+final class EditProfileEvent extends AuthEvent {
+  final String? nickname;
+  final File? profileImage;
+
+  EditProfileEvent({required this.nickname, required this.profileImage});
+}

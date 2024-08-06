@@ -25,4 +25,7 @@ abstract interface class AuthRepository {
       {required String uid, required File profileImage});
 
   Future<ResponseWrapper<PresenceEntity>> findByUid(String uid);
+
+  Future<ResponseWrapper<int>> countByField(
+      {required String field, required String value});
 }

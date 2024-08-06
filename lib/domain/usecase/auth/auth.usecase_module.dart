@@ -22,6 +22,8 @@ part "scenario/sign_out.usecase.dart";
 
 part "scenario/find_by_uid.usecase.dart";
 
+part "scenario/check_nickname.usecase.dart";
+
 @lazySingleton
 class AuthUseCase {
   final AuthRepository _repository;
@@ -50,4 +52,7 @@ class AuthUseCase {
 
   @injectable
   FindByUidUseCase get findByUid => FindByUidUseCase(_repository);
+
+  @injectable
+  CheckNicknameUseCase get checkNickname => CheckNicknameUseCase(_repository);
 }

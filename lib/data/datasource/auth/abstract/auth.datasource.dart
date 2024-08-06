@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -31,4 +32,6 @@ abstract interface class AuthDataSource
       {required String uid, required File profileImage});
 
   Future<AccountModel> findByUid(String uid);
+
+  Future<int> countByField({required String field, required String value});
 }

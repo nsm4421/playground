@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
     on<SignUpWithEmailAndPasswordEvent>(_onSignUp);
     on<SignInWithEmailAndPasswordEvent>(_onSignIn);
     on<SignOutEvent>(_onSignOut);
+    on<EditProfileEvent>(_onEdit);
   }
 
   User? get currentUser => _useCase.currentUser.call();
@@ -33,9 +34,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
 
   Stream<AuthState> get authStream => _useCase.authStream.call();
 
+  Future<bool> isNicknameDuplicated(String nickname) async {
+    return await _useCase.checkNickname(nickname).then((res) => res.ok);
+  }
+
   Future<void> _onInit(
       InitAuthEvent event, Emitter<AuthenticationState> emit) async {
-    emit(state.copyWith(status: Status.initial));
+    emit(state.copyWith(status: event.status ?? Status.initial));
   }
 
   Future<void> _onSignUp(SignUpWithEmailAndPasswordEvent event,
@@ -70,6 +75,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
     emit(state.copyWith(status: Status.loading));
     final res = await _useCase.signOut();
+    if (res.ok) {
+      emit(state.copyWith(status: Status.success, user: null));
+    } else {
+      emit(state.copyWith(status: Status.error, message: res.message));
+    }
+  }
+
+  Future<void> _onEdit(
+      EditProfileEvent event, Emitter<AuthenticationState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+    final res = await _useCase.editProfile(
+        uid: _useCase.currentUser.call()!.id,
+        nickname: event.nickname,
+        profileImage: event.profileImage);
     if (res.ok) {
       emit(state.copyWith(status: Status.success, user: null));
     } else {
