@@ -70,7 +70,7 @@ class PrivateChatMessageDataSourceImpl implements PrivateChatMessageDataSource {
             "sender:${TableName.account.name}!private_chat_messages_sender_fkey(*), "
             "receiver:${TableName.account.name}!private_chat_messages_receiver_fkey(*)")
         .eq("chat_id", chatId)
-        .lte("created_at", beforeAt)
+        .lt("created_at", beforeAt)
         .order("created_at", ascending: ascending)
         .range(0, take)
         .then((res) => res.map(PrivateChatMessageWithUserModel.fromJson));

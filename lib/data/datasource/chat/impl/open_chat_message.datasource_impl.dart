@@ -42,7 +42,7 @@ class OpenChatMessageDataSourceImpl implements OpenChatMessageDataSource {
         .from(tableName)
         .select("*, user:${TableName.account.name}(*)")
         .eq("chat_id", chatId)
-        .lte("created_at", beforeAt)
+        .lt("created_at", beforeAt)
         .order("created_at", ascending: ascending)
         .range(from, to)
         .then((res) => res.map(OpenChatMessageWithUserModel.fromJson));

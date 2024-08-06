@@ -63,7 +63,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<String> upsertProfileImage(
       {required String uid, required File profileImage}) async {
     final bytes = await profileImage.readAsBytes();
-    final fileName = 'profile_image_$uid';
+    final fileName = 'public/profile_image_$uid';
     await _client.storage.from(BucketName.profileImage.name).uploadBinary(
           fileName,
           bytes,

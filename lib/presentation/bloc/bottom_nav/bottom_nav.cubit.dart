@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 part "bottom_nav.state.dart";
 
-@lazySingleton
+@injectable
 class BottomNavCubit extends Cubit<BottomNav> {
   BottomNavCubit() : super(BottomNav.home);
 
