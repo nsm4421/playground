@@ -5,6 +5,7 @@ import 'package:portfolio/presentation/pages/feed/display/feed/display_feed.page
 import '../../../../core/dependency_injection/configure_dependencies.dart';
 import '../../../bloc/bottom_nav/bottom_nav.cubit.dart';
 import '../../chat/private_chat/display/display_private_chat.page.dart';
+import '../../setting/setting.page.dart';
 
 part "entry.fragment.dart";
 

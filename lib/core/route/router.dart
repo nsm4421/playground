@@ -6,8 +6,8 @@ import 'package:portfolio/presentation/pages/feed/create/comment/create_feed_com
 import 'package:portfolio/presentation/pages/feed/create/feed/create_feed.page.dart';
 import 'package:portfolio/presentation/pages/feed/display/comment/display_feed_comment.page.dart';
 import 'package:portfolio/presentation/pages/feed/display/feed/display_feed.page.dart';
+import 'package:portfolio/presentation/pages/setting/edit/edit_profile.page.dart';
 
-import '../../data/model/feed/feed/feed.model.dart';
 import '../../presentation/pages/main/components/error.screen.dart';
 import '../../presentation/pages/auth/sign_up/sign-up.page.dart';
 import '../../presentation/pages/chat/open_chat/chat_room/open_chat_room.page.dart';
@@ -17,6 +17,7 @@ import '../../presentation/pages/chat/private_chat/chat_room/private_chat_room.p
 import '../../presentation/pages/chat/private_chat/display/display_private_chat.page.dart';
 import '../../presentation/pages/main/main.page.dart';
 import '../../presentation/pages/main/splash/splash.page.dart';
+import '../../presentation/pages/setting/setting.page.dart';
 
 part "route_path.dart";
 
@@ -68,6 +69,19 @@ final GoRouter router = GoRouter(routes: [
                 },
               ),
             ]),
+      ]),
+
+  // 세팅
+  GoRoute(
+      path: RoutePaths.setting.path,
+      name: 'setting',
+      builder: (context, state) => const SettingPage(),
+      routes: [
+        // 프로필 수정
+        GoRoute(
+            path: RoutePaths.editProfile.subPath!,
+            name: 'edit-profile',
+            builder: (context, state) => const EditProfilePage()),
       ]),
 
   /// 채팅

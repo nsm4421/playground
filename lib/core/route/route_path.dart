@@ -6,6 +6,8 @@ enum RoutePaths {
   main("/main"),
   chat("/chat"),
   feed("/feed"),
+  setting("/setting"),
+  editProfile("/setting/edit-profile", subPath: "edit-profile"),
   createFeed("/feed/create", subPath: "create"),
   feedComment("/feed/comment", subPath: "comment"),
   createComment("/feed/comment/create", subPath: "create"),

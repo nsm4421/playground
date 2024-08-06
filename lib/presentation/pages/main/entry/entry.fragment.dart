@@ -8,13 +8,12 @@ class EntryFragment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (item) {
-      // TODO : UI 구현하기
       case BottomNav.home:
         return const DisplayFeedPage();
       case BottomNav.chat:
         return const DisplayPrivateChatPage();
       case BottomNav.setting:
-        return const Text("SETTING");
+        return const SettingPage();
     }
   }
 }
