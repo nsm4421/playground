@@ -17,6 +17,7 @@ class _PrivateChatMessageListFragmentState
   @override
   void initState() {
     super.initState();
+
     _channel = context.read<PrivateChatRoomBloc>().getPrivateChatMessageChannel(
         onInsert: (message) {
       context
@@ -30,7 +31,7 @@ class _PrivateChatMessageListFragmentState
   }
 
   @override
-  void dispose() {
+  dispose() {
     super.dispose();
     _channel.unsubscribe();
   }
@@ -40,6 +41,8 @@ class _PrivateChatMessageListFragmentState
     return BlocBuilder<PrivateChatRoomBloc, PrivateChatRoomState>(
         builder: (context, state) {
       return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          reverse: true,
           shrinkWrap: true,
           itemCount: state.chatMessages.length,
           itemBuilder: (context, index) => PrivateChatMessageItemWidget(

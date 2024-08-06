@@ -85,8 +85,10 @@ class PrivateChatRoomBloc
   Future<void> _onNewMessage(
       AwareNewPrivateChatMessageEvent event, Emitter<ChatState> emit) async {
     try {
-      emit(
-          state.copyWith(chatMessages: [...state.chatMessages, event.message]));
+      emit(state.copyWith(chatMessages: [
+        event.message,
+        ...state.chatMessages,
+      ]));
     } catch (error) {
       log("_onNewMessage ${error.toString()}");
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
@@ -99,8 +101,7 @@ class PrivateChatRoomBloc
       emit(state.copyWith(
           chatMessages: state.chatMessages
               .map((e) => (e.id == event.message.id)
-                  ? event.message
-                      .copyWith(content: "Removed Message", isRemoved: true)
+                  ? e.copyWith(content: "Removed Message", isRemoved: true)
                   : e)
               .toList()));
     } catch (error) {
@@ -115,7 +116,7 @@ class PrivateChatRoomBloc
       final res = await _useCase.fetchPrivateChatMessages(
           chatId: _chatId, beforeAt: state.beforeAt, take: event.take);
       if (res.ok) {
-        final data = res.data ?? [] as List<PrivateChatMessageEntity>;
+        final data = res.data ?? [];
         final beforeAt = data.isEmpty
             ? DateTime.now().toUtc()
             : data
@@ -124,7 +125,7 @@ class PrivateChatRoomBloc
         emit(state.copyWith(
             beforeAt: beforeAt,
             isEnd: data.length < event.take,
-            chatMessages: [...(res.data ?? []), ...state.chatMessages]));
+            chatMessages: [...data.reversed, ...state.chatMessages]));
       } else {
         emit(state.copyWith(status: Status.error));
       }

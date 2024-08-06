@@ -12,6 +12,10 @@ class _SettingScreenState extends State<SettingScreen> {
     context.push(RoutePaths.editProfile.path);
   }
 
+  _handleSignOut() {
+    context.read<AuthBloc>().add(SignOutEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +23,9 @@ class _SettingScreenState extends State<SettingScreen> {
         title: const Text("Setting"),
         actions: [
           IconButton(
-              onPressed: _handleMoveToEditProfile, icon: const Icon(Icons.edit))
+              onPressed: _handleMoveToEditProfile,
+              icon: const Icon(Icons.edit)),
+          IconButton(onPressed: _handleSignOut, icon: const Icon(Icons.logout))
         ],
       ),
     );
