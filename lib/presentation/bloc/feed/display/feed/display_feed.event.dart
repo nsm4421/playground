@@ -2,6 +2,12 @@ part of "display_feed.bloc.dart";
 
 final class DisplayFeedEvent extends FeedEvent {}
 
+final class FeedCreatedEvent extends DisplayFeedEvent {
+  final FeedEntity _feed;
+
+  FeedCreatedEvent(this._feed);
+}
+
 final class FetchFeedEvent extends DisplayFeedEvent {
   final int take;
 
@@ -19,4 +25,10 @@ final class CancelLikeFeedEvent extends DisplayFeedEvent {
   final String emotionId;
 
   CancelLikeFeedEvent({required this.feedId, required this.emotionId});
+}
+
+final class DeleteFeedEvent extends DisplayFeedEvent {
+  final String feedId;
+
+  DeleteFeedEvent(this.feedId);
 }

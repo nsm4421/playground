@@ -8,8 +8,15 @@ class DisplayFeedScreen extends StatefulWidget {
 }
 
 class _DisplayFeedScreenState extends State<DisplayFeedScreen> {
-  _handleMoveToCreatePage() {
-    context.push(RoutePaths.createFeed.path);
+
+  // 피드 작성 페이지로 이동
+  // 피드 작성이 성공한 경우 피드 목록 맨 앞에 추가
+  _handleMoveToCreatePage() async {
+    await context.push<FeedEntity?>(RoutePaths.createFeed.path).then((res) {
+      if (res != null) {
+        context.read<DisplayFeedBloc>().add(FeedCreatedEvent(res));
+      }
+    });
   }
 
   @override

@@ -4,7 +4,7 @@ abstract interface class FeedRepository {
   Future<ResponseWrapper<List<FeedEntity>>> fetchFeeds(
       {required DateTime beforeAt, int take = 20});
 
-  Future<ResponseWrapper<void>> createFeed(FeedEntity entity);
+  Future<ResponseWrapper<FeedEntity>> createFeed(FeedEntity entity);
 
   Future<ResponseWrapper<void>> modifyFeed(
       {required String feedId,

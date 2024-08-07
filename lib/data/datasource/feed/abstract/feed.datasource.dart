@@ -4,7 +4,7 @@ abstract interface class FeedDataSource implements BaseDataSource<FeedModel> {
   Future<Iterable<FeedModelForRpc>> fetchFeeds(
       {required DateTime beforeAt, int take = 20});
 
-  Future<void> createFeed(FeedModel model);
+  Future<FeedModel> createFeed(FeedModel model);
 
   Future<void> modifyFeed(
       {required String feedId,

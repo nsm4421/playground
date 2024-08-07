@@ -25,6 +25,8 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
     on<FetchFeedEvent>(_onFetch);
     on<LikeFeedEvent>(_onLike);
     on<CancelLikeFeedEvent>(_onCancelLike);
+    on<DeleteFeedEvent>(_onDelete);
+    on<FeedCreatedEvent>(_onCreated);
   }
 
   Future<void> _onFetch(
@@ -102,6 +104,37 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
       log('_onCancelLike : ${error.toString()}');
       emit(state.copyWith(
           emotionStatus: Status.error, message: 'cancel like fails'));
+    }
+  }
+
+  Future<void> _onDelete(
+      DeleteFeedEvent event, Emitter<DisplayFeedState> emit) async {
+    try {
+      emit(state.copyWith(emotionStatus: Status.loading));
+      final res = await _feedUseCase.deleteFeed(event.feedId);
+      if (res.ok) {
+        emit(state.copyWith(
+            emotionStatus: Status.success,
+            data:
+                state.data.where((feed) => feed.id != event.feedId).toList()));
+      } else {
+        emit(state.copyWith(emotionStatus: Status.error, message: res.message));
+      }
+    } catch (error) {
+      log('_onDelete : ${error.toString()}');
+      emit(state.copyWith(
+          emotionStatus: Status.error, message: 'delete feed fails'));
+    }
+  }
+
+  Future<void> _onCreated(
+      FeedCreatedEvent event, Emitter<DisplayFeedState> emit) async {
+    try {
+      emit(state.copyWith(data: [event._feed, ...state.data]));
+    } catch (error) {
+      log('_onCreate : ${error.toString()}');
+      emit(state.copyWith(
+          emotionStatus: Status.error, message: 'add feed fails'));
     }
   }
 }

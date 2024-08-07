@@ -7,11 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:portfolio/core/dependency_injection/configure_dependencies.dart';
 import 'package:portfolio/core/route/router.dart';
 import 'package:portfolio/domain/entity/feed/feed.entity.dart';
+import 'package:portfolio/presentation/bloc/auth/auth.bloc.dart';
 import 'package:portfolio/presentation/bloc/feed/display/feed/display_feed.bloc.dart';
 import 'package:portfolio/presentation/bloc/feed/feed.bloc_module.dart';
-import 'package:portfolio/presentation/pages/feed/display/comment/display_feed_comment.page.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:portfolio/presentation/pages/main/components/hashtags.widget.dart';
-import 'package:portfolio/presentation/pages/main/components/loading.screen.dart';
 
 import '../../../../../core/constant/status.dart';
 

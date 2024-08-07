@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portfolio/core/dependency_injection/configure_dependencies.dart';
+import 'package:portfolio/domain/entity/auth/presence.entity.dart';
+import 'package:portfolio/presentation/bloc/auth/auth.bloc.dart';
 import 'package:portfolio/presentation/bloc/feed/create/feed/create_feed.cubit.dart';
 import 'package:portfolio/presentation/bloc/feed/feed.bloc_module.dart';
 import 'package:portfolio/presentation/pages/main/components/error.screen.dart';
@@ -27,11 +29,14 @@ class CreateFeedPage extends StatelessWidget {
         create: (_) => getIt<FeedBlocModule>().createFeed,
         child: BlocListener<CreateFeedCubit, CreateFeedState>(
             listener: (BuildContext context, state) {
+          // 포스팅 등록 성공 시
           if (state.status == Status.success && context.mounted) {
             Timer(const Duration(seconds: 2), () {
               Fluttertoast.showToast(
                   msg: "create feed success", gravity: ToastGravity.TOP);
-              context.pop();
+              context.pop(state.saved?.copyWith(
+                  createdBy: PresenceEntity.fromUser(
+                      context.read<AuthBloc>().currentUser!)));
             });
           } else if (state.status == Status.error) {
             Timer(const Duration(seconds: 2), () {

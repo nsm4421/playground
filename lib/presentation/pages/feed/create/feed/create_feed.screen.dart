@@ -13,14 +13,16 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   late ImagePicker _picker;
   late TextEditingController _contentTec;
   late TextEditingController _hashtagTec;
-  late GlobalKey<FormState> _formKey;
+  late GlobalKey<FormState> _contentFormKey;
+  late GlobalKey<FormState> _hashtagFormKey;
   final List<XFile> _xFiles = [];
   final List<String> _hashtags = [];
 
   @override
   void initState() {
     super.initState();
-    _formKey = GlobalKey<FormState>();
+    _contentFormKey = GlobalKey<FormState>();
+    _hashtagFormKey = GlobalKey<FormState>();
     _picker = ImagePicker();
     _contentTec = TextEditingController();
     _hashtagTec = TextEditingController();
@@ -34,8 +36,9 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   }
 
   _handleSubmit() {
-    _formKey.currentState?.save();
-    final ok = _formKey.currentState?.validate();
+    _contentFormKey.currentState?.save();
+    _hashtagFormKey.currentState?.save();
+    final ok = _contentFormKey.currentState?.validate();
     if (ok == null || !ok) {
       return;
     }
@@ -72,7 +75,9 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   }
 
   String? _handleValidateHashtag(String? text) {
-    if (_hashtags.length >= _maxHashtagNum) {
+    if (text == null || text.isEmpty) {
+      return "Send Hashtag";
+    } else if (_hashtags.length >= _maxHashtagNum) {
       return "Too Many Hashtag";
     } else if (_hashtags.contains(text)) {
       return "Duplicated Hashtag";
@@ -82,7 +87,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   }
 
   _handleAddHashtag() {
-    final ok = _formKey.currentState?.validate();
+    final ok = _hashtagFormKey.currentState?.validate();
     if (ok != null && ok) {
       setState(() {
         _hashtags.add(_hashtagTec.text.trim());
@@ -97,42 +102,72 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     });
   }
 
+  _handlePop() {
+    context.pop(null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Feed"), actions: [
-        IconButton(onPressed: _handleSubmit, icon: const Icon(Icons.upload))
-      ]),
+      appBar: AppBar(
+        title: const Text("Create Feed"),
+        actions: [
+          GestureDetector(
+            onTap: _handleSubmit,
+            child: Container(
+              margin: const EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).colorScheme.primaryContainer),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.upload),
+                  const SizedBox(width: 8),
+                  Text(
+                    "UPLOAD",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+        leading:
+            IconButton(onPressed: _handlePop, icon: const Icon(Icons.clear)),
+      ),
       body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// 본문
-              Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Icon(Icons.abc,
-                              color: Theme.of(context).colorScheme.primary),
-                          const SizedBox(width: 5),
-                          Text("Content",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary))
-                        ]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// 본문
+            Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(Icons.abc,
+                            color: Theme.of(context).colorScheme.primary),
+                        const SizedBox(width: 5),
+                        Text("Content",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary))
+                      ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Form(
+                        key: _contentFormKey,
                         child: TextFormField(
                           validator: _handleValidateContent,
                           minLines: 3,
@@ -150,39 +185,42 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                                           .tertiary)),
                           controller: _contentTec,
                         ),
-                      )
-                    ],
-                  )),
+                      ),
+                    )
+                  ],
+                )),
 
-              const Divider(),
+            const Divider(),
 
-              // 해시태그
-              Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.tag,
-                                  color: Theme.of(context).colorScheme.primary),
-                              const SizedBox(width: 5),
-                              Text("Hashtag",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary)),
-                            ],
-                          ),
+            // 해시태그
+            Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.tag,
+                                color: Theme.of(context).colorScheme.primary),
+                            const SizedBox(width: 5),
+                            Text("Hashtag",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)),
+                          ],
                         ),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Form(
+                            key: _hashtagFormKey,
                             child: TextFormField(
                                 validator: _handleValidateHashtag,
                                 style: const TextStyle(decorationThickness: 0),
@@ -196,83 +234,81 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                                                         .tertiary),
                                                 onPressed: _handleAddHashtag)
                                             : null),
-                                controller: _hashtagTec)),
-                        Padding(
+                                controller: _hashtagTec),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: HashtagsWidget(_hashtags,
+                            onDelete: _handleDeleteHashtag),
+                      )
+                    ])),
+
+            const Divider(),
+
+            /// 사진
+            Padding(
+                padding: const EdgeInsets.only(top: 15, bottom: 20),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: HashtagsWidget(_hashtags,
-                              onDelete: _handleDeleteHashtag),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            Icon(Icons.photo_outlined,
+                                color: Theme.of(context).colorScheme.primary),
+                            const SizedBox(width: 5),
+                            Text("Media",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)),
+                            const Spacer(),
+                            IconButton(
+                                onPressed: _handleSelectMedia,
+                                icon: Icon(Icons.add_a_photo_outlined,
+                                    color:
+                                        Theme.of(context).colorScheme.primary)),
+                          ])),
+
+                      // 미리보기
+                      if (_xFiles.isNotEmpty)
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ...List.generate(_xFiles.length, (index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Stack(
+                                    children: [
+                                      CircleAvatar(
+                                          radius: 45,
+                                          backgroundImage: FileImage(
+                                              File(_xFiles[index].path))),
+                                      Positioned(
+                                          top: -15,
+                                          right: -15,
+                                          child: IconButton(
+                                              onPressed:
+                                                  _handleUnSelectMedia(index),
+                                              iconSize: 20,
+                                              icon: Icon(Icons.clear,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary))),
+                                    ],
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
                         )
-                      ])),
-
-              const Divider(),
-
-              /// 사진
-              Padding(
-                  padding: const EdgeInsets.only(top: 15, bottom: 20),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                                Row(mainAxisSize: MainAxisSize.min, children: [
-                              Icon(Icons.photo_outlined,
-                                  color: Theme.of(context).colorScheme.primary),
-                              const SizedBox(width: 5),
-                              Text("Media",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary)),
-                              const Spacer(),
-                              IconButton(
-                                  onPressed: _handleSelectMedia,
-                                  icon: Icon(Icons.add_a_photo_outlined,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                            ])),
-
-                        // 미리보기
-                        if (_xFiles.isNotEmpty)
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                ...List.generate(_xFiles.length, (index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: Stack(
-                                      children: [
-                                        CircleAvatar(
-                                            radius: 45,
-                                            backgroundImage: FileImage(
-                                                File(_xFiles[index].path))),
-                                        Positioned(
-                                            top: -15,
-                                            right: -15,
-                                            child: IconButton(
-                                                onPressed:
-                                                    _handleUnSelectMedia(index),
-                                                iconSize: 20,
-                                                icon: Icon(Icons.clear,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary))),
-                                      ],
-                                    ),
-                                  );
-                                })
-                              ],
-                            ),
-                          )
-                      ]))
-            ],
-          ),
+                    ]))
+          ],
         ),
       ),
     );

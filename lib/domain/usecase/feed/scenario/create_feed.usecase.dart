@@ -5,7 +5,7 @@ class CreateFeedUseCase {
 
   CreateFeedUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call({
+  Future<ResponseWrapper<FeedEntity>> call({
     required String feedId,
     required String content,
     required List<String> hashtags,

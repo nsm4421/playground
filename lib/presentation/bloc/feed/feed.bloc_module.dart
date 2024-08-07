@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:portfolio/domain/usecase/auth/auth.usecase_module.dart';
 import 'package:portfolio/domain/usecase/feed/feed.usecase_module.dart';
 import 'package:portfolio/presentation/bloc/feed/create/comment/create_comment.cubit.dart';
 import 'package:portfolio/presentation/bloc/feed/create/feed/create_feed.cubit.dart';
@@ -15,17 +16,21 @@ part "feed.event.dart";
 
 @lazySingleton
 class FeedBlocModule {
+  final AuthUseCase _authUseCase;
   final FeedUseCase _feedUseCase;
   final EmotionUseCase _emotionUseCase;
 
   FeedBlocModule(
-      {required FeedUseCase feedUseCase,
+      {required AuthUseCase authUseCase,
+      required FeedUseCase feedUseCase,
       required EmotionUseCase emotionUseCase})
-      : _feedUseCase = feedUseCase,
+      : _authUseCase = authUseCase,
+        _feedUseCase = feedUseCase,
         _emotionUseCase = emotionUseCase;
 
   @lazySingleton
-  CreateFeedCubit get createFeed => CreateFeedCubit(_feedUseCase);
+  CreateFeedCubit get createFeed =>
+      CreateFeedCubit(authUseCase: _authUseCase, feedUseCase: _feedUseCase);
 
   @lazySingleton
   CreateCommentCubit createComment(String feedId) =>

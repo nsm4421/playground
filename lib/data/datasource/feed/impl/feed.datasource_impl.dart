@@ -32,8 +32,12 @@ class FeedDataSourceImpl implements FeedDataSource {
   }
 
   @override
-  Future<void> createFeed(FeedModel model) async {
-    await _client.rest.from(tableName).insert(audit(model).toJson());
+  Future<FeedModel> createFeed(FeedModel model) async {
+    final audited = audit(model);
+    return await _client.rest
+        .from(tableName)
+        .insert(audited.toJson())
+        .then((_) => audited);
   }
 
   @override

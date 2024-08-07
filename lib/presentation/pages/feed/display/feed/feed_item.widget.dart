@@ -10,11 +10,14 @@ class FeedItemWidget extends StatefulWidget {
 }
 
 class _FeedItemWidgetState extends State<FeedItemWidget> {
+  late bool _isMine;
   late bool _isLike;
 
   @override
   initState() {
     super.initState();
+    _isMine =
+        context.read<AuthBloc>().currentUser!.id == widget._feed.createdBy!.id;
     _isLike = widget._feed.emotion != null;
   }
 
@@ -47,6 +50,11 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
     await context.push(RoutePaths.feedComment.path, extra: widget._feed);
   }
 
+  // 피드 삭제
+  _handleDelete() {
+    context.read<DisplayFeedBloc>().add(DeleteFeedEvent(widget._feed.id!));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,25 +68,49 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
         children: [
           // 헤더
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Row(
-              children: [
-                CircleAvatar(
-                    radius: 25,
-                    backgroundImage: CachedNetworkImageProvider(
-                        widget._feed.createdBy!.profileImage!)),
-                const SizedBox(width: 8),
-                Text(widget._feed.createdBy!.nickname!,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold)),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                // 프로필 사진
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: CachedNetworkImageProvider(
+                          widget._feed.createdBy!.profileImage!)),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 닉네임
+                    if (widget._feed.createdBy?.nickname != null)
+                      Text(widget._feed.createdBy!.nickname!,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                    // 작성시간
+                    if (widget._feed.createdAt != null)
+                      Text(timeago.format(widget._feed.createdAt!),
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary)),
+                  ],
+                ),
                 const Spacer(),
-                const Icon(Icons.more_vert)
-              ],
-            ),
-          ),
+                if (_isMine)
+                  IconButton(
+                      onPressed: _handleDelete,
+                      icon: Icon(
+                        Icons.delete_outline_outlined,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ))
+              ])),
 
           /// 본문
           Container(
@@ -125,28 +157,29 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                 children: [
                   // 좋아요 버튼
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: IconButton(
-                        onPressed: _handleLike,
-                        icon: _isLike
-                            ? Icon(
-                                Icons.favorite,
-                                color: Theme.of(context).colorScheme.primary,
-                              )
-                            : Icon(
-                                Icons.favorite_border,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              )),
-                  ),
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: IconButton(
+                          onPressed: _handleLike,
+                          icon: _isLike
+                              ? Icon(
+                                  Icons.favorite,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : Icon(Icons.favorite_border,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary))),
 
                   // 댓글 버튼
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: IconButton(
                         onPressed: _handleMoveToCommentPage,
-                        icon: const Icon(Icons.comment)),
+                        icon: Icon(Icons.comment,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.5))),
                   )
                 ],
               ),

@@ -19,11 +19,12 @@ class FeedRepositoryImpl implements FeedRepository {
   FeedRepositoryImpl(this._dataSource);
 
   @override
-  Future<ResponseWrapper<void>> createFeed(FeedEntity entity) async {
+  Future<ResponseWrapper<FeedEntity>> createFeed(FeedEntity entity) async {
     try {
       return await _dataSource
           .createFeed(FeedModel.fromEntity(entity))
-          .then((_) => ResponseWrapper.success(null));
+          .then(FeedEntity.fromModel)
+          .then(ResponseWrapper.success);
     } on PostgrestException catch (error) {
       _logger.e(error);
       return ResponseWrapper.error(error.message);
@@ -74,8 +75,7 @@ class FeedRepositoryImpl implements FeedRepository {
 
   @override
   Future<ResponseWrapper<List<FeedEntity>>> fetchFeeds(
-      {required DateTime beforeAt,
-      int take = 20}) async {
+      {required DateTime beforeAt, int take = 20}) async {
     try {
       return await _dataSource
           .fetchFeeds(beforeAt: beforeAt, take: take)
