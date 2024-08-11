@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portfolio/core/util/date.util.dart';
 import 'package:portfolio/domain/entity/chat/open_chat.entity.dart';
 import 'package:portfolio/presentation/bloc/chat/chat.bloc_module.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../core/constant/status.dart';
 import '../../../../../core/dependency_injection/configure_dependencies.dart';

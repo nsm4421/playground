@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/util/date.util.dart';
 import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../domain/entity/chat/open_chat_message.entity.dart';
 
@@ -66,7 +66,7 @@ class _Mine extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(timeago.format(_message.createdAt!),
+                  Text(_message.createdAt!.format(),
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: Theme.of(context).colorScheme.inversePrimary))
                 ],
@@ -155,7 +155,7 @@ class _Others extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(timeago.format(_message.createdAt!),
+                          Text(_message.createdAt!.format(),
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall

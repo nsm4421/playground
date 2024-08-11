@@ -61,7 +61,7 @@ class _DisplayOpenChatScreenState extends State<DisplayOpenChatScreen> {
                       subtitleTextStyle:
                           Theme.of(context).textTheme.labelMedium,
                       trailing: item.lastTalkAt != null
-                          ? Text(timeago.format(item.lastTalkAt!),
+                          ? Text(item.lastTalkAt!.format(),
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium

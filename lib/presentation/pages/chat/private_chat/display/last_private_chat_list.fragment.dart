@@ -31,7 +31,7 @@ class LastPrivateChatListFragment extends StatelessWidget {
                       item.content ?? "",
                       overflow: TextOverflow.ellipsis,
                     ),
-                    subtitle: Text(timeago.format(item.createdAt!),
+                    subtitle: Text(item.createdAt!.format(),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: Theme.of(context).colorScheme.tertiary)),
                   );

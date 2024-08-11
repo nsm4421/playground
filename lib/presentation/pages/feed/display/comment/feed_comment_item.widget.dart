@@ -57,7 +57,7 @@ class FeedCommentItemWidget extends StatelessWidget {
               Container(
                 alignment: Alignment.centerRight,
                 width: MediaQuery.of(context).size.width - 96,
-                child: Text(timeago.format(_comment.createdAt!),
+                child: Text(_comment.createdAt!.format(),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.tertiary)),
               )

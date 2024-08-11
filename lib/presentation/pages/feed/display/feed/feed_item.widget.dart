@@ -92,7 +92,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                               ?.copyWith(fontWeight: FontWeight.bold)),
                     // 작성시간
                     if (widget._feed.createdAt != null)
-                      Text(timeago.format(widget._feed.createdAt!),
+                      Text(widget._feed.createdAt!.format(),
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
