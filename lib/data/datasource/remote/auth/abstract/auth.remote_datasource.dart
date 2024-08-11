@@ -1,16 +1,17 @@
-import 'dart:ffi';
 import 'dart:io';
 
+import 'package:logger/logger.dart';
+import 'package:portfolio/core/util/exception.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constant/supabase_constant.dart';
-import '../../base/base.datasource.dart';
-import '../../../model/auth/account.model.dart';
+import '../../../../../core/constant/supabase_constant.dart';
+import '../../../../model/auth/account.model.dart';
+import '../../../base/remote_datasource.dart';
 
-part "../impl/auth.datasource_impl.dart";
+part "../impl/auth.remote_datasource_impl.dart";
 
-abstract interface class AuthDataSource
-    implements BaseDataSource<AccountModel> {
+abstract interface class AuthRemoteDataSource
+    implements BaseRemoteDataSource<AccountModel> {
   User? get currentUser;
 
   Stream<AuthState> get authStream;

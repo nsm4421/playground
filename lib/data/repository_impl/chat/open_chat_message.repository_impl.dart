@@ -5,15 +5,16 @@ import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/response_wrapper.dart';
+import '../../../core/util/exception.util.dart';
 import '../../../domain/entity/chat/open_chat_message.entity.dart';
-import '../../datasource/chat/impl/open_chat_message.datasource_impl.dart';
+import '../../datasource/remote/chat/impl/open_chat_message.remote_datasource_impl.dart';
 import '../../model/chat/open_chat_message/open_chat_message.model.dart';
 
 part '../../../domain/repository/chat/open_chat_message.repository.dart';
 
 @LazySingleton(as: OpenChatMessageRepository)
 class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
-  final OpenChatMessageDataSource _dataSource;
+  final OpenChatMessageRemoteDataSource _dataSource;
   final _logger = Logger();
 
   OpenChatMessageRepositoryImpl(this._dataSource);
@@ -36,12 +37,8 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
           .then((res) =>
               res.map(OpenChatMessageEntity.fromModelWithUser).toList())
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('fetch message fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -52,12 +49,8 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
       await _dataSource
           .createChatMessage(OpenChatMessageModel.fromEntity(entity));
       return ResponseWrapper.success(null);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('send message fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -69,25 +62,29 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
               OpenChatMessageEntity oldRecord, OpenChatMessageEntity newRecord)?
           onUpdate,
       void Function(OpenChatMessageEntity oldRecord)? onDelete}) {
-    return _dataSource.getMessageChannel(
-      key: "open_chat_message:$chatId",
-      onInsert: onInsert == null
-          ? null
-          : (OpenChatMessageModel newModel) {
-              onInsert(OpenChatMessageEntity.fromModel(newModel));
-            },
-      onUpdate: onUpdate == null
-          ? null
-          : (OpenChatMessageModel oldModel, OpenChatMessageModel newModel) {
-              onUpdate(OpenChatMessageEntity.fromModel(oldModel),
-                  OpenChatMessageEntity.fromModel(newModel));
-            },
-      onDelete: onDelete == null
-          ? null
-          : (OpenChatMessageModel oldModel) {
-              onDelete(OpenChatMessageEntity.fromModel(oldModel));
-            },
-    );
+    try {
+      return _dataSource.getMessageChannel(
+        key: "open_chat_message:$chatId",
+        onInsert: onInsert == null
+            ? null
+            : (OpenChatMessageModel newModel) {
+                onInsert(OpenChatMessageEntity.fromModel(newModel));
+              },
+        onUpdate: onUpdate == null
+            ? null
+            : (OpenChatMessageModel oldModel, OpenChatMessageModel newModel) {
+                onUpdate(OpenChatMessageEntity.fromModel(oldModel),
+                    OpenChatMessageEntity.fromModel(newModel));
+              },
+        onDelete: onDelete == null
+            ? null
+            : (OpenChatMessageModel oldModel) {
+                onDelete(OpenChatMessageEntity.fromModel(oldModel));
+              },
+      );
+    } catch (error) {
+      throw CustomException.from(error);
+    }
   }
 
   @override
@@ -95,12 +92,8 @@ class OpenChatMessageRepositoryImpl implements OpenChatMessageRepository {
     try {
       await _dataSource.deleteChatMessageById(messageId);
       return ResponseWrapper.success(null);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('delete message fails');
+      throw CustomException.from(error);
     }
   }
 }

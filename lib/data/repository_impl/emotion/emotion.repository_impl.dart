@@ -1,18 +1,17 @@
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
-import 'package:portfolio/data/datasource/emotion/impl/emotion.datasource_impl.dart';
 import 'package:portfolio/data/model/emotion/emotion.model.dart';
 import 'package:portfolio/domain/entity/emotion/emotion.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/response_wrapper.dart';
+import '../../../core/util/exception.util.dart';
+import '../../datasource/remote/emotion/impl/emotion.remote_datasource_impl.dart';
 
 part '../../../domain/repository/emotion/emotion.repository.dart';
 
 @LazySingleton(as: EmotionRepository)
 class EmotionRepositoryImpl implements EmotionRepository {
-  final EmotionDataSource _dataSource;
-  final Logger _logger = Logger();
+  final EmotionRemoteDataSource _dataSource;
 
   EmotionRepositoryImpl(this._dataSource);
 
@@ -22,12 +21,8 @@ class EmotionRepositoryImpl implements EmotionRepository {
       return await _dataSource
           .deleteEmotionById(id)
           .then((_) => ResponseWrapper.success(null));
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.toString());
+      throw CustomException.from(error);
     }
   }
 
@@ -39,12 +34,8 @@ class EmotionRepositoryImpl implements EmotionRepository {
           .upsertEmotion(EmotionModel.fromEntity(entity))
           .then(EmotionEntity.fromModel)
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.toString());
+      throw CustomException.from(error);
     }
   }
 
@@ -53,23 +44,27 @@ class EmotionRepositoryImpl implements EmotionRepository {
       {void Function(EmotionEntity newModel)? onInsert,
       void Function(EmotionEntity oldModel, EmotionEntity newModel)? onUpdate,
       void Function(EmotionEntity oldModel)? onDelete}) {
-    return _dataSource.getEmotionChannel(
-      onInsert: onInsert == null
-          ? null
-          : (EmotionModel model) {
-              onInsert(EmotionEntity.fromModel(model));
-            },
-      onUpdate: onUpdate == null
-          ? null
-          : (EmotionModel oldModel, EmotionModel newModel) {
-              onUpdate(EmotionEntity.fromModel(oldModel),
-                  EmotionEntity.fromModel(newModel));
-            },
-      onDelete: onDelete == null
-          ? null
-          : (EmotionModel model) {
-              onDelete(EmotionEntity.fromModel(model));
-            },
-    );
+    try {
+      return _dataSource.getEmotionChannel(
+        onInsert: onInsert == null
+            ? null
+            : (EmotionModel model) {
+                onInsert(EmotionEntity.fromModel(model));
+              },
+        onUpdate: onUpdate == null
+            ? null
+            : (EmotionModel oldModel, EmotionModel newModel) {
+                onUpdate(EmotionEntity.fromModel(oldModel),
+                    EmotionEntity.fromModel(newModel));
+              },
+        onDelete: onDelete == null
+            ? null
+            : (EmotionModel model) {
+                onDelete(EmotionEntity.fromModel(model));
+              },
+      );
+    } catch (error) {
+      throw CustomException.from(error);
+    }
   }
 }

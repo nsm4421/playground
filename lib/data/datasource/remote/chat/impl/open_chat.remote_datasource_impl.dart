@@ -1,17 +1,18 @@
 import 'package:logger/logger.dart';
+import 'package:portfolio/core/util/exception.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../core/constant/supabase_constant.dart';
-import '../../../model/chat/open_chat/open_chat.model.dart';
-import '../abstract/chat.datasource.dart';
+import '../../../../../core/constant/supabase_constant.dart';
+import '../../../../model/chat/open_chat/open_chat.model.dart';
+import '../../../base/remote_datasource.dart';
 
-part "../abstract/open_chat.datasource.dart";
+part "../abstract/open_chat.remote_datasource.dart";
 
-class OpenChatDataSourceImpl implements OpenChatDataSource {
+class OpenChatRemoteDataSourceImpl implements OpenChatRemoteDataSource {
   final SupabaseClient _client;
   final Logger _logger;
 
-  OpenChatDataSourceImpl(
+  OpenChatRemoteDataSourceImpl(
       {required SupabaseClient client, required Logger logger})
       : _client = client,
         _logger = logger;
@@ -38,23 +39,36 @@ class OpenChatDataSourceImpl implements OpenChatDataSource {
 
   @override
   Future<void> createChat(OpenChatModel chatRoom) async {
-    final audited = audit(chatRoom);
-    await _client.rest.from(tableName).insert(audited.toJson()).then((_) {
+    try {
+      final audited = audit(chatRoom);
       _logger.d(audited);
-    });
+      await _client.rest.from(tableName).insert(audited.toJson());
+    } catch (e) {
+      throw CustomException.from(e, logger: _logger);
+    }
   }
 
   @override
   Future<void> updateLastMessage(
       {required String chatId, required String lastMessage}) async {
-    await _client.rest.from(tableName).update({
-      "last_message": lastMessage,
-      "last_talk_at": DateTime.now().toUtc().toIso8601String()
-    }).eq("id", chatId);
+    try {
+      _logger.d('deleted id:$chatId}');
+      await _client.rest.from(tableName).update({
+        "last_message": lastMessage,
+        "last_talk_at": DateTime.now().toUtc().toIso8601String()
+      }).eq("id", chatId);
+    } catch (e) {
+      throw CustomException.from(e, logger: _logger);
+    }
   }
 
   @override
   Future<void> deleteChatById(String chatId) async {
-    await _client.rest.from(tableName).delete().eq("id", chatId);
+    try {
+      _logger.d('deleted id:$chatId}');
+      return await _client.rest.from(tableName).delete().eq("id", chatId);
+    } catch (e) {
+      throw CustomException.from(e, logger: _logger);
+    }
   }
 }

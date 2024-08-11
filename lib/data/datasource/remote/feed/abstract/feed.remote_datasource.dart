@@ -1,6 +1,6 @@
-part of "../impl/feed.datasource_impl.dart";
+part of "../impl/feed.remote_datasource_impl.dart";
 
-abstract interface class FeedDataSource implements BaseDataSource<FeedModel> {
+abstract interface class FeedRemoteDataSource implements BaseRemoteDataSource<FeedModel> {
   Future<Iterable<FeedModelForRpc>> fetchFeeds(
       {required DateTime beforeAt, int take = 20});
 

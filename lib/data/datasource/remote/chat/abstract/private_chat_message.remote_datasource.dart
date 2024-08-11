@@ -1,7 +1,7 @@
-part of "../impl/private_chat_message.datasource_impl.dart";
+part of "../impl/private_chat_message.remote_datasource_impl.dart";
 
-abstract class PrivateChatMessageDataSource
-    implements ChatMessageDataSource<PrivateChatMessageModel> {
+abstract class PrivateChatMessageRemoteDataSource
+    implements ChatMessageRemoteDataSource<PrivateChatMessageModel> {
   String getChatId(String receiver, {String? sender});
 
   Future<Iterable<PrivateChatMessageWithUserModelForRpc>> fetchLastMessages(

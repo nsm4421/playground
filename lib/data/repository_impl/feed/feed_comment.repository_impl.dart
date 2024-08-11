@@ -1,17 +1,15 @@
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constant/response_wrapper.dart';
+import '../../../core/util/exception.util.dart';
 import '../../../domain/entity/feed/feed_comment.entity.dart';
-import '../../datasource/feed/impl/feed_comment.datasource_impl.dart';
+import '../../datasource/remote/feed/impl/feed_comment.remote_datasource_impl.dart';
 import '../../model/feed/comment/feed_comment.model.dart';
 
 part '../../../domain/repository/feed/feed_comment.repository.dart';
 
 @LazySingleton(as: FeedCommentRepository)
 class FeedCommentRepositoryImpl implements FeedCommentRepository {
-  final FeedCommentDataSource _dataSource;
-  final Logger _logger = Logger();
+  final FeedCommentRemoteDataSource _dataSource;
 
   FeedCommentRepositoryImpl(this._dataSource);
 
@@ -21,12 +19,8 @@ class FeedCommentRepositoryImpl implements FeedCommentRepository {
       return await _dataSource
           .createComment(FeedCommentModel.fromEntity(model))
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('create comment fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -36,12 +30,8 @@ class FeedCommentRepositoryImpl implements FeedCommentRepository {
       return await _dataSource
           .deleteCommentById(commentId)
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('delete comment fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -55,12 +45,8 @@ class FeedCommentRepositoryImpl implements FeedCommentRepository {
           .fetchComments(beforeAt: beforeAt, feedId: feedId, take: take)
           .then((res) => res.map(FeedCommentEntity.fromRpcModel).toList())
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('fetch comment fails');
+      throw CustomException.from(error);
     }
   }
 }

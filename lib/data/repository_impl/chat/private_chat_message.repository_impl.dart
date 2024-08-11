@@ -1,26 +1,24 @@
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
-import 'package:portfolio/data/datasource/auth/abstract/auth.datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/constant/response_wrapper.dart';
+import '../../../core/util/exception.util.dart';
 import '../../../domain/entity/chat/private_chat_message.entity.dart';
-import '../../datasource/chat/impl/private_chat_message.datasource_impl.dart';
+import '../../datasource/remote/auth/abstract/auth.remote_datasource.dart';
+import '../../datasource/remote/chat/impl/private_chat_message.remote_datasource_impl.dart';
 import '../../model/chat/private_chat_message/private_chat_message.model.dart';
 
 part '../../../domain/repository/chat/private_chat_message.repository.dart';
 
 @LazySingleton(as: PrivateChatMessageRepository)
 class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
-  final AuthDataSource _authDataSource;
-  final PrivateChatMessageDataSource _messageDataSource;
-
-  final _logger = Logger();
+  final AuthRemoteDataSource _authDataSource;
+  final PrivateChatMessageRemoteDataSource _messageDataSource;
 
   PrivateChatMessageRepositoryImpl(
-      {required AuthDataSource authDataSource,
-      required PrivateChatMessageDataSource messageDataSource})
+      {required AuthRemoteDataSource authDataSource,
+      required PrivateChatMessageRemoteDataSource messageDataSource})
       : _authDataSource = authDataSource,
         _messageDataSource = messageDataSource;
 
@@ -32,12 +30,8 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
           .createChatMessage(
               PrivateChatMessageModel(content: content, receiver: receiver))
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('create message fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -47,12 +41,8 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
       return await _messageDataSource
           .deleteChatMessageById(messageId)
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('delete message fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -68,12 +58,8 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
                   currentUid: currentUid))
               .toList())
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('fetch message fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -96,12 +82,8 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
                   currentUid: currentUid))
               .toList())
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('fetch message fails');
+      throw CustomException.from(error);
     }
   }
 
@@ -113,11 +95,15 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
               PrivateChatMessageEntity newRecord)?
           onUpdate,
       void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
-    return _getMessageChannel(
-        key: "conversation-channel:$chatId",
-        onInsert: onInsert,
-        onUpdate: onUpdate,
-        onDelete: onDelete);
+    try {
+      return _getMessageChannel(
+          key: "conversation-channel:$chatId",
+          onInsert: onInsert,
+          onUpdate: onUpdate,
+          onDelete: onDelete);
+    } catch (error) {
+      throw CustomException.from(error);
+    }
   }
 
   @override
@@ -127,11 +113,15 @@ class PrivateChatMessageRepositoryImpl implements PrivateChatMessageRepository {
               PrivateChatMessageEntity newRecord)?
           onUpdate,
       void Function(PrivateChatMessageEntity oldRecord)? onDelete}) {
-    return _getMessageChannel(
-        key: "last-message-channel:${const Uuid().v4()}",
-        onInsert: onInsert,
-        onUpdate: onUpdate,
-        onDelete: onDelete);
+    try {
+      return _getMessageChannel(
+          key: "last-message-channel:${const Uuid().v4()}",
+          onInsert: onInsert,
+          onUpdate: onUpdate,
+          onDelete: onDelete);
+    } catch (error) {
+      throw CustomException.from(error);
+    }
   }
 
   RealtimeChannel _getMessageChannel(

@@ -1,7 +1,7 @@
-part of "../impl/open_chat_message.datasource_impl.dart";
+part of "../impl/open_chat_message.remote_datasource_impl.dart";
 
-abstract class OpenChatMessageDataSource
-    implements ChatMessageDataSource<OpenChatMessageModel> {
+abstract class OpenChatMessageRemoteDataSource
+    implements ChatMessageRemoteDataSource<OpenChatMessageModel> {
   Future<Iterable<OpenChatMessageWithUserModel>> fetchMessages(
       {required String chatId,
       required DateTime beforeAt,

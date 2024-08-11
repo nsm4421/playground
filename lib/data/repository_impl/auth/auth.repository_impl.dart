@@ -1,21 +1,20 @@
 import 'dart:io';
 
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
+import 'package:portfolio/core/util/exception.util.dart';
 import 'package:portfolio/data/model/auth/account.model.dart';
 import 'package:portfolio/domain/entity/auth/account.entity.dart';
 import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/response_wrapper.dart';
-import '../../datasource/auth/abstract/auth.datasource.dart';
+import '../../datasource/remote/auth/abstract/auth.remote_datasource.dart';
 
 part '../../../domain/repository/auth/auth.repository.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthDataSource _dataSource;
-  final Logger _logger = Logger();
+  final AuthRemoteDataSource _dataSource;
 
   AuthRepositoryImpl(this._dataSource);
 
@@ -34,12 +33,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return user == null
           ? ResponseWrapper.error('auth response is not valid')
           : ResponseWrapper.success(user);
-    } on AuthException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('sign in fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -52,13 +47,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return user == null
           ? ResponseWrapper.error('auth response is not valid')
           : ResponseWrapper.success(user);
-    } on AuthException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(
-          (error is AuthException) ? error.message : 'sign up fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -66,12 +56,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<ResponseWrapper<void>> signOut() async {
     try {
       return await _dataSource.signOut().then(ResponseWrapper.success);
-    } on AuthException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('sign out fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -81,12 +67,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return await _dataSource
           .insertAccount(AccountModel.fromEntity(entity))
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('insert account fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -99,12 +81,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return user == null
           ? ResponseWrapper.error('update metadata fail')
           : ResponseWrapper.success(user);
-    } on AuthException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('update metadata fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -116,12 +94,8 @@ class AuthRepositoryImpl implements AuthRepository {
           .updateAccount(
               uid: uid, nickname: nickname, profileImage: profileImage)
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('update account fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -132,12 +106,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return await _dataSource
           .upsertProfileImage(uid: uid, profileImage: profileImage)
           .then(ResponseWrapper.success);
-    } on StorageException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('upsert profile image fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -148,12 +118,8 @@ class AuthRepositoryImpl implements AuthRepository {
           .findByUid(uid)
           .then(PresenceEntity.fromModel)
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('find by uid fail');
+      throw CustomException.from(error);
     }
   }
 
@@ -164,12 +130,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return await _dataSource
           .countByField(field: field, value: value)
           .then(ResponseWrapper.success);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error('count query fails');
+      throw CustomException.from(error);
     }
   }
 }

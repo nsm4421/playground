@@ -1,7 +1,7 @@
-part of "../impl/emotion.datasource_impl.dart";
+part of "../impl/emotion.remote_datasource_impl.dart";
 
-abstract interface class EmotionDataSource
-    implements BaseDataSource<EmotionModel> {
+abstract interface class EmotionRemoteDataSource
+    implements BaseRemoteDataSource<EmotionModel> {
   Future<EmotionModel> upsertEmotion(EmotionModel model);
 
   Future<void> deleteEmotionById(String id);

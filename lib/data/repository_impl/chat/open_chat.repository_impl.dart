@@ -1,18 +1,16 @@
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 import 'package:portfolio/domain/entity/chat/open_chat.entity.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/response_wrapper.dart';
-import '../../datasource/chat/impl/open_chat.datasource_impl.dart';
+import '../../../core/util/exception.util.dart';
+import '../../datasource/remote/chat/impl/open_chat.remote_datasource_impl.dart';
 import '../../model/chat/open_chat/open_chat.model.dart';
 
 part '../../../domain/repository/chat/open_chat.repository.dart';
 
 @LazySingleton(as: OpenChatRepository)
 class OpenChatRepositoryImpl implements OpenChatRepository {
-  final OpenChatDataSource _dataSource;
-  final _logger = Logger();
+  final OpenChatRemoteDataSource _dataSource;
 
   OpenChatRepositoryImpl(this._dataSource);
 
@@ -25,12 +23,8 @@ class OpenChatRepositoryImpl implements OpenChatRepository {
     try {
       await _dataSource.createChat(OpenChatModel.fromEntity(chat));
       return ResponseWrapper.success(null);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error("create open chat fail");
+      throw CustomException.from(error);
     }
   }
 
@@ -41,12 +35,8 @@ class OpenChatRepositoryImpl implements OpenChatRepository {
       await _dataSource.updateLastMessage(
           chatId: chatId, lastMessage: lastMessage);
       return ResponseWrapper.success(null);
-    } on PostgrestException catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error(error.message);
     } catch (error) {
-      _logger.e(error);
-      return ResponseWrapper.error("update last message fail");
+      throw CustomException.from(error);
     }
   }
 }
