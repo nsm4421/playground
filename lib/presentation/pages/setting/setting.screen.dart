@@ -28,6 +28,9 @@ class _SettingScreenState extends State<SettingScreen> {
           IconButton(onPressed: _handleSignOut, icon: const Icon(Icons.logout))
         ],
       ),
+      body: Column(
+        children: [],
+      ),
     );
   }
 }

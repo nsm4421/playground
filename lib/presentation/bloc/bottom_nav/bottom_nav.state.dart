@@ -7,6 +7,10 @@ enum BottomNav {
       label: 'CHAT',
       iconData: Icons.chat_bubble_outline,
       activeIconData: Icons.chat_bubble),
+  travel(
+      label: 'TRIP',
+      iconData: Icons.airplane_ticket_outlined,
+      activeIconData: Icons.airplane_ticket),
   setting(
       label: 'SETTING',
       iconData: Icons.settings_outlined,

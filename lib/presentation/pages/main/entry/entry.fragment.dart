@@ -12,6 +12,8 @@ class EntryFragment extends StatelessWidget {
         return const DisplayFeedPage();
       case BottomNav.chat:
         return const DisplayPrivateChatPage();
+      case BottomNav.travel:
+        return const TravelPage();
       case BottomNav.setting:
         return const SettingPage();
     }

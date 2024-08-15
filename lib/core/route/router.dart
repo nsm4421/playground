@@ -7,6 +7,8 @@ import 'package:portfolio/presentation/pages/feed/create/feed/create_feed.page.d
 import 'package:portfolio/presentation/pages/feed/display/comment/display_feed_comment.page.dart';
 import 'package:portfolio/presentation/pages/feed/display/feed/display_feed.page.dart';
 import 'package:portfolio/presentation/pages/setting/edit/edit_profile.page.dart';
+import 'package:portfolio/presentation/pages/travel/recommend/recommend_itinerary.page.dart';
+import 'package:portfolio/presentation/pages/travel/travel.page.dart';
 
 import '../../presentation/pages/main/components/error.screen.dart';
 import '../../presentation/pages/auth/sign_up/sign-up.page.dart';
@@ -69,6 +71,18 @@ final GoRouter router = GoRouter(routes: [
                 },
               ),
             ]),
+      ]),
+
+  // 여행
+  GoRoute(
+      path: RoutePaths.travel.path,
+      name: "travel",
+      builder: (context, state) => const TravelPage(),
+      routes: [
+        GoRoute(
+            path: RoutePaths.recommendItinerary.subPath!,
+            name: "recommend-itinerary",
+            builder: (context, state) => const RecommendItineraryPage())
       ]),
 
   // 세팅

@@ -11,7 +11,6 @@ import 'package:portfolio/domain/entity/auth/presence.entity.dart';
 import 'package:portfolio/presentation/bloc/auth/auth.bloc.dart';
 import 'package:portfolio/presentation/bloc/feed/create/feed/create_feed.cubit.dart';
 import 'package:portfolio/presentation/bloc/feed/feed.bloc_module.dart';
-import 'package:portfolio/presentation/pages/main/components/error.screen.dart';
 import 'package:portfolio/presentation/pages/main/components/hashtags.widget.dart';
 import 'package:portfolio/presentation/pages/main/components/loading.screen.dart';
 
