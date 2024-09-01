@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/auth/presentation/sign_in.page.dart';
+import 'package:flutter_app/auth/presentation/pages/sign_in.page.dart';
+import 'package:flutter_app/shared/config/di/dependency_injection.dart';
 import 'package:flutter_app/shared/style/style.dart';
 
 void main() {
@@ -13,8 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SNS APP',
-      theme: const CustomLightTheme().theme,
-      darkTheme: const CustomDarkTheme().theme,
+      theme: getIt<CustomLightTheme>().theme,
+      darkTheme: getIt<CustomDarkTheme>().theme,
       home: const SignInPage(),
     );
   }

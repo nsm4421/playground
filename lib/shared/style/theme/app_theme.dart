@@ -1,5 +1,6 @@
 part of '../style.dart';
 
+@lazySingleton
 class CustomLightTheme {
   const CustomLightTheme();
 
@@ -84,6 +85,7 @@ class CustomLightTheme {
   );
 }
 
+@lazySingleton
 class CustomDarkTheme extends CustomLightTheme {
   const CustomDarkTheme();
 
