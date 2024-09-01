@@ -11,6 +11,11 @@
 migrate_working_dir/
 pubspec.lock
 .metadata
+assets/
+.env
+*.gen.dart
+*.config.dart
+*.g.dart
 
 # IntelliJ related
 *.iml
