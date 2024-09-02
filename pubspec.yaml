@@ -26,6 +26,8 @@ dependencies:
   build_runner: ^2.4.11
   injectable: ^2.4.4
   get_it: ^7.7.0
+  supabase_flutter: ^2.6.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +43,7 @@ flutter:
     - assets/animations/
     - assets/icons/
     - assets/images/
+    - .env
   fonts:
     - family: Inter
       fonts:
