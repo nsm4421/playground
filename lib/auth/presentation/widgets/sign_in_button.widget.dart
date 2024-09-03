@@ -8,18 +8,22 @@ class GoogleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: _handleSignIn,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Assets.icons.google.svg(
-              height: CustomTextSize.xl,
-            ),
-            CustomWidth.xl,
-            const Text('구글 계정으로 로그인하기'),
-          ],
-        ));
+    return BlocBuilder<SignInCubit, SignInState>(
+      builder: (context, state) {
+        return ElevatedButton(
+            onPressed: state.isReady ? _handleSignIn : () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Assets.icons.google.svg(
+                  height: CustomTextSize.xl,
+                ),
+                CustomWidth.xl,
+                const Text('구글 계정으로 로그인하기'),
+              ],
+            ));
+      },
+    );
   }
 }
 
@@ -31,16 +35,18 @@ class GithubSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: _handleSignIn,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Assets.icons.github
-                .svg(height: CustomTextSize.xl, color: Colors.white),
-            CustomWidth.xl,
-            const Text('깃허브 계정으로 로그인하기'),
-          ],
-        ));
+    return BlocBuilder<SignInCubit, SignInState>(builder: (context, state) {
+      return ElevatedButton(
+          onPressed: state.isReady ? _handleSignIn : () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Assets.icons.github
+                  .svg(height: CustomTextSize.xl, color: Colors.white),
+              CustomWidth.xl,
+              const Text('깃허브 계정으로 로그인하기'),
+            ],
+          ));
+    });
   }
 }

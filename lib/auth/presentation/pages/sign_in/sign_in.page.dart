@@ -15,6 +15,6 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<LoginCubit>(), child: const SignInScreen());
+        create: (_) => getIt<SignInCubit>(), child: const SignInScreen());
   }
 }

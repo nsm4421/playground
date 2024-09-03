@@ -1,6 +1,6 @@
-part of '../bloc.dart';
+part of '../../bloc.dart';
 
-enum LoginStatus {
+enum SignInStatus {
   init,
   loading,
   success,
@@ -11,20 +11,20 @@ enum LoginStatus {
   error;
 }
 
-class LoginState {
-  final LoginStatus status;
+class SignInState {
+  final SignInStatus status;
   final String? errorMessage;
 
-  LoginState({this.status = LoginStatus.init, this.errorMessage});
+  SignInState({this.status = SignInStatus.init, this.errorMessage});
 
   // 로그인 요청을 보낼 수 있는지 상태 여부
-  bool get isReady => status == LoginStatus.init;
+  bool get isReady => status == SignInStatus.init;
 
-  LoginState copyWith({
-    LoginStatus? status,
+  SignInState copyWith({
+    SignInStatus? status,
     String? errorMessage,
   }) {
-    return LoginState(
+    return SignInState(
         status: status ?? this.status,
         errorMessage: errorMessage ?? this.errorMessage);
   }

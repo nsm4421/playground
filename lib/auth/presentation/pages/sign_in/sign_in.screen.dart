@@ -65,7 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
       return;
     }
     _formKey.currentState?.save();
-    await context.read<LoginCubit>().signInWithEmailAndPassword(
+    await context.read<SignInCubit>().signInWithEmailAndPassword(
         _emailTec.text.trim(), _passwordTec.text.trim());
   }
 
