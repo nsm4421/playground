@@ -12,6 +12,14 @@ class AuthDataSourceImpl extends AuthDataSource {
   Future<User?> signUpWithEmailAndPassword(
       String email, String password) async {
     return await _supabaseClient.auth
+        .signUp(email: email, password: password)
+        .then((res) => res.user);
+  }
+
+  @override
+  Future<User?> signInWithEmailAndPassword(
+      String email, String password) async {
+    return await _supabaseClient.auth
         .signInWithPassword(email: email, password: password)
         .then((res) => res.user);
   }

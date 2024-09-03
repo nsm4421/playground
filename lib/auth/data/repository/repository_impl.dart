@@ -9,10 +9,15 @@ class AuthRepositoryImpl extends AuthRepository {
   final AuthDataSource _dataSource;
 
   AuthRepositoryImpl(this._dataSource);
-
   @override
   Future<User?> signUpWithEmailAndPassword(
       String email, String password) async {
     return await _dataSource.signUpWithEmailAndPassword(email, password);
+  }
+
+  @override
+  Future<User?> signInWithEmailAndPassword(
+      String email, String password) async {
+    return await _dataSource.signInWithEmailAndPassword(email, password);
   }
 }
