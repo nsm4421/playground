@@ -10,11 +10,14 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   static const _maxEmailLength = 30;
   static const _maxPasswordLength = 30;
+  static const _minUsernameLength = 3;
+  static const _maxUsernameLength = 15;
 
   late ImagePicker _imagePicker;
   late TextEditingController _emailTec;
   late TextEditingController _passwordTec;
   late TextEditingController _passwordConfirmTec;
+  late TextEditingController _usernameTec;
   late GlobalKey<FormState> _formKey;
 
   bool _isPasswordVisibile = false;
@@ -28,6 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailTec = TextEditingController();
     _passwordTec = TextEditingController();
     _passwordConfirmTec = TextEditingController();
+    _usernameTec = TextEditingController();
     _formKey = GlobalKey<FormState>(debugLabel: 'sign-up');
   }
 
@@ -37,6 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailTec.dispose();
     _passwordTec.dispose();
     _passwordConfirmTec.dispose();
+    _usernameTec.dispose();
   }
 
   _switchPasswordVisibility() {
@@ -77,6 +82,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return null;
   }
 
+  String? _validateUsername(String? text) {
+    if (text == null || text.isEmpty) {
+      return '유저명을 입력하세요';
+    } else if (text.length < _minUsernameLength ||
+        text.length > _maxUsernameLength) {
+      return '유저명은 최소 $_minUsernameLength~$_maxUsernameLength글자로 작명해주세요';
+    }
+    return null;
+  }
+
   _pickImage() async {
     // 이미지 선택
     final selected = await _imagePicker.pickImage(
@@ -103,8 +118,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
+  _checkUsername() {
+    final username = _usernameTec.text.trim();
+    if (username.isNotEmpty && username.length >= _minUsernameLength) {
+      context.read<SignUpCubit>().checkUsername(_usernameTec.text.trim());
+    }
+  }
+
   _signUp() async {
-    // TODO : 프로필 저장
+    if (_selectedImage == null) {
+      // TODO : snakbar 띄위기
+      return;
+    }
     // 입력값 검사
     final ok = _formKey.currentState?.validate();
     if (ok == null || !ok) {
@@ -113,7 +138,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _formKey.currentState?.save();
     // 회원가입 처리
     await context.read<SignUpCubit>().signUpWithEmailAndPassword(
-        _emailTec.text.trim(), _passwordTec.text.trim());
+        email: _emailTec.text.trim(),
+        password: _passwordTec.text.trim(),
+        username: _usernameTec.text.trim(),
+        profileImage: _selectedImage!);
   }
 
   @override
@@ -126,65 +154,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
             // 앱 로고
             Padding(
               padding: EdgeInsets.only(
-                  top: CustomSpacing.xxxl * 2, bottom: CustomSpacing.lg),
+                  top: CustomSpacing.xxl, bottom: CustomSpacing.lg),
               child: AppLogoWidget(
                 fit: BoxFit.fitHeight,
                 width: MediaQuery.of(context).size.width * 0.8,
               ),
             ),
 
-            // 프로필 사진
-            _selectedImage == null
-                ? Column(
-                    children: [
-                      IconButton(
-                          onPressed: _pickImage,
-                          icon: Icon(
+            GestureDetector(
+              onTap: _pickImage,
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.width * 0.7,
+                  child: CircleAvatar(
+                    child: _selectedImage == null
+                        ? Icon(
                             Icons.add_a_photo_outlined,
                             color: Theme.of(context).colorScheme.secondary,
                             size: MediaQuery.of(context).size.width * 0.3,
-                          )),
-                      CustomHeight.sm,
-                      Text('프로필 이미지를 선택해주세요',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary))
-                    ],
-                  )
-                : GestureDetector(
-                    onTap: _pickImage,
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: MediaQuery.of(context).size.width * 0.3,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surfaceContainer,
-                          backgroundImage: FileImage(_selectedImage!),
-                        ),
-                        Positioned(
-                            top: 0,
-                            right: 0,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.clear,
-                                color: Theme.of(context).colorScheme.secondary,
-                                size: CustomTextSize.xl,
+                          )
+                        : Stack(
+                            children: [
+                              CircleAvatar(
+                                radius:
+                                    MediaQuery.of(context).size.width * 0.35,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainer,
+                                backgroundImage: FileImage(_selectedImage!),
                               ),
-                              onPressed: _unSelectImage,
-                            ))
-                      ],
-                    ),
-                  ),
+                              Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                      size: CustomTextSize.xl,
+                                    ),
+                                    onPressed: _unSelectImage,
+                                  ))
+                            ],
+                          ),
+                  )),
+            ),
 
-            // 이메일, 비밀번호
             Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     CustomHeight.lg,
+                    // 이메일
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: CustomSpacing.lg,
@@ -195,7 +216,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         maxLength: _maxEmailLength,
                         maxLines: 1,
                         decoration: InputDecoration(
-                            hintText: '이메일을 입력해주세요',
+                            hintText: '인증메일을 보낼 이메일 주소를 입력해주세요',
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -207,6 +228,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                     ),
+                    // 비밀번호
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: CustomSpacing.lg,
@@ -218,7 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         maxLines: 1,
                         obscureText: !_isPasswordVisibile,
                         decoration: InputDecoration(
-                            hintText: '비밀번호를 입력해주세요',
+                            hintText: '비밀번호를 $_maxPasswordLength자 내로 작명해주세요',
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -236,6 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                     ),
+                    // 비밀번호 확인
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: CustomSpacing.lg,
@@ -247,7 +270,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         maxLines: 1,
                         obscureText: !_isPasswordConfirmVisibile,
                         decoration: InputDecoration(
-                            hintText: '비밀번호를 다시 한번 입력해주세요',
+                            hintText: '비밀번호를 다시 입력해주세요',
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -265,6 +288,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                     ),
+
+                    // 유저명
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: CustomSpacing.lg,
+                          vertical: CustomSpacing.tiny),
+                      child: TextFormField(
+                        controller: _usernameTec,
+                        validator: _validateUsername,
+                        maxLength: _maxUsernameLength,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                            hintText:
+                                '유저명은 $_minUsernameLength~$_maxUsernameLength자 내로 작명해주세요',
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary),
+                            prefixIcon: const Icon(Icons.abc),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.check),
+                              onPressed: _checkUsername,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: CustomSpacing.sm),
+                      child: Divider(
+                          indent: CustomSpacing.xxl,
+                          endIndent: CustomSpacing.xxl),
+                    ),
+
+                    // 회원가입 버튼
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: CustomSpacing.lg,
@@ -272,20 +333,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: BlocBuilder<SignUpCubit, SignUpState>(
                         builder: (context, state) {
                           return ElevatedButton(
-                              onPressed: state.isReady ? _signUp : () {},
+                              onPressed: _signUp,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.check, size: CustomTextSize.xl),
                                   CustomWidth.lg,
-                                  Text('회원가입하기',
+                                  Text(
+                                      state.status == SignUpStatus.loading
+                                          ? '로딩중...'
+                                          : '회원가입하기',
                                       style: TextStyle(
                                           fontSize: CustomTextSize.xl))
                                 ],
                               ));
                         },
                       ),
-                    )
+                    ),
+                    CustomHeight.xxl
                   ],
                 )),
           ],

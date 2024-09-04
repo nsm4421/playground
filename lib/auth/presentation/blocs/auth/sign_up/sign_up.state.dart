@@ -6,7 +6,7 @@ enum SignUpStatus {
   success,
   // errors
   weakPassword,
-  duplicatedEmail,
+  dupliacatedUsername,
   networkError,
   error;
 }

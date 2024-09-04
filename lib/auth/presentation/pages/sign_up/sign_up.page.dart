@@ -25,7 +25,7 @@ class SignUpPage extends StatelessWidget {
               switch (state.status) {
                 // TODO : 회원가입 완료 처리, 오류 처리
                 case SignUpStatus.success:
-                case SignUpStatus.duplicatedEmail:
+                case SignUpStatus.dupliacatedUsername:
                 case SignUpStatus.networkError:
                 case SignUpStatus.error:
                 default:
