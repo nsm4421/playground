@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'auth/auth.export.dart';
 import 'shared/shared.export.dart';
 
 main() async {
@@ -19,26 +21,31 @@ main() async {
   // 의존성 주입
   configureDependencies();
 
-  runApp(const MyApp());
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: CustomLightTheme().theme,
-      darkTheme: CustomDarkTheme().theme,
-      routerConfig: routerConfig,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            child!,
-            SnakbarWidget(key: getIt<CustomSnakbar>().globalKey),
-          ],
-        );
-      },
-    );
+    return MultiBlocProvider(
+        providers: [
+          // 인증상태 Bloc
+          BlocProvider(create: (_) => getIt<AuthenticationBloc>())
+        ],
+        child: MaterialApp.router(
+          theme: CustomLightTheme().theme,
+          darkTheme: CustomDarkTheme().theme,
+          routerConfig: routerConfig,
+          builder: (context, child) {
+            return Stack(
+              children: [
+                child!,
+                SnakbarWidget(key: getIt<CustomSnakbar>().globalKey),
+              ],
+            );
+          },
+        ));
   }
 }

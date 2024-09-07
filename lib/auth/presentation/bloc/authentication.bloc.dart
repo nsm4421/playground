@@ -15,8 +15,6 @@ part 'authentication.event.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthUseCase _useCase;
-  late Stream<User?> _userStream;
-  User? _currentUser;
 
   AuthenticationBloc(this._useCase) : super(AuthenticationState()) {
     on<InitAuthEvent>(_onInit);
@@ -25,11 +23,10 @@ class AuthenticationBloc
     on<SignInWithEmailAndPasswordEvent>(_onSignInWithEmailAndPassword);
     on<SignUpWithEmailAndPasswordEvent>(_onSignUpWithEmailAndPassword);
     on<SignOutEvent>(_onSignOut);
-    _userStream = _useCase.userStream;
   }
 
-  Stream<User?> get userStream => _userStream;
-  User? get currentUser => _currentUser;
+  Stream<User?> get userStream => _useCase.userStream;
+  User? get currentUser => _useCase.currentUser;
 
   Future<bool> checkUsername(String username) async =>
       await _useCase.checkUsername.call(username);
