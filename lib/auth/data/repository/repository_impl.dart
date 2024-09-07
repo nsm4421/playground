@@ -39,4 +39,16 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<String> uploadProfileImage(File profileImage) async {
     return await _dataSource.uploadProfileImage(profileImage);
   }
+
+  @override
+  Future<void> signOut() async {
+    return await _dataSource.signOut();
+  }
+
+  @override
+  Stream<User?> get userStream =>
+      _dataSource.authStream.asyncMap((authState) => authState.session?.user);
+
+  @override
+  User? get currenetUser => _dataSource.currentUser;
 }

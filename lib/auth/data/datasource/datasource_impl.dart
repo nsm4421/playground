@@ -57,4 +57,15 @@ class AuthDataSourceImpl extends AuthDataSource {
         ));
     return bucket.getPublicUrl(path);
   }
+
+  @override
+  Future<void> signOut() async {
+    await _supabaseClient.auth.signOut();
+  }
+
+  @override
+  Stream<AuthState> get authStream => _supabaseClient.auth.onAuthStateChange;
+
+  @override
+  User? get currentUser => _supabaseClient.auth.currentUser;
 }

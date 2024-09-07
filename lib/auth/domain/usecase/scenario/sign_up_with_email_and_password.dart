@@ -5,7 +5,7 @@ class SignUpWithEmailAndPasswordUseCase {
 
   SignUpWithEmailAndPasswordUseCase(this._repository);
 
-  Future<void> call({
+  Future<User?> call({
     required String email,
     required String password,
     required String username,
@@ -15,7 +15,7 @@ class SignUpWithEmailAndPasswordUseCase {
     final avatarUrl = await _repository.uploadProfileImage(profileImage);
 
     // 회원가입
-    await _repository.signUpWithEmailAndPassword(
+    return await _repository.signUpWithEmailAndPassword(
         email: email,
         password: password,
         username: username,

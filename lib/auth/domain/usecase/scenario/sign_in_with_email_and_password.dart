@@ -5,7 +5,7 @@ class SignInWithEmailAndPasswordUseCase {
 
   SignInWithEmailAndPasswordUseCase(this._repository);
 
-  Future<void> call(String email, String password) async {
-    await _repository.signInWithEmailAndPassword(email, password);
+  Future<User?> call(String email, String password) async {
+    return await _repository.signInWithEmailAndPassword(email, password);
   }
 }
