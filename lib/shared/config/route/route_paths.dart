@@ -2,8 +2,8 @@ part of 'router.dart';
 
 enum RoutePaths {
   auth('/auth'),
-  signIn('/auth/sign-in', subpath: 'sign-in'),
   signUp('/auth/sign-up', subpath: 'sign-up'),
+  home('/'),
   ;
 
   const RoutePaths(this.path, {this.subpath});
