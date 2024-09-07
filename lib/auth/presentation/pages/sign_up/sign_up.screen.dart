@@ -127,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   _signUp() async {
     if (_selectedImage == null) {
-      // TODO : snakbar 띄위기
+      getIt<CustomSnakbar>().info(title: '프로필사진을 선택해주세요');
       return;
     }
     // 입력값 검사

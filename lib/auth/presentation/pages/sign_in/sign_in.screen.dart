@@ -55,11 +55,11 @@ class _SignInScreenState extends State<SignInScreen> {
     return null;
   }
 
-  // TODO : 회원가입 페이지로 이동
-  _routeSignUp() {}
+  _routeSignUp() {
+    context.push(RoutePaths.signUp.path);
+  }
 
   _submitForm() async {
-    // 이메일, 비밀번호 필드 검사
     final ok = _formKey.currentState?.validate();
     if (ok == null || !ok) {
       return;

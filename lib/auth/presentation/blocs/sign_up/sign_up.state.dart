@@ -5,9 +5,10 @@ enum SignUpStatus {
   loading,
   success,
   // errors
+  invalidParameter,
   weakPassword,
+  alreadyExistEmail,
   dupliacatedUsername,
-  networkError,
   error;
 }
 

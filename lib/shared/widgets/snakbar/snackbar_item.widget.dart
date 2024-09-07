@@ -15,9 +15,10 @@ class _SnackbarItemWidgetState extends State<SnackbarItemWidget> {
     return GestureDetector(
       onTap: widget._message.onTap,
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: CustomSpacing.sm),
         padding: EdgeInsets.symmetric(
             horizontal: CustomSpacing.lg, vertical: CustomSpacing.sm),
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width - 2 * CustomSpacing.sm,
         decoration: BoxDecoration(
             color: widget._message.bgColor,
             borderRadius: BorderRadius.circular(20)),

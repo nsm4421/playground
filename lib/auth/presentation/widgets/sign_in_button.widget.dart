@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../shared/style/style.export.dart';
-import '../blocs/auth/sign_in/sign_in.cubit.dart';
+import '../blocs/sign_in/sign_in.cubit.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({super.key});

@@ -35,7 +35,7 @@ class CustomSnakbar {
 
   info(
       {String title = 'Info',
-      required String description,
+      String? description,
       IconData iconData = Icons.info,
       Duration? timeout,
       VoidCallback? onTap,

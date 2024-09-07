@@ -5,9 +5,9 @@ enum SignInStatus {
   loading,
   success,
   // errors
-  invalidCredentials,
+  invalidParameter,
   userNotFound,
-  networkError,
+  wrongPassword,
   error;
 }
 
