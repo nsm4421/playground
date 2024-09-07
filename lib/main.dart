@@ -28,9 +28,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        theme: CustomLightTheme().theme,
-        darkTheme: CustomDarkTheme().theme,
-        routerConfig: routerConfig,
-        builder: (context, child) => child!);
+      theme: CustomLightTheme().theme,
+      darkTheme: CustomDarkTheme().theme,
+      routerConfig: routerConfig,
+      builder: (context, child) {
+        return Stack(
+          children: [
+            child!,
+            SnakbarWidget(key: getIt<CustomSnakbar>().globalKey),
+          ],
+        );
+      },
+    );
   }
 }
