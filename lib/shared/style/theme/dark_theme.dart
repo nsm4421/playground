@@ -1,15 +1,14 @@
-part of '../style.dart';
+part of 'light_theme.dart';
 
 class CustomDarkTheme extends CustomLightTheme {
   @override
   Brightness get brightness => Brightness.dark;
   @override
-  Color get _primary => const Color(0xFFAB47BC);
+  Color get _primary => AppColors.darkTeal;
   @override
-  Color get _secondary => const Color(0xFF80DEEA);
+  Color get _secondary => AppColors.deepOrangeAccent;
   @override
-  Color get _tertiary => const Color.fromARGB(255, 138, 76, 76);
-
+  Color get _tertiary => AppColors.lightBlueAccent;
   @override
   Color get _background => const Color(0xFF121212);
   @override

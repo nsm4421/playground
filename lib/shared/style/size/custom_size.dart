@@ -1,4 +1,6 @@
-part of '../style.dart';
+import 'package:flutter/material.dart';
+
+part 'custom_sizedbox.dart';
 
 abstract class CustomTextSize {
   static double get tiny => 8;

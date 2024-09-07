@@ -1,17 +1,21 @@
-part of '../style.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/material.dart';
+
+import '../size/custom_size.dart';
+
+part 'app_color.dart';
+part 'dark_theme.dart';
 
 class CustomLightTheme {
   // 밝기
   Brightness get brightness => Brightness.light;
 
-  // 색깔
-  Color get _primary => Colors.black87;
-  Color get _secondary => Colors.black38;
-  Color get _tertiary => Colors.blueGrey;
-
-  Color get _background => const Color.fromARGB(255, 8, 53, 16);
-  Color get _textColor => const Color(0xFF212121);
-  Color get _buttonTextColor => Colors.white;
+  Color get _primary => AppColors.teal;
+  Color get _secondary => AppColors.deepOrange;
+  Color get _tertiary => AppColors.indigo;
+  Color get _textColor => AppColors.black;
+  Color get _buttonTextColor => AppColors.white;
+  Color get _background => AppColors.teal.withOpacity(0.5);
 
   // 기본 테마
   ThemeData get _baseTheme => FlexThemeData.light(

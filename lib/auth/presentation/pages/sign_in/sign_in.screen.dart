@@ -13,6 +13,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   late TextEditingController _emailTec;
   late TextEditingController _passwordTec;
+  late GlobalKey<FormState> _formKey;
 
   bool _isPasswordVisible = false;
 
@@ -21,6 +22,7 @@ class _SignInScreenState extends State<SignInScreen> {
     super.initState();
     _emailTec = TextEditingController();
     _passwordTec = TextEditingController();
+    _formKey = GlobalKey<FormState>(debugLabel: 'login form');
   }
 
   @override
@@ -36,8 +38,39 @@ class _SignInScreenState extends State<SignInScreen> {
     });
   }
 
-  // TODO : 회원가입 페이지로 이동
-  _routeSignUp() {}
+  String? _validateEmail(String? text) {
+    RegExp regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (text == null || text.isEmpty) {
+      return '이메일을 입력하세요';
+    } else if (!regex.hasMatch(text)) {
+      return '올바른 이메일 형식이 아닙니다';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? text) {
+    if (text == null || text.isEmpty) {
+      return '비밀번호를 입력하세요';
+    }
+    return null;
+  }
+
+  _routeSignUp() {
+    context.push(RoutePaths.signUp.path);
+  }
+
+  _submitForm() async {
+    if (context.read<AuthenticationBloc>().state.status == Status.loading) {
+      return;
+    }
+    final ok = _formKey.currentState?.validate();
+    if (ok == null || !ok) {
+      return;
+    }
+    _formKey.currentState?.save();
+    context.read<AuthenticationBloc>().add(SignInWithEmailAndPasswordEvent(
+        _emailTec.text.trim(), _passwordTec.text.trim()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,49 +89,69 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
 
-              // 이메일
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: CustomSpacing.lg, vertical: CustomSpacing.tiny),
-                child: TextFormField(
-                  controller: _emailTec,
-                  maxLength: _maxEmailLength,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-
-              // 비밀번호
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: CustomSpacing.lg, vertical: CustomSpacing.tiny),
-                child: TextFormField(
-                  controller: _passwordTec,
-                  maxLength: _maxPasswordLength,
-                  maxLines: 1,
-                  obscureText: !_isPasswordVisible,
-                  decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.key),
-                      suffixIcon: IconButton(
-                        icon: Icon(_isPasswordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility),
-                        onPressed: _switchVisiblity,
+              // 이메일, 비밀번호
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: CustomSpacing.lg,
+                            vertical: CustomSpacing.tiny),
+                        child: TextFormField(
+                          controller: _emailTec,
+                          validator: _validateEmail,
+                          maxLength: _maxEmailLength,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.email),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
                       ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: CustomSpacing.lg,
+                            vertical: CustomSpacing.tiny),
+                        child: TextFormField(
+                          controller: _passwordTec,
+                          validator: _validatePassword,
+                          maxLength: _maxPasswordLength,
+                          maxLines: 1,
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.key),
+                              suffixIcon: IconButton(
+                                icon: Icon(_isPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: _switchVisiblity,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                      ),
+                    ],
+                  )),
 
               //  로그인 버튼
               Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: CustomSpacing.xxl,
                       vertical: CustomSpacing.tiny),
-                  child: const SignInWithEmailAndPasswordButton()),
+                  child: ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.email,
+                            size: CustomTextSize.xl,
+                          ),
+                          CustomWidth.xl,
+                          const Text('이메일로 로그인하기'),
+                        ],
+                      ))),
 
               // 회원가입버튼
               Padding(
