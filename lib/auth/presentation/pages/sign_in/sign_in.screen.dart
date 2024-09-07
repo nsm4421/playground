@@ -60,13 +60,16 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   _submitForm() async {
+    if (context.read<AuthenticationBloc>().state.status == Status.loading) {
+      return;
+    }
     final ok = _formKey.currentState?.validate();
     if (ok == null || !ok) {
       return;
     }
     _formKey.currentState?.save();
-    await context.read<SignInCubit>().signInWithEmailAndPassword(
-        _emailTec.text.trim(), _passwordTec.text.trim());
+    context.read<AuthenticationBloc>().add(SignInWithEmailAndPasswordEvent(
+        _emailTec.text.trim(), _passwordTec.text.trim()));
   }
 
   @override

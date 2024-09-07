@@ -121,7 +121,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   _checkUsername() {
     final username = _usernameTec.text.trim();
     if (username.isNotEmpty && username.length >= _minUsernameLength) {
-      context.read<SignUpCubit>().checkUsername(_usernameTec.text.trim());
+      context
+          .read<AuthenticationBloc>()
+          .checkUsername(_usernameTec.text.trim());
     }
   }
 
@@ -137,11 +139,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     _formKey.currentState?.save();
     // 회원가입 처리
-    await context.read<SignUpCubit>().signUpWithEmailAndPassword(
+    context.read<AuthenticationBloc>().add(SignUpWithEmailAndPasswordEvent(
         email: _emailTec.text.trim(),
         password: _passwordTec.text.trim(),
         username: _usernameTec.text.trim(),
-        profileImage: _selectedImage!);
+        profileImage: _selectedImage!));
   }
 
   @override
@@ -330,7 +332,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       padding: EdgeInsets.symmetric(
                           horizontal: CustomSpacing.lg,
                           vertical: CustomSpacing.sm),
-                      child: BlocBuilder<SignUpCubit, SignUpState>(
+                      child:
+                          BlocBuilder<AuthenticationBloc, AuthenticationState>(
                         builder: (context, state) {
                           return ElevatedButton(
                               onPressed: _signUp,
@@ -340,7 +343,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   Icon(Icons.check, size: CustomTextSize.xl),
                                   CustomWidth.lg,
                                   Text(
-                                      state.status == SignUpStatus.loading
+                                      state.status == Status.loading
                                           ? '로딩중...'
                                           : '회원가입하기',
                                       style: TextStyle(
