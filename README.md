@@ -43,7 +43,8 @@
 
 ## 회원가입
 
-```create or replace function public.on_sign_up()
+```
+create or replace function public.on_sign_up()
 returns trigger
 language plpgsql
 security definer set search_path = public
