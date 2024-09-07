@@ -1,4 +1,9 @@
-part of '../style.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/material.dart';
+
+import '../size/custom_size.dart';
+
+part 'dark_theme.dart';
 
 class CustomLightTheme {
   // 밝기

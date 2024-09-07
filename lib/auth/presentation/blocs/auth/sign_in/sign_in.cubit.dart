@@ -1,4 +1,11 @@
-part of '../../bloc.dart';
+import 'dart:developer';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+
+import '../../../../domain/usecase/usecase.dart';
+
+part 'sign_in.state.dart';
 
 @injectable
 class SignInCubit extends Cubit<SignInState> {

@@ -1,15 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/auth/presentation/blocs/bloc.dart';
-import 'package:flutter_app/shared/config/di/dependency_injection.dart';
-import 'package:flutter_app/shared/style/style.dart';
-import 'package:flutter_app/shared/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:flutter_app/shared/shared.export.dart';
+
+import '../../blocs/auth/sign_up/sign_up.cubit.dart';
 
 part 'sign_up.screen.dart';
 

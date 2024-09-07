@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/auth/presentation/widgets/widgets.dart';
 import 'package:flutter_app/shared/config/di/dependency_injection.dart';
-import 'package:flutter_app/shared/style/style.dart';
-import 'package:flutter_app/shared/widgets/widgets.dart';
+import 'package:flutter_app/shared/style/style.export.dart';
+import 'package:flutter_app/shared/widgets/widgets.export.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/bloc.dart';
+import '../../blocs/auth/sign_in/sign_in.cubit.dart';
+import '../../widgets/sign_in_button.widget.dart';
 
 part 'sign_in.screen.dart';
 

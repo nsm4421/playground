@@ -1,4 +1,6 @@
-part of 'widgets.dart';
+import 'package:flutter/material.dart';
+
+import '../../style/generated/assets.gen.dart';
 
 class AppLogoWidget extends StatelessWidget {
   const AppLogoWidget(

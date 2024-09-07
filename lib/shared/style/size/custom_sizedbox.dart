@@ -1,4 +1,4 @@
-part of '../style.dart';
+part of 'custom_size.dart';
 
 abstract class CustomWidth {
   static SizedBox get tiny => SizedBox(width: CustomSpacing.tiny);

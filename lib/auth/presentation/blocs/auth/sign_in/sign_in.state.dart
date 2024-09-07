@@ -1,4 +1,4 @@
-part of '../../bloc.dart';
+part of 'sign_in.cubit.dart';
 
 enum SignInStatus {
   init,

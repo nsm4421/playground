@@ -1,4 +1,4 @@
-part of '../style.dart';
+part of 'light_theme.dart';
 
 class CustomDarkTheme extends CustomLightTheme {
   @override
