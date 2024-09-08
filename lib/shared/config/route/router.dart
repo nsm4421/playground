@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/auth/auth.export.dart';
-import 'package:flutter_app/feed/presentation/feed.page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../auth/auth.export.dart';
 import '../../../auth/presentation/pages/sign_in/sign_in.page.dart';
 import '../../../auth/presentation/pages/sign_up/sign_up.page.dart';
+import '../../../create_media/create_media.export.dart';
+import '../../../feed/feed.export.dart';
 import '../../../home/home.export.dart';
+import '../../../reels/reels.export.dart';
+import '../../../search/search.export.dart';
+import '../../../setting/setting.export.dart';
 import '../../shared.export.dart';
 
 part 'route_paths.dart';
@@ -43,42 +47,16 @@ final routerConfig = GoRouter(
                         path: item.path,
                         pageBuilder: (context, state) {
                           return switch (item) {
-                            // TODO : 각 라우팅별로 View 구현하기
-                            HomeBottomNavItem.feed => NoTransitionPage(
-                                  child: Center(
-                                child: Text(
-                                  'Feed',
-                                  style: TextStyle(fontSize: 50),
-                                ),
-                              )),
-                            HomeBottomNavItem.search => NoTransitionPage(
-                                  child: Center(
-                                child: Text(
-                                  'Search',
-                                  style: TextStyle(fontSize: 50),
-                                ),
-                              )),
-                            HomeBottomNavItem.createMedia => NoTransitionPage(
-                                  child: Center(
-                                child: Text(
-                                  'Create',
-                                  style: TextStyle(fontSize: 50),
-                                ),
-                              )),
-                            HomeBottomNavItem.reels => NoTransitionPage(
-                                  child: Center(
-                                child: Text(
-                                  'Reels',
-                                  style: TextStyle(fontSize: 50),
-                                ),
-                              )),
-                            HomeBottomNavItem.setting => NoTransitionPage(
-                                  child: Center(
-                                child: Text(
-                                  'Setting',
-                                  style: TextStyle(fontSize: 50),
-                                ),
-                              )),
+                            HomeBottomNavItem.feed =>
+                              const NoTransitionPage(child: FeedPage()),
+                            HomeBottomNavItem.search =>
+                              const NoTransitionPage(child: SearchPage()),
+                            HomeBottomNavItem.createMedia =>
+                              const NoTransitionPage(child: CreateMediaPage()),
+                            HomeBottomNavItem.reels =>
+                              const NoTransitionPage(child: ReelsPage()),
+                            HomeBottomNavItem.setting =>
+                              const NoTransitionPage(child: SettingPage()),
                           };
                         })
                   ]))
