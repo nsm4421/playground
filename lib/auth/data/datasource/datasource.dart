@@ -7,10 +7,14 @@ abstract class AuthDataSource {
     required String username,
     required String avatarUrl,
   });
+
   Future<User?> signInWithEmailAndPassword(String email, String password);
+
   Future<bool> checkUsername(String username);
-  Future<String> uploadProfileImage(File profileImage);
+
   Future<void> signOut();
+
   Stream<AuthState> get authStream;
+
   User? get currentUser;
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_app/shared/shared.export.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -55,29 +56,10 @@ class AuthDataSourceImpl extends AuthDataSource {
   Future<bool> checkUsername(String username) async {
     try {
       return await _supabaseClient
-          .from('accounts')
+          .from(Tables.accounts.name)
           .count()
           .eq('username', username)
           .then((res) => res == 0);
-    } catch (error) {
-      _logger.e(error);
-      throw CustomException.from(error: error);
-    }
-  }
-
-  @override
-  Future<String> uploadProfileImage(File profileImage) async {
-    try {
-      final uuid = const Uuid().v4();
-      final ext = profileImage.path.split('/').last;
-      final path = '$uuid.$ext';
-      final bucket = _supabaseClient.storage.from('avatars');
-      await bucket.uploadBinary(path, await profileImage.readAsBytes(),
-          fileOptions: FileOptions(
-            contentType: 'image/$ext',
-            cacheControl: '3600',
-          ));
-      return bucket.getPublicUrl(path);
     } catch (error) {
       _logger.e(error);
       throw CustomException.from(error: error);
