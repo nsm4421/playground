@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_app/auth/data/repository/repository_impl.dart';
+import 'package:flutter_app/shared/constant/constant.export.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -28,5 +29,5 @@ class AuthUseCase {
 
   Stream<User?> get userStream => _authRepository.userStream;
 
-  User? get currentUser => _authRepository.currenetUser;
+  User? get currentUser => _authRepository.currentUser;
 }

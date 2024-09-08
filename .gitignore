@@ -18,6 +18,7 @@ assets/
 *.g.dart
 devtools_options.yaml
 .vscode/
+*.freezed.dart
 
 # IntelliJ related
 *.iml

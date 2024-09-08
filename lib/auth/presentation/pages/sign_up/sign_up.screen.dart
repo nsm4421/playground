@@ -123,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (username.isNotEmpty && username.length >= _minUsernameLength) {
       context
           .read<AuthenticationBloc>()
-          .checkUsername(_usernameTec.text.trim());
+          .add(CheckUsernameEvent(_usernameTec.text.trim()));
     }
   }
 
