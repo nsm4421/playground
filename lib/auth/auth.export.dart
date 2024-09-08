@@ -1,1 +1,2 @@
-export 'presentation/bloc/authentication.bloc.dart';
+export 'data/data.export.dart';
+export 'presentation/presentation.export.dart';

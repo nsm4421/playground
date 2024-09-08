@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter_app/auth/domain/usecase/usecase.dart';
-import 'package:flutter_app/shared/constant/constant.export.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../shared/shared.export.dart';
+import '../../domain/domain.export.dart';
 
 part 'authentication.state.dart';
 
