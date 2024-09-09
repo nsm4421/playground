@@ -1,1 +1,1 @@
-export 'presentation/create_media.page.dart';
+export 'presentation/pages/index/create_media.page.dart';
