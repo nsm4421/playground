@@ -6,7 +6,10 @@ class EditFeedUseCase {
   EditFeedUseCase(this._repository);
 
   Future<UseCaseResponseWrapper<void>> call(
-      {required String feedId, File? feedImage, String? caption}) async {
+      {required String feedId,
+      File? feedImage,
+      String? caption,
+      List<String>? hashtags}) async {
     String? media;
     if (feedImage != null) {
       final feedImageUploadRes =
@@ -18,7 +21,8 @@ class EditFeedUseCase {
       media = (feedImageUploadRes as RepositorySuccess).data;
     }
     return await _repository
-        .editFeed(feedId: feedId, media: media, caption: caption)
+        .editFeed(
+            feedId: feedId, media: media, caption: caption, hashtags: hashtags)
         .then(UseCaseResponseWrapper.from);
   }
 }

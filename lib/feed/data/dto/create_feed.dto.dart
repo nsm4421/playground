@@ -11,6 +11,7 @@ class CreateFeedDto with _$CreateFeedDto {
     @Default('') String id,
     @Default('') String media,
     @Default('') String caption,
+    @Default(<String>[]) List<String> hashtags,
     @Default('') String created_by,
     @Default('') String created_at,
   }) = _CreateFeedDto;

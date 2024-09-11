@@ -5,10 +5,12 @@ class CreateFeedUseCase {
 
   CreateFeedUseCase(this._repository);
 
-  Future<UseCaseResponseWrapper<void>> call(
-      {required String feedId,
-      required File feedImage,
-      required String caption}) async {
+  Future<UseCaseResponseWrapper<void>> call({
+    required String feedId,
+    required File feedImage,
+    required String caption,
+    required List<String> hashtags,
+  }) async {
     final feedImageUploadRes = await _repository.uploadFeedImage(feedImage);
     if (!feedImageUploadRes.ok) {
       return UseCaseError.from(feedImageUploadRes,
@@ -16,7 +18,8 @@ class CreateFeedUseCase {
     }
     final media = (feedImageUploadRes as RepositorySuccess).data;
     return await _repository
-        .createFeed(feedId: feedId, media: media, caption: caption)
+        .createFeed(
+            feedId: feedId, media: media, caption: caption, hashtags: hashtags)
         .then(UseCaseResponseWrapper.from);
   }
 }

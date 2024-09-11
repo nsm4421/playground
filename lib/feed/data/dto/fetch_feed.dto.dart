@@ -11,6 +11,7 @@ class FetchFeedDto with _$FetchFeedDto {
     @Default('') String id,
     @Default('') String media,
     @Default('') String caption,
+    @Default(<String>[]) List<String> hashtags,
     @Default('') String created_at,
     @Default('') String updated_at,
     // 작성자

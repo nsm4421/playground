@@ -11,6 +11,7 @@ class EditFeedDto with _$EditFeedDto {
     @Default('') String id,
     String? media,
     String? caption,
+    List<String>? hashtags,
     @Default('') String updated_at,
   }) = _EditFeedDto;
 

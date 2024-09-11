@@ -25,10 +25,12 @@ class FeedRepositoryImpl extends FeedRepository {
   Future<RepositoryResponseWrapper<void>> createFeed(
       {required String feedId,
       required String media,
-      required String caption}) async {
+      required String caption,
+      required List<String> hashtags}) async {
     try {
       return await _feedDataSource
-          .createFeed(CreateFeedDto(id: feedId, media: media, caption: caption))
+          .createFeed(CreateFeedDto(
+              id: feedId, media: media, caption: caption, hashtags: hashtags))
           .then(RepositorySuccess<void>.from);
     } on Exception catch (error) {
       return RepositoryError<void>.from(error);
@@ -48,10 +50,14 @@ class FeedRepositoryImpl extends FeedRepository {
 
   @override
   Future<RepositoryResponseWrapper<void>> editFeed(
-      {required String feedId, String? media, String? caption}) async {
+      {required String feedId,
+      String? media,
+      String? caption,
+      List<String>? hashtags}) async {
     try {
       return await _feedDataSource
-          .editFeed(EditFeedDto(id: feedId, media: media, caption: caption))
+          .editFeed(EditFeedDto(
+              id: feedId, media: media, caption: caption, hashtags: hashtags))
           .then(RepositorySuccess<void>.from);
     } on Exception catch (error) {
       return RepositoryError<void>.from(error);

@@ -22,7 +22,7 @@ class StorageDataSource {
       String? filename,
       bool upsert = false}) async {
     try {
-      final ext = file.path.split('/').last; // 파일 확장자
+      final ext = file.path.split('.').last; // 파일 확장자
       final prefix = directory == null ? '' : '$directory/'; // 파일 디렉터리 경로
       final fullFilename = '${filename ?? const Uuid().v4()}.$ext'; // 파일명
       final path = '$prefix$fullFilename';
