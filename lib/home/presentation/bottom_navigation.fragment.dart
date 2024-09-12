@@ -11,12 +11,11 @@ class BottomNavigationFragment extends StatefulWidget {
 }
 
 class _BottomNavigationFragmentState extends State<BottomNavigationFragment> {
-
-  _onTap(int index) {
-    if (index != widget._navigationShell.currentIndex){
+  _onTap(int idx) {
+    if (idx != widget._navigationShell.currentIndex) {
       widget._navigationShell.goBranch(
-        index,
-        initialLocation: index == widget._navigationShell.currentIndex,
+        idx,
+        initialLocation: idx == widget._navigationShell.currentIndex,
       );
     }
   }

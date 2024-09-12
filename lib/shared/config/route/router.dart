@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../auth/auth.export.dart';
@@ -18,15 +19,29 @@ part 'route_paths.dart';
 
 part 'auth_notifier.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+@lazySingleton
+class CustomRoute {
+  late GlobalKey<NavigatorState> _rootNavigatorKey;
 
-final routerConfig = GoRouter(
-    navigatorKey: _rootNavigatorKey,
-    initialLocation: RoutePaths.auth.path,
-    // TODO : splash 페이지 구현
-    routes: [
-      // 인증
-      GoRoute(
+  final AuthStateNotifier _authStateNotifier; // 인증상태가 변경 시 이를 감지하여, 라우팅을 처리
+
+  CustomRoute(this._authStateNotifier) {
+    _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+  }
+
+  /// router 세팅
+  GoRouter get routerConfig => GoRouter(
+      navigatorKey: _rootNavigatorKey,
+      initialLocation: RoutePaths.auth.path,
+      routes: [
+        _authRouter,
+        _homeRouter,
+      ],
+      redirect: _redirect,
+      refreshListenable: _authStateNotifier);
+
+  /// 인증
+  GoRoute get _authRouter => GoRoute(
           path: RoutePaths.auth.path,
           builder: (context, state) => const SignInPage(),
           routes: [
@@ -34,54 +49,54 @@ final routerConfig = GoRouter(
             GoRoute(
                 path: RoutePaths.signUp.subpath!,
                 builder: (context, state) => const SignUpPage())
-          ]),
-      // 홈화면
-      StatefulShellRoute.indexedStack(
-          parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state, navigationShell) {
-            return HomePage(navigationShell);
-          },
-          branches: HomeBottomNavItem.values
-              .map((item) => StatefulShellBranch(routes: [
-                    GoRoute(
-                        path: item.path,
-                        pageBuilder: (context, state) {
-                          return switch (item) {
-                            HomeBottomNavItem.feed =>
-                              const NoTransitionPage(child: FeedPage()),
-                            HomeBottomNavItem.search =>
-                              const NoTransitionPage(child: SearchPage()),
-                            HomeBottomNavItem.createMedia =>
-                              const NoTransitionPage(child: CreateMediaPage()),
-                            HomeBottomNavItem.reels =>
-                              const NoTransitionPage(child: ReelsPage()),
-                            HomeBottomNavItem.setting =>
-                              const NoTransitionPage(child: SettingPage()),
-                          };
-                        })
-                  ]))
-              .toList())
-    ],
-    // 리다이렉션
-    redirect: (context, state) {
-      final authenticated =
-          context.read<AuthenticationBloc>().state.authStatus ==
-              AuthStatus.authenticated;
-      final isInAuthPage = RoutePaths.values
-          .where((item) => item.path.contains('/auth'))
-          .map((item) => item.path)
-          .contains(state.matchedLocation);
+          ]);
 
-      if (authenticated && isInAuthPage) {
-        // 로그인했는데 인증페이지에 있는 경우, 홈화면으로 redirect
-        return RoutePaths.feed.path;
-      } else if (!authenticated && !isInAuthPage) {
-        // 로그인 안했는데 인증페이지에 없는 경우, 인증페이지로 redirect
-        return RoutePaths.auth.path;
-      }
+  /// 홈화면
+  StatefulShellRoute get _homeRouter => StatefulShellRoute.indexedStack(
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state, navigationShell) {
+        return HomePage(navigationShell);
+      },
+      branches: HomeBottomNavItem.values
+          .map((item) => StatefulShellBranch(routes: [
+                GoRoute(
+                    path: item.path,
+                    pageBuilder: (context, state) {
+                      return switch (item) {
+                        HomeBottomNavItem.feed =>
+                          const NoTransitionPage(child: FeedPage()),
+                        HomeBottomNavItem.search =>
+                          const NoTransitionPage(child: SearchPage()),
+                        HomeBottomNavItem.createMedia =>
+                          const NoTransitionPage(child: CreateMediaPage()),
+                        HomeBottomNavItem.reels =>
+                          const NoTransitionPage(child: ReelsPage()),
+                        HomeBottomNavItem.setting =>
+                          const NoTransitionPage(child: SettingPage()),
+                      };
+                    })
+              ]))
+          .toList());
 
-      return null;
-    },
-    // 인증상태가 변경될 때 마다 refresh
-    refreshListenable:
-        AuthStateNotifier(getIt<AuthenticationBloc>().userStream));
+  /// 리다이렉션
+  String? Function(BuildContext, GoRouterState) get _redirect =>
+      (context, state) {
+        final authenticated =
+            context.read<AuthenticationBloc>().state.authStatus ==
+                AuthStatus.authenticated;
+        final isInAuthPage = RoutePaths.values
+            .where((item) => item.path.contains('/auth'))
+            .map((item) => item.path)
+            .contains(state.matchedLocation);
+
+        if (authenticated && isInAuthPage) {
+          // 로그인했는데 인증페이지에 있는 경우, 홈화면으로 redirect
+          return RoutePaths.feed.path;
+        } else if (!authenticated && !isInAuthPage) {
+          // 로그인 안했는데 인증페이지에 없는 경우, 인증페이지로 redirect
+          return RoutePaths.auth.path;
+        }
+
+        return null;
+      };
+}

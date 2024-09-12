@@ -37,7 +37,7 @@ class MainApp extends StatelessWidget {
         child: MaterialApp.router(
           theme: CustomLightTheme().theme,
           darkTheme: CustomDarkTheme().theme,
-          routerConfig: routerConfig,
+          routerConfig: getIt<CustomRoute>().routerConfig,
           builder: (context, child) {
             return Stack(
               children: [

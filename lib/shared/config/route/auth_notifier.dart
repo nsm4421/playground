@@ -1,10 +1,11 @@
 part of 'router.dart';
 
+@lazySingleton
 class AuthStateNotifier extends ChangeNotifier {
-  final Stream<User?> _userStream;
+  final AuthenticationBloc _authBloc;
 
-  AuthStateNotifier(this._userStream) {
-    _userStream.listen((data) {
+  AuthStateNotifier(this._authBloc) {
+    _authBloc.userStream.listen((data) {
       notifyListeners();
     });
   }
