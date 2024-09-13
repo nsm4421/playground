@@ -11,6 +11,10 @@ class CreateMediaCubit extends Cubit<CreateMediaState> {
       : super(CreateMediaState(
             mode: CreateMediaMode.feed, step: CreateMediaStep.selectMedia));
 
+  switchStep(CreateMediaStep step) {
+    emit(state.copyWith(step: step));
+  }
+
   switchMode(CreateMediaMode mode) {
     emit(state.copyWith(mode: mode));
   }

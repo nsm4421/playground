@@ -19,8 +19,12 @@ class CreateMediaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<CreateMediaCubit>(),
-      child: const CreateMediaScreen(),
-    );
+        create: (_) => getIt<CreateMediaCubit>(),
+        child: BlocBuilder<CreateMediaCubit, CreateMediaState>(
+            builder: (context, state) {
+          return state.step == CreateMediaStep.done
+              ? const CreateMediaSuccessScreen()
+              : const CreateMediaScreen();
+        }));
   }
 }

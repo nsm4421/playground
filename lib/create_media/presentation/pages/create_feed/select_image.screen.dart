@@ -8,17 +8,14 @@ class SelectImageScreen extends StatefulWidget {
 }
 
 class _SelectImageScreenState extends State<SelectImageScreen> {
-  @override
-  initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context.read<CreateFeedCubit>().fetchAlbums();
-    });
-  }
-
   _moveNextStep() {
-    if (context.read<CreateFeedCubit>().state.currentAsset != null) {
-      context.read<CreateFeedCubit>().movePage(CreateStep.detail);
+    if (context.read<CreateFeedBloc>().state.currentAsset != null) {
+      context
+          .read<CreateMediaCubit>()
+          .switchStep(CreateMediaStep.detail);
+      context
+          .read<CreateFeedBloc>()
+          .add(UpdateStateEvent(step: CreateMediaStep.detail));
     }
   }
 
@@ -26,26 +23,25 @@ class _SelectImageScreenState extends State<SelectImageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("사진을 선택해주세요"),
-          actions: [
-            IconButton(
-                tooltip: 'NEXT',
-                onPressed: _moveNextStep,
-                icon: Icon(
-                  Icons.chevron_right,
-                  size: CustomTextSize.xxl,
-                ))
-          ],
-          elevation: 0,
-        ),
-        body: BlocBuilder<CreateFeedCubit, CreateFeedState>(
+            title: const Text("사진을 선택해주세요"),
+            actions: [
+              IconButton(
+                  tooltip: 'NEXT',
+                  onPressed: _moveNextStep,
+                  icon: Icon(
+                    Icons.chevron_right,
+                    size: CustomTextSize.xxl,
+                  ))
+            ],
+            elevation: 0),
+        body: BlocBuilder<CreateFeedBloc, CreateFeedState>(
             builder: (context, state) {
           return SingleChildScrollView(
               child: Column(children: [
             SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width,
-                child: (state.currentAsset == null || state.media == null)
+                child: (state.media == null)
                     ? const Center(child: CircularProgressIndicator())
                     : Image.file(
                         state.media!,

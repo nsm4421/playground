@@ -18,8 +18,7 @@ class SelectModeButtonWidget extends StatelessWidget {
                   _floatingButtonWidth / 1.5,
           child: Container(
               width: _floatingButtonWidth,
-              padding: EdgeInsets.symmetric(
-                  horizontal: CustomSpacing.sm, vertical: CustomSpacing.tiny),
+              padding: EdgeInsets.symmetric(vertical: CustomSpacing.tiny),
               decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
@@ -29,35 +28,32 @@ class SelectModeButtonWidget extends StatelessWidget {
               child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SingleSelectModeButtonWidget(CreateMediaMode.feed),
-                    CustomWidth.md,
-                    const SingleSelectModeButtonWidget(CreateMediaMode.reels),
-                  ])));
+                  children: CreateMediaMode.values
+                      .map((mode) => GestureDetector(
+                          onTap: () {
+                            context.read<CreateMediaCubit>().switchMode(mode);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: CustomSpacing.sm),
+                            child: Text(mode.label,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withOpacity(
+                                                mode.index == state.mode.index
+                                                    ? 1
+                                                    : 0.5),
+                                        fontWeight:
+                                            mode.index == state.mode.index
+                                                ? FontWeight.bold
+                                                : FontWeight.normal)),
+                          )))
+                      .toList())));
     });
-  }
-}
-
-class SingleSelectModeButtonWidget extends StatelessWidget {
-  const SingleSelectModeButtonWidget(this._mode, {super.key});
-
-  final CreateMediaMode _mode;
-
-  @override
-  Widget build(BuildContext context) {
-    final currentMode = context.read<CreateMediaCubit>().state.mode;
-    return GestureDetector(
-        onTap: () {
-          context.read<CreateMediaCubit>().switchMode(_mode);
-        },
-        child: Text(_mode.label,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withOpacity(_mode.index == 0 ? 1 : 0.5),
-                fontWeight: _mode.index == currentMode.index
-                    ? FontWeight.bold
-                    : FontWeight.normal)));
   }
 }

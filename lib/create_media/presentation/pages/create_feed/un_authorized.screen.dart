@@ -18,8 +18,8 @@ class UnAuthorizedScreen extends StatelessWidget {
                 ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           ElevatedButton(
-              onPressed: () async {
-                await context.read<CreateFeedCubit>().askPermission();
+              onPressed: () {
+                context.read<CreateFeedBloc>().add(AskPermissionEvent());
               },
               child: const Text('권한 허용하기'))
         ],

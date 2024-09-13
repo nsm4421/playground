@@ -20,7 +20,9 @@ class _DetailScreenState extends State<DetailScreen> {
     _focusNode = FocusNode()
       ..addListener(() {
         if (!_focusNode.hasFocus) {
-          context.read<CreateFeedCubit>().updateCaption(_tec.text);
+          context
+              .read<CreateFeedBloc>()
+              .add(UpdateStateEvent(caption: _tec.text));
         }
       });
   }
@@ -33,7 +35,10 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   _moveBack() {
-    context.read<CreateFeedCubit>().movePage(CreateStep.selectMedia);
+    context.read<CreateMediaCubit>().switchStep(CreateMediaStep.selectMedia);
+    context
+        .read<CreateFeedBloc>()
+        .add(UpdateStateEvent(step: CreateMediaStep.selectMedia));
   }
 
   _showAddHashtag() async {
@@ -46,19 +51,24 @@ class _DetailScreenState extends State<DetailScreen> {
         showDragHandle: false,
         context: context,
         builder: (_) => AddHashtagFragment(
-            context.read<CreateFeedCubit>().state.hashtags)).then((hashtags) {
+            context.read<CreateFeedBloc>().state.hashtags)).then((hashtags) {
       if (hashtags == null) {
         return;
       }
       setState(() {
-        context.read<CreateFeedCubit>().updateHashtags(hashtags);
+        context
+            .read<CreateFeedBloc>()
+            .add(UpdateStateEvent(hashtags: hashtags));
       });
     });
   }
 
-  // TODO : 포스팅 업로드
   _uploadFeed() {
-    context.read<CreateFeedCubit>().uploadFeed();
+    if (_tec.text.trim().isEmpty){
+      getIt<CustomSnakbar>().error(title: '캡션을 입력해주세요');
+      return;
+    }
+    context.read<CreateFeedBloc>().add(UploadEvent());
   }
 
   @override
@@ -81,7 +91,7 @@ class _DetailScreenState extends State<DetailScreen> {
             CircleAvatar(
               radius: 60,
               backgroundImage:
-                  FileImage(context.read<CreateFeedCubit>().state.media!),
+                  FileImage(context.read<CreateFeedBloc>().state.media!),
             ),
             CustomWidth.sm,
             Expanded(
@@ -107,7 +117,7 @@ class _DetailScreenState extends State<DetailScreen> {
               left: CustomSpacing.sm,
               right: CustomSpacing.sm,
             ),
-            child: context.read<CreateFeedCubit>().state.hashtags.isEmpty
+            child: context.read<CreateFeedBloc>().state.hashtags.isEmpty
                 // 해시태그 수정화면 띄우기 버튼
                 ? IconButton(
                     onPressed: _showAddHashtag,
@@ -132,7 +142,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 // 해시태그 아이템 목록
                 : Wrap(
                     children: context
-                        .read<CreateFeedCubit>()
+                        .read<CreateFeedBloc>()
                         .state
                         .hashtags
                         .map((text) => GestureDetector(

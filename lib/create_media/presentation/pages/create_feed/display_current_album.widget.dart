@@ -27,14 +27,18 @@ class _DisplayCurrentAlbumWidgetState extends State<DisplayCurrentAlbumWidget> {
         context: context,
         builder: (_) {
           return SelectDirectoryFragment(
-              context.read<CreateFeedCubit>().state.albums);
+              context.read<CreateFeedBloc>().state.albums);
         }).then((album) {
       if (album == null) {
         return;
       }
-      context.read<CreateFeedCubit>().selectAlbum(album);
+      context.read<CreateFeedBloc>().add(SelectAlbumEvent(album: album));
     });
   }
+
+  _selectAsset(AssetEntity asset) => () {
+        context.read<CreateFeedBloc>().add(SelectAssetEvent(asset));
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +79,7 @@ class _DisplayCurrentAlbumWidgetState extends State<DisplayCurrentAlbumWidget> {
             itemBuilder: (context, index) {
               final asset = widget.assets[index];
               return GestureDetector(
-                  onTap: () async {
-                    await context.read<CreateFeedCubit>().selectAsset(asset);
-                  },
+                  onTap: _selectAsset(asset),
                   child: Opacity(
                       opacity: widget.currentAsset == asset ? 0.3 : 1,
                       child: ImagePreviewWidget(asset)));
@@ -99,7 +101,7 @@ class FetchMoreButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateFeedCubit, CreateFeedState>(
+    return BlocBuilder<CreateFeedBloc, CreateFeedState>(
         builder: (context, state) {
       if (state.isEnd) {
         return const SizedBox();
@@ -109,8 +111,8 @@ class FetchMoreButton extends StatelessWidget {
         case Status.success:
           return IconButton(
               tooltip: '더 가져오기',
-              onPressed: () async {
-                context.read<CreateFeedCubit>().fetchAssets();
+              onPressed: () {
+                context.read<CreateFeedBloc>().add(FetchMoreAssetsEvent());
               },
               icon: Icon(
                 Icons.rotate_left,

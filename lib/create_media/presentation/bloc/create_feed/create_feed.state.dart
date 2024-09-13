@@ -1,4 +1,4 @@
-part of 'create_feed.cubit.dart';
+part of 'create_feed.bloc.dart';
 
 class CreateFeedState extends BaseState {
   final String caption;
@@ -13,7 +13,7 @@ class CreateFeedState extends BaseState {
   CreateFeedState({
     required super.id,
     super.status = Status.initial,
-    super.step = CreateStep.selectMedia,
+    super.step = CreateMediaStep.selectMedia,
     super.media,
     this.caption = '',
     required this.hashtags,
@@ -28,8 +28,9 @@ class CreateFeedState extends BaseState {
 
   @override
   CreateFeedState copyWith({
+    String? id,
     Status? status,
-    CreateStep? step,
+    CreateMediaStep? step,
     File? media,
     String? caption,
     List<String>? hashtags,
@@ -42,7 +43,7 @@ class CreateFeedState extends BaseState {
     bool? isEnd,
   }) =>
       CreateFeedState(
-          id: id,
+          id: id ?? this.id,
           status: status ?? this.status,
           step: step ?? this.step,
           media: media ?? this.media,
