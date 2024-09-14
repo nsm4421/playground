@@ -7,16 +7,13 @@ import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import '../../../constant/constant.dart';
 import '../../widgets/image_preview.widget.dart';
+import '../../widgets/select_directory.fragment.dart';
 
 part 'select_image.screen.dart';
 
 part 'detail.screen.dart';
 
-part 'select_directory.fragment.dart';
-
 part 'display_current_album.widget.dart';
-
-part 'un_authorized.screen.dart';
 
 part 'add_hashtag.fragment.dart';
 
@@ -51,9 +48,6 @@ class CreateFeedPage extends StatelessWidget {
           },
           child: BlocBuilder<CreateFeedBloc, CreateFeedState>(
               builder: (context, state) {
-            if (!state.isAuth) {
-              return const UnAuthorizedScreen();
-            }
             return switch (state.step) {
               CreateMediaStep.selectMedia => const SelectImageScreen(),
               CreateMediaStep.detail => const DetailScreen(),
