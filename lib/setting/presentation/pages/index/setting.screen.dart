@@ -8,7 +8,6 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-
   late ScrollController _nestedScrollController;
 
   @override
@@ -23,11 +22,22 @@ class _SettingScreenState extends State<SettingScreen> {
     _nestedScrollController.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("SETTING"),),
+      appBar: AppBar(
+        title: Text("SETTING"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+
+
+            Text('test')
+
+          ],
+        ),
+      ),
     );
   }
 }
