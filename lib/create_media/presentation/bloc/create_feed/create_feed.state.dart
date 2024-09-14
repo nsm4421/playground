@@ -3,12 +3,6 @@ part of 'create_feed.bloc.dart';
 class CreateFeedState extends BaseState {
   final String caption;
   final List<String> hashtags;
-  final List<AssetPathEntity> albums;
-  final AssetPathEntity? currentAlbum;
-  final List<AssetEntity> assets;
-  final AssetEntity? currentAsset;
-  final bool isAuth;
-  final bool isEnd;
 
   CreateFeedState({
     required super.id,
@@ -18,12 +12,12 @@ class CreateFeedState extends BaseState {
     this.caption = '',
     required this.hashtags,
     super.errorMessage = '',
-    required this.albums,
-    this.currentAlbum,
-    required this.assets,
-    this.currentAsset,
-    this.isAuth = false,
-    this.isEnd = false,
+    super.albums,
+    super.currentAlbum,
+    super.assets,
+    super.currentAsset,
+    super.isAuth = false,
+    super.isEnd = false,
   });
 
   @override

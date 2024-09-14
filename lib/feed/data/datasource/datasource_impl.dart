@@ -60,7 +60,8 @@ class FeedDataSourceImpl extends FeedDataSource {
       await _supabaseClient.rest.from(Tables.feeds.name).update({
         if (dto.media != null) 'media': dto.media,
         if (dto.caption != null) 'caption': dto.caption,
-        if (dto.hashtags != null) 'hashtags': dto.hashtags
+        if (dto.hashtags != null) 'hashtags': dto.hashtags,
+        'updated_at' : DateTime.now().toUtc().toIso8601String()
       }).eq('id', dto.id);
     } catch (error) {
       _logger.e(error);
