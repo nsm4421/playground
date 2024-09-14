@@ -25,6 +25,34 @@
     create policy "can delete own account" on accounts
     for delete using (auth.uid() = id);
 
+## Feed
+
+    create table public.feeds (
+    id uuid not null default gen_random_uuid (),
+    created_by uuid not null default auth.uid(),
+    media text null,
+    hashtags text[] DEFAULT '{}',
+    caption text null,
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone null,    
+    constraint posts_pkey primary key (id),
+    constraint posts_user_id_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+    ) tablespace pg_default;
+    
+    alter table public.feeds enable row level security;
+    
+    create policy "permit select for all authenticated" on public.feeds
+    for select to authenticated using (true);
+    
+    create policy "permit insert own data" on public.feeds
+    for insert to authenticated with check (auth.uid() = created_by);
+    
+    create policy "permit update own data" on public.feeds
+    for update to authenticated with check (auth.uid() = created_by);
+    
+    create policy "permit delete own data" on public.feeds
+    for update to authenticated with check (auth.uid() = created_by);
 
 # 버킷
 

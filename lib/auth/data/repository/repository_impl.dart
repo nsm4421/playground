@@ -3,16 +3,21 @@ import 'dart:io';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../shared/constant/constant.export.dart';
+import '../../../shared/shared.export.dart';
 import '../datasource/datasource_impl.dart';
 
 part 'repository.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl extends AuthRepository {
-  final AuthDataSource _dataSource;
+  final AuthDataSource _authDataSource;
+  final StorageDataSource _storageDataSource;
 
-  AuthRepositoryImpl(this._dataSource);
+  AuthRepositoryImpl(
+      {required AuthDataSource authDataSource,
+      required StorageDataSource storageDataSource})
+      : _authDataSource = authDataSource,
+        _storageDataSource = storageDataSource;
 
   @override
   Future<RepositoryResponseWrapper<User?>> signUpWithEmailAndPassword(
@@ -21,15 +26,15 @@ class AuthRepositoryImpl extends AuthRepository {
       required String username,
       required String avatarUrl}) async {
     try {
-      return await _dataSource
+      return await _authDataSource
           .signUpWithEmailAndPassword(
               email: email,
               password: password,
               username: username,
               avatarUrl: avatarUrl)
-          .then(RepositorySuccess.from);
+          .then(RepositorySuccess<User?>.from);
     } on Exception catch (error) {
-      return RepositoryError.from(error);
+      return RepositoryError<User?>.from(error);
     }
   }
 
@@ -37,47 +42,53 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<RepositoryResponseWrapper<User?>> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      return await _dataSource
+      return await _authDataSource
           .signInWithEmailAndPassword(email, password)
-          .then(RepositorySuccess.from);
+          .then(RepositorySuccess<User?>.from);
     } on Exception catch (error) {
-      return RepositoryError.from(error);
+      return RepositoryError<User?>.from(error);
     }
   }
 
   @override
   Future<RepositoryResponseWrapper<bool>> checkUsername(String username) async {
     try {
-      return await _dataSource.checkUsername(username).then(RepositorySuccess.from);
+      return await _authDataSource
+          .checkUsername(username)
+          .then(RepositorySuccess<bool>.from);
     } on Exception catch (error) {
-      return RepositoryError.from(error);
+      return RepositoryError<bool>.from(error);
     }
   }
 
   @override
-  Future<RepositoryResponseWrapper<String>> uploadProfileImage(File profileImage) async {
+  Future<RepositoryResponseWrapper<String>> uploadProfileImage(
+      File profileImage) async {
     try {
-      return await _dataSource
-          .uploadProfileImage(profileImage)
-          .then(RepositorySuccess.from);
+      return await _storageDataSource
+          .uploadImage(
+              file: profileImage,
+              bucketName: Buckets.avatars.name,
+              upsert: true)
+          .then(RepositorySuccess<String>.from);
     } on Exception catch (error) {
-      return RepositoryError.from(error);
+      return RepositoryError<String>.from(error);
     }
   }
 
   @override
   Future<RepositoryResponseWrapper<void>> signOut() async {
     try {
-      return await _dataSource.signOut().then(RepositorySuccess.from);
+      return await _authDataSource.signOut().then(RepositorySuccess<void>.from);
     } on Exception catch (error) {
-      return RepositoryError.from(error);
+      return RepositoryError<void>.from(error);
     }
   }
 
   @override
-  Stream<User?> get userStream =>
-      _dataSource.authStream.asyncMap((authState) => authState.session?.user);
+  Stream<User?> get userStream => _authDataSource.authStream
+      .asyncMap((authState) => authState.session?.user);
 
   @override
-  User? get currentUser => _dataSource.currentUser;
+  User? get currentUser => _authDataSource.currentUser;
 }
