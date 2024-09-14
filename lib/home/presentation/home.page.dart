@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../shared/constant/constant.export.dart';
+import '../../shared/shared.export.dart';
 
 part 'home.screen.dart';
 
