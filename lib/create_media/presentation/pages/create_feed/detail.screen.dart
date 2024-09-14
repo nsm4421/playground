@@ -52,9 +52,7 @@ class _DetailScreenState extends State<DetailScreen> {
         context: context,
         builder: (_) => AddHashtagFragment(
             context.read<CreateFeedBloc>().state.hashtags)).then((hashtags) {
-      if (hashtags == null) {
-        return;
-      }
+      if (hashtags == null) return;
       setState(() {
         context
             .read<CreateFeedBloc>()
@@ -64,7 +62,7 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   _uploadFeed() {
-    if (_tec.text.trim().isEmpty){
+    if (_tec.text.trim().isEmpty) {
       getIt<CustomSnakbar>().error(title: '캡션을 입력해주세요');
       return;
     }
@@ -75,12 +73,9 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: _moveBack,
-          icon: const Icon(Icons.chevron_left),
-        ),
-        title: const Text('포스팅을 작성해주세요'),
-      ),
+          leading: IconButton(
+              onPressed: _moveBack, icon: const Icon(Icons.chevron_left)),
+          title: const Text('포스팅을 작성해주세요')),
       body: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -1,4 +1,8 @@
-part of 'create_feed.page.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:photo_manager/photo_manager.dart';
+
+import '../../../shared/shared.export.dart';
 
 class SelectDirectoryFragment extends StatelessWidget {
   const SelectDirectoryFragment(this._album, {super.key});

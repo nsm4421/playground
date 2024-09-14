@@ -3,8 +3,6 @@ part of 'create_feed.bloc.dart';
 @sealed
 final class CreateFeedEvent {}
 
-final class AskPermissionEvent extends CreateFeedEvent {}
-
 final class FetchAlbumsEvent extends CreateFeedEvent {
   final int minHeight; // 가져올 이미지의 최소 높이
   final int take; // 가져올 이미지 개수

@@ -1,24 +1,26 @@
 part of 'create_feed.bloc.dart';
 
 class CreateFeedState extends BaseState {
-  final String caption;
-  final List<String> hashtags;
+  late final String caption;
+  late final List<String> hashtags;
 
   CreateFeedState({
-    required super.id,
-    super.status = Status.initial,
-    super.step = CreateMediaStep.selectMedia,
+    super.id,
+    super.status,
+    super.step,
     super.media,
-    this.caption = '',
-    required this.hashtags,
+    String? caption,
+    List<String>? hashtags,
     super.errorMessage = '',
     super.albums,
     super.currentAlbum,
     super.assets,
     super.currentAsset,
-    super.isAuth = false,
-    super.isEnd = false,
-  });
+    super.isEnd,
+  }) {
+    this.hashtags = hashtags ?? [];
+    this.caption = caption ?? '';
+  }
 
   @override
   CreateFeedState copyWith({
@@ -33,7 +35,6 @@ class CreateFeedState extends BaseState {
     AssetPathEntity? currentAlbum,
     List<AssetEntity>? assets,
     AssetEntity? currentAsset,
-    bool? isAuth,
     bool? isEnd,
   }) =>
       CreateFeedState(
@@ -48,6 +49,5 @@ class CreateFeedState extends BaseState {
           currentAlbum: currentAlbum ?? this.currentAlbum,
           assets: assets ?? this.assets,
           currentAsset: currentAsset ?? this.currentAsset,
-          isAuth: isAuth ?? this.isAuth,
           isEnd: isEnd ?? this.isEnd);
 }

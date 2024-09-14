@@ -8,7 +8,7 @@ class ImagePreviewWidget extends StatefulWidget {
       {super.key, this.size = 200, this.quality = 80});
 
   final AssetEntity asset;
-  final int size;
+  final double size;
   final int quality;
 
   @override
@@ -21,7 +21,6 @@ class _ImagePreviewWidgetState extends State<ImagePreviewWidget> {
   @override
   initState() {
     super.initState();
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _loadImage();
     });
@@ -29,7 +28,7 @@ class _ImagePreviewWidgetState extends State<ImagePreviewWidget> {
 
   Future<void> _loadImage() async {
     final data = await widget.asset.thumbnailDataWithSize(
-      ThumbnailSize(widget.size, widget.size),
+      ThumbnailSize(widget.size.toInt(), widget.size.toInt()),
       quality: widget.quality,
     );
     setState(() {

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 import '../../../constant/constant.dart';
 
@@ -17,5 +18,12 @@ class CreateMediaCubit extends Cubit<CreateMediaState> {
 
   switchMode(CreateMediaMode mode) {
     emit(state.copyWith(mode: mode));
+  }
+
+  askPermission() async {
+    emit(state.copyWith(mounted: false));
+    final isAuth =
+        await PhotoManager.requestPermissionExtend().then((res) => res.isAuth);
+    emit(state.copyWith(isAuth: isAuth, mounted: true));
   }
 }

@@ -1,7 +1,20 @@
-part of 'create_feed.page.dart';
+part of 'create_media.page.dart';
 
-class UnAuthorizedScreen extends StatelessWidget {
+class UnAuthorizedScreen extends StatefulWidget {
   const UnAuthorizedScreen({super.key});
+
+  @override
+  State<UnAuthorizedScreen> createState() => _UnAuthorizedScreenState();
+}
+
+class _UnAuthorizedScreenState extends State<UnAuthorizedScreen> {
+  _askPermission() async {
+    await context.read<CreateMediaCubit>().askPermission();
+  }
+
+  _openSetting() async {
+    await PhotoManager.openSetting();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +31,8 @@ class UnAuthorizedScreen extends StatelessWidget {
                 ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           ElevatedButton(
-              onPressed: () {
-                context.read<CreateFeedBloc>().add(AskPermissionEvent());
-              },
-              child: const Text('권한 허용하기'))
+              onPressed: _askPermission, child: const Text('권한 요청하기')),
+          ElevatedButton(onPressed: _openSetting, child: const Text('세팅 열기'))
         ],
       ),
     );

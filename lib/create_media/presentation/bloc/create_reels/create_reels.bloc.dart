@@ -1,24 +1,25 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter_app/shared/constant/constant.export.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:uuid/uuid.dart';
 
-import '../../../../feed/feed.export.dart';
+import '../../../../reels/reels.export.dart';
+import '../../../../shared/shared.export.dart';
 import '../../../constant/constant.dart';
 
-part 'create_feed.state.dart';
+part 'create_reels.state.dart';
 
-part 'create_feed.event.dart';
+part 'create_reels.event.dart';
 
 @injectable
-class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
-  final FeedUseCase _useCase;
+class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState> {
+  final ReelsUseCase _useCase;
 
-  CreateFeedBloc(this._useCase) : super(CreateFeedState()) {
+  CreateReelsBloc(this._useCase) : super(CreateReelsState()) {
     on<FetchAlbumsEvent>(_onFetchAlbums);
     on<SelectAlbumEvent>(_onSelectAlbum);
     on<SelectAssetEvent>(_onSelectAsset);
@@ -28,19 +29,22 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   }
 
   Future<void> _onFetchAlbums(
-      FetchAlbumsEvent event, Emitter<CreateFeedState> emit) async {
+      FetchAlbumsEvent event, Emitter<CreateReelsState> emit) async {
     try {
+      log('[CreateReelsBloc]_onFetchAlbums 실행');
       emit(state.copyWith(status: Status.loading));
       final albums = await PhotoManager.getAssetPathList(
-          type: RequestType.image,
+          type: RequestType.video,
           filterOption: FilterOptionGroup(
               imageOption: FilterOption(
                   sizeConstraint: SizeConstraint(minHeight: event.minHeight)),
               orders: [
                 const OrderOption(type: OrderOptionType.createDate, asc: false)
               ]));
+      log('[CreateReelsBloc] albums ${albums.length}개 가져옴');
       final assets =
           await albums.first.getAssetListRange(start: 0, end: event.take);
+      log('[CreateReelsBloc] asset ${assets.length}개 가져옴');
       emit(state.copyWith(
           albums: albums,
           currentAlbum: albums.first,
@@ -58,7 +62,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   }
 
   Future<void> _onSelectAlbum(
-      SelectAlbumEvent event, Emitter<CreateFeedState> emit) async {
+      SelectAlbumEvent event, Emitter<CreateReelsState> emit) async {
     try {
       if (state.currentAlbum == event.album) return;
       emit(state.copyWith(status: Status.loading, currentAlbum: event.album));
@@ -79,7 +83,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   }
 
   Future<void> _onSelectAsset(
-      SelectAssetEvent event, Emitter<CreateFeedState> emit) async {
+      SelectAssetEvent event, Emitter<CreateReelsState> emit) async {
     try {
       if (state.currentAsset == event.asset) return;
       emit(state.copyWith(
@@ -90,7 +94,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   }
 
   Future<void> _onFetchMoreAssets(
-      FetchMoreAssetsEvent event, Emitter<CreateFeedState> emit) async {
+      FetchMoreAssetsEvent event, Emitter<CreateReelsState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
       final fetched = await state.currentAlbum!.getAssetListRange(
@@ -108,30 +112,26 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   }
 
   Future<void> _onUpdateState(
-      UpdateStateEvent event, Emitter<CreateFeedState> emit) async {
+      UpdateStateEvent event, Emitter<CreateReelsState> emit) async {
     emit(state.copyWith(
         status: event.status ?? state.status,
         caption: event.caption ?? state.caption,
-        hashtags: event.hashtags ?? state.hashtags,
         step: event.step ?? state.step));
   }
 
   Future<void> _onUpload(
-      UploadEvent event, Emitter<CreateFeedState> emit) async {
+      UploadEvent event, Emitter<CreateReelsState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
       if (state.media == null || state.caption.isEmpty) {
         emit(state.copyWith(
             step: CreateMediaStep.uploading,
             status: Status.error,
-            errorMessage: '사진이나 캡션을 다시 확인해주세요'));
+            errorMessage: '릴스를 선택해주세요'));
         return;
       }
-      final res = await _useCase.createFeed(
-          feedId: state.id,
-          feedImage: state.media!,
-          caption: state.caption,
-          hashtags: state.hashtags);
+      final res = await _useCase.createReels(
+          reelsId: state.id, video: state.media!, caption: state.caption);
       emit(state.copyWith(
           step: res.ok ? CreateMediaStep.uploading : CreateMediaStep.detail,
           status: res.ok ? Status.success : Status.error,
