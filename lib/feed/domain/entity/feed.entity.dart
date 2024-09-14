@@ -12,6 +12,7 @@ class FeedEntity with _$FeedEntity {
     String? id,
     String? media,
     String? caption,
+    List<String>? hashtags,
     String? createdAt,
     String? updatedAt,
     PresenceEntity? author,
@@ -22,11 +23,13 @@ class FeedEntity with _$FeedEntity {
         id: dto.id,
         media: dto.media,
         caption: dto.caption,
+        hashtags: dto.hashtags,
         createdAt: dto.created_at,
         updatedAt: dto.updated_at,
         author: PresenceEntity(
-            uid: dto.author_uid,
-            username: dto.author_username,
-            avatarUrl: dto.author_avatar_url));
+          uid: dto.author.id,
+          username: dto.author.username,
+          avatarUrl: dto.author.avatar_url,
+        ));
   }
 }

@@ -24,10 +24,7 @@ class FeedDataSourceImpl extends FeedDataSource {
       _logger.d('fetch feed request beforeAt:$beforeAt limit : $limit');
       return await _supabaseClient.rest
           .from(Tables.feeds.name)
-          .select("*,"
-              "author_uid:${Tables.accounts.name}(id),"
-              "author_username:${Tables.accounts.name}(username),"
-              "author_avatar_url:${Tables.accounts.name}(avatar_url)")
+          .select("*,author:${Tables.accounts.name}(id, username, avatar_url)")
           .lt('created_at', beforeAt.toUtc().toIso8601String())
           .limit(limit)
           .then((res) => res.map((json) => FetchFeedDto.fromJson(json)));

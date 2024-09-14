@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'auth/auth.export.dart';
+import 'create_media/create_media.export.dart';
+import 'feed/feed.export.dart';
 import 'shared/shared.export.dart';
 
 main() async {
@@ -32,7 +34,11 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           // 인증상태 Bloc
-          BlocProvider(create: (_) => getIt<AuthenticationBloc>())
+          BlocProvider(
+              create: (_) => getIt<AuthenticationBloc>()..add(InitAuthEvent())),
+          // 홈 화면 Bloc
+          BlocProvider(create: (_) => getIt<DisplayFeedBloc>()),
+          BlocProvider(create: (_) => getIt<CreateMediaCubit>())
         ],
         child: MaterialApp.router(
           theme: CustomLightTheme().theme,

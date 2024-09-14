@@ -32,7 +32,17 @@ class AuthenticationBloc
   User? get currentUser => _useCase.currentUser;
 
   _onInit(InitAuthEvent event, Emitter<AuthenticationState> emit) {
-    emit(state.copyWith(status: Status.initial));
+    final user = currentUser;
+    if (user == null) {
+      emit(state.copyWith(status: Status.initial));
+      return;
+    }
+    // 자동로그인
+    emit(state.copyWith(
+        authStatus: AuthStatus.authenticated,
+        status: Status.success,
+        user: user,
+        errorMessage: null));
   }
 
   _onChange(AuthChangedEvent event, Emitter<AuthenticationState> emit) {
