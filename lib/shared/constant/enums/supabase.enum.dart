@@ -1,9 +1,11 @@
 enum Tables {
   accounts,
-  feeds;
+  feeds,
+  reels;
 }
 
 enum Buckets {
   avatars,
-  feeds;
+  feeds,
+  reels;
 }
