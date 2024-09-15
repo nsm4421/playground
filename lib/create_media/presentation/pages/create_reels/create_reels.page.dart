@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/create_media/presentation/bloc/create_reels/create_reels.bloc.dart';
 import 'package:flutter_app/create_media/presentation/widgets/video_thumbnail.widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
 
@@ -15,6 +16,8 @@ part 'select_video.screen.dart';
 part 'display_current_album.widget.dart';
 
 part 'detail.screen.dart';
+
+part 'edit_caption.fragment.dart';
 
 class CreateReelsPage extends StatelessWidget {
   const CreateReelsPage({super.key});

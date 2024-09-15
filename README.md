@@ -54,6 +54,34 @@
     create policy "permit delete own data" on public.feeds
     for update to authenticated with check (auth.uid() = created_by);
 
+## Reels
+
+    create table public.reels (
+    id uuid not null default gen_random_uuid (),
+    created_by uuid not null default auth.uid(),
+    media text null,
+    caption text null,
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone null,    
+    constraint reels_pkey primary key (id),
+    constraint reels_user_id_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+    ) tablespace pg_default;
+    
+    alter table public.reels enable row level security;
+    
+    create policy "permit select for all authenticated" on public.reels
+    for select to authenticated using (true);
+    
+    create policy "permit insert own data" on public.reels
+    for insert to authenticated with check (auth.uid() = created_by);
+    
+    create policy "permit update own data" on public.reels
+    for update to authenticated with check (auth.uid() = created_by);
+    
+    create policy "permit delete own data" on public.reels
+    for update to authenticated with check (auth.uid() = created_by);
+
 # 버킷
 
 ## 아바타
@@ -66,6 +94,28 @@
 
     create policy "permit insert for all" on storage.objects
     for insert with check (bucket_id = 'avatars');
+
+## 피드 릴스
+
+## 아바타
+
+    insert into storage.buckets (id, name)
+    values ('feeds', 'feeds');
+
+    create policy "permit select for all" on storage.objects
+    for select using (bucket_id = 'feeds');
+
+    create policy "permit insert for all" on storage.objects
+    for insert with check (bucket_id = 'feeds');
+
+    insert into storage.buckets (id, name)
+    values ('reels', 'reels');
+
+    create policy "permit select for all" on storage.objects
+    for select using (bucket_id = 'reels');
+
+    create policy "permit insert for all" on storage.objects
+    for insert with check (bucket_id = 'reels');
 
 # Supabase Functions
 
