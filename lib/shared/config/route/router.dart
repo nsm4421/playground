@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/feed/presentation/pages/create/create_feed.page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../auth/auth.export.dart';
 import '../../../auth/presentation/pages/sign_in/sign_in.page.dart';
 import '../../../auth/presentation/pages/sign_up/sign_up.page.dart';
-import '../../../create_media/create_media.export.dart';
+import '../../../chat/chat.export.dart';
 import '../../../feed/feed.export.dart';
 import '../../../home/home.export.dart';
-import '../../../reels/reels.export.dart';
 import '../../../search/search.export.dart';
 import '../../../setting/setting.export.dart';
 import '../../shared.export.dart';
@@ -68,11 +67,12 @@ class CustomRoute {
                         HomeBottomNavItem.search =>
                           const NoTransitionPage(child: SearchPage()),
                         HomeBottomNavItem.createMedia =>
-                          const NoTransitionPage(child: CreateMediaPage()),
-                        HomeBottomNavItem.reels =>
-                          const NoTransitionPage(child: ReelsPage()),
+                          const NoTransitionPage(child: CreateFeedPage()),
+                        HomeBottomNavItem.chat =>
+                          const NoTransitionPage(child: ChatPage()),
                         HomeBottomNavItem.setting =>
                           const NoTransitionPage(child: SettingPage()),
+                        // TODO: Handle this case.
                       };
                     })
               ]))

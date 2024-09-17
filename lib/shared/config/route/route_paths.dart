@@ -8,7 +8,7 @@ enum RoutePaths {
   feed('/feed'),
   search('/search'),
   createMedia('/create-media'),
-  reels('/reels'),
+  chat('/chat'),
   setting('/setting'),
   ;
 

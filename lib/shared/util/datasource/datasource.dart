@@ -5,7 +5,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../auth/auth.export.dart';
 import '../../../feed/feed.export.dart';
-import '../../../reels/reels.export.dart';
 
 @module
 abstract class DataSource {
@@ -19,10 +18,6 @@ abstract class DataSource {
   @lazySingleton
   FeedDataSource get feed =>
       FeedDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
-
-  @lazySingleton
-  ReelsDataSource get reels =>
-      ReelsDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
 
   @lazySingleton
   StorageDataSource get storage =>
