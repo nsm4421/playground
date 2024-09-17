@@ -25,8 +25,9 @@ class FeedDataSourceImpl extends FeedDataSource {
       return await _supabaseClient.rest
           .from(Tables.feeds.name)
           .select("*,author:${Tables.accounts.name}(id, username, avatar_url)")
-          .lt('created_at', beforeAt.toUtc().toIso8601String())
+          .lt('created_at', beforeAt.toUtc().toIso8601String())   // 내림차순
           .limit(limit)
+          .order('created_at', ascending: false)
           .then((res) => res.map((json) => FetchFeedDto.fromJson(json)));
     } catch (error) {
       _logger.e(error);
@@ -61,7 +62,7 @@ class FeedDataSourceImpl extends FeedDataSource {
         if (dto.media != null) 'media': dto.media,
         if (dto.caption != null) 'caption': dto.caption,
         if (dto.hashtags != null) 'hashtags': dto.hashtags,
-        'updated_at' : DateTime.now().toUtc().toIso8601String()
+        'updated_at': DateTime.now().toUtc().toIso8601String()
       }).eq('id', dto.id);
     } catch (error) {
       _logger.e(error);

@@ -6,10 +6,10 @@ enum HomeBottomNavItem {
   feed(activeIcon: Icons.home_filled, icon: Icons.home_outlined, label: '피드'),
   search(activeIcon: Icons.search, icon: Icons.search_outlined, label: '검색'),
   createMedia(activeIcon: Icons.add, icon: Icons.add, label: '포스팅'),
-  reels(
-      activeIcon: Icons.video_collection,
-      icon: Icons.video_collection_outlined,
-      label: '릴스'),
+  chat(
+      activeIcon: Icons.chat_bubble,
+      icon: Icons.chat_bubble_outline,
+      label: '채팅'),
   setting(
       activeIcon: Icons.settings, icon: Icons.settings_outlined, label: '세팅'),
   ;
@@ -30,8 +30,7 @@ enum HomeBottomNavItem {
       feed => RoutePaths.feed.path,
       search => RoutePaths.search.path,
       createMedia => RoutePaths.createMedia.path,
-      reels => RoutePaths.reels.path,
-      reels => RoutePaths.reels.path,
+      chat => RoutePaths.chat.path,
       setting => RoutePaths.setting.path
     };
   }
