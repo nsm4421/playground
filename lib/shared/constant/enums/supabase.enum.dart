@@ -1,11 +1,15 @@
 enum Tables {
   accounts,
   feeds,
-  reels;
+  likes;
 }
 
 enum Buckets {
   avatars,
-  feeds,
-  reels;
+  feeds;
+}
+
+// RPC 함수명
+enum RpcFunctions {
+  fetch_feeds;
 }

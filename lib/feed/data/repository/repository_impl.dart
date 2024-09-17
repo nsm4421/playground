@@ -66,10 +66,10 @@ class FeedRepositoryImpl extends FeedRepository {
 
   @override
   Future<RepositoryResponseWrapper<List<FeedEntity>>> fetchFeeds(
-      {required DateTime beforeAt, int limit = 20}) async {
+      {required DateTime beforeAt, int take = 20}) async {
     try {
       return await _feedDataSource
-          .fetchFeeds(beforeAt: beforeAt, limit: limit)
+          .fetchFeedsByRPC(beforeAt: beforeAt, take: take)
           .then((res) => res.map(FeedEntity.from).toList())
           .then(RepositorySuccess<List<FeedEntity>>.from);
     } on Exception catch (error) {

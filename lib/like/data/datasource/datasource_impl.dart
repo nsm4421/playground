@@ -19,7 +19,7 @@ class LikeDataSourceImpl extends LikeDataSource {
   Future<String> sendLike(SendLikeDto dto) async {
     try {
       final likeId = dto.id.isNotEmpty ? dto.id : const Uuid().v4();
-      _logger.d('like request id:${likeId} table:${dto.reference_table.name}');
+      _logger.d('like request id:$likeId table:${dto.reference_table.name}');
       return await _supabaseClient.rest
           .from(Tables.likes.name)
           .insert(dto.copyWith(id: likeId).toJson())
@@ -37,7 +37,7 @@ class LikeDataSourceImpl extends LikeDataSource {
       _logger.d(
           'cancel like request id:$referenceId reference table:${referenceTable.name}');
       await _supabaseClient.rest
-          .from(referenceTable.name)
+          .from(Tables.likes.name)
           .delete()
           .eq('reference_id', referenceId)
           .eq('reference_table', referenceTable.name);

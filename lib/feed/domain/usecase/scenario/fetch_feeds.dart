@@ -6,10 +6,10 @@ class FetchFeedsUseCase {
   FetchFeedsUseCase(this._repository);
 
   Future<UseCaseResponseWrapper<List<FeedEntity>>> call(
-      {DateTime? beforeAt, int limit = 20}) async {
+      {DateTime? beforeAt, int take = 20}) async {
     return await _repository
         .fetchFeeds(
-            beforeAt: (beforeAt ?? DateTime.now().toUtc()), limit: limit)
+            beforeAt: (beforeAt ?? DateTime.now().toUtc()), take: take)
         .then(UseCaseResponseWrapper.from);
   }
 }

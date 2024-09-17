@@ -2,7 +2,7 @@ part of 'repository_impl.dart';
 
 abstract class FeedRepository {
   Future<RepositoryResponseWrapper<List<FeedEntity>>> fetchFeeds(
-      {required DateTime beforeAt, int limit = 20});
+      {required DateTime beforeAt, int take = 20});
 
   Future<RepositoryResponseWrapper<void>> createFeed(
       {required String feedId,

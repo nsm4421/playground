@@ -1,3 +1,4 @@
+import 'package:flutter_app/like/data/datasource/datasource_impl.dart';
 import 'package:flutter_app/shared/shared.export.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
@@ -18,6 +19,10 @@ abstract class DataSource {
   @lazySingleton
   FeedDataSource get feed =>
       FeedDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
+
+  @lazySingleton
+  LikeDataSource get like =>
+      LikeDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
 
   @lazySingleton
   StorageDataSource get storage =>

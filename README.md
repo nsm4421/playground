@@ -58,8 +58,8 @@
 
     create table public.likes (
     id uuid not null default gen_random_uuid (),
-    refernce_id uuid not null,
-    refernce_table text not null,
+    reference_id uuid not null,
+    reference_table text not null,
     created_by uuid not null default auth.uid(),
     created_at timestamp with time zone not null default now(),
     constraint likes_pkey primary key (id),
@@ -132,4 +132,68 @@ $$;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.on_sign_up();
+```
+
+
+## 피드조회
+
+```
+create or replace function fetch_feeds(before_at timestamptz, take int)
+returns table(
+    feed_id uuid,                     -- 피드 id
+    media text,                       -- 피드 사진/동영상 경로
+    caption text,                     -- 캡션
+    created_at timestamptz,           -- 작성시간
+    updated_at timestamptz,           -- 수정시간
+    author_id uuid,                   -- 작성자 id
+    author_username text,             -- 작성자 유저명
+    author_avatar_url text,           -- 작성자 프포필 사진
+    like_count int,                   -- 좋아요 개수
+    is_like bool                      -- 좋아요 눌렀는지 여부
+)
+language sql
+as $$
+    select
+      A.id,                         -- feed_id
+      A.media,                      -- media
+      A.caption,                    -- caption
+      A.created_at,                 -- created_at
+      A.updated_at,                 -- updated_at      
+      B.id,                         -- author_uid
+      B.username,                   -- author_username
+      B.avatar_url,                 -- author_avatar_url
+      C.like_cnt,                   -- like_count
+      (D.like_cnt>0)                -- is_like
+    from (
+        select
+            id,
+            media,
+            caption,
+            created_at,
+            updated_at,
+            created_by
+        from
+            public.feeds
+        where
+            created_at < before_at
+        ) A 
+    -- 글쓴이 정보
+    left join public.accounts B on A.created_by = B.id
+    -- 해당 게시글에 좋아요 누른 목록
+    left join (
+      select reference_id, count(1) like_cnt
+      from public.likes
+      where reference_table = 'feeds'
+      group by reference_id
+    ) C on A.id = C.reference_id    -- feed id로 left join
+    -- 해당 게시글에 내가 좋아요 누른 목록
+    left join (
+      select reference_id, count(1) like_cnt
+      from public.likes
+      where reference_table = 'feeds' and created_by = (auth.uid())
+      group by reference_id
+    ) D on A.id = D.reference_id    -- feed id로 left join
+    order by A.created_at desc
+    limit(take);
+$$;
 ```
