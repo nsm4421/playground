@@ -14,6 +14,8 @@ part 'feed_item.widget.dart';
 
 part 'feed_list.fragment.dart';
 
+part 'icon_menus.widget.dart';
+
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});
 

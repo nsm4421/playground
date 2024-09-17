@@ -1,9 +1,12 @@
 part of 'feed.page.dart';
 
 class FeedItemWidget extends StatelessWidget {
-  const FeedItemWidget(this._feed, {super.key});
+  const FeedItemWidget(this._feed,
+      {super.key, required CustomTimeFormat timeFormatter})
+      : _timeFormatter = timeFormatter;
 
   final FeedEntity _feed;
+  final CustomTimeFormat _timeFormatter;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class FeedItemWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.primary)),
                   CustomHeight.sm,
                   // 작성시간 formatting
-                  Text(_feed.createdAt!,
+                  Text(_timeFormatter.timeAgo(_feed.createdAt!),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: Theme.of(context).colorScheme.primary)),
@@ -46,9 +49,10 @@ class FeedItemWidget extends StatelessWidget {
             height: MediaQuery.of(context).size.width,
             margin: EdgeInsets.symmetric(vertical: CustomSpacing.md),
             decoration: BoxDecoration(
+                color: Colors.blueGrey[100],
                 image: DecorationImage(
                     image: CachedNetworkImageProvider(_feed.media!),
-                    fit: BoxFit.cover),
+                    fit: BoxFit.fitHeight),
                 borderRadius: BorderRadius.circular(CustomSpacing.md))),
 
         // 캡션
@@ -100,6 +104,9 @@ class FeedItemWidget extends StatelessWidget {
                 .toList(),
           ),
         ),
+
+        // 좋아요, 댓글 아이콘 버튼
+        IconMenuWidget(_feed),
 
         // 디바이더
         Padding(
