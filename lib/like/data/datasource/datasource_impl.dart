@@ -1,4 +1,4 @@
-import 'package:flutter_app/like/data/dto/send_like.dto.dart';
+import 'package:flutter_app/like/data/dto/save_like.dto.dart';
 import 'package:flutter_app/shared/shared.export.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -16,7 +16,7 @@ class LikeDataSourceImpl extends LikeDataSource {
         _logger = logger;
 
   @override
-  Future<String> sendLike(SendLikeDto dto) async {
+  Future<String> saveLike(SaveLikeDto dto) async {
     try {
       final likeId = dto.id.isNotEmpty ? dto.id : const Uuid().v4();
       _logger.d('like request id:$likeId table:${dto.reference_table.name}');
@@ -31,7 +31,7 @@ class LikeDataSourceImpl extends LikeDataSource {
   }
 
   @override
-  Future<void> cancelLike(
+  Future<void> deleteLike(
       {required String referenceId, required Tables referenceTable}) async {
     try {
       _logger.d(
@@ -48,7 +48,7 @@ class LikeDataSourceImpl extends LikeDataSource {
   }
 
   @override
-  Future<void> cancelLikeById(String likeId) async {
+  Future<void> deleteLikeById(String likeId) async {
     try {
       _logger.d('cancel like by id request like id :$likeId');
       await _supabaseClient.rest

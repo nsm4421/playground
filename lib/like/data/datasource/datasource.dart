@@ -1,10 +1,10 @@
 part of 'datasource_impl.dart';
 
 abstract class LikeDataSource {
-  Future<String> sendLike(SendLikeDto dto);
+  Future<String> saveLike(SaveLikeDto dto);
 
-  Future<void> cancelLike(
+  Future<void> deleteLike(
       {required String referenceId, required Tables referenceTable});
 
-  Future<void> cancelLikeById(String likeId);
+  Future<void> deleteLikeById(String likeId);
 }

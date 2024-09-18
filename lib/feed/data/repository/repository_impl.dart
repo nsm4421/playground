@@ -1,11 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter_app/comment/data/dto/save_comment.dto.dart';
 import 'package:flutter_app/feed/data/data.export.dart';
 import 'package:flutter_app/feed/data/dto/edit_feed.dto.dart';
 import 'package:flutter_app/feed/domain/domain.export.dart';
+import 'package:flutter_app/feed/domain/entity/feed_comment.entity.dart';
+import 'package:flutter_app/like/data/data.export.dart';
 import 'package:flutter_app/shared/shared.export.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../comment/comment.export.dart';
+import '../../../like/like.export.dart';
 import '../dto/create_feed.dto.dart';
 
 part 'repository.dart';
@@ -14,12 +20,18 @@ part 'repository.dart';
 class FeedRepositoryImpl extends FeedRepository {
   final FeedDataSource _feedDataSource;
   final StorageDataSource _storageDataSource;
+  final LikeDataSource _likeDataSource;
+  final CommentDataSource _commentDataSource;
 
   FeedRepositoryImpl(
       {required FeedDataSource feedDataSource,
-      required StorageDataSource storageDataSource})
+      required StorageDataSource storageDataSource,
+      required LikeDataSource likeDataSource,
+      required CommentDataSource commentDataSource})
       : _feedDataSource = feedDataSource,
-        _storageDataSource = storageDataSource;
+        _storageDataSource = storageDataSource,
+        _likeDataSource = likeDataSource,
+        _commentDataSource = commentDataSource;
 
   @override
   Future<RepositoryResponseWrapper<void>> createFeed(
@@ -87,6 +99,106 @@ class FeedRepositoryImpl extends FeedRepository {
           .then(RepositorySuccess<String>.from);
     } on Exception catch (error) {
       return RepositoryError<String>.from(error);
+    }
+  }
+
+  @override
+  Future<RepositoryResponseWrapper<String>> saveLike(String feedId) async {
+    try {
+      return await _likeDataSource
+          .saveLike(SaveLikeDto(
+              id: const Uuid().v4(),
+              reference_id: feedId,
+              reference_table: Tables.feeds))
+          .then(RepositorySuccess<String>.from);
+    } on Exception catch (error) {
+      return RepositoryError<String>.from(error);
+    }
+  }
+
+  @override
+  Future<RepositoryResponseWrapper<void>> deleteLike(
+      String feedId) async {
+    try {
+      return await _likeDataSource
+          .deleteLike(referenceId: feedId, referenceTable: Tables.feeds)
+          .then(RepositorySuccess<void>.from);
+    } on Exception catch (error) {
+      return RepositoryError<void>.from(error);
+    }
+  }
+
+  @override
+  Future<RepositoryResponseWrapper<List<ParentFeedCommentEntity>>>
+      fetchParentComments(
+          {required String feedId,
+          required DateTime beforeAt,
+          int take = 20}) async {
+    try {
+      return await _commentDataSource
+          .fetchParentComments(
+              referenceId: feedId,
+              referenceTable: Tables.feeds,
+              beforeAt: beforeAt,
+              take: take)
+          .then((res) => res.map(ParentFeedCommentEntity.from).toList())
+          .then(RepositorySuccess<List<ParentFeedCommentEntity>>.from);
+    } on Exception catch (error) {
+      return RepositoryError<List<ParentFeedCommentEntity>>.from(error);
+    }
+  }
+
+  @override
+  Future<RepositoryResponseWrapper<List<ChildFeedCommentEntity>>>
+      fetchChildComments(
+          {required String feedId,
+          required String parentId,
+          required DateTime beforeAt,
+          int take = 20}) async {
+    try {
+      return await _commentDataSource
+          .fetchChildComments(
+              referenceId: feedId,
+              referenceTable: Tables.feeds,
+              parentId: parentId,
+              beforeAt: beforeAt,
+              take: take)
+          .then(
+              (res) => res.map((item) => ChildFeedCommentEntity.from).toList())
+          .then(RepositorySuccess<List<ChildFeedCommentEntity>>.from);
+    } on Exception catch (error) {
+      return RepositoryError<List<ChildFeedCommentEntity>>.from(error);
+    }
+  }
+
+  @override
+  Future<RepositoryResponseWrapper<void>> saveComment(
+      {required String feedId,
+      String? parentId,
+      required String content}) async {
+    try {
+      return await _commentDataSource
+          .saveComment(SaveCommentDto(
+              id: const Uuid().v4(),
+              reference_id: feedId,
+              reference_table: Tables.feeds.name,
+              parent_id: parentId,
+              content: content))
+          .then((_) => const RepositorySuccess<void>(null));
+    } on Exception catch (error) {
+      return RepositoryError<void>.from(error);
+    }
+  }
+
+  @override
+  Future<RepositoryResponseWrapper<void>> deleteCommentById(
+      String commentId) async {
+    try {
+      return await _commentDataSource
+          .deleteCommentById(commentId)
+          .then((_) => const RepositorySuccess<void>(null));
+    } on Exception catch (error) {
+      return RepositoryError<void>.from(error);
     }
   }
 }
