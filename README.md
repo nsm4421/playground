@@ -54,6 +54,32 @@
     create policy "permit delete own data" on public.feeds
     for update to authenticated with check (auth.uid() = created_by);
 
+## Comment
+
+    create table public.comments (
+    id uuid not null default gen_random_uuid (),
+    reference_id uuid not null,
+    reference_table text not null,
+    parent_id uuid default null,
+    content text not null,
+    created_by uuid not null default auth.uid(),
+    created_at timestamp with time zone not null default now(),
+    constraint comments_pkey primary key (id),
+    constraint comments_uid_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+    ) tablespace pg_default;
+    
+    alter table public.comments enable row level security;
+    
+    create policy "permit select for all authenticated" on public.comments
+    for select to authenticated using (true);
+    
+    create policy "permit insert own data" on public.comments
+    for insert to authenticated with check (auth.uid() = created_by);
+    
+    create policy "permit delete own data" on public.comments
+    for update to authenticated with check (auth.uid() = created_by);
+
 ## Likes
 
     create table public.likes (
@@ -77,6 +103,7 @@
     
     create policy "permit delete own data" on public.likes
     for update to authenticated with check (auth.uid() = created_by);
+
 
 # 버킷
 
@@ -196,4 +223,65 @@ as $$
     order by A.created_at desc
     limit(take);
 $$;
+```
+
+
+## 댓글조회
+
+```
+create or replace function fetch_parent_comments
+(reference_id text, reference_table text, before_at timestamptz, take int)
+returns table(
+    id uuid,                          -- 부모댓글 id
+    content text,                     -- 댓글
+    created_at timestamptz,           -- 작성시간
+    author_id uuid,                   -- 작성자 id
+    author_username text,             -- 작성자 유저명
+    author_avatar_url text,           -- 작성자 프포필 사진
+    child_comment_count int           -- 자식댓글 개수
+)
+language sql
+as $$
+    select
+      A.id id,
+      A.content content,
+      A.created_at,
+      B.id author_id,
+      B.username author_username,
+      B.avatar_url author_avatar_url,
+      C.child_comment_count child_comment_count
+    from (
+        select
+            id,
+            content,
+            created_by,
+            created_at
+        from
+            public.comments
+        where
+            created_at < before_at 
+            and parent_id is null 
+            and reference_id = reference_id
+            and reference_table = reference_table
+        limit take
+        ) A   -- 부모댓글
+    left join (
+        select
+          id,
+          username,
+          avatar_url
+        from
+          public.accounts
+    ) B on A.created_by = B.id  -- 작성자 정보
+    left join (
+      select count(1) child_comment_count, parent_id
+      from public.comments
+      where parent_id is not null
+        and reference_id = reference_id
+        and reference_table = reference_table
+      group by parent_id
+    ) C on A.id = C.parent_id  -- 자식 댓글 개수
+    order by A.created_at desc
+$$;
+
 ```
