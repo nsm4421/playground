@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter_app/like/domain/usecase/usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -14,19 +13,20 @@ part 'dispaly_feed.event.dart';
 
 @lazySingleton
 class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
-  final FeedUseCase _feedUseCase;
-  final LikeUseCase _likeUseCase;
+  final FeedUseCase _useCase;
 
-  DisplayFeedBloc(
-      {required FeedUseCase feedUseCase, required LikeUseCase likeUseCase})
-      : _feedUseCase = feedUseCase,
-        _likeUseCase = likeUseCase,
-        super(DisplayFeedState()) {
+  DisplayFeedBloc(this._useCase) : super(DisplayFeedState()) {
     on<FetchFeedEvent>(_onFetch);
     on<RefreshEvent>(_onRefresh);
     on<LikeOnFeedEvent>(_onLike);
     on<CancelLikeOnFeedEvent>(_onCancelLike);
   }
+
+  DateTime get beforeAt => state.data.isEmpty
+      ? DateTime.now().toUtc()
+      : state.data
+          .map((item) => item.createdAt!)
+          .reduce((r, l) => r.isBefore(l) ? r : l);
 
   Future<void> _onFetch(
       FetchFeedEvent event, Emitter<DisplayFeedState> emit) async {
@@ -34,25 +34,19 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
       log('[DisplayFeedBloc]_onFetch실행');
       if (state.isEnd) return;
       emit(state.copyWith(status: Status.loading));
-      final res = await _feedUseCase.fetchFeeds(
-          beforeAt: state.beforeAt, take: event.take);
+      final res =
+          await _useCase.fetchFeeds(beforeAt: beforeAt, take: event.take);
       if (!res.ok || res.data == null) {
         log(res.message ?? '[DisplayFeedBloc]피드 가져오는 중 오류');
         emit(state.copyWith(status: Status.error, errorMessage: res.message));
         return;
       }
-      log('[DisplayFeedBloc]피드 가져오기 성공 beforeAt:${state.beforeAt} 개수:${res.data?.length ?? 0}');
+      log('[DisplayFeedBloc]피드 가져오기 성공 beforeAt:$beforeAt 개수:${res.data?.length ?? 0}');
       final fetched = res.data!;
       emit(state.copyWith(
           status: Status.success,
           data: [...state.data, ...fetched],
-          isEnd: fetched.length < event.take,
-          beforeAt: fetched.isEmpty
-              ? state.beforeAt
-              : fetched
-                  .map((item) => item.createdAt)
-                  .map((text) => DateTime.tryParse(text!))
-                  .reduce((l, r) => l!.isBefore(r!) ? l : r)));
+          isEnd: fetched.length < event.take));
     } catch (error) {
       log('[DisplayFeedBloc]피드 가져오는 중 오류 발생 ${error.toString()}');
       emit(state.copyWith(
@@ -81,7 +75,7 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
     try {
       log('[DisplayFeedBloc]_onLike 호출');
       emit(state.copyWith(status: Status.loading));
-      await _likeUseCase.likeOnFeed(event.feedId);
+      await _useCase.like(event.feedId);
       emit(state.copyWith(
           status: Status.success,
           data: state.data
@@ -103,7 +97,7 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
     try {
       log('[DisplayFeedBloc]_onCancelLike 호출');
       emit(state.copyWith(status: Status.loading));
-      await _likeUseCase.cancelLikeOnFeed(event.feedId);
+      await _useCase.cancelLike(event.feedId);
       emit(state.copyWith(
           status: Status.success,
           data: state.data
