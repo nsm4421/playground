@@ -42,7 +42,7 @@ class FeedDataSourceImpl extends FeedDataSource {
     try {
       _logger.d('fetch feed request by rpc beforeAt:$beforeAt limit : $take');
       return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
-          RpcFunctions.fetch_feeds.name,
+          RpcFunctions.fetchFeeds.name,
           params: {
             'before_at': beforeAt.toUtc().toIso8601String(),
             'take': take
