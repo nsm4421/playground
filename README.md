@@ -167,7 +167,7 @@ for each row execute procedure public.on_sign_up();
 ```
 create or replace function fetch_feeds(before_at timestamptz, take int)
 returns table(
-    feed_id uuid,                     -- 피드 id
+    id uuid,                          -- 피드 id
     media text,                       -- 피드 사진/동영상 경로
     caption text,                     -- 캡션
     created_at timestamptz,           -- 작성시간
@@ -176,7 +176,11 @@ returns table(
     author_username text,             -- 작성자 유저명
     author_avatar_url text,           -- 작성자 프포필 사진
     like_count int,                   -- 좋아요 개수
-    is_like bool                      -- 좋아요 눌렀는지 여부
+    is_like bool,                     -- 좋아요 눌렀는지 여부
+    comment_count int,                -- 부모 댓글 개수
+    latest_comment_id uuid,           -- 최신 댓글 id
+    latest_comment_content text,      -- 최신 댓글 본문
+    lastet_comment_created_at timestamptz   
 )
 language sql
 as $$
@@ -190,7 +194,11 @@ as $$
       B.username,                   -- author_username
       B.avatar_url,                 -- author_avatar_url
       C.like_cnt,                   -- like_count
-      (D.like_cnt>0)                -- is_like
+      (D.like_cnt>0),               -- is_like
+      E.parent_comment_count,       -- comment_count
+      F.id,                         -- latest_comment_id
+      F.content,                    -- latest_comment
+      F.created_at                  -- laset_comment_created_at
     from (
         select
             id,
@@ -203,6 +211,7 @@ as $$
             public.feeds
         where
             created_at < before_at
+        limit(take)
         ) A 
     -- 글쓴이 정보
     left join public.accounts B on A.created_by = B.id
@@ -220,8 +229,22 @@ as $$
       where reference_table = 'feeds' and created_by = (auth.uid())
       group by reference_id
     ) D on A.id = D.reference_id    -- feed id로 left join
+    -- 댓글 개수
+    left join (
+      select reference_id, count(1) parent_comment_count
+      from public.comments
+      where reference_table = 'feeds' 
+      group by reference_id
+    ) E on A.id = E.reference_id    -- feed id로 left join 
+    -- 가장 최신 댓글 정보
+    left join (
+      select id, reference_id, content, created_at
+      from public.comments
+      where reference_table = 'feeds' 
+      order by created_at desc limit(1)      -- 가장 최신 댓글 1개만
+    ) F on A.id = F.reference_id    -- feed id로 left join 
     order by A.created_at desc
-    limit(take);
+;
 $$;
 ```
 

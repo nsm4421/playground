@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app/feed/data/data.export.dart';
+import 'package:flutter_app/comment/domain/entity/comment.entity.dart';
 import 'package:flutter_app/feed/data/dto/fetch_feed_by_rpc.dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,11 +19,13 @@ class FeedEntity with _$FeedEntity {
     PresenceEntity? author,
     @Default(0) int likeCount,
     @Default(false) bool isLike,
+    @Default(0) int commentCount,
+    CommentEntity? latestComment,
   }) = _FeedEntity;
 
   factory FeedEntity.from(FetchFeedByRpcDto dto) {
     return FeedEntity(
-        id: dto.feed_id.isNotEmpty ? dto.feed_id : null,
+        id: dto.id.isNotEmpty ? dto.id : null,
         media: dto.media.isNotEmpty ? dto.media : null,
         caption: dto.caption.isNotEmpty ? dto.caption : null,
         hashtags: dto.hashtags.isNotEmpty ? dto.hashtags : [],
@@ -37,6 +39,16 @@ class FeedEntity with _$FeedEntity {
                 ? dto.author_avatar_url
                 : null),
         likeCount: dto.like_count,
-        isLike: dto.is_like);
+        isLike: dto.is_like,
+        commentCount: dto.comment_count,
+        latestComment:
+            dto.latest_comment_id != null && dto.latest_comment_id!.isNotEmpty
+                ? CommentEntity(
+                    id: dto.latest_comment_id,
+                    content: dto.latest_comment_content,
+                    createdAt: dto.lastet_comment_created_at != null
+                        ? DateTime.parse(dto.lastet_comment_created_at!)
+                        : null)
+                : null);
   }
 }
