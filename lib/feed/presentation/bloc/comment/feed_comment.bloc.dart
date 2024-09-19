@@ -17,8 +17,9 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
   final FeedUseCase _useCase;
   final String _feedId;
 
-  FeedCommentBloc(this._useCase, @factoryParam this._feedId)
-      : super(FeedCommentState(feedId: _feedId)) {
+  FeedCommentBloc(@factoryParam this._feedId, {required FeedUseCase useCase})
+      : _useCase = useCase,
+        super(FeedCommentState(feedId: _feedId)) {
     on<InitFeedCommentEvent>(_onInit);
     on<WriteParentFeedCommentEvent>(_onWriteParentComment);
     on<WriteChildFeedCommentEvent>(_onWriteChildComment);
@@ -34,9 +35,11 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
   DateTime getBeforeAt({String? parentId}) {
     if (parentId == null) {
       // 부모댓글의 조회 기준시간
-      return state.comments
-          .map((item) => item.createdAt!)
-          .reduce((r, l) => r.isBefore(l) ? r : l);
+      return state.comments.isEmpty
+          ? DateTime.now().toUtc()
+          : state.comments
+              .map((item) => item.createdAt!)
+              .reduce((r, l) => r.isBefore(l) ? r : l);
     } else {
       // 자식댓글의 조회 기준시간
       final children =
@@ -111,6 +114,7 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
       emit(state.copyWith(status: Status.loading));
       final res = await _useCase.fetchParentComment(
           feedId: feedId, beforeAt: getBeforeAt(), take: event.take);
+      log('[FeedCommentBloc]feedId: $feedId beforeAt :${getBeforeAt()} take:${event.take}');
       if (res.ok && res.data != null) {
         log('[FeedCommentBloc]부모댓글 가져오기 요청 성공');
         emit(state.copyWith(status: Status.success, comments: [

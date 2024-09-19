@@ -117,8 +117,7 @@ class FeedRepositoryImpl extends FeedRepository {
   }
 
   @override
-  Future<RepositoryResponseWrapper<void>> deleteLike(
-      String feedId) async {
+  Future<RepositoryResponseWrapper<void>> deleteLike(String feedId) async {
     try {
       return await _likeDataSource
           .deleteLike(referenceId: feedId, referenceTable: Tables.feeds)
@@ -138,7 +137,7 @@ class FeedRepositoryImpl extends FeedRepository {
       return await _commentDataSource
           .fetchParentComments(
               referenceId: feedId,
-              referenceTable: Tables.feeds,
+              referenceTable: Tables.feeds.name,
               beforeAt: beforeAt,
               take: take)
           .then((res) => res.map(ParentFeedCommentEntity.from).toList())
@@ -159,7 +158,7 @@ class FeedRepositoryImpl extends FeedRepository {
       return await _commentDataSource
           .fetchChildComments(
               referenceId: feedId,
-              referenceTable: Tables.feeds,
+              referenceTable: Tables.feeds.name,
               parentId: parentId,
               beforeAt: beforeAt,
               take: take)

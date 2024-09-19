@@ -253,7 +253,7 @@ $$;
 
 ```
 create or replace function fetch_parent_comments
-(reference_id text, reference_table text, before_at timestamptz, take int)
+(ref_id uuid, ref_tab text, before_at timestamptz, take int)
 returns table(
     id uuid,                          -- 부모댓글 id
     content text,                     -- 댓글
@@ -261,33 +261,39 @@ returns table(
     author_id uuid,                   -- 작성자 id
     author_username text,             -- 작성자 유저명
     author_avatar_url text,           -- 작성자 프포필 사진
-    child_comment_count int           -- 자식댓글 개수
+    child_comment_count int,          -- 자식댓글 개수
+    reference_id uuid,
+    reference_table text
 )
 language sql
 as $$
     select
-      A.id id,
-      A.content content,
-      A.created_at,
-      B.id author_id,
-      B.username author_username,
-      B.avatar_url author_avatar_url,
-      C.child_comment_count child_comment_count
+      AA.id id,
+      AA.content content,
+      AA.created_at,
+      BB.id author_id,
+      BB.username author_username,
+      BB.avatar_url author_avatar_url,
+      CC.child_comment_count child_comment_count,
+      AA.reference_id reference_id,
+      AA.reference_table reference_table
     from (
         select
             id,
             content,
             created_by,
-            created_at
+            created_at,
+            reference_id,
+            reference_table
         from
             public.comments
         where
             created_at < before_at 
             and parent_id is null 
-            and reference_id = reference_id
-            and reference_table = reference_table
+            and reference_id = ref_id
+            and reference_table = ref_tab
         limit take
-        ) A   -- 부모댓글
+        ) AA   -- 부모댓글
     left join (
         select
           id,
@@ -295,16 +301,18 @@ as $$
           avatar_url
         from
           public.accounts
-    ) B on A.created_by = B.id  -- 작성자 정보
+    ) BB on AA.created_by = BB.id  -- 작성자 정보
     left join (
-      select count(1) child_comment_count, parent_id
+      select count(1) child_comment_count,
+        parent_id, 
+        reference_id, 
+        reference_table
       from public.comments
       where parent_id is not null
-        and reference_id = reference_id
-        and reference_table = reference_table
-      group by parent_id
-    ) C on A.id = C.parent_id  -- 자식 댓글 개수
-    order by A.created_at desc
+        and reference_id = ref_id
+        and reference_table = ref_tab
+      group by parent_id, reference_id, reference_table
+    ) CC on AA.id = CC.parent_id  
+    order by AA.created_at desc
 $$;
-
 ```

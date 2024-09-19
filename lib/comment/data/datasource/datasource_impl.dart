@@ -19,15 +19,17 @@ class CommentDataSourceImpl extends CommentDataSource {
   @override
   Future<Iterable<FetchParentCommentDto>> fetchParentComments(
       {required String referenceId,
-      required Tables referenceTable,
+      required String referenceTable,
       required DateTime beforeAt,
       int take = 20}) async {
     try {
+      _logger.d(
+          'referenceId:$referenceId referenceTable:$referenceTable beforeAt:${beforeAt.toIso8601String()}');
       return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
           RpcFunctions.fetchParentComments.name,
           params: {
-            'reference_id': referenceId,
-            'reference_table': referenceTable,
+            'ref_id': referenceId,
+            'ref_tab': referenceTable,
             'before_at': beforeAt.toUtc().toIso8601String(),
             'take': take
           }).then((res) => res.map(FetchParentCommentDto.fromJson));
@@ -40,16 +42,18 @@ class CommentDataSourceImpl extends CommentDataSource {
   @override
   Future<Iterable<FetchChildCommentDto>> fetchChildComments(
       {required String referenceId,
-      required Tables referenceTable,
+      required String referenceTable,
       required String parentId,
       required DateTime beforeAt,
       int take = 20}) async {
     try {
+      _logger.d(
+          'referenceId:$referenceId referenceTable:$referenceTable parentId:$parentId beforeAt:${beforeAt.toIso8601String()}');
       return await _supabaseClient.rest
           .from(Tables.comments.name)
           .select("*,author:${Tables.accounts.name}(id, username, avatar_url)")
           .eq('reference_id', referenceId)
-          .eq('reference_table', referenceTable.name)
+          .eq('reference_table', referenceTable)
           .eq('parent_id', parentId)
           .lt('created_at', beforeAt.toUtc().toIso8601String()) // 내림차순
           .limit(take)
