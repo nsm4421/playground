@@ -30,7 +30,7 @@ class FeedItemWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.primary)),
                   CustomHeight.sm,
                   // 작성시간 formatting
-                  Text(_timeFormatter.timeAgo(_feed.createdAt!),
+                  Text(_timeFormatter.timeAgo(_feed.createdAt!.toString()),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: Theme.of(context).colorScheme.primary)),
@@ -107,6 +107,33 @@ class FeedItemWidget extends StatelessWidget {
 
         // 좋아요, 댓글 아이콘 버튼
         IconMenuWidget(_feed),
+
+        // 최신댓글
+        if (_feed.latestComment != null)
+          Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: CustomSpacing.md, horizontal: CustomSpacing.lg),
+              child: Row(
+                children: [
+                  Text(
+                    _feed.latestComment!.content!,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.tertiary),
+                  ),
+                  const Spacer(),
+                  Text(
+                    _timeFormatter
+                        .timeAgo(_feed.latestComment!.createdAt!.toString()),
+                    softWrap: true,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.tertiary),
+                  ),
+                ],
+              )),
 
         // 디바이더
         Padding(
