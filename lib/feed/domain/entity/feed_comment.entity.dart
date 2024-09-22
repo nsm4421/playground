@@ -20,7 +20,7 @@ class ChildFeedCommentEntity with _$ChildFeedCommentEntity {
   }) = _ChildFeedCommentEntity;
 
   factory ChildFeedCommentEntity.from(FetchChildCommentDto dto,
-          {String? feedId}) =>
+          {required String feedId}) =>
       ChildFeedCommentEntity(
           id: dto.id.isNotEmpty ? dto.id : null,
           feedId: feedId,
@@ -42,7 +42,6 @@ class ParentFeedCommentEntity with _$ParentFeedCommentEntity {
   const factory ParentFeedCommentEntity({
     String? id,
     String? feedId,
-    String? parentId,
     String? content,
     PresenceEntity? author,
     DateTime? createdAt,
@@ -51,11 +50,10 @@ class ParentFeedCommentEntity with _$ParentFeedCommentEntity {
   }) = _ParentFeedCommentEntity;
 
   factory ParentFeedCommentEntity.from(FetchParentCommentDto dto,
-          {String? feedId, List<ChildFeedCommentEntity>? children}) =>
+          {required String feedId, List<ChildFeedCommentEntity>? children}) =>
       ParentFeedCommentEntity(
           id: dto.id.isNotEmpty ? dto.id : null,
           feedId: feedId,
-          parentId: null,
           content: dto.content.isNotEmpty ? dto.content : null,
           author: PresenceEntity(
             uid: dto.author_id.isNotEmpty ? dto.author_id : null,

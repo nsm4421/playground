@@ -15,8 +15,7 @@ class EditFeedUseCase {
       final feedImageUploadRes =
           await _repository.uploadFeedImage(feedImage, upsert: true);
       if (!feedImageUploadRes.ok) {
-        return UseCaseError.from(feedImageUploadRes,
-            message: '피드 사진 업로드 중 오류가 발생했습니다');
+        return UseCaseError.from(message: '피드 사진 업로드 중 오류가 발생했습니다');
       }
       media = (feedImageUploadRes as RepositorySuccess).data;
     }

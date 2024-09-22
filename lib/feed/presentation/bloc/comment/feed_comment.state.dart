@@ -4,6 +4,7 @@ class FeedCommentState {
   final String feedId;
   final bool isMounted;
   final Status status;
+  final ParentFeedCommentEntity? parentComment;
   late final List<ParentFeedCommentEntity> comments;
 
   /// isEndMap : 조회할 댓글이 더 있는지 여부를 판단하기 위한 변수
@@ -15,6 +16,7 @@ class FeedCommentState {
       {required this.feedId,
       this.isMounted = false,
       this.status = Status.initial,
+      this.parentComment,
       List<ParentFeedCommentEntity>? comments,
       DateTime? beforeAt,
       Map<String, bool>? isEndMap,
@@ -26,6 +28,7 @@ class FeedCommentState {
   FeedCommentState copyWith(
           {Status? status,
           bool? isMounted,
+          ParentFeedCommentEntity? parentComment,
           List<ParentFeedCommentEntity>? comments,
           Map<String, bool>? isEndMap,
           String? errorMessage}) =>
@@ -33,6 +36,7 @@ class FeedCommentState {
           feedId: feedId,
           status: status ?? this.status,
           isMounted: isMounted ?? this.isMounted,
+          parentComment: parentComment ?? this.parentComment,
           comments: comments ?? this.comments,
           isEndMap: isEndMap ?? this.isEndMap,
           errorMessage: errorMessage ?? this.errorMessage);

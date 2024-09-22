@@ -28,8 +28,9 @@ final class FetchChildFeedCommentEvent extends FeedCommentEvent {
 /// 댓글작성
 final class WriteParentFeedCommentEvent extends FeedCommentEvent {
   final String content;
+  final int take;
 
-  WriteParentFeedCommentEvent(this.content);
+  WriteParentFeedCommentEvent(this.content, {this.take = 20});
 }
 
 final class WriteChildFeedCommentEvent extends FeedCommentEvent {
@@ -53,3 +54,13 @@ final class DeleteChildFeedCommentEvent extends FeedCommentEvent {
   DeleteChildFeedCommentEvent(
       {required this.parentId, required this.commentId});
 }
+
+/// 부모댓글 선택, 선택해제
+final class SelectParentCommentEvent extends FeedCommentEvent {
+  final ParentFeedCommentEntity parentComment;
+  final int take;
+
+  SelectParentCommentEvent(this.parentComment, {this.take = 20});
+}
+
+final class UnSelectParentCommentEvent extends FeedCommentEvent {}

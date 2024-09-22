@@ -46,8 +46,11 @@ class FeedUseCase {
       CancelLikeOnFeedUseCase(_repository);
 
   /// 댓글
-  CreateFeedCommentUseCase get createComment =>
-      CreateFeedCommentUseCase(_repository);
+  CreateFeedParentCommentUseCase get createParentComment =>
+      CreateFeedParentCommentUseCase(_repository);
+
+  CreateFeedChildCommentUseCase get createChildComment =>
+      CreateFeedChildCommentUseCase(_repository);
 
   FetchParentFeedCommentUseCase get fetchParentComment =>
       FetchParentFeedCommentUseCase(_repository);

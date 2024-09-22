@@ -1,17 +1,32 @@
 part of '../usecase.dart';
 
-class CreateFeedCommentUseCase {
+class CreateFeedParentCommentUseCase {
   final FeedRepository _repository;
 
-  CreateFeedCommentUseCase(this._repository);
+  CreateFeedParentCommentUseCase(this._repository);
 
-  Future<UseCaseResponseWrapper<void>> call({
+  Future<UseCaseResponseWrapper<ParentFeedCommentEntity>> call({
     required String feedId,
-    String? parentId,
     required String content,
   }) async {
     return await _repository
-        .saveComment(feedId: feedId, parentId: parentId, content: content)
-        .then(UseCaseResponseWrapper<void>.from);
+        .saveParentComment(feedId: feedId, content: content)
+        .then(UseCaseResponseWrapper<ParentFeedCommentEntity>.from);
+  }
+}
+
+class CreateFeedChildCommentUseCase {
+  final FeedRepository _repository;
+
+  CreateFeedChildCommentUseCase(this._repository);
+
+  Future<UseCaseResponseWrapper<ChildFeedCommentEntity>> call({
+    required String feedId,
+   required String parentId,
+    required String content,
+  }) async {
+    return await _repository
+        .saveChildComment(feedId: feedId, parentId: parentId, content: content)
+        .then(UseCaseResponseWrapper<ChildFeedCommentEntity>.from);
   }
 }

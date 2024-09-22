@@ -13,8 +13,7 @@ class CreateFeedUseCase {
   }) async {
     final feedImageUploadRes = await _repository.uploadFeedImage(feedImage);
     if (!feedImageUploadRes.ok) {
-      return UseCaseError.from(feedImageUploadRes,
-          message: '피드 사진 업로드 중 오류가 발생했습니다');
+      return UseCaseError.from(message: '피드 사진 업로드 중 오류가 발생했습니다');
     }
     final media = (feedImageUploadRes as RepositorySuccess).data;
     return await _repository
