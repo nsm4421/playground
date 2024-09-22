@@ -39,8 +39,13 @@ abstract class FeedRepository {
           required DateTime beforeAt,
           int take = 20});
 
-  Future<RepositoryResponseWrapper<void>> saveComment(
-      {required String feedId, String? parentId, required String content});
+  Future<RepositoryResponseWrapper<ParentFeedCommentEntity>> saveParentComment(
+      {required String feedId, required String content});
+
+  Future<RepositoryResponseWrapper<ChildFeedCommentEntity>> saveChildComment(
+      {required String feedId,
+      required String? parentId,
+      required String content});
 
   Future<RepositoryResponseWrapper<void>> deleteCommentById(String commentId);
 }

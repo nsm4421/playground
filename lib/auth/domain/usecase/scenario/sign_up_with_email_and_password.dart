@@ -14,8 +14,7 @@ class SignUpWithEmailAndPasswordUseCase {
     // 프로필 이미지 업로드
     final profileUploadRes = await _repository.uploadProfileImage(profileImage);
     if (!profileUploadRes.ok) {
-      return UseCaseError.from(profileUploadRes,
-          message: '프로필 사진 업로드 중 오류가 발생했습니다');
+      return UseCaseError.from(message: '프로필 사진 업로드 중 오류가 발생했습니다');
     }
     final avatarUrl = (profileUploadRes as RepositorySuccess).data;
     // 회원가입

@@ -13,15 +13,15 @@ abstract class UseCaseResponseWrapper<T> {
 
   final String? message;
 
-  factory UseCaseResponseWrapper.from(RepositoryResponseWrapper res,
+  factory UseCaseResponseWrapper.from(RepositoryResponseWrapper<T> res,
       {String? successMessage, String? errorMessage}) {
     if (res is RepositorySuccess) {
-      return UseCaseSuccess<T>(res.data,
+      return UseCaseSuccess<T>(res.data!,
           message: successMessage ?? res.message);
     } else if (res is RepositoryError) {
-      return UseCaseError(message: errorMessage ?? res.message);
+      return UseCaseError<T>(message: errorMessage ?? res.message);
     } else {
-      return const UseCaseError(message: 'repository returns weired response');
+      return UseCaseError<T>(message: 'repository returns weired response');
     }
   }
 }
@@ -42,8 +42,8 @@ class UseCaseSuccess<T> extends UseCaseResponseWrapper<T> {
     onSuccess!(data);
   }
 
-  factory UseCaseSuccess.from(data, {String? message}) =>
-      UseCaseSuccess(data, message: message);
+  factory UseCaseSuccess.from(T data, {String? message}) =>
+      UseCaseSuccess<T>(data, message: message);
 }
 
 class UseCaseError<T> extends UseCaseResponseWrapper<T> {
@@ -62,6 +62,6 @@ class UseCaseError<T> extends UseCaseResponseWrapper<T> {
     onError!(message ?? '알수없는 오류가 발생했습니다');
   }
 
-  factory UseCaseError.from(data, {String? message}) =>
-      UseCaseError(message: message);
+  factory UseCaseError.from({RepositoryError<T>? error, String? message}) =>
+      UseCaseError<T>(message: message ?? error?.message);
 }
