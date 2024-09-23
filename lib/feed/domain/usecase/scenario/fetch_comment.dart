@@ -5,13 +5,14 @@ class FetchParentFeedCommentUseCase {
 
   FetchParentFeedCommentUseCase(this._repository);
 
-  Future<UseCaseResponseWrapper<List<ParentFeedCommentEntity>>> call(
+  Future<ResponseWrapper<List<ParentFeedCommentEntity>>> call(
       {required String feedId,
       required DateTime beforeAt,
       int take = 20}) async {
     return await _repository
         .fetchParentComments(feedId: feedId, beforeAt: beforeAt, take: take)
-        .then(UseCaseResponseWrapper<List<ParentFeedCommentEntity>>.from);
+        .then((res) =>
+            res.copyWith(message: res.ok ? '댓글 가져오기 성공' : '댓글 가져오기 실패'));
   }
 }
 
@@ -20,7 +21,7 @@ class FetchChildFeedCommentUseCase {
 
   FetchChildFeedCommentUseCase(this._repository);
 
-  Future<UseCaseResponseWrapper<List<ChildFeedCommentEntity>>> call(
+  Future<ResponseWrapper<List<ChildFeedCommentEntity>>> call(
       {required String feedId,
       required String parentId,
       required DateTime beforeAt,
@@ -28,6 +29,7 @@ class FetchChildFeedCommentUseCase {
     return await _repository
         .fetchChildComments(
             feedId: feedId, parentId: parentId, beforeAt: beforeAt, take: take)
-        .then(UseCaseResponseWrapper<List<ChildFeedCommentEntity>>.from);
+        .then((res) =>
+            res.copyWith(message: res.ok ? '대댓글 가져오기 성공' : '대댓글 가져오기 실패'));
   }
 }

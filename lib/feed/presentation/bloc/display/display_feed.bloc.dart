@@ -34,19 +34,18 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
       log('[DisplayFeedBloc]_onFetch실행');
       if (state.isEnd) return;
       emit(state.copyWith(status: Status.loading));
-      final res =
-          await _useCase.fetchFeeds(beforeAt: beforeAt, take: event.take);
-      if (!res.ok || res.data == null) {
-        log(res.message ?? '[DisplayFeedBloc]피드 가져오는 중 오류');
-        emit(state.copyWith(status: Status.error, errorMessage: res.message));
-        return;
-      }
-      log('[DisplayFeedBloc]피드 가져오기 성공 beforeAt:$beforeAt 개수:${res.data?.length ?? 0}');
-      final fetched = res.data!;
-      emit(state.copyWith(
-          status: Status.success,
-          data: [...state.data, ...fetched],
-          isEnd: fetched.length < event.take));
+      await _useCase
+          .fetchFeeds(beforeAt: beforeAt, take: event.take)
+          .then((res) {
+        if (res.ok) {
+          emit(state.copyWith(
+              status: Status.success,
+              data: [...state.data, ...res.data!],
+              isEnd: res.data!.length < event.take));
+        } else {
+          emit(state.copyWith(status: Status.error, errorMessage: res.message));
+        }
+      });
     } catch (error) {
       log('[DisplayFeedBloc]피드 가져오는 중 오류 발생 ${error.toString()}');
       emit(state.copyWith(

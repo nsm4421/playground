@@ -5,7 +5,7 @@ class EditFeedUseCase {
 
   EditFeedUseCase(this._repository);
 
-  Future<UseCaseResponseWrapper<void>> call(
+  Future<ResponseWrapper<void>> call(
       {required String feedId,
       File? feedImage,
       String? caption,
@@ -15,13 +15,14 @@ class EditFeedUseCase {
       final feedImageUploadRes =
           await _repository.uploadFeedImage(feedImage, upsert: true);
       if (!feedImageUploadRes.ok) {
-        return UseCaseError.from(message: '피드 사진 업로드 중 오류가 발생했습니다');
+        return const ErrorResponse(message: '피드 수정 이미지 업로드 중 오류 발생');
       }
-      media = (feedImageUploadRes as RepositorySuccess).data;
+      media = feedImageUploadRes.data!;
     }
     return await _repository
         .editFeed(
             feedId: feedId, media: media, caption: caption, hashtags: hashtags)
-        .then(UseCaseResponseWrapper.from);
+        .then((res) =>
+            res.copyWith(message: res.ok ? '피드 수정하기 성공' : '피드 수정하기 실패'));
   }
 }

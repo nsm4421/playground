@@ -36,7 +36,7 @@ class FeedCommentState {
           feedId: feedId,
           status: status ?? this.status,
           isMounted: isMounted ?? this.isMounted,
-          parentComment: parentComment ?? this.parentComment,
+          parentComment: parentComment,
           comments: comments ?? this.comments,
           isEndMap: isEndMap ?? this.isEndMap,
           errorMessage: errorMessage ?? this.errorMessage);

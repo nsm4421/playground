@@ -20,7 +20,7 @@ class AuthRepositoryImpl extends AuthRepository {
         _storageDataSource = storageDataSource;
 
   @override
-  Future<RepositoryResponseWrapper<User?>> signUpWithEmailAndPassword(
+  Future<ResponseWrapper<User?>> signUpWithEmailAndPassword(
       {required String email,
       required String password,
       required String username,
@@ -32,37 +32,37 @@ class AuthRepositoryImpl extends AuthRepository {
               password: password,
               username: username,
               avatarUrl: avatarUrl)
-          .then(RepositorySuccess<User?>.from);
+          .then(SuccessResponse<User?>.from);
     } on Exception catch (error) {
-      return RepositoryError<User?>.from(error);
+      return ErrorResponse<User?>.from(error);
     }
   }
 
   @override
-  Future<RepositoryResponseWrapper<User?>> signInWithEmailAndPassword(
+  Future<ResponseWrapper<User?>> signInWithEmailAndPassword(
       String email, String password) async {
     try {
       return await _authDataSource
           .signInWithEmailAndPassword(email, password)
-          .then(RepositorySuccess<User?>.from);
+          .then(SuccessResponse<User?>.from);
     } on Exception catch (error) {
-      return RepositoryError<User?>.from(error);
+      return ErrorResponse<User?>.from(error);
     }
   }
 
   @override
-  Future<RepositoryResponseWrapper<bool>> checkUsername(String username) async {
+  Future<ResponseWrapper<bool>> checkUsername(String username) async {
     try {
       return await _authDataSource
           .checkUsername(username)
-          .then(RepositorySuccess<bool>.from);
+          .then(SuccessResponse<bool>.from);
     } on Exception catch (error) {
-      return RepositoryError<bool>.from(error);
+      return ErrorResponse<bool>.from(error);
     }
   }
 
   @override
-  Future<RepositoryResponseWrapper<String>> uploadProfileImage(
+  Future<ResponseWrapper<String>> uploadProfileImage(
       File profileImage) async {
     try {
       return await _storageDataSource
@@ -70,18 +70,18 @@ class AuthRepositoryImpl extends AuthRepository {
               file: profileImage,
               bucketName: Buckets.avatars.name,
               upsert: true)
-          .then(RepositorySuccess<String>.from);
+          .then(SuccessResponse<String>.from);
     } on Exception catch (error) {
-      return RepositoryError<String>.from(error);
+      return ErrorResponse<String>.from(error);
     }
   }
 
   @override
-  Future<RepositoryResponseWrapper<void>> signOut() async {
+  Future<ResponseWrapper<void>> signOut() async {
     try {
-      return await _authDataSource.signOut().then(RepositorySuccess<void>.from);
+      return await _authDataSource.signOut().then(SuccessResponse<void>.from);
     } on Exception catch (error) {
-      return RepositoryError<void>.from(error);
+      return ErrorResponse<void>.from(error);
     }
   }
 

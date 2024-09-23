@@ -70,15 +70,12 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
       emit(state.copyWith(status: Status.loading));
       final res = await _useCase.createParentComment(
           feedId: feedId, content: event.content);
-      if (!res.ok) {
-        log('[FeedCommentBloc]부모댓글 작성 요청 실패');
-        emit(state.copyWith(
-            status: Status.error,
-            errorMessage: res.message ?? '댓글을 작성 중 오류가 발생했습니다'));
-        return;
+      log('[FeedCommentBloc]부모댓글 작성 요청 ok:${res.ok} message:${res.message}');
+      if (res.ok) {
+        emit(state.copyWith(status: Status.success));
+      } else {
+        emit(state.copyWith(status: Status.error, errorMessage: res.message));
       }
-      emit(state.copyWith(
-          status: Status.success, comments: [res.data!, ...state.comments]));
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -92,22 +89,18 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
     try {
       log('[FeedCommentBloc]_onWriteChildComment실행');
       emit(state.copyWith(status: Status.loading));
-      final res = await _useCase.createChildComment(
-          feedId: feedId, parentId: event.parentId, content: event.content);
-      if (!res.ok) {
-        log('[FeedCommentBloc]자식댓글 작성 요청 실패');
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '댓글을 작성  오류가 발생했습니다'));
-        return;
-      }
-      log('[FeedCommentBloc]자식댓글 작성 요청 성공');
-      emit(state.copyWith(
-          status: Status.success,
-          comments: (state.comments.map((parent) => parent.id == event.parentId
-              ? parent.copyWith(
-                  children: [res.data!, ...parent.children].toList(),
-                  childCommentCount: parent.childCommentCount + 1)
-              : parent)).toList()));
+      await _useCase
+          .createChildComment(
+              feedId: feedId, parentId: event.parentId, content: event.content)
+          .then((res) {
+        log('[FeedCommentBloc]자식댓글 작성 요청 ok:${res.ok} message:${res.message}');
+        if (res.ok) {
+          emit(state.copyWith(status: Status.success));
+        } else {
+          emit(state.copyWith(
+              status: Status.error, errorMessage: '댓글을 작성  오류가 발생했습니다'));
+        }
+      });
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -121,23 +114,23 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
     try {
       log('[FeedCommentBloc]_onFetchParentComments실행');
       emit(state.copyWith(status: Status.loading));
-      final res = await _useCase.fetchParentComment(
-          feedId: feedId, beforeAt: getBeforeAt(), take: event.take);
-      log('[FeedCommentBloc]feedId: $feedId beforeAt :${getBeforeAt()} take:${event.take}');
-      if (res.ok && res.data != null) {
-        log('[FeedCommentBloc]부모댓글 가져오기 요청 성공');
-        emit(state.copyWith(status: Status.success, comments: [
-          ...state.comments,
-          ...res.data!
-        ], isEndMap: {
-          ...state.isEndMap,
-          feedId: res.data!.length < event.take
-        }));
-      } else {
-        log('[FeedCommentBloc]부모댓글 가져오기 요청 실패');
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '댓글을 가져오는 중 오류가 발생했습니다'));
-      }
+      await _useCase
+          .fetchParentComment(
+              feedId: feedId, beforeAt: getBeforeAt(), take: event.take)
+          .then((res) {
+        log('[FeedCommentBloc]댓글 가져오기 요청 ok:${res.ok} message:${res.message}');
+        if (res.ok) {
+          emit(state.copyWith(status: Status.success, comments: [
+            ...state.comments,
+            ...res.data!
+          ], isEndMap: {
+            ...state.isEndMap,
+            feedId: res.data!.length < event.take
+          }));
+        } else {
+          emit(state.copyWith(status: Status.error, errorMessage: res.message));
+        }
+      });
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -151,29 +144,32 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
     try {
       log('[FeedCommentBloc]_onFetchChildComments실행');
       emit(state.copyWith(status: Status.loading));
-      final res = await _useCase.fetchChildComment(
-          feedId: feedId,
-          parentId: event.parentId,
-          beforeAt: getBeforeAt(parentId: event.parentId),
-          take: event.take);
-      if (res.ok && res.data != null) {
-        log('[FeedCommentBloc]자식댓글 가져오기 요청 성공');
-        emit(state.copyWith(
-            status: Status.success,
-            comments: state.comments
-                .map((item) => item.id == event.parentId
-                    ? item.copyWith(children: [...item.children, ...res.data!])
-                    : item)
-                .toList(),
-            isEndMap: {
-              ...state.isEndMap,
-              event.parentId: res.data!.length < event.take
-            }));
-      } else {
-        log('[FeedCommentBloc]자식댓글 가져오기 요청 실패');
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '댓글을 가져오는 중 오류가 발생했습니다'));
-      }
+      await _useCase
+          .fetchChildComment(
+              feedId: feedId,
+              parentId: event.parentId,
+              beforeAt: getBeforeAt(parentId: event.parentId),
+              take: event.take)
+          .then((res) {
+        log('[FeedCommentBloc]대댓글 가져오기 요청 ok:${res.ok} message:${res.message}');
+        if (res.ok) {
+          emit(state.copyWith(
+              status: Status.success,
+              comments: state.comments
+                  .map((item) => item.id == event.parentId
+                      ? item
+                          .copyWith(children: [...item.children, ...res.data!])
+                      : item)
+                  .toList(),
+              isEndMap: {
+                ...state.isEndMap,
+                event.parentId: res.data!.length < event.take
+              }));
+        } else {
+          emit(state.copyWith(
+              status: Status.error, errorMessage: '댓글을 가져오는 중 오류가 발생했습니다'));
+        }
+      });
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -187,19 +183,18 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
     try {
       log('[FeedCommentBloc]_onDeleteParentComment실행');
       emit(state.copyWith(status: Status.loading));
-      final res = await _useCase.deleteComment(event.commentId);
-      if (res.ok) {
-        log('[FeedCommentBloc]부모 댓글 삭제 요청 성공');
-        emit(state.copyWith(
-            status: Status.success,
-            comments: [...state.comments]
-                .where((item) => item.id != event.commentId)
-                .toList()));
-      } else {
-        log('[FeedCommentBloc]부모 댓글 삭제 실패');
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '댓글을 삭제하는 중 오류가 발생했습니다'));
-      }
+      await _useCase.deleteComment(event.commentId).then((res) {
+        log('[FeedCommentBloc]댓글 삭제하기 요청 ok:${res.ok} message:${res.message}');
+        if (res.ok) {
+          emit(state.copyWith(
+              status: Status.success,
+              comments: [...state.comments]
+                  .where((item) => item.id != event.commentId)
+                  .toList()));
+        } else {
+          emit(state.copyWith(status: Status.error, errorMessage: res.message));
+        }
+      });
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -213,25 +208,24 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
     try {
       log('[FeedCommentBloc]_onDeleteChildComment실행');
       emit(state.copyWith(status: Status.loading));
-      final res = await _useCase.deleteComment(event.commentId);
-      if (res.ok) {
-        log('[FeedCommentBloc]자식 댓글 삭제 요청 성공');
-        emit(state.copyWith(
-            status: Status.success,
-            comments: [...state.comments]
-                .map((parentComment) => parentComment.id == event.parentId
-                    ? parentComment.copyWith(
-                        children: [...parentComment.children]
-                            .where((childComment) =>
-                                childComment.id != event.commentId)
-                            .toList())
-                    : parentComment)
-                .toList()));
-      } else {
-        log('[FeedCommentBloc]자식 댓글 삭제 실패');
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '댓글을 삭제하는 중 오류가 발생했습니다'));
-      }
+      await _useCase.deleteComment(event.commentId).then((res) {
+        log('[FeedCommentBloc]대댓글 삭제하기 요청 ok:${res.ok} message:${res.message}');
+        if (res.ok) {
+          emit(state.copyWith(
+              status: Status.success,
+              comments: [...state.comments]
+                  .map((parentComment) => parentComment.id == event.parentId
+                      ? parentComment.copyWith(
+                          children: [...parentComment.children]
+                              .where((childComment) =>
+                                  childComment.id != event.commentId)
+                              .toList())
+                      : parentComment)
+                  .toList()));
+        } else {
+          emit(state.copyWith(status: Status.error, errorMessage: res.message));
+        }
+      });
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -244,31 +238,33 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
       SelectParentCommentEvent event, Emitter<FeedCommentState> emit) async {
     try {
       log('[FeedCommentBloc]_onSelectParentComment실행');
-      emit(state.copyWith(
-          status: Status.loading, parentComment: event.parentComment));
-      final res = await _useCase.fetchChildComment(
-          feedId: feedId,
-          parentId: event.parentComment.id!,
-          beforeAt: getBeforeAt(parentId: event.parentComment.id!),
-          take: event.take);
-      if (res.ok && res.data != null) {
-        log('[FeedCommentBloc]자식댓글 가져오기 요청 성공');
-        emit(state.copyWith(
-            status: Status.success,
-            comments: state.comments
-                .map((item) => item.id == event.parentComment.id!
-                    ? item.copyWith(children: [...res.data!])
-                    : item)
-                .toList(),
-            isEndMap: {
-              ...state.isEndMap,
-              event.parentComment.id!: res.data!.length < event.take
-            }));
-      } else {
-        log('[FeedCommentBloc]자식댓글 가져오기 요청 실패');
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '댓글을 가져오는 중 오류가 발생했습니다'));
-      }
+      emit(state.copyWith(status: Status.loading));
+      await _useCase
+          .fetchChildComment(
+              feedId: feedId,
+              parentId: event.parentComment.id!,
+              beforeAt: getBeforeAt(parentId: event.parentComment.id!),
+              take: event.take)
+          .then((res) {
+        log('[FeedCommentBloc]부모댓글 선택하기 요청 ok:${res.ok} message:${res.message}');
+        if (res.ok) {
+          emit(state.copyWith(
+              parentComment: event.parentComment,
+              status: Status.success,
+              comments: state.comments
+                  .map((item) => item.id == event.parentComment.id!
+                      ? item.copyWith(children: [...res.data!])
+                      : item)
+                  .toList(),
+              isEndMap: {
+                ...state.isEndMap,
+                event.parentComment.id!: res.data!.length < event.take
+              }));
+        } else {
+          emit(state.copyWith(
+              status: Status.error, errorMessage: '댓글을 가져오는 중 오류가 발생했습니다'));
+        }
+      });
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,

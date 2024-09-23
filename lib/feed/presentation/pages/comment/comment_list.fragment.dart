@@ -51,7 +51,7 @@ class ParentCommentListFragment extends StatelessWidget {
   }
 }
 
-class ChildCommentListFragment extends StatelessWidget {
+class ChildCommentListFragment extends StatefulWidget {
   const ChildCommentListFragment(
       {super.key, required this.parentComment, required this.timeFormatter});
 
@@ -59,15 +59,29 @@ class ChildCommentListFragment extends StatelessWidget {
   final CustomTimeFormat timeFormatter;
 
   @override
+  State<ChildCommentListFragment> createState() =>
+      _ChildCommentListFragmentState();
+}
+
+class _ChildCommentListFragmentState extends State<ChildCommentListFragment> {
+  @override
+  void initState() {
+    super.initState();
+    // context
+    //     .read<FeedCommentBloc>()
+    //     .add(FetchChildFeedCommentEvent(parentId: widget.parentComment.id!));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         // 부모 댓글
         CommentListTile(
-            timeFormatter: timeFormatter,
-            avatarUrl: parentComment.author!.avatarUrl!,
-            content: parentComment.content!,
-            createdAt: parentComment.createdAt!),
+            timeFormatter: widget.timeFormatter,
+            avatarUrl: widget.parentComment.author!.avatarUrl!,
+            content: widget.parentComment.content!,
+            createdAt: widget.parentComment.createdAt!),
         Padding(
           padding: EdgeInsets.symmetric(vertical: CustomSpacing.sm),
           child: Divider(indent: CustomSpacing.lg, endIndent: CustomSpacing.lg),
@@ -77,11 +91,11 @@ class ChildCommentListFragment extends StatelessWidget {
           padding: EdgeInsets.only(left: CustomSpacing.xl),
           child: ListView.builder(
               shrinkWrap: true,
-              itemCount: parentComment.children.length,
+              itemCount: widget.parentComment.children.length,
               itemBuilder: (context, index) {
-                final item = parentComment.children[index];
+                final item = widget.parentComment.children[index];
                 return CommentListTile(
-                    timeFormatter: timeFormatter,
+                    timeFormatter: widget.timeFormatter,
                     avatarUrl: item.author!.avatarUrl!,
                     content: item.content!,
                     createdAt: item.createdAt!);
