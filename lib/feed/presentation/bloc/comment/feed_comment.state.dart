@@ -4,7 +4,7 @@ class FeedCommentState {
   final String feedId;
   final bool isMounted;
   final Status status;
-  final ParentFeedCommentEntity? parentComment;
+  final String? parentCommentId;
   late final List<ParentFeedCommentEntity> comments;
 
   /// isEndMap : 조회할 댓글이 더 있는지 여부를 판단하기 위한 변수
@@ -16,28 +16,29 @@ class FeedCommentState {
       {required this.feedId,
       this.isMounted = false,
       this.status = Status.initial,
-      this.parentComment,
+      this.parentCommentId,
       List<ParentFeedCommentEntity>? comments,
-      DateTime? beforeAt,
       Map<String, bool>? isEndMap,
       this.errorMessage = ''}) {
     this.comments = comments ?? [];
     this.isEndMap = isEndMap ?? {feedId: false};
   }
 
-  FeedCommentState copyWith(
-          {Status? status,
-          bool? isMounted,
-          ParentFeedCommentEntity? parentComment,
-          List<ParentFeedCommentEntity>? comments,
-          Map<String, bool>? isEndMap,
-          String? errorMessage}) =>
+  FeedCommentState copyWith({
+    Status? status,
+    bool? isMounted,
+    List<ParentFeedCommentEntity>? comments,
+    Map<String, bool>? isEndMap,
+    String? errorMessage,
+    String? parentCommentId,
+    bool changeParent = false,
+  }) =>
       FeedCommentState(
           feedId: feedId,
           status: status ?? this.status,
           isMounted: isMounted ?? this.isMounted,
-          parentComment: parentComment,
           comments: comments ?? this.comments,
           isEndMap: isEndMap ?? this.isEndMap,
-          errorMessage: errorMessage ?? this.errorMessage);
+          errorMessage: errorMessage ?? this.errorMessage,
+          parentCommentId: changeParent ? parentCommentId : this.parentCommentId);
 }

@@ -67,9 +67,9 @@ class _ChildCommentListFragmentState extends State<ChildCommentListFragment> {
   @override
   void initState() {
     super.initState();
-    // context
-    //     .read<FeedCommentBloc>()
-    //     .add(FetchChildFeedCommentEvent(parentId: widget.parentComment.id!));
+    context
+        .read<FeedCommentBloc>()
+        .add(FetchChildFeedCommentEvent(parentId: widget.parentComment.id!));
   }
 
   @override

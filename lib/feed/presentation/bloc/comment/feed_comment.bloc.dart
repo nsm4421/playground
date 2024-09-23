@@ -98,7 +98,7 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
           emit(state.copyWith(status: Status.success));
         } else {
           emit(state.copyWith(
-              status: Status.error, errorMessage: '댓글을 작성  오류가 발생했습니다'));
+              status: Status.error, errorMessage: '대댓글을 작성 오류가 발생했습니다'));
         }
       });
     } catch (error) {
@@ -237,34 +237,9 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
   Future<void> _onSelectParentComment(
       SelectParentCommentEvent event, Emitter<FeedCommentState> emit) async {
     try {
-      log('[FeedCommentBloc]_onSelectParentComment실행');
-      emit(state.copyWith(status: Status.loading));
-      await _useCase
-          .fetchChildComment(
-              feedId: feedId,
-              parentId: event.parentComment.id!,
-              beforeAt: getBeforeAt(parentId: event.parentComment.id!),
-              take: event.take)
-          .then((res) {
-        log('[FeedCommentBloc]부모댓글 선택하기 요청 ok:${res.ok} message:${res.message}');
-        if (res.ok) {
-          emit(state.copyWith(
-              parentComment: event.parentComment,
-              status: Status.success,
-              comments: state.comments
-                  .map((item) => item.id == event.parentComment.id!
-                      ? item.copyWith(children: [...res.data!])
-                      : item)
-                  .toList(),
-              isEndMap: {
-                ...state.isEndMap,
-                event.parentComment.id!: res.data!.length < event.take
-              }));
-        } else {
-          emit(state.copyWith(
-              status: Status.error, errorMessage: '댓글을 가져오는 중 오류가 발생했습니다'));
-        }
-      });
+      log('[FeedCommentBloc]_onSelectParentComment요청');
+      emit(state.copyWith(
+          parentCommentId: event.parentComment.id, changeParent: true));
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,
@@ -277,7 +252,7 @@ class FeedCommentBloc extends Bloc<FeedCommentEvent, FeedCommentState> {
       UnSelectParentCommentEvent event, Emitter<FeedCommentState> emit) async {
     try {
       log('[FeedCommentBloc]_onUnSelectParentComment요청');
-      emit(state.copyWith(parentComment: null));
+      emit(state.copyWith(parentCommentId: null, changeParent: true));
     } catch (error) {
       emit(state.copyWith(
           status: Status.error,

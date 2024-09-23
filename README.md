@@ -52,7 +52,7 @@
     for update to authenticated with check (auth.uid() = created_by);
     
     create policy "permit delete own data" on public.feeds
-    for update to authenticated with check (auth.uid() = created_by);
+    for delete to authenticated USING (auth.uid() = created_by);
 
 ## Comment
 
@@ -77,8 +77,11 @@
     create policy "permit insert own data" on public.comments
     for insert to authenticated with check (auth.uid() = created_by);
     
-    create policy "permit delete own data" on public.comments
+    create policy "permit update own data" on public.comments
     for update to authenticated with check (auth.uid() = created_by);
+
+    create policy "permit delete own data" on public.comments
+    for delete to authenticated USING (auth.uid() = created_by);
 
 ## Likes
 
@@ -89,8 +92,9 @@
     created_by uuid not null default auth.uid(),
     created_at timestamp with time zone not null default now(),
     constraint likes_pkey primary key (id),
-    constraint likes_uid_fkey foreign key (created_by)
-    references accounts (id) on update cascade on delete cascade
+    constraint likes_uid_fkey foreign key (created_by) 
+    references accounts (id) on update cascade on delete cascade,
+    constraint unique_ref_id_table_created_by UNIQUE (reference_id, reference_table, created_by)
     ) tablespace pg_default;
     
     alter table public.likes enable row level security;
@@ -100,10 +104,9 @@
     
     create policy "permit insert own data" on public.likes
     for insert to authenticated with check (auth.uid() = created_by);
-    
-    create policy "permit delete own data" on public.likes
-    for update to authenticated with check (auth.uid() = created_by);
 
+    create policy "permit delete own data" on public.likes
+    for delete to authenticated USING (auth.uid() = created_by);
 
 # 버킷
 

@@ -27,17 +27,18 @@ class _ParentCommentScreenState extends State<ParentCommentScreen> {
   _submitComment() async {
     try {
       final text = _tec.text.trim();
-      final parentComment = context.read<FeedCommentBloc>().state.parentComment;
+      final parentCommentId =
+          context.read<FeedCommentBloc>().state.parentCommentId;
       if (text.isEmpty) {
         return;
-      } else if (parentComment == null) {
+      } else if (parentCommentId == null) {
         // 부모댓글을 등록한 경우
         context.read<FeedCommentBloc>().add(WriteParentFeedCommentEvent(text));
         _tec.clear();
       } else {
         // 자식댓글을 등록한 경우
         context.read<FeedCommentBloc>().add(WriteChildFeedCommentEvent(
-            parentId: parentComment!.id!, content: text));
+            parentId: parentCommentId, content: text));
         _tec.clear();
       }
     } catch (error) {
@@ -67,12 +68,12 @@ class _ParentCommentScreenState extends State<ParentCommentScreen> {
             leading: Icon(Icons.comment_rounded,
                 size: CustomTextSize.xl,
                 color: Theme.of(context).colorScheme.primary),
-            title: Text(state.parentComment == null ? '댓글' : '대댓글',
+            title: Text(state.parentCommentId == null ? '댓글' : '대댓글',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold)),
             actions: [
-              state.parentComment == null
+              state.parentCommentId == null
                   ? IconButton(onPressed: _pop, icon: const Icon(Icons.clear))
                   : IconButton(
                       onPressed: _unSelectParentComment,
@@ -82,11 +83,13 @@ class _ParentCommentScreenState extends State<ParentCommentScreen> {
           body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // 댓글목록
             Expanded(
-                child: state.parentComment == null
+                child: state.parentCommentId == null
                     ? ParentCommentListFragment(
                         comments: state.comments, timeFormatter: _timeFormatter)
                     : ChildCommentListFragment(
-                        parentComment: state.parentComment!,
+                        parentComment: state.comments
+                            .where((item) => item.id == state.parentCommentId)
+                            .first,
                         timeFormatter: _timeFormatter)),
             // 텍스트 입력창
             Padding(

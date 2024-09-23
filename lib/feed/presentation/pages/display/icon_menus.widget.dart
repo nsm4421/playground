@@ -28,13 +28,17 @@ class _IconMenuWidgetState extends State<IconMenuWidget> {
 
   _handleLike() async {
     if (!_isReady) return;
-    context.read<DisplayFeedBloc>().add(_isLike
-        ? CancelLikeOnFeedEvent(widget._feed.id!)
-        : LikeOnFeedEvent(widget._feed.id!));
-    setState(() {
-      _likeCount = _isLike ? _likeCount - 1 : _likeCount + 1;
-      _isLike = !_isLike;
-    });
+    try {
+      context.read<DisplayFeedBloc>().add(_isLike
+          ? CancelLikeOnFeedEvent(widget._feed.id!)
+          : LikeOnFeedEvent(widget._feed.id!));
+      setState(() {
+        _likeCount = _isLike ? _likeCount - 1 : _likeCount + 1;
+        _isLike = !_isLike;
+      });
+    } catch (error) {
+      log('좋아요 요청 오류 : ${error.toString()}');
+    }
   }
 
   _handleComment() async {
