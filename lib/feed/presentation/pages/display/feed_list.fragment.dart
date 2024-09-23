@@ -12,7 +12,7 @@ class FeedListFragment extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _feeds.length,
         itemBuilder: (context, index) {
-          return FeedItemWidget(_feeds[index]);
+          return FeedItemWidget(_feeds[index], timeFormatter: CustomTimeFormat());
         });
   }
 }

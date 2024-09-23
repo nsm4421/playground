@@ -1,11 +1,21 @@
 enum Tables {
   accounts,
   feeds,
-  reels;
+  likes,
+  comments;
 }
 
 enum Buckets {
   avatars,
-  feeds,
-  reels;
+  feeds;
+}
+
+// RPC 함수명
+enum RpcFunctions {
+  fetchFeeds('fetch_feeds'),
+  fetchParentComments("fetch_parent_comments");
+
+  final String name;
+
+  const RpcFunctions(this.name);
 }

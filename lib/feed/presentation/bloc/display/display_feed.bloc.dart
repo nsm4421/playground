@@ -18,7 +18,15 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
   DisplayFeedBloc(this._useCase) : super(DisplayFeedState()) {
     on<FetchFeedEvent>(_onFetch);
     on<RefreshEvent>(_onRefresh);
+    on<LikeOnFeedEvent>(_onLike);
+    on<CancelLikeOnFeedEvent>(_onCancelLike);
   }
+
+  DateTime get beforeAt => state.data.isEmpty
+      ? DateTime.now().toUtc()
+      : state.data
+          .map((item) => item.createdAt!)
+          .reduce((r, l) => r.isBefore(l) ? r : l);
 
   Future<void> _onFetch(
       FetchFeedEvent event, Emitter<DisplayFeedState> emit) async {
@@ -26,25 +34,18 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
       log('[DisplayFeedBloc]_onFetch실행');
       if (state.isEnd) return;
       emit(state.copyWith(status: Status.loading));
-      final res = await _useCase.fetchFeeds(
-          beforeAt: state.beforeAt, limit: event.limit);
-      if (!res.ok || res.data == null) {
-        log(res.message ?? '[DisplayFeedBloc]피드 가져오는 중 오류');
-        emit(state.copyWith(status: Status.error, errorMessage: res.message));
-        return;
-      }
-      log('[DisplayFeedBloc]피드 가져오기 성공 beforeAt:${state.beforeAt} 개수:${res.data?.length ?? 0}');
-      final fetched = res.data!;
-      emit(state.copyWith(
-          status: Status.success,
-          data: [...state.data, ...fetched],
-          isEnd: fetched.length < event.limit,
-          beforeAt: fetched.isEmpty
-              ? state.beforeAt
-              : fetched
-                  .map((item) => item.createdAt)
-                  .map((text) => DateTime.tryParse(text!))
-                  .reduce((l, r) => l!.isBefore(r!) ? l : r)));
+      await _useCase
+          .fetchFeeds(beforeAt: beforeAt, take: event.take)
+          .then((res) {
+        if (res.ok) {
+          emit(state.copyWith(
+              status: Status.success,
+              data: [...state.data, ...res.data!],
+              isEnd: res.data!.length < event.take));
+        } else {
+          emit(state.copyWith(status: Status.error, errorMessage: res.message));
+        }
+      });
     } catch (error) {
       log('[DisplayFeedBloc]피드 가져오는 중 오류 발생 ${error.toString()}');
       emit(state.copyWith(
@@ -61,6 +62,50 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
       emit(DisplayFeedState());
     } catch (error) {
       log('[DisplayFeedBloc]새로고침 중 오류');
+      emit(state.copyWith(
+          status: Status.error,
+          errorMessage:
+              error is CustomException ? error.message : '알수 없는 오류가 발생하였습니다'));
+    }
+  }
+
+  Future<void> _onLike(
+      LikeOnFeedEvent event, Emitter<DisplayFeedState> emit) async {
+    try {
+      log('[DisplayFeedBloc]_onLike 호출');
+      emit(state.copyWith(status: Status.loading));
+      await _useCase.like(event.feedId);
+      emit(state.copyWith(
+          status: Status.success,
+          data: state.data
+              .map((item) => item.id == event.feedId
+                  ? item.copyWith(isLike: true, likeCount: item.likeCount + 1)
+                  : item)
+              .toList()));
+    } catch (error) {
+      log('[DisplayFeedBloc]좋아요 요청 중 오류');
+      emit(state.copyWith(
+          status: Status.error,
+          errorMessage:
+              error is CustomException ? error.message : '알수 없는 오류가 발생하였습니다'));
+    }
+  }
+
+  Future<void> _onCancelLike(
+      CancelLikeOnFeedEvent event, Emitter<DisplayFeedState> emit) async {
+    try {
+      log('[DisplayFeedBloc]_onCancelLike 호출');
+      emit(state.copyWith(status: Status.loading));
+      await _useCase.cancelLike(event.feedId);
+      emit(state.copyWith(
+          status: Status.success,
+          data: state.data
+              .map((item) => item.id == event.feedId
+                  ? item.copyWith(isLike: false, likeCount: item.likeCount - 1)
+                  : item)
+              .toList()));
+    } catch (error) {
+      log('[DisplayFeedBloc]좋아요 취소 중 오류');
       emit(state.copyWith(
           status: Status.error,
           errorMessage:

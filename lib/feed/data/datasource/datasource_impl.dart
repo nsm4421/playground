@@ -1,5 +1,6 @@
 import 'package:flutter_app/feed/data/dto/create_feed.dto.dart';
 import 'package:flutter_app/feed/data/dto/fetch_feed.dto.dart';
+import 'package:flutter_app/feed/data/dto/fetch_feed_by_rpc.dto.dart';
 import 'package:flutter_app/shared/constant/constant.export.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,10 +26,27 @@ class FeedDataSourceImpl extends FeedDataSource {
       return await _supabaseClient.rest
           .from(Tables.feeds.name)
           .select("*,author:${Tables.accounts.name}(id, username, avatar_url)")
-          .lt('created_at', beforeAt.toUtc().toIso8601String())   // 내림차순
+          .lt('created_at', beforeAt.toUtc().toIso8601String()) // 내림차순
           .limit(limit)
           .order('created_at', ascending: false)
           .then((res) => res.map((json) => FetchFeedDto.fromJson(json)));
+    } catch (error) {
+      _logger.e(error);
+      throw CustomException.from(error: error);
+    }
+  }
+
+  @override
+  Future<Iterable<FetchFeedByRpcDto>> fetchFeedsByRPC(
+      {required DateTime beforeAt, int take = 20}) async {
+    try {
+      _logger.d('fetch feed request by rpc beforeAt:$beforeAt limit : $take');
+      return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
+          RpcFunctions.fetchFeeds.name,
+          params: {
+            'before_at': beforeAt.toUtc().toIso8601String(),
+            'take': take
+          }).then((res) => res.map((FetchFeedByRpcDto.fromJson)));
     } catch (error) {
       _logger.e(error);
       throw CustomException.from(error: error);

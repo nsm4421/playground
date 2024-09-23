@@ -5,9 +5,10 @@ class SignOutUseCase {
 
   SignOutUseCase(this._repository);
 
-  Future<UseCaseResponseWrapper<void>> call() async {
-    return await _repository.signOut().then((res) =>
-        UseCaseResponseWrapper.from(res,
-            successMessage: '로그아웃되었습니다', errorMessage: '로그아웃에 실패하였습니다'));
+  Future<ResponseWrapper<void>> call() async {
+    final res = await _repository.signOut();
+    return res.ok
+        ? const SuccessResponse<void>(message: '로그아웃되었습니다')
+        : const ErrorResponse<void>(message: '로그아웃에 실패하였습니다');
   }
 }
