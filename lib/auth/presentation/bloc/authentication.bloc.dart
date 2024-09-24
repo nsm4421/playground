@@ -21,15 +21,17 @@ class AuthenticationBloc
   AuthenticationBloc(this._useCase) : super(AuthenticationState()) {
     on<InitAuthEvent>(_onInit);
     on<AuthChangedEvent>(_onChange);
-    on<CheckUsernameEvent>(_onCheckUsername);
     on<SignInWithEmailAndPasswordEvent>(_onSignInWithEmailAndPassword);
     on<SignUpWithEmailAndPasswordEvent>(_onSignUpWithEmailAndPassword);
     on<SignOutEvent>(_onSignOut);
+    on<UpdateProfileEvent>(_onUpdateProfile);
   }
 
   Stream<User?> get userStream => _useCase.userStream;
 
   User? get currentUser => _useCase.currentUser;
+
+  PresenceEntity get presence => PresenceEntity.fromSupUser(currentUser!);
 
   _onInit(InitAuthEvent event, Emitter<AuthenticationState> emit) {
     final user = currentUser;
@@ -58,20 +60,6 @@ class AuthenticationBloc
     } catch (error) {
       log(error.toString());
       emit(state.copyWith(status: Status.error));
-    }
-  }
-
-  _onCheckUsername(
-      CheckUsernameEvent event, Emitter<AuthenticationState> emit) async {
-    try {
-      emit(state.copyWith(status: Status.loading));
-      await _useCase.checkUsername.call(event.username).then((res) => res.ok
-          ? emit(state.copyWith(status: Status.initial))
-          : emit(state.copyWith(errorMessage: res.message)));
-    } catch (error) {
-      log(error.toString());
-      emit(state.copyWith(
-          status: Status.error, errorMessage: '유저명 중복체크 중 오류 발생'));
     }
   }
 
@@ -132,6 +120,17 @@ class AuthenticationBloc
     } catch (error) {
       log(error.toString());
       emit(state.copyWith(status: Status.error));
+    }
+  }
+
+  _onUpdateProfile(
+      UpdateProfileEvent event, Emitter<AuthenticationState> emit) async {
+    try {
+      emit(state.copyWith(status: Status.success, user: currentUser));
+    } catch (error) {
+      log(error.toString());
+      emit(state.copyWith(
+          status: Status.error, errorMessage: '프로필 업데이트 중 오류 발생'));
     }
   }
 }

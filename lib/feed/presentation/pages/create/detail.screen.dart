@@ -17,21 +17,22 @@ class _DetailScreenState extends State<DetailScreen> {
   initState() {
     super.initState();
     _tec = TextEditingController();
-    _focusNode = FocusNode()
-      ..addListener(() {
-        if (!_focusNode.hasFocus) {
-          context
-              .read<CreateFeedBloc>()
-              .add(UpdateStateEvent(caption: _tec.text));
-        }
-      });
+    _focusNode = FocusNode()..addListener(_focusNodeListener);
   }
 
   @override
   dispose() {
     super.dispose();
     _tec.dispose();
-    _focusNode.dispose();
+    _focusNode
+      ..removeListener(_focusNodeListener)
+      ..dispose();
+  }
+
+  _focusNodeListener() {
+    if (!_focusNode.hasFocus) {
+      context.read<CreateFeedBloc>().add(UpdateStateEvent(caption: _tec.text));
+    }
   }
 
   _moveBack() {

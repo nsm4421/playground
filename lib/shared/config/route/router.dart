@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/feed/presentation/pages/create/create_feed.page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -35,6 +34,10 @@ class CustomRoute {
       routes: [
         _authRouter,
         _homeRouter,
+        // 프로필 수정
+        GoRoute(
+            path: RoutePaths.editProfile.path,
+            builder: (context, state) => const EditProfilePage())
       ],
       redirect: _redirect,
       refreshListenable: _authStateNotifier);
@@ -72,7 +75,6 @@ class CustomRoute {
                           const NoTransitionPage(child: ChatPage()),
                         HomeBottomNavItem.setting =>
                           const NoTransitionPage(child: SettingPage()),
-                        // TODO: Handle this case.
                       };
                     })
               ]))
