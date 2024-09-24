@@ -26,16 +26,11 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SETTING"),
+        title: const Text("SETTING"),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
-          children: [
-
-
-            Text('test')
-
-          ],
+          children: [UserProfileFragment(), Text('test')],
         ),
       ),
     );

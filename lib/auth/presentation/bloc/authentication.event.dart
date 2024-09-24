@@ -1,8 +1,6 @@
 part of 'authentication.bloc.dart';
 
-sealed class AuthenticationEvent {
-  const AuthenticationEvent();
-}
+sealed class AuthenticationEvent {}
 
 final class InitAuthEvent extends AuthenticationEvent {}
 
@@ -38,6 +36,6 @@ final class SignUpWithEmailAndPasswordEvent extends AuthenticationEvent {
       required this.profileImage});
 }
 
-final class SignOutEvent extends AuthenticationEvent {
-  SignOutEvent();
-}
+final class SignOutEvent extends AuthenticationEvent {}
+
+final class UpdateProfileEvent extends AuthenticationEvent {}

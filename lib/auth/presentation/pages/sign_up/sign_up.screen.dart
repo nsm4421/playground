@@ -13,21 +13,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   static const _minUsernameLength = 3;
   static const _maxUsernameLength = 15;
 
-  late ImagePicker _imagePicker;
   late TextEditingController _emailTec;
   late TextEditingController _passwordTec;
   late TextEditingController _passwordConfirmTec;
   late TextEditingController _usernameTec;
   late GlobalKey<FormState> _formKey;
 
-  bool _isPasswordVisibile = false;
-  bool _isPasswordConfirmVisibile = false;
+  bool _isPasswordVisible = false;
+  bool _isPasswordConfirmVisible = false;
   File? _selectedImage;
 
   @override
   void initState() {
     super.initState();
-    _imagePicker = ImagePicker();
     _emailTec = TextEditingController();
     _passwordTec = TextEditingController();
     _passwordConfirmTec = TextEditingController();
@@ -46,13 +44,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   _switchPasswordVisibility() {
     setState(() {
-      _isPasswordVisibile = !_isPasswordVisibile;
+      _isPasswordVisible = !_isPasswordVisible;
     });
   }
 
   _switchPasswordConfirmVisibility() {
     setState(() {
-      _isPasswordConfirmVisibile = !_isPasswordConfirmVisibile;
+      _isPasswordConfirmVisible = !_isPasswordConfirmVisible;
     });
   }
 
@@ -93,23 +91,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _pickImage() async {
-    // 이미지 선택
-    final selected = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if (selected == null) {
-      return;
+    final selected = await getIt<CustomMediaUtil>()
+        .pickCompressedImage(filename: 'profile-image.jpg');
+    if (selected != null) {
+      setState(() {
+        _selectedImage = selected;
+      });
     }
-    // 이미지 압축
-    final dir = await getTemporaryDirectory();
-    final compressed = await FlutterImageCompress.compressAndGetFile(
-      selected.path,
-      path.join(dir.path, "profile-image.jpg"),
-      quality: 80,
-    );
-    setState(() {
-      _selectedImage = File(compressed!.path);
-    });
   }
 
   _unSelectImage() {
@@ -240,7 +228,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         validator: _validatePassword,
                         maxLength: _maxPasswordLength,
                         maxLines: 1,
-                        obscureText: !_isPasswordVisibile,
+                        obscureText: !_isPasswordVisible,
                         decoration: InputDecoration(
                             hintText: '비밀번호를 $_maxPasswordLength자 내로 작명해주세요',
                             hintStyle: Theme.of(context)
@@ -251,7 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         Theme.of(context).colorScheme.tertiary),
                             prefixIcon: const Icon(Icons.key),
                             suffixIcon: IconButton(
-                              icon: Icon(_isPasswordVisibile
+                              icon: Icon(_isPasswordVisible
                                   ? Icons.visibility_off
                                   : Icons.visibility),
                               onPressed: _switchPasswordVisibility,
@@ -270,7 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         validator: _validatePasswordConfirm,
                         maxLength: _maxPasswordLength,
                         maxLines: 1,
-                        obscureText: !_isPasswordConfirmVisibile,
+                        obscureText: !_isPasswordConfirmVisible,
                         decoration: InputDecoration(
                             hintText: '비밀번호를 다시 입력해주세요',
                             hintStyle: Theme.of(context)
@@ -281,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         Theme.of(context).colorScheme.tertiary),
                             prefixIcon: const Icon(Icons.key),
                             suffixIcon: IconButton(
-                              icon: Icon(_isPasswordConfirmVisibile
+                              icon: Icon(_isPasswordConfirmVisible
                                   ? Icons.visibility_off
                                   : Icons.visibility),
                               onPressed: _switchPasswordConfirmVisibility,

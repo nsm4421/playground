@@ -42,17 +42,25 @@
     
     alter table public.feeds enable row level security;
     
-    create policy "permit select for all authenticated" on public.feeds
-    for select to authenticated using (true);
-    
-    create policy "permit insert own data" on public.feeds
-    for insert to authenticated with check (auth.uid() = created_by);
-    
-    create policy "permit update own data" on public.feeds
-    for update to authenticated with check (auth.uid() = created_by);
-    
-    create policy "permit delete own data" on public.feeds
-    for delete to authenticated USING (auth.uid() = created_by);
+    create policy "permit select for all" 
+    on accounts for select 
+    to authenticated
+    using (true);
+
+    create policy "can create own account" 
+    on accounts for insert
+    to authenticated
+    with check (auth.uid() = id);
+
+    create policy "can modify own account" 
+    on accounts for update 
+    to authenticated
+    with check (auth.uid() = id);
+
+    create policy "can delete own account" 
+    on accounts for delete  
+    to authenticated
+    using (auth.uid() = id);
 
 ## Comment
 
@@ -163,7 +171,6 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.on_sign_up();
 ```
-
 
 ## 피드조회
 
