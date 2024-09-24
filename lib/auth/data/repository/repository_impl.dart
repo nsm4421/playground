@@ -51,19 +51,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<ResponseWrapper<bool>> checkUsername(String username) async {
-    try {
-      return await _authDataSource
-          .checkUsername(username)
-          .then(SuccessResponse<bool>.from);
-    } on Exception catch (error) {
-      return ErrorResponse<bool>.from(error);
-    }
-  }
-
-  @override
-  Future<ResponseWrapper<String>> uploadProfileImage(
-      File profileImage) async {
+  Future<ResponseWrapper<String>> uploadProfileImage(File profileImage) async {
     try {
       return await _storageDataSource
           .uploadImage(
@@ -91,4 +79,16 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   User? get currentUser => _authDataSource.currentUser;
+
+  @override
+  Future<ResponseWrapper<void>> updateMetaData(
+      {String? username, String? avatarUrl}) async {
+    try {
+      return await _authDataSource
+          .updateMetaData(username: username, avatarUrl: avatarUrl)
+          .then(SuccessResponse<void>.from);
+    } on Exception catch (error) {
+      return ErrorResponse<void>.from(error);
+    }
+  }
 }

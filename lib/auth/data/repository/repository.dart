@@ -10,8 +10,6 @@ abstract class AuthRepository {
   Future<ResponseWrapper<User?>> signInWithEmailAndPassword(
       String email, String password);
 
-  Future<ResponseWrapper<bool>> checkUsername(String username);
-
   Future<ResponseWrapper<String>> uploadProfileImage(File profileImage);
 
   Future<ResponseWrapper<void>> signOut();
@@ -19,4 +17,7 @@ abstract class AuthRepository {
   Stream<User?> get userStream;
 
   User? get currentUser;
+
+  Future<ResponseWrapper<void>> updateMetaData(
+      {String? username, String? avatarUrl});
 }
