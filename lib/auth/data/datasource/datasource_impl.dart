@@ -1,11 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter_app/shared/shared.export.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
-
-import '../../../shared/constant/response/custom_exception.dart';
 
 part 'datasource.dart';
 
@@ -53,20 +48,6 @@ class AuthDataSourceImpl extends AuthDataSource {
   }
 
   @override
-  Future<bool> checkUsername(String username) async {
-    try {
-      return await _supabaseClient
-          .from(Tables.accounts.name)
-          .count()
-          .eq('username', username)
-          .then((res) => res == 0);
-    } catch (error) {
-      _logger.e(error);
-      throw CustomException.from(error: error);
-    }
-  }
-
-  @override
   Future<void> signOut() async {
     try {
       await _supabaseClient.auth.signOut();
@@ -81,4 +62,19 @@ class AuthDataSourceImpl extends AuthDataSource {
 
   @override
   User? get currentUser => _supabaseClient.auth.currentUser;
+
+  @override
+  Future<void> updateMetaData({String? username, String? avatarUrl}) async {
+    try {
+      await _supabaseClient.auth.updateUser(UserAttributes(
+        data: {
+          if (username != null) 'username': username,
+          if (avatarUrl != null) 'avatar_url': avatarUrl
+        },
+      ));
+    } catch (error) {
+      _logger.e(error);
+      throw CustomException.from(error: error);
+    }
+  }
 }

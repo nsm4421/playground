@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter_app/auth/auth.export.dart';
 import 'package:flutter_app/comment/data/dto/save_comment.dto.dart';
 import 'package:flutter_app/feed/data/data.export.dart';
 import 'package:flutter_app/feed/data/dto/edit_feed.dto.dart';
@@ -21,20 +20,17 @@ part 'repository.dart';
 @LazySingleton(as: FeedRepository)
 class FeedRepositoryImpl extends FeedRepository {
   final Logger _logger = Logger();
-  final AuthDataSource _authDataSource;
   final FeedDataSource _feedDataSource;
   final StorageDataSource _storageDataSource;
   final LikeDataSource _likeDataSource;
   final CommentDataSource _commentDataSource;
 
   FeedRepositoryImpl(
-      {required AuthDataSource authDataSource,
-      required FeedDataSource feedDataSource,
+      {required FeedDataSource feedDataSource,
       required StorageDataSource storageDataSource,
       required LikeDataSource likeDataSource,
       required CommentDataSource commentDataSource})
-      : _authDataSource = authDataSource,
-        _feedDataSource = feedDataSource,
+      : _feedDataSource = feedDataSource,
         _storageDataSource = storageDataSource,
         _likeDataSource = likeDataSource,
         _commentDataSource = commentDataSource;

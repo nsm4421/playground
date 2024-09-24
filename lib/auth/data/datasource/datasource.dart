@@ -10,11 +10,14 @@ abstract class AuthDataSource {
 
   Future<User?> signInWithEmailAndPassword(String email, String password);
 
-  Future<bool> checkUsername(String username);
-
   Future<void> signOut();
 
   Stream<AuthState> get authStream;
 
   User? get currentUser;
+
+  Future<void> updateMetaData({
+    String? username,
+    String? avatarUrl,
+  });
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_app/setting/data/datasource/datasource_impl.dart';
 import 'package:flutter_app/shared/shared.export.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
@@ -16,6 +17,10 @@ abstract class DataSource {
   @lazySingleton
   AuthDataSource get auth =>
       AuthDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
+
+  @lazySingleton
+  AccountDataSource get account =>
+      AccountDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
 
   @lazySingleton
   FeedDataSource get feed =>

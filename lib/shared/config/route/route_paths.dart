@@ -10,6 +10,8 @@ enum RoutePaths {
   createMedia('/create-media'),
   chat('/chat'),
   setting('/setting'),
+  // 기타
+  editProfile('/setting/edit-profile'),
   ;
 
   const RoutePaths(this.path, {this.subpath});

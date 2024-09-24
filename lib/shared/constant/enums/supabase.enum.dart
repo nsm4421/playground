@@ -13,7 +13,8 @@ enum Buckets {
 // RPC 함수명
 enum RpcFunctions {
   fetchFeeds('fetch_feeds'),
-  fetchParentComments("fetch_parent_comments");
+  fetchParentComments('fetch_parent_comments'),
+  ;
 
   final String name;
 
