@@ -1,41 +1,29 @@
 part of 'feed.page.dart';
 
 class IconMenuWidget extends StatefulWidget {
-  const IconMenuWidget(this._feed, {super.key});
+  const IconMenuWidget(
+      {super.key, required FeedEntity feed, bool isMyFeed = false})
+      : _feed = feed,
+        _isMyFeed = isMyFeed;
 
   final FeedEntity _feed;
+  final bool _isMyFeed;
 
   @override
   State<IconMenuWidget> createState() => _IconMenuWidgetState();
 }
 
 class _IconMenuWidgetState extends State<IconMenuWidget> {
-  late bool _isLike;
-  late int _likeCount;
-  late int _commentCount;
-
-  @override
-  void initState() {
-    super.initState();
-    _isLike = widget._feed.isLike;
-    _likeCount = widget._feed.likeCount;
-    _commentCount = widget._feed.commentCount;
-  }
-
   bool get _isReady =>
       context.read<DisplayFeedBloc>().state.status != Status.loading &&
       context.read<DisplayFeedBloc>().state.status != Status.error;
 
   _handleLike() async {
-    if (!_isReady) return;
+    if (widget._isMyFeed || !_isReady) return;
     try {
-      context.read<DisplayFeedBloc>().add(_isLike
+      context.read<DisplayFeedBloc>().add(widget._feed.isLike
           ? CancelLikeOnFeedEvent(widget._feed.id!)
           : LikeOnFeedEvent(widget._feed.id!));
-      setState(() {
-        _likeCount = _isLike ? _likeCount - 1 : _likeCount + 1;
-        _isLike = !_isLike;
-      });
     } catch (error) {
       log('좋아요 요청 오류 : ${error.toString()}');
     }
@@ -86,7 +74,7 @@ class _IconMenuWidgetState extends State<IconMenuWidget> {
                 CustomWidth.sm,
                 Icon(Icons.comment_outlined, size: CustomTextSize.xl),
                 CustomWidth.sm,
-                Text('$_commentCount'),
+                Text('${widget._feed.commentCount}'),
                 CustomWidth.sm
               ]),
             ))

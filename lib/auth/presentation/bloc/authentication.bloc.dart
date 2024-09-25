@@ -16,6 +16,7 @@ part 'authentication.event.dart';
 @lazySingleton
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
+  late User? _currentUser;
   final AuthUseCase _useCase;
 
   AuthenticationBloc(this._useCase) : super(AuthenticationState()) {
@@ -25,11 +26,12 @@ class AuthenticationBloc
     on<SignUpWithEmailAndPasswordEvent>(_onSignUpWithEmailAndPassword);
     on<SignOutEvent>(_onSignOut);
     on<UpdateProfileEvent>(_onUpdateProfile);
+    _currentUser = _useCase.currentUser;
   }
 
   Stream<User?> get userStream => _useCase.userStream;
 
-  User? get currentUser => _useCase.currentUser;
+  User? get currentUser => _currentUser;
 
   PresenceEntity get presence => PresenceEntity.fromSupUser(currentUser!);
 

@@ -20,6 +20,7 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
     on<RefreshEvent>(_onRefresh);
     on<LikeOnFeedEvent>(_onLike);
     on<CancelLikeOnFeedEvent>(_onCancelLike);
+    on<DeleteFeedEvent>(_onDelete);
   }
 
   DateTime get beforeAt => state.data.isEmpty
@@ -106,6 +107,24 @@ class DisplayFeedBloc extends Bloc<DisplayFeedEvent, DisplayFeedState> {
               .toList()));
     } catch (error) {
       log('[DisplayFeedBloc]좋아요 취소 중 오류');
+      emit(state.copyWith(
+          status: Status.error,
+          errorMessage:
+              error is CustomException ? error.message : '알수 없는 오류가 발생하였습니다'));
+    }
+  }
+
+  Future<void> _onDelete(
+      DeleteFeedEvent event, Emitter<DisplayFeedState> emit) async {
+    try {
+      log('[DisplayFeedBloc]_onDelete 호출');
+      emit(state.copyWith(status: Status.loading));
+      await _useCase.deleteFeed(event.feedId);
+      emit(state.copyWith(
+          status: Status.success,
+          data: state.data.where((item) => item.id != event.feedId).toList()));
+    } catch (error) {
+      log('[DisplayFeedBloc]피드 삭제 취소 중 오류');
       emit(state.copyWith(
           status: Status.error,
           errorMessage:

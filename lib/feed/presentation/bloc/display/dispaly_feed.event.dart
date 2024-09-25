@@ -25,3 +25,9 @@ final class CancelLikeOnFeedEvent extends DisplayFeedEvent {
 
   CancelLikeOnFeedEvent(this.feedId);
 }
+
+final class DeleteFeedEvent extends DisplayFeedEvent {
+  final String feedId;
+
+  DeleteFeedEvent(this.feedId);
+}
