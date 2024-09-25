@@ -116,6 +116,88 @@
     create policy "permit delete own data" on public.likes
     for delete to authenticated USING (auth.uid() = created_by);
 
+## Chat
+
+    create table public.chats (
+    id uuid not null default gen_random_uuid(),      -- 채팅방 id
+    uid uuid not null default auth.uid(),       -- 해당 레코드를 조회할 수 있는 유저 id
+    opponent_uid uuid not null,                 -- 대화상대방 uid
+    -- 가장 최근 메세지
+    last_message_id uuid default null,
+    last_message_content text default null,
+    last_message_created_at timestamp with time zone null,
+    created_at timestamp with time zone not null default now(), -- 생성시간
+    constraint chat_pkey primary key(id, uid, opponent_uid),
+    constraint chat_unique_key UNIQUE (uid, opponent_uid),
+    constraint chat_fkey1 foreign key(uid)
+    references accounts (id) on update cascade on delete cascade,
+    constraint chat_fkey2 foreign key(uid)
+    references accounts (id) on update cascade on delete cascade
+    ) tablespace pg_default;
+    
+    alter table public.chats enable row level security;
+    
+    create policy "permit select based on uid" 
+    on chats for select 
+    to authenticated
+    using (auth.uid() = uid);
+
+    create policy "can insert based on uid" 
+    on chats for insert
+    to authenticated
+    with check (auth.uid() = uid or auth.uid() = opponent_uid);
+
+    create policy "permit updated based on uid" 
+    on chats for update 
+    to authenticated
+    with check (auth.uid() = uid or auth.uid() = opponent_uid);
+
+    create policy "permit delete based on uid" 
+    on chats for delete  
+    to authenticated
+    using (auth.uid() = uid or auth.uid() = opponent_uid);
+
+## Chat Messages
+
+    create table public.chat_messages (
+    id uuid not null default gen_random_uuid(),
+    uid uuid not null default auth.uid(),       -- 해당 레코드를 조회할 수 있는 유저 id
+    chat_id uuid not null,
+    type text not null,
+    content text default null,
+    is_seen boolean default false,
+    sender_uid uuid not null,
+    receiver_uid uuid not null,
+    created_at timestamp with time zone not null default now(),
+    constraint chat_messages_pkey primary key (id, uid),
+    constraint chat_messages_fkey1 foreign key (sender_uid)
+    references accounts (id) on update cascade on delete cascade,
+    constraint chat_messages_fkey2 foreign key (receiver_uid)
+    references accounts (id) on update cascade on delete cascade
+    ) tablespace pg_default;
+
+    alter table public.chat_messages enable row level security;
+
+    create policy "permit select based on uid" 
+    on chat_messages for select 
+    to authenticated
+    using (auth.uid() = uid);
+
+    create policy "permit insert based on uid" 
+    on chat_messages for insert
+    to authenticated
+    with check (auth.uid() = sender_uid or auth.uid() = receiver_uid);
+
+    create policy "permit update based on uid" 
+    on chat_messages for update
+    to authenticated
+    using (auth.uid() = uid);
+
+    create policy "can delete based on uid" 
+    on chat_messages for delete  
+    to authenticated
+    using (auth.uid() = sender_uid or auth.uid() = receiver_uid);
+
 # 버킷
 
 ## 아바타
@@ -325,4 +407,154 @@ as $$
     ) CC on AA.id = CC.parent_id  
     order by AA.created_at desc
 $$;
+```
+
+## 채팅방 조회
+
+```
+create or replace function fetch_chats
+(before_at timestamptz, take int)
+returns table(
+    id uuid,                                -- 채팅방 id
+    uid uuid,                               -- 현재 유저 id
+    opponent_uid uuid,                      -- 상대방 uid
+    opponent_username text,                 -- 상대방 유저명
+    opponent_avatar_url text,               -- 상대방 프로필 사진
+    last_message_id uuid,
+    last_message_content text,              -- 마지막 메세지 본문
+    last_message_created_at timestamptz,    -- 마지막 메세지 작성시간
+    un_read_message_count int               -- 아직 읽지 않은 메세지 개수
+)
+language sql
+as $$
+    select
+        A.id id,
+        A.uid uid,
+        A.opponent_uid opponent_uid,
+        B.username opponent_username,
+        B.avatar_url oppoent_avatar_url,
+        A.last_message_id last_message_id,
+        A.last_message_content last_message_content,
+        A.last_message_created_at,
+        C.un_read_message_count un_read_message_count
+    from (
+        select
+            id,
+            uid,
+            opponent_uid,
+            last_message_id,
+            last_message_content,
+            last_message_created_at
+        from
+            public.chats
+        where
+            created_at < before_at 
+            and last_message_created_at is not null 
+            and uid = auth.uid() 
+        order by last_message_created_at desc
+        limit take
+        ) A
+    left join (
+        select
+          id,
+          username,
+          avatar_url
+        from
+          public.accounts
+    ) B on A.opponent_uid = B.id  -- 대화 상대방 유저정보
+    left join (
+      select count(1) un_read_message_count, chat_id
+      from public.chat_messages
+      where is_seen = false 
+      and uid = auth.uid()
+      group by chat_id
+    ) C on A.id = C.chat_id  
+$$;
+```
+
+## 채팅 메시지 조회
+
+```
+create or replace function fetch_chat_messages
+(chat_id_to_fetch uuid, before_at timestamptz, take int)
+returns table(
+    id uuid,                                -- 메세지 id
+    uid uuid,                               -- 해당 레코드를 조회 가능한 유저 id
+    chat_id uuid,                           -- 채팅방 id
+    type text,                              -- 메세지 type (text, video ...)
+    content text,                           -- 본문
+    is_seen bool,                           -- 해당 메세지를 읽었는지 여부
+    sender_uid uuid,                        -- sender
+    sender_username text,           
+    sender_avatar_url text,    
+    receiver_uid uuid,                      -- recevier
+    receiver_username text,           
+    receiver_avatar_url text,
+    created_at timestamptz                  -- 메세지 보낸 시간
+)
+language sql
+as $$
+    select
+      A.id id,
+      A.uid uid,
+      A.chat_id chat_id,
+      A.type type,
+      A.content content,
+      A.is_seen is_seen,
+      A.sender_uid sender_uid,
+      B.username sender_username,
+      B.avatar_url sender_avatar_url,
+      A.receiver_uid receiver_uid,
+      B.username receiver_username,
+      B.avatar_url receiver_avatar_url,
+      A.created_at
+    from (
+        select
+            id,
+            uid,
+            chat_id,
+            type,
+            content,
+            is_seen,
+            sender_uid,  
+            receiver_uid,
+            created_at
+        from
+            public.chat_messages
+        where
+            created_at < before_at
+            and chat_id = chat_id_to_fetch
+            and uid = auth.uid()
+        order by created_at desc
+        limit take
+        ) A
+    left join (
+        select
+          id,
+          username,
+          avatar_url
+        from
+          public.accounts
+    ) B on A.sender_uid = B.id  -- sender
+    left join (
+        select
+          id,
+          username,
+          avatar_url
+        from
+          public.accounts
+    ) C on A.receiver_uid = C.id  -- receiver
+$$;
+```
+
+## 채팅방 삭제
+
+```
+CREATE OR REPLACE FUNCTION delete_chat_by_id(chat_id_to_delete uuid)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM public.chats WHERE chat_id = chat_id_to_delete;
+    DELETE FROM public.chat_messages WHERE chat_id = chat_id_to_delete;
+END;
+$$ LANGUAGE plpgsql;
 ```

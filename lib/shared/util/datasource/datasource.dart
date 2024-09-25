@@ -1,3 +1,4 @@
+import 'package:flutter_app/chat/data/datasource/chat_datasource_impl.dart';
 import 'package:flutter_app/setting/data/datasource/datasource_impl.dart';
 import 'package:flutter_app/shared/shared.export.dart';
 import 'package:injectable/injectable.dart';
@@ -33,6 +34,10 @@ abstract class DataSource {
   @lazySingleton
   LikeDataSource get like =>
       LikeDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
+
+  @lazySingleton
+  ChatDataSource get chat =>
+      ChatDataSourceImpl(supabaseClient: _supabaseClient, logger: _logger);
 
   @lazySingleton
   StorageDataSource get storage =>
