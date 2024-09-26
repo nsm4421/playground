@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter_app/feed/domain/entity/feed_comment.entity.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../comment/comment.export.dart';
 import '../../../shared/shared.export.dart';
 import '../../data/data.export.dart';
 import '../entity/feed.entity.dart';
