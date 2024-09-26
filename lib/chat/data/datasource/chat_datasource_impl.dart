@@ -17,13 +17,45 @@ class ChatDataSourceImpl extends ChatDataSource {
         _logger = logger;
 
   @override
+  Future<FetchChatDto> findChatById(String chatId) async {
+    try {
+      return await _supabaseClient
+          .rpc<List<Map<String, dynamic>>>(RpcFunctions.fetchChatById.name,
+              params: {'chat_id_to_fetch': chatId})
+          .then((res) => res.map((json) => FetchChatDto.fromJson(json)))
+          .then((res) => res.first);
+    } catch (error) {
+      _logger.e(error);
+      throw CustomException.from(error: error);
+    }
+  }
+
+  @override
+  Future<String?> findChatIdByUid(String opponentUid) async {
+    try {
+      return await _supabaseClient.rest
+          .from(Tables.chats.name)
+          .select("id")
+          .eq('uid', _supabaseClient.auth.currentUser!.id)
+          .eq('opponent_uid', opponentUid)
+          .limit(1)
+          .then((res) => res.isNotEmpty ? res.first['id'] : null);
+    } catch (error) {
+      _logger.e(error);
+      throw CustomException.from(error: error);
+    }
+  }
+
+  @override
   Future<Iterable<FetchChatDto>> fetchChats(
       {required DateTime beforeAt, int take = 20}) async {
     try {
-      return await _supabaseClient.rpc(RpcFunctions.fetchChats.name, params: {
-        'before_at': beforeAt,
-        'take': take
-      }).then((res) => res.map((json) => FetchChatDto.fromJson(json)));
+      return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
+          RpcFunctions.fetchChats.name,
+          params: {
+            'before_at': beforeAt,
+            'take': take
+          }).then((res) => res.map((json) => FetchChatDto.fromJson(json)));
     } catch (error) {
       _logger.e(error);
       throw CustomException.from(error: error);
@@ -106,6 +138,18 @@ class ChatDataSourceImpl extends ChatDataSource {
           .from(Tables.chatMessages.name)
           .delete()
           .eq('chat_id', chatId);
+    } catch (error) {
+      _logger.e(error);
+      throw CustomException.from(error: error);
+    }
+  }
+
+  @override
+  Future<void> updateIsSeen(String messageId) async {
+    try {
+      return await _supabaseClient.rest
+          .from(Tables.chatMessages.name)
+          .update({'is_seen': true}).eq('id', messageId);
     } catch (error) {
       _logger.e(error);
       throw CustomException.from(error: error);

@@ -411,6 +411,67 @@ $$;
 
 ## 채팅방 조회
 
+> 채팅방 단건 조회
+```
+create or replace function fetch_chat_by_id
+(chat_id_to_fetch uuid)
+returns table(
+    id uuid,                                -- 채팅방 id
+    uid uuid,                               -- 현재 유저 id
+    opponent_uid uuid,                      -- 상대방 uid
+    opponent_username text,                 -- 상대방 유저명
+    opponent_avatar_url text,               -- 상대방 프로필 사진
+    last_message_id uuid,
+    last_message_content text,              -- 마지막 메세지 본문
+    last_message_created_at timestamptz,    -- 마지막 메세지 작성시간
+    un_read_message_count int               -- 아직 읽지 않은 메세지 개수
+)
+language sql
+as $$
+    select
+        A.id id,
+        A.uid uid,
+        A.opponent_uid opponent_uid,
+        B.username opponent_username,
+        B.avatar_url oppoent_avatar_url,
+        A.last_message_id last_message_id,
+        A.last_message_content last_message_content,
+        A.last_message_created_at last_message_created_at,
+        C.un_read_message_count un_read_message_count
+    from (
+        select
+            id,
+            uid,
+            opponent_uid,
+            last_message_id,
+            last_message_content,
+            last_message_created_at
+        from
+            public.chats
+        where
+            id = chat_id_to_fetch
+            and (uid = auth.uid())
+        ) A
+    left join (
+        select
+          id,
+          username,
+          avatar_url
+        from
+          public.accounts
+    ) B on A.opponent_uid = B.id  -- 대화 상대방 유저정보
+    left join (
+      select count(1) un_read_message_count, chat_id
+      from public.chat_messages
+      where is_seen = false 
+      and uid = auth.uid()
+      group by chat_id
+    ) C on A.id = C.chat_id  
+$$;
+```
+
+> 목록 조회
+
 ```
 create or replace function fetch_chats
 (before_at timestamptz, take int)
@@ -435,7 +496,7 @@ as $$
         B.avatar_url oppoent_avatar_url,
         A.last_message_id last_message_id,
         A.last_message_content last_message_content,
-        A.last_message_created_at,
+        A.last_message_created_at last_message_created_at,
         C.un_read_message_count un_read_message_count
     from (
         select

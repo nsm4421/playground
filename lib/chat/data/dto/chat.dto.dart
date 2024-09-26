@@ -33,6 +33,7 @@ class FetchChatDto with _$FetchChatDto {
     @Default('') String opponent_username,
     @Default('') String opponent_avatar_url,
     // 최신 메세지
+    String? last_message_id,
     String? last_message_content,
     DateTime? last_message_created_at,
     // 읽지 않은 메세지 개수

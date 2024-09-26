@@ -1,4 +1,3 @@
-import 'package:flutter_app/auth/auth.export.dart';
 import 'package:flutter_app/chat/constant/chat_type.dart';
 import 'package:flutter_app/chat/data/datasource/chat_datasource_impl.dart';
 import 'package:flutter_app/chat/data/dto/chat.dto.dart';
@@ -18,6 +17,33 @@ class ChatRepositoryImpl extends ChatRepository {
   final Logger _logger = Logger();
 
   ChatRepositoryImpl(this._chatDataSource);
+
+  @override
+  Future<ResponseWrapper<ChatEntity>> findChatById(String chatId) async {
+    try {
+      return await _chatDataSource
+          .findChatById(chatId)
+          .then(ChatEntity.from)
+          .then(SuccessResponse.from);
+    } on CustomException catch (error) {
+      _logger.e(error);
+      return ErrorResponse.from(error);
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<String>> findChatIdByUidOrElseCreate(
+      {required String currentUid, required String opponentUid}) async {
+    try {
+      final fetched = await _chatDataSource.findChatIdByUid(opponentUid);
+      return fetched == null
+          ? await createChat(currentUid: currentUid, opponentUid: opponentUid)
+          : SuccessResponse(data: fetched);
+    } on CustomException catch (error) {
+      _logger.e(error);
+      return ErrorResponse.from(error);
+    }
+  }
 
   @override
   Future<ResponseWrapper<List<ChatEntity>>> fetchChats(
@@ -50,16 +76,16 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<ResponseWrapper<void>> createChat(
+  Future<ResponseWrapper<String>> createChat(
       {required String currentUid, required String opponentUid}) async {
     try {
-      final messageId = const Uuid().v4();
-      final dto = CreateChatDto(
-          id: messageId, uid: currentUid, opponent_uid: opponentUid);
+      final chatId = const Uuid().v4();
+      final dto =
+          CreateChatDto(id: chatId, uid: currentUid, opponent_uid: opponentUid);
       await _chatDataSource.createChat(dto);
       await _chatDataSource
           .createChat(dto.copyWith(uid: opponentUid, opponent_uid: currentUid));
-      return const SuccessResponse<void>();
+      return SuccessResponse<String>(data: chatId);
     } on CustomException catch (error) {
       _logger.e(error);
       return ErrorResponse.from(error);
@@ -109,6 +135,18 @@ class ChatRepositoryImpl extends ChatRepository {
     try {
       return await _chatDataSource
           .deleteMessageById(messageId)
+          .then((_) => const SuccessResponse<void>());
+    } on CustomException catch (error) {
+      _logger.e(error);
+      return ErrorResponse.from(error);
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<void>> seeChatMessage(String messageId) async {
+    try {
+      return await _chatDataSource
+          .updateIsSeen(messageId)
           .then((_) => const SuccessResponse<void>());
     } on CustomException catch (error) {
       _logger.e(error);

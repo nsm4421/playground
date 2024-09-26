@@ -12,6 +12,7 @@ class ChatEntity with _$ChatEntity {
     String? id,
     String? uid, // 채팅방을 조회할 수 있는 유저
     PresenceEntity? opponent,
+    String? lastMessageId,
     String? lastMessageContent,
     DateTime? lastMessageCreatedAt,
     @Default(0) int unReadMessageCount, // 읽지 않은 메세지 개수
@@ -26,6 +27,7 @@ class ChatEntity with _$ChatEntity {
               username: dto.opponent_username,
               avatarUrl: dto.opponent_avatar_url)
           : null,
+      lastMessageId: dto.last_message_id,
       lastMessageContent: dto.last_message_content,
       lastMessageCreatedAt: dto.last_message_created_at,
       unReadMessageCount: dto.un_read_message_count);

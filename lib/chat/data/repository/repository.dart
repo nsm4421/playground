@@ -1,7 +1,7 @@
 part of 'repository_impl.dart';
 
 abstract class ChatRepository {
-  Future<ResponseWrapper<void>> createChat({
+  Future<ResponseWrapper<String>> createChat({
     required String currentUid,
     required String opponentUid,
   });
@@ -14,6 +14,11 @@ abstract class ChatRepository {
     required String opponentUid,
   });
 
+  Future<ResponseWrapper<ChatEntity>> findChatById(String chatId);
+
+  Future<ResponseWrapper<String>> findChatIdByUidOrElseCreate(
+      {required String currentUid, required String opponentUid});
+
   Future<ResponseWrapper<List<ChatEntity>>> fetchChats(
       {required DateTime beforeAt, int take = 20});
 
@@ -23,4 +28,6 @@ abstract class ChatRepository {
   Future<ResponseWrapper<void>> deleteChat(String chatId);
 
   Future<ResponseWrapper<void>> deleteChatMessage(String messageId);
+
+  Future<ResponseWrapper<void>> seeChatMessage(String messageId);
 }

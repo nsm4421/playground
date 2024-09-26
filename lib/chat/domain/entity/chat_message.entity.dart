@@ -18,6 +18,7 @@ class ChatMessageEntity with _$ChatMessageEntity {
     PresenceEntity? sender,
     PresenceEntity? receiver,
     DateTime? createdAt,
+    @Default(false) bool isDeleted,
   }) = _ChatMessageEntity;
 
   factory ChatMessageEntity.from(FetchChatMessageDto dto) => ChatMessageEntity(

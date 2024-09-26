@@ -21,7 +21,8 @@ enum RpcFunctions {
   fetchFeeds('fetch_feeds'),
   fetchParentComments('fetch_parent_comments'),
   fetchChats('fetch_chats'),
-  fetchChatMessages('fetch_chat_messages');
+  fetchChatMessages('fetch_chat_messages'),
+  fetchChatById('fetch_chat_by_id');
 
   final String name;
 
