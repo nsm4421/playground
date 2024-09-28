@@ -14,6 +14,8 @@ class IconMenuWidget extends StatefulWidget {
 }
 
 class _IconMenuWidgetState extends State<IconMenuWidget> {
+  bool _isDmLoading = false; // DM기능 로딩중 여부
+
   bool get _isReady =>
       context.read<DisplayFeedBloc>().state.status != Status.loading &&
       context.read<DisplayFeedBloc>().state.status != Status.error;
@@ -26,6 +28,25 @@ class _IconMenuWidgetState extends State<IconMenuWidget> {
           : LikeOnFeedEvent(widget._feed.id!));
     } catch (error) {
       log('좋아요 요청 오류 : ${error.toString()}');
+    }
+  }
+
+  _sendDM() async {
+    if (_isDmLoading) return;
+    try {
+      _isDmLoading = true;
+      await context
+          .read<ChatBloc>()
+          .findChatByUid(widget._feed.author!.uid!)
+          .then((chat) {
+        if (chat == null) throw Exception('DM요청 실패');
+        context.push(RoutePaths.chatRoom.path, extra: chat);
+      });
+    } catch (error) {
+      log('dm 기능 오류');
+      getIt<CustomSnakbar>().error(title: 'DM요청 실패');
+    } finally {
+      _isDmLoading = false;
     }
   }
 
@@ -76,6 +97,17 @@ class _IconMenuWidgetState extends State<IconMenuWidget> {
                 CustomWidth.sm,
                 Text('${widget._feed.commentCount}'),
                 CustomWidth.sm
+              ]),
+            )),
+
+        // DM 아이콘
+        Padding(
+            padding: EdgeInsets.only(right: CustomSpacing.md),
+            child: InkWell(
+              onTap: _sendDM,
+              child: Row(children: [
+                CustomWidth.sm,
+                Icon(Icons.send_and_archive_outlined, size: CustomTextSize.xl)
               ]),
             ))
       ]);

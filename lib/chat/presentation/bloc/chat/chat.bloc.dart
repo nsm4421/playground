@@ -29,6 +29,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           .map((item) => item.lastMessageCreatedAt!)
           .reduce((r, l) => r.isBefore(l) ? r : l);
 
+  Future<ChatEntity?> findChatByUid(String opponentUid) async {
+    final res = await _useCase.getChatByUid(opponentUid);
+    return res.ok ? res.data! : null;
+  }
+
   Future<void> _onFetch(FetchChatsEvent event, Emitter<ChatState> emit) async {
     try {
       log('[ChatBloc]_onFetch실행');

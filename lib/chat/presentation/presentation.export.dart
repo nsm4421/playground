@@ -1,1 +1,1 @@
-export 'pages/chat.page.dart';
+export 'pages/index/chat_list.page.dart';

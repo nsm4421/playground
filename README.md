@@ -1,6 +1,4 @@
-# 테이블
 
-## 회원정보
 
     create table public.accounts (
         id uuid not null ,
@@ -43,22 +41,22 @@
     alter table public.feeds enable row level security;
     
     create policy "permit select for all" 
-    on accounts for select 
+    on feeds for select 
     to authenticated
     using (true);
 
     create policy "can create own account" 
-    on accounts for insert
+    on feeds for insert
     to authenticated
     with check (auth.uid() = id);
 
     create policy "can modify own account" 
-    on accounts for update 
+    on feeds for update 
     to authenticated
     with check (auth.uid() = id);
 
     create policy "can delete own account" 
-    on accounts for delete  
+    on feeds for delete  
     to authenticated
     using (auth.uid() = id);
 
@@ -216,10 +214,10 @@
     insert into storage.buckets (id, name)
     values ('feeds', 'feeds');
 
-    create policy "permit select for all" on storage.objects
+    create policy "permit select for all on feed" on storage.objects
     for select using (bucket_id = 'feeds');
 
-    create policy "permit insert for all" on storage.objects
+    create policy "permit insert for all on feed" on storage.objects
     for insert with check (bucket_id = 'feeds');
 
 # Supabase Functions
@@ -413,6 +411,63 @@ $$;
 
 > 채팅방 단건 조회
 ```
+create or replace function fetch_chat_by_opponent_uid
+(opponent_uid_to_find uuid)
+returns table(
+    id uuid,                                -- 채팅방 id
+    uid uuid,                               -- 현재 유저 id
+    opponent_uid uuid,                      -- 상대방 uid
+    opponent_username text,                 -- 상대방 유저명
+    opponent_avatar_url text,               -- 상대방 프로필 사진
+    last_message_id uuid,
+    last_message_content text,              -- 마지막 메세지 본문
+    last_message_created_at timestamptz,    -- 마지막 메세지 작성시간
+    un_read_message_count int               -- 아직 읽지 않은 메세지 개수
+)
+language sql
+as $$
+    select
+        A.id id,
+        A.uid uid,
+        A.opponent_uid opponent_uid,
+        B.username opponent_username,
+        B.avatar_url oppoent_avatar_url,
+        A.last_message_id last_message_id,
+        A.last_message_content last_message_content,
+        A.last_message_created_at last_message_created_at,
+        C.un_read_message_count un_read_message_count
+    from (
+        select
+            id,
+            uid,
+            opponent_uid,
+            last_message_id,
+            last_message_content,
+            last_message_created_at
+        from
+            public.chats
+        where
+            opponent_uid = opponent_uid_to_find
+            and (uid = auth.uid())
+        ) A
+    left join (
+        select
+          id,
+          username,
+          avatar_url
+        from
+          public.accounts
+        where id = opponent_uid_to_find
+    ) B on A.opponent_uid = B.id  -- 대화 상대방 유저정보
+    left join (
+      select count(1) un_read_message_count, chat_id
+      from public.chat_messages
+      where is_seen = false 
+      and uid = auth.uid()
+      group by chat_id
+    ) C on A.id = C.chat_id  
+$$;
+
 create or replace function fetch_chat_by_id
 (chat_id_to_fetch uuid)
 returns table(

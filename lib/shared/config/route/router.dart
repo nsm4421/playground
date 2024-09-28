@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/chat/domain/entity/chat.entity.dart';
+import 'package:flutter_app/chat/presentation/pages/chat/chat_room.page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -37,7 +39,12 @@ class CustomRoute {
         // 프로필 수정
         GoRoute(
             path: RoutePaths.editProfile.path,
-            builder: (context, state) => const EditProfilePage())
+            builder: (context, state) => const EditProfilePage()),
+        // 채팅방
+        GoRoute(
+            path: RoutePaths.chatRoom.path,
+            builder: (context, state) =>
+                ChatRoomPage(state.extra as ChatEntity))
       ],
       redirect: _redirect,
       refreshListenable: _authStateNotifier);
@@ -72,7 +79,7 @@ class CustomRoute {
                         HomeBottomNavItem.createMedia =>
                           const NoTransitionPage(child: CreateFeedPage()),
                         HomeBottomNavItem.chat =>
-                          const NoTransitionPage(child: ChatPage()),
+                          const NoTransitionPage(child: ChatListPage()),
                         HomeBottomNavItem.setting =>
                           const NoTransitionPage(child: SettingPage()),
                       };

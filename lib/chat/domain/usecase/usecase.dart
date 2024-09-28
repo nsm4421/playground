@@ -24,6 +24,8 @@ class ChatUseCase {
 
   FindChatByIdUseCase get findChatById => FindChatByIdUseCase(_repository);
 
+  GetChatByOpponentUidUseCase get getChatByUid => GetChatByOpponentUidUseCase(_repository);
+
   FetchChatsUseCase get fetchChats => FetchChatsUseCase(_repository);
 
   FetchChatMessagesUseCase get fetchChatMessages =>

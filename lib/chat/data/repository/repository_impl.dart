@@ -1,3 +1,4 @@
+import 'package:flutter_app/auth/auth.export.dart';
 import 'package:flutter_app/chat/constant/chat_type.dart';
 import 'package:flutter_app/chat/data/datasource/chat_datasource_impl.dart';
 import 'package:flutter_app/chat/data/dto/chat.dto.dart';
@@ -13,10 +14,15 @@ part 'repository.dart';
 
 @LazySingleton(as: ChatRepository)
 class ChatRepositoryImpl extends ChatRepository {
+  final AuthDataSource _authDataSource;
   final ChatDataSource _chatDataSource;
   final Logger _logger = Logger();
 
-  ChatRepositoryImpl(this._chatDataSource);
+  ChatRepositoryImpl(
+      {required AuthDataSource authDataSource,
+      required ChatDataSource chatDataSource})
+      : _authDataSource = authDataSource,
+        _chatDataSource = chatDataSource;
 
   @override
   Future<ResponseWrapper<ChatEntity>> findChatById(String chatId) async {
@@ -32,13 +38,13 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<ResponseWrapper<String>> findChatIdByUidOrElseCreate(
-      {required String currentUid, required String opponentUid}) async {
+  Future<ResponseWrapper<ChatEntity>> findChatByUidOrElseCreate(
+      String opponentUid) async {
     try {
-      final fetched = await _chatDataSource.findChatIdByUid(opponentUid);
-      return fetched == null
-          ? await createChat(currentUid: currentUid, opponentUid: opponentUid)
-          : SuccessResponse(data: fetched);
+      return await _chatDataSource
+          .findChatByUidOrElseCreate(opponentUid)
+          .then(ChatEntity.from)
+          .then(SuccessResponse.from);
     } on CustomException catch (error) {
       _logger.e(error);
       return ErrorResponse.from(error);
@@ -76,12 +82,12 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<ResponseWrapper<String>> createChat(
-      {required String currentUid, required String opponentUid}) async {
+  Future<ResponseWrapper<String>> createChat(String opponentUid) async {
     try {
       final chatId = const Uuid().v4();
-      final dto =
-          CreateChatDto(id: chatId, uid: currentUid, opponent_uid: opponentUid);
+      final currentUid = _authDataSource.currentUser!.id;
+      final dto = CreateChatDto(
+          id: chatId, uid: currentUid ?? '', opponent_uid: opponentUid);
       await _chatDataSource.createChat(dto);
       await _chatDataSource
           .createChat(dto.copyWith(uid: opponentUid, opponent_uid: currentUid));
@@ -97,10 +103,10 @@ class ChatRepositoryImpl extends ChatRepository {
       {required String chatId,
       required ChatMessageType type,
       required String content,
-      required String currentUid,
       required String opponentUid}) async {
     try {
       final messageId = const Uuid().v4();
+      final currentUid = _authDataSource.currentUser!.id;
       final dto = CreateChatMessageDto(
           id: messageId,
           uid: currentUid,

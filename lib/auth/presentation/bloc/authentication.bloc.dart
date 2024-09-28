@@ -33,7 +33,8 @@ class AuthenticationBloc
 
   User? get currentUser => _currentUser;
 
-  PresenceEntity get presence => PresenceEntity.fromSupUser(currentUser!);
+  PresenceEntity get presence =>
+      PresenceEntity.fromSupUser(currentUser ?? _useCase.currentUser!);
 
   _onInit(InitAuthEvent event, Emitter<AuthenticationState> emit) {
     final user = currentUser;

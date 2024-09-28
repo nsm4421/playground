@@ -27,6 +27,9 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("SETTING"),
+        actions: [IconButton(onPressed: (){
+          context.read<AuthenticationBloc>().add(SignOutEvent());
+        }, icon: Icon(Icons.logout))],
       ),
       body: const SingleChildScrollView(
         child: Column(

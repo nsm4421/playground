@@ -1,23 +1,19 @@
 part of 'repository_impl.dart';
 
 abstract class ChatRepository {
-  Future<ResponseWrapper<String>> createChat({
-    required String currentUid,
-    required String opponentUid,
-  });
+  Future<ResponseWrapper<String>> createChat(String opponentUid);
 
   Future<ResponseWrapper<void>> createChatMessage({
     required String chatId,
     required ChatMessageType type,
     required String content,
-    required String currentUid,
     required String opponentUid,
   });
 
-  Future<ResponseWrapper<ChatEntity>> findChatById(String chatId);
+  Future<ResponseWrapper<ChatEntity>> findChatByUidOrElseCreate(
+      String opponentUid);
 
-  Future<ResponseWrapper<String>> findChatIdByUidOrElseCreate(
-      {required String currentUid, required String opponentUid});
+  Future<ResponseWrapper<ChatEntity>> findChatById(String chatId);
 
   Future<ResponseWrapper<List<ChatEntity>>> fetchChats(
       {required DateTime beforeAt, int take = 20});

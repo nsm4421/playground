@@ -12,7 +12,7 @@ enum RoutePaths {
   setting('/setting'),
   // 기타
   editProfile('/setting/edit-profile'),
-  ;
+  chatRoom('/chat/room', subpath: 'room');
 
   const RoutePaths(this.path, {this.subpath});
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/chat/presentation/bloc/chat/chat.bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -36,7 +37,8 @@ class MainApp extends StatelessWidget {
               create: (_) => getIt<AuthenticationBloc>()..add(InitAuthEvent())),
           // 홈 화면 Bloc
           BlocProvider(create: (_) => getIt<DisplayFeedBloc>()),
-          BlocProvider(create: (_) => getIt<CreateFeedBloc>())
+          BlocProvider(create: (_) => getIt<CreateFeedBloc>()),
+          BlocProvider(create: (_) => getIt<ChatBloc>())
         ],
         child: MaterialApp.router(
           theme: CustomLightTheme().theme,
