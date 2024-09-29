@@ -13,6 +13,9 @@ test/
 .metadata
 pubspec.lock
 analysis_options.yaml
+*.g.dart
+*.freezed.dart
+*.config.dart
 
 # IntelliJ related
 *.iml
