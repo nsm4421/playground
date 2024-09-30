@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:travel/presentation/pages/index/index.page.dart';
+import 'package:travel/presentation/view/index.page.dart';
 
 part 'paths.dart';
 

@@ -1,4 +1,4 @@
-part of 'index.page.dart';
+part of 'widgets.dart';
 
 class OutlineHighlight extends CustomPainter {
   final bool isSelected;
