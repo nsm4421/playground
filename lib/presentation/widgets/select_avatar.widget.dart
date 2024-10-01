@@ -1,4 +1,4 @@
-part of 'widgets.dart';
+part of './widgets.dart';
 
 class SelectAvatarWidget extends StatefulWidget {
   const SelectAvatarWidget(this.initialImage, this.onSelect,

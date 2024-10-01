@@ -1,4 +1,4 @@
-part of 'widgets.dart';
+part of '../image_to_text.page.dart';
 
 class SelectedImageWidget extends StatefulWidget {
   const SelectedImageWidget(
@@ -20,23 +20,6 @@ class SelectedImageWidget extends StatefulWidget {
 }
 
 class _SelectedImageWidgetState extends State<SelectedImageWidget> {
-  late List<Block> _adjustedBlocks;
-
-  @override
-  void initState() {
-    super.initState();
-    double widthRatio = widget.imageWidth / widget.selectedImage.width;
-    double heightRatio = widget.imageHeight / widget.selectedImage.height;
-    _adjustedBlocks = widget.blocks
-        .map((item) => Block(
-            left: item.left * widthRatio,
-            top: item.top * heightRatio,
-            width: item.width * widthRatio,
-            height: item.height * heightRatio,
-            originalText: item.originalText))
-        .toList();
-  }
-
   _handleSelectBlock(int index) => () {
         if (context.read<ImageToTextBloc>().state.status.ok) {
           log('[SelectedImageWidget][_handleSelectBlock]function called');
@@ -46,6 +29,8 @@ class _SelectedImageWidgetState extends State<SelectedImageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final adjustedBlocks = context.read<ImageToTextBloc>().getAdjustedBlocks(
+        screenWidth: widget.imageWidth, screenHeight: widget.imageHeight);
     return Stack(
       children: [
         Container(
@@ -55,8 +40,8 @@ class _SelectedImageWidgetState extends State<SelectedImageWidget> {
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: FileImage(widget.selectedImage.image)))),
-        ...List.generate(_adjustedBlocks.length, (index) {
-          final block = _adjustedBlocks[index];
+        ...List.generate(adjustedBlocks.length, (index) {
+          final block = adjustedBlocks[index];
           return Positioned(
             left: block.left,
             top: block.top,

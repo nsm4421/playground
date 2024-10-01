@@ -21,6 +21,31 @@ class ImageToTextBloc extends Bloc<ImageToTextEvent, ImageToTextState> {
 
   OnDeviceTranslator? _onDeviceTranslator;
 
+  Block get selectedBlock {
+    if (state.selectedIndex == null) {
+      throw Exception(
+          "image not selected. so that can't get index of selected bounding box");
+    }
+    return state.blocks[state.selectedIndex!];
+  }
+
+  List<Block> getAdjustedBlocks(
+      {required double screenWidth, required double screenHeight}) {
+    if (state.selectedIndex == null) {
+      throw Exception("image not selected. so that can't get adjusted blocks");
+    }
+    double widthRatio = screenWidth / state.selectedImage!.width;
+    double heightRatio = screenWidth / state.selectedImage!.height;
+    return state.blocks
+        .map((item) => Block(
+            left: item.left * widthRatio,
+            top: item.top * heightRatio,
+            width: item.width * widthRatio,
+            height: item.height * heightRatio,
+            originalText: item.originalText))
+        .toList();
+  }
+
   ImageToTextBloc() : super(ImageToTextState()) {
     _textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     _modelManager = OnDeviceTranslatorModelManager();

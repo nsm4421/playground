@@ -3,12 +3,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/presentation/bloc/image_to_text/image_to_text.bloc.dart';
 
-import '../../core/constant/constant.dart';
-import '../widget/widgets.dart';
+import '../../../core/constant/constant.dart';
 
 part 'select_language/setting.screen.dart';
 
@@ -22,18 +20,22 @@ part 'select_image/display_image.fragment.dart';
 
 part 'select_image/guide_text_box.fragment.dart';
 
+part 'translate/translated_text.fragment.dart';
+
 part 'select_language/select_lang.widget.dart';
 
-part 'translate/translation_button.widget.dart';
+part 'widget/outline_border.widget.dart';
 
-class IndexPage extends StatefulWidget {
-  const IndexPage({super.key});
+part 'widget/selected_image.widget.dart';
+
+class ImageToTextPage extends StatefulWidget {
+  const ImageToTextPage({super.key});
 
   @override
-  State<IndexPage> createState() => _IndexPageState();
+  State<ImageToTextPage> createState() => _ImageToTextPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _ImageToTextPageState extends State<ImageToTextPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

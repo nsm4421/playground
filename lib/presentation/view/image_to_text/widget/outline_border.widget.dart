@@ -1,4 +1,4 @@
-part of 'widgets.dart';
+part of '../image_to_text.page.dart';
 
 class OutlineHighlight extends CustomPainter {
   final bool isSelected;

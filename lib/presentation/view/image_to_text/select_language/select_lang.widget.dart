@@ -1,4 +1,4 @@
-part of '../index.page.dart';
+part of '../image_to_text.page.dart';
 
 class SelectLangWidget extends StatefulWidget {
   const SelectLangWidget(
@@ -94,23 +94,22 @@ class _SelectLangWidgetState extends State<SelectLangWidget> {
                     )
                   : null),
         ),
-
         if (_lang == null)
-        ListView.builder(
-            shrinkWrap: true,
-            itemCount: _options.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: _handleSelect(_options[index]),
-                title: Text(
-                  _options[index].lang.name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(decorationThickness: 0),
-                ),
-              );
-            })
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: _options.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: _handleSelect(_options[index]),
+                  title: Text(
+                    _options[index].lang.name,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(decorationThickness: 0),
+                  ),
+                );
+              })
       ],
     );
   }

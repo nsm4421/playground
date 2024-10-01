@@ -12,7 +12,14 @@ final class SettingLanguageEvent extends ImageToTextEvent {
 
 final class CheckModelDownloadedEvent extends ImageToTextEvent {}
 
-final class DownloadModelEvent extends ImageToTextEvent {}
+final class DownloadModelEvent extends ImageToTextEvent {
+  final bool downloadSourceLangModel;
+  final bool downloadTargetLangModel;
+
+  DownloadModelEvent(
+      {this.downloadSourceLangModel = false,
+      this.downloadTargetLangModel = false});
+}
 
 final class SelectImageEvent extends ImageToTextEvent {}
 

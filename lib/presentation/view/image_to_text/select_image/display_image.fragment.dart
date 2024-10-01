@@ -1,4 +1,4 @@
-part of '../index.page.dart';
+part of '../image_to_text.page.dart';
 
 class DisplayImageFragment extends StatelessWidget {
   const DisplayImageFragment(this.imageSize, {super.key});

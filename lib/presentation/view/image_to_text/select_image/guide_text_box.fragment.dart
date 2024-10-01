@@ -1,4 +1,4 @@
-part of '../index.page.dart';
+part of '../image_to_text.page.dart';
 
 class GuideTextBoxFragment extends StatelessWidget {
   const GuideTextBoxFragment({super.key});
@@ -9,10 +9,16 @@ class GuideTextBoxFragment extends StatelessWidget {
         builder: (context, state) {
       if (state.status == Status.loading) {
         return const Center(child: CircularProgressIndicator());
+      } else if (state.originalText.isEmpty) {
+        return const Center(child: Text('No Text Extracted'));
       } else if (state.originalText.isNotEmpty) {
-        return ElevatedButton(onPressed: () {}, child: const Text('통역하기'));
+        return ElevatedButton(
+            onPressed: () {
+              context.read<ImageToTextBloc>().add(TranslateEvent());
+            },
+            child: const Text('통역하기'));
       } else {
-        return const SizedBox();
+        return const Center(child: Text('Error'));
       }
     });
   }
