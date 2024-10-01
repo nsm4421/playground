@@ -14,7 +14,13 @@ class _SelectImageScreenState extends State<SelectImageScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Image2Text Demo'),
+          leading: IconButton(
+            onPressed: (){
+              context.read<ImageToTextBloc>().add(InitEvent());
+            },
+            icon: const Icon(Icons.chevron_left),
+          ),
+          title: const Text('이미지를 선택해주세요'),
           elevation: 0,
           actions: [
             // 리셋버튼
@@ -36,7 +42,7 @@ class _SelectImageScreenState extends State<SelectImageScreen> {
             child: DisplayImageFragment(imageSize),
           ),
 
-          const Expanded(child: GuideTextBoxFragment())
+          const Expanded(child: Center(child: GuideTextBoxFragment()))
         ]));
   }
 }

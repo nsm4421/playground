@@ -49,6 +49,7 @@ class ImageToTextBloc extends Bloc<ImageToTextEvent, ImageToTextState> {
   ImageToTextBloc() : super(ImageToTextState()) {
     _textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     _modelManager = OnDeviceTranslatorModelManager();
+    on<InitEvent>(_onInit);
     on<SettingLanguageEvent>(_onSettingLang);
     on<CheckModelDownloadedEvent>(_onCheckModelDownloaded);
     on<DownloadModelEvent>(_onDownloadModel);
@@ -63,6 +64,11 @@ class ImageToTextBloc extends Bloc<ImageToTextEvent, ImageToTextState> {
     await _textRecognizer.close();
     await _onDeviceTranslator?.close();
     return super.close();
+  }
+
+  Future<void> _onInit(
+      InitEvent event, Emitter<ImageToTextState> emit) async {
+    emit(ImageToTextState());
   }
 
   Future<void> _onSettingLang(

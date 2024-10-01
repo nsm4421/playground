@@ -12,7 +12,7 @@ class DisplayImageFragment extends StatelessWidget {
       if (!state.status.ok) {
         /// 로딩중이거나 오류인 경우
         return const Center(child: CircularProgressIndicator());
-      } else if (state.selectedImage == null) {
+      } else if (state.selectedIndex == null || state.blocks.isEmpty) {
         /// 아직 이미지를 선택하지 않은 경우
         return InkWell(
             onTap: () {

@@ -3,6 +3,8 @@ part of 'image_to_text.bloc.dart';
 @sealed
 final class ImageToTextEvent {}
 
+final class InitEvent extends ImageToTextEvent {}
+
 final class SettingLanguageEvent extends ImageToTextEvent {
   final Lang sourceLang;
   final Lang targetLang;
