@@ -1,6 +1,8 @@
 part of 'util.dart';
 
-mixin class CustomFormatUtil {
+mixin class CustomTimeUtil {
+  String get now => DateTime.now().toUtc().toIso8601String();
+
   String timeAgoInKr(String timestamp) {
     try {
       final now = DateTime.now();
