@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/core/response/response_wrapper.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 import 'package:travel/domain/repository/auth/repository.dart';
