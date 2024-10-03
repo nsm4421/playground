@@ -31,6 +31,9 @@ part 'edit/editor_body.fragment.dart';
 
 part 'edit/fab.widget.dart';
 
+part 'meta/hashtag.fragment.dart';
+part 'meta/location.fragment.dart';
+
 class EditDiaryPage extends StatelessWidget {
   const EditDiaryPage({super.key});
 

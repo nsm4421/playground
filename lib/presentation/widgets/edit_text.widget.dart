@@ -4,10 +4,14 @@ class EditTextWidget extends StatefulWidget {
   const EditTextWidget(
       {super.key,
       required this.initialText,
+      this.prefixIcon,
+      this.suffixIcon,
       this.minLine = 3,
       this.maxLine = 10,
       this.maxLength = 1000});
 
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final String initialText;
   final int minLine;
   final int maxLine;
@@ -40,13 +44,18 @@ class _EditTextWidgetState extends State<EditTextWidget> {
         return true;
       },
       child: Padding(
-        padding: MediaQuery.of(context).viewInsets.copyWith(left: 8, right: 8),
+        padding: MediaQuery.of(context)
+            .viewInsets
+            .copyWith(top: 12, left: 8, right: 8),
         child: TextField(
           controller: _textEditingController,
           minLines: widget.minLine,
           maxLines: widget.maxLine,
           maxLength: widget.maxLength,
-          decoration: const InputDecoration(border: OutlineInputBorder()),
+          decoration: InputDecoration(
+              prefixIcon: widget.prefixIcon,
+              suffixIcon: widget.suffixIcon,
+              border: const OutlineInputBorder()),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
                 letterSpacing: 1.5,

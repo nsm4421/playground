@@ -27,6 +27,7 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
     on<UpdateImageEvent>(_onUpdateImage);
     on<AddPageEvent>(_onAddPage);
     on<DeletePageEvent>(_onDeletePage);
+    on<UpdateMetaDataEvent>(_onUpdateMetaData);
     on<MoveStepEvent>(_onMoveStep);
     on<MovePageEvent>(_onMovePage);
     on<SubmitDiaryEvent>(_onSubmit);
@@ -124,6 +125,17 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
       MovePageEvent event, Emitter<EditDiaryState> emit) async {
     try {
       emit(state.copyWith(currentIndex: event.page));
+    } on Exception catch (error) {
+      emit(state.copyWith(
+          status: Status.error, errorMessage: '페이지 전환 중 에러가 발생했습니다'));
+      customUtil.logger.e(error);
+    }
+  }
+
+  Future<void> _onUpdateMetaData(
+      UpdateMetaDataEvent event, Emitter<EditDiaryState> emit) async {
+    try {
+      emit(state.copyWith(hashtags: event.hashtags, location: event.location));
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: '페이지 전환 중 에러가 발생했습니다'));
