@@ -22,9 +22,7 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
           // 메타 데이터 입력 페이지로 이동 버튼
           IconButton(
             onPressed: () {
-              context
-                  .read<EditDiaryBloc>()
-                  .add(MoveStepEvent(EditDiaryStep.metaData));
+              context.read<EditDiaryBloc>().add(MoveToMetaDataPage());
             },
             icon: const Icon(Icons.chevron_right_rounded),
             tooltip: '다음 단계로',

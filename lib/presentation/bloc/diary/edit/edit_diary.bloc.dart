@@ -22,26 +22,39 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
   EditDiaryBloc(@factoryParam this._id, DiaryUseCase useCase)
       : _useCase = useCase,
         super(EditDiaryState()) {
+    on<LoadDiaryEvent>(_onLoad); // TODO
     on<InitializeEvent>(_onInit);
     on<UpdateCaptionEvent>(_onUpdateCaption);
     on<UpdateImageEvent>(_onUpdateImage);
     on<AddPageEvent>(_onAddPage);
     on<DeletePageEvent>(_onDeletePage);
-    on<UpdateMetaDataEvent>(_onUpdateMetaData);
-    on<MoveStepEvent>(_onMoveStep);
     on<MovePageEvent>(_onMovePage);
+    on<MoveToMetaDataPage>(_onMoveToMetaDataPage);
+    on<UpdateMetaDataEvent>(_onUpdateMetaData);
     on<SubmitDiaryEvent>(_onSubmit);
   }
 
-  Future<void> _onInit(
-      InitializeEvent event, Emitter<EditDiaryState> emit) async {
+  // TODO : edit모드인 경우 기존 데이터를 불러오기
+  Future<void> _onLoad(
+      LoadDiaryEvent event, Emitter<EditDiaryState> emit) async {
     try {
       if (state.update) {
         // TODO : 기존 게시글 불러와서 이미지를 File객체로 만들어 상태 업데이트
       }
       emit(state.copyWith(step: EditDiaryStep.editing, status: Status.initial));
     } on Exception catch (error) {
-      emit(state.copyWith(status: Status.error, errorMessage: '초기화 중'));
+      emit(state.copyWith(
+          status: Status.error, errorMessage: '기존 데이터 불러오는 중 오류 발생'));
+      customUtil.logger.e(error);
+    }
+  }
+
+  Future<void> _onInit(
+      InitializeEvent event, Emitter<EditDiaryState> emit) async {
+    try {
+      emit(state.copyWith(status: event.status, step: event.step));
+    } on Exception catch (error) {
+      emit(state.copyWith(status: Status.error, errorMessage: '초기화 도중 에러 발생'));
       customUtil.logger.e(error);
     }
   }
@@ -110,17 +123,6 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
     }
   }
 
-  Future<void> _onMoveStep(
-      MoveStepEvent event, Emitter<EditDiaryState> emit) async {
-    try {
-      emit(state.copyWith(step: event.step));
-    } on Exception catch (error) {
-      emit(state.copyWith(
-          status: Status.error, errorMessage: 'step 전환 중 에러가 발생했습니다'));
-      customUtil.logger.e(error);
-    }
-  }
-
   Future<void> _onMovePage(
       MovePageEvent event, Emitter<EditDiaryState> emit) async {
     try {
@@ -128,6 +130,31 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: '페이지 전환 중 에러가 발생했습니다'));
+      customUtil.logger.e(error);
+    }
+  }
+
+  Future<void> _onMoveToMetaDataPage(
+      MoveToMetaDataPage event, Emitter<EditDiaryState> emit) async {
+    try {
+      // 이미지나 캡션이 첨부되지 않은 페이지 찾기
+      final unNecessary = state.pages
+          .where((item) => (item.image == null) && (item.caption.isEmpty))
+          .map((item) => item.index)
+          .firstOrNull;
+      if (unNecessary == null) {
+        emit(state.copyWith(
+            status: Status.success, step: EditDiaryStep.metaData));
+      } else {
+        emit(state.copyWith(
+            status: Status.error,
+            step: EditDiaryStep.editing,
+            currentIndex: unNecessary,
+            errorMessage: '캡션이나 이미지가 빈 페이지가 있습니다'));
+      }
+    } on Exception catch (error) {
+      emit(state.copyWith(
+          status: Status.error, errorMessage: '메타데이터 페이지로 넘어가는 중 발생했습니다'));
       customUtil.logger.e(error);
     }
   }

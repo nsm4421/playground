@@ -21,7 +21,7 @@ class _EditMetaDataScreenState extends State<EditMetaDataScreen> {
             onPressed: () {
               context
                   .read<EditDiaryBloc>()
-                  .add(MoveStepEvent(EditDiaryStep.editing));
+                  .add(InitializeEvent(step: EditDiaryStep.editing));
             },
           ),
           elevation: 0,

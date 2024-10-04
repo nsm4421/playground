@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel/core/di/dependency_injection.dart';
+import 'package:travel/core/util/util.dart';
 import 'package:travel/presentation/bloc/image_to_text/image_to_text.bloc.dart';
 
 import '../../../core/constant/constant.dart';

@@ -17,6 +17,7 @@ analysis_options.yaml
 *.freezed.dart
 *.config.dart
 supabase/
+devtools_options.yaml
 
 # IntelliJ related
 *.iml

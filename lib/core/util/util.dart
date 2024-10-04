@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
@@ -14,7 +15,10 @@ part 'logger.util.dart';
 
 part 'media.util.dart';
 
-class CustomUtil with CustomMediaUtil, CustomLoggerUtil, CustomTimeUtil {}
+part 'snack_bar.util.dart';
+
+class CustomUtil
+    with CustomMediaUtil, CustomLoggerUtil, CustomTimeUtil, CustomSnackBarUtil {}
 
 @lazySingleton
 CustomUtil get customUtil => CustomUtil();
