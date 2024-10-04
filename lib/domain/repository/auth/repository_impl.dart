@@ -3,12 +3,15 @@ part of 'repository.dart';
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource _authDataSource;
+  final LocalDataSource _localDataSource;
   final StorageDataSource _storageDataSource;
 
   AuthRepositoryImpl(
       {required AuthDataSource authDataSource,
+      required LocalDataSource localDataSource,
       required StorageDataSource storageDataSource})
       : _authDataSource = authDataSource,
+        _localDataSource = localDataSource,
         _storageDataSource = storageDataSource;
 
   @override
@@ -23,13 +26,25 @@ class AuthRepositoryImpl implements AuthRepository {
   bool get isAuthorized => _authDataSource.isAuthorized;
 
   @override
+  Future<Map<String, String?>> getEmailAndPassword() async {
+    try {
+      return await _localDataSource.getEmailAndPassword();
+    } catch (error) {
+      customUtil.logger.e(error);
+      return {'email': null, 'password': null};
+    }
+  }
+
+  @override
   Future<Either<ErrorResponse, PresenceEntity?>> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      return await _authDataSource
+      final res = await _authDataSource
           .signInWithEmailAndPassword(email: email, password: password)
-          .then(PresenceEntity.from)
-          .then(Right.new);
+          .then(PresenceEntity.from);
+      await _localDataSource.saveEmailAndPassword(
+          email, password); // 로컬DB에 인증정보 저장
+      return Right(res);
     } on Exception catch (error) {
       customUtil.logger.e(error);
       return Left(ErrorResponse.from(error));
@@ -62,7 +77,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<ErrorResponse, void>> signOut() async {
     try {
-      return await _authDataSource.signOut().then(Right.new);
+      await _authDataSource.signOut();
+      await _localDataSource.deleteEmailAndPassword();
+      return const Right(null);
     } on Exception catch (error) {
       customUtil.logger.e(error);
       return Left(ErrorResponse.from(error));

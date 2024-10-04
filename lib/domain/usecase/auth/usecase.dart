@@ -32,6 +32,9 @@ class AuthUseCase {
 
   GetCurrentUser get currentUser => GetCurrentUser(_repository);
 
+  GetEmailAndPasswordUseCase get getEmailAndPassword =>
+      GetEmailAndPasswordUseCase(_repository);
+
   SignInWithEmailAndPasswordUseCase get signIn =>
       SignInWithEmailAndPasswordUseCase(_repository);
 

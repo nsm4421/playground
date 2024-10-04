@@ -1,5 +1,15 @@
 part of '../usecase.dart';
 
+class GetEmailAndPasswordUseCase {
+  final AuthRepository _repository;
+
+  GetEmailAndPasswordUseCase(this._repository);
+
+  Future<Map<String, String?>> call() async {
+    return await _repository.getEmailAndPassword();
+  }
+}
+
 class SignInWithEmailAndPasswordUseCase {
   final AuthRepository _repository;
 

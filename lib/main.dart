@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/presentation/bloc/auth/authentication.bloc.dart';
 import 'package:travel/presentation/route/router.dart';
@@ -14,6 +15,8 @@ Future<void> main() async {
       url: Env.supabaseUrl,
       anonKey: Env.supabaseAnonKey); // supabase client 초기화
 
+  await Hive.initFlutter(); // 로컬 DB 초기화
+
   configureDependencies(); // 의존성 주입
 
   runApp(const MainApp());
@@ -25,7 +28,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthenticationBloc>(), // 앱 전역에서 인증 bloc 접근 가능
+      create: (_) => getIt<AuthenticationBloc>()
+        ..add(OnMountedEvent()), // 앱 전역에서 인증 bloc 접근 가능
       child: MaterialApp.router(
         title: 'Traveler',
         theme: ThemeData(

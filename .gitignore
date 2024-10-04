@@ -19,6 +19,7 @@ analysis_options.yaml
 supabase/
 devtools_options.yaml
 .env
+*.gen.dart
 
 # IntelliJ related
 *.iml
