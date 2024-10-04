@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:travel/core/response/response_wrapper.dart';
+import 'package:travel/core/constant/constant.dart';
+import 'package:travel/core/response/error_response.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 import 'package:travel/domain/repository/auth/repository.dart';
+
+import '../../../core/response/error_code.constant.dart';
 
 part 'scenario/sign_up.dart';
 
@@ -25,6 +31,9 @@ class AuthUseCase {
       GetIsAuthorizedUseCase(_repository);
 
   GetCurrentUser get currentUser => GetCurrentUser(_repository);
+
+  GetEmailAndPasswordUseCase get getEmailAndPassword =>
+      GetEmailAndPasswordUseCase(_repository);
 
   SignInWithEmailAndPasswordUseCase get signIn =>
       SignInWithEmailAndPasswordUseCase(_repository);

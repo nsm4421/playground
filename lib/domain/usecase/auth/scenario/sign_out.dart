@@ -5,7 +5,7 @@ class SignOutUseCase {
 
   SignOutUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call() async {
+  Future<Either<ErrorResponse, void>> call() async {
     return await _repository.signOut();
   }
 }

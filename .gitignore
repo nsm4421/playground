@@ -16,6 +16,10 @@ analysis_options.yaml
 *.g.dart
 *.freezed.dart
 *.config.dart
+supabase/
+devtools_options.yaml
+.env
+*.gen.dart
 
 # IntelliJ related
 *.iml

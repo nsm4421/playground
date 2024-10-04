@@ -15,10 +15,8 @@ class _SettingScreenState extends State<SettingScreen> {
     if (_sourceLang == null || _targetLang == null) {
       return;
     } else if (_sourceLang?.lang.name == _targetLang?.lang.name) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Source언어와 Target언어가 동일합니다'),
-        duration: Duration(seconds: 2),
-      ));
+      customUtil.showWarningSnackBar(
+          context: context, message: 'Source언어와 Target언어가 동일합니다');
       return;
     }
     context.read<ImageToTextBloc>().add(SettingLanguageEvent(

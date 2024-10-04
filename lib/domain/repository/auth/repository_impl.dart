@@ -2,57 +2,87 @@ part of 'repository.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthDataSource _dataSource;
+  final AuthDataSource _authDataSource;
+  final LocalDataSource _localDataSource;
+  final StorageDataSource _storageDataSource;
 
-  AuthRepositoryImpl(this._dataSource);
+  AuthRepositoryImpl(
+      {required AuthDataSource authDataSource,
+      required LocalDataSource localDataSource,
+      required StorageDataSource storageDataSource})
+      : _authDataSource = authDataSource,
+        _localDataSource = localDataSource,
+        _storageDataSource = storageDataSource;
 
   @override
   Stream<PresenceEntity?> get authStateStream =>
-      _dataSource.authStateStream.asyncMap(PresenceEntity.from);
+      _authDataSource.authStateStream.asyncMap(PresenceEntity.from);
 
   @override
-  PresenceEntity? get currentUser => PresenceEntity.from(_dataSource.authUser);
+  PresenceEntity? get currentUser =>
+      PresenceEntity.from(_authDataSource.authUser);
 
   @override
-  bool get isAuthorized => _dataSource.isAuthorized;
+  bool get isAuthorized => _authDataSource.isAuthorized;
 
   @override
-  Future<ResponseWrapper<PresenceEntity?>> signInWithEmailAndPassword(
+  Future<Map<String, String?>> getEmailAndPassword() async {
+    try {
+      return await _localDataSource.getEmailAndPassword();
+    } catch (error) {
+      customUtil.logger.e(error);
+      return {'email': null, 'password': null};
+    }
+  }
+
+  @override
+  Future<Either<ErrorResponse, PresenceEntity?>> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      return await _dataSource
+      final res = await _authDataSource
           .signInWithEmailAndPassword(email: email, password: password)
-          .then(PresenceEntity.from)
-          .then(ResponseSuccess<PresenceEntity?>.from);
+          .then(PresenceEntity.from);
+      await _localDataSource.saveEmailAndPassword(
+          email, password); // 로컬DB에 인증정보 저장
+      return Right(res);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 
   @override
-  Future<ResponseWrapper<PresenceEntity?>> signUpWithEmailAndPassword(
+  Future<Either<ErrorResponse, PresenceEntity?>> signUpWithEmailAndPassword(
       {required String email,
       required String password,
-      required String username}) async {
+      required String username,
+      required File profileImage}) async {
     try {
-      return await _dataSource
-          .signInWithEmailAndPassword(email: email, password: password)
+      final avatarUrl = await _storageDataSource.uploadImageAndReturnPublicUrl(
+          file: profileImage, bucketName: 'avatar');
+      return await _authDataSource
+          .signUpWithEmailAndPassword(
+              email: email,
+              password: password,
+              username: username,
+              avatarUrl: avatarUrl)
           .then(PresenceEntity.from)
-          .then(ResponseSuccess<PresenceEntity?>.from);
+          .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 
   @override
-  Future<ResponseWrapper<void>> signOut() async {
+  Future<Either<ErrorResponse, void>> signOut() async {
     try {
-      return await _dataSource.signOut().then(ResponseSuccess<void>.from);
+      await _authDataSource.signOut();
+      await _localDataSource.deleteEmailAndPassword();
+      return const Right(null);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 }

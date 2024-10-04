@@ -1,0 +1,1 @@
+part of 'dislpay_diary.bloc.dart';
