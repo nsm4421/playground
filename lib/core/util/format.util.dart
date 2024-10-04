@@ -3,6 +3,11 @@ part of 'util.dart';
 mixin class CustomTimeUtil {
   String get now => DateTime.now().toUtc().toIso8601String();
 
+  bool validateEmail(String text) {
+    RegExp regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return regex.hasMatch(text);
+  }
+
   String timeAgoInKr(String timestamp) {
     try {
       final now = DateTime.now();

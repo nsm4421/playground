@@ -1,3 +1,4 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/core/response/custom_exception.dart';
 
 import '../constant/constant.dart';
@@ -39,21 +40,23 @@ class ResponseError<T> extends ResponseWrapper<T> {
 
   factory ResponseError.from(Exception? exception,
       {ErrorCode? errorCode, String? errorMessage}) {
+    // 에러코드가 주어진 경우
     if (errorCode != null) {
-      // 에러 코드가 주어진 경우
       return ResponseError<T>(
           exception: CustomException(errorCode,
               message: errorMessage ?? errorCode.description));
-    } else if (exception != null) {
-      // exception이 주어진 경우
-      return ResponseError<T>(
-          exception: CustomException.from(exception),
-          errorMessage: errorMessage ?? exception.toString());
-    } else {
-      // 그 외의 경우
-      return ResponseError<T>(
-          exception: CustomException(ErrorCode.unknownError),
-          errorMessage: errorMessage ?? exception.toString());
     }
+    // 에러코드가 주어지지 않은 경우
+    ErrorCode $errorCode = errorCode ?? ErrorCode.unknownError;
+    if (exception is AuthException) {
+      $errorCode = ErrorCode.auth;
+    } else if (exception is StorageException) {
+      $errorCode = ErrorCode.storage;
+    } else if (exception is PostgrestException) {
+      $errorCode = ErrorCode.db;
+    }
+    return ResponseError<T>(
+        exception: CustomException($errorCode,
+            message: errorMessage ?? $errorCode.description));
   }
 }

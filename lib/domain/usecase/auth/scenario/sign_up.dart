@@ -8,8 +8,12 @@ class SignUpWithEmailAndPasswordUseCase {
   Future<ResponseWrapper<PresenceEntity?>> call(
       {required String email,
       required String password,
-      required String username}) async {
+      required String username,
+      required File profileImage}) async {
     return await _repository.signUpWithEmailAndPassword(
-        email: email, password: password, username: username);
+        email: email,
+        password: password,
+        username: username,
+        profileImage: profileImage);
   }
 }

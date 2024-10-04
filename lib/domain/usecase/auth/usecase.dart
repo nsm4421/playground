@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:travel/core/response/response_wrapper.dart';
 import 'package:travel/domain/entity/auth/presence.dart';

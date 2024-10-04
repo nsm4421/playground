@@ -89,7 +89,7 @@ mixin class CustomSnackBarUtil {
       {required BuildContext context,
       required String message,
       String actionLabel = '닫기',
-      int durationInSec = 2,
+      int durationInSec = 3,
       Color? bgColor,
       Color? textColor,
       SnackBarAction? showActionWidget}) {
@@ -108,7 +108,7 @@ mixin class CustomSnackBarUtil {
       {required BuildContext context,
       required String message,
       String actionLabel = '닫기',
-      int durationInSec = 2,
+      int durationInSec = 3,
       Color? bgColor,
       Color? textColor,
       SnackBarAction? showActionWidget}) {
