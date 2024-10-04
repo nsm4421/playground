@@ -52,7 +52,10 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
   Future<void> _onInit(
       InitializeEvent event, Emitter<EditDiaryState> emit) async {
     try {
-      emit(state.copyWith(status: event.status, step: event.step));
+      emit(state.copyWith(
+          status: event.status,
+          step: event.step,
+          errorMessage: event.errorMessage ?? state.errorMessage));
     } on Exception catch (error) {
       emit(state.copyWith(status: Status.error, errorMessage: '초기화 도중 에러 발생'));
       customUtil.logger.e(error);

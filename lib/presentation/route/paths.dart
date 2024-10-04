@@ -1,7 +1,8 @@
 part of 'router.dart';
 
 enum Routes {
-  entry('/'),
+  home('/'),
+  auth('/auth'),
   editDiary('/diary/edit');
 
   final String path;

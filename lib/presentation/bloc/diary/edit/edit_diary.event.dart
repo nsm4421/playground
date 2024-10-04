@@ -9,9 +9,12 @@ final class LoadDiaryEvent extends EditDiaryEvent {}
 final class InitializeEvent extends EditDiaryEvent {
   final Status status;
   final EditDiaryStep step;
+  final String? errorMessage;
 
   InitializeEvent(
-      {this.status = Status.initial, this.step = EditDiaryStep.initializing});
+      {this.status = Status.initial,
+      this.step = EditDiaryStep.initializing,
+      this.errorMessage});
 }
 
 /// Editor 상태변경

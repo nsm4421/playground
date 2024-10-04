@@ -41,8 +41,7 @@ class EditDiaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final diaryId = const Uuid().v4();
     return BlocProvider(
-        create: (_) =>
-            getIt<EditDiaryBloc>(param1: diaryId),
+        create: (_) => getIt<EditDiaryBloc>(param1: diaryId),
         child: BlocListener<EditDiaryBloc, EditDiaryState>(
           listener: (context, state) {
             if (state.step == EditDiaryStep.uploading &&
@@ -62,7 +61,8 @@ class EditDiaryPage extends StatelessWidget {
                     step: state.step == EditDiaryStep.uploading
                         ? EditDiaryStep.metaData
                         : state.step,
-                    status: Status.initial));
+                    status: Status.initial,
+                    errorMessage: ''));
               });
             }
           },
