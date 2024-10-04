@@ -3,6 +3,8 @@ part of 'authentication.bloc.dart';
 @sealed
 abstract class AuthenticationEvent {}
 
+final class OnMountedEvent extends AuthenticationEvent {}
+
 final class InitializeEvent extends AuthenticationEvent {
   final AuthenticationStep? step;
   final Status? status;

@@ -47,6 +47,10 @@ class _SignInScreenState extends State<SignInScreen> {
     return (text == null || text.isEmpty) ? '비밀번호를 입력하세요' : null;
   }
 
+  _handleClearEmail() {
+    _emailTec.clear();
+  }
+
   _routeSignUp() {
     context
         .read<AuthenticationBloc>()
@@ -89,6 +93,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   prefixIcon: Icons.email,
                   validator: _handleValidateEmail,
                   maxLength: _maxEmailLength,
+                  suffixIcon: Icons.clear,
+                  onTapSuffixIcon: _handleClearEmail,
                 ),
               ),
               Padding(
@@ -97,10 +103,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: CustomTextFieldWidget(
                   _passwordTec,
                   obscureText: !_isPasswordVisible,
-                  onTapSuffixIcon: _switchVisible,
                   prefixIcon: Icons.key,
                   validator: _handleValidatePassword,
                   maxLength: _maxPasswordLength,
+                  suffixIcon: _isPasswordVisible
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  onTapSuffixIcon: _switchVisible,
                 ),
               ),
             ],

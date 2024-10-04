@@ -1,3 +1,4 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'error_code.constant.dart';
@@ -37,6 +38,8 @@ class ErrorResponse {
       type = ErrorType.storage;
     } else if (exception is PostgrestException) {
       type = ErrorType.db;
+    } else if (exception is HiveError) {
+      type = ErrorType.localDb;
     }
     return ErrorResponse(
         exception: exception,

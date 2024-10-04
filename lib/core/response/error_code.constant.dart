@@ -13,14 +13,17 @@ enum ErrorType {
   invalidFormat(description: '잘못된 이메일 형식', code: 1008),
   toWeekPassword(description: '비밀번호가 너무 약함', code: 1009),
 
-  /// db
+  /// remote db
   db(description: 'database error', code: 2000),
 
+  /// hive error
+  localDb(description: 'database error', code: 3000),
+
   /// storage
-  storage(description: 'storage error', code: 3000),
+  storage(description: 'storage error', code: 4000),
 
   /// network
-  network(description: 'network error', code: 4000),
+  network(description: 'network error', code: 5000),
 
   /// else
   unknownError(description: 'unknown error', code: 9999);
