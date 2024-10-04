@@ -5,7 +5,7 @@ class EditDiaryUseCase {
 
   EditDiaryUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call({
+  Future<Either<ErrorResponse, void>> call({
     required String id,
     String? location,
     required List<String> hashtags,
@@ -29,7 +29,7 @@ class DeleteDiaryUseCase {
 
   DeleteDiaryUseCase(this._repository);
 
-  Future<ResponseWrapper<void>> call(String id) async {
+  Future<Either<ErrorResponse, void>> call(String id) async {
     return await _repository.delete(id);
   }
 }

@@ -12,7 +12,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
         _storageDataSource = storageDataSource;
 
   @override
-  Future<ResponseWrapper<void>> edit(
+  Future<Either<ErrorResponse, void>> edit(
       {required String id,
       String? location,
       required List<String> hashtags,
@@ -30,22 +30,20 @@ class DiaryRepositoryImpl implements DiaryRepository {
                   await _saveImagesAndReturnPublicUrls(id: id, images: images),
               captions: captions,
               is_private: isPrivate))
-          .then(ResponseSuccess<void>.from);
+          .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError<void>.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 
   @override
-  Future<ResponseWrapper<void>> delete(String id) async {
+  Future<Either<ErrorResponse, void>> delete(String id) async {
     try {
-      return await _diaryDataSource
-          .deleteById(id)
-          .then(ResponseSuccess<void>.from);
+      return await _diaryDataSource.deleteById(id).then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError<void>.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 

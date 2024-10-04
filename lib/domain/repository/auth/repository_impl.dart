@@ -23,21 +23,21 @@ class AuthRepositoryImpl implements AuthRepository {
   bool get isAuthorized => _authDataSource.isAuthorized;
 
   @override
-  Future<ResponseWrapper<PresenceEntity?>> signInWithEmailAndPassword(
+  Future<Either<ErrorResponse, PresenceEntity?>> signInWithEmailAndPassword(
       String email, String password) async {
     try {
       return await _authDataSource
           .signInWithEmailAndPassword(email: email, password: password)
           .then(PresenceEntity.from)
-          .then(ResponseSuccess<PresenceEntity?>.from);
+          .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 
   @override
-  Future<ResponseWrapper<PresenceEntity?>> signUpWithEmailAndPassword(
+  Future<Either<ErrorResponse, PresenceEntity?>> signUpWithEmailAndPassword(
       {required String email,
       required String password,
       required String username,
@@ -52,20 +52,20 @@ class AuthRepositoryImpl implements AuthRepository {
               username: username,
               avatarUrl: avatarUrl)
           .then(PresenceEntity.from)
-          .then(ResponseSuccess<PresenceEntity?>.from);
+          .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 
   @override
-  Future<ResponseWrapper<void>> signOut() async {
+  Future<Either<ErrorResponse, void>> signOut() async {
     try {
-      return await _authDataSource.signOut().then(ResponseSuccess<void>.from);
+      return await _authDataSource.signOut().then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
-      return ResponseError.from(error);
+      return Left(ErrorResponse.from(error));
     }
   }
 }

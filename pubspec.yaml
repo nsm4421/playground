@@ -35,6 +35,9 @@ dependencies:
   # 로깅
   logger: ^2.4.0
 
+  # reponse wrapper
+  either_dart: ^1.0.0
+
   # 라우팅
   go_router: ^14.2.7
 

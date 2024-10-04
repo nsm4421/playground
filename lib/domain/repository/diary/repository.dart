@@ -1,10 +1,9 @@
 import 'dart:io';
 
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:travel/core/response/response_wrapper.dart';
-import 'package:travel/data/datasource/auth/datasource.dart';
+import 'package:travel/core/response/error_response.dart';
 import 'package:travel/data/datasource/diary/datsource.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../core/util/util.dart';
 import '../../../data/datasource/storage/datasource.dart';
@@ -13,7 +12,7 @@ import '../../../data/model/diary/edit_diary.dart';
 part 'repository_impl.dart';
 
 abstract interface class DiaryRepository {
-  Future<ResponseWrapper<void>> edit(
+  Future<Either<ErrorResponse, void>> edit(
       {required String id,
       String? location,
       required List<String> hashtags,
@@ -22,5 +21,5 @@ abstract interface class DiaryRepository {
       required bool isPrivate,
       bool update = false});
 
-  Future<ResponseWrapper<void>> delete(String id);
+  Future<Either<ErrorResponse, void>> delete(String id);
 }

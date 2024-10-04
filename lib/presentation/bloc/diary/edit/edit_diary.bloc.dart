@@ -178,20 +178,21 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
     try {
       emit(state.copyWith(
           step: EditDiaryStep.uploading, status: Status.loading));
-      final res = await _useCase.edit.call(
-          id: id,
-          location: state.location,
-          hashtags: state.hashtags,
-          images: state.pages.map((item) => item.image).toList(),
-          captions: state.pages.map((item) => item.caption).toList(),
-          isPrivate: state.isPrivate,
-          update: state.update);
-      if (res.ok) {
-        emit(state.copyWith(status: Status.success));
-      } else {
-        emit(state.copyWith(
-            status: Status.error, errorMessage: '업로드 중 에러가 발생했습니다'));
-      }
+      await _useCase.edit
+          .call(
+              id: id,
+              location: state.location,
+              hashtags: state.hashtags,
+              images: state.pages.map((item) => item.image).toList(),
+              captions: state.pages.map((item) => item.caption).toList(),
+              isPrivate: state.isPrivate,
+              update: state.update)
+          .then((res) => res.fold((l) {
+                emit(state.copyWith(
+                    status: Status.error, errorMessage: l.message));
+              }, (r) {
+                emit(state.copyWith(status: Status.success));
+              }));
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: '업로드 중 에러가 발생했습니다'));

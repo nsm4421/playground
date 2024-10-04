@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -50,53 +51,54 @@ class AuthenticationBloc
   Future<void> _onSignUp(SignUpWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
     emit(state.copyWith(status: Status.loading));
-    final res = await _authUseCase.signUp(
-        email: event.email,
-        password: event.password,
-        username: event.username,
-        profileImage: event.profileImage);
-    if (res.ok) {
+    await _authUseCase
+        .signUp(
+            email: event.email,
+            password: event.password,
+            username: event.username,
+            profileImage: event.profileImage)
+        .fold((l) {
+      emit(state
+          .copyWith(status: Status.error, errorMessage: l.message)
+          .copyWithCurrentUser(null));
+    }, (r) {
       emit(state
           .copyWith(status: Status.success, step: AuthenticationStep.authorized)
-          .copyWithCurrentUser(res.data));
-    } else {
-      emit(state
-          .copyWith(
-              status: Status.error, errorMessage: 'error occurs on sign up')
-          .copyWithCurrentUser(null));
-    }
+          .copyWithCurrentUser(r));
+    });
   }
 
   Future<void> _onSignIn(SignInWithEmailAndPasswordEvent event,
       Emitter<AuthenticationState> emit) async {
     emit(state.copyWith(status: Status.loading));
-    final res =
-        await _authUseCase.signIn(email: event.email, password: event.password);
-    if (res.ok) {
-      emit(state
-          .copyWith(status: Status.success, step: AuthenticationStep.authorized)
-          .copyWithCurrentUser(res.data));
-    } else {
-      emit(state
-          .copyWith(
-              status: Status.error, errorMessage: 'error occurs on sign in')
-          .copyWithCurrentUser(null));
-    }
+
+    await _authUseCase
+        .signIn(email: event.email, password: event.password)
+        .then((res) => res.fold((l) {
+              emit(state
+                  .copyWith(status: Status.error, errorMessage: l.message)
+                  .copyWithCurrentUser(null));
+            }, (r) {
+              emit(state
+                  .copyWith(
+                      status: Status.success,
+                      step: AuthenticationStep.authorized)
+                  .copyWithCurrentUser(r));
+            }));
   }
 
   Future<void> _onSignOut(
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
     emit(state.copyWith(status: Status.loading));
-    final res = await _authUseCase.signOut();
-    if (res.ok) {
-      emit(state
-          .copyWith(status: Status.success, step: AuthenticationStep.signIn)
-          .copyWithCurrentUser(null));
-    } else {
-      emit(state.copyWith(
-          status: Status.error,
-          step: AuthenticationStep.signIn,
-          errorMessage: 'error occurs on sign out'));
-    }
+    await _authUseCase.signOut().then((res) => res.fold((l) {
+          emit(state.copyWith(
+              status: Status.error,
+              step: AuthenticationStep.signIn,
+              errorMessage: l.message));
+        }, (r) {
+          emit(state
+              .copyWith(status: Status.success, step: AuthenticationStep.signIn)
+              .copyWithCurrentUser(null));
+        }));
   }
 }
