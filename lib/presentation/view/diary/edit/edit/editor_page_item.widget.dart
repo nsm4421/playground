@@ -1,4 +1,4 @@
-part of '../edit_diary.page.dart';
+part of '../index.page.dart';
 
 class EditorPageItemWidget extends StatefulWidget {
   const EditorPageItemWidget(this._page, {super.key});

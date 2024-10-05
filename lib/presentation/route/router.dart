@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:travel/core/util/util.dart';
 import 'package:travel/presentation/bloc/auth/authentication.bloc.dart';
 import 'package:travel/presentation/bloc/bloc_module.dart';
 import 'package:travel/presentation/view/auth/index.page.dart';
@@ -37,10 +38,10 @@ final routerConfig = GoRouter(
           .map((item) => item.path)
           .contains(state.matchedLocation);
       if (authenticated && isInAuthPage) {
-        // 로그인했는데 인증페이지에 있는 경우, 홈화면으로 redirect
+        customUtil.logger.d('로그인했는데 인증페이지에 있는 경우, 홈화면으로 redirect');
         return Routes.home.path;
       } else if (!authenticated && !isInAuthPage) {
-        // 로그인 안했는데 인증페이지에 없는 경우, 인증페이지로 redirect
+        customUtil.logger.d('로그인 안했는데 인증페이지에 없는 경우, 인증페이지로 redirect');
         return Routes.auth.path;
       }
       return null;

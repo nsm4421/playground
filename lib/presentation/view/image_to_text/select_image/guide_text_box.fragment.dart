@@ -1,4 +1,4 @@
-part of '../image_to_text.page.dart';
+part of '../index.page.dart';
 
 class GuideTextBoxFragment extends StatelessWidget {
   const GuideTextBoxFragment({super.key});

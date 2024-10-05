@@ -1,4 +1,4 @@
-part of '../image_to_text.page.dart';
+part of '../index.page.dart';
 
 class TranslatedTextFragment extends StatelessWidget {
   const TranslatedTextFragment(this.currentBlock, {super.key});

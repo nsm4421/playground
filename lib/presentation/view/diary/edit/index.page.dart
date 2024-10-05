@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/util/util.dart';
-import 'package:travel/presentation/widgets/widgets.dart';
+import 'package:travel/presentation/bloc/bloc_module.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../bloc/diary/edit/edit_diary.bloc.dart';
+import '../../../widgets/widgets.dart';
 
 part 'initializing/initialize.screen.dart';
 
@@ -41,7 +41,7 @@ class EditDiaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final diaryId = const Uuid().v4();
     return BlocProvider(
-        create: (_) => getIt<EditDiaryBloc>(param1: diaryId),
+        create: (_) => getIt<BlocModule>().editDiary(diaryId),
         child: BlocListener<EditDiaryBloc, EditDiaryState>(
           listener: (context, state) {
             if (state.step == EditDiaryStep.uploading &&

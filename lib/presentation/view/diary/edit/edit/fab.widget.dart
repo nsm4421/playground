@@ -1,4 +1,4 @@
-part of '../edit_diary.page.dart';
+part of '../index.page.dart';
 
 class FabWidget extends StatelessWidget {
   const FabWidget({super.key});

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/util/util.dart';
+import 'package:travel/presentation/bloc/bloc_module.dart';
 import 'package:travel/presentation/bloc/image_to_text/image_to_text.bloc.dart';
 
 import '../../../core/constant/constant.dart';
@@ -40,7 +41,7 @@ class _ImageToTextPageState extends State<ImageToTextPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<ImageToTextBloc>(),
+        create: (_) => getIt<BlocModule>().image2Text,
         child: BlocBuilder<ImageToTextBloc, ImageToTextState>(
             builder: (context, state) {
           return switch (state.step) {

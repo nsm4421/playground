@@ -1,4 +1,4 @@
-part of '../auth.page.dart';
+part of '../index.page.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

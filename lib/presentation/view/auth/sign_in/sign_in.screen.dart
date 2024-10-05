@@ -1,4 +1,4 @@
-part of '../auth.page.dart';
+part of '../index.page.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

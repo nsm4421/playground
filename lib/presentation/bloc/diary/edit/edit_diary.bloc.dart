@@ -2,25 +2,24 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:injectable/injectable.dart';
-import 'package:travel/domain/usecase/diary/usecase.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/util/util.dart';
+import '../../../../domain/usecase/diary/usecase.dart';
 
 part 'edit_diary.state.dart';
 
 part 'edit_diary.event.dart';
 
-@injectable
 class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
   final String _id;
   final DiaryUseCase _useCase;
 
   String get id => _id;
 
-  EditDiaryBloc(@factoryParam this._id, DiaryUseCase useCase)
-      : _useCase = useCase,
+  EditDiaryBloc({required String id, required DiaryUseCase useCase})
+      : _id = id,
+        _useCase = useCase,
         super(EditDiaryState()) {
     on<LoadDiaryEvent>(_onLoad); // TODO
     on<InitializeEvent>(_onInit);

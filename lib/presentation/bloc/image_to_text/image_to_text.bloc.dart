@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-import 'package:injectable/injectable.dart';
 import 'package:travel/core/util/util.dart';
 
 import '../../../core/constant/constant.dart';
@@ -14,7 +13,6 @@ part 'image_to_text.state.dart';
 
 part 'image_to_text.event.dart';
 
-@lazySingleton
 class ImageToTextBloc extends Bloc<ImageToTextEvent, ImageToTextState> {
   late TextRecognizer _textRecognizer;
   late OnDeviceTranslatorModelManager _modelManager;
@@ -66,8 +64,7 @@ class ImageToTextBloc extends Bloc<ImageToTextEvent, ImageToTextState> {
     return super.close();
   }
 
-  Future<void> _onInit(
-      InitEvent event, Emitter<ImageToTextState> emit) async {
+  Future<void> _onInit(InitEvent event, Emitter<ImageToTextState> emit) async {
     emit(ImageToTextState());
   }
 
