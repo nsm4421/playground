@@ -41,7 +41,7 @@ class MainApp extends StatelessWidget {
               tertiary: Colors.blueGrey),
           useMaterial3: true,
         ),
-        routerConfig: routerConfig,
+        routerConfig: getIt<CustomRouter>().routerConfig,
       ),
     );
   }
