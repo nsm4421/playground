@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/core/util/util.dart';
 import 'package:travel/data/model/auth/auth_user.model.dart';
+
+part 'mock_datasource.dart';
 
 part 'datasource_impl.dart';
 
