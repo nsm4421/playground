@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:travel/domain/entity/auth/presence.dart';
+import 'package:injectable/injectable.dart';
 import 'package:travel/presentation/bloc/auth/authentication.bloc.dart';
-import 'package:travel/presentation/view/auth/auth.page.dart';
+import 'package:travel/presentation/bloc/bloc_module.dart';
+import 'package:travel/presentation/view/auth/index.page.dart';
 import 'package:travel/presentation/view/main_view/index.page.dart';
 
 import '../../core/di/dependency_injection.dart';
-import '../view/diary/edit/edit_diary.page.dart';
+import '../view/diary/edit/index.page.dart';
 
 part 'paths.dart';
 
@@ -46,5 +47,4 @@ final routerConfig = GoRouter(
     },
 
     /// 인증 상태 listener
-    refreshListenable:
-        AuthStateNotifier(getIt<AuthenticationBloc>().authStateStream));
+    refreshListenable: getIt<AuthStateNotifier>());

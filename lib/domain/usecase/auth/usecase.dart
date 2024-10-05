@@ -18,7 +18,6 @@ part 'scenario/sign_out.dart';
 
 part 'scenario/getter.dart';
 
-@lazySingleton
 class AuthUseCase {
   final AuthRepository _repository;
 

@@ -1,6 +1,5 @@
 part of 'repository.dart';
 
-@LazySingleton(as: DiaryRepository)
 class DiaryRepositoryImpl implements DiaryRepository {
   final DiaryDataSource _diaryDataSource;
   final StorageDataSource _storageDataSource;

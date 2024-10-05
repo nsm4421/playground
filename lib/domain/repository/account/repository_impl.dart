@@ -1,6 +1,5 @@
 part of 'repository.dart';
 
-@LazySingleton(as: AccountRepository)
 class AccountRepositoryImpl implements AccountRepository {
   final AccountDataSource _accountDataSource;
 

@@ -1,6 +1,5 @@
 part of 'repository.dart';
 
-@LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource _authDataSource;
   final LocalDataSource _localDataSource;

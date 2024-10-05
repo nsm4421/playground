@@ -7,7 +7,6 @@ import 'package:travel/domain/repository/diary/repository.dart';
 
 part 'scenario/crud.dart';
 
-@lazySingleton
 class DiaryUseCase {
   final DiaryRepository _repository;
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/presentation/bloc/auth/authentication.bloc.dart';
+import 'package:travel/presentation/bloc/bloc_module.dart';
 import 'package:travel/presentation/route/router.dart';
 
 import 'core/di/dependency_injection.dart';
@@ -28,7 +29,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthenticationBloc>()
+      create: (_) => getIt<BlocModule>().auth
         ..add(OnMountedEvent()), // 앱 전역에서 인증 bloc 접근 가능
       child: MaterialApp.router(
         title: 'Traveler',
