@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/util/util.dart';
@@ -13,3 +14,5 @@ part 'page_not_found.screen.dart';
 part 'text_form.widget.dart';
 
 part 'loading_overlay.screen.dart';
+
+part 'avatar.widget.dart';
