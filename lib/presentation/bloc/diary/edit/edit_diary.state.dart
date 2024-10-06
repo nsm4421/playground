@@ -31,6 +31,8 @@ class EditDiaryState {
 
   bool get isLastPage => currentIndex == pages.length;
 
+  int get totalPage => pages.length;
+
   EditDiaryState copyWith({
     EditDiaryStep? step,
     Status? status,

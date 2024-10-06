@@ -8,15 +8,7 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
     return BlocBuilder<EditDiaryBloc, EditDiaryState>(
         builder: (context, state) {
       return AppBar(
-        // 닫기 버튼
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (context.mounted) {
-                context.pop();
-              }
-            }),
-        title: Text('일기장(${state.currentIndex + 1}/${state.pages.length})'),
+        title: Text('Diary'),
         elevation: 0,
         actions: [
           // 메타 데이터 입력 페이지로 이동 버튼

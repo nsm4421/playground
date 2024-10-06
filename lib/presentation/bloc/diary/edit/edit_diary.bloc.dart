@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/util/util.dart';
@@ -12,7 +13,7 @@ part 'edit_diary.state.dart';
 part 'edit_diary.event.dart';
 
 class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
-  final String _id;
+  String _id;
   final DiaryUseCase _useCase;
 
   String get id => _id;
@@ -97,8 +98,7 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
       AddPageEvent event, Emitter<EditDiaryState> emit) async {
     try {
       emit(state.copyWith(
-          pages: [...state.pages, DiaryPage(index: state.pages.length)],
-          currentIndex: state.currentIndex + 1));
+          pages: [...state.pages, DiaryPage(index: state.pages.length)]));
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: '페이지 추가 중 발생했습니다'));
@@ -190,7 +190,9 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
                 emit(state.copyWith(
                     status: Status.error, errorMessage: l.message));
               }, (r) {
-                emit(state.copyWith(status: Status.success));
+                // 초기화
+                _id = const Uuid().v4();
+                emit(EditDiaryState());
               }));
     } on Exception catch (error) {
       emit(state.copyWith(

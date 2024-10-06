@@ -22,16 +22,16 @@ class _EditorBodyState extends State<EditorBody> {
     _pageController.dispose();
   }
 
-  _handleMovePage(int page) => () {
-        context.read<EditDiaryBloc>().add(MovePageEvent(page));
-      };
+  _handleMovePage(int page) {
+    context.read<EditDiaryBloc>().add(MovePageEvent(page));
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<EditDiaryBloc, EditDiaryState>(
         // current index가 변경되는 경우 페이지 페이지 전환
         listenWhen: (prev, curr) =>
-            (prev.currentIndex != curr.currentIndex) &&
+            (prev.currentIndex != curr.currentIndex) ||
             (curr.currentIndex != _pageController.page?.round()),
         listener: (context, state) {
           _pageController.animateToPage(state.currentIndex,
@@ -41,8 +41,9 @@ class _EditorBodyState extends State<EditorBody> {
         child: BlocBuilder<EditDiaryBloc, EditDiaryState>(
           builder: (context, state) {
             return PageView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: _pageController,
-                itemCount: state.pages.length,
+                itemCount: state.totalPage,
                 onPageChanged: _handleMovePage,
                 itemBuilder: (context, index) {
                   final page = state.pages[index];

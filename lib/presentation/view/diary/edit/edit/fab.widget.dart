@@ -3,8 +3,6 @@ part of '../index.page.dart';
 class FabWidget extends StatelessWidget {
   const FabWidget({super.key});
 
-  static const _maxPageNum = 5;
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditDiaryBloc, EditDiaryState>(
@@ -26,15 +24,6 @@ class FabWidget extends StatelessWidget {
                         index: state.currentIndex, image: res));
                   });
                 }),
-
-            /// 페이지 추가 아이콘
-            if (state.pages.length < _maxPageNum)
-              IconBoxWidget(
-                  iconData: Icons.plus_one,
-                  isLoading: !state.status.ok,
-                  voidCallback: () async {
-                    context.read<EditDiaryBloc>().add(AddPageEvent());
-                  }),
 
             /// 페이지 삭제 아이콘
             if (state.pages.length > 1)
