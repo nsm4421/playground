@@ -11,6 +11,20 @@ class DiaryRepositoryImpl implements DiaryRepository {
         _storageDataSource = storageDataSource;
 
   @override
+  Future<Either<ErrorResponse, List<DiaryEntity>>> fetch(String beforeAt,
+      {int take = 20}) async {
+    try {
+      return await _diaryDataSource
+          .fetch(beforeAt, take: take)
+          .then((res) => res.map(DiaryEntity.from).toList())
+          .then(Right.new);
+    } on Exception catch (error) {
+      customUtil.logger.e(error);
+      return Left(ErrorResponse.from(error));
+    }
+  }
+
+  @override
   Future<Either<ErrorResponse, void>> edit(
       {required String id,
       String? location,

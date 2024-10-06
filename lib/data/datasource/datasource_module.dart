@@ -13,15 +13,22 @@ class DataSourceModule {
   final SupabaseClient _supabaseClient = Supabase.instance.client;
   final mode = Env.mode;
 
+  @lazySingleton
   AuthDataSource get auth => mode == 'dev'
       ? MockAuthDataSource()
       : AuthDataSourceImpl(_supabaseClient);
 
+  @lazySingleton
   LocalDataSource get local => LocalDataSourceImpl();
 
+  @lazySingleton
   AccountDataSource get account => AccountDataSourceImpl(_supabaseClient);
 
-  DiaryDataSource get diary => DiaryDataSourceImpl(_supabaseClient);
+  @lazySingleton
+  DiaryDataSource get diary => mode == 'dev'
+      ? MockDiaryDataSource()
+      : DiaryDataSourceImpl(_supabaseClient);
 
+  @lazySingleton
   StorageDataSource get storage => StorageDataSourceImpl(_supabaseClient);
 }

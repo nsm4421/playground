@@ -6,6 +6,16 @@ class DiaryDataSourceImpl extends DiaryDataSource {
   DiaryDataSourceImpl(this._supabaseClient);
 
   @override
+  Future<Iterable<FetchDiaryModel>> fetch(String beforeAt,
+      {int take = 20}) async {
+    return await _supabaseClient
+        .rpc<List<Map<String, dynamic>>>('fetch_diaries', params: {
+      'before_at': beforeAt,
+      'take': take
+    }).then((res) => res.map(FetchDiaryModel.fromJson));
+  }
+
+  @override
   Future<void> edit(EditDiaryModel model, {bool update = false}) async {
     return await _supabaseClient.rest.from('diaries').upsert(model
         .copyWith(

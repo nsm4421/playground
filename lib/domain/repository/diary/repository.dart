@@ -8,10 +8,14 @@ import 'package:travel/data/datasource/diary/datsource.dart';
 import '../../../core/util/util.dart';
 import '../../../data/datasource/storage/datasource.dart';
 import '../../../data/model/diary/edit_diary.dart';
+import '../../entity/diary/diary.dart';
 
 part 'repository_impl.dart';
 
 abstract interface class DiaryRepository {
+  Future<Either<ErrorResponse, List<DiaryEntity>>> fetch(String beforeAt,
+      {int take = 20});
+
   Future<Either<ErrorResponse, void>> edit(
       {required String id,
       String? location,

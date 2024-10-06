@@ -46,7 +46,7 @@ create table public.accounts (
 alter table public.accounts enable row level security;
 
 create policy "enable to select for all authenticated" 
-on accounts for select to authenticated using (true);
+on accounts for select using (true);
 
 create policy "enable insert only own data" on accounts
 for insert to authenticated with check (auth.uid() = id);
@@ -93,6 +93,7 @@ create table public.diaries (
     images text[] DEFAULT '{}',
     hashtags text[] DEFAULT '{}',
     captions text[] DEFAULT '{}',
+    location text,
     is_private bool DEFAULT true,
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone null,    
@@ -114,4 +115,58 @@ for update to authenticated with check (auth.uid() = created_by);
 
 create policy "enable delete only own data" on diaries
 for delete to authenticated using (auth.uid() = created_by);
+
+------------------------------------------------------
+
+create or replace function fetch_diaries
+(before_at timestamptz, take int)
+returns table(
+    id uuid, 
+    images text[],
+    hashtags text[],
+    captions text[],
+    location text,
+    is_private bool,
+    created_at timestamptz,
+    updated_at timestamptz,
+    created_by uuid,
+    username text,
+    avatar_url text
+)
+language sql
+as $$
+    select
+      A.id,
+      A.images,
+      A.hashtags,
+      A.captions,
+      A.location,
+      A.is_private,
+      A.created_at,
+      A.updated_at,
+      A.created_by author_uid,
+      B.username author_username,
+      B.avatar_url author_avatar_url
+    from (
+        select
+          id,
+          images,
+          hashtags,
+          captions,
+          location,
+          is_private,
+          created_by,
+          created_at,
+          updated_at
+        from
+            public.diaries
+        where
+            created_at < before_at
+            and ((is_private = false) or (created_by = auth.uid()))
+        order by created_at desc
+        limit(take)
+        ) A
+    left join public.accounts B on A.created_by = B.id
+;
+$$
 ```

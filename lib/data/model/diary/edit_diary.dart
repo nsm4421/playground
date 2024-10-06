@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 part 'edit_diary.freezed.dart';
 
@@ -9,7 +8,7 @@ part 'edit_diary.g.dart';
 @freezed
 class EditDiaryModel with _$EditDiaryModel {
   const factory EditDiaryModel({
-    @Default('') id,
+    @Default('') String id,
     String? location,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,

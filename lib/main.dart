@@ -29,20 +29,18 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<BlocModule>().auth
-        ..add(OnMountedEvent()), // 앱 전역에서 인증 bloc 접근 가능
-      child: MaterialApp.router(
-        title: 'Traveler',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple,
-              primary: Colors.blue,
-              secondary: Colors.teal,
-              tertiary: Colors.blueGrey),
-          useMaterial3: true,
-        ),
-        routerConfig: getIt<CustomRouter>().routerConfig,
-      ),
-    );
+        create: (_) => getIt<BlocModule>().auth
+          ..add(OnMountedEvent()), // 앱 전역에서 인증 bloc 접근 가능
+        child: MaterialApp.router(
+            title: 'Traveler',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                  seedColor: Colors.deepPurple,
+                  primary: Colors.blue,
+                  secondary: Colors.teal,
+                  tertiary: Colors.blueGrey),
+              useMaterial3: true,
+            ),
+            routerConfig: getIt<CustomRouter>().routerConfig));
   }
 }
