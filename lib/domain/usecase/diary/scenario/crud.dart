@@ -8,6 +8,7 @@ class EditDiaryUseCase {
   Future<Either<ErrorResponse, void>> call({
     required String id,
     String? location,
+    required String content,
     required List<String> hashtags,
     required List<File?> images,
     required List<String> captions,
@@ -17,6 +18,8 @@ class EditDiaryUseCase {
     return await _repository
         .edit(
             id: id,
+            content: content,
+            location: location,
             hashtags: hashtags,
             images: images,
             captions: captions,

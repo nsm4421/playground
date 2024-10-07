@@ -28,6 +28,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
   Future<Either<ErrorResponse, void>> edit(
       {required String id,
       String? location,
+      required String content,
       required List<String> hashtags,
       required List<File?> images,
       required List<String> captions,
@@ -38,6 +39,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
           .edit(EditDiaryModel(
               id: id,
               location: location,
+              content: content,
               hashtags: hashtags,
               images:
                   await _saveImagesAndReturnPublicUrls(id: id, images: images),

@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -24,13 +24,11 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
         super(EditDiaryState()) {
     on<LoadDiaryEvent>(_onLoad); // TODO
     on<InitializeEvent>(_onInit);
-    on<UpdateCaptionEvent>(_onUpdateCaption);
-    on<UpdateImageEvent>(_onUpdateImage);
-    on<AddPageEvent>(_onAddPage);
-    on<DeletePageEvent>(_onDeletePage);
-    on<MovePageEvent>(_onMovePage);
-    on<MoveToMetaDataPage>(_onMoveToMetaDataPage);
-    on<UpdateMetaDataEvent>(_onUpdateMetaData);
+    on<ResetDiaryEvent>(_onReset);
+    on<UpdateEditorEvent>(_onUpdate);
+    on<AddAssetEvent>(_onAddAsset);
+    on<ChangeAssetEvent>(_onChangeAsset);
+    on<UnSelectAssetEvent>(_onUnSelect);
     on<SubmitDiaryEvent>(_onSubmit);
   }
 
@@ -41,7 +39,7 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
       if (state.update) {
         // TODO : 기존 게시글 불러와서 이미지를 File객체로 만들어 상태 업데이트
       }
-      emit(state.copyWith(step: EditDiaryStep.editing, status: Status.initial));
+      emit(state.copyWith(status: Status.initial));
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: '기존 데이터 불러오는 중 오류 발생'));
@@ -53,122 +51,83 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
       InitializeEvent event, Emitter<EditDiaryState> emit) async {
     try {
       emit(state.copyWith(
-          status: event.status,
-          step: event.step,
-          errorMessage: event.errorMessage ?? state.errorMessage));
+          status: event.status, errorMessage: event.errorMessage));
     } on Exception catch (error) {
-      emit(state.copyWith(status: Status.error, errorMessage: '초기화 도중 에러 발생'));
       customUtil.logger.e(error);
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on init'));
     }
   }
 
-  Future<void> _onUpdateCaption(
-      UpdateCaptionEvent event, Emitter<EditDiaryState> emit) async {
+  Future<void> _onReset(
+      ResetDiaryEvent event, Emitter<EditDiaryState> emit) async {
     try {
-      emit(state.copyWith(
-          pages: state.pages
-              .map((item) => item.index == event.index
-                  ? item.copyWith(caption: event.caption)
-                  : item)
-              .toList()));
+      _id = const Uuid().v4();
+      emit(EditDiaryState());
     } on Exception catch (error) {
-      emit(state.copyWith(
-          status: Status.error, errorMessage: '캡션 상태 업데이트 발생했습니다'));
       customUtil.logger.e(error);
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on init'));
     }
   }
 
-  Future<void> _onUpdateImage(
-      UpdateImageEvent event, Emitter<EditDiaryState> emit) async {
+  Future<void> _onUpdate(
+      UpdateEditorEvent event, Emitter<EditDiaryState> emit) async {
     try {
       emit(state.copyWith(
-          pages: state.pages
-              .map((item) => item.index == event.index
-                  ? item.copyWithImage(event.image)
-                  : item)
-              .toList()));
-    } on Exception catch (error) {
-      emit(state.copyWith(
-          status: Status.error, errorMessage: '이미지 상태 업데이트 발생했습니다'));
+          content: event.content ?? state.content,
+          hashtags: event.hashtags ?? state.hashtags,
+          location: event.location ?? state.location));
+    } catch (error) {
       customUtil.logger.e(error);
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on editing'));
     }
   }
 
-  Future<void> _onAddPage(
-      AddPageEvent event, Emitter<EditDiaryState> emit) async {
+  Future<void> _onAddAsset(
+      AddAssetEvent event, Emitter<EditDiaryState> emit) async {
     try {
-      emit(state.copyWith(
-          pages: [...state.pages, DiaryPage(index: state.pages.length)]));
-    } on Exception catch (error) {
-      emit(state.copyWith(
-          status: Status.error, errorMessage: '페이지 추가 중 발생했습니다'));
+      emit(state.copyWith(assets: [
+        ...state.assets,
+        DiaryAsset(caption: '', image: event.image)
+      ]));
+    } catch (error) {
       customUtil.logger.e(error);
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on add asset'));
     }
   }
 
-  Future<void> _onDeletePage(
-      DeletePageEvent event, Emitter<EditDiaryState> emit) async {
+  Future<void> _onChangeAsset(
+      ChangeAssetEvent event, Emitter<EditDiaryState> emit) async {
     try {
-      assert(state.pages.length >= 2);
-      final currentIndex = max(0, state.currentIndex - 1);
-      final pages = state.pages
-          .where((item) => item.index != state.currentIndex)
-          .map((item) => item.index < state.currentIndex
-              ? item
-              : item.copyWith(index: item.index - 1))
-          .toList();
-      emit(state.copyWith(pages: pages, currentIndex: currentIndex));
-    } on Exception catch (error) {
       emit(state.copyWith(
-          status: Status.error, errorMessage: '페이지 추가 중 발생했습니다'));
+          assets: List.generate(state.assets.length, (index) {
+        final asset = state.assets[index];
+        return event.index == index
+            ? asset.copyWith(
+                image: event.asset.image, caption: event.asset.caption)
+            : asset;
+      })));
+    } catch (error) {
       customUtil.logger.e(error);
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on change image'));
     }
   }
 
-  Future<void> _onMovePage(
-      MovePageEvent event, Emitter<EditDiaryState> emit) async {
+  Future<void> _onUnSelect(
+      UnSelectAssetEvent event, Emitter<EditDiaryState> emit) async {
     try {
-      emit(state.copyWith(currentIndex: event.page));
-    } on Exception catch (error) {
-      emit(state.copyWith(
-          status: Status.error, errorMessage: '페이지 전환 중 에러가 발생했습니다'));
+      List<DiaryAsset> assets = [...state.assets];
+      assets.removeAt(event.index);
+      emit(state.copyWith(assets: assets));
+    } catch (error) {
       customUtil.logger.e(error);
-    }
-  }
-
-  Future<void> _onMoveToMetaDataPage(
-      MoveToMetaDataPage event, Emitter<EditDiaryState> emit) async {
-    try {
-      // 이미지나 캡션이 첨부되지 않은 페이지 찾기
-      final unNecessary = state.pages
-          .where((item) => (item.image == null) && (item.caption.isEmpty))
-          .map((item) => item.index)
-          .firstOrNull;
-      if (unNecessary == null) {
-        emit(state.copyWith(
-            status: Status.success, step: EditDiaryStep.metaData));
-      } else {
-        emit(state.copyWith(
-            status: Status.error,
-            step: EditDiaryStep.editing,
-            currentIndex: unNecessary,
-            errorMessage: '캡션이나 이미지가 빈 페이지가 있습니다'));
-      }
-    } on Exception catch (error) {
       emit(state.copyWith(
-          status: Status.error, errorMessage: '메타데이터 페이지로 넘어가는 중 발생했습니다'));
-      customUtil.logger.e(error);
-    }
-  }
-
-  Future<void> _onUpdateMetaData(
-      UpdateMetaDataEvent event, Emitter<EditDiaryState> emit) async {
-    try {
-      emit(state.copyWith(hashtags: event.hashtags, location: event.location));
-    } on Exception catch (error) {
-      emit(state.copyWith(
-          status: Status.error, errorMessage: '페이지 전환 중 에러가 발생했습니다'));
-      customUtil.logger.e(error);
+          status: Status.error,
+          errorMessage: 'error occurs on un select image'));
     }
   }
 
@@ -176,23 +135,29 @@ class EditDiaryBloc extends Bloc<EditDiaryEvent, EditDiaryState> {
       SubmitDiaryEvent event, Emitter<EditDiaryState> emit) async {
     try {
       emit(state.copyWith(
-          step: EditDiaryStep.uploading, status: Status.loading));
+          status: Status.loading, content: state.content.trim()));
+      // 이미지나 본문이 없는 경우 에러 처리
+      if (state.assets.isEmpty && state.content.isEmpty) {
+        emit(state.copyWith(
+            status: Status.error, errorMessage: '이미지나 본문을 입력해주세요'));
+        return;
+      }
+      // 업로드 요청
       await _useCase.edit
           .call(
               id: id,
               location: state.location,
+              content: state.content,
               hashtags: state.hashtags,
-              images: state.pages.map((item) => item.image).toList(),
-              captions: state.pages.map((item) => item.caption).toList(),
+              images: state.assets.map((item) => item.image).toList(),
+              captions: state.assets.map((item) => item.caption).toList(),
               isPrivate: state.isPrivate,
               update: state.update)
           .then((res) => res.fold((l) {
                 emit(state.copyWith(
                     status: Status.error, errorMessage: l.message));
               }, (r) {
-                // 초기화
-                _id = const Uuid().v4();
-                emit(EditDiaryState());
+                emit(state.copyWith(status: Status.success));
               }));
     } on Exception catch (error) {
       emit(state.copyWith(

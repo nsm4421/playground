@@ -11,6 +11,7 @@ class DiaryEntity with _$DiaryEntity {
   const factory DiaryEntity({
     String? id,
     String? location,
+    String? content,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String?>[]) List<String?> images,
     @Default(<String?>[]) List<String?> captions,
@@ -23,6 +24,7 @@ class DiaryEntity with _$DiaryEntity {
   factory DiaryEntity.from(FetchDiaryModel model) => DiaryEntity(
       id: model.id.isNotEmpty ? model.id : null,
       location: model.location,
+      content: model.content,
       hashtags: model.hashtags.where((item) => item.isNotEmpty).toList(),
       images:
           model.images.map((item) => item.isNotEmpty ? item : null).toList(),

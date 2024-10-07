@@ -9,6 +9,7 @@ part 'edit_diary.g.dart';
 class EditDiaryModel with _$EditDiaryModel {
   const factory EditDiaryModel({
     @Default('') String id,
+    @Default('') String content,
     String? location,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,

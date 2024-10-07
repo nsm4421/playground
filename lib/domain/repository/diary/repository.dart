@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
-import 'package:injectable/injectable.dart';
 import 'package:travel/core/response/error_response.dart';
 import 'package:travel/data/datasource/diary/datsource.dart';
 
@@ -19,6 +18,7 @@ abstract interface class DiaryRepository {
   Future<Either<ErrorResponse, void>> edit(
       {required String id,
       String? location,
+      required String content,
       required List<String> hashtags,
       required List<File?> images,
       required List<String> captions,

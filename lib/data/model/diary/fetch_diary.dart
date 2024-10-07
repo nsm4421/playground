@@ -10,6 +10,7 @@ class FetchDiaryModel with _$FetchDiaryModel {
   const factory FetchDiaryModel({
     @Default('') String id,
     String? location,
+    @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> images,
     @Default(<String>[]) List<String> captions,
