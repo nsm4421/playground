@@ -13,16 +13,16 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
   static const double _indicatorSize = 12;
 
   late PageController _pageController;
+  late List<bool> _isBlurList;
   int _currentPage = 0;
-  bool _isBlurred = false;
 
-  int get _length => widget._diary.captions.length;
+  int get _length => widget._diary.images.length;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    log(widget._diary.toString());
+    _isBlurList = widget._diary.images.map((item) => item == null).toList();
   }
 
   @override
@@ -44,9 +44,10 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
     }
   }
 
-  _handleSwitchIsBlurred() {
+  _handleSwitchIsBlurred(int index) {
+    log('_handleSwitchIsBlurred called index:$index');
     setState(() {
-      _isBlurred = !_isBlurred;
+      _isBlurList[index] = !_isBlurList[index];
     });
   }
 
@@ -72,81 +73,85 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
             children: [
               /// header
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // 프로필 이미지
-                    if (widget._diary.author?.avatarUrl != null)
-                      CircularAvatarWidget(widget._diary.author!.avatarUrl),
-                    const SizedBox(width: 12),
-                    // 유저명
-                    Text(widget._diary.author?.username ?? '',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.w500))
-                  ],
-                ),
-              ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // 프로필 이미지
+                        if (widget._diary.author?.avatarUrl != null)
+                          CircularAvatarWidget(widget._diary.author!.avatarUrl),
+                        const SizedBox(width: 12),
+                        // 유저명
+                        Text(widget._diary.author?.username ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    fontWeight: FontWeight.w500))
+                      ])),
 
               /// images
-              GestureDetector(
-                onTap: _handleSwitchIsBlurred,
-                onDoubleTap: _handleShowDetail,
-                child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                    child: PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: _onPageChanged,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _length,
-                        itemBuilder: (context, index) {
-                          final image = widget._diary.images[index];
-                          final caption = widget._diary.captions[index];
-                          return GestureDetector(
-                            child: Stack(
-                              children: [
-                                // 이미지
-                                Container(
-                                    decoration: BoxDecoration(
-                                        image: image != null
-                                            ? DecorationImage(
-                                                fit: BoxFit.fitHeight,
-                                                image:
-                                                    CachedNetworkImageProvider(
-                                                        image))
-                                            : null)),
-
-                                if (_isBlurred)
-                                  BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 10.0, sigmaY: 10.0),
-                                      child: Container(
-                                          color: Colors.black.withOpacity(0))),
-
-                                if ((image == null && caption != null) ||
-                                    _isBlurred)
+              if (_length != 0)
+                GestureDetector(
+                    onDoubleTap: _handleShowDetail,
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.width,
+                        child: PageView.builder(
+                            controller: _pageController,
+                            onPageChanged: _onPageChanged,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _length,
+                            itemBuilder: (context, index) {
+                              final image = widget._diary.images[index];
+                              final caption = widget._diary.captions[index];
+                              final isBlur = _isBlurList[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  if (caption != null) {
+                                    _handleSwitchIsBlurred(index);
+                                  }
+                                },
+                                child: Stack(children: [
                                   Container(
                                       decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(0.4)),
-                                      child: Center(
-                                          child: Text(
-                                        widget._diary.captions[index]!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(color: Colors.white),
-                                        softWrap: true,
-                                        overflow: TextOverflow.ellipsis,
-                                      )))
-                              ],
-                            ),
-                          );
-                        })),
-              ),
+                                          image: image != null
+                                              ? DecorationImage(
+                                                  fit: BoxFit.fitHeight,
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          image))
+                                              : null)),
+                                  if (isBlur)
+                                    BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                            sigmaX: 10.0, sigmaY: 10.0),
+                                        child: Container(
+                                            color:
+                                                Colors.black.withOpacity(0))),
+                                  if (caption != null && isBlur)
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.4)),
+                                        child: Center(
+                                            child: Text(
+                                                widget._diary.captions[index]!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge
+                                                    ?.copyWith(
+                                                        color: Colors.white),
+                                                softWrap: true,
+                                                overflow:
+                                                    TextOverflow.ellipsis))),
+                                ]),
+                              );
+                            }))),
 
               /// indicator
               if (_length > 1)
@@ -176,6 +181,13 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
                     }),
                   ),
                 ),
+
+              /// 본문
+              if (widget._diary.content != null)
+                Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: ExpandableTextWidget(widget._diary.content!)),
 
               // TODO : icons
               Row(

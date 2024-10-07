@@ -22,33 +22,35 @@ class EditTextWidget extends StatefulWidget {
 }
 
 class _EditTextWidgetState extends State<EditTextWidget> {
-  late TextEditingController _textEditingController;
+  late TextEditingController _tec;
 
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController()..text = widget.initialText;
+    _tec = TextEditingController()..text = widget.initialText;
   }
 
   @override
   void dispose() {
     super.dispose();
-    _textEditingController.dispose();
+    _tec.dispose();
+  }
+
+  Future<bool> _handlePop() async {
+    context.pop<String?>(_tec.text);
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context, _textEditingController.text);
-        return true;
-      },
+      onWillPop: _handlePop,
       child: Padding(
         padding: MediaQuery.of(context)
             .viewInsets
             .copyWith(top: 12, left: 8, right: 8),
         child: TextField(
-          controller: _textEditingController,
+          controller: _tec,
           minLines: widget.minLine,
           maxLines: widget.maxLine,
           maxLength: widget.maxLength,
