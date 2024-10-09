@@ -73,7 +73,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
                 : await _storageDataSource.uploadImageAndReturnPublicUrl(
                     file: image,
                     filename: '${id}_$index.jpg',
-                    bucketName: 'diaries');
+                    bucketName: Buckets.diary.name);
           }));
   }
 }

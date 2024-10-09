@@ -8,7 +8,7 @@ class AccountDataSourceImpl implements AccountDataSource {
   @override
   Future<bool> isUsernameDuplicated(String username) async {
     return await _supabaseClient.rest
-        .from('accounts')
+        .from(Tables.accounts.name)
         .select('id')
         .eq('username', username)
         .limit(1)

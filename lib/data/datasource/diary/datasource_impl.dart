@@ -9,7 +9,7 @@ class DiaryDataSourceImpl extends DiaryDataSource {
   Future<Iterable<FetchDiaryModel>> fetch(String beforeAt,
       {int take = 20}) async {
     return await _supabaseClient
-        .rpc<List<Map<String, dynamic>>>('fetch_diaries', params: {
+        .rpc<List<Map<String, dynamic>>>(RpcFns.fetchDiaries.name, params: {
       'before_at': beforeAt,
       'take': take
     }).then((res) => res.map(FetchDiaryModel.fromJson));
@@ -17,7 +17,7 @@ class DiaryDataSourceImpl extends DiaryDataSource {
 
   @override
   Future<void> edit(EditDiaryModel model, {bool update = false}) async {
-    return await _supabaseClient.rest.from('diaries').upsert(model
+    return await _supabaseClient.rest.from(Tables.diaries.name).upsert(model
         .copyWith(
             created_at: update ? model.created_at : customUtil.now,
             updated_at: customUtil.now,
@@ -27,6 +27,9 @@ class DiaryDataSourceImpl extends DiaryDataSource {
 
   @override
   Future<void> deleteById(String id) async {
-    return await _supabaseClient.rest.from('diaries').delete().eq('id', id);
+    return await _supabaseClient.rest
+        .from(Tables.diaries.name)
+        .delete()
+        .eq('id', id);
   }
 }

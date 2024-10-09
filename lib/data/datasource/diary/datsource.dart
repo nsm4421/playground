@@ -3,6 +3,8 @@ import 'package:travel/core/util/util.dart';
 import 'package:travel/data/model/diary/edit_diary.dart';
 import 'package:travel/data/model/diary/fetch_diary.dart';
 
+import '../../../core/constant/constant.dart';
+
 part 'datasource_impl.dart';
 
 part 'mock_datasource.dart';

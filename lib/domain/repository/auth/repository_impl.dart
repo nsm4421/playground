@@ -110,6 +110,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<String> _uploadImageAndReturnPublicUrl(File profileImage) async {
     return await _storageDataSource.uploadImageAndReturnPublicUrl(
-        file: profileImage, bucketName: 'avatar');
+        file: profileImage, bucketName: Buckets.avatar.name);
   }
 }
