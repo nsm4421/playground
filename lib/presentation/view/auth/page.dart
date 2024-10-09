@@ -43,7 +43,7 @@ class AuthPage extends StatelessWidget {
           childWidget: switch (state.step) {
             AuthenticationStep.signUp => const SignUpScreen(),
             AuthenticationStep.signIn => const SignInScreen(),
-            AuthenticationStep.authorized => const PageNotFounded(),
+            AuthenticationStep.authorized => const PageNotFoundedScreen(),
           });
     }));
   }

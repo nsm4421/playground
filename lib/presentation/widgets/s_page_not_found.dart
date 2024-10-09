@@ -1,7 +1,7 @@
 part of 'widgets.dart';
 
-class PageNotFounded extends StatelessWidget {
-  const PageNotFounded({super.key});
+class PageNotFoundedScreen extends StatelessWidget {
+  const PageNotFoundedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

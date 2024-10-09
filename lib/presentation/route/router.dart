@@ -12,8 +12,11 @@ import '../view/diary/display/page.dart';
 import '../view/diary/edit/page.dart';
 import '../view/home/page.dart';
 import '../view/image_to_text/page.dart';
+import '../view/reels/page.dart';
+import '../view/search/page.dart';
 import '../view/setting/edit/page.dart';
 import '../view/setting/page.dart';
+import '../widgets/widgets.dart';
 
 part 'paths.dart';
 
@@ -41,7 +44,7 @@ class CustomRouter {
         _homeRouter,
         GoRoute(
             path: Routes.editProfile.path,
-            builder: (context, state) => const EditProfilePage())
+            builder: (context, state) => const EditProfilePage()),
       ],
       redirect: _redirect,
       refreshListenable: _authStateNotifier);
@@ -64,12 +67,14 @@ class CustomRouter {
                           const NoTransitionPage(child: DisplayDiariesPage()),
                         HomeBottomNavItems.writeDiary =>
                           const NoTransitionPage(child: EditDiaryPage()),
+                        HomeBottomNavItems.search =>
+                          const NoTransitionPage(child: SearchPage()),
+                        HomeBottomNavItems.reels =>
+                          const NoTransitionPage(child: ReelsPage()),
                         HomeBottomNavItems.setting =>
                           const NoTransitionPage(child: SettingPage()),
-                        HomeBottomNavItems.imageToText =>
-                          const NoTransitionPage(child: ImageToTextPage()),
                         (_) => const NoTransitionPage(
-                            child: Center(child: CircularProgressIndicator()))
+                            child: Center(child: PageNotFoundedScreen()))
                       };
                     })
               ]))

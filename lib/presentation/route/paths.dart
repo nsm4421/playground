@@ -5,6 +5,8 @@ enum Routes {
   home('/display-diary'),
   editDiary('/write-diary'),
   setting('/setting'),
+  reels('/reels'),
+  search('/search'),
   editProfile('/setting/edit-profile'),
   image2Text('/image-to-text');
 
