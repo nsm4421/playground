@@ -7,13 +7,13 @@ import '../../core/constant/constant.dart';
 import '../../core/util/util.dart';
 import '../bloc/auth/authentication.bloc.dart';
 import '../bloc/bloc_module.dart';
-import '../view/auth/index.page.dart';
-import '../view/diary/display/index.page.dart';
-import '../view/diary/edit/index.page.dart';
-import '../view/home/index.page.dart';
-import '../view/image_to_text/index.page.dart';
-import '../view/setting/edit/index.page.dart';
-import '../view/setting/index.page.dart';
+import '../view/auth/page.dart';
+import '../view/diary/display/page.dart';
+import '../view/diary/edit/page.dart';
+import '../view/home/page.dart';
+import '../view/image_to_text/page.dart';
+import '../view/setting/edit/page.dart';
+import '../view/setting/page.dart';
 
 part 'paths.dart';
 

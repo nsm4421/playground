@@ -89,6 +89,28 @@ for update to authenticated with check (auth.uid() = created_by);
 create policy "enable delete only own data" on diaries
 for delete to authenticated using (auth.uid() = created_by);
 
+
+------------------------------------------------------
+-- avatar bucket
+insert into storage.buckets (id, name)
+values ('avatar', 'avatar');
+
+create policy "permit select avatar for all" on storage.objects
+for select using (bucket_id = 'avatar');
+
+create policy "permit insert avatar for all" on storage.objects
+for insert with check (bucket_id = 'avatar');
+
+-- diary bucket
+insert into storage.buckets (id, name)
+values ('diary', 'diary');
+
+create policy "permit select diary for all" on storage.objects
+for select using (bucket_id = 'diary');
+
+create policy "permit insert for all" on storage.objects
+for insert with check (bucket_id = 'diary');
+
 ------------------------------------------------------
 
 -- on sign up
@@ -128,8 +150,8 @@ security definer set search_path = public
 as $$
     begin
     update public.accounts 
-    set username = new.raw_user_meta_data-->>'username', 
-        avatar_url = new.raw_user_meta_data-->>'avatar_url'
+    set username = new.raw_user_meta_data->>'username', 
+        avatar_url = new.raw_user_meta_data->>'avatar_url'
     where id = new.id;
     return new;
     end;

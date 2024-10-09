@@ -6,16 +6,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/util/util.dart';
 
-part 'select_avatar.widget.dart';
+part 'w_select_avatar.dart';
 
-part 'edit_text.widget.dart';
+part 'w_edit_text.dart';
 
-part 'page_not_found.screen.dart';
+part 's_page_not_found.dart';
 
-part 'text_form.widget.dart';
+part 'w_text_form.dart';
 
-part 'loading_overlay.screen.dart';
+part 's_loading_overlay.dart';
 
-part 'avatar.widget.dart';
-
-part 'expandable_text.widget.dart';
+part 'w_avatar.dart';
