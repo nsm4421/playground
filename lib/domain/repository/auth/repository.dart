@@ -19,6 +19,9 @@ abstract interface class AuthRepository {
 
   bool get isAuthorized;
 
+  Future<Either<ErrorResponse, PresenceEntity?>> editProfile(
+      {String? username, File? profileImage});
+
   Future<Either<ErrorResponse, PresenceEntity?>> signUpWithEmailAndPassword(
       {required String email,
       required String password,

@@ -33,6 +33,7 @@
 # Script
 
 ```
+-- create account table
 create table public.accounts (
     id uuid not null ,
     email text not null unique,
@@ -57,36 +58,7 @@ for update to authenticated with check (auth.uid() = id);
 create policy "enable delete only own data" on accounts
 for delete to authenticated using (auth.uid() = id);
 
-------------------------------------------------------
-
-create or replace function public.on_sign_up()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-    begin
-    insert into public.accounts (
-        id,
-        email, 
-        username, 
-        avatar_url
-    )
-    values (
-        new.id, 
-        new.email,
-        new.raw_user_meta_data->>'username', 
-        new.raw_user_meta_data->>'avatar_url'
-    );
-    return new;
-    end;
-$$;
-
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute procedure public.on_sign_up();
-
-------------------------------------------------------
-
+-- create diary
 create table public.diaries (
     id uuid not null default gen_random_uuid (),
     created_by uuid not null default auth.uid(),
@@ -119,6 +91,57 @@ for delete to authenticated using (auth.uid() = created_by);
 
 ------------------------------------------------------
 
+-- on sign up
+create or replace function public.on_sign_up()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+    begin
+    insert into public.accounts (
+        id,
+        email, 
+        username, 
+        avatar_url
+    )
+    values (
+        new.id, 
+        new.email,
+        new.raw_user_meta_data->>'username', 
+        new.raw_user_meta_data->>'avatar_url'
+    );
+    return new;
+    end;
+$$;
+
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute procedure public.on_sign_up();
+
+------------------------------------------------------
+
+-- on edit profile
+create or replace function public.on_edit_profile()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+    begin
+    update public.accounts 
+    set username = new.raw_user_meta_data-->>'username', 
+        avatar_url = new.raw_user_meta_data-->>'avatar_url'
+    where id = new.id;
+    return new;
+    end;
+$$;
+
+create trigger on_auth_edited
+after update on auth.users
+for each row execute procedure public.on_edit_profile();
+
+------------------------------------------------------
+
+-- on fetch diary
 create or replace function fetch_diaries
 (before_at timestamptz, take int)
 returns table(

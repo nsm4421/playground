@@ -17,6 +17,8 @@ abstract interface class AuthDataSource {
 
   bool get isAuthorized;
 
+  Future<AuthUserModel?> editProfile({String? username, String? avatarUrl});
+
   Future<AuthUserModel?> signUpWithEmailAndPassword(
       {required String email,
       required String password,
