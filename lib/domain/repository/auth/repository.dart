@@ -1,16 +1,11 @@
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
-import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:travel/core/util/util.dart';
-import 'package:travel/data/datasource/auth/datasource.dart';
-import 'package:travel/data/datasource/local/datasource.dart';
-import 'package:travel/data/datasource/storage/datasource.dart';
-import 'package:uuid/uuid.dart';
-
-import '../../../core/constant/constant.dart';
 import '../../../core/response/error_response.dart';
+import '../../../core/util/util.dart';
+import '../../../data/datasource/auth/datasource.dart';
+import '../../../data/datasource/local/datasource.dart';
+import '../../../data/datasource/storage/datasource.dart';
 import '../../entity/auth/presence.dart';
 
 part 'repository_impl.dart';
@@ -23,6 +18,9 @@ abstract interface class AuthRepository {
   PresenceEntity? get currentUser;
 
   bool get isAuthorized;
+
+  Future<Either<ErrorResponse, PresenceEntity?>> editProfile(
+      {String? username, File? profileImage});
 
   Future<Either<ErrorResponse, PresenceEntity?>> signUpWithEmailAndPassword(
       {required String email,

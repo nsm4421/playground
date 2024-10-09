@@ -15,6 +15,7 @@ dependencies:
   # 이미지 처리
   image_picker: ^1.1.2
   flutter_image_compress: ^2.3.0
+  cached_network_image: ^3.4.1
 
   # supabase
   supabase_flutter: ^2.6.0

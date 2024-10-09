@@ -30,6 +30,7 @@ class AuthenticationBloc
     on<SignUpWithEmailAndPasswordEvent>(_onSignUp);
     on<SignInWithEmailAndPasswordEvent>(_onSignIn);
     on<SignOutEvent>(_onSignOut);
+    on<EditProfileEvent>(_onEditProfile);
   }
 
   Stream<PresenceEntity?> get authStateStream =>
@@ -165,5 +166,32 @@ class AuthenticationBloc
           .copyWith(status: Status.error, errorMessage: '알 수 없는 오류가 발생했습니다')
           .copyWithCurrentUser(null));
     }
+  }
+
+  Future<void> _onEditProfile(
+      EditProfileEvent event, Emitter<AuthenticationState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+    // 유저명 검사
+    final isUsernameDuplicated = event.newUsername == null
+        ? false
+        : await _accountUseCase.isUsernameDuplicated(event.newUsername!);
+    if (isUsernameDuplicated) {
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'username is duplicated'));
+      return;
+    }
+    await _authUseCase
+        .edit(username: event.newUsername, profileImage: event.newProfileImage)
+        .then((res) => res.fold((l) {
+              customUtil.logger.d('프로필 업데이트 요청 실패');
+              emit(state.copyWith(
+                  status: Status.error,
+                  step: AuthenticationStep.signIn,
+                  errorMessage: l.message));
+            }, (r) {
+              emit(state
+                  .copyWith(status: Status.success)
+                  .copyWithCurrentUser(r ?? _authUseCase.currentUser.call()));
+            }));
   }
 }

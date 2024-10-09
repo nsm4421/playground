@@ -14,6 +14,13 @@ final class InitializeEvent extends AuthenticationEvent {
   InitializeEvent({this.step, this.status, this.presence, this.errorMessage});
 }
 
+final class EditProfileEvent extends AuthenticationEvent {
+  final File? newProfileImage;
+  final String? newUsername;
+
+  EditProfileEvent({required this.newProfileImage, required this.newUsername});
+}
+
 final class SignInWithEmailAndPasswordEvent extends AuthenticationEvent {
   final String email;
   final String password;

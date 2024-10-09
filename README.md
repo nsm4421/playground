@@ -33,6 +33,7 @@
 # Script
 
 ```
+-- create account table
 create table public.accounts (
     id uuid not null ,
     email text not null unique,
@@ -46,7 +47,7 @@ create table public.accounts (
 alter table public.accounts enable row level security;
 
 create policy "enable to select for all authenticated" 
-on accounts for select to authenticated using (true);
+on accounts for select using (true);
 
 create policy "enable insert only own data" on accounts
 for insert to authenticated with check (auth.uid() = id);
@@ -57,8 +58,62 @@ for update to authenticated with check (auth.uid() = id);
 create policy "enable delete only own data" on accounts
 for delete to authenticated using (auth.uid() = id);
 
+-- create diary
+create table public.diaries (
+    id uuid not null default gen_random_uuid (),
+    created_by uuid not null default auth.uid(),
+    images text[] DEFAULT '{}',
+    hashtags text[] DEFAULT '{}',
+    captions text[] DEFAULT '{}',
+    location text,
+    content text,
+    is_private bool DEFAULT true,
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone null,    
+    constraint diaries_pkey primary key (id),
+    constraint diaries_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.diaries enable row level security;
+
+create policy "enable to select for all authenticated" 
+on diaries for select to authenticated using (true);
+
+create policy "enable insert only own data" on diaries
+for insert to authenticated with check (auth.uid() = created_by);
+
+create policy "enable update only own data" on diaries
+for update to authenticated with check (auth.uid() = created_by);
+
+create policy "enable delete only own data" on diaries
+for delete to authenticated using (auth.uid() = created_by);
+
+
+------------------------------------------------------
+-- avatar bucket
+insert into storage.buckets (id, name)
+values ('avatar', 'avatar');
+
+create policy "permit select avatar for all" on storage.objects
+for select using (bucket_id = 'avatar');
+
+create policy "permit insert avatar for all" on storage.objects
+for insert with check (bucket_id = 'avatar');
+
+-- diary bucket
+insert into storage.buckets (id, name)
+values ('diary', 'diary');
+
+create policy "permit select diary for all" on storage.objects
+for select using (bucket_id = 'diary');
+
+create policy "permit insert for all" on storage.objects
+for insert with check (bucket_id = 'diary');
+
 ------------------------------------------------------
 
+-- on sign up
 create or replace function public.on_sign_up()
 returns trigger
 language plpgsql
@@ -87,31 +142,80 @@ for each row execute procedure public.on_sign_up();
 
 ------------------------------------------------------
 
-create table public.diaries (
-    id uuid not null default gen_random_uuid (),
-    created_by uuid not null default auth.uid(),
-    images text[] DEFAULT '{}',
-    hashtags text[] DEFAULT '{}',
-    captions text[] DEFAULT '{}',
-    is_private bool DEFAULT true,
-    created_at timestamp with time zone not null default now(),
-    updated_at timestamp with time zone null,    
-    constraint diaries_pkey primary key (id),
-    constraint diaries_fkey foreign key (created_by)
-    references accounts (id) on update cascade on delete cascade
-) tablespace pg_default;
+-- on edit profile
+create or replace function public.on_edit_profile()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+    begin
+    update public.accounts 
+    set username = new.raw_user_meta_data->>'username', 
+        avatar_url = new.raw_user_meta_data->>'avatar_url'
+    where id = new.id;
+    return new;
+    end;
+$$;
 
-alter table public.diaries enable row level security;
+create trigger on_auth_edited
+after update on auth.users
+for each row execute procedure public.on_edit_profile();
 
-create policy "enable to select for all authenticated" 
-on diaries for select to authenticated using (true);
+------------------------------------------------------
 
-create policy "enable insert only own data" on diaries
-for insert to authenticated with check (auth.uid() = created_by);
-
-create policy "enable update only own data" on diaries
-for update to authenticated with check (auth.uid() = created_by);
-
-create policy "enable delete only own data" on diaries
-for delete to authenticated using (auth.uid() = created_by);
+-- on fetch diary
+create or replace function fetch_diaries
+(before_at timestamptz, take int)
+returns table(
+    id uuid, 
+    images text[],
+    hashtags text[],
+    captions text[],
+    location text,
+    content text,
+    is_private bool,
+    created_at timestamptz,
+    updated_at timestamptz,
+    created_by uuid,
+    username text,
+    avatar_url text
+)
+language sql
+as $$
+    select
+      A.id,
+      A.images,
+      A.hashtags,
+      A.captions,
+      A.location,
+      A.content,
+      A.is_private,
+      A.created_at,
+      A.updated_at,
+      A.created_by author_uid,
+      B.username author_username,
+      B.avatar_url author_avatar_url
+    from (
+        select
+          id,
+          images,
+          hashtags,
+          captions,
+          location,
+          content,
+          is_private,
+          created_by,
+          created_at,
+          updated_at
+        from
+            public.diaries
+        where
+            created_at < before_at
+            and ((is_private = false) or (created_by = auth.uid()))
+        order by created_at desc
+        limit(take)
+        ) A
+    left join public.accounts B on A.created_by = B.id
+;
+$$
 ```

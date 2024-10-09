@@ -35,6 +35,30 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<ErrorResponse, PresenceEntity?>> editProfile(
+      {String? username, File? profileImage}) async {
+    try {
+      if (username == null && profileImage == null) {
+        throw Exception('nothing to update');
+      }
+      PresenceEntity? res;
+      res = await _authDataSource
+          .editProfile(username: username)
+          .then(PresenceEntity.from);
+      if (profileImage != null) {
+        res = await _authDataSource
+            .editProfile(
+                avatarUrl: await _uploadImageAndReturnPublicUrl(profileImage))
+            .then(PresenceEntity.from);
+      }
+      return Right(res);
+    } on Exception catch (error) {
+      customUtil.logger.e(error);
+      return Left(ErrorResponse.from(error));
+    }
+  }
+
+  @override
   Future<Either<ErrorResponse, PresenceEntity?>> signInWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -57,8 +81,7 @@ class AuthRepositoryImpl implements AuthRepository {
       required String username,
       required File profileImage}) async {
     try {
-      final avatarUrl = await _storageDataSource.uploadImageAndReturnPublicUrl(
-          file: profileImage, bucketName: 'avatar');
+      final avatarUrl = await _uploadImageAndReturnPublicUrl(profileImage);
       return await _authDataSource
           .signUpWithEmailAndPassword(
               email: email,
@@ -83,5 +106,10 @@ class AuthRepositoryImpl implements AuthRepository {
       customUtil.logger.e(error);
       return Left(ErrorResponse.from(error));
     }
+  }
+
+  Future<String> _uploadImageAndReturnPublicUrl(File profileImage) async {
+    return await _storageDataSource.uploadImageAndReturnPublicUrl(
+        file: profileImage, bucketName: 'avatar');
   }
 }

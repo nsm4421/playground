@@ -11,14 +11,17 @@ class RepositoryModule {
 
   RepositoryModule(this._dataSourceModule);
 
+  @lazySingleton
   AuthRepository get auth => AuthRepositoryImpl(
       authDataSource: _dataSourceModule.auth,
       storageDataSource: _dataSourceModule.storage,
       localDataSource: _dataSourceModule.local);
 
+  @lazySingleton
   AccountRepository get account =>
       AccountRepositoryImpl(_dataSourceModule.account);
 
+  @lazySingleton
   DiaryRepository get diary => DiaryRepositoryImpl(
       diaryDataSource: _dataSourceModule.diary,
       storageDataSource: _dataSourceModule.storage);

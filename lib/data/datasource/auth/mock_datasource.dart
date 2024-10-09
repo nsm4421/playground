@@ -52,4 +52,12 @@ class MockAuthDataSource implements AuthDataSource {
     _mockUser = _authUser;
     return _mockUser;
   }
+
+  @override
+  Future<AuthUserModel?> editProfile(
+      {String? username, String? avatarUrl}) async {
+    return _mockUser?.copyWith(
+        username: username ?? _mockUser!.username,
+        avatar_url: avatarUrl ?? _mockUser!.avatar_url);
+  }
 }

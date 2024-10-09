@@ -11,9 +11,12 @@ class UseCaseModule {
 
   UseCaseModule(this._repositoryModule);
 
+  @lazySingleton
   AuthUseCase get auth => AuthUseCase(_repositoryModule.auth);
 
+  @lazySingleton
   AccountUseCase get account => AccountUseCase(_repositoryModule.account);
 
+  @lazySingleton
   DiaryUseCase get diary => DiaryUseCase(_repositoryModule.diary);
 }
