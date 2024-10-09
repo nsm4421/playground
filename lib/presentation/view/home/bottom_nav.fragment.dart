@@ -25,6 +25,7 @@ class _BottomNavigationFragmentState extends State<BottomNavigationFragment> {
     return BottomNavigationBar(
         elevation: 0,
         selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.tertiary,
         showSelectedLabels: true,
         showUnselectedLabels: false,
         currentIndex: widget._navigationShell.currentIndex,

@@ -15,10 +15,10 @@ final class InitializeEvent extends AuthenticationEvent {
 }
 
 final class EditProfileEvent extends AuthenticationEvent {
-  final File? profileImage;
-  final String? username;
+  final File? newProfileImage;
+  final String? newUsername;
 
-  EditProfileEvent({required this.profileImage, required this.username});
+  EditProfileEvent({required this.newProfileImage, required this.newUsername});
 }
 
 final class SignInWithEmailAndPasswordEvent extends AuthenticationEvent {

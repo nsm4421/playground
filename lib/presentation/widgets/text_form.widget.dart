@@ -12,8 +12,10 @@ class CustomTextFieldWidget extends StatefulWidget {
     this.suffixIcon,
     this.hintText,
     this.helperText,
+    this.readOnly = false,
     this.obscureText = false,
     this.isLoading = false,
+    this.onTap,
     this.onTapSuffixIcon,
     this.onFocusLeave,
     this.validator,
@@ -28,8 +30,10 @@ class CustomTextFieldWidget extends StatefulWidget {
   final IconData? suffixIcon;
   final String? hintText;
   final String? helperText;
+  final bool readOnly;
   final bool obscureText;
   final bool isLoading;
+  final void Function()? onTap;
   final void Function()? onTapSuffixIcon;
   final void Function()? onFocusLeave;
   final String? Function(String? text)? validator;
@@ -77,6 +81,8 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
       minLines: widget.minLine,
       maxLines: widget.maxLine,
       obscureText: widget.obscureText,
+      readOnly: widget.readOnly,
+      onTap: widget.onTap,
       decoration: InputDecoration(
           prefixIcon:
               widget.prefixIcon == null ? null : Icon(widget.prefixIcon),

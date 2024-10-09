@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:travel/core/util/util.dart';
-import 'package:travel/presentation/bloc/auth/authentication.bloc.dart';
-import 'package:travel/presentation/bloc/bloc_module.dart';
-import 'package:travel/presentation/view/auth/index.page.dart';
-import 'package:travel/presentation/view/image_to_text/index.page.dart';
-import 'package:travel/presentation/widgets/widgets.dart';
 
 import '../../core/constant/constant.dart';
+import '../../core/util/util.dart';
+import '../bloc/auth/authentication.bloc.dart';
+import '../bloc/bloc_module.dart';
+import '../view/auth/index.page.dart';
 import '../view/diary/display/index.page.dart';
 import '../view/diary/edit/index.page.dart';
 import '../view/home/index.page.dart';
+import '../view/image_to_text/index.page.dart';
+import '../view/setting/edit/index.page.dart';
+import '../view/setting/index.page.dart';
 
 part 'paths.dart';
 
@@ -38,6 +39,9 @@ class CustomRouter {
       routes: [
         _authRouter,
         _homeRouter,
+        GoRoute(
+            path: Routes.editProfile.path,
+            builder: (context, state) => const EditProfilePage())
       ],
       redirect: _redirect,
       refreshListenable: _authStateNotifier);
@@ -60,6 +64,8 @@ class CustomRouter {
                           const NoTransitionPage(child: DisplayDiariesPage()),
                         HomeBottomNavItems.writeDiary =>
                           const NoTransitionPage(child: EditDiaryPage()),
+                        HomeBottomNavItems.setting =>
+                          const NoTransitionPage(child: SettingPage()),
                         HomeBottomNavItems.imageToText =>
                           const NoTransitionPage(child: ImageToTextPage()),
                         (_) => const NoTransitionPage(

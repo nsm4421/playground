@@ -21,6 +21,26 @@ class CircularAvatarWidget extends StatelessWidget {
   }
 }
 
+class CircularAvatarAssetWidget extends StatelessWidget {
+  const CircularAvatarAssetWidget(this.image,
+      {super.key, this.fit = BoxFit.cover, this.size = 60});
+
+  final File image;
+  final double size;
+  final BoxFit fit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.tertiaryContainer,
+            shape: BoxShape.circle,
+            image: DecorationImage(fit: fit, image: FileImage(image))));
+  }
+}
+
 class RoundedAvatarWidget extends StatelessWidget {
   const RoundedAvatarWidget(this.avatarUrl,
       {super.key,

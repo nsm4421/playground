@@ -170,20 +170,18 @@ class AuthenticationBloc
 
   Future<void> _onEditProfile(
       EditProfileEvent event, Emitter<AuthenticationState> emit) async {
-    customUtil.logger.d(
-        '프로필 업데이트 요청|username:${event.username ?? ''}|profile-image-path:${event.profileImage?.path ?? ''}');
     emit(state.copyWith(status: Status.loading));
     // 유저명 검사
-    final isUsernameDuplicated = event.username == null
+    final isUsernameDuplicated = event.newUsername == null
         ? false
-        : await _accountUseCase.isUsernameDuplicated(event.username!);
+        : await _accountUseCase.isUsernameDuplicated(event.newUsername!);
     if (isUsernameDuplicated) {
       emit(state.copyWith(
           status: Status.error, errorMessage: 'username is duplicated'));
       return;
     }
     await _authUseCase
-        .edit(username: event.username, profileImage: event.profileImage)
+        .edit(username: event.newUsername, profileImage: event.newProfileImage)
         .then((res) => res.fold((l) {
               customUtil.logger.d('프로필 업데이트 요청 실패');
               emit(state.copyWith(

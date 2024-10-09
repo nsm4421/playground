@@ -11,6 +11,11 @@ enum HomeBottomNavItems {
       iconData: Icons.edit_note_outlined,
       activeIconData: Icons.edit_note,
       route: Routes.editDiary),
+  setting(
+      label: 'setting',
+      iconData: Icons.settings_outlined,
+      activeIconData: Icons.settings,
+      route: Routes.setting),
   imageToText(
       label: 'translate',
       iconData: Icons.g_translate_outlined,
