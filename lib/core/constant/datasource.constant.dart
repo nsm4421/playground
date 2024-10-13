@@ -3,6 +3,7 @@ part of 'constant.dart';
 enum Tables {
   accounts('accounts'),
   diaries('diaries'),
+  meeting('meetings'),
   reels('reels'),
   openChatRooms('open_chat_rooms'),
   openChatMessages('open_chat_messages'),
@@ -18,6 +19,7 @@ enum Tables {
 enum Buckets {
   avatar('avatar'),
   diary('diary'),
+  meeting('meeting'),
   reels('reels'),
   openChat('open_chat'),
   privateChat('private_chat'),
@@ -37,6 +39,7 @@ enum RpcFns {
   fetchReels('fetch_reels'),
   fetchOpenChats('fetch_open_chats'),
   fetchOpenChatMessages('fetch_open_messages'),
+  fetchMeetings('fetch_meetings'),
   ;
 
   final String name;

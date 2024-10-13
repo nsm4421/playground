@@ -9,6 +9,7 @@ import 'chat/open_chat/datasource.dart';
 import 'chat/private_chat/datasource.dart';
 import 'diary/datsource.dart';
 import 'local/datasource.dart';
+import 'meeting/datasource.dart';
 import 'reels/datasource.dart';
 import 'storage/datasource.dart';
 
@@ -48,6 +49,9 @@ class DataSourceModule {
   @lazySingleton
   PrivateChatMessageDataSource get privateChatMessage =>
       PrivateChatMessageDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  MeetingDataSource get meeting => MeetingDataSourceImpl(_supabaseClient);
 
   @lazySingleton
   ReelsDataSource get reels => ReelsDataSourceImpl(_supabaseClient);

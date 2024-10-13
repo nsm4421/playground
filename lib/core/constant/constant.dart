@@ -8,4 +8,4 @@ part 'bottom_nav.constant.dart';
 
 part 'datasource.constant.dart';
 
-part 'type.constant.dart';
+part 'meeting.constant.dart';
