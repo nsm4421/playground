@@ -20,6 +20,7 @@ supabase/
 devtools_options.yaml
 .env
 *.gen.dart
+assets/
 
 # IntelliJ related
 *.iml

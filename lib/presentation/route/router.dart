@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:travel/presentation/view/chat/page.dart';
 
 import '../../core/constant/constant.dart';
 import '../../core/util/util.dart';
@@ -11,8 +12,6 @@ import '../view/auth/page.dart';
 import '../view/diary/display/page.dart';
 import '../view/diary/edit/page.dart';
 import '../view/home/page.dart';
-import '../view/image_to_text/page.dart';
-import '../view/reels/page.dart';
 import '../view/search/page.dart';
 import '../view/setting/edit/page.dart';
 import '../view/setting/page.dart';
@@ -69,8 +68,8 @@ class CustomRouter {
                           const NoTransitionPage(child: EditDiaryPage()),
                         HomeBottomNavItems.search =>
                           const NoTransitionPage(child: SearchPage()),
-                        HomeBottomNavItems.reels =>
-                          const NoTransitionPage(child: ReelsPage()),
+                        HomeBottomNavItems.chat =>
+                          const NoTransitionPage(child: ChatPage()),
                         HomeBottomNavItems.setting =>
                           const NoTransitionPage(child: SettingPage()),
                         (_) => const NoTransitionPage(

@@ -3,27 +3,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../core/util/util.dart';
 
-part 'edit_diary.freezed.dart';
+part 'edit_reels.freezed.dart';
 
-part 'edit_diary.g.dart';
+part 'edit_reels.g.dart';
 
 @freezed
-class EditDiaryModel with _$EditDiaryModel {
-  const factory EditDiaryModel({
+class EditReelsModel with _$EditReelsModel {
+  const factory EditReelsModel({
     @Default('') String id,
-    @Default('') String content,
+    @Default('') String video,
+    @Default('') String title,
+    @Default('') String caption,
     String? location,
-    @Default(<String>[]) List<String> hashtags,
-    @Default(<String>[]) List<String> images,
-    @Default(<String>[]) List<String> captions,
     @Default(true) bool is_private,
     @Default('') String created_at,
     @Default('') String updated_at,
     @Default('') String created_by,
-  }) = _EditDiaryModel;
+  }) = _EditReelsModel;
 
-  factory EditDiaryModel.fromJson(Map<String, dynamic> json) =>
-      _$EditDiaryModelFromJson(json);
+  factory EditReelsModel.fromJson(Map<String, dynamic> json) =>
+      _$EditReelsModelFromJson(json);
 
   @override
   Map<String, dynamic> toJson() {
