@@ -1,9 +1,9 @@
 import 'package:injectable/injectable.dart';
-import 'package:travel/domain/repository/repository_module.dart';
-import 'package:travel/domain/usecase/auth/usecase.dart';
-import 'package:travel/domain/usecase/diary/usecase.dart';
 
+import '../repository/repository_module.dart';
 import 'account/usecase.dart';
+import 'auth/usecase.dart';
+import 'diary/usecase.dart';
 
 @lazySingleton
 class UseCaseModule {

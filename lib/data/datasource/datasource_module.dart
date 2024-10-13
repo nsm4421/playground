@@ -1,12 +1,16 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:travel/data/datasource/account/datasource.dart';
-import 'package:travel/data/datasource/auth/datasource.dart';
-import 'package:travel/data/datasource/diary/datsource.dart';
-import 'package:travel/data/datasource/storage/datasource.dart';
 
 import '../../core/env/env.dart';
+import 'account/datasource.dart';
+import 'auth/datasource.dart';
+import 'channel/datasource.dart';
+import 'chat/open_chat/datasource.dart';
+import 'chat/private_chat/datasource.dart';
+import 'diary/datsource.dart';
 import 'local/datasource.dart';
+import 'reels/datasource.dart';
+import 'storage/datasource.dart';
 
 @lazySingleton
 class DataSourceModule {
@@ -30,5 +34,27 @@ class DataSourceModule {
       : DiaryDataSourceImpl(_supabaseClient);
 
   @lazySingleton
+  OpenChatRoomDataSource get openChat =>
+      OpenChatRoomDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  OpenChatMessageDataSource get openChatMessage =>
+      OpenChatMessageDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  PrivateChatRoomDataSource get privateChat =>
+      PrivateChatRoomDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  PrivateChatMessageDataSource get privateChatMessage =>
+      PrivateChatMessageDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  ReelsDataSource get reels => ReelsDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
   StorageDataSource get storage => StorageDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  ChannelDataSource get channel => ChannelDataSourceImpl(_supabaseClient);
 }
