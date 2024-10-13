@@ -16,11 +16,6 @@ enum HomeBottomNavItems {
       iconData: Icons.edit_note_outlined,
       activeIconData: Icons.edit_note,
       route: Routes.editDiary),
-  reels(
-      label: 'REELS',
-      iconData: Icons.play_circle_outline_outlined,
-      activeIconData: Icons.play_circle,
-      route: Routes.reels),
   setting(
       label: 'SETTING',
       iconData: Icons.settings_outlined,

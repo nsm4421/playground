@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:travel/presentation/view/chat/page.dart';
 
 import '../../core/constant/constant.dart';
 import '../../core/util/util.dart';
@@ -68,8 +67,6 @@ class CustomRouter {
                           const NoTransitionPage(child: EditDiaryPage()),
                         HomeBottomNavItems.search =>
                           const NoTransitionPage(child: SearchPage()),
-                        HomeBottomNavItems.chat =>
-                          const NoTransitionPage(child: ChatPage()),
                         HomeBottomNavItems.setting =>
                           const NoTransitionPage(child: SettingPage()),
                         (_) => const NoTransitionPage(
