@@ -89,6 +89,127 @@ for update to authenticated with check (auth.uid() = created_by);
 create policy "enable delete only own data" on diaries
 for delete to authenticated using (auth.uid() = created_by);
 
+-- create open chat
+create table public.open_chats (
+    id uuid not null default gen_random_uuid(),
+    title text,
+    hashtags text[] DEFAULT '{}',
+    last_message_content text,
+    last_message_created_at timestamp with time zone not null default now(),
+    created_at timestamp with time zone not null default now(),
+    created_by uuid not null default auth.uid(),
+    constraint open_chat_pkey primary key (id),
+    constraint open_chat_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.open_chats enable row level security;
+
+create policy "enable to select for all authenticated" 
+on open_chats for select to authenticated using (true);
+
+create policy "enable insert only own data" on open_chats
+for insert to authenticated with check (true);
+
+create policy "enable update only own data" on open_chats
+for update to authenticated with check (true);
+
+create policy "enable delete only own data" on open_chats
+for delete to authenticated using (auth.uid() = created_by);
+
+-- create private chat
+create table public.private_chats (
+    id uuid not null default gen_random_uuid(),
+    uid uuid not null,
+    opponent_uid uuid not null,
+    last_message_content text,
+    last_message_created_at timestamp with time zone not null default now(),
+    created_at timestamp with time zone not null default now(),
+    constraint private_chat_pkey primary key (id),
+    constraint private_chat_fkey1 foreign key (uid)
+    references accounts (id) on update cascade on delete cascade,
+    constraint private_chat_fkey2 foreign key (opponent_uid)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.private_chats enable row level security;
+
+create policy "enable to select for all authenticated" 
+on private_chats for select to authenticated using 
+((auth.uid()=uid) or (auth.uid()=opponent_uid));
+
+create policy "enable insert only own data" on private_chats
+for insert to authenticated with check
+((auth.uid()=uid) or (auth.uid()=opponent_uid));
+
+create policy "enable update only own data" on private_chats
+for update to authenticated with check
+((auth.uid()=uid) or (auth.uid()=opponent_uid));
+
+create policy "enable delete only own data" on private_chats
+for delete to authenticated using
+((auth.uid()=uid) or (auth.uid()=opponent_uid));
+
+-- create open chat message
+create table public.open_chat_messages (
+    id uuid not null default gen_random_uuid(),
+    chat_id uuid not null,
+    content text,
+    media text,
+    last_message_created_at timestamp with time zone not null default now(),
+    created_at timestamp with time zone not null default now(),
+    created_by uuid not null default auth.uid(),
+    constraint open_chat_message_pkey primary key (id),
+    constraint open_chat_message_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.open_chat_messages enable row level security;
+
+create policy "enable to select for all authenticated" 
+on open_chat_messages for select to authenticated using (true);
+
+create policy "enable insert only own data" on open_chat_messages
+for insert to authenticated with check (true);
+
+create policy "enable update only own data" on open_chat_messages
+for update to authenticated with check (auth.uid()=created_by);
+
+-- create private chat message
+create table public.private_chat_messages (
+    id uuid not null default gen_random_uuid(),
+    chat_id uuid not null,
+    sender uuid not null,
+    receiver uuid not null,
+    content text,
+    media text,
+    created_at timestamp with time zone not null default now(),
+    removed_at timestamp with time zone,
+    created_by uuid not null default auth.uid(),
+    constraint private_chat_messages_pkey primary key (id),
+    constraint private_chat_messages_fkey1 foreign key (sender)
+    references accounts (id) on update cascade on delete cascade,
+    constraint private_chat_messages_fkey2 foreign key (receiver)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.private_chat_messages enable row level security;
+
+create policy "enable to select for all authenticated" 
+on private_chat_messages for select to authenticated using 
+((auth.uid()=sender) or (auth.uid()=receiver));
+
+create policy "enable insert only own data" on private_chat_messages
+for insert to authenticated with check
+((auth.uid()=sender) or (auth.uid()=receiver));
+
+create policy "enable update only own data" on private_chat_messages
+for update to authenticated with check
+((auth.uid()=sender) or (auth.uid()=receiver) and (auth.uid() = created_by));
+
+create policy "enable delete only own data" on private_chat_messages
+for delete to authenticated using
+((auth.uid()=sender) or (auth.uid()=receiver) and (auth.uid() = created_by));
 
 ------------------------------------------------------
 -- avatar bucket
