@@ -34,6 +34,10 @@ enum Boxes {
   credential;
 }
 
+enum Channels {
+  meeting;
+}
+
 enum RpcFns {
   fetchDiaries('fetch_diaries'),
   fetchReels('fetch_reels'),

@@ -18,4 +18,23 @@ class ChannelDataSourceImpl implements ChannelDataSource {
             table: table.name,
             callback: onInsert);
   }
+
+  @override
+  RealtimeChannel getMeetingChannel(
+      {required void Function(PostgresChangePayload p) onInsert,
+      required void Function(PostgresChangePayload p) onDelete}) {
+    final key = Channels.meeting.name;
+    return _supabaseClient
+        .channel(key, opts: RealtimeChannelConfig(key: key))
+        .onPostgresChanges(
+            event: PostgresChangeEvent.insert,
+            schema: 'public',
+            table: Tables.meeting.name,
+            callback: onInsert)
+        .onPostgresChanges(
+            event: PostgresChangeEvent.delete,
+            schema: 'public',
+            table: Tables.meeting.name,
+            callback: onDelete);
+  }
 }

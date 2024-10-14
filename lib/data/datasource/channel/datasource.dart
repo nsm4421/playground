@@ -9,4 +9,8 @@ abstract interface class ChannelDataSource {
       {required String key,
       required Tables table,
       required void Function(PostgresChangePayload) onInsert});
+
+  RealtimeChannel getMeetingChannel(
+      {required void Function(PostgresChangePayload p) onInsert,
+      required void Function(PostgresChangePayload p) onDelete});
 }

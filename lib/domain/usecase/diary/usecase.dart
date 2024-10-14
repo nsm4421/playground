@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
-import 'package:injectable/injectable.dart';
 import 'package:travel/core/response/error_response.dart';
 import 'package:travel/domain/entity/diary/diary.dart';
 import 'package:travel/domain/repository/diary/repository.dart';

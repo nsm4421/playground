@@ -3,12 +3,24 @@ part of 'repository.dart';
 class MeetingRepositoryImpl implements MeetingRepository {
   final MeetingDataSource _meetingDataSource;
   final StorageDataSource _storageDataSource;
+  final ChannelDataSource _channelDataSource;
 
   MeetingRepositoryImpl(
       {required MeetingDataSource meetingDataSource,
-      required StorageDataSource storageDataSource})
+      required StorageDataSource storageDataSource,
+      required ChannelDataSource channelDataSource})
       : _meetingDataSource = meetingDataSource,
-        _storageDataSource = storageDataSource;
+        _storageDataSource = storageDataSource,
+        _channelDataSource = channelDataSource;
+
+  @override
+  RealtimeChannel getMeetingChannel(
+      {required void Function(Map<String, dynamic> newRecord) onInsert,
+      required void Function(Map<String, dynamic> oldRecord) onDelete}) {
+    return _channelDataSource.getMeetingChannel(
+        onInsert: (p) => onInsert(p.newRecord),
+        onDelete: (p) => onDelete(p.oldRecord));
+  }
 
   @override
   Future<Either<ErrorResponse, void>> edit(
@@ -67,11 +79,11 @@ class MeetingRepositoryImpl implements MeetingRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, Iterable<MeetingEntity>>> fetch(String beforeAt,
+  Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(DateTime beforeAt,
       {int take = 20}) async {
     try {
       return await _meetingDataSource
-          .fetch(beforeAt, take: take)
+          .fetch(beforeAt.toUtc().toIso8601String(), take: take)
           .then((res) => res.map(MeetingEntity.from).toList())
           .then(Right.new);
     } on Exception catch (error) {

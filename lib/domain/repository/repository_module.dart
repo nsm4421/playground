@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/repository/meeting/repository.dart';
 
 import '../../data/datasource/datasource_module.dart';
 import 'account/repository.dart';
@@ -39,4 +40,10 @@ class RepositoryModule {
   DiaryRepository get diary => DiaryRepositoryImpl(
       diaryDataSource: _dataSourceModule.diary,
       storageDataSource: _dataSourceModule.storage);
+
+  @lazySingleton
+  MeetingRepository get meeting => MeetingRepositoryImpl(
+      meetingDataSource: _dataSourceModule.meeting,
+      storageDataSource: _dataSourceModule.storage,
+      channelDataSource: _dataSourceModule.channel);
 }

@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constant/constant.dart';
 import '../../../core/response/error_response.dart';
 import '../../../core/util/util.dart';
+import '../../../data/datasource/channel/datasource.dart';
 import '../../../data/datasource/meeting/datasource.dart';
 import '../../../data/datasource/storage/datasource.dart';
 import '../../../data/model/meeting/edit_meeting.dart';
@@ -13,7 +15,11 @@ import '../../entity/meeting/meeting.dart';
 part 'repository_impl.dart';
 
 abstract interface class MeetingRepository {
-  Future<Either<ErrorResponse, Iterable<MeetingEntity>>> fetch(String beforeAt,
+  RealtimeChannel getMeetingChannel(
+      {required void Function(Map<String, dynamic> newRecord) onInsert,
+      required void Function(Map<String, dynamic> oldRecord) onDelete});
+
+  Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(DateTime beforeAt,
       {int take = 20});
 
   // create -> id = null  /  update = false
