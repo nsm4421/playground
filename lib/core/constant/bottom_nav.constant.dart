@@ -11,6 +11,11 @@ enum HomeBottomNavItems {
       iconData: Icons.search_outlined,
       activeIconData: Icons.search,
       route: Routes.search),
+  meeting(
+      label: 'MEETING',
+      iconData: Icons.airplane_ticket_outlined,
+      activeIconData: Icons.airplane_ticket,
+      route: Routes.meeting),
   writeDiary(
       label: 'ADD',
       iconData: Icons.edit_note_outlined,

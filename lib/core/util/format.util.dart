@@ -1,6 +1,6 @@
 part of 'util.dart';
 
-mixin class CustomTimeUtil {
+mixin class CustomFormatUtil {
   String get now => DateTime.now().toUtc().toIso8601String();
 
   bool validateEmail(String text) {

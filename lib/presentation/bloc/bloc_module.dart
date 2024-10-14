@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/presentation/bloc/meeting/create_meeting.cubit.dart';
 
 import '../../domain/usecase/usecase_module.dart';
 import 'auth/authentication.bloc.dart';
@@ -25,4 +26,7 @@ class BlocModule {
 
   @lazySingleton
   ImageToTextBloc get image2Text => ImageToTextBloc();
+
+  @lazySingleton
+  CreateMeetingCubit get createMeeting => CreateMeetingCubit();
 }

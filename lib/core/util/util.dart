@@ -18,7 +18,7 @@ part 'media.util.dart';
 part 'snack_bar.util.dart';
 
 class CustomUtil
-    with CustomMediaUtil, CustomLoggerUtil, CustomTimeUtil, CustomSnackBarUtil {}
+    with CustomMediaUtil, CustomLoggerUtil, CustomFormatUtil, CustomSnackBarUtil {}
 
 @lazySingleton
 CustomUtil get customUtil => CustomUtil();

@@ -11,6 +11,8 @@ import '../view/auth/page.dart';
 import '../view/diary/display/page.dart';
 import '../view/diary/edit/page.dart';
 import '../view/home/page.dart';
+import '../view/meeting/create/page.dart';
+import '../view/meeting/page.dart';
 import '../view/search/page.dart';
 import '../view/setting/edit/page.dart';
 import '../view/setting/page.dart';
@@ -41,6 +43,9 @@ class CustomRouter {
         _authRouter,
         _homeRouter,
         GoRoute(
+            path: Routes.createMeeting.path,
+            builder: (context, state) => const CreateMeetingPage()),
+        GoRoute(
             path: Routes.editProfile.path,
             builder: (context, state) => const EditProfilePage()),
       ],
@@ -65,6 +70,8 @@ class CustomRouter {
                           const NoTransitionPage(child: DisplayDiariesPage()),
                         HomeBottomNavItems.writeDiary =>
                           const NoTransitionPage(child: EditDiaryPage()),
+                        HomeBottomNavItems.meeting =>
+                          const NoTransitionPage(child: MeetingPage()),
                         HomeBottomNavItems.search =>
                           const NoTransitionPage(child: SearchPage()),
                         HomeBottomNavItems.setting =>
