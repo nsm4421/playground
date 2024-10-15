@@ -23,10 +23,7 @@ class _SelectCountryFragmentState extends State<SelectCountryFragment> {
   }
 
   _handleOnSelect(Country country) {
-    context.read<CreateMeetingCubit>().updateState(context
-        .read<CreateMeetingCubit>()
-        .state
-        .copyWith(country: country.name));
+    context.read<CreateMeetingCubit>().setCountry(country.name);
     setState(() {
       _countryTec.text =
           '${country.flagEmoji} ${(country.nameLocalized ?? country.name)}';
