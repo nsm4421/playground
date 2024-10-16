@@ -1,27 +1,40 @@
-import 'dart:io';
+part of 'create_meeting.cubit.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+class CreateMeetingState {
+  final Status status;
+  final String country;
+  late final DateTime startDate;
+  late final DateTime endDate;
+  final bool isDateSelected;
+  final int headCount;
+  final TravelPeopleSexType sex;
+  final TravelThemeType theme;
+  final int minCost;
+  final int maxCost;
+  final String title;
+  final String content;
+  late final List<String> hashtags;
+  final File? thumbnail;
+  final String errorMessage;
 
-import '../../../core/constant/constant.dart';
-
-part 'create_meeting.state.freezed.dart';
-
-@freezed
-class CreateMeetingState with _$CreateMeetingState {
-  const factory CreateMeetingState({
-    @Default(Status.initial) Status status,
-    @Default('') String country,
-    DateTimeRange? dateRange,
-    @Default(2) int headCount,
-    @Default(TravelPeopleSexType.all) TravelPeopleSexType sex,
-    @Default(TravelThemeType.all) TravelThemeType theme,
-    @Default(10) int minCost,
-    @Default(500) int maxCost,
-    @Default('') String title,
-    @Default('') String content,
-    @Default(<String>[]) List<String> hashtags,
-    File? thumbnail,
-  }) = _CreateMeetingState;
+  CreateMeetingState(
+      {this.status = Status.initial,
+      this.country = '',
+      DateTime? startDate,
+      DateTime? endDate,
+      this.isDateSelected = false,
+      this.headCount = 2,
+      this.sex = TravelPeopleSexType.all,
+      this.theme = TravelThemeType.all,
+      this.minCost = 10,
+      this.maxCost = 500,
+      this.title = '',
+      this.content = '',
+      List<String>? hashtags,
+      this.thumbnail,
+      this.errorMessage = ''}) {
+    this.startDate = startDate ?? DateTime.now();
+    this.endDate = endDate ?? DateTime.now();
+    this.hashtags = hashtags ?? [];
+  }
 }

@@ -8,32 +8,22 @@ class SelectDateFragment extends StatefulWidget {
 }
 
 class _SelectDateFragmentState extends State<SelectDateFragment> {
-  late DateTimeRange _dateTimeRange;
-  bool _isSelected = false;
   final DateTime _today = DateTime.now();
-  final _firstDate = DateTime(2000);
+  final _firstDate = DateTime.now();
   final _lastDate = DateTime(2100);
-
-  @override
-  void initState() {
-    super.initState();
-    _dateTimeRange = context.read<CreateMeetingCubit>().state.dateRange ??
-        DateTimeRange(start: _today, end: _today);
-  }
 
   _handleSelectDate() async {
     await showDateRangePicker(
             context: context,
             firstDate: _firstDate,
             lastDate: DateTime(2100),
-            initialDateRange: _dateTimeRange)
+            initialDateRange: DateTimeRange(
+                start: context.read<CreateMeetingCubit>().state.startDate,
+                end: context.read<CreateMeetingCubit>().state.endDate))
         .then((res) {
       if (res != null) {
-        context.read<CreateMeetingCubit>().setDateRange(res);
-        setState(() {
-          _isSelected = true;
-          _dateTimeRange = res;
-        });
+        context.read<CreateMeetingCubit>().updateState(
+            isDateSelected: true, startDate: res.start, endDate: res.end);
       }
     });
   }
@@ -42,45 +32,48 @@ class _SelectDateFragmentState extends State<SelectDateFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(children: [
-        const Icon(Icons.calendar_today),
-        const SizedBox(width: 12),
-        Text('Date',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold))
-      ]),
-      GestureDetector(
-        onTap: _handleSelectDate,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          child: Text(
-              _isSelected
-                  ? '${_formatDt(_dateTimeRange.start)} ~ ${_formatDt(_dateTimeRange.end)}'
-                      ' (${_dateTimeRange.end.difference(_dateTimeRange.start).inDays} days)'
-                  : 'need to select date',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.secondary)),
+    return BlocBuilder<CreateMeetingCubit, CreateMeetingState>(
+        builder: (context, state) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          const Icon(Icons.calendar_today),
+          const SizedBox(width: 12),
+          Text('Date',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold))
+        ]),
+        GestureDetector(
+          onTap: _handleSelectDate,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            child: Text(
+                state.isDateSelected
+                    ? '${_formatDt(state.startDate)} ~ ${_formatDt(state.endDate)}'
+                        ' (${state.endDate.difference(state.startDate).inDays} days)'
+                    : 'need to select date',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.secondary)),
+          ),
         ),
-      ),
-      TableCalendar(
-          focusedDay: _today,
-          headerVisible: false,
-          firstDay: _firstDate,
-          lastDay: _lastDate,
-          calendarFormat: CalendarFormat.month,
-          rangeStartDay: _dateTimeRange.start,
-          rangeEndDay: _dateTimeRange.end,
-          calendarStyle: CalendarStyle(
-              rangeStartDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: BoxShape.circle),
-              rangeEndDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: BoxShape.circle)))
-    ]);
+        TableCalendar(
+            focusedDay: _today,
+            headerVisible: false,
+            firstDay: _firstDate,
+            lastDay: _lastDate,
+            calendarFormat: CalendarFormat.month,
+            rangeStartDay: state.startDate,
+            rangeEndDay: state.endDate,
+            calendarStyle: CalendarStyle(
+                rangeStartDecoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: BoxShape.circle),
+                rangeEndDecoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: BoxShape.circle)))
+      ]);
+    });
   }
 }

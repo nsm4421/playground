@@ -32,7 +32,9 @@ class _HashtagFragmentState extends State<HashtagFragment> {
       return;
     }
     _hashtagTec.clear();
-    context.read<CreateMeetingCubit>().setHashtags([...hashtags, text]);
+    context
+        .read<CreateMeetingCubit>()
+        .updateState(hashtags: [...hashtags, text]);
   }
 
   _handleDeleteHashtag(int index) => () {
@@ -40,7 +42,7 @@ class _HashtagFragmentState extends State<HashtagFragment> {
           ...context.read<CreateMeetingCubit>().state.hashtags
         ];
         hashtags.removeAt(index);
-        context.read<CreateMeetingCubit>().setHashtags(hashtags);
+        context.read<CreateMeetingCubit>().updateState(hashtags: hashtags);
       };
 
   @override

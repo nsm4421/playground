@@ -11,7 +11,17 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Create Meeting')),
+        appBar: AppBar(
+          title: const Text('Create Meeting'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  context.read<CreateMeetingCubit>().submit();
+                },
+                icon: Icon(Icons.check,
+                    size: 25, color: Theme.of(context).colorScheme.primary))
+          ],
+        ),
         body: const SingleChildScrollView(
             child: Column(children: [
           /// country

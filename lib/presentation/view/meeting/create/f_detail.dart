@@ -13,7 +13,6 @@ class _DetailFragmentState extends State<DetailFragment> {
   static const int _contentMaxLine = 10;
   static const int _titleMaxLength = 50;
   static const int _contentMaxLength = 1000;
-  static const int _hashtagMaxLength = 50;
   late TextEditingController _titleTec;
   late TextEditingController _contentTec;
   late TextEditingController _hashtagTec;
@@ -36,7 +35,7 @@ class _DetailFragmentState extends State<DetailFragment> {
 
   _handleClearTitle() {
     _titleTec.clear();
-    context.read<CreateMeetingCubit>().setTitle('');
+    context.read<CreateMeetingCubit>().updateState(title: '');
   }
 
   _handleShowTitleModal() async {
@@ -55,7 +54,9 @@ class _DetailFragmentState extends State<DetailFragment> {
             ),
           );
         }).then((_) {
-      context.read<CreateMeetingCubit>().setTitle(_titleTec.text.trim());
+      context
+          .read<CreateMeetingCubit>()
+          .updateState(title: _titleTec.text.trim());
     });
   }
 
@@ -74,7 +75,9 @@ class _DetailFragmentState extends State<DetailFragment> {
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: 'CONTENT')));
         }).then((_) {
-      context.read<CreateMeetingCubit>().setContent(_contentTec.text.trim());
+      context
+          .read<CreateMeetingCubit>()
+          .updateState(content: _contentTec.text.trim());
     });
   }
 

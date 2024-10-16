@@ -1,17 +1,17 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/util/util.dart';
-import 'package:travel/presentation/bloc/bloc_module.dart';
-import 'package:travel/presentation/bloc/meeting/create_meeting.cubit.dart';
-import 'package:travel/presentation/bloc/meeting/create_meeting.state.dart';
-import 'package:travel/presentation/view/diary/display/page.dart';
-import 'package:travel/presentation/widgets/widgets.dart';
+
+import '../../../bloc/bloc_module.dart';
+import '../../../bloc/meeting/create_meeting.cubit.dart';
+import '../../../widgets/widgets.dart';
 
 part 's_create_meeting.dart';
 
@@ -36,6 +36,31 @@ class CreateMeetingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (_) => getIt<BlocModule>().createMeeting,
-        child: const CreateMeetingScreen());
+        child: BlocListener<CreateMeetingCubit, CreateMeetingState>(
+          listener: (BuildContext context, CreateMeetingState state) {
+            if (state.status == Status.success) {
+              customUtil.showSuccessSnackBar(
+                  context: context, message: 'Success');
+              context.pop();
+            } else if (state.status == Status.error) {
+              customUtil.showErrorSnackBar(
+                  context: context, message: state.errorMessage);
+              Timer(const Duration(seconds: 1), () {
+                context
+                    .read<CreateMeetingCubit>()
+                    .updateState(status: Status.initial, errorMessage: '');
+              });
+            }
+          },
+          child: BlocBuilder<CreateMeetingCubit, CreateMeetingState>(
+            builder: (context, state) {
+              return LoadingOverLayScreen(
+                  isLoading: state.status == Status.loading,
+                  loadingWidget:
+                      const Center(child: CircularProgressIndicator()),
+                  childWidget: const CreateMeetingScreen());
+            },
+          ),
+        ));
   }
 }

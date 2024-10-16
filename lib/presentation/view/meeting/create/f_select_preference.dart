@@ -13,15 +13,17 @@ class _SelectPreferenceFragmentState extends State<SelectPreferenceFragment> {
   static const int _maxHeadCount = 10;
 
   _handleSex(TravelPeopleSexType sex) => () {
-        context.read<CreateMeetingCubit>().setSex(sex);
+        context.read<CreateMeetingCubit>().updateState(sex: sex);
       };
 
   _handleTheme(TravelThemeType theme) => () {
-        context.read<CreateMeetingCubit>().setTheme(theme);
+        context.read<CreateMeetingCubit>().updateState(theme: theme);
       };
 
-  _handleHeadCount(double value) {
-    context.read<CreateMeetingCubit>().setHeadCount(value.toInt());
+  _handleHeadCount(double headCount) {
+    context
+        .read<CreateMeetingCubit>()
+        .updateState(headCount: headCount.toInt());
   }
 
   @override

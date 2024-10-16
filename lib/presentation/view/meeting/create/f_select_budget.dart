@@ -12,9 +12,8 @@ class _SelectBudgetFragmentState extends State<SelectBudgetFragment> {
   static const _lastCost = 500;
 
   _handleChangeSlider(RangeValues values) {
-    context
-        .read<CreateMeetingCubit>()
-        .setCost(minCost: values.start.toInt(), maxCost: values.end.toInt());
+    context.read<CreateMeetingCubit>().updateState(
+        minCost: values.start.toInt(), maxCost: values.end.toInt());
   }
 
   @override

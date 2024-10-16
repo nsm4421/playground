@@ -28,5 +28,6 @@ class BlocModule {
   ImageToTextBloc get image2Text => ImageToTextBloc();
 
   @lazySingleton
-  CreateMeetingCubit get createMeeting => CreateMeetingCubit();
+  CreateMeetingCubit get createMeeting =>
+      CreateMeetingCubit(_useCaseModule.meeting);
 }
