@@ -24,13 +24,13 @@ class CreateMeetingUseCase {
       required DateTime endDate,
       int headCount = 2,
       required TravelPeopleSexType sex,
-      required TravelPreferenceType preference,
+      required TravelThemeType theme,
       int minCost = 0,
       int maxCost = 500,
       required String title,
       required String content,
       required List<String> hashtags,
-      required List<File> images}) async {
+      File? thumbnail}) async {
     return await _repository
         .edit(
             country: country,
@@ -39,13 +39,13 @@ class CreateMeetingUseCase {
             endDate: endDate,
             headCount: headCount,
             sex: sex,
-            preference: preference,
+            theme: theme,
             minCost: minCost,
             maxCost: maxCost,
             title: title,
             content: content,
             hashtags: hashtags,
-            images: images)
+            thumbnail: thumbnail)
         .then((res) =>
             res.mapLeft((l) => l.copyWith(message: 'fail to create meeting')));
   }
@@ -64,13 +64,13 @@ class ModifyMeetingUseCase {
       required DateTime endDate,
       int headCount = 2,
       required TravelPeopleSexType sex,
-      required TravelPreferenceType preference,
+      required TravelThemeType theme,
       int minCost = 0,
       int maxCost = 500,
       required String title,
       required String content,
       required List<String> hashtags,
-      required List<File> images}) async {
+      File? thumbnail}) async {
     return await _repository
         .edit(
             id: id,
@@ -81,13 +81,13 @@ class ModifyMeetingUseCase {
             endDate: endDate,
             headCount: headCount,
             sex: sex,
-            preference: preference,
+            theme: theme,
             minCost: minCost,
             maxCost: maxCost,
             title: title,
             content: content,
             hashtags: hashtags,
-            images: images)
+            thumbnail: thumbnail)
         .then((res) =>
             res.mapLeft((l) => l.copyWith(message: 'fail to modify meeting')));
   }

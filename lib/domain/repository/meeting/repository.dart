@@ -33,13 +33,13 @@ abstract interface class MeetingRepository {
       required DateTime endDate,
       int headCount = 2,
       required TravelPeopleSexType sex,
-      required TravelPreferenceType preference,
+      required TravelThemeType theme,
       int minCost = 0,
       int maxCost = 500,
       required String title,
       required String content,
       required List<String> hashtags,
-      required List<File> images});
+      File? thumbnail});
 
   Future<Either<ErrorResponse, void>> deleteById(String id);
 }

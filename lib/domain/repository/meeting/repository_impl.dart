@@ -32,13 +32,13 @@ class MeetingRepositoryImpl implements MeetingRepository {
       required DateTime endDate,
       int headCount = 2,
       required TravelPeopleSexType sex,
-      required TravelPreferenceType preference,
+      required TravelThemeType theme,
       int minCost = 0,
       int maxCost = 500,
       required String title,
       required String content,
       required List<String> hashtags,
-      required List<File> images}) async {
+      File? thumbnail}) async {
     try {
       final dto = EditMeetingModel(
           country: country,
@@ -47,17 +47,16 @@ class MeetingRepositoryImpl implements MeetingRepository {
           end_date: endDate.toUtc().toIso8601String(),
           head_count: headCount,
           sex: sex,
-          preference: preference,
+          theme: theme,
           min_cost: minCost,
           max_cost: maxCost,
           title: title,
           content: content,
           hashtags: hashtags,
-          images: images.isNotEmpty
-              ? await Future.wait(images.map((file) async =>
-                  await _storageDataSource.uploadImageAndReturnPublicUrl(
-                      file: file, bucketName: Buckets.meeting.name)))
-              : []);
+          thumbnail: thumbnail == null
+              ? null
+              : await _storageDataSource.uploadImageAndReturnPublicUrl(
+                  file: thumbnail, bucketName: Buckets.meeting.name));
       return await (update
               ? _meetingDataSource.modify(id: id!, model: dto)
               : _meetingDataSource.create(dto))

@@ -19,7 +19,7 @@ class MeetingEntity with _$MeetingEntity {
     // 같이 여행할 사람
     int? headCount,
     TravelPeopleSexType? sex,
-    TravelPreferenceType? preference,
+    TravelThemeType? theme,
     // 여행 경비
     int? minCost,
     int? maxCost,
@@ -27,7 +27,7 @@ class MeetingEntity with _$MeetingEntity {
     String? title,
     String? content,
     @Default(<String>[]) List<String> hashtags,
-    @Default(<String>[]) List<String> images,
+    String? thumbnail,
     // 메타정보
     String? id,
     DateTime? createdAt,
@@ -42,13 +42,13 @@ class MeetingEntity with _$MeetingEntity {
       endDate: DateTime.tryParse(model.end_date),
       headCount: model.head_count,
       sex: model.sex,
-      preference: model.preference,
+      theme: model.theme,
       minCost: model.min_cost,
       maxCost: model.max_cost,
       title: model.title.isNotEmpty ? model.title : null,
       content: model.content.isNotEmpty ? model.content : null,
       hashtags: model.hashtags,
-      images: model.images,
+      thumbnail: model.thumbnail,
       id: model.id.isNotEmpty ? model.id : null,
       createdAt: DateTime.tryParse(model.created_at),
       updatedAt: DateTime.tryParse(model.updated_at),

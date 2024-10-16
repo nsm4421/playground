@@ -20,7 +20,7 @@ class FetchMeetingsModel with _$FetchMeetingsModel {
     // 같이 여행할 사람
     int? head_count,
     @Default(TravelPeopleSexType.all) TravelPeopleSexType sex,
-    @Default(TravelPreferenceType.all) TravelPreferenceType preference,
+    @Default(TravelThemeType.all) TravelThemeType theme,
     // 여행 경비
     @Default(0) int min_cost,
     @Default(0) int max_cost,
@@ -28,7 +28,7 @@ class FetchMeetingsModel with _$FetchMeetingsModel {
     @Default('') String title,
     @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
-    @Default(<String>[]) List<String> images,
+    String? thumbnail,
     // 메타정보
     @Default('') String id,
     @Default('') String created_at,

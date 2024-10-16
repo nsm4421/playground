@@ -212,6 +212,44 @@ create policy "enable delete only own data" on private_chat_messages
 for delete to authenticated using
 ((auth.uid()=sender) or (auth.uid()=receiver) and (auth.uid() = created_by));
 
+-- create meeting
+create table public.meetings (
+    id uuid not null default gen_random_uuid(),
+    country text not null,
+    city text,
+    start_date timestamp with time zone not null,
+    end_date timestamp with time zone not null,
+    head_count int default 2,
+    sex text default 'all',
+    theme text default 'all',
+    min_cost int default 0,
+    max_cost int default 10,
+    title text,
+    content text,
+    hashtags text[] DEFAULT '{}',
+    thumbnail text,
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone not null,
+    created_by uuid not null default auth.uid(),
+    constraint meetings_pkey primary key (id),
+    constraint meetings_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.meetings enable row level security;
+
+create policy "enable to select for all authenticated" 
+on meetings for select to authenticated using (true);
+
+create policy "enable insert only own data" on meetings
+for insert to authenticated with check (true);
+
+create policy "enable update only own data" on meetings
+for update to authenticated with check (auth.uid()=created_by);
+
+create policy "enable delete only own data" on meetings
+for delete to authenticated using (auth.uid()=created_by);
+
 ------------------------------------------------------
 -- avatar bucket
 insert into storage.buckets (id, name)
@@ -232,6 +270,16 @@ for select using (bucket_id = 'diary');
 
 create policy "permit insert for all" on storage.objects
 for insert with check (bucket_id = 'diary');
+
+-- meeting bucket
+insert into storage.buckets (id, name)
+values ('meeting', 'meeting');
+
+create policy "permit select meeting for all" on storage.objects
+for select using (bucket_id = 'meeting');
+
+create policy "permit insert meeting for all" on storage.objects
+for insert with check (bucket_id = 'meeting');
 
 ------------------------------------------------------
 

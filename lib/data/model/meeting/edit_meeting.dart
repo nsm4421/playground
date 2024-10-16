@@ -20,7 +20,7 @@ class EditMeetingModel with _$EditMeetingModel {
     // 같이 여행할 사람
     int? head_count,
     @Default(TravelPeopleSexType.all) TravelPeopleSexType sex,
-    @Default(TravelPreferenceType.all) TravelPreferenceType preference,
+    @Default(TravelThemeType.all) TravelThemeType theme,
     // 여행 경비
     @Default(0) int min_cost,
     @Default(0) int max_cost,
@@ -28,7 +28,7 @@ class EditMeetingModel with _$EditMeetingModel {
     @Default('') String title,
     @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
-    @Default(<String>[]) List<String> images,
+    String? thumbnail,
   }) = _EditMeetingModel;
 
   factory EditMeetingModel.fromJson(Map<String, dynamic> json) =>
@@ -41,11 +41,11 @@ class EditMeetingModel with _$EditMeetingModel {
       end_date: entity.endDate!.toUtc().toIso8601String(),
       head_count: entity.headCount,
       sex: entity.sex ?? TravelPeopleSexType.all,
-      preference: entity.preference ?? TravelPreferenceType.all,
+      theme: entity.theme ?? TravelThemeType.all,
       min_cost: entity.minCost ?? 0,
       max_cost: entity.maxCost ?? 500,
       title: entity.title ?? '',
       content: entity.content ?? '',
       hashtags: entity.hashtags,
-      images: entity.images);
+      thumbnail: entity.thumbnail);
 }
