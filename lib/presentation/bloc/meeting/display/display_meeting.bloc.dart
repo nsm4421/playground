@@ -1,26 +1,27 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:travel/core/util/util.dart';
-import 'package:travel/domain/entity/diary/diary.dart';
 
 import '../../../../core/constant/constant.dart';
-import '../../../../domain/usecase/diary/usecase.dart';
+import '../../../../core/util/util.dart';
+import '../../../../domain/entity/meeting/meeting.dart';
+import '../../../../domain/usecase/meeting/usecase.dart';
 
-part 'display_diary.event.dart';
+part 'display_meeting.event.dart';
 
-class DisplayDiaryBloc
-    extends Bloc<DisplayDiaryEvent, CustomDisplayState<DiaryEntity>> {
-  final DiaryUseCase _useCase;
+class DisplayMeetingBloc
+    extends Bloc<DisplayMeetingEvent, CustomDisplayState<MeetingEntity>> {
+  final MeetingUseCase _useCase;
 
-  DisplayDiaryBloc(this._useCase) : super(CustomDisplayState<DiaryEntity>()) {
-    on<FetchDiariesEvent>(_onFetch);
+  DisplayMeetingBloc(this._useCase)
+      : super(CustomDisplayState<MeetingEntity>()) {
+    on<FetchMeetingEvent>(_onFetch);
   }
 
-  Future<void> _onFetch(FetchDiariesEvent event,
-      Emitter<CustomDisplayState<DiaryEntity>> emit) async {
+  Future<void> _onFetch(FetchMeetingEvent event,
+      Emitter<CustomDisplayState<MeetingEntity>> emit) async {
     try {
       emit(state.copyWith(
-        status: event.refresh ? Status.loading : state.status,
+        status: state.data.isEmpty ? Status.loading : state.status,
         isFetching: true,
         data: event.refresh ? [] : state.data,
         isEnd: event.refresh ? false : state.isEnd,

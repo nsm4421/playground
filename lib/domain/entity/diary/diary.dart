@@ -1,25 +1,32 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
+import '../../../core/constant/constant.dart';
 import '../../../data/model/diary/fetch_diary.dart';
 import '../auth/presence.dart';
 
-part 'diary.freezed.dart';
+class DiaryEntity extends BaseEntity {
+  final String? location;
+  final String? content;
+  late final List<String> hashtags;
+  late final List<String?> images;
+  late final List<String?> captions;
+  final bool? isPrivate;
+  final PresenceEntity? author;
 
-@freezed
-class DiaryEntity with _$DiaryEntity {
-  const factory DiaryEntity({
-    String? id,
-    String? location,
-    String? content,
-    @Default(<String>[]) List<String> hashtags,
-    @Default(<String?>[]) List<String?> images,
-    @Default(<String?>[]) List<String?> captions,
-    bool? isPrivate,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    PresenceEntity? author,
-  }) = _DiaryEntity;
+  DiaryEntity(
+      {super.id,
+      super.createdAt,
+      super.updatedAt,
+      super.createdBy,
+      this.location,
+      this.content,
+      List<String>? hashtags,
+      List<String?>? images,
+      List<String?>? captions,
+      this.isPrivate,
+      this.author}) {
+    this.hashtags = hashtags ?? [];
+    this.images = images ?? [];
+    this.captions = captions ?? [];
+  }
 
   factory DiaryEntity.from(FetchDiaryModel model) => DiaryEntity(
       id: model.id.isNotEmpty ? model.id : null,
@@ -33,15 +40,13 @@ class DiaryEntity with _$DiaryEntity {
       isPrivate: model.is_private,
       createdAt: DateTime.tryParse(model.created_at),
       updatedAt: DateTime.tryParse(model.updated_at),
+      createdBy: model.created_by,
       author: model.created_by.isNotEmpty
           ? PresenceEntity(
               uid: model.created_by,
               username: model.username,
-              avatarUrl: model.avatar_url,
-            )
+              avatarUrl: model.avatar_url)
           : null);
-}
 
-extension DiaryEntityExt on DiaryEntity {
-  int get length => images?.length ?? 0;
+  int get length => images.length;
 }

@@ -1,39 +1,57 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:travel/data/model/meeting/fetch_meetings.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
 import '../../../core/constant/constant.dart';
 
-part 'meeting.freezed.dart';
+class MeetingEntity extends BaseEntity {
+  // 여행 장소
+  final String? country;
+  final String? city;
 
-@freezed
-class MeetingEntity with _$MeetingEntity {
-  const factory MeetingEntity({
-    // 여행 장소
-    String? country,
-    String? city,
-    // 여행 일정
-    DateTime? startDate,
-    DateTime? endDate,
-    // 같이 여행할 사람
-    int? headCount,
-    TravelPeopleSexType? sex,
-    TravelThemeType? theme,
-    // 여행 경비
-    int? minCost,
-    int? maxCost,
-    // 게시글
-    String? title,
-    String? content,
-    @Default(<String>[]) List<String> hashtags,
-    String? thumbnail,
-    // 메타정보
-    String? id,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    PresenceEntity? author,
-  }) = _MeetingEntity;
+  // 여행 일정
+  final DateTime? startDate;
+  final DateTime? endDate;
+
+  // 같이 여행할 사람
+  final int? headCount;
+  final TravelPeopleSexType? sex;
+  final TravelThemeType? theme;
+
+  // 여행 경비
+  final int? minCost;
+  final int? maxCost;
+
+  // 게시글
+  final String? title;
+  final String? content;
+  late final List<String> hashtags;
+  final String? thumbnail;
+
+  // 글쓴이
+  final PresenceEntity? author;
+
+  MeetingEntity(
+      {this.country,
+      this.city,
+      this.startDate,
+      this.endDate,
+      this.headCount,
+      this.sex,
+      this.theme,
+      this.minCost,
+      this.maxCost,
+      this.title,
+      this.content,
+      List<String>? hashtags,
+      this.thumbnail,
+      this.author,
+      // meta data
+      super.id,
+      super.createdAt,
+      super.updatedAt,
+      super.createdBy}) {
+    this.hashtags = hashtags ?? [];
+  }
 
   factory MeetingEntity.from(FetchMeetingsModel model) => MeetingEntity(
       country: model.country.isNotEmpty ? model.country : null,
@@ -49,12 +67,15 @@ class MeetingEntity with _$MeetingEntity {
       content: model.content.isNotEmpty ? model.content : null,
       hashtags: model.hashtags,
       thumbnail: model.thumbnail,
+      // meta data
       id: model.id.isNotEmpty ? model.id : null,
       createdAt: DateTime.tryParse(model.created_at),
       updatedAt: DateTime.tryParse(model.updated_at),
-      author: PresenceEntity(
-        uid: model.author_uid,
-        username: model.author_username,
-        avatarUrl: model.author_avatar_url,
-      ));
+      author: model.author_uid.isNotEmpty
+          ? PresenceEntity(
+              uid: model.author_uid,
+              username: model.author_username,
+              avatarUrl: model.author_avatar_url)
+          : null,
+      createdBy: model.author_uid.isNotEmpty ? model.author_uid : null);
 }
