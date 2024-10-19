@@ -89,14 +89,14 @@ class _EditAssetWidgetState extends State<EditAssetWidget> {
               alignment: Alignment.bottomRight,
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 /// 작성완료
-                FabItemWidget(
+                RoundIconButtonWidget(
                     iconData: Icons.check,
                     voidCallback: () async {
                       context.pop<DiaryAsset?>(_asset);
                     }),
 
                 /// 삭제 아이콘
-                FabItemWidget(
+                RoundIconButtonWidget(
                     iconData: Icons.delete_forever,
                     voidCallback: () async {
                       context.pop<DiaryAsset?>(null);

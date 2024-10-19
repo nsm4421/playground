@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:travel/data/model/meeting/fetch_meetings.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
@@ -78,4 +80,22 @@ class MeetingEntity extends BaseEntity {
               avatarUrl: model.author_avatar_url)
           : null,
       createdBy: model.author_uid.isNotEmpty ? model.author_uid : null);
+
+  String? get dateRangeRepr {
+    try {
+      return '${startDate!.month}.${startDate!.day}~${endDate!.month}.${endDate!.day}';
+    } catch (error) {
+      log('formatting date fails:${error.toString()}');
+      return null;
+    }
+  }
+
+  int? get durationInDay {
+    try {
+      return endDate!.difference(startDate!).inDays;
+    } catch (error) {
+      log('getting duration date fails:${error.toString()}');
+      return null;
+    }
+  }
 }

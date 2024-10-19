@@ -12,9 +12,15 @@ class MeetingItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
+              onTap: () {
+                // 상세 페이지로 이동
+                context.push(Routes.meetingDetail.path, extra: _entity);
+              },
+              // TODO : 수정,삭제,신고하기 메뉴 모달 창 띄우기
+              onLongPress: () {},
               // 썸네일
               leading: _entity.thumbnail == null
-                  ? const SizedBox()  // 국가별 대표 이미지
+                  ? const SizedBox() // 국가별 대표 이미지
                   : RoundedAvatarWidget(_entity.thumbnail!, fit: BoxFit.cover),
               // 제목
               // TODO : 국기 보여주기
@@ -34,12 +40,13 @@ class MeetingItemWidget extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.tertiary)),
               // 날짜
-              trailing: Text(
-                  '${_entity.startDate!.month}.${_entity.startDate!.day}~${_entity.endDate!.month}.${_entity.endDate!.day}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge
-                      ?.copyWith(fontWeight: FontWeight.w500))),
+              trailing: _entity.dateRangeRepr != null
+                  ? Text(_entity.dateRangeRepr!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(fontWeight: FontWeight.w500))
+                  : null),
           // 해시태그
           if (_entity.hashtags.isNotEmpty)
             Padding(

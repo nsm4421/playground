@@ -20,9 +20,9 @@ part 'f_editor_content.dart';
 
 part 'f_display_avatar.dart';
 
-part 'w_fab_item.dart';
-
 part 'w_edit_asset.dart';
+
+part 'w_fab.dart';
 
 class EditDiaryPage extends StatelessWidget {
   const EditDiaryPage({super.key});

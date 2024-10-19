@@ -1,10 +1,11 @@
-part of 'page.dart';
+part of 'widgets.dart';
 
-class FabItemWidget extends StatelessWidget {
-  const FabItemWidget(
+class RoundIconButtonWidget extends StatelessWidget {
+  const RoundIconButtonWidget(
       {super.key,
       required this.voidCallback,
       required this.iconData,
+      this.tooltip,
       this.iconSize = 40,
       this.iconColor = Colors.white,
       this.bgColor = Colors.blueGrey,
@@ -12,6 +13,7 @@ class FabItemWidget extends StatelessWidget {
 
   final void Function() voidCallback;
   final IconData iconData;
+  final String? tooltip;
   final double iconSize;
   final Color iconColor;
   final Color bgColor;
@@ -20,6 +22,7 @@ class FabItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        tooltip: tooltip,
         onPressed: voidCallback,
         icon: Container(
             padding: const EdgeInsets.all(8),

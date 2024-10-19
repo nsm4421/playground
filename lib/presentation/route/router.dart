@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/entity/meeting/meeting.dart';
+import 'package:travel/presentation/view/meeting/display/detail/page.dart';
 
 import '../../core/constant/constant.dart';
 import '../../core/util/util.dart';
@@ -45,6 +47,11 @@ class CustomRouter {
         GoRoute(
             path: Routes.createMeeting.path,
             builder: (context, state) => const CreateMeetingPage()),
+        GoRoute(
+            path: Routes.meetingDetail.path,
+            builder: (context, state) {
+              return MeetingDetailPage(state.extra as MeetingEntity);
+            }),
         GoRoute(
             path: Routes.editProfile.path,
             builder: (context, state) => const EditProfilePage()),

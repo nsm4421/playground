@@ -23,3 +23,5 @@ part 'w_avatar.dart';
 part 'w_video_player.dart';
 
 part 'w_hashtags.dart';
+
+part 'w_button.dart';

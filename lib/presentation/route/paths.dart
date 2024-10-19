@@ -6,6 +6,7 @@ enum Routes {
   editDiary('/write-diary'),
   meeting('/meeting'),
   createMeeting('/create-meeting'),
+  meetingDetail('/meeting-detail'),
   setting('/setting'),
   reels('/reels'),
   chat('/chat'),
