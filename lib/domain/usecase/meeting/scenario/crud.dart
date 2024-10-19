@@ -5,8 +5,8 @@ class FetchMeetingUseCase {
 
   FetchMeetingUseCase(this._repository);
 
-  Future<Either<ErrorResponse, List<MeetingEntity>>> call(
-      {required DateTime beforeAt, int take = 20}) async {
+  Future<Either<ErrorResponse, List<MeetingEntity>>> call(String beforeAt,
+      {int take = 20}) async {
     return await _repository.fetch(beforeAt, take: take).then((res) =>
         res.mapLeft((l) => l.copyWith(message: 'fail to fetch meeting')));
   }

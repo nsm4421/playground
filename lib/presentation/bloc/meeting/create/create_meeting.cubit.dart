@@ -5,7 +5,7 @@ import 'package:either_dart/either.dart';
 import 'package:travel/core/util/util.dart';
 import 'package:travel/domain/usecase/meeting/usecase.dart';
 
-import '../../../core/constant/constant.dart';
+import '../../../../core/constant/constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'create_meeting.state.dart';
@@ -53,7 +53,8 @@ class CreateMeetingCubit extends Cubit<CreateMeetingState> {
         status: state.status,
         country: state.country,
         startDate: state.startDate,
-        endDate: state.startDate,
+        endDate: state.endDate,
+        isDateSelected:state.isDateSelected,
         headCount: state.headCount,
         sex: state.sex,
         theme: state.theme,

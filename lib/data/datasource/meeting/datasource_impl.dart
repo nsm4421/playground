@@ -29,7 +29,7 @@ class MeetingDataSourceImpl implements MeetingDataSource {
   @override
   Future<Iterable<FetchMeetingsModel>> fetch(String beforeAt,
       {int take = 20}) async {
-    // TODO : RPC함수 구현
+    customUtil.logger.d('beforeAt:$beforeAt|take:$take');
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchMeetings.name, params: {
       'before_at': beforeAt,

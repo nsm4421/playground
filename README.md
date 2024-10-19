@@ -388,4 +388,80 @@ as $$
     left join public.accounts B on A.created_by = B.id
 ;
 $$
+
+-- on fetch meeting
+create or replace function fetch_meetings
+(before_at timestamptz, take int)
+returns table(
+    country text,
+    city text,
+    start_date timestamptz,
+    end_date timestamptz,
+    head_count int,
+    sex text,
+    theme text ,
+    min_cost int,
+    max_cost int,
+    title text,
+    content text,
+    hashtags text[],
+    thumbnail text,
+    id uuid, 
+    created_at timestamptz,
+    updated_at timestamptz,
+    author_uid uuid,
+    author_username text,
+    author_avatar_url text
+)
+language sql
+as $$
+    select
+          A.country,
+          A.city,
+          A.start_date,
+          A.end_date,
+          A.head_count,
+          A.sex,
+          A.theme,
+          A.min_cost,
+          A.max_cost,
+          A.title,
+          A.content,
+          A.hashtags,
+          A.thumbnail,
+          A.id,
+          A.created_at,
+          A.updated_at,
+          A.created_by author_uid,
+          B.username author_username,
+          B.avatar_url author_avatar_url
+    from (
+        select
+          country,
+          city,
+          start_date,
+          end_date,
+          head_count,
+          sex,
+          theme,
+          min_cost,
+          max_cost,
+          title,
+          content,
+          hashtags,
+          thumbnail,
+          id,
+          created_at,
+          updated_at,
+          created_by
+        from
+            public.meetings
+        where
+            created_at < before_at
+        order by created_at desc
+        limit(take)
+        ) A
+    left join public.accounts B on A.created_by = B.id
+;
+$$
 ```

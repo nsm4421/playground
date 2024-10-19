@@ -10,7 +10,7 @@ import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/util/util.dart';
 
 import '../../../bloc/bloc_module.dart';
-import '../../../bloc/meeting/create_meeting.cubit.dart';
+import '../../../bloc/meeting/create/create_meeting.cubit.dart';
 import '../../../widgets/widgets.dart';
 
 part 's_create_meeting.dart';

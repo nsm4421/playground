@@ -19,7 +19,7 @@ abstract interface class MeetingRepository {
       {required void Function(Map<String, dynamic> newRecord) onInsert,
       required void Function(Map<String, dynamic> oldRecord) onDelete});
 
-  Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(DateTime beforeAt,
+  Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(String beforeAt,
       {int take = 20});
 
   // create -> id = null  /  update = false

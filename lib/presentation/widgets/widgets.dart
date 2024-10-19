@@ -21,3 +21,5 @@ part 's_loading_overlay.dart';
 part 'w_avatar.dart';
 
 part 'w_video_player.dart';
+
+part 'w_hashtags.dart';

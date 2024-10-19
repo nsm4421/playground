@@ -78,11 +78,11 @@ class MeetingRepositoryImpl implements MeetingRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(DateTime beforeAt,
+  Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(String beforeAt,
       {int take = 20}) async {
     try {
       return await _meetingDataSource
-          .fetch(beforeAt.toUtc().toIso8601String(), take: take)
+          .fetch(beforeAt, take: take)
           .then((res) => res.map(MeetingEntity.from).toList())
           .then(Right.new);
     } on Exception catch (error) {

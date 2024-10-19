@@ -1,4 +1,4 @@
-part of 'page.dart';
+part of 'widgets.dart';
 
 class HashtagsWidget extends StatelessWidget {
   const HashtagsWidget(this.hashtags, {super.key});

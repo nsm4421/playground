@@ -12,7 +12,7 @@ import '../view/diary/display/page.dart';
 import '../view/diary/edit/page.dart';
 import '../view/home/page.dart';
 import '../view/meeting/create/page.dart';
-import '../view/meeting/page.dart';
+import '../view/meeting/display/page.dart';
 import '../view/search/page.dart';
 import '../view/setting/edit/page.dart';
 import '../view/setting/page.dart';
