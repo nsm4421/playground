@@ -115,10 +115,12 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
 }
 
 class ExpandableTextWidget extends StatefulWidget {
-  const ExpandableTextWidget(this.text, {super.key, this.minLine = 3});
+  const ExpandableTextWidget(this.text,
+      {super.key, this.minLine = 3, this.textStyle});
 
   final String text;
   final int minLine;
+  final TextStyle? textStyle;
 
   @override
   State<ExpandableTextWidget> createState() => _ExpandableTextWidgetState();
@@ -161,6 +163,7 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
         widget.text,
         maxLines: _isExpanded ? null : widget.minLine,
         overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+        style: widget.textStyle,
       ),
       const SizedBox(height: 8),
       if (_showToggle)

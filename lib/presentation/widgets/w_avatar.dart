@@ -44,12 +44,14 @@ class CircularAvatarAssetWidget extends StatelessWidget {
 class RoundedAvatarWidget extends StatelessWidget {
   const RoundedAvatarWidget(this.avatarUrl,
       {super.key,
+      this.bgColor,
       this.fit = BoxFit.fitHeight,
       this.borderRadius = 12,
       this.width = 60,
       this.height = 60});
 
   final String avatarUrl;
+  final Color? bgColor;
   final double width;
   final double height;
   final double borderRadius;
@@ -62,7 +64,7 @@ class RoundedAvatarWidget extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            color: Theme.of(context).colorScheme.tertiaryContainer,
+            color: bgColor ?? Theme.of(context).colorScheme.tertiaryContainer,
             image: DecorationImage(
                 fit: fit, image: CachedNetworkImageProvider(avatarUrl))));
   }
