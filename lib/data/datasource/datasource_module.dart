@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:travel/data/datasource/registration/datasource.dart';
 
 import '../../core/env/env.dart';
 import 'account/datasource.dart';
@@ -52,6 +53,10 @@ class DataSourceModule {
 
   @lazySingleton
   MeetingDataSource get meeting => MeetingDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  RegistrationDataSource get registration =>
+      RegistrationDataSourceImpl(_supabaseClient);
 
   @lazySingleton
   ReelsDataSource get reels => ReelsDataSourceImpl(_supabaseClient);
