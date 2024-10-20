@@ -3,9 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/constant/constant.dart';
+import '../../../../core/response/error_response.dart';
 import '../../../../core/util/util.dart';
 import '../../../../domain/entity/auth/presence.dart';
 import '../../../../domain/entity/meeting/meeting.dart';
+import '../../../../domain/entity/registration/registration.dart';
 import '../../../../domain/usecase/registration/usecase.dart';
 
 part 'registration.state.dart';
@@ -22,25 +24,33 @@ class EditRegistrationBloc
       : _meeting = meeting,
         _useCase = useCase,
         super(EditRegistrationState(meeting)) {
-    on<FetchMeetingEvent>(_onFetch);
+    on<InitialRegistrationEvent>(_onInit);
+    on<FetchRegistrationEvent>(_onFetch);
     on<RegisterMeetingEvent>(_onRegister);
-    on<CancelMeetingEvent>(_onCancel);
+    on<CancelRegistrationEvent>(_onCancel);
   }
 
+  MeetingEntity get meeting => _meeting;
+
   String get _meetingId => _meeting.id!;
+
+  Future<void> _onInit(InitialRegistrationEvent event,
+      Emitter<EditRegistrationState> emit) async {
+    emit(state.copyWith(
+        status: event.status,
+        registrations: event.registrations,
+        errorMessage: event.errorMessage));
+  }
 
   Future<void> _onFetch(
       EditRegistrationEvent event, Emitter<EditRegistrationState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
-      await _useCase.fetch(_meetingId).then((res) => res.fold((l) {
-            emit(state.copyWith(status: Status.error, errorMessage: l.message));
-          }, (r) {
-            emit(state.copyWith(
-                status: Status.success,
-                accompanies: r.map((item) => item.proposer!).toList(),
-                errorMessage: null));
-          }));
+      await _$fetch((l) {
+        emit(state.copyWith(status: Status.error, errorMessage: l.message));
+      }, (r) {
+        emit(state.copyWith(status: Status.success, errorMessage: null));
+      });
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: 'error occurs on fetching data'));
@@ -52,14 +62,20 @@ class EditRegistrationBloc
       RegisterMeetingEvent event, Emitter<EditRegistrationState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
-      await _useCase.register(_meetingId).then((res) => res.fold((l) {
-            emit(state.copyWith(status: Status.error, errorMessage: l.message));
-          }, (r) {
-            emit(state.copyWith(
-                status: Status.success,
-                accompanies: [...state.accompanies, event.currentUser],
-                errorMessage: null));
-          }));
+      await _useCase
+          .register(meetingId: _meetingId, introduce: event.introduce)
+          .then((res) => res.mapLeft((l) {
+                emit(state.copyWith(
+                    status: Status.error, errorMessage: l.message));
+              }).mapAsync((r) async {
+                await _$fetch((l) {
+                  emit(state.copyWith(
+                      status: Status.error, errorMessage: l.message));
+                }, (r) {
+                  emit(state.copyWith(
+                      status: Status.success, errorMessage: null));
+                });
+              }));
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: 'error occurs on register'));
@@ -67,24 +83,33 @@ class EditRegistrationBloc
     }
   }
 
-  Future<void> _onCancel(
-      CancelMeetingEvent event, Emitter<EditRegistrationState> emit) async {
+  Future<void> _onCancel(CancelRegistrationEvent event,
+      Emitter<EditRegistrationState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
-      await _useCase.cancel(_meetingId).then((res) => res.fold((l) {
+      await _useCase.cancel(_meetingId).then((res) => res.mapLeft((l) {
             emit(state.copyWith(status: Status.error, errorMessage: l.message));
-          }, (r) {
-            emit(state.copyWith(
-                status: Status.success,
-                accompanies: state.accompanies
-                    .where((item) => item.uid != event.currentUser.uid)
-                    .toList(),
-                errorMessage: null));
+          }).mapAsync((r) async {
+            await _$fetch((l) {
+              emit(state.copyWith(
+                  status: Status.error, errorMessage: l.message));
+            }, (r) {
+              emit(state.copyWith(status: Status.success, errorMessage: null));
+            });
           }));
     } on Exception catch (error) {
       emit(state.copyWith(
           status: Status.error, errorMessage: 'error occurs on cancel'));
       customUtil.logger.e(error);
     }
+  }
+
+  Future<void> _$fetch(
+    void Function(ErrorResponse error) onError,
+    void Function(List<RegistrationEntity> data) onSuccess,
+  ) async {
+    await _useCase
+        .fetch(_meetingId)
+        .then((res) => res.fold(onError, onSuccess));
   }
 }

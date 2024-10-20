@@ -10,6 +10,8 @@ class FetchRegistrationsModel with _$FetchRegistrationsModel {
   const factory FetchRegistrationsModel(
       {@Default('') String id,
       @Default('') String meeting_id,
+      @Default(false) bool is_permitted,
+      @Default('') String introduce,
       @Default('') String manager_id,
       @Default('') String manager_username,
       @Default('') String manager_avatar_url,

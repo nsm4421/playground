@@ -1,12 +1,13 @@
-import 'package:travel/data/model/registration/fetch_registrations.dart';
-import 'package:travel/domain/entity/auth/presence.dart';
-
 import '../../../core/constant/constant.dart';
+import '../../../data/model/registration/fetch_registrations.dart';
+import '../auth/presence.dart';
 
 class RegistrationEntity extends BaseEntity {
   final String? meetingId;
   final PresenceEntity? manager;
   final PresenceEntity? proposer;
+  final bool? isPermitted;
+  final String? introduce;
 
   RegistrationEntity(
       {super.id,
@@ -15,7 +16,9 @@ class RegistrationEntity extends BaseEntity {
       super.createdBy,
       this.meetingId,
       this.manager,
-      this.proposer});
+      this.proposer,
+      this.isPermitted,
+      this.introduce});
 
   factory RegistrationEntity.from(FetchRegistrationsModel model) {
     return RegistrationEntity(
@@ -29,14 +32,14 @@ class RegistrationEntity extends BaseEntity {
             : PresenceEntity(
                 uid: model.manager_id,
                 username: model.manager_username,
-                avatarUrl: model.manager_avatar_url
-              ),
+                avatarUrl: model.manager_avatar_url),
         proposer: model.proposer_id.isEmpty
             ? null
             : PresenceEntity(
                 uid: model.proposer_id,
                 username: model.proposer_username,
-                avatarUrl: model.proposer_avatar_url
-              ));
+                avatarUrl: model.proposer_avatar_url),
+        isPermitted: model.is_permitted,
+        introduce: model.introduce.isNotEmpty ? model.introduce : null);
   }
 }

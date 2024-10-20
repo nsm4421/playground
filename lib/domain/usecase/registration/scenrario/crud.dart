@@ -5,9 +5,10 @@ class SubmitRegistrationUseCase {
 
   SubmitRegistrationUseCase(this._repository);
 
-  Future<Either<ErrorResponse, void>> call(String meetingId) async {
+  Future<Either<ErrorResponse, void>> call(
+      {required String meetingId, required String introduce}) async {
     return await _repository
-        .create(meetingId)
+        .create(meetingId: meetingId, introduce: introduce)
         .mapLeft((l) => l.copyWith(message: 'submit registration fails'));
   }
 }

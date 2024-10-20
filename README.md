@@ -253,13 +253,14 @@ create policy "enable delete only own data" on meetings
 for delete to authenticated using (auth.uid()=created_by);
 
 -- create registration table
-create table public.registration (
+create table public.registrations (
     id uuid not null default gen_random_uuid(),
     meeting_id uuid not null,
     manager_id uuid not null,
-    proposer_id uuid not null default auth.uid(),
-    ids_permitted bool default false,                   -- 등록 신청 허용 여부
-    created_by uuid not null default auth.uid(),        -- 등록 신청한 유저 id
+    proposer_id uuid not null default auth.uid(),       -- 등록 신청한 유저 id
+    is_permitted bool default false,                   -- 등록 신청 허용 여부
+    created_by uuid not null default auth.uid(),
+    INTRODUCE text,
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone not null,
     constraint registration_pkey primary key (id),
@@ -272,18 +273,18 @@ create table public.registration (
     references accounts (id) on update cascade on delete cascade
 ) tablespace pg_default;
 
-alter table public.registration enable row level security;
+alter table public.registrations enable row level security;
 
 create policy "enable to select for all authenticated" 
-on registration for select to authenticated using (true);
+on registrations for select to authenticated using (true);
 
 create policy "enable insert only own data" on registration
 for insert to authenticated with check (auth.uid()=created_by);
 
-create policy "enable update only own data" on registration
+create policy "enable update only own data" on registrations
 for update to authenticated with check (auth.uid()=manager_id);
 
-create policy "enable delete only own data" on registration
+create policy "enable delete only own data" on registrations
 for delete to authenticated using ((auth.uid()=proposer_id) or (auth.uid()=manager_id));
 ```
 
@@ -505,7 +506,10 @@ as $$
 ;
 $$
 
-CREATE OR REPLACE FUNCTION create_registration(meeting_id uuid)
+CREATE OR REPLACE FUNCTION create_registration(
+    meeting_id_to_insert uuid,
+    introduce_to_insert text
+)
 RETURNS UUID AS $$
 DECLARE
     max_head_count int;         -- 최대 인원
@@ -516,13 +520,12 @@ BEGIN
     -- 변수에 값 할당하기
     SELECT head_count, created_by INTO max_head_count, manager_uid
     FROM meetings
-    WHERE id = meeting_id;
+    WHERE id = meeting_id_to_insert;
     
     SELECT count(1) INTO currernt_head_count
-    FROM meetings
-    WHERE id = meeting_id
-    and is_permited = true
-    ;
+    FROM registrations
+    WHERE meeting_id = meeting_id_to_insert
+    and is_permitted = true;
  
     -- 에러처리
     if not found then
@@ -536,20 +539,22 @@ BEGIN
         manager_id,
         proposer_id,
         is_permitted,
+        introduce,
         created_by,
         created_at,
         updated_at
     ) VALUES (
-        meeting_id,
+        meeting_id_to_insert,
         manager_uid,
         auth.uid(),
         false,
+        introduce_to_insert,
         auth.uid(),
         NOW() AT TIME ZONE 'UTC',
         NOW() AT TIME ZONE 'UTC'
     )
-    RETURNING id INTO new_registration_id
-    ;
+    RETURNING id INTO new_registration_id;
+    RETURN new_registration_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -565,48 +570,29 @@ RETURNS table(
     PROPOSER_USERNAME TEXT,
     PROPOSER_AVATAR_URL TEXT,
     IS_PERMITTED BOOL,
-    created_at timestamptz
+    INTRODUCE text,
+    CREATED_AT timestamptz
 )
 AS $$
 BEGIN
+    RETURN QUERY
     SELECT 
-        A.ID,
-        A.MEETING_ID,
-        A.MANAGER_ID,
-        C.MANAGER_USERNAME,
-        C.MANAGER_AVATAR_URL,
-        A.CREATED_BY,
-        A.PROPOSER_ID,
-        B.USERNAME PROPOSER_USERNAME,
-        B.AVATAR_URL PROPOSER_AVATAR_URL,
-        A.IS_PERMITTED,
-        A.CREATED_AT 
-    FROM (
-        SELECT 
-            ID,
-            MEETING_ID,
-            CREATED_BY,
-            MANAGER_ID,
-            PROPOSER_ID,
-            IS_PERMITTED,
-            CREATED_AT       
-        FROM REGISTRATIONS
-        WHERE MEETING_ID = meeting_id_to_fetch
-    ) A LEFT JOIN (
-        SELECT 
-            ID,
-            USERNAME,
-            AVATAR_URL
-        FROM ACCOUNTS
-    ) B ON A.PROPOSER_ID = B.ID  
-    LEFT JOIN (
-        SELECT
-            ID,
-            USERNAME,
-            AVATAR_URL
-        FROM ACCOUNTS
-    ) C ON A.MANAGER_ID = C.ID
-    ;
+        R.ID,                            
+        R.MEETING_ID,                   
+        R.MANAGER_ID,
+        MGR.USERNAME AS MANAGER_USERNAME,
+        MGR.AVATAR_URL AS MANAGER_AVATAR_URL,
+        R.CREATED_BY,                  
+        R.PROPOSER_ID,              
+        PRP.USERNAME AS PROPOSER_USERNAME, 
+        PRP.AVATAR_URL AS PROPOSER_AVATAR_URL,
+        R.IS_PERMITTED,           
+        R.INTRODUCE,            
+        R.CREATED_AT
+    FROM public.REGISTRATIONS R
+    LEFT JOIN public.ACCOUNTS PRP ON R.PROPOSER_ID = PRP.ID
+    LEFT JOIN public.ACCOUNTS MGR ON R.MANAGER_ID = MGR.ID
+    where R.MEETING_ID = meeting_id_to_fetch;
 END;
 $$ LANGUAGE plpgsql;
 

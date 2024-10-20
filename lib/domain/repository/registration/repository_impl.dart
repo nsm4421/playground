@@ -8,9 +8,12 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
       : _registrationDataSource = registrationDataSource;
 
   @override
-  Future<Either<ErrorResponse, void>> create(String meetingId) async {
+  Future<Either<ErrorResponse, void>> create(
+      {required String meetingId, required String introduce}) async {
     try {
-      return await _registrationDataSource.create(meetingId).then(Right.new);
+      return await _registrationDataSource
+          .create(meetingId: meetingId, introduce: introduce)
+          .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
       return Left(ErrorResponse.from(error));

@@ -11,7 +11,8 @@ abstract interface class RegistrationRepository {
   Future<Either<ErrorResponse, List<RegistrationEntity>>> fetch(
       String meetingId);
 
-  Future<Either<ErrorResponse, void>> create(String meetingId);
+  Future<Either<ErrorResponse, void>> create(
+      {required String meetingId, required String introduce});
 
   Future<Either<ErrorResponse, void>> update(
       {required String meetingId, required bool isPermitted});

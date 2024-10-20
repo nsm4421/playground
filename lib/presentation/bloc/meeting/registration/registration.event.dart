@@ -1,24 +1,23 @@
 part of 'registration.bloc.dart';
 
 @sealed
-class EditRegistrationEvent {
-  final String meetingId;
+class EditRegistrationEvent {}
 
-  EditRegistrationEvent(this.meetingId);
+class InitialRegistrationEvent extends EditRegistrationEvent {
+  final Status? status;
+  final List<RegistrationEntity>? registrations;
+  final String? errorMessage;
+
+  InitialRegistrationEvent(
+      {this.status, this.registrations, this.errorMessage});
 }
 
-class FetchMeetingEvent extends EditRegistrationEvent {
-  FetchMeetingEvent(super.meetingId);
-}
+class FetchRegistrationEvent extends EditRegistrationEvent {}
 
 class RegisterMeetingEvent extends EditRegistrationEvent {
-  final PresenceEntity currentUser;
+  final String introduce;
 
-  RegisterMeetingEvent(super.meetingId, {required this.currentUser});
+  RegisterMeetingEvent({required this.introduce});
 }
 
-class CancelMeetingEvent extends EditRegistrationEvent {
-  final PresenceEntity currentUser;
-
-  CancelMeetingEvent(super.meetingId, {required this.currentUser});
-}
+class CancelRegistrationEvent extends EditRegistrationEvent {}

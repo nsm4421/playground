@@ -8,7 +8,7 @@ part 'datsource_impl.dart';
 abstract interface class RegistrationDataSource {
   Future<Iterable<FetchRegistrationsModel>> fetch(String meetingId);
 
-  Future<String> create(String meetingId);
+  Future<String> create({required String meetingId, required String introduce});
 
   Future<void> update({required String meetingId, required bool isPermitted});
 

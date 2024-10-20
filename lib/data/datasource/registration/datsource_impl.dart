@@ -6,10 +6,11 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
   RegistrationDataSourceImpl(this._supabaseClient);
 
   @override
-  Future<String> create(String meetingId) async {
+  Future<String> create(
+      {required String meetingId, required String introduce}) async {
     // return new registration id
     return await _supabaseClient.rpc<String>(RpcFns.createRegistration.name,
-        params: {'meeting_id': meetingId});
+        params: {'introduce_to_insert': introduce,'meeting_id_to_insert': meetingId, });
   }
 
   @override
