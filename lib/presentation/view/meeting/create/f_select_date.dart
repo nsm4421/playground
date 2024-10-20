@@ -35,15 +35,7 @@ class _SelectDateFragmentState extends State<SelectDateFragment> {
     return BlocBuilder<CreateMeetingCubit, CreateMeetingState>(
         builder: (context, state) {
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          const Icon(Icons.calendar_today),
-          const SizedBox(width: 12),
-          Text('Date',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold))
-        ]),
+        const IconLabelWidget(iconData: Icons.calendar_today, label: 'Date'),
         GestureDetector(
           onTap: _handleSelectDate,
           child: Padding(
@@ -58,21 +50,22 @@ class _SelectDateFragmentState extends State<SelectDateFragment> {
                     color: Theme.of(context).colorScheme.secondary)),
           ),
         ),
-        TableCalendar(
-            focusedDay: _today,
-            headerVisible: false,
-            firstDay: _firstDate,
-            lastDay: _lastDate,
-            calendarFormat: CalendarFormat.month,
-            rangeStartDay: state.startDate,
-            rangeEndDay: state.endDate,
-            calendarStyle: CalendarStyle(
-                rangeStartDecoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    shape: BoxShape.circle),
-                rangeEndDecoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    shape: BoxShape.circle)))
+        if (state.isDateSelected)
+          TableCalendar(
+              focusedDay: _today,
+              headerVisible: false,
+              firstDay: _firstDate,
+              lastDay: _lastDate,
+              calendarFormat: CalendarFormat.month,
+              rangeStartDay: state.startDate,
+              rangeEndDay: state.endDate,
+              calendarStyle: CalendarStyle(
+                  rangeStartDecoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: BoxShape.circle),
+                  rangeEndDecoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: BoxShape.circle)))
       ]);
     });
   }

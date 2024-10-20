@@ -11,8 +11,10 @@ class SelectPreferenceFragment extends StatefulWidget {
 class _SelectPreferenceFragmentState extends State<SelectPreferenceFragment> {
   static const int _minHeadCount = 2;
   static const int _maxHeadCount = 10;
+  static const _firstCost = 10;
+  static const _lastCost = 500;
 
-  _handleSex(TravelPeopleSexType sex) => () {
+  _handleSex(AccompanySexType sex) => () {
         context.read<CreateMeetingCubit>().updateState(sex: sex);
       };
 
@@ -26,110 +28,164 @@ class _SelectPreferenceFragmentState extends State<SelectPreferenceFragment> {
         .updateState(headCount: headCount.toInt());
   }
 
+  _handleChangeSlider(RangeValues values) {
+    context.read<CreateMeetingCubit>().updateState(
+        minCost: values.start.toInt(), maxCost: values.end.toInt());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateMeetingCubit, CreateMeetingState>(
         builder: (context, state) {
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        // 성별
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Icon(Icons.male),
-            const SizedBox(width: 12),
-            Text('Sex',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold))
-          ]),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: Wrap(
-                  children: TravelPeopleSexType.values.map((item) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: ElevatedButton(
-                      onPressed: _handleSex(item),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: state.sex == item
-                              ? Theme.of(context).colorScheme.secondaryContainer
-                              : null,
-                          elevation: state.sex == item ? 3 : 0),
-                      child: Text(item.label,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontWeight: state.sex == item
-                                      ? FontWeight.bold
-                                      : FontWeight.w300))),
-                );
-              }).toList()))
-        ]),
+        const IconLabelWidget(
+            iconData: Icons.people_alt_outlined, label: 'Preference'),
 
-        // 여행 테마
-        Column(children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Icon(Icons.travel_explore),
-            const SizedBox(width: 12),
-            Text('Theme',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold))
-          ]),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: Wrap(
-                  children: TravelThemeType.values.map((item) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: ElevatedButton(
-                      onPressed: _handleTheme(item),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: state.theme == item
-                              ? Theme.of(context).colorScheme.secondaryContainer
-                              : null,
-                          elevation: state.theme == item ? 3 : 0),
-                      child: Text(item.label,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontWeight: state.theme == item
-                                      ? FontWeight.bold
-                                      : FontWeight.w300))),
-                );
-              }).toList()))
-        ]),
+        /// 성별
+        Card(
+            elevation: 1,
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Wrap(
+                    children: AccompanySexType.values.map((item) {
+                  return Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: ElevatedButton(
+                          onPressed: _handleSex(item),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: state.sex == item
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                  : null,
+                              elevation: state.sex == item ? 3 : 0),
+                          child: Text(item.label,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      fontWeight: state.sex == item
+                                          ? FontWeight.bold
+                                          : FontWeight.w300))));
+                }).toList()))),
 
-        // 동반 인원수
-        Column(children: [
-          const SizedBox(height: 12),
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Icon(Icons.info_outline),
-            const SizedBox(width: 12),
-            Text('Head Count',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-            const Spacer(),
-            Text(state.headCount.toStringAsFixed(0),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.secondary))
-          ]),
-          Slider(
-            value: state.headCount.toDouble(),
-            min: _minHeadCount.toDouble(),
-            max: _maxHeadCount.toDouble(),
-            divisions: _maxHeadCount - _minHeadCount,
-            label: state.headCount.toString(),
-            onChanged: _handleHeadCount,
-          ),
-          const SizedBox(height: 12)
-        ])
+        /// 여행 테마
+        Card(
+            elevation: 1,
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Wrap(
+                    children: TravelThemeType.values.map((item) {
+                  return Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: ElevatedButton(
+                          onPressed: _handleTheme(item),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: state.theme == item
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                  : null,
+                              elevation: state.theme == item ? 3 : 0),
+                          child: Text(item.label,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      fontWeight: state.theme == item
+                                          ? FontWeight.bold
+                                          : FontWeight.w300))));
+                }).toList()))),
+
+        /// 최대 동반 인원수
+        Card(
+            elevation: 1,
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Maximum Head Count',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
+                          const Spacer(),
+                          Text('${state.headCount}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary))
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Slider(
+                          value: state.headCount.toDouble(),
+                          min: _minHeadCount.toDouble(),
+                          max: _maxHeadCount.toDouble(),
+                          divisions: _maxHeadCount - _minHeadCount,
+                          label: state.headCount.toString(),
+                          onChanged: _handleHeadCount)
+                    ]))),
+
+        /// 예산 범위
+        Card(
+            elevation: 1,
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Budget Range',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
+                          const Spacer(),
+                          Text('${state.minCost}~${state.maxCost}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary))
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      RangeSlider(
+                          values: RangeValues(state.minCost.toDouble(),
+                              state.maxCost.toDouble()),
+                          min: _firstCost.toDouble(),
+                          max: _lastCost.toDouble(),
+                          divisions: (_lastCost - _firstCost) ~/ 10,
+                          labels: RangeLabels(
+                            state.minCost.toString(),
+                            state.maxCost.toString(),
+                          ),
+                          onChanged: _handleChangeSlider)
+                    ]))),
       ]);
     });
   }

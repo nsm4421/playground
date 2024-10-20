@@ -72,7 +72,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
               if (widget._diary.hashtags.isNotEmpty)
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   const SizedBox(height: 8),
-                  HashtagsWidget(widget._diary.hashtags),
+                  DisplayHashtagsWidget(widget._diary.hashtags),
                   const SizedBox(height: 8),
                   const Divider()
                 ]),

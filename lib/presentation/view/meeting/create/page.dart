@@ -4,6 +4,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
@@ -20,8 +21,6 @@ part 'f_select_country.dart';
 part 'f_select_date.dart';
 
 part 'f_select_preference.dart';
-
-part 'f_select_budget.dart';
 
 part 'f_detail.dart';
 

@@ -57,8 +57,10 @@ class _MeetingDetailPageState extends State<MeetingDetailPage> {
           // 썸네일
           if (widget.entity.thumbnail != null)
             Container(
+                width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 3,
                 decoration: BoxDecoration(
+                    color: Colors.blueGrey,
                     image: DecorationImage(
                         fit: BoxFit.fitWidth,
                         image: CachedNetworkImageProvider(
@@ -68,7 +70,7 @@ class _MeetingDetailPageState extends State<MeetingDetailPage> {
           DescriptionFragment(widget.entity),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            child: Divider(),
+            child: Divider()
           ),
 
           // 동행자 목록
