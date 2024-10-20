@@ -33,6 +33,8 @@
 
 # Script
 
+
+## Create Tables
 ```
 -- create account table
 create table public.accounts (
@@ -250,7 +252,44 @@ for update to authenticated with check (auth.uid()=created_by);
 create policy "enable delete only own data" on meetings
 for delete to authenticated using (auth.uid()=created_by);
 
-------------------------------------------------------
+-- create registration table
+create table public.registration (
+    id uuid not null default gen_random_uuid(),
+    meeting_id uuid not null,
+    manager_id uuid not null,
+    proposer_id uuid not null default auth.uid(),
+    ids_permitted bool default false,                   -- 등록 신청 허용 여부
+    created_by uuid not null default auth.uid(),        -- 등록 신청한 유저 id
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone not null,
+    constraint registration_pkey primary key (id),
+    UNIQUE (meeting_id, created_by),   -- meeting id와 등록신청한 유저 id로 unique 조건 걸기
+    constraint registration_fkey1 foreign key (meeting_id)
+    references meetings (id) on update cascade on delete cascade,
+    constraint registration_fkey2 foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade,
+    constraint registration_fkey3 foreign key (manager_id)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.registration enable row level security;
+
+create policy "enable to select for all authenticated" 
+on registration for select to authenticated using (true);
+
+create policy "enable insert only own data" on registration
+for insert to authenticated with check (auth.uid()=created_by);
+
+create policy "enable update only own data" on registration
+for update to authenticated with check (auth.uid()=manager_id);
+
+create policy "enable delete only own data" on registration
+for delete to authenticated using ((auth.uid()=proposer_id) or (auth.uid()=manager_id));
+```
+
+## Create Buckets
+
+```
 -- avatar bucket
 insert into storage.buckets (id, name)
 values ('avatar', 'avatar');
@@ -280,9 +319,10 @@ for select using (bucket_id = 'meeting');
 
 create policy "permit insert meeting for all" on storage.objects
 for insert with check (bucket_id = 'meeting');
+```
 
-------------------------------------------------------
-
+## Rpc Function
+```
 -- on sign up
 create or replace function public.on_sign_up()
 returns trigger
@@ -464,4 +504,127 @@ as $$
     left join public.accounts B on A.created_by = B.id
 ;
 $$
+
+CREATE OR REPLACE FUNCTION create_registration(meeting_id uuid)
+RETURNS UUID AS $$
+DECLARE
+    max_head_count int;         -- 최대 인원
+    currernt_head_count int;    -- 현재 승인된 인원
+    manager_uid uuid;
+    new_registration_id uuid;
+BEGIN
+    -- 변수에 값 할당하기
+    SELECT head_count, created_by INTO max_head_count, manager_uid
+    FROM meetings
+    WHERE id = meeting_id;
+    
+    SELECT count(1) INTO currernt_head_count
+    FROM meetings
+    WHERE id = meeting_id
+    and is_permited = true
+    ;
+ 
+    -- 에러처리
+    if not found then
+        RAISE EXCEPTION 'meeting with id % does not exist', meeting_id;
+    ELSIF max_head_count <= currernt_head_count then
+        RAISE EXCEPTION 'head count can not exceed %', max_head_count;
+    end if;
+
+    INSERT INTO registrations (
+        meeting_id,
+        manager_id,
+        proposer_id,
+        is_permitted,
+        created_by,
+        created_at,
+        updated_at
+    ) VALUES (
+        meeting_id,
+        manager_uid,
+        auth.uid(),
+        false,
+        auth.uid(),
+        NOW() AT TIME ZONE 'UTC',
+        NOW() AT TIME ZONE 'UTC'
+    )
+    RETURNING id INTO new_registration_id
+    ;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetch_registrations(meeting_id_to_fetch uuid)
+RETURNS table(
+    ID uuid,
+    MEETING_ID UUID,
+    MANAGER_ID UUID,
+    MANAGER_USERNAME TEXT,
+    MANAGER_AVATAR_URL TEXT,
+    CREATED_BY UUID,
+    PROPOSER_ID UUID,
+    PROPOSER_USERNAME TEXT,
+    PROPOSER_AVATAR_URL TEXT,
+    IS_PERMITTED BOOL,
+    created_at timestamptz
+)
+AS $$
+BEGIN
+    SELECT 
+        A.ID,
+        A.MEETING_ID,
+        A.MANAGER_ID,
+        C.MANAGER_USERNAME,
+        C.MANAGER_AVATAR_URL,
+        A.CREATED_BY,
+        A.PROPOSER_ID,
+        B.USERNAME PROPOSER_USERNAME,
+        B.AVATAR_URL PROPOSER_AVATAR_URL,
+        A.IS_PERMITTED,
+        A.CREATED_AT 
+    FROM (
+        SELECT 
+            ID,
+            MEETING_ID,
+            CREATED_BY,
+            MANAGER_ID,
+            PROPOSER_ID,
+            IS_PERMITTED,
+            CREATED_AT       
+        FROM REGISTRATIONS
+        WHERE MEETING_ID = meeting_id_to_fetch
+    ) A LEFT JOIN (
+        SELECT 
+            ID,
+            USERNAME,
+            AVATAR_URL
+        FROM ACCOUNTS
+    ) B ON A.PROPOSER_ID = B.ID  
+    LEFT JOIN (
+        SELECT
+            ID,
+            USERNAME,
+            AVATAR_URL
+        FROM ACCOUNTS
+    ) C ON A.MANAGER_ID = C.ID
+    ;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- on meeting created
+CREATE OR REPLACE FUNCTION PUBLIC.ON_MEETING_CREATED()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+    begin
+    PERFORM create_registration(NEW.MEETING_ID);
+    RETURN NEW;
+    end;
+$$;
+
+create trigger on_auth_edited
+after update on public.meetings
+for each row execute procedure PUBLIC.ON_MEETING_CREATED();
+
 ```
