@@ -22,7 +22,7 @@ class CreateMeetingCubit extends Cubit<CreateMeetingState> {
       DateTime? endDate,
       bool? isDateSelected,
       int? headCount,
-      TravelPeopleSexType? sex,
+      AccompanySexType? sex,
       TravelThemeType? theme,
       int? minCost,
       int? maxCost,
@@ -54,7 +54,7 @@ class CreateMeetingCubit extends Cubit<CreateMeetingState> {
         country: state.country,
         startDate: state.startDate,
         endDate: state.endDate,
-        isDateSelected:state.isDateSelected,
+        isDateSelected: state.isDateSelected,
         headCount: state.headCount,
         sex: state.sex,
         theme: state.theme,
@@ -69,7 +69,11 @@ class CreateMeetingCubit extends Cubit<CreateMeetingState> {
   void submit() async {
     try {
       // validate
-      if (!state.isDateSelected) {
+      if (state.country.isEmpty) {
+        updateState(
+            status: Status.error, errorMessage: 'need to select country!');
+        return;
+      } else if (!state.isDateSelected) {
         updateState(status: Status.error, errorMessage: 'need to select date!');
         return;
       } else if (state.title.isEmpty || state.content.isEmpty) {

@@ -1,20 +1,20 @@
 part of 'constant.dart';
 
 // 동행자 성별
-enum TravelPeopleSexType {
+enum AccompanySexType {
   all(name: 'all', label: "All"),
-  onlyMale(name: 'only_male', label: 'Only Male'),
-  onlyFemale(name: 'only_female', label: 'Only Male');
+  onlyMale(name: 'only_male', label: '남자끼리'),
+  onlyFemale(name: 'only_female', label: '여자끼리');
 
   final String name;
   final String label;
 
-  const TravelPeopleSexType({required this.name, required this.label});
+  const AccompanySexType({required this.name, required this.label});
 }
 
 // 여행 테마
 enum TravelThemeType {
-  all(label: 'all'),
+  all(label: 'All'),
   eating(label: '맛집투어'),
   shopping(label: '쇼핑'),
   activity(label: '액티비티'),
