@@ -1,52 +1,37 @@
 part of 'page.dart';
 
-class AccompanyFragment extends StatefulWidget {
-  const AccompanyFragment(
-      {super.key, required this.entity, required this.accompanies});
-
-  final MeetingEntity entity;
-  final List<PresenceEntity> accompanies;
-
-  @override
-  State<AccompanyFragment> createState() => _AccompanyFragmentState();
-}
-
-class _AccompanyFragmentState extends State<AccompanyFragment> {
-  static const double _avatarSize = 100;
+class AccompanyListFragment extends StatelessWidget {
+  const AccompanyListFragment({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(children: [
-        Row(children: [
-          const Icon(Icons.people_alt_outlined, size: 30),
-          const SizedBox(width: 12),
-          Text('Accompany',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
-          const Spacer(),
-          Text('${widget.accompanies.length}/${widget.entity.headCount}',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w700))
-        ]),
-        SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: _avatarSize + 10,
-            child: ListView.builder(
-                padding: const EdgeInsets.only(right: 8, top: 12, bottom: 12),
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.accompanies.length,
-                itemBuilder: (context, index) {
-                  return CircularAvatarWidget(
-                      size: _avatarSize, widget.accompanies[index].avatarUrl);
-                }))
-      ]),
-    );
+    final currentUid =
+        context.read<AuthenticationBloc>().state.currentUser!.uid;
+    final mangerUid = context.read<EditRegistrationBloc>().meeting.id;
+
+    return BlocBuilder<EditRegistrationBloc, EditRegistrationState>(
+        builder: (context, state) {
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: state.registrations.length,
+          itemBuilder: (context, index) {
+            final item = state.registrations[index];
+            return ListTile(
+                leading: CircularAvatarWidget(item.proposer!.avatarUrl),
+                title: Text(item.introduce ?? '',
+                    softWrap: true, overflow: TextOverflow.ellipsis),
+                subtitle: Text(item.proposer!.username),
+                trailing: IconButton(
+                    // TODO : 탭했을 때 이벤트
+                    onPressed: () {
+                      if (currentUid == mangerUid){
+                        // ~~~~~
+                      }
+                    },
+                    icon: item.isPermitted!
+                        ? const Icon(Icons.check_box_outlined)
+                        : const Icon(Icons.check_box_outline_blank_rounded)));
+          });
+    });
   }
 }

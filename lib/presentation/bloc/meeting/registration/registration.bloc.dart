@@ -49,7 +49,8 @@ class EditRegistrationBloc
       await _$fetch((l) {
         emit(state.copyWith(status: Status.error, errorMessage: l.message));
       }, (r) {
-        emit(state.copyWith(status: Status.success, errorMessage: null));
+        emit(state.copyWith(
+            status: Status.success, registrations: r, errorMessage: null));
       });
     } on Exception catch (error) {
       emit(state.copyWith(
@@ -73,7 +74,9 @@ class EditRegistrationBloc
                       status: Status.error, errorMessage: l.message));
                 }, (r) {
                   emit(state.copyWith(
-                      status: Status.success, errorMessage: null));
+                      status: Status.success,
+                      registrations: r,
+                      errorMessage: null));
                 });
               }));
     } on Exception catch (error) {
@@ -94,7 +97,10 @@ class EditRegistrationBloc
               emit(state.copyWith(
                   status: Status.error, errorMessage: l.message));
             }, (r) {
-              emit(state.copyWith(status: Status.success, errorMessage: null));
+              emit(state.copyWith(
+                  status: Status.success,
+                  registrations: r,
+                  errorMessage: null));
             });
           }));
     } on Exception catch (error) {

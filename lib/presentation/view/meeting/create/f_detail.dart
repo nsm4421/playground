@@ -44,7 +44,7 @@ class _DetailFragmentState extends State<DetailFragment> {
         context: context,
         builder: (_) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: MediaQuery.of(context).viewInsets,
             child: TextField(
               controller: _titleTec,
               minLines: _titleLine,

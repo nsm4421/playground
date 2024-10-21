@@ -547,7 +547,7 @@ BEGIN
         meeting_id_to_insert,
         manager_uid,
         auth.uid(),
-        false,
+        manager_uid = auth.uid(),
         introduce_to_insert,
         auth.uid(),
         NOW() AT TIME ZONE 'UTC',
@@ -604,13 +604,13 @@ language plpgsql
 security definer set search_path = public
 as $$
     begin
-    PERFORM create_registration(NEW.MEETING_ID);
+    PERFORM create_registration(NEW.ID, 'meeting created');
     RETURN NEW;
     end;
 $$;
 
-create trigger on_auth_edited
-after update on public.meetings
+create trigger on_meeting_created
+after insert on public.meetings
 for each row execute procedure PUBLIC.ON_MEETING_CREATED();
 
 ```
