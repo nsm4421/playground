@@ -7,13 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel/core/util/util.dart';
 import 'package:travel/domain/entity/registration/registration.dart';
+import 'package:travel/presentation/bloc/registration/display/display_registration.bloc.dart';
 
 import '../../../../../core/constant/constant.dart';
 import '../../../../../core/di/dependency_injection.dart';
 import '../../../../../domain/entity/meeting/meeting.dart';
 import '../../../../bloc/auth/authentication.bloc.dart';
 import '../../../../bloc/bloc_module.dart';
-import '../../../../bloc/meeting/registration/registration.bloc.dart';
+import '../../../../bloc/registration/edit/edit_registration.bloc.dart';
 import '../../../../widgets/widgets.dart';
 
 part 's_meeting_detail.dart';
@@ -29,9 +30,9 @@ part 'f_accompany.dart';
 part 'w_fab.dart';
 
 class MeetingDetailPage extends StatefulWidget {
-  const MeetingDetailPage(this.entity, {super.key});
+  const MeetingDetailPage(this._meeting, {super.key});
 
-  final MeetingEntity entity;
+  final MeetingEntity _meeting;
 
   @override
   State<MeetingDetailPage> createState() => _MeetingDetailPageState();
@@ -61,10 +62,16 @@ class _MeetingDetailPageState extends State<MeetingDetailPage>
   Widget build(BuildContext context) {
     final isAuthor =
         context.read<AuthenticationBloc>().state.currentUser!.uid ==
-            widget.entity.createdBy;
-    return BlocProvider(
-        create: (_) => getIt<BlocModule>().getEditRegistration(widget.entity)
-          ..add(FetchRegistrationEvent()),
+            widget._meeting.createdBy;
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (_) =>
+                  getIt<BlocModule>().displayRegistration(widget._meeting)),
+          BlocProvider(
+              create: (_) =>
+                  getIt<BlocModule>().editRegistration(widget._meeting))
+        ],
         child: Scaffold(
             appBar: AppBar(
                 leading: IconButton(
@@ -95,8 +102,8 @@ class _MeetingDetailPageState extends State<MeetingDetailPage>
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return switch (index) {
-                    0 => MeetingDetailScreen(widget.entity),
-                    1 => CommentScreen(),
+                    0 => MeetingDetailScreen(widget._meeting),
+                    1 => const CommentScreen(),
                     (_) =>
                       BlocListener<EditRegistrationBloc, EditRegistrationState>(
                         listener: (context, state) {
@@ -105,14 +112,14 @@ class _MeetingDetailPageState extends State<MeetingDetailPage>
                                 context: context, message: state.errorMessage);
                             Timer(const Duration(seconds: 1), () {
                               context.read<EditRegistrationBloc>().add(
-                                  InitialRegistrationEvent(
+                                  InitEditRegistrationEvent(
                                       status: Status.initial,
                                       errorMessage: ''));
                             });
                           }
                         },
-                        child: BlocBuilder<EditRegistrationBloc,
-                            EditRegistrationState>(
+                        child: BlocBuilder<DisplayRegistrationBloc,
+                            CustomDisplayState<RegistrationEntity>>(
                           builder: (context, state) {
                             return LoadingOverLayScreen(
                                 isLoading: state.status == Status.loading,
@@ -120,8 +127,7 @@ class _MeetingDetailPageState extends State<MeetingDetailPage>
                                     child: CircularProgressIndicator()),
                                 childWidget: isAuthor
                                     ? const EditAccompanyScreen()
-                                    : DisplayAccompanyScreen(
-                                        state.registrations));
+                                    : DisplayAccompanyScreen(state.data));
                           },
                         ),
                       ),

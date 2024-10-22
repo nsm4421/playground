@@ -7,15 +7,15 @@ class AccompanyListFragment extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentUid =
         context.read<AuthenticationBloc>().state.currentUser!.uid;
-    final mangerUid = context.read<EditRegistrationBloc>().meeting.id;
+    final mangerUid = context.read<DisplayRegistrationBloc>().meeting.id;
 
-    return BlocBuilder<EditRegistrationBloc, EditRegistrationState>(
-        builder: (context, state) {
+    return BlocBuilder<DisplayRegistrationBloc,
+        CustomDisplayState<RegistrationEntity>>(builder: (context, state) {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: state.registrations.length,
+          itemCount: state.data.length,
           itemBuilder: (context, index) {
-            final item = state.registrations[index];
+            final item = state.data[index];
             return ListTile(
                 leading: CircularAvatarWidget(item.proposer!.avatarUrl),
                 title: Text(item.introduce ?? '',
@@ -24,7 +24,7 @@ class AccompanyListFragment extends StatelessWidget {
                 trailing: IconButton(
                     // TODO : 탭했을 때 이벤트
                     onPressed: () {
-                      if (currentUid == mangerUid){
+                      if (currentUid == mangerUid) {
                         // ~~~~~
                       }
                     },

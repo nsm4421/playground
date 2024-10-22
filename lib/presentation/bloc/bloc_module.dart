@@ -1,6 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:travel/presentation/bloc/meeting/create/create_meeting.cubit.dart';
-import 'package:travel/presentation/bloc/meeting/registration/registration.bloc.dart';
 
 import '../../domain/entity/meeting/meeting.dart';
 import '../../domain/usecase/usecase_module.dart';
@@ -8,7 +6,10 @@ import 'auth/authentication.bloc.dart';
 import 'diary/display/display_diary.bloc.dart';
 import 'diary/edit/edit_diary.bloc.dart';
 import 'image_to_text/image_to_text.bloc.dart';
+import 'meeting/create/create_meeting.cubit.dart';
 import 'meeting/display/display_meeting.bloc.dart';
+import 'registration/display/display_registration.bloc.dart';
+import 'registration/edit/edit_registration.bloc.dart';
 
 @lazySingleton
 class BlocModule {
@@ -39,6 +40,10 @@ class BlocModule {
       DisplayMeetingBloc(_useCaseModule.meeting);
 
   @injectable
-  EditRegistrationBloc getEditRegistration(MeetingEntity meeting) =>
+  DisplayRegistrationBloc displayRegistration(MeetingEntity meeting) =>
+      DisplayRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+
+  @injectable
+  EditRegistrationBloc editRegistration(MeetingEntity meeting) =>
       EditRegistrationBloc(meeting, useCase: _useCaseModule.registration);
 }

@@ -1,18 +1,14 @@
-part of 'registration.bloc.dart';
+part of 'edit_registration.bloc.dart';
 
 @sealed
 class EditRegistrationEvent {}
 
-class InitialRegistrationEvent extends EditRegistrationEvent {
+class InitEditRegistrationEvent extends EditRegistrationEvent {
   final Status? status;
-  final List<RegistrationEntity>? registrations;
   final String? errorMessage;
 
-  InitialRegistrationEvent(
-      {this.status, this.registrations, this.errorMessage});
+  InitEditRegistrationEvent({this.status, this.errorMessage});
 }
-
-class FetchRegistrationEvent extends EditRegistrationEvent {}
 
 class RegisterMeetingEvent extends EditRegistrationEvent {
   final String introduce;
