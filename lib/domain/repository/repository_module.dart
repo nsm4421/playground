@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/repository/comment/repository.dart';
 import 'package:travel/domain/repository/meeting/repository.dart';
 
 import '../../data/datasource/datasource_module.dart';
@@ -51,4 +52,8 @@ class RepositoryModule {
   @lazySingleton
   RegistrationRepository get registration => RegistrationRepositoryImpl(
       registrationDataSource: _dataSourceModule.registration);
+
+  @lazySingleton
+  CommentRepository get comment =>
+      CommentRepositoryImpl(_dataSourceModule.comment);
 }

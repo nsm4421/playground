@@ -27,4 +27,7 @@ class UseCaseModule {
   @lazySingleton
   RegistrationUseCase get registration =>
       RegistrationUseCase(_repositoryModule.registration);
+
+  @lazySingleton
+  MeetingUseCase get comment => MeetingUseCase(_repositoryModule.meeting);
 }

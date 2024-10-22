@@ -1,6 +1,5 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:travel/data/datasource/registration/datasource.dart';
 
 import '../../core/env/env.dart';
 import 'account/datasource.dart';
@@ -8,10 +7,12 @@ import 'auth/datasource.dart';
 import 'channel/datasource.dart';
 import 'chat/open_chat/datasource.dart';
 import 'chat/private_chat/datasource.dart';
+import 'comment/datasource.dart';
 import 'diary/datsource.dart';
 import 'local/datasource.dart';
 import 'meeting/datasource.dart';
 import 'reels/datasource.dart';
+import 'registration/datasource.dart';
 import 'storage/datasource.dart';
 
 @lazySingleton
@@ -66,4 +67,7 @@ class DataSourceModule {
 
   @lazySingleton
   ChannelDataSource get channel => ChannelDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  CommentDataSource get comment => CommentDataSourceImpl(_supabaseClient);
 }

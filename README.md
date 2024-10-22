@@ -286,6 +286,35 @@ for update to authenticated with check (auth.uid()=manager_id);
 
 create policy "enable delete only own data" on registrations
 for delete to authenticated using ((auth.uid()=proposer_id) or (auth.uid()=manager_id));
+
+-- 댓글 테이블
+create table public.comments (
+    id uuid not null default gen_random_uuid(),
+    reference_table text not null,
+    reference_id uuid not null,
+    content text,
+    created_by uuid not null default auth.uid(),
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone not null,
+    constraint comments_pkey primary key (id),
+    constraint comments_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade
+) tablespace pg_default;
+
+alter table public.comments enable row level security;
+
+create policy "enable to select for all authenticated" 
+on comments for select to authenticated using (true);
+
+create policy "enable insert only own data" on comments
+for insert to authenticated with check (auth.uid()=created_by);
+
+create policy "enable update only own data" on comments
+for update to authenticated with check (auth.uid()=created_by);
+
+create policy "enable delete only own data" on comments
+for delete to authenticated using (auth.uid()=created_by);
+
 ```
 
 ## Create Buckets
@@ -613,4 +642,53 @@ create trigger on_meeting_created
 after insert on public.meetings
 for each row execute procedure PUBLIC.ON_MEETING_CREATED();
 
+
+CREATE OR REPLACE FUNCTION fetch_comments(
+    reference_id_to_fetch uuid,
+    reference_table_to_fetch text,
+    before_at timestamptz, 
+    take int
+) RETURNS table(
+    id uuid,
+    reference_table text,
+    reference_id UUID,
+    content text,
+    author_uid uuid,
+    author_username text,
+    author_avatar_url text,
+    created_at timestamptz,
+    updated_at timestamptz
+)
+language sql
+as $$
+    select
+        A.id,
+        A.reference_table,
+        A.reference_id,
+        A.content,
+        A.created_by author_uid,
+        B.username author_username,
+        B.avatar_url author_avatar_url,
+        A.created_at,
+        A.updated_at
+    from (
+        select
+            id,
+            reference_table,
+            reference_id,
+            content,
+            created_by,
+            created_at,
+            updated_at
+        from
+            public.comments
+        where
+            created_at < before_at
+            and reference_table = reference_table_to_fetch
+            and reference_id = reference_id_to_fetch
+        order by created_at desc
+        limit(take)
+        ) A
+    left join public.accounts B on A.created_by = B.id;
+$$
 ```
