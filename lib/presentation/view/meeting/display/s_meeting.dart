@@ -19,7 +19,7 @@ class DisplayMeetingScreen extends StatelessWidget {
                 onRefresh: () async {
                   context
                       .read<DisplayMeetingBloc>()
-                      .add(FetchMeetingEvent(refresh: true));
+                      .add(FetchEvent(refresh: true));
                 },
                 child: const SingleChildScrollView(
                   physics: NeverScrollableScrollPhysics(),

@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
-import 'package:travel/domain/entity/meeting/meeting.dart';
-import 'package:travel/presentation/bloc/bloc_module.dart';
-import 'package:travel/presentation/bloc/meeting/display/display_meeting.bloc.dart';
-
+import '../../../../core/bloc/display_bloc.dart';
+import '../../../../domain/entity/meeting/meeting.dart';
+import '../../../bloc/bloc_module.dart';
+import '../../../bloc/meeting/display/display_meeting.bloc.dart';
 import '../../../route/router.dart';
 import '../../../widgets/widgets.dart';
 
@@ -24,8 +24,8 @@ class MeetingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<BlocModule>().displayMeeting
-        ..add(FetchMeetingEvent(refresh: true)),
+      create: (_) =>
+          getIt<BlocModule>().displayMeeting..add(FetchEvent(refresh: true)),
       child: BlocBuilder<DisplayMeetingBloc, CustomDisplayState<MeetingEntity>>(
           builder: (context, state) {
         return LoadingOverLayScreen(
