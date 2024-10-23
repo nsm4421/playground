@@ -1,4 +1,5 @@
-part of 'constant.dart';
+part of 'display_bloc.dart';
+
 
 class CustomDisplayState<T extends BaseEntity> {
   final Status status;
@@ -62,3 +63,4 @@ class CustomDisplayState<T extends BaseEntity> {
     });
   }
 }
+

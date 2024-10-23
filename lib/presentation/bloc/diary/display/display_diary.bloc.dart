@@ -1,22 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:travel/core/util/util.dart';
-import 'package:travel/domain/entity/diary/diary.dart';
 
+import '../../../../core/bloc/display_bloc.dart';
 import '../../../../core/constant/constant.dart';
+import '../../../../core/util/util.dart';
+import '../../../../domain/entity/diary/diary.dart';
 import '../../../../domain/usecase/diary/usecase.dart';
 
-part 'display_diary.event.dart';
-
-class DisplayDiaryBloc
-    extends Bloc<DisplayDiaryEvent, CustomDisplayState<DiaryEntity>> {
+class DisplayDiaryBloc extends CustomDisplayBloc<DiaryEntity> {
   final DiaryUseCase _useCase;
 
-  DisplayDiaryBloc(this._useCase) : super(CustomDisplayState<DiaryEntity>()) {
-    on<FetchDiariesEvent>(_onFetch);
-  }
+  DisplayDiaryBloc(this._useCase);
 
-  Future<void> _onFetch(FetchDiariesEvent event,
+  @override
+  Future<void> onFetch(FetchEvent<DiaryEntity> event,
       Emitter<CustomDisplayState<DiaryEntity>> emit) async {
     try {
       emit(state.copyWith(

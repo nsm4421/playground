@@ -1,42 +1,27 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/bloc/display_bloc.dart';
 import '../../../../core/constant/constant.dart';
 import '../../../../core/util/util.dart';
 import '../../../../domain/entity/meeting/meeting.dart';
 import '../../../../domain/entity/registration/registration.dart';
 import '../../../../domain/usecase/registration/usecase.dart';
 
-part 'display_registration.event.dart';
-
-class DisplayRegistrationBloc extends Bloc<DisplayRegistrationsEvent,
-    CustomDisplayState<RegistrationEntity>> {
+class DisplayRegistrationBloc extends CustomDisplayBloc<RegistrationEntity> {
   final MeetingEntity _meeting;
   final RegistrationUseCase _useCase;
 
-  DisplayRegistrationBloc(@factoryParam MeetingEntity meeting,
+  DisplayRegistrationBloc(@factoryParam this._meeting,
       {required RegistrationUseCase useCase})
-      : _meeting = meeting,
-        _useCase = useCase,
-        super(CustomDisplayState<RegistrationEntity>()) {
-    on<InitDisplayRegistrationEvent>(_onInit);
-    on<FetchRegistrationsEvent>(_onFetch);
-  }
+      : _useCase = useCase;
 
   MeetingEntity get meeting => _meeting;
 
   String get _meetingId => _meeting.id!;
 
-  Future<void> _onInit(InitDisplayRegistrationEvent event,
-      Emitter<CustomDisplayState<RegistrationEntity>> emit) async {
-    emit(state.copyWith(
-        status: event.status,
-        data: event.registrations,
-        errorMessage: event.errorMessage));
-  }
-
-  Future<void> _onFetch(DisplayRegistrationsEvent event,
+  @override
+  Future<void> onFetch(FetchEvent<RegistrationEntity> event,
       Emitter<CustomDisplayState<RegistrationEntity>> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));

@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/presentation/bloc/comment/edit/edit_comment.bloc.dart';
 
 import '../../domain/entity/meeting/meeting.dart';
 import '../../domain/usecase/usecase_module.dart';
@@ -46,4 +47,8 @@ class BlocModule {
   @injectable
   EditRegistrationBloc editRegistration(MeetingEntity meeting) =>
       EditRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+
+  @injectable
+  EditCommentBloc<MeetingEntity> editMeetingComment(MeetingEntity meeting) =>
+      EditCommentBloc<MeetingEntity>(meeting, useCase: _useCaseModule.comment);
 }
