@@ -5,11 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:travel/presentation/bloc/comment/display/display_comment.bloc.dart';
+import 'package:travel/presentation/bloc/comment/edit/edit_comment.bloc.dart';
 
 import '../../../../../core/bloc/display_bloc.dart';
 import '../../../../../core/constant/constant.dart';
 import '../../../../../core/di/dependency_injection.dart';
 import '../../../../../core/util/util.dart';
+import '../../../../../domain/entity/comment/comment.dart';
 import '../../../../../domain/entity/meeting/meeting.dart';
 import '../../../../../domain/entity/registration/registration.dart';
 import '../../../../bloc/auth/authentication.bloc.dart';
@@ -18,15 +21,22 @@ import '../../../../bloc/registration/display/display_registration.bloc.dart';
 import '../../../../bloc/registration/edit/edit_registration.bloc.dart';
 import '../../../../widgets/widgets.dart';
 
-part 's_meeting_detail.dart';
+part 'home/s_meeting_detail_home.dart';
 
-part 's_comment.dart';
+part 'comment/s_comment.dart';
 
-part 's_display_accompany.dart';
+part 'comment/f_display_comment.dart';
 
-part 's_edit_accompany.dart';
+part 'comment/w_edit_comment.dart';
 
-part 'f_accompany.dart';
+part 'accompany/s_accompany.dart';
+
+part 'accompany/f_edit_accompany.dart';
+
+
+part 'accompany/w_proposer_registration.dart';
+
+part 'accompany/w_manager_registration.dart';
 
 part 'w_fab.dart';
 
@@ -61,78 +71,61 @@ class _MeetingDetailPageState extends State<MeetingDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    final isAuthor =
-        context.read<AuthenticationBloc>().state.currentUser!.uid ==
-            widget._meeting.createdBy;
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-              create: (_) =>
-                  getIt<BlocModule>().displayRegistration(widget._meeting)),
-          BlocProvider(
-              create: (_) =>
-                  getIt<BlocModule>().editRegistration(widget._meeting))
-        ],
-        child: Scaffold(
-            appBar: AppBar(
-                leading: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      context.pop();
-                    }),
-                actions: [
-                  // TODO : 더보기 버튼 기능개발
-                  IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.more_vert))
-                ],
-                title: TabBar(
-                    controller: _tabController,
-                    onTap: (value) {
-                      _currentIndex = value;
-                      _pageController.animateToPage(_currentIndex,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.ease);
-                    },
-                    tabs: const [
-                      Tab(icon: Icon(Icons.home_outlined)),
-                      Tab(icon: Icon(Icons.comment_outlined)),
-                      Tab(icon: Icon(Icons.group))
-                    ])),
-            body: PageView.builder(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return switch (index) {
-                    0 => MeetingDetailScreen(widget._meeting),
-                    1 => const CommentScreen(),
-                    (_) =>
-                      BlocListener<EditRegistrationBloc, EditRegistrationState>(
-                        listener: (context, state) {
-                          if (state.status == Status.error) {
-                            customUtil.showErrorSnackBar(
-                                context: context, message: state.errorMessage);
-                            Timer(const Duration(seconds: 1), () {
-                              context.read<EditRegistrationBloc>().add(
-                                  InitEditRegistrationEvent(
-                                      status: Status.initial,
-                                      errorMessage: ''));
-                            });
-                          }
-                        },
-                        child: BlocBuilder<DisplayRegistrationBloc,
-                            CustomDisplayState<RegistrationEntity>>(
-                          builder: (context, state) {
-                            return LoadingOverLayScreen(
-                                isLoading: state.status == Status.loading,
-                                loadingWidget: const Center(
-                                    child: CircularProgressIndicator()),
-                                childWidget: isAuthor
-                                    ? const EditAccompanyScreen()
-                                    : DisplayAccompanyScreen(state.data));
-                          },
-                        ),
-                      ),
-                  };
-                })));
+    return Scaffold(
+        appBar: AppBar(
+            leading: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  context.pop();
+                }),
+            actions: [
+              // TODO : 더보기 버튼 기능개발
+              IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+            ],
+            title: TabBar(
+                controller: _tabController,
+                onTap: (value) {
+                  _currentIndex = value;
+                  _pageController.animateToPage(_currentIndex,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease);
+                },
+                tabs: const [
+                  Tab(icon: Icon(Icons.home_outlined)),
+                  Tab(icon: Icon(Icons.comment_outlined)),
+                  Tab(icon: Icon(Icons.group))
+                ])),
+        body: PageView.builder(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return switch (index) {
+                /// 미팅 세부내용
+                0 => MeetingDetailHomeScreen(widget._meeting),
+
+                /// 댓글
+                1 => MultiBlocProvider(providers: [
+                    BlocProvider(
+                        create: (_) => getIt<BlocModule>()
+                            .displayMeetingComment(widget._meeting)
+                          ..add(FetchEvent<CommentEntity>())),
+                    BlocProvider(
+                        create: (_) => getIt<BlocModule>()
+                            .editMeetingComment(widget._meeting))
+                  ], child: const CommentScreen()),
+
+                /// 동반자 목록
+                (_) => MultiBlocProvider(providers: [
+                    BlocProvider(
+                        create: (_) => getIt<BlocModule>()
+                            .displayRegistration(widget._meeting)
+                    ..add(FetchEvent<RegistrationEntity>())
+                    ),
+                    BlocProvider(
+                        create: (_) => getIt<BlocModule>()
+                            .editRegistration(widget._meeting)),
+                  ], child: AccompanyScreen(widget._meeting)),
+              };
+            }));
   }
 }

@@ -23,15 +23,17 @@ class EditRegistrationBloc
         super(EditRegistrationState(meeting)) {
     on<InitEditRegistrationEvent>(_onInit);
     on<RegisterMeetingEvent>(_onRegister);
-    on<CancelRegistrationEvent>(_onCancel);
+    on<DeleteRegistrationEvent>(_onDelete);
+    on<PermitRegistrationEvent>(_onPermit);
+    on<CancelPermitRegistrationEvent>(_onCancelPermit);
   }
 
   MeetingEntity get meeting => _meeting;
 
   String get _meetingId => _meeting.id!;
 
-  Future<void> _onInit(
-      InitEditRegistrationEvent event, Emitter<EditRegistrationState> emit) async {
+  Future<void> _onInit(InitEditRegistrationEvent event,
+      Emitter<EditRegistrationState> emit) async {
     emit(
         state.copyWith(status: event.status, errorMessage: event.errorMessage));
   }
@@ -56,11 +58,47 @@ class EditRegistrationBloc
     }
   }
 
-  Future<void> _onCancel(CancelRegistrationEvent event,
+  Future<void> _onDelete(DeleteRegistrationEvent event,
       Emitter<EditRegistrationState> emit) async {
     try {
+      customUtil.logger.t('delete registration request');
       emit(state.copyWith(status: Status.loading));
-      await _useCase.cancel(_meetingId).then((res) => res.fold((l) {
+      await _useCase.delete(_meetingId).then((res) => res.fold((l) {
+            emit(state.copyWith(status: Status.error, errorMessage: l.message));
+          }, (r) {
+            emit(state.copyWith(status: Status.success, errorMessage: ''));
+          }));
+    } on Exception catch (error) {
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on cancel'));
+      customUtil.logger.e(error);
+    }
+  }
+
+  Future<void> _onPermit(PermitRegistrationEvent event,
+      Emitter<EditRegistrationState> emit) async {
+    try {
+      customUtil.logger.t('permit registration request');
+      emit(state.copyWith(status: Status.loading));
+      await _useCase.permit(event.registrationId).then((res) => res.fold((l) {
+            emit(state.copyWith(status: Status.error, errorMessage: l.message));
+          }, (r) {
+            emit(state.copyWith(status: Status.success, errorMessage: ''));
+          }));
+    } on Exception catch (error) {
+      emit(state.copyWith(
+          status: Status.error, errorMessage: 'error occurs on cancel'));
+      customUtil.logger.e(error);
+    }
+  }
+
+  Future<void> _onCancelPermit(CancelPermitRegistrationEvent event,
+      Emitter<EditRegistrationState> emit) async {
+    try {
+      customUtil.logger.t('cancel permit registration request');
+      emit(state.copyWith(status: Status.loading));
+      await _useCase.cancelPermit(event.registrationId).then((res) =>
+          res.fold((l) {
             emit(state.copyWith(status: Status.error, errorMessage: l.message));
           }, (r) {
             emit(state.copyWith(status: Status.success, errorMessage: ''));

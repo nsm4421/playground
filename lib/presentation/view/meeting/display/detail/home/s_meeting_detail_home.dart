@@ -1,7 +1,7 @@
-part of 'page.dart';
+part of '../page.dart';
 
-class MeetingDetailScreen extends StatelessWidget {
-  const MeetingDetailScreen(this._meeting, {super.key});
+class MeetingDetailHomeScreen extends StatelessWidget {
+  const MeetingDetailHomeScreen(this._meeting, {super.key});
 
   final MeetingEntity _meeting;
 

@@ -8,9 +8,8 @@ class EditRegistrationState {
   EditRegistrationState(this._meeting,
       {this.status = Status.initial, this.errorMessage = ''});
 
-  MeetingEntity get meeting => _meeting;
-
-  EditRegistrationState copyWith({Status? status, String? errorMessage}) {
+  EditRegistrationState copyWith(
+      {Status? status, bool? isIn, String? errorMessage}) {
     return EditRegistrationState(_meeting,
         status: status ?? this.status,
         errorMessage: errorMessage ?? this.errorMessage);

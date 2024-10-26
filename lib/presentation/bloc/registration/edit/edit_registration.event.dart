@@ -13,7 +13,19 @@ class InitEditRegistrationEvent extends EditRegistrationEvent {
 class RegisterMeetingEvent extends EditRegistrationEvent {
   final String introduce;
 
-  RegisterMeetingEvent({required this.introduce});
+  RegisterMeetingEvent(this.introduce);
 }
 
-class CancelRegistrationEvent extends EditRegistrationEvent {}
+class DeleteRegistrationEvent extends EditRegistrationEvent {}
+
+class PermitRegistrationEvent extends EditRegistrationEvent {
+  final String registrationId;
+
+  PermitRegistrationEvent(this.registrationId);
+}
+
+class CancelPermitRegistrationEvent extends EditRegistrationEvent {
+  final String registrationId;
+
+  CancelPermitRegistrationEvent(this.registrationId);
+}
