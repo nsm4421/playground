@@ -10,8 +10,8 @@ class DiaryDataSourceImpl extends DiaryDataSource {
       {int take = 20}) async {
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchDiaries.name, params: {
-      'before_at': beforeAt,
-      'take': take
+      '_before_at': beforeAt,
+      '_take': take
     }).then((res) => res.map(FetchDiaryModel.fromJson));
   }
 

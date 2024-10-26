@@ -30,10 +30,10 @@ class CommentDataSourceImpl implements CommentDataSource {
       int take = 20}) async {
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchComments.name, params: {
-      'reference_id_to_fetch': refId,
-      'reference_table_to_fetch': refTable.name,
-      'before_at': beforeAt,
-      'take': take
+      '_reference_id': refId,
+      '_reference_table': refTable.name,
+      '_before_at': beforeAt,
+      '_take': take
     }).then((res) => res.map(FetchCommentModel.fromJson));
   }
 

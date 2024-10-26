@@ -23,8 +23,8 @@ class OpenChatRoomDataSourceImpl implements OpenChatRoomDataSource {
     // TODO : RPC 함수 구현
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchOpenChats.name, params: {
-      'before_at': beforeAt,
-      'take': take
+      '_before_at': beforeAt,
+      '_take': take
     }).then((res) => res.map(FetchOpenChatModel.fromJson));
   }
 

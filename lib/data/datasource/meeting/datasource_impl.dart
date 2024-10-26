@@ -32,8 +32,8 @@ class MeetingDataSourceImpl implements MeetingDataSource {
     customUtil.logger.d('beforeAt:$beforeAt|take:$take');
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchMeetings.name, params: {
-      'before_at': beforeAt,
-      'take': take
+      '_before_at': beforeAt,
+      '_take': take
     }).then((res) => res.map(FetchMeetingsModel.fromJson));
   }
 

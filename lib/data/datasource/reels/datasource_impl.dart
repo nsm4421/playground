@@ -8,10 +8,11 @@ class ReelsDataSourceImpl implements ReelsDataSource {
   @override
   Future<Iterable<FetchReelsModel>> fetch(String beforeAt,
       {int take = 20}) async {
+    // TODO : RPC함수 구현
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchReels.name, params: {
-      'before_at': beforeAt,
-      'take': take
+      '_before_at': beforeAt,
+      '_take': take
     }).then((res) => res.map(FetchReelsModel.fromJson));
   }
 
