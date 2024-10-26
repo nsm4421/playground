@@ -8,12 +8,12 @@ import '../../../../domain/entity/comment/comment.dart';
 import '../../../../domain/entity/meeting/meeting.dart';
 import '../../../../domain/usecase/comment/usecase.dart';
 
-class DisplayCommentBloc<T extends BaseEntity>
+class DisplayCommentBloc<Ref extends BaseEntity>
     extends CustomDisplayBloc<CommentEntity> {
-  final T _ref;
+  final Ref _ref;
   final CommentUseCase _useCase;
 
-  T get ref => _ref;
+  Ref get ref => _ref;
 
   DisplayCommentBloc(@factoryParam this._ref, {required CommentUseCase useCase})
       : _useCase = useCase;
@@ -28,9 +28,11 @@ class DisplayCommentBloc<T extends BaseEntity>
         data: event.refresh ? [] : state.data,
         isEnd: event.refresh ? false : state.isEnd,
       ));
-      if (T is MeetingEntity) {
+      // Ref is MeetingEntity라고 조건문 걸면 안 먹음...
+      // == 로 하니가 잘 됨
+      if (Ref == MeetingEntity) {
         await _useCase
-            .fetchComment(refId: _ref.id!, refTable: Tables.meeting)
+            .fetchComment(_ref)
             .call(beforeAt: state.beforeAt, take: event.take)
             .then((res) => emit(state.from(res, take: event.take)));
       } else {
