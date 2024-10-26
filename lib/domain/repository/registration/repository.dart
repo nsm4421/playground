@@ -15,7 +15,7 @@ abstract interface class RegistrationRepository {
       {required String meetingId, required String introduce});
 
   Future<Either<ErrorResponse, void>> update(
-      {required String meetingId, required bool isPermitted});
+      {required String registrationId, required bool isPermitted});
 
   Future<Either<ErrorResponse, void>> deleteByMeetingId(String meetingId);
 }

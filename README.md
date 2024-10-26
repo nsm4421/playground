@@ -278,11 +278,13 @@ alter table public.registrations enable row level security;
 create policy "enable to select for all authenticated" 
 on registrations for select to authenticated using (true);
 
-create policy "enable insert only own data" on registration
+create policy "enable insert only own data" on registrations
 for insert to authenticated with check (auth.uid()=created_by);
 
 create policy "enable update only own data" on registrations
-for update to authenticated with check (auth.uid()=manager_id);
+for update to authenticated 
+USING (auth.uid() = manager_id)
+with check (auth.uid()=manager_id);
 
 create policy "enable delete only own data" on registrations
 for delete to authenticated using ((auth.uid()=proposer_id) or (auth.uid()=manager_id));
@@ -691,4 +693,58 @@ as $$
         ) A
     left join public.accounts B on A.created_by = B.id;
 $$
+
+CREATE OR REPLACE FUNCTION update_permission_on_registration(
+    registration_id_to_permit uuid,
+    is_permitted_to_switch bool
+)
+RETURNS void AS $$
+DECLARE
+    updated_count int;
+    max_head_count int;
+    current_permitted_head_count int;
+    current_meeting_id uuid;
+    current_manager_id uuid;
+BEGIN
+    SELECT meeting_id, manager_id 
+    INTO current_meeting_id, current_manager_id
+    FROM registrations
+    WHERE id = registration_id_to_permit;   
+    
+    -- 권한 체크
+    IF current_manager_id != auth.uid() then
+        RAISE EXCEPTION 'only manager can handle permission';
+    -- 변경할 record가 없는 경우
+    ELSIF not found then
+        RAISE EXCEPTION 'registration with id % does not exist', registration_id_to_permit;
+    -- 동행 허용하는 경우 최대 인원수 초과하는지 확인
+    ELSIF is_permitted_to_switch then
+        SELECT count(1) 
+        INTO current_permitted_head_count
+        FROM registrations
+        WHERE meeting_id = current_meeting_id and is_permitted = true;        
+        SELECT head_count
+        INTO max_head_count
+        FROM meetings
+        WHERE id = current_meeting_id;
+        IF max_head_count <= current_permitted_head_count then
+            RAISE EXCEPTION 'head count can not exceed %', max_head_count;
+        END IF;
+    END IF;
+    
+    -- 업데이트
+    update public.registrations 
+    set is_permitted = is_permitted_to_switch,
+    updated_at = NOW()
+    where id = registration_id_to_permit;
+    
+    -- 업데이트 결과 체크
+    GET DIAGNOSTICS updated_count = ROW_COUNT;
+    IF updated_count = 0 then
+        RAISE EXCEPTION 'updated nothing';       
+    ELSIF updated_count > 1 then
+        RAISE EXCEPTION 'attempt to update % rows', updated_count;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
 ```

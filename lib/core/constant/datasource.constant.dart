@@ -49,6 +49,7 @@ enum RpcFns {
   fetchComments('fetch_comments'),
   fetchRegistrations('fetch_registrations'),
   createRegistration('create_registration'),
+  updatePermissionOnRegistration('update_permission_on_registration'),
   ;
 
   final String name;

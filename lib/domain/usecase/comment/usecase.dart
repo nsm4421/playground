@@ -5,22 +5,20 @@ import '../../../core/response/error_response.dart';
 import '../../entity/comment/comment.dart';
 import '../../repository/comment/repository.dart';
 
-part 'scenario/meeting.dart';
+part 'scenario/crud.dart';
 
 class CommentUseCase {
   final CommentRepository _repository;
 
   CommentUseCase(this._repository);
 
-  CreateMeetingCommentUseCase get createMeetingComment =>
-      CreateMeetingCommentUseCase(_repository);
+  CreateCommentUseCase createComment(BaseEntity ref) =>
+      CreateCommentUseCase(_repository, ref: ref);
 
-  ModifyMeetingCommentUseCase get modifyMeetingComment =>
-      ModifyMeetingCommentUseCase(_repository);
+  FetchCommentUseCase fetchComment(BaseEntity ref) =>
+      FetchCommentUseCase(ref: ref, _repository);
 
-  DeleteMeetingCommentUseCase get deleteMeetingComment =>
-      DeleteMeetingCommentUseCase(_repository);
+  ModifyCommentUseCase get modify => ModifyCommentUseCase(_repository);
 
-  FetchMeetingCommentUseCase get fetchMeetingComment =>
-      FetchMeetingCommentUseCase(_repository);
+  DeleteCommentUseCase get delete => DeleteCommentUseCase(_repository);
 }

@@ -9,8 +9,11 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
   Future<String> create(
       {required String meetingId, required String introduce}) async {
     // return new registration id
-    return await _supabaseClient.rpc<String>(RpcFns.createRegistration.name,
-        params: {'introduce_to_insert': introduce,'meeting_id_to_insert': meetingId, });
+    return await _supabaseClient
+        .rpc<String>(RpcFns.createRegistration.name, params: {
+      'introduce_to_insert': introduce,
+      'meeting_id_to_insert': meetingId,
+    });
   }
 
   @override
@@ -34,10 +37,13 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
 
   @override
   Future<void> update(
-      {required String meetingId, required bool isPermitted}) async {
-    // auth.uid()=manager_id로 권한설정 되어 있음
-    return await _supabaseClient.rest
-        .from(Tables.registration.name)
-        .update({'is_permitted': isPermitted}).eq('meeting_id', meetingId);
+      {required String registrationId, required bool isPermitted}) async {
+    customUtil.logger.t(
+        'update registration request|id:$registrationId|isPermitted:$isPermitted');
+    return await _supabaseClient
+        .rpc<void>(RpcFns.updatePermissionOnRegistration.name, params: {
+      'registration_id_to_permit': registrationId,
+      'is_permitted_to_switch': isPermitted
+    });
   }
 }

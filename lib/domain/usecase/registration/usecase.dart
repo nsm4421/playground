@@ -16,9 +16,12 @@ class RegistrationUseCase {
 
   FetchRegistrationsUseCase get fetch => FetchRegistrationsUseCase(_repository);
 
-  UpdateRegistrationsUseCase get update =>
-      UpdateRegistrationsUseCase(_repository);
+  PermitRegistrationsUseCase get permit =>
+      PermitRegistrationsUseCase(_repository);
 
-  CancelRegistrationUseCase get cancel =>
-      CancelRegistrationUseCase(_repository);
+  CancelPermitRegistrationUseCase get cancelPermit =>
+      CancelPermitRegistrationUseCase(_repository);
+
+  DeleteRegistrationUseCase get delete =>
+      DeleteRegistrationUseCase(_repository);
 }

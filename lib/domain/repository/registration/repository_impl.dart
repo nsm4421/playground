@@ -49,10 +49,10 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
 
   @override
   Future<Either<ErrorResponse, void>> update(
-      {required String meetingId, required bool isPermitted}) async {
+      {required String registrationId, required bool isPermitted}) async {
     try {
       return await _registrationDataSource
-          .update(meetingId: meetingId, isPermitted: isPermitted)
+          .update(registrationId: registrationId, isPermitted: isPermitted)
           .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);

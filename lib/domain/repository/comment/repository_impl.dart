@@ -7,12 +7,10 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Either<ErrorResponse, String>> create(
-      {required Tables refTable,
-      required String refId,
-      required String content}) async {
+      {required BaseEntity ref, required String content}) async {
     try {
       return await _dataSource
-          .create(refTable: refTable, refId: refId, content: content)
+          .create(refTable: _getRefTable(ref), refId: ref.id!, content: content)
           .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
@@ -32,14 +30,16 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Either<ErrorResponse, List<CommentEntity>>> fetch(
-      {required Tables refTable,
-      required String refId,
+      {required BaseEntity ref,
       required String beforeAt,
       int take = 20}) async {
     try {
       return await _dataSource
           .fetch(
-              refTable: refTable, refId: refId, beforeAt: beforeAt, take: take)
+              refTable: _getRefTable(ref),
+              refId: ref.id!,
+              beforeAt: beforeAt,
+              take: take)
           .then((res) => res.map(CommentEntity.from).toList())
           .then(Right.new);
     } on Exception catch (error) {
@@ -58,6 +58,14 @@ class CommentRepositoryImpl implements CommentRepository {
     } on Exception catch (error) {
       customUtil.logger.e(error);
       return Left(ErrorResponse.from(error));
+    }
+  }
+
+  Tables _getRefTable(BaseEntity entity) {
+    if (entity is MeetingEntity) {
+      return Tables.meeting;
+    } else {
+      throw Exception('ref table is not well defined');
     }
   }
 }
