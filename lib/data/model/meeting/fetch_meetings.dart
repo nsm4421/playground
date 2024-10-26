@@ -19,7 +19,7 @@ class FetchMeetingsModel with _$FetchMeetingsModel {
     @Default('') String end_date,
     // 같이 여행할 사람
     int? head_count,
-    @Default(TravelPeopleSexType.all) TravelPeopleSexType sex,
+    @Default(AccompanySexType.all) AccompanySexType sex,
     @Default(TravelThemeType.all) TravelThemeType theme,
     // 여행 경비
     @Default(0) int min_cost,

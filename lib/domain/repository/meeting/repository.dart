@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:travel/data/datasource/registration/datasource.dart';
 
 import '../../../core/constant/constant.dart';
 import '../../../core/response/error_response.dart';
@@ -32,7 +33,7 @@ abstract interface class MeetingRepository {
       required DateTime startDate,
       required DateTime endDate,
       int headCount = 2,
-      required TravelPeopleSexType sex,
+      required AccompanySexType sex,
       required TravelThemeType theme,
       int minCost = 0,
       int maxCost = 500,

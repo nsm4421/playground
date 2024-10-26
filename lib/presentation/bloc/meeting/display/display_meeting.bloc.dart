@@ -1,23 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:travel/core/bloc/display_bloc.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/util/util.dart';
 import '../../../../domain/entity/meeting/meeting.dart';
 import '../../../../domain/usecase/meeting/usecase.dart';
 
-part 'display_meeting.event.dart';
-
-class DisplayMeetingBloc
-    extends Bloc<DisplayMeetingEvent, CustomDisplayState<MeetingEntity>> {
+class DisplayMeetingBloc extends CustomDisplayBloc<MeetingEntity> {
   final MeetingUseCase _useCase;
 
-  DisplayMeetingBloc(this._useCase)
-      : super(CustomDisplayState<MeetingEntity>()) {
-    on<FetchMeetingEvent>(_onFetch);
-  }
+  DisplayMeetingBloc(this._useCase);
 
-  Future<void> _onFetch(FetchMeetingEvent event,
+  @override
+  Future<void> onFetch(FetchEvent<MeetingEntity> event,
       Emitter<CustomDisplayState<MeetingEntity>> emit) async {
     try {
       emit(state.copyWith(

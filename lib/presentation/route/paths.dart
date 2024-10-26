@@ -15,6 +15,7 @@ enum Routes {
   image2Text('/image-to-text');
 
   final String path;
+  final String? subPath;
 
-  const Routes(this.path);
+  const Routes(this.path, {this.subPath});
 }

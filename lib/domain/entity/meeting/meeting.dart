@@ -16,7 +16,7 @@ class MeetingEntity extends BaseEntity {
 
   // 같이 여행할 사람
   final int? headCount;
-  final TravelPeopleSexType? sex;
+  final AccompanySexType? sex;
   final TravelThemeType? theme;
 
   // 여행 경비

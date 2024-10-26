@@ -51,7 +51,7 @@ class MeetingItemWidget extends StatelessWidget {
           if (_entity.hashtags.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 12, left: 15),
-              child: HashtagsWidget(_entity.hashtags),
+              child: DisplayHashtagsWidget(_entity.hashtags),
             ),
           // 디바이더
           const Padding(

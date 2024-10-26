@@ -23,42 +23,30 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
           ],
         ),
         body: const SingleChildScrollView(
-            child: Column(children: [
-          /// country
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: SelectCountryFragment()),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: SelectDateFragment()),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: SelectPreferenceFragment()),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: SelectBudgetFragment()),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: DetailFragment()),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: HashtagFragment()),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                        child: SelectThumbnailFragment())
-                  ]))
-        ])));
+            child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            /// 여행할 국가 선택
+            SelectCountryFragment(),
+            Padding(padding: EdgeInsets.all(16), child: Divider()),
+
+            /// 여행일자 선택
+            SelectDateFragment(),
+            Padding(padding: EdgeInsets.all(16), child: Divider()),
+
+            /// 같이갈 동행
+            SelectPreferenceFragment(),
+            Padding(padding: EdgeInsets.all(16), child: Divider()),
+
+            /// 세부 내용
+            DetailFragment(),
+            SizedBox(height: 12),
+            HashtagFragment(),
+            SizedBox(height: 12),
+            SelectThumbnailFragment(),
+            Padding(padding: EdgeInsets.all(16), child: Divider()),
+          ]),
+        )));
   }
 }

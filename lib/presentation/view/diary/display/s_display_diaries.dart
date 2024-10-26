@@ -18,7 +18,7 @@ class _DisplayDiariesScreenState extends State<DisplayDiariesScreen> {
           onRefresh: () async {
             context
                 .read<DisplayDiaryBloc>()
-                .add(FetchDiariesEvent(refresh: true));
+                .add(FetchEvent(refresh: true));
           },
           child: SingleChildScrollView(
             child: ListView.builder(

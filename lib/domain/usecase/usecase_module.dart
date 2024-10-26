@@ -1,11 +1,11 @@
 import 'package:injectable/injectable.dart';
-import 'package:travel/domain/usecase/meeting/usecase.dart';
-import 'package:travel/domain/usecase/meeting/usecase.dart';
-
 import '../repository/repository_module.dart';
 import 'account/usecase.dart';
 import 'auth/usecase.dart';
+import 'comment/usecase.dart';
 import 'diary/usecase.dart';
+import 'meeting/usecase.dart';
+import 'registration/usecase.dart';
 
 @lazySingleton
 class UseCaseModule {
@@ -24,4 +24,11 @@ class UseCaseModule {
 
   @lazySingleton
   MeetingUseCase get meeting => MeetingUseCase(_repositoryModule.meeting);
+
+  @lazySingleton
+  RegistrationUseCase get registration =>
+      RegistrationUseCase(_repositoryModule.registration);
+
+  @injectable
+  CommentUseCase get comment => CommentUseCase(_repositoryModule.comment);
 }

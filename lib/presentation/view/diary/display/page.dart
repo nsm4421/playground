@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/bloc/display_bloc.dart';
 import '../../../../core/constant/constant.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../domain/entity/diary/diary.dart';
@@ -28,7 +29,7 @@ class DisplayDiariesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (_) => getIt<BlocModule>().displayDiary
-          ..add(FetchDiariesEvent(refresh: true)),
+          ..add(FetchEvent(refresh: true)),
         child: BlocBuilder<DisplayDiaryBloc, CustomDisplayState<DiaryEntity>>(
           builder: (context, state) {
             return LoadingOverLayScreen(

@@ -19,7 +19,7 @@ class EditMeetingModel with _$EditMeetingModel {
     @Default('') String end_date,
     // 같이 여행할 사람
     int? head_count,
-    @Default(TravelPeopleSexType.all) TravelPeopleSexType sex,
+    @Default(AccompanySexType.all) AccompanySexType sex,
     @Default(TravelThemeType.all) TravelThemeType theme,
     // 여행 경비
     @Default(0) int min_cost,
@@ -40,7 +40,7 @@ class EditMeetingModel with _$EditMeetingModel {
       start_date: entity.startDate!.toUtc().toIso8601String(),
       end_date: entity.endDate!.toUtc().toIso8601String(),
       head_count: entity.headCount,
-      sex: entity.sex ?? TravelPeopleSexType.all,
+      sex: entity.sex ?? AccompanySexType.all,
       theme: entity.theme ?? TravelThemeType.all,
       min_cost: entity.minCost ?? 0,
       max_cost: entity.maxCost ?? 500,

@@ -4,6 +4,8 @@ enum Tables {
   accounts('accounts'),
   diaries('diaries'),
   meeting('meetings'),
+  comment('comments'),
+  registration('registrations'),
   reels('reels'),
   openChatRooms('open_chat_rooms'),
   openChatMessages('open_chat_messages'),
@@ -44,6 +46,10 @@ enum RpcFns {
   fetchOpenChats('fetch_open_chats'),
   fetchOpenChatMessages('fetch_open_messages'),
   fetchMeetings('fetch_meetings'),
+  fetchComments('fetch_comments'),
+  fetchRegistrations('fetch_registrations'),
+  createRegistration('create_registration'),
+  updatePermissionOnRegistration('update_permission_on_registration'),
   ;
 
   final String name;

@@ -44,7 +44,7 @@ class _DetailFragmentState extends State<DetailFragment> {
         context: context,
         builder: (_) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: MediaQuery.of(context).viewInsets,
             child: TextField(
               controller: _titleTec,
               minLines: _titleLine,
@@ -86,15 +86,7 @@ class _DetailFragmentState extends State<DetailFragment> {
     return Column(children: [
       // 제목
       Column(children: [
-        Row(children: [
-          const Icon(Icons.title),
-          const SizedBox(width: 12),
-          Text('Title',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold))
-        ]),
+        const IconLabelWidget(iconData: Icons.title, label: 'Title'),
         const SizedBox(height: 10),
         TextField(
             controller: _titleTec,
@@ -107,26 +99,20 @@ class _DetailFragmentState extends State<DetailFragment> {
       ]),
 
       // 본문
-      Column(children: [
-        const SizedBox(height: 24),
-        Row(children: [
-          const Icon(Icons.abc),
-          const SizedBox(width: 12),
-          Text('Content',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold))
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Column(children: [
+          const IconLabelWidget(iconData: Icons.abc, label: 'Content'),
+          const SizedBox(height: 10),
+          TextField(
+              controller: _contentTec,
+              onTap: _handleShowContentModal,
+              minLines: _contentMinLine,
+              maxLines: _contentMaxLine,
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+              readOnly: true)
         ]),
-        const SizedBox(height: 10),
-        TextField(
-            controller: _contentTec,
-            onTap: _handleShowContentModal,
-            minLines: _contentMinLine,
-            maxLines: _contentMaxLine,
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-            readOnly: true)
-      ])
+      )
     ]);
   }
 }

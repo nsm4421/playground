@@ -56,28 +56,18 @@ class _SelectCountryFragmentState extends State<SelectCountryFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(children: [
-          const Icon(Icons.airplanemode_active),
-          const SizedBox(width: 12),
-          Text('Country',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold))
-        ]),
-        TextField(
-            onTap: _handleShowModal,
-            readOnly: true,
-            controller: _countryTec,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.secondary),
-            decoration: const InputDecoration(
-                hintText: 'select country you want to travel'))
-      ],
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const IconLabelWidget(
+          iconData: Icons.airplanemode_active, label: 'Country'),
+      TextField(
+          onTap: _handleShowModal,
+          readOnly: true,
+          controller: _countryTec,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.secondary),
+          decoration: const InputDecoration(
+              hintText: 'select country you want to travel'))
+    ]);
   }
 }

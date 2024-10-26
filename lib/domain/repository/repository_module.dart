@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/repository/comment/repository.dart';
 import 'package:travel/domain/repository/meeting/repository.dart';
 
 import '../../data/datasource/datasource_module.dart';
@@ -7,6 +8,7 @@ import 'auth/repository.dart';
 import 'chat/open_chat/repository.dart';
 import 'chat/private_chat/repository.dart';
 import 'diary/repository.dart';
+import 'registration/repository.dart';
 
 @lazySingleton
 class RepositoryModule {
@@ -46,4 +48,12 @@ class RepositoryModule {
       meetingDataSource: _dataSourceModule.meeting,
       storageDataSource: _dataSourceModule.storage,
       channelDataSource: _dataSourceModule.channel);
+
+  @lazySingleton
+  RegistrationRepository get registration => RegistrationRepositoryImpl(
+      registrationDataSource: _dataSourceModule.registration);
+
+  @lazySingleton
+  CommentRepository get comment =>
+      CommentRepositoryImpl(_dataSourceModule.comment);
 }

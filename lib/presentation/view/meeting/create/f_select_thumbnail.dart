@@ -8,16 +8,8 @@ class SelectThumbnailFragment extends StatelessWidget {
     return BlocBuilder<CreateMeetingCubit, CreateMeetingState>(
         builder: (context, state) {
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          const Icon(Icons.add_photo_alternate_outlined),
-          const SizedBox(width: 12),
-          Text('Thumbnail',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold)),
-          const Spacer()
-        ]),
+        const IconLabelWidget(
+            iconData: Icons.add_photo_alternate_outlined, label: 'Thumbnail'),
         const SizedBox(height: 24),
         state.thumbnail == null
             ? ElevatedButton(

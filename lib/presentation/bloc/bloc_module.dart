@@ -1,12 +1,17 @@
 import 'package:injectable/injectable.dart';
-import 'package:travel/presentation/bloc/meeting/create/create_meeting.cubit.dart';
+import 'package:travel/presentation/bloc/comment/display/display_comment.bloc.dart';
+import 'package:travel/presentation/bloc/comment/edit/edit_comment.bloc.dart';
 
+import '../../domain/entity/meeting/meeting.dart';
 import '../../domain/usecase/usecase_module.dart';
 import 'auth/authentication.bloc.dart';
 import 'diary/display/display_diary.bloc.dart';
 import 'diary/edit/edit_diary.bloc.dart';
 import 'image_to_text/image_to_text.bloc.dart';
+import 'meeting/create/create_meeting.cubit.dart';
 import 'meeting/display/display_meeting.bloc.dart';
+import 'registration/display/display_registration.bloc.dart';
+import 'registration/edit/edit_registration.bloc.dart';
 
 @lazySingleton
 class BlocModule {
@@ -35,4 +40,22 @@ class BlocModule {
   @lazySingleton
   DisplayMeetingBloc get displayMeeting =>
       DisplayMeetingBloc(_useCaseModule.meeting);
+
+  @injectable
+  DisplayRegistrationBloc displayRegistration(MeetingEntity meeting) =>
+      DisplayRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+
+  @injectable
+  EditRegistrationBloc editRegistration(MeetingEntity meeting) =>
+      EditRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+
+  @injectable
+  DisplayCommentBloc<MeetingEntity> displayMeetingComment(
+          MeetingEntity meeting) =>
+      DisplayCommentBloc<MeetingEntity>(meeting,
+          useCase: _useCaseModule.comment);
+
+  @injectable
+  EditCommentBloc<MeetingEntity> editMeetingComment(MeetingEntity meeting) =>
+      EditCommentBloc<MeetingEntity>(meeting, useCase: _useCaseModule.comment);
 }

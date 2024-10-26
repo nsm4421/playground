@@ -7,10 +7,12 @@ import 'auth/datasource.dart';
 import 'channel/datasource.dart';
 import 'chat/open_chat/datasource.dart';
 import 'chat/private_chat/datasource.dart';
+import 'comment/datasource.dart';
 import 'diary/datsource.dart';
 import 'local/datasource.dart';
 import 'meeting/datasource.dart';
 import 'reels/datasource.dart';
+import 'registration/datasource.dart';
 import 'storage/datasource.dart';
 
 @lazySingleton
@@ -54,6 +56,10 @@ class DataSourceModule {
   MeetingDataSource get meeting => MeetingDataSourceImpl(_supabaseClient);
 
   @lazySingleton
+  RegistrationDataSource get registration =>
+      RegistrationDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
   ReelsDataSource get reels => ReelsDataSourceImpl(_supabaseClient);
 
   @lazySingleton
@@ -61,4 +67,7 @@ class DataSourceModule {
 
   @lazySingleton
   ChannelDataSource get channel => ChannelDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  CommentDataSource get comment => CommentDataSourceImpl(_supabaseClient);
 }

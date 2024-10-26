@@ -7,7 +7,7 @@ class CreateMeetingState {
   late final DateTime endDate;
   final bool isDateSelected;
   final int headCount;
-  final TravelPeopleSexType sex;
+  final AccompanySexType sex;
   final TravelThemeType theme;
   final int minCost;
   final int maxCost;
@@ -24,7 +24,7 @@ class CreateMeetingState {
       DateTime? endDate,
       this.isDateSelected = false,
       this.headCount = 2,
-      this.sex = TravelPeopleSexType.all,
+      this.sex = AccompanySexType.all,
       this.theme = TravelThemeType.all,
       this.minCost = 10,
       this.maxCost = 500,
