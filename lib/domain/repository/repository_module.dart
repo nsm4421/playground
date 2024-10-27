@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:travel/domain/repository/comment/repository.dart';
+import 'package:travel/domain/repository/like/repository.dart';
 import 'package:travel/domain/repository/meeting/repository.dart';
 
 import '../../data/datasource/datasource_module.dart';
@@ -56,4 +57,7 @@ class RepositoryModule {
   @lazySingleton
   CommentRepository get comment =>
       CommentRepositoryImpl(_dataSourceModule.comment);
+
+  @lazySingleton
+  LikeRepository get like => LikeRepositoryImpl(_dataSourceModule.like);
 }

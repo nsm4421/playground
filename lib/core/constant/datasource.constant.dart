@@ -5,6 +5,7 @@ enum Tables {
   diaries('diaries'),
   meeting('meetings'),
   comment('comments'),
+  like('likes'),
   registration('registrations'),
   reels('reels'),
   openChatRooms('open_chat_rooms'),

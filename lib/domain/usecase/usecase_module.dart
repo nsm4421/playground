@@ -4,6 +4,7 @@ import 'account/usecase.dart';
 import 'auth/usecase.dart';
 import 'comment/usecase.dart';
 import 'diary/usecase.dart';
+import 'like/usecase.dart';
 import 'meeting/usecase.dart';
 import 'registration/usecase.dart';
 
@@ -29,6 +30,9 @@ class UseCaseModule {
   RegistrationUseCase get registration =>
       RegistrationUseCase(_repositoryModule.registration);
 
-  @injectable
+  @lazySingleton
   CommentUseCase get comment => CommentUseCase(_repositoryModule.comment);
+
+  @lazySingleton
+  LikeUseCase get like => LikeUseCase(_repositoryModule.like);
 }

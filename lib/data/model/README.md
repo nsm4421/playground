@@ -311,6 +311,32 @@ create policy "enable delete only own data" on comments
 for delete to authenticated using (auth.uid()=created_by);
 ```
 
+## Comment
+```
+create table public.likes (
+    id uuid not null default gen_random_uuid(),
+    reference_table text not null,
+    reference_id uuid not null,
+    created_by uuid not null default auth.uid(),
+    created_at timestamp with time zone not null default now(),
+    constraint likes_pkey primary key (id),
+    constraint likes_fkey foreign key (created_by)
+    references accounts (id) on update cascade on delete cascade,
+    unique(reference_id, reference_table, created_by)
+) tablespace pg_default;
+
+alter table public.likes enable row level security;
+
+create policy "enable to select for all authenticated" 
+on likes for select to authenticated using (true);
+
+create policy "enable insert only own data" on likes
+for insert to authenticated with check (auth.uid()=created_by);
+
+create policy "enable delete only own data" on likes
+for delete to authenticated using (auth.uid()=created_by);
+```
+
 # Create Buckets
 
 ## Avatar

@@ -9,6 +9,7 @@ import 'chat/open_chat/datasource.dart';
 import 'chat/private_chat/datasource.dart';
 import 'comment/datasource.dart';
 import 'diary/datsource.dart';
+import 'like/datasource.dart';
 import 'local/datasource.dart';
 import 'meeting/datasource.dart';
 import 'reels/datasource.dart';
@@ -70,4 +71,7 @@ class DataSourceModule {
 
   @lazySingleton
   CommentDataSource get comment => CommentDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  LikeDataSource get like => LikeDataSourceImpl(_supabaseClient);
 }

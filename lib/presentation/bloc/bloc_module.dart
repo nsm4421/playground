@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 
+import '../../domain/entity/comment/comment.dart';
 import '../../domain/entity/diary/diary.dart';
 import '../../domain/entity/meeting/meeting.dart';
 import '../../domain/usecase/usecase_module.dart';
@@ -10,6 +11,7 @@ import 'comment/edit/edit_comment.bloc.dart';
 import 'diary/display/display_diary.bloc.dart';
 import 'diary/edit/edit_diary.bloc.dart';
 import 'image_to_text/image_to_text.bloc.dart';
+import 'like/like.cubit.dart';
 import 'meeting/create/create_meeting.cubit.dart';
 import 'meeting/display/display_meeting.bloc.dart';
 import 'registration/display/display_registration.bloc.dart';
@@ -38,14 +40,6 @@ class BlocModule {
   @lazySingleton
   DisplayDiaryBloc get displayDiary => DisplayDiaryBloc(_useCaseModule.diary);
 
-  @injectable
-  DisplayCommentBloc<DiaryEntity> displayDiaryComment(DiaryEntity diary) =>
-      DisplayCommentBloc<DiaryEntity>(diary, useCase: _useCaseModule.comment);
-
-  @injectable
-  EditCommentBloc<DiaryEntity> editDiaryComment(DiaryEntity diary) =>
-      EditCommentBloc<DiaryEntity>(diary, useCase: _useCaseModule.comment);
-
   /// meeting
   @lazySingleton
   CreateMeetingCubit get createMeeting =>
@@ -54,6 +48,24 @@ class BlocModule {
   @lazySingleton
   DisplayMeetingBloc get displayMeeting =>
       DisplayMeetingBloc(_useCaseModule.meeting);
+
+  /// registration on meeting
+  @injectable
+  DisplayRegistrationBloc displayRegistration(MeetingEntity meeting) =>
+      DisplayRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+
+  @injectable
+  EditRegistrationBloc editRegistration(MeetingEntity meeting) =>
+      EditRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+
+  /// comment
+  @injectable
+  DisplayCommentBloc<DiaryEntity> displayDiaryComment(DiaryEntity diary) =>
+      DisplayCommentBloc<DiaryEntity>(diary, useCase: _useCaseModule.comment);
+
+  @injectable
+  EditCommentBloc<DiaryEntity> editDiaryComment(DiaryEntity diary) =>
+      EditCommentBloc<DiaryEntity>(diary, useCase: _useCaseModule.comment);
 
   @injectable
   DisplayCommentBloc<MeetingEntity> displayMeetingComment(
@@ -65,13 +77,14 @@ class BlocModule {
   EditCommentBloc<MeetingEntity> editMeetingComment(MeetingEntity meeting) =>
       EditCommentBloc<MeetingEntity>(meeting, useCase: _useCaseModule.comment);
 
+  /// like
   @injectable
-  DisplayRegistrationBloc displayRegistration(MeetingEntity meeting) =>
-      DisplayRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+  LikeCubit<DiaryEntity> likeDiary(DiaryEntity diary) =>
+      LikeCubit<DiaryEntity>(diary, useCase: _useCaseModule.like);
 
   @injectable
-  EditRegistrationBloc editRegistration(MeetingEntity meeting) =>
-      EditRegistrationBloc(meeting, useCase: _useCaseModule.registration);
+  LikeCubit<CommentEntity> likeComment(CommentEntity comment) =>
+      LikeCubit<CommentEntity>(comment, useCase: _useCaseModule.like);
 
   /// etc
   @lazySingleton
