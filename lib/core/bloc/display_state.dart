@@ -1,6 +1,5 @@
 part of 'display_bloc.dart';
 
-
 class CustomDisplayState<T extends BaseEntity> {
   final Status status;
   final bool isFetching;
@@ -63,4 +62,3 @@ class CustomDisplayState<T extends BaseEntity> {
     });
   }
 }
-

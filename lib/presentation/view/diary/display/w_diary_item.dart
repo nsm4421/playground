@@ -189,22 +189,8 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: ExpandableTextWidget(widget._diary.content!)),
 
-              // TODO : icons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: IconButton(
-                          icon: const Icon(Icons.favorite_border),
-                          onPressed: () {})),
-                  IconButton(
-                      icon: const Icon(Icons.comment_outlined),
-                      onPressed: () {}),
-                  IconButton(
-                      icon: const Icon(Icons.send_outlined), onPressed: () {})
-                ],
-              )
+              /// 아이콘 위젯
+              IconsWidget(widget._diary)
             ]));
   }
 }

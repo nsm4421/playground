@@ -1,4 +1,4 @@
-part of 'page.dart';
+part of '../page.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
   const DiaryDetailScreen(this._diary, {super.key});

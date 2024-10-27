@@ -64,6 +64,8 @@ class CommentRepositoryImpl implements CommentRepository {
   Tables _getRefTable(BaseEntity entity) {
     if (entity is MeetingEntity) {
       return Tables.meeting;
+    } else if (entity is DiaryEntity) {
+      return Tables.diaries;
     } else {
       throw Exception('ref table is not well defined');
     }

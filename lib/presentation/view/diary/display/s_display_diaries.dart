@@ -16,19 +16,14 @@ class _DisplayDiariesScreenState extends State<DisplayDiariesScreen> {
         appBar: const DisplayDiaryAppBarWidget(),
         body: RefreshIndicator(
           onRefresh: () async {
-            context
-                .read<DisplayDiaryBloc>()
-                .add(FetchEvent(refresh: true));
+            context.read<DisplayDiaryBloc>().add(FetchEvent(refresh: true));
           },
-          child: SingleChildScrollView(
-            child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: widget._diaries.length,
-                itemBuilder: (context, index) {
-                  return DiaryItemWidget(widget._diaries[index]);
-                }),
-          ),
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget._diaries.length,
+              itemBuilder: (context, index) {
+                return DiaryItemWidget(widget._diaries[index]);
+              }),
         ));
   }
 }

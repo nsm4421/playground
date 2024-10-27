@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:travel/domain/entity/diary/diary.dart';
 import 'package:travel/domain/entity/meeting/meeting.dart';
 
 import '../../../core/constant/constant.dart';

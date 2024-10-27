@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/entity/diary/diary.dart';
 
 import '../../../../core/bloc/display_bloc.dart';
 import '../../../../core/constant/constant.dart';
@@ -30,11 +33,11 @@ class DisplayCommentBloc<Ref extends BaseEntity>
       ));
       // Ref is MeetingEntity라고 조건문 걸면 안 먹음...
       // == 로 하니가 잘 됨
-      if (Ref == MeetingEntity) {
+      if (Ref == MeetingEntity || Ref == DiaryEntity) {
         await _useCase
             .fetchComment(_ref)
             .call(beforeAt: state.beforeAt, take: event.take)
-            .then((res) => emit(state.from(res, take: event.take)));
+            .then((res) => emit(state.from(res)));
       } else {
         throw Exception('given parameter is not valid');
       }
