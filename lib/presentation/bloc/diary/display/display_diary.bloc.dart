@@ -15,11 +15,12 @@ class DisplayDiaryBloc extends CustomDisplayBloc<DiaryEntity> {
   Future<void> onFetch(FetchEvent<DiaryEntity> event,
       Emitter<CustomDisplayState<DiaryEntity>> emit) async {
     try {
+      if (!event.refresh && state.isEnd) return;
       emit(state.copyWith(
-        status: event.refresh ? Status.loading : state.status,
+        status: event.refresh ? Status.loading : null,
         isFetching: true,
-        data: event.refresh ? [] : state.data,
-        isEnd: event.refresh ? false : state.isEnd,
+        data: event.refresh ? [] : null,
+        isEnd: event.refresh ? false : null,
       ));
       await _useCase
           .fetch(state.beforeAt, take: event.take)

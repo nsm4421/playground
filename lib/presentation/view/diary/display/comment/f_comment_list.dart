@@ -27,11 +27,9 @@ class _CommentListFragmentState extends State<CommentListFragment> {
   void _handleScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 30) {
-      Timer(const Duration(seconds: 1), () {
-        context
-            .read<DisplayCommentBloc<DiaryEntity>>()
-            .add(FetchEvent<CommentEntity>());
-      });
+      context
+          .read<DisplayCommentBloc<DiaryEntity>>()
+          .add(FetchEvent<CommentEntity>());
     }
   }
 

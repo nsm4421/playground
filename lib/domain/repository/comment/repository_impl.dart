@@ -10,7 +10,10 @@ class CommentRepositoryImpl implements CommentRepository {
       {required BaseEntity ref, required String content}) async {
     try {
       return await _dataSource
-          .create(refTable: _getRefTable(ref), refId: ref.id!, content: content)
+          .create(
+              refTable: customUtil.getRefTable(ref),
+              refId: ref.id!,
+              content: content)
           .then(Right.new);
     } on Exception catch (error) {
       customUtil.logger.e(error);
@@ -36,7 +39,7 @@ class CommentRepositoryImpl implements CommentRepository {
     try {
       return await _dataSource
           .fetch(
-              refTable: _getRefTable(ref),
+              refTable: customUtil.getRefTable(ref),
               refId: ref.id!,
               beforeAt: beforeAt,
               take: take)
@@ -58,16 +61,6 @@ class CommentRepositoryImpl implements CommentRepository {
     } on Exception catch (error) {
       customUtil.logger.e(error);
       return Left(ErrorResponse.from(error));
-    }
-  }
-
-  Tables _getRefTable(BaseEntity entity) {
-    if (entity is MeetingEntity) {
-      return Tables.meeting;
-    } else if (entity is DiaryEntity) {
-      return Tables.diaries;
-    } else {
-      throw Exception('ref table is not well defined');
     }
   }
 }

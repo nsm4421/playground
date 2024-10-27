@@ -8,7 +8,10 @@ class DiaryEntity extends BaseEntity {
   late final List<String> hashtags;
   late final List<String?> images;
   late final List<String?> captions;
-  final bool? isPrivate;
+  final bool isPrivate;
+  final bool isLike;
+  final int likeCount;
+  final int commentCount;
   final PresenceEntity? author;
 
   DiaryEntity(
@@ -21,7 +24,10 @@ class DiaryEntity extends BaseEntity {
       List<String>? hashtags,
       List<String?>? images,
       List<String?>? captions,
-      this.isPrivate,
+      this.isPrivate = false,
+      this.isLike = false,
+      this.likeCount = 0,
+      this.commentCount = 0,
       this.author}) {
     this.hashtags = hashtags ?? [];
     this.images = images ?? [];
@@ -38,6 +44,9 @@ class DiaryEntity extends BaseEntity {
       captions:
           model.captions.map((item) => item.isNotEmpty ? item : null).toList(),
       isPrivate: model.is_private,
+      isLike: model.is_like,
+      likeCount: model.like_count,
+      commentCount: model.comment_count,
       createdAt: DateTime.tryParse(model.created_at),
       updatedAt: DateTime.tryParse(model.updated_at),
       createdBy: model.created_by,

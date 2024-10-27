@@ -78,6 +78,9 @@ returns table(
     location text,
     content text,
     is_private bool,
+    is_like bool,
+    like_count int,
+    comment_count int,
     created_at timestamptz,
     updated_at timestamptz,
     created_by uuid,
@@ -94,6 +97,25 @@ as $$
       A.location,
       A.content,
       A.is_private,
+      (SELECT EXISTS (
+        SELECT 1
+        FROM public.likes
+        WHERE created_by = auth.uid() 
+        AND reference_table = 'diaries'
+        AND reference_id = A.id
+      )) AS is_like,
+      (
+        SELECT count(1)
+        FROM public.likes
+        WHERE reference_table = 'diaries'
+        AND reference_id = A.id
+      ) AS like_count,     
+      (
+        select count(1)
+        from public.comments
+        WHERE reference_table = 'diaries'
+        AND reference_id = A.id
+      ) AS comment_count,
       A.created_at,
       A.updated_at,
       A.created_by author_uid,

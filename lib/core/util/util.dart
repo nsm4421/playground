@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:travel/core/util/domain.util.dart';
 import 'package:uuid/uuid.dart';
 
 part 'format.util.dart';
@@ -18,7 +19,12 @@ part 'media.util.dart';
 part 'snack_bar.util.dart';
 
 class CustomUtil
-    with CustomMediaUtil, CustomLoggerUtil, CustomFormatUtil, CustomSnackBarUtil {}
+    with
+        CustomMediaUtil,
+        CustomLoggerUtil,
+        CustomFormatUtil,
+        CustomSnackBarUtil,
+        DomainUtil {}
 
 @lazySingleton
 CustomUtil get customUtil => CustomUtil();

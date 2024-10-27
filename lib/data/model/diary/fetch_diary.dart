@@ -22,6 +22,13 @@ class FetchDiaryModel with _$FetchDiaryModel {
     @Default('') String created_by,
     @Default('') String username,
     @Default('') String avatar_url,
+
+    /// like
+    @Default(false) bool is_like,
+    @Default(0) int like_count,
+
+    /// comment
+    @Default(0) int comment_count,
   }) = _FetchDiaryModel;
 
   factory FetchDiaryModel.fromJson(Map<String, dynamic> json) =>

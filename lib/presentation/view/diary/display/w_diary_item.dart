@@ -156,31 +156,32 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
               /// indicator
               if (_length > 1)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(_length, (index) {
-                      final isSelected = index == _currentPage;
-                      return GestureDetector(
-                        onTap: () {
-                          _handleJumpPage(index);
-                        },
-                        child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 5),
-                            width: _indicatorSize,
-                            height: _indicatorSize,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent)),
-                      );
-                    }),
-                  ),
-                ),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(_length, (index) {
+                          final isSelected = index == _currentPage;
+                          return GestureDetector(
+                              onTap: () {
+                                _handleJumpPage(index);
+                              },
+                              child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  width: _indicatorSize,
+                                  height: _indicatorSize,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      color: isSelected
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Colors.transparent)));
+                        }))),
 
               /// 본문
               if (widget._diary.content != null)
@@ -190,7 +191,12 @@ class _DiaryItemWidgetState extends State<DiaryItemWidget> {
                     child: ExpandableTextWidget(widget._diary.content!)),
 
               /// 아이콘 위젯
-              IconsWidget(widget._diary)
+              BlocProvider(
+                  create: (_) => getIt<BlocModule>().likeDiary(widget._diary)
+                    ..init(
+                        isLike: widget._diary.isLike ?? false,
+                        likeCount: widget._diary.likeCount),
+                  child: IconsWidget(widget._diary))
             ]));
   }
 }
