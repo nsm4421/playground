@@ -1,7 +1,7 @@
 part of 'constant.dart';
 
 enum HomeBottomNavItems {
-  displayDiary(
+  feed(
       label: 'FEED',
       iconData: Icons.photo_album_outlined,
       activeIconData: Icons.photo_album,
@@ -16,11 +16,11 @@ enum HomeBottomNavItems {
       iconData: Icons.airplane_ticket_outlined,
       activeIconData: Icons.airplane_ticket,
       route: Routes.meeting),
-  writeDiary(
+  createFeed(
       label: 'ADD',
       iconData: Icons.edit_note_outlined,
       activeIconData: Icons.edit_note,
-      route: Routes.editDiary),
+      route: Routes.editFeed),
   setting(
       label: 'SETTING',
       iconData: Icons.settings_outlined,

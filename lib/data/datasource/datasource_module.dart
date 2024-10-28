@@ -8,7 +8,7 @@ import 'channel/datasource.dart';
 import 'chat/open_chat/datasource.dart';
 import 'chat/private_chat/datasource.dart';
 import 'comment/datasource.dart';
-import 'diary/datsource.dart';
+import 'feed/datsource.dart';
 import 'like/datasource.dart';
 import 'local/datasource.dart';
 import 'meeting/datasource.dart';
@@ -33,9 +33,9 @@ class DataSourceModule {
   AccountDataSource get account => AccountDataSourceImpl(_supabaseClient);
 
   @lazySingleton
-  DiaryDataSource get diary => mode == 'dev'
-      ? MockDiaryDataSource()
-      : DiaryDataSourceImpl(_supabaseClient);
+  FeedDataSource get feed => mode == 'dev'
+      ? MockFeedDataSource()
+      : FeedDataSourceImpl(_supabaseClient);
 
   @lazySingleton
   OpenChatRoomDataSource get openChat =>

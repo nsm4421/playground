@@ -1,15 +1,15 @@
 import 'package:injectable/injectable.dart';
 
 import '../../domain/entity/comment/comment.dart';
-import '../../domain/entity/diary/diary.dart';
+import '../../domain/entity/feed/feed.dart';
 import '../../domain/entity/meeting/meeting.dart';
 import '../../domain/usecase/usecase_module.dart';
 import 'auth/authentication.bloc.dart';
 import 'bottom_nav/home_bottom_nav.cubit.dart';
 import 'comment/display/display_comment.bloc.dart';
 import 'comment/edit/edit_comment.bloc.dart';
-import 'diary/display/display_diary.bloc.dart';
-import 'diary/edit/edit_diary.bloc.dart';
+import 'feed/display/display_feed.bloc.dart';
+import 'feed/edit/edit_feed.bloc.dart';
 import 'image_to_text/image_to_text.bloc.dart';
 import 'like/like.cubit.dart';
 import 'meeting/create/create_meeting.cubit.dart';
@@ -32,13 +32,13 @@ class BlocModule {
   AuthenticationBloc get auth => AuthenticationBloc(
       authUseCase: _useCaseModule.auth, accountUseCase: _useCaseModule.account);
 
-  /// diary
+  /// feed
   @injectable
-  EditDiaryBloc editDiary(String id) =>
-      EditDiaryBloc(id: id, useCase: _useCaseModule.diary);
+  EditFeedBloc editFeed(String id) =>
+      EditFeedBloc(id: id, useCase: _useCaseModule.feed);
 
   @lazySingleton
-  DisplayDiaryBloc get displayDiary => DisplayDiaryBloc(_useCaseModule.diary);
+  DisplayFeedBloc get displayFeed => DisplayFeedBloc(_useCaseModule.feed);
 
   /// meeting
   @lazySingleton
@@ -60,12 +60,12 @@ class BlocModule {
 
   /// comment
   @injectable
-  DisplayCommentBloc<DiaryEntity> displayDiaryComment(DiaryEntity diary) =>
-      DisplayCommentBloc<DiaryEntity>(diary, useCase: _useCaseModule.comment);
+  DisplayCommentBloc<FeedEntity> displayFeedComment(FeedEntity feed) =>
+      DisplayCommentBloc<FeedEntity>(feed, useCase: _useCaseModule.comment);
 
   @injectable
-  EditCommentBloc<DiaryEntity> editDiaryComment(DiaryEntity diary) =>
-      EditCommentBloc<DiaryEntity>(diary, useCase: _useCaseModule.comment);
+  EditCommentBloc<FeedEntity> editFeedComment(FeedEntity feed) =>
+      EditCommentBloc<FeedEntity>(feed, useCase: _useCaseModule.comment);
 
   @injectable
   DisplayCommentBloc<MeetingEntity> displayMeetingComment(
@@ -79,8 +79,8 @@ class BlocModule {
 
   /// like
   @injectable
-  LikeCubit<DiaryEntity> likeDiary(DiaryEntity diary) =>
-      LikeCubit<DiaryEntity>(diary, useCase: _useCaseModule.like);
+  LikeCubit<FeedEntity> likeFeed(FeedEntity feed) =>
+      LikeCubit<FeedEntity>(feed, useCase: _useCaseModule.like);
 
   @injectable
   LikeCubit<CommentEntity> likeComment(CommentEntity comment) =>

@@ -1,6 +1,4 @@
 import 'package:either_dart/either.dart';
-import 'package:travel/domain/entity/diary/diary.dart';
-import 'package:travel/domain/entity/meeting/meeting.dart';
 
 import '../../../core/constant/constant.dart';
 import '../../../core/response/error_response.dart';
@@ -12,13 +10,10 @@ part 'repository_impl.dart';
 
 abstract interface class CommentRepository {
   Future<Either<ErrorResponse, List<CommentEntity>>> fetch(
-      {required BaseEntity ref,
-      required String beforeAt,
-      int take = 20});
+      {required BaseEntity ref, required String beforeAt, int take = 20});
 
   Future<Either<ErrorResponse, String>> create(
-      {required BaseEntity ref,
-      required String content});
+      {required BaseEntity ref, required String content});
 
   Future<Either<ErrorResponse, void>> modifyById(
       {required String commentId, required String content});

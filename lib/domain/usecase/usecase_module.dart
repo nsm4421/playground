@@ -3,7 +3,7 @@ import '../repository/repository_module.dart';
 import 'account/usecase.dart';
 import 'auth/usecase.dart';
 import 'comment/usecase.dart';
-import 'diary/usecase.dart';
+import 'feed/usecase.dart';
 import 'like/usecase.dart';
 import 'meeting/usecase.dart';
 import 'registration/usecase.dart';
@@ -21,7 +21,7 @@ class UseCaseModule {
   AccountUseCase get account => AccountUseCase(_repositoryModule.account);
 
   @lazySingleton
-  DiaryUseCase get diary => DiaryUseCase(_repositoryModule.diary);
+  FeedUseCase get feed => FeedUseCase(_repositoryModule.feed);
 
   @lazySingleton
   MeetingUseCase get meeting => MeetingUseCase(_repositoryModule.meeting);

@@ -9,8 +9,8 @@ import '../../domain/entity/meeting/meeting.dart';
 import '../bloc/auth/authentication.bloc.dart';
 import '../bloc/bloc_module.dart';
 import '../view/auth/page.dart';
-import '../view/diary/display/page.dart';
-import '../view/diary/edit/page.dart';
+import '../view/feed/display/page.dart';
+import '../view/feed/edit/page.dart';
 import '../view/home/page.dart';
 import '../view/meeting/create/page.dart';
 import '../view/meeting/display/detail/page.dart';
@@ -73,10 +73,10 @@ class CustomRouter {
                     path: item.route.path,
                     pageBuilder: (context, state) {
                       return switch (item) {
-                        HomeBottomNavItems.displayDiary =>
-                          const NoTransitionPage(child: DisplayDiariesPage()),
-                        HomeBottomNavItems.writeDiary =>
-                          const NoTransitionPage(child: EditDiaryPage()),
+                        HomeBottomNavItems.feed =>
+                          const NoTransitionPage(child: DisplayFeedPage()),
+                        HomeBottomNavItems.createFeed =>
+                          const NoTransitionPage(child: EditFeedPage()),
                         HomeBottomNavItems.meeting =>
                           const NoTransitionPage(child: MeetingPage()),
                         HomeBottomNavItems.search =>

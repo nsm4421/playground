@@ -2,8 +2,8 @@ part of 'router.dart';
 
 enum Routes {
   auth('/auth'),
-  home('/display-diary'),
-  editDiary('/write-diary'),
+  home('/display-feed'),
+  editFeed('/write-feed'),
   meeting('/meeting'),
   createMeeting('/create-meeting'),
   meetingDetail('/meeting-detail'),

@@ -21,8 +21,8 @@ enum Tables {
 
 enum Buckets {
   avatar('avatar'),
-  diary('diary'),
-  meeting('meeting'),
+  feed('diary'),
+  feeds('meeting'),
   reels('reels'),
   openChat('open_chat'),
   privateChat('private_chat'),

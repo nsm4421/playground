@@ -1,14 +1,14 @@
 import 'package:injectable/injectable.dart';
-import 'package:travel/domain/repository/comment/repository.dart';
-import 'package:travel/domain/repository/like/repository.dart';
-import 'package:travel/domain/repository/meeting/repository.dart';
 
 import '../../data/datasource/datasource_module.dart';
 import 'account/repository.dart';
 import 'auth/repository.dart';
 import 'chat/open_chat/repository.dart';
 import 'chat/private_chat/repository.dart';
-import 'diary/repository.dart';
+import 'comment/repository.dart';
+import 'feed/repository.dart';
+import 'like/repository.dart';
+import 'meeting/repository.dart';
 import 'registration/repository.dart';
 
 @lazySingleton
@@ -40,8 +40,8 @@ class RepositoryModule {
       storageDataSource: _dataSourceModule.storage);
 
   @lazySingleton
-  DiaryRepository get diary => DiaryRepositoryImpl(
-      diaryDataSource: _dataSourceModule.diary,
+  FeedRepository get feed => FeedRepositoryImpl(
+      feedDataSource: _dataSourceModule.feed,
       storageDataSource: _dataSourceModule.storage);
 
   @lazySingleton

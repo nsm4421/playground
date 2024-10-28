@@ -56,7 +56,7 @@ class MeetingRepositoryImpl implements MeetingRepository {
           thumbnail: thumbnail == null
               ? null
               : await _storageDataSource.uploadImageAndReturnPublicUrl(
-                  file: thumbnail, bucketName: Buckets.meeting.name));
+                  file: thumbnail, bucketName: Buckets.feeds.name));
       return await (update
               ? _meetingDataSource.modify(id: id!, model: dto)
               : _meetingDataSource.create(dto))
