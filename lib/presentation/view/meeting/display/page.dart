@@ -18,6 +18,8 @@ part 'f_meetings.dart';
 
 part 'w_meeting_item.dart';
 
+part 'f_search.dart';
+
 class MeetingPage extends StatelessWidget {
   const MeetingPage({super.key});
 

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-
 import '../../../../core/bloc/display_bloc.dart';
 import '../../../../core/constant/constant.dart';
 import '../../../../core/di/dependency_injection.dart';
@@ -22,8 +21,6 @@ part 's_display_diaries.dart';
 
 part 'detail/s_diary_detail.dart';
 
-part 'w_display_diary_appbar.dart';
-
 part 'w_diary_item.dart';
 
 part 'w_icons.dart';
@@ -34,8 +31,8 @@ class DisplayDiariesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => getIt<BlocModule>().displayDiary
-          ..add(FetchEvent(refresh: true)),
+        create: (_) =>
+            getIt<BlocModule>().displayDiary..add(FetchEvent(refresh: true)),
         child: const DisplayDiariesScreen());
   }
 }

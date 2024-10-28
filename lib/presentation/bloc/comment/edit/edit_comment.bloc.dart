@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/util/util.dart';
-import '../../../../domain/entity/meeting/meeting.dart';
 import '../../../../domain/usecase/comment/usecase.dart';
 
 part 'edit_comment.state.dart';
