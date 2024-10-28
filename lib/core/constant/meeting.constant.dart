@@ -25,3 +25,11 @@ enum TravelThemeType {
 
   const TravelThemeType({required this.label});
 }
+
+class MeetingSearchOption {
+  final AccompanySexType? sex;
+  final TravelThemeType? theme;
+  final String? title;
+
+  MeetingSearchOption({this.sex, this.theme, this.title});
+}

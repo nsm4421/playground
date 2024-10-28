@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:travel/data/datasource/registration/datasource.dart';
 
 import '../../../core/constant/constant.dart';
 import '../../../core/response/error_response.dart';
@@ -22,6 +21,12 @@ abstract interface class MeetingRepository {
 
   Future<Either<ErrorResponse, List<MeetingEntity>>> fetch(String beforeAt,
       {int take = 20});
+
+  Future<Either<ErrorResponse, List<MeetingEntity>>> search(String beforeAt,
+      {int take = 20,
+      String? title,
+      AccompanySexType? sex,
+      TravelThemeType? theme});
 
   // create -> id = null  /  update = false
   // update -> update = true

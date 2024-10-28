@@ -25,5 +25,7 @@ class MeetingUseCase {
 
   FetchMeetingUseCase get fetch => FetchMeetingUseCase(_repository);
 
+  SearchMeetingUseCase get search => SearchMeetingUseCase(_repository);
+
   DeleteMeetingUseCase get delete => DeleteMeetingUseCase(_repository);
 }

@@ -31,7 +31,7 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
     return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
         RpcFns.fetchRegistrations.name,
         params: {
-          'meeting_id_to_fetch': meetingId
+          '_meeting_id': meetingId
         }).then((res) => res.map(FetchRegistrationsModel.fromJson));
   }
 

@@ -11,6 +11,12 @@ part 'datasource_impl.dart';
 abstract interface class MeetingDataSource {
   Future<Iterable<FetchMeetingsModel>> fetch(String beforeAt, {int take = 20});
 
+  Future<Iterable<FetchMeetingsModel>> search(String beforeAt,
+      {int take = 20,
+      String? title,
+      AccompanySexType? sex,
+      TravelThemeType? theme});
+
   Future<void> create(EditMeetingModel model);
 
   Future<void> modify({required String id, required EditMeetingModel model});

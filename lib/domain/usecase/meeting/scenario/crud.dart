@@ -12,6 +12,21 @@ class FetchMeetingUseCase {
   }
 }
 
+class SearchMeetingUseCase {
+  final MeetingRepository _repository;
+
+  SearchMeetingUseCase(this._repository);
+
+  Future<Either<ErrorResponse, List<MeetingEntity>>> call(String beforeAt,
+      {int take = 20,
+      String? title,
+      AccompanySexType? sex,
+      TravelThemeType? theme}) async {
+    return await _repository.fetch(beforeAt, take: take).then((res) =>
+        res.mapLeft((l) => l.copyWith(message: 'fail to search meeting')));
+  }
+}
+
 class CreateMeetingUseCase {
   final MeetingRepository _repository;
 
