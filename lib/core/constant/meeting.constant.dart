@@ -29,7 +29,7 @@ enum TravelThemeType {
 class MeetingSearchOption {
   final AccompanySexType? sex;
   final TravelThemeType? theme;
-  final String? title;
+  final String? hashtag;
 
-  MeetingSearchOption({this.sex, this.theme, this.title});
+  MeetingSearchOption({this.sex, this.theme, this.hashtag});
 }

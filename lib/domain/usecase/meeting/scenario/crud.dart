@@ -19,11 +19,13 @@ class SearchMeetingUseCase {
 
   Future<Either<ErrorResponse, List<MeetingEntity>>> call(String beforeAt,
       {int take = 20,
-      String? title,
+      String? hashtag,
       AccompanySexType? sex,
       TravelThemeType? theme}) async {
-    return await _repository.fetch(beforeAt, take: take).then((res) =>
-        res.mapLeft((l) => l.copyWith(message: 'fail to search meeting')));
+    return await _repository
+        .search(beforeAt, take: take, hashtag: hashtag, sex: sex, theme: theme)
+        .then((res) =>
+            res.mapLeft((l) => l.copyWith(message: 'fail to search meeting')));
   }
 }
 

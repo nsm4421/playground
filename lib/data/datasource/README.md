@@ -63,12 +63,12 @@ after update on auth.users
 for each row execute procedure public.on_edit_profile();
 ```
 
-## Diary
+## Feed
 
-- fetch_diaries
+- fetch_feeds
 
 ```
-create or replace function fetch_diaries
+create or replace function fetch_feeds
 (_before_at timestamptz, _take int)
 returns table(
     id uuid, 
@@ -101,19 +101,19 @@ as $$
         SELECT 1
         FROM public.likes
         WHERE created_by = auth.uid() 
-        AND reference_table = 'diaries'
+        AND reference_table = 'feeds'
         AND reference_id = A.id
       )) AS is_like,
       (
         SELECT count(1)
         FROM public.likes
-        WHERE reference_table = 'diaries'
+        WHERE reference_table = 'feeds'
         AND reference_id = A.id
       ) AS like_count,     
       (
         select count(1)
         from public.comments
-        WHERE reference_table = 'diaries'
+        WHERE reference_table = 'feeds'
         AND reference_id = A.id
       ) AS comment_count,
       A.created_at,
@@ -134,7 +134,7 @@ as $$
           created_at,
           updated_at
         from
-            public.diaries
+            public.feeds
         where
             created_at < _before_at
             and ((is_private = false) or (created_by = auth.uid()))
@@ -219,6 +219,97 @@ as $$
             public.meetings
         where
             created_at < _before_at
+        order by created_at desc
+        limit(_take)
+        ) A
+    left join public.accounts B on A.created_by = B.id
+;
+$$
+```
+- search_meetings
+
+```
+create or replace function search_meetings(
+    _before_at timestamptz, 
+    _take int,
+    _hashtag text, 
+    _sex text, 
+    _theme text
+)
+returns table(
+    country text,
+    city text,
+    start_date timestamptz,
+    end_date timestamptz,
+    head_count int,
+    sex text,
+    theme text ,
+    min_cost int,
+    max_cost int,
+    title text,
+    content text,
+    hashtags text[],
+    thumbnail text,
+    id uuid, 
+    created_at timestamptz,
+    updated_at timestamptz,
+    author_uid uuid,
+    author_username text,
+    author_avatar_url text
+)
+language sql
+as $$
+    select
+          A.country,
+          A.city,
+          A.start_date,
+          A.end_date,
+          A.head_count,
+          A.sex,
+          A.theme,
+          A.min_cost,
+          A.max_cost,
+          A.title,
+          A.content,
+          A.hashtags,
+          A.thumbnail,
+          A.id,
+          A.created_at,
+          A.updated_at,
+          A.created_by author_uid,
+          B.username author_username,
+          B.avatar_url author_avatar_url
+    from (
+        select
+          country,
+          city,
+          start_date,
+          end_date,
+          head_count,
+          sex,
+          theme,
+          min_cost,
+          max_cost,
+          title,
+          content,
+          hashtags,
+          thumbnail,
+          id,
+          created_at,
+          updated_at,
+          created_by
+        from
+            public.meetings
+        where
+            created_at < _before_at
+            -- 검색조건
+            and (_hashtag IS NULL OR EXISTS (
+                SELECT 1
+                FROM unnest(HASHTAGS) AS elem
+                WHERE elem LIKE '%' || _hashtag || '%'
+            ))
+            and (_sex IS NULL OR SEX = _sex)
+            and (_theme IS NULL OR THEME = _theme)
         order by created_at desc
         limit(_take)
         ) A

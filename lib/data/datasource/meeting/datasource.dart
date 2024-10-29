@@ -13,7 +13,7 @@ abstract interface class MeetingDataSource {
 
   Future<Iterable<FetchMeetingsModel>> search(String beforeAt,
       {int take = 20,
-      String? title,
+      String? hashtag,
       AccompanySexType? sex,
       TravelThemeType? theme});
 

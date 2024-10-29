@@ -24,7 +24,7 @@ abstract interface class MeetingRepository {
 
   Future<Either<ErrorResponse, List<MeetingEntity>>> search(String beforeAt,
       {int take = 20,
-      String? title,
+      String? hashtag,
       AccompanySexType? sex,
       TravelThemeType? theme});
 

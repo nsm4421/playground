@@ -9,7 +9,7 @@ class FeedDataSourceImpl extends FeedDataSource {
   Future<Iterable<FetchFeedModel>> fetch(String beforeAt,
       {int take = 20}) async {
     return await _supabaseClient
-        .rpc<List<Map<String, dynamic>>>(RpcFns.fetchDiaries.name, params: {
+        .rpc<List<Map<String, dynamic>>>(RpcFns.fetchFeeds.name, params: {
       '_before_at': beforeAt,
       '_take': take
     }).then((res) => res.map(FetchFeedModel.fromJson));
@@ -17,7 +17,7 @@ class FeedDataSourceImpl extends FeedDataSource {
 
   @override
   Future<void> edit(EditFeedModel model, {bool update = false}) async {
-    return await _supabaseClient.rest.from(Tables.diaries.name).upsert(model
+    return await _supabaseClient.rest.from(Tables.feeds.name).upsert(model
         .copyWith(
             created_at: update ? model.created_at : customUtil.now,
             updated_at: customUtil.now,
@@ -28,7 +28,7 @@ class FeedDataSourceImpl extends FeedDataSource {
   @override
   Future<void> deleteById(String id) async {
     return await _supabaseClient.rest
-        .from(Tables.diaries.name)
+        .from(Tables.feeds.name)
         .delete()
         .eq('id', id);
   }

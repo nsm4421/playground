@@ -94,12 +94,12 @@ class MeetingRepositoryImpl implements MeetingRepository {
   @override
   Future<Either<ErrorResponse, List<MeetingEntity>>> search(String beforeAt,
       {int take = 20,
-      String? title,
+      String? hashtag,
       AccompanySexType? sex,
       TravelThemeType? theme}) async {
     try {
       return await _meetingDataSource
-          .search(beforeAt, take: take, title: title, sex: sex, theme: theme)
+          .search(beforeAt, take: take, hashtag: hashtag, sex: sex, theme: theme)
           .then((res) => res.map(MeetingEntity.from).toList())
           .then(Right.new);
     } on Exception catch (error) {

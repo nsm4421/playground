@@ -40,15 +40,15 @@ class MeetingDataSourceImpl implements MeetingDataSource {
   @override
   Future<Iterable<FetchMeetingsModel>> search(String beforeAt,
       {int take = 20,
-      String? title,
+      String? hashtag,
       AccompanySexType? sex,
       TravelThemeType? theme}) async {
     customUtil.logger
-        .d('beforeAt:$beforeAt|take:$take|title:$title|sex:$sex|theme:$theme');
+        .d('beforeAt:$beforeAt|take:$take|hashtag:$hashtag|sex:$sex|theme:$theme');
     // TODO : search RPC 함수 구현하기
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.searchMeetings.name, params: {
-      if (title != null) '_title': title,
+      if (hashtag != null) '_hashtag': hashtag,
       if (sex != null) '_sex': sex,
       if (theme != null) '_theme': theme,
       '_before_at': beforeAt,
@@ -59,7 +59,7 @@ class MeetingDataSourceImpl implements MeetingDataSource {
   @override
   Future<void> deleteById(String id) async {
     return await _supabaseClient.rest
-        .from(Tables.diaries.name)
+        .from(Tables.meeting.name)
         .delete()
         .eq('id', id);
   }

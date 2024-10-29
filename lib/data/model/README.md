@@ -27,9 +27,9 @@ create policy "enable delete only own data" on accounts
 for delete to authenticated using (auth.uid() = id);
 ```
 
-## Diary
+## Feeds
 ```
-create table public.diaries (
+create table public.feeds (
     id uuid not null default gen_random_uuid (),
     created_by uuid not null default auth.uid(),
     images text[] DEFAULT '{}',
@@ -40,23 +40,23 @@ create table public.diaries (
     is_private bool DEFAULT true,
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone null,    
-    constraint diaries_pkey primary key (id),
-    constraint diaries_fkey foreign key (created_by)
+    constraint feeds_pkey primary key (id),
+    constraint feeds_fkey foreign key (created_by)
     references accounts (id) on update cascade on delete cascade
 ) tablespace pg_default;
 
-alter table public.diaries enable row level security;
+alter table public.feeds enable row level security;
 
 create policy "enable to select for all authenticated" 
-on diaries for select to authenticated using (true);
+on feeds for select to authenticated using (true);
 
-create policy "enable insert only own data" on diaries
+create policy "enable insert only own data" on feeds
 for insert to authenticated with check (auth.uid() = created_by);
 
-create policy "enable update only own data" on diaries
+create policy "enable update only own data" on feeds
 for update to authenticated with check (auth.uid() = created_by);
 
-create policy "enable delete only own data" on diaries
+create policy "enable delete only own data" on feeds
 for delete to authenticated using (auth.uid() = created_by);
 ```
 
@@ -352,16 +352,16 @@ create policy "permit insert avatar for all" on storage.objects
 for insert with check (bucket_id = 'avatar');
 ```
 
-## Diary
+## Feeds
 ```
 insert into storage.buckets (id, name)
-values ('diary', 'diary');
+values ('feed', 'feed');
 
-create policy "permit select diary for all" on storage.objects
-for select using (bucket_id = 'diary');
+create policy "permit select feed for all" on storage.objects
+for select using (bucket_id = 'feed');
 
 create policy "permit insert for all" on storage.objects
-for insert with check (bucket_id = 'diary');
+for insert with check (bucket_id = 'feed');
 ```
 
 ## Meeting

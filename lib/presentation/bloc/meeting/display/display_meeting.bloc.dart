@@ -54,7 +54,7 @@ class DisplayMeetingBloc extends CustomDisplayBloc<MeetingEntity> {
               // 검색옵션
               sex: _option.sex,
               theme: _option.theme,
-              title: _option.title)
+              hashtag: _option.hashtag)
           .then((res) => emit(state.from(res, take: event.take)));
     } on Exception catch (error) {
       emit(state.copyWith(

@@ -7,7 +7,7 @@ mixin class DomainUtil {
     if (entity is MeetingEntity) {
       return Tables.meeting;
     } else if (entity is FeedEntity) {
-      return Tables.diaries;
+      return Tables.feeds;
     } else {
       throw Exception('ref table is not well defined');
     }
