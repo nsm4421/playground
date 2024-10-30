@@ -43,17 +43,19 @@ class MeetingDataSourceImpl implements MeetingDataSource {
       String? hashtag,
       AccompanySexType? sex,
       TravelThemeType? theme}) async {
-    customUtil.logger
-        .d('beforeAt:$beforeAt|take:$take|hashtag:$hashtag|sex:$sex|theme:$theme');
-    // TODO : search RPC 함수 구현하기
+    customUtil.logger.d(
+        'beforeAt:$beforeAt|take:$take|hashtag:$hashtag|sex:${sex?.name}|theme:${theme?.name}');
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.searchMeetings.name, params: {
-      if (hashtag != null) '_hashtag': hashtag,
-      if (sex != null) '_sex': sex,
-      if (theme != null) '_theme': theme,
+      '_hashtag': hashtag,
+      '_sex': sex?.name,
+      '_theme': theme?.name,
       '_before_at': beforeAt,
       '_take': take
-    }).then((res) => res.map(FetchMeetingsModel.fromJson));
+    }).then((res) {
+      customUtil.logger.t(res.firstOrNull);
+      return res.map(FetchMeetingsModel.fromJson);
+    });
   }
 
   @override

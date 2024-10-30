@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
+import 'package:travel/presentation/bloc/bottom_nav/home_bottom_nav.cubit.dart';
+import 'package:travel/presentation/bloc/feed/edit/edit_feed.bloc.dart';
 import '../../../../core/bloc/display_bloc.dart';
+import '../../../../core/constant/constant.dart';
 import '../../../../domain/entity/meeting/meeting.dart';
 import '../../../bloc/bloc_module.dart';
 import '../../../bloc/meeting/display/display_meeting.bloc.dart';
@@ -18,7 +20,7 @@ part 'f_meetings.dart';
 
 part 'w_meeting_item.dart';
 
-part 'f_search.dart';
+part 'f_modal.dart';
 
 class MeetingPage extends StatelessWidget {
   const MeetingPage({super.key});

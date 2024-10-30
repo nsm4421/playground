@@ -8,10 +8,9 @@ class DisplayMeetingScreen extends StatefulWidget {
 }
 
 class _DisplayMeetingScreenState extends State<DisplayMeetingScreen> {
-  static const double _searchWidgetHeight = 80;
-  bool _isAppBarVisible = true;
-  bool _isExpanded = true;
   double _previousPosition = 0;
+  bool _showAppBar = true;
+  bool _isOptionEmpty = true;
   late ScrollController _scrollController;
 
   @override
@@ -32,7 +31,7 @@ class _DisplayMeetingScreenState extends State<DisplayMeetingScreen> {
     final currentPosition = _scrollController.position.pixels;
     // 스크롤이 내려갈 때 앱바가 안 보이고, 올라갈 때 앱바가 보임
     setState(() {
-      _isAppBarVisible = currentPosition < _previousPosition;
+      _showAppBar = _previousPosition > currentPosition;
       _previousPosition = currentPosition;
     });
   }
@@ -41,40 +40,58 @@ class _DisplayMeetingScreenState extends State<DisplayMeetingScreen> {
     context.read<DisplayMeetingBloc>().add(FetchEvent(refresh: true));
   }
 
-  _handleExpand() {
+  _handleMoveToCreateMeetingPage() {
+    context.push(Routes.createMeeting.path);
+  }
+
+  _handleShowOptionModal() async {
+    context.read<HomeBottomNavCubit>().handleVisible(false);
+    await showModalBottomSheet<MeetingSearchOption>(
+        context: context,
+        showDragHandle: true,
+        builder: (_) {
+          return OptionModalModal(context.read<DisplayMeetingBloc>().option);
+        }).then((res) {
+      if (res != null) {
+        context.read<DisplayMeetingBloc>().add(SearchMeetingEvent(option: res));
+        setState(() {
+          _isOptionEmpty = res.isEmpty;
+        });
+      }
+      context.read<HomeBottomNavCubit>().handleVisible(true);
+    });
+  }
+
+  _handleInitFilter() {
+    context.read<DisplayMeetingBloc>().add(MeetingFilterOffEvent());
     setState(() {
-      _isExpanded = !_isExpanded;
+      _isOptionEmpty = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _isAppBarVisible
-            ? AppBar(title: const Text('Meeting'), actions: [
-                IconButton(
-                    onPressed: _handleExpand,
-                    icon: _isExpanded
-                        ? const Icon(Icons.expand_less)
-                        : const Icon(Icons.expand_more))
-              ])
-            : null,
-        body: Scaffold(
-            body: RefreshIndicator(
-                onRefresh: _handleRefresh,
-                child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: Stack(children: [
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: _isExpanded ? _searchWidgetHeight : 0),
-                          child: const MeetingItemsFragment()),
-                      if (_isAppBarVisible && _isExpanded)
-                        const Positioned(
-                            top: 0,
-                            child: SizedBox(
-                                height: _searchWidgetHeight,
-                                child: SearchFragment()))
-                    ])))));
+      appBar: _showAppBar
+          ? AppBar(title: const Text('Meeting'), actions: [
+              IconButton(
+                  tooltip: '게시글 작성하기',
+                  onPressed: _handleMoveToCreateMeetingPage,
+                  icon: const Icon(Icons.add_box_outlined)),
+              IconButton(
+                  onPressed: _handleShowOptionModal,
+                  icon: const Icon(Icons.search))
+            ])
+          : null,
+      body: Scaffold(
+          body: RefreshIndicator(
+              onRefresh: _handleRefresh, child: const MeetingItemsFragment())),
+      floatingActionButton: _isOptionEmpty
+          ? null
+          : FloatingActionButton.small(
+              onPressed: _handleInitFilter,
+              child: const Icon(Icons.filter_alt_off_outlined),
+            ),
+    );
   }
 }
