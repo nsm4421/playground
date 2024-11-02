@@ -22,6 +22,9 @@ dependencies:
   # supabase
   supabase_flutter: ^2.6.0
 
+  # animation
+  rive: ^0.13.15
+
   # local database
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -73,12 +76,15 @@ flutter:
   uses-material-design: true
   assets:
     - .env
-    - assets/videos/
+    - assets/video/
+    - assets/image/
+    - assets/font/
+    - assets/rive/
 
 flutter_gen:
   assets:
     enabled: true
-  output: core/generated
+  output: lib/core/generated
   line_length: 80
   integrations:
     flutter_svg: true
