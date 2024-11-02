@@ -1,0 +1,1 @@
+part of 's_home.dart';
