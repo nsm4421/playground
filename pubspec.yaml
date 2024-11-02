@@ -54,13 +54,16 @@ dependencies:
   # 상태관리(bloc)
   flutter_bloc: ^8.1.6
 
-  # 기타
+  # 환경변수
   envied: ^0.5.4+1
+
+  # 기타
   uuid: ^4.5.0
   path_provider: ^2.1.4
   path: ^1.9.0
   country_picker: ^2.0.4
   table_calendar: ^3.1.2
+  flutter_svg: ^2.0.11
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +83,7 @@ flutter:
     - assets/image/
     - assets/font/
     - assets/rive/
+    - assets/svg/
 
 flutter_gen:
   assets:

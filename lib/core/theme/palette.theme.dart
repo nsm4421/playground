@@ -38,13 +38,11 @@ class CustomPalette {
   static const outline = Color(0xFFDDDDDD);
 
   // extended color
-  static const contentPrimary = Color(0xFF333333);
+  static const darkGrey = Color(0xFF333333);
 
-  static const contentSecondary = Color(0xFF666666);
+  static const mediumGrey = Color(0xFF666666);
 
-  static const contentTertiary = Color(0xFF999999);
-
-  static const contentFourth = Color(0xFFB2B2B2);
+  static const lightGrey = Color(0xFFB2B2B2);
 
   static const positive = Color(0xFF74CD7C);
 }
