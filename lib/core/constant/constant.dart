@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:travel/core/theme/theme.dart';
+part 'status.constant.dart';
 
-part 'enum.constant.dart';
-
-part 'bloc.constant.dart';
+part 'bucket.constant.dart';

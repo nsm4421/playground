@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel/presentation/widget/widget.dart';
 
+import '../../../presentation/widget/widget.dart';
 import '../../constant/constant.dart';
 
 part 'double.extension.dart';

@@ -1,4 +1,4 @@
-part of 'constant.dart';
+part of 'abstract.dart';
 
 abstract class BaseState {
   final Status status;
