@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/core/theme/theme.dart';
 
 import 'core/di/dependency_injection.dart';
 import 'core/env/env.dart';
-import 'presentation/view/home/index.dart';
+import 'core/util/snackbar/snackbar.dart';
+import 'presentation/route/route.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,10 +25,15 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: 'Traveler',
-        theme: customThemeData,
-        routerConfig: GoRouter(initialLocation: '/', routes: [
-          GoRoute(path: '/', builder: (context, state) => const HomePage()),
-        ]));
+      title: 'Traveler',
+      theme: customThemeData,
+      routerConfig: getIt<CustomRouter>().routerConfig,
+      builder: (context, child) => Stack(
+        children: [
+          child!,
+          SnackBarWidget(key: getIt<CustomSnackBar>().snackbarKey),
+        ],
+      ),
+    );
   }
 }
