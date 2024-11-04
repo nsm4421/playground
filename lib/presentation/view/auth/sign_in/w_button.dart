@@ -1,9 +1,7 @@
 part of 'index.dart';
 
 class SubmitButtonWidget extends StatelessWidget {
-  const SubmitButtonWidget(this._formKey, {super.key});
-
-  final GlobalKey<FormState> _formKey;
+  const SubmitButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,21 +11,16 @@ class SubmitButtonWidget extends StatelessWidget {
           onPressed: state.status == Status.loading
               ? null
               : () async {
-                  // 폼 검사
-                  _formKey.currentState?.save();
-                  final ok = _formKey.currentState?.validate();
-                  if (ok == null || !ok) {
-                    return;
+                  if (context.read<SignInCubit>().ok) {
+                    await context.read<SignInCubit>().signIn();
                   }
-                  // 회원가입 요청
-                  await context.read<SignInCubit>().signIn();
                 },
           style: ElevatedButton.styleFrom(
               backgroundColor:
                   context.colorScheme.primaryContainer.withOpacity(0.5),
               minimumSize: const Size(double.infinity, 50)),
           child: Text(
-            'Sign In',
+            'Submit',
             style: context.textTheme.titleMedium
                 ?.copyWith(color: context.colorScheme.onPrimary),
           ));
@@ -54,7 +47,8 @@ class RouteToSignUpButtonWidget extends StatelessWidget {
               onPressed: state.status == Status.loading
                   ? null
                   : () {
-                      // TODO : 회원가입 페이지로 이동하기
+                      // 회원가입페이지로 이동
+                      context.push(Routes.signUp.path);
                     },
               style: ElevatedButton.styleFrom(
                   backgroundColor:
@@ -81,9 +75,9 @@ class CloseButtonWidget extends StatelessWidget {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: -50,
+      bottom: -25,
       child: CircleAvatar(
-        radius: 50 / 2,
+        radius: 25,
         backgroundColor: CustomPalette.white,
         child: IconButton(
           onPressed: () {

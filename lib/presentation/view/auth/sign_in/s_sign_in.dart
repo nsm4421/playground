@@ -1,26 +1,13 @@
 part of 'index.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
-
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  // 폼
-  late GlobalKey<FormState> _formKey;
-
-  @override
-  void initState() {
-    super.initState();
-    _formKey = GlobalKey<FormState>(debugLabel: 'sign-in-form-key');
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -47,16 +34,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ],
               ),
-
               const Spacer(flex: 2),
 
               /// 회원가입 양식
-              SignInFormFragment(_formKey),
+              const SignInFormFragment(),
 
               /// 로그인 버튼
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: SubmitButtonWidget(_formKey),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: SubmitButtonWidget(),
               ),
 
               const Padding(
@@ -68,11 +54,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: RouteToSignUpButtonWidget(),
               ),
+
+              const Spacer()
             ],
           ),
-
-          /// 닫기 버튼
-          const CloseButtonWidget(),
+          const CloseButtonWidget()
         ],
       ),
     );

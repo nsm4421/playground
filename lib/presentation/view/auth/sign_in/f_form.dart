@@ -1,9 +1,7 @@
 part of 'index.dart';
 
 class SignInFormFragment extends StatefulWidget {
-  const SignInFormFragment(this._formKey, {super.key});
-
-  final GlobalKey<FormState> _formKey;
+  const SignInFormFragment({super.key});
 
   @override
   State<SignInFormFragment> createState() => _SignInFormFragmentState();
@@ -90,7 +88,7 @@ class _SignInFormFragmentState extends State<SignInFormFragment> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: widget._formKey,
+      key: context.read<SignInCubit>().formKey,
       child: Column(
         children: [
           /// 이메일

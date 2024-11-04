@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/util/extension/extension.dart';
+import 'package:travel/core/util/snackbar/snackbar.dart';
 import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/widget/widget.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../route/routes.dart';
 
 part 's_sign_in.dart';
 
@@ -27,17 +29,10 @@ class SignInPage extends StatelessWidget {
         listener: (context, state) async {
           switch (state.status) {
             case Status.success:
-              context.showCustomSnackBar(
-                  type: SnackBarType.success,
-                  shake: true,
-                  duration: 1.sec,
-                  title: 'sign in success');
+              getIt<CustomSnackBar>().success(title: 'sign in success');
             // TODO : 홈화면으로 이동
             case Status.error:
-              context.showCustomSnackBar(
-                  type: SnackBarType.error,
-                  duration: 1.sec,
-                  title: 'sign in fails');
+              getIt<CustomSnackBar>().error(title: 'sign in fail');
             default:
           }
           Future.delayed(2.sec, () {
@@ -49,8 +44,7 @@ class SignInPage extends StatelessWidget {
             return Center(
                 child: Container(
                     height: context.height * 2 / 3,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 18),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                       color: CustomPalette.white,
                       borderRadius: BorderRadius.circular(24),
@@ -59,8 +53,7 @@ class SignInPage extends StatelessWidget {
                         isLoading: state.status == Status.loading,
                         loadingWidget: const CircularProgressIndicator(),
                         childWidget: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 12),
                           child: SignInScreen(),
                         ))));
           },
