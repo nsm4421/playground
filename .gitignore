@@ -21,6 +21,7 @@ devtools_options.yaml
 .env
 *.gen.dart
 assets/
+.vscode
 
 # IntelliJ related
 *.iml

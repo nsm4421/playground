@@ -10,9 +10,9 @@ import 'presentation/route/route.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await Supabase.initialize(
-  //     url: Env.supabaseUrl,
-  //     anonKey: Env.supabaseAnonKey); // supabase client 초기화
+  await Supabase.initialize(
+      url: Env.supabaseUrl,
+      anonKey: Env.supabaseAnonKey); // supabase client 초기화
 
   configureDependencies(); // 의존성 주입
 
