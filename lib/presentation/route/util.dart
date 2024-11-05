@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:injectable/injectable.dart';
+import 'package:travel/presentation/bloc/module.dart';
 
-class CustomRouteUtil<T> {
-  Page<T> Function(BuildContext, GoRouterState) pageBuilder(Widget child) =>
-      (context, state) {
-        return CustomTransitionPage(
-            child: child,
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-              final tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              final offsetAnimation = animation.drive(tween);
-              return SlideTransition(
-                position: offsetAnimation,
-                child: child,
-              );
-            });
-      };
+@lazySingleton
+class AuthStateNotifier extends ChangeNotifier{
+  final BlocModule _blocModule;
+
+  AuthStateNotifier(this._blocModule) {
+    _blocModule.auth.authStateStream.listen((data) {
+      notifyListeners();
+    });
+  }
 }
