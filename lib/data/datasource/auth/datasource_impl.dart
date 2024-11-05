@@ -53,7 +53,6 @@ class AuthDataSourceImpl with CustomLogger implements AuthDataSource {
   @override
   Future<AuthUserModel?> signInWithEmailAndPassword(
       {required String email, required String password}) async {
-    logger.t('email:$email|password:$password');
     return await _supabaseClient.auth
         .signInWithPassword(email: email, password: password)
         .then((res) => res.user)
