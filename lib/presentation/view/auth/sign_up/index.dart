@@ -1,19 +1,19 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/extension/extension.dart';
+import 'package:travel/core/util/media/media.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
+import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
+import 'package:travel/presentation/bloc/auth/sign_up/cubit.dart';
+import 'package:travel/presentation/bloc/module.dart';
 import 'package:travel/presentation/widget/widget.dart';
-
-import '../../../../core/constant/constant.dart';
-import '../../../../core/util/media/media.dart';
-import '../../../bloc/auth/sign_up/cubit.dart';
 
 part 's_sign_up.dart';
 
@@ -29,14 +29,14 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<SignUpCubit>(),
+      create: (_) => getIt<BlocModule>().signUp,
       child: BlocListener<SignUpCubit, SignUpState>(
         listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) async {
           switch (state.status) {
             case Status.success:
               getIt<CustomSnackBar>().success(title: 'Success');
-              context.pop();
+              context.read<AuthenticationBloc>().add(UpdateCurrentUserEvent());
             case Status.error:
               getIt<CustomSnackBar>()
                   .error(title: 'Error', description: state.message);

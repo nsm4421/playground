@@ -9,6 +9,8 @@ extension BuildContextExtension on BuildContext {
 
   EdgeInsets get viewPadding => MediaQuery.of(this).viewPadding;
 
+  EdgeInsets get viewInsets => MediaQuery.of(this).viewInsets;
+
   double get width => size.width;
 
   double get height => size.height;

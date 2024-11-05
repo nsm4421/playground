@@ -1,13 +1,13 @@
 part of 'index.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _AuthScreenState extends State<AuthScreen> {
   late RiveAnimationController _buttonController;
   bool _isFormExposed = false;
 
@@ -113,18 +113,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             controllers: [_buttonController],
                           ),
                           Positioned.fill(
-                              top: 8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.arrow_forward, size: 30),
-                                  (12.0).w,
-                                  Text(
-                                    "Let's go",
-                                    style: context.textTheme.titleLarge,
-                                  ),
-                                ],
-                              ))
+                            top: 8,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.arrow_forward, size: 30),
+                                (12.0).w,
+                                Text(
+                                  "Let's go",
+                                  style: context.textTheme.titleLarge,
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),

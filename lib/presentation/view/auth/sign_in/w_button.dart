@@ -5,14 +5,18 @@ class SubmitButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignInCubit, SignInState>(builder: (context, state) {
-      return ElevatedButton(
+    return BlocBuilder<SignInCubit, SignInState>(
+      builder: (context, state) {
+        return ElevatedButton(
           // 회원가입 처리
           onPressed: state.status == Status.loading
               ? null
               : () async {
+                  FocusScope.of(context).unfocus();
                   if (context.read<SignInCubit>().ok) {
-                    await context.read<SignInCubit>().signIn();
+                    await Future.delayed(200.ms, () async {
+                      await context.read<SignInCubit>().signIn();
+                    });
                   }
                 },
           style: ElevatedButton.styleFrom(
@@ -23,8 +27,10 @@ class SubmitButtonWidget extends StatelessWidget {
             'Submit',
             style: context.textTheme.titleMedium
                 ?.copyWith(color: context.colorScheme.onPrimary),
-          ));
-    });
+          ),
+        );
+      },
+    );
   }
 }
 

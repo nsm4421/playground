@@ -13,7 +13,10 @@ class SubmitButtonWidget extends StatelessWidget {
         elevation: 5,
       ),
       onPressed: () async {
-        await context.read<SignUpCubit>().signUp(); // 회원가입 요청
+        FocusScope.of(context).unfocus();
+        await Future.delayed(200.ms, () async {
+          await context.read<SignUpCubit>().signUp(); // 회원가입 요청
+        });
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
