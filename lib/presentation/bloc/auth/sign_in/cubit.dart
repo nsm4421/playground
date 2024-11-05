@@ -1,22 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/logger/logger.dart';
-import 'package:travel/domain/usecase/usecase.dart';
 
 import '../../../../core/abstract/abstract.dart';
 import '../../../../core/constant/constant.dart';
+import '../../../../domain/usecase/auth/usecase.dart';
 
 part 'state.dart';
 
-@injectable
 class SignInCubit extends Cubit<SignInState> with CustomLogger {
   SignInCubit(this._useCase) : super(SignInState()) {
     _formKey = GlobalKey<FormState>(debugLabel: 'sign-in-form-key');
   }
 
-  final UseCaseModule _useCase;
+  final AuthUseCase _useCase;
   late GlobalKey<FormState> _formKey;
 
   GlobalKey<FormState> get formKey => _formKey;
@@ -40,15 +38,12 @@ class SignInCubit extends Cubit<SignInState> with CustomLogger {
   Future<void> signIn() async {
     emit(state.copyWith(status: Status.loading));
     try {
-      logger.t('email:${state.email}|password:${state.password}');
       await _useCase
           .signIn(email: state.email, password: state.password)
-          .then((res) => Future.delayed(1.sec, () {
-                res.fold(
-                    (l) => emit(state.copyWith(
-                        status: Status.error, message: 'sign in fails')),
-                    (r) => emit(state.copyWith(status: Status.success)));
-              }));
+          .then((res) => res.fold(
+              (l) => emit(state.copyWith(
+              status: Status.error, message: 'sign in fails')),
+              (r) => emit(state.copyWith(status: Status.success))));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error));

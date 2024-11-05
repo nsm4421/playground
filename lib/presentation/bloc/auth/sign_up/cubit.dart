@@ -2,22 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../core/abstract/abstract.dart';
 import '../../../../core/constant/constant.dart';
-import '../../../../domain/usecase/usecase.dart';
+import '../../../../domain/usecase/auth/usecase.dart';
 
 part 'state.dart';
 
-@injectable
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit(this._useCase) : super(SignUpState()) {
     _formKey = GlobalKey<FormState>(debugLabel: 'sign-up-form-key');
   }
 
-  final UseCaseModule _useCase;
+  final AuthUseCase _useCase;
 
   final _logger = Logger();
   late GlobalKey<FormState> _formKey;
@@ -55,7 +53,6 @@ class SignUpCubit extends Cubit<SignUpState> {
       } else {
         emit(state.copyWith(status: Status.loading));
         _logger.t('email:${state.email}|password:${state.password}');
-        // TODO : 회원가입 처리
         await _useCase
             .signUp(
                 email: state.email,
