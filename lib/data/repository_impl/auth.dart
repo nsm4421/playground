@@ -94,7 +94,6 @@ class AuthRepositoryImpl with CustomLogger implements AuthRepository {
   }
 
   Future<String> _uploadImageAndReturnPublicUrl(File profileImage) async {
-    return await _storageDataSource.uploadImageAndReturnPublicUrl(
-        file: profileImage, bucketName: Buckets.avatars.name);
+    return await _storageDataSource.uploadAvatarAndReturnPublicUrl(profileImage);
   }
 }

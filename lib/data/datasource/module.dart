@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:travel/data/datasource/database/feed/datasource.dart';
 import 'package:travel/data/datasource/storage/datasource.dart';
 
 import 'auth/datasource.dart';
@@ -12,6 +13,8 @@ abstract class DataSourceModule {
   AuthDataSource get auth => AuthDataSourceImpl(_supabaseClient);
 
   @lazySingleton
-  StorageDataSource get storage =>
-      StorageDataSourceImpl( _supabaseClient);
+  StorageDataSource get storage => StorageDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  FeedDataSource get feed => FeedDataSourceImpl(_supabaseClient);
 }

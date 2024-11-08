@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'error_response.freezed.dart';
 
@@ -10,8 +11,16 @@ class ErrorResponse with _$ErrorResponse {
     String? message,
   }) = _ErrorResponse;
 
-  // TODO : 에러처리 구현하기
-  static ErrorResponse from(Exception error) {
-    return ErrorResponse(message: error.toString());
+  static ErrorResponse from(dynamic error) {
+    if (error is AuthException) {
+      return ErrorResponse(code: 'auth-exception', message: error.message);
+    } else if (error is PostgrestException) {
+      return ErrorResponse(
+          code: 'postgres-exception:${error.code}', message: error.message);
+    } else if (error is StorageException) {
+      return ErrorResponse(code: 'storage-exception', message: error.message);
+    } else {
+      return ErrorResponse(message: error.toString());
+    }
   }
 }
