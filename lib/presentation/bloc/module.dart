@@ -3,6 +3,7 @@ import 'package:travel/domain/usecase/module.dart';
 import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
+import 'package:travel/presentation/bloc/feed/create/bloc.dart';
 
 import 'auth/sign_up/cubit.dart';
 
@@ -23,4 +24,7 @@ class BlocModule {
 
   @lazySingleton
   HomeBottomNavCubit get nav => HomeBottomNavCubit();
+
+  @injectable
+  CreateFeedBloc get createFeed => CreateFeedBloc(_useCase.feed);
 }
