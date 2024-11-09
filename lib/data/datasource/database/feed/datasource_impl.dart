@@ -11,8 +11,8 @@ class FeedDataSourceImpl with CustomLogger implements FeedDataSource {
   Future<void> create({required String id, required CreateFeedDto dto}) async {
     await _supabaseClient.rest.from(_table).insert({
       ...dto.toJson(),
-      id: id,
-      'crated_by': _supabaseClient.auth.currentUser!.id,
+      'id': id,
+      'created_by': _supabaseClient.auth.currentUser!.id,
       'created_at': DateTime.now().toUtc().toIso8601String(),
       'updated_at': DateTime.now().toUtc().toIso8601String(),
     });
