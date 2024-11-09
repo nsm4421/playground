@@ -9,6 +9,14 @@ class CreateMediaScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Create Media'),
       ),
+      body: Column(
+        children: [
+          SizedBox(height: context.width, child: const SelectedImageWidget()),
+          const Expanded(child: DisplayAssetWidget()),
+        ],
+      ),
+      floatingActionButton: const FabWidget(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

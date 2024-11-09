@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/util/logger/logger.dart';
-import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
 import 'package:travel/presentation/bloc/module.dart';
 
@@ -20,15 +19,6 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<BlocModule>().nav,
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  context.read<AuthenticationBloc>().add(SignOutEvent());
-                },
-                icon: const Icon(Icons.logout))
-          ],
-        ),
         body: _navigationShell,
         bottomNavigationBar: BottomNavigationFragment(_navigationShell),
       ),
