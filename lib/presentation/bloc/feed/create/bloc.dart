@@ -34,7 +34,10 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
 
   Future<void> _onInit(InitEvent event, Emitter<CreateFeedState> emit) async {
     emit(state.copyWith(
-        status: event.status, message: event.message, content: event.content));
+        status: event.status,
+        message: event.message,
+        content: event.content,
+        hashtags: event.hashtags));
   }
 
   Future<void> _onTap(
@@ -153,21 +156,29 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   Future<void> _onSubmit(
       SubmitEvent event, Emitter<CreateFeedState> emit) async {
     try {
-      emit(state.copyWith(status: Status.loading));
-      await _useCase
-          .create(
-              id: state.id,
-              content: state.content,
-              hashtags: state.hashtags,
-              captions: state.captions,
-              images: state.images.isEmpty
-                  ? []
-                  : await Future.wait(state.images
-                      .map((item) async => (await item.originFile as File))))
-          .then((res) => res.fold(
-              (l) => emit(
-                  state.copyWith(status: Status.error, message: l.message)),
-              (r) => emit(state.copyWith(status: Status.success))));
+      if (state.images.isEmpty) {
+        emit(state.copyWith(
+            status: Status.error, message: 'picture is not selected'));
+      } else if (state.content.isEmpty) {
+        emit(
+            state.copyWith(status: Status.error, message: 'body is not given'));
+      } else {
+        emit(state.copyWith(status: Status.loading));
+        await _useCase
+            .create(
+                id: state.id,
+                content: state.content,
+                hashtags: state.hashtags,
+                captions: state.captions,
+                images: state.images.isEmpty
+                    ? []
+                    : await Future.wait(state.images
+                        .map((item) async => (await item.originFile as File))))
+            .then((res) => res.fold(
+                (l) => emit(
+                    state.copyWith(status: Status.error, message: l.message)),
+                (r) => emit(state.copyWith(status: Status.success))));
+      }
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(

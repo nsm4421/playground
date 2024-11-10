@@ -11,8 +11,9 @@ final class InitEvent extends CreateFeedEvent {
   final Status? status;
   final String? message;
   final String? content;
+  final List<String>? hashtags;
 
-  InitEvent({this.status, this.message, this.content});
+  InitEvent({this.status, this.message, this.content, this.hashtags});
 }
 
 final class ChangeAssetPathEvent extends CreateFeedEvent {

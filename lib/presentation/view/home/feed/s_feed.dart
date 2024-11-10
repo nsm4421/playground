@@ -9,7 +9,11 @@ class FeedScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Feed'),
         actions: [
-
+          IconButton(
+              onPressed: () {
+                context.push(Routes.createFeed.path);
+              },
+              icon: const Icon(Icons.create))
         ],
       ),
     );

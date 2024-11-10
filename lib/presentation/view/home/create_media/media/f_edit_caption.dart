@@ -13,12 +13,12 @@ class EditCaptionFragment extends StatefulWidget {
 class _EditCaptionFragmentState extends State<EditCaptionFragment> {
   late TextEditingController _controller;
 
-  static const int _maxLength = 300;
+  static const int _maxLength = 50;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: widget.initText);
   }
 
   @override

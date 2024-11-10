@@ -34,6 +34,11 @@ class _CreateMediaScreenState extends State<CreateMediaScreen> {
     }
   }
 
+  _handleJumpToSelectMediaPage() async {
+    await _controller.animateToPage(0,
+        duration: 200.ms, curve: Curves.easeInOut);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -43,7 +48,7 @@ class _CreateMediaScreenState extends State<CreateMediaScreen> {
       itemBuilder: (context, index) {
         return index == 0
             ? SelectMediaScreen(handleJumpPage: _handleJumpToDetailPage)
-            : const EditDetailScreen();
+            : EditDetailScreen(handleJumpPage: _handleJumpToSelectMediaPage);
       },
     );
   }
