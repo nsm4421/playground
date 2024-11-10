@@ -6,6 +6,7 @@ enum Routes {
   /// home
   home('/home'),
   feed('/home/feed', subPath: 'feed'),
+  createFeed('/home/feed/create', subPath: 'create'),
   search('/home/search', subPath: 'search'),
   createMedia('/home/create-media', subPath: 'create-media'),
   reels('/home/reels', subPath: 'reels'),

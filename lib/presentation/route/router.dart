@@ -10,6 +10,7 @@ import 'package:travel/presentation/view/auth/sign_up/index.dart';
 import 'package:travel/presentation/view/home/create_media/index.dart';
 import 'package:travel/presentation/view/home/feed/index.dart';
 import 'package:travel/presentation/view/home/index.dart';
+import 'package:travel/presentation/view/home/setting/index.dart';
 
 import 'util.dart';
 import 'routes.dart';
@@ -47,15 +48,23 @@ class CustomRouter with CustomLogger {
                   GoRoute(
                     path: switch (item) {
                       HomeBottomNavItem.feed => Routes.feed.path,
-                      HomeBottomNavItem.createMedia => Routes.createMedia.path,
+                      HomeBottomNavItem.setting => Routes.setting.path,
                     },
                     pageBuilder: _pageBuilder(
                       switch (item) {
                         HomeBottomNavItem.feed => const FeedPage(),
-                        HomeBottomNavItem.createMedia =>
-                          const CreateMediaPage(),
+                        HomeBottomNavItem.setting => const SettingPage(),
                       },
                     ),
+                    routes: switch (item) {
+                      HomeBottomNavItem.feed => [
+                          GoRoute(
+                              path: Routes.createFeed.subPath ?? 'create',
+                              builder: (context, state) =>
+                                  const CreateMediaPage()),
+                        ],
+                      (_) => [],
+                    },
                   )
                 ],
               ),
