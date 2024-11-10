@@ -74,4 +74,15 @@ for select using (bucket_id = 'avatars');
 
 create policy "permit insert avatar for all" on storage.objects
 for insert with check (bucket_id = 'avatars');
+
+------------------------------------------------------
+
+insert into storage.buckets (id, name)
+values ('feeds', 'feeds');
+
+create policy "permit feed media for all" on storage.objects
+for select using (bucket_id = 'feeds');
+
+create policy "permit insert feed media for all" on storage.objects
+for insert with check (bucket_id = 'feeds');
 ```

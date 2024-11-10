@@ -20,4 +20,8 @@ as $$
     return new;
     end;
 $$;
+
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute procedure public.on_sign_up();
 ```
