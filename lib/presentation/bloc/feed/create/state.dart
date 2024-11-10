@@ -6,10 +6,10 @@ class CreateFeedState extends BaseState {
   late final List<String> hashtags;
   late final List<String> captions;
   late final List<AssetPathEntity> album;
-  final AssetPathEntity? assetPath; // 현재 선택한 폴더 경로
+  final AssetPathEntity? currentAssetPath; // 현재 선택한 폴더 경로
   late final List<AssetEntity> assets;
-  final AssetEntity? currentImage; // 현재 보여주고 있는 asset
-  late final List<AssetEntity> selected;
+  final AssetEntity? currentAsset; // 현재 보여주고 있는 asset
+  late final List<AssetEntity> images;
   final bool isAuth;
 
   CreateFeedState(
@@ -20,16 +20,16 @@ class CreateFeedState extends BaseState {
       List<String>? hashtags,
       List<String>? captions,
       List<AssetPathEntity>? album,
-      this.assetPath,
+      this.currentAssetPath,
       List<AssetEntity>? assets,
-      this.currentImage,
+      this.currentAsset,
       List<AssetEntity>? selected,
       this.isAuth = false}) {
     this.hashtags = hashtags ?? [];
     this.captions = captions ?? [];
     this.album = album ?? [];
     this.assets = assets ?? [];
-    this.selected = selected ?? [];
+    this.images = selected ?? [];
   }
 
   @override
@@ -52,12 +52,14 @@ class CreateFeedState extends BaseState {
       content: content ?? this.content,
       captions: captions ?? this.captions,
       hashtags: hashtags ?? this.hashtags,
-      selected: selected ?? this.selected,
+      selected: selected ?? this.images,
       album: album ?? this.album,
-      currentImage: currentImage ?? this.currentImage,
-      assetPath: assetPath ?? this.assetPath,
+      currentAsset: currentImage ?? this.currentAsset,
+      currentAssetPath: assetPath ?? this.currentAssetPath,
       assets: assets ?? this.assets,
       isAuth: isAuth ?? this.isAuth,
     );
   }
+
+  int get index => images.indexOf(currentAsset!);
 }

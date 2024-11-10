@@ -34,16 +34,11 @@ final class SelectImageEvent extends CreateFeedEvent {
 }
 
 final class EditCaptionEvent extends CreateFeedEvent {
-  final int index;
   final String content;
 
-  EditCaptionEvent({required this.index, required this.content});
+  EditCaptionEvent(this.content);
 }
 
-final class UnSelectImageEvent extends CreateFeedEvent {
-  final int index;
-
-  UnSelectImageEvent(this.index);
-}
+final class UnSelectImageEvent extends CreateFeedEvent {}
 
 final class SubmitEvent extends CreateFeedEvent {}

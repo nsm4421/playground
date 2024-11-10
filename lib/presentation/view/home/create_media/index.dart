@@ -1,8 +1,12 @@
 
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:travel/core/constant/constant.dart';
@@ -18,15 +22,23 @@ part 's_create.dart';
 
 part 's_un_authorized.dart';
 
-part 'f_edit_caption.dart';
+part 'media/s_select_media.dart';
 
-part 'w_display_asset.dart';
+part 'media/f_edit_caption.dart';
 
-part 'w_content.dart';
+part 'media/f_selected_images.dart';
+
+part 'media/f_display_asset.dart';
+
+part 'detail/s_edit_detail.dart';
+
+part 'detail/w_content.dart';
 
 part 'w_fab.dart';
 
-part 'w_selected_image.dart';
+part 'media/f_current_asset.dart';
+
+part 'media/w_asset_path.dart';
 
 class CreateMediaPage extends StatelessWidget {
   const CreateMediaPage({super.key});

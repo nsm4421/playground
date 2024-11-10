@@ -1,7 +1,7 @@
-part of 'index.dart';
+part of '../index.dart';
 
-class DisplayAssetWidget extends StatelessWidget {
-  const DisplayAssetWidget({super.key});
+class DisplayAssetFragment extends StatelessWidget {
+  const DisplayAssetFragment({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class DisplayAssetWidget extends StatelessWidget {
                   context.read<CreateFeedBloc>().add(OnTapImageEvent(asset));
                 },
                 child: AnimatedOpacity(
-                    opacity: state.currentImage == asset ? 0.4 : 1,
+                    opacity: state.currentAsset == asset ? 0.4 : 1,
                     duration: 200.ms,
                     child: AssetEntityImage(asset, fit: BoxFit.cover)));
           },

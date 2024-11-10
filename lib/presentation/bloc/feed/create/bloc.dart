@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:travel/core/abstract/abstract.dart';
 import 'package:travel/core/constant/constant.dart';
+import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/logger/logger.dart';
 import 'package:travel/domain/usecase/feed/usecase.dart';
 import 'package:uuid/uuid.dart';
@@ -24,6 +25,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
     on<AskPermissionEvent>(_onAsk);
     on<OnMountEvent>(_onMount);
     on<OnTapImageEvent>(_onTap);
+    on<ChangeAssetPathEvent>(_onChangePath);
     on<SelectImageEvent>(_onSelect);
     on<EditCaptionEvent>(_onEdit);
     on<UnSelectImageEvent>(_onUnSelect);
@@ -58,7 +60,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
       SelectImageEvent event, Emitter<CreateFeedState> emit) async {
     try {
       emit(state.copyWith(
-          selected: [...state.selected, event.asset],
+          selected: [...state.images, event.asset],
           captions: [...state.captions, '']));
     } catch (error) {
       logger.e(error);
@@ -72,7 +74,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
       emit(state.copyWith(
           captions: List.generate(
               state.captions.length,
-              (index) => index == event.index
+              (index) => index == state.index
                   ? event.content
                   : state.captions[index])));
     } catch (error) {
@@ -84,11 +86,31 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   Future<void> _onUnSelect(
       UnSelectImageEvent event, Emitter<CreateFeedState> emit) async {
     try {
-      List<AssetEntity> selected = [...state.selected];
+      final temp = state.index;
+      List<AssetEntity> selected = [...state.images];
       List<String> captions = [...state.captions];
-      selected.removeAt(event.index);
-      captions.removeAt(event.index);
+      selected.removeAt(temp);
+      captions.removeAt(temp);
       emit(state.copyWith(selected: selected, captions: captions));
+    } catch (error) {
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, message: 'error occurs'));
+    }
+  }
+
+  Future<void> _onChangePath(
+      ChangeAssetPathEvent event, Emitter<CreateFeedState> emit) async {
+    try {
+      if (event.assetPath == state.currentAssetPath) return;
+      emit(state.copyWith(status: Status.loading, assetPath: event.assetPath));
+      final assets =
+          await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100);
+      await Future.delayed(500.ms, () {
+        emit(state.copyWith(
+            assets: assets,
+            currentImage: assets.first,
+            status: Status.initial));
+      });
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
@@ -118,7 +140,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
           .then(
               (res) => emit(state.copyWith(album: res, assetPath: res.first)));
       // assets 가져오기
-      await state.assetPath!.getAssetListPaged(page: 0, size: 100).then(
+      await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100).then(
           (res) => emit(state.copyWith(assets: res, currentImage: res.first)));
       emit(state.copyWith(status: Status.initial, isAuth: true));
     } catch (error) {
@@ -138,9 +160,9 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
               content: state.content,
               hashtags: state.hashtags,
               captions: state.captions,
-              images: state.selected.isEmpty
+              images: state.images.isEmpty
                   ? []
-                  : await Future.wait(state.selected
+                  : await Future.wait(state.images
                       .map((item) async => (await item.originFile as File))))
           .then((res) => res.fold(
               (l) => emit(
