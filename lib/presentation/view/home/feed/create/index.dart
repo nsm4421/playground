@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -13,6 +10,7 @@ import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
+import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
 import 'package:travel/presentation/bloc/feed/create/bloc.dart';
 import 'package:travel/presentation/bloc/module.dart';
 import 'package:travel/presentation/widget/widget.dart';
@@ -21,30 +19,30 @@ part 's_create.dart';
 
 part 's_un_authorized.dart';
 
-part 'media/s_select_media.dart';
+part './media/s_select_media.dart';
 
-part 'media/f_edit_caption.dart';
+part './media/f_edit_caption.dart';
 
-part 'media/f_selected_images.dart';
+part './media/f_selected_images.dart';
 
-part 'media/f_display_asset.dart';
+part './media/f_display_asset.dart';
 
-part 'media/f_current_asset.dart';
+part './media/f_current_asset.dart';
 
-part 'media/w_asset_path.dart';
+part './media/w_asset_path.dart';
 
-part 'detail/s_edit_detail.dart';
+part './detail/s_edit_detail.dart';
 
-part 'detail/f_content.dart';
+part './detail/f_content.dart';
 
-part 'detail/f_carousel.dart';
+part './detail/f_carousel.dart';
 
-part 'detail/f_hashtag.dart';
+part './detail/f_hashtag.dart';
 
 part 'w_fab.dart';
 
-class CreateMediaPage extends StatelessWidget {
-  const CreateMediaPage({super.key});
+class CreateFeedPage extends StatelessWidget {
+  const CreateFeedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +57,14 @@ class CreateMediaPage extends StatelessWidget {
           } else if (state.status == Status.error) {
             getIt<CustomSnackBar>()
                 .error(title: 'Error', description: state.message);
-            await Future.delayed(1.sec, () {
-              context
-                  .read<CreateFeedBloc>()
-                  .add(InitEvent(status: Status.initial, message: ''));
-            });
+            await Future.delayed(
+              1.sec,
+              () {
+                context
+                    .read<CreateFeedBloc>()
+                    .add(InitEvent(status: Status.initial, message: ''));
+              },
+            );
           } else if (state.status == Status.success) {
             getIt<CustomSnackBar>().success(title: 'Success');
             context.pop();
@@ -76,7 +77,7 @@ class CreateMediaPage extends StatelessWidget {
                     state.status == Status.success,
                 loadingWidget: const Center(child: CircularProgressIndicator()),
                 childWidget: state.isAuth
-                    ? const CreateMediaScreen()
+                    ? const CreateFeedScreen()
                     : const UnAuthorizedScreen());
           },
         ),

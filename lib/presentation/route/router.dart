@@ -7,9 +7,10 @@ import 'package:travel/core/util/logger/logger.dart';
 import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/view/auth/index.dart';
 import 'package:travel/presentation/view/auth/sign_up/index.dart';
-import 'package:travel/presentation/view/home/create_media/index.dart';
+import 'package:travel/presentation/view/home/feed/create/index.dart';
 import 'package:travel/presentation/view/home/feed/index.dart';
 import 'package:travel/presentation/view/home/index.dart';
+import 'package:travel/presentation/view/home/reels/index.dart';
 import 'package:travel/presentation/view/home/setting/index.dart';
 
 import 'util.dart';
@@ -48,11 +49,13 @@ class CustomRouter with CustomLogger {
                   GoRoute(
                     path: switch (item) {
                       HomeBottomNavItem.feed => Routes.feed.path,
+                      HomeBottomNavItem.reels => Routes.reels.path,
                       HomeBottomNavItem.setting => Routes.setting.path,
                     },
                     pageBuilder: _pageBuilder(
                       switch (item) {
                         HomeBottomNavItem.feed => const FeedPage(),
+                        HomeBottomNavItem.reels => const ReelsPage(),
                         HomeBottomNavItem.setting => const SettingPage(),
                       },
                     ),
@@ -61,7 +64,7 @@ class CustomRouter with CustomLogger {
                           GoRoute(
                               path: Routes.createFeed.subPath ?? 'create',
                               builder: (context, state) =>
-                                  const CreateMediaPage()),
+                                  const CreateFeedPage()),
                         ],
                       (_) => [],
                     },

@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<BlocModule>().nav,
+      create: (_) => getIt<BlocModule>().homeBottomNav,
       child: Scaffold(
         body: _navigationShell,
         bottomNavigationBar: BottomNavigationFragment(_navigationShell),

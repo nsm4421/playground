@@ -1,13 +1,13 @@
 part of 'index.dart';
 
-class CreateMediaScreen extends StatefulWidget {
-  const CreateMediaScreen({super.key});
+class CreateFeedScreen extends StatefulWidget {
+  const CreateFeedScreen({super.key});
 
   @override
-  State<CreateMediaScreen> createState() => _CreateMediaScreenState();
+  State<CreateFeedScreen> createState() => _CreateFeedScreenState();
 }
 
-class _CreateMediaScreenState extends State<CreateMediaScreen> {
+class _CreateFeedScreenState extends State<CreateFeedScreen> {
   late PageController _controller;
 
   @override
