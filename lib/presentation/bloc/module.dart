@@ -4,6 +4,7 @@ import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
 import 'package:travel/presentation/bloc/feed/create/bloc.dart';
+import 'package:travel/presentation/bloc/feed/display/bloc.dart';
 
 import 'auth/sign_up/cubit.dart';
 
@@ -13,6 +14,7 @@ class BlocModule {
 
   BlocModule(this._useCase);
 
+  /// auth
   @injectable
   SignInCubit get signIn => SignInCubit(_useCase.auth);
 
@@ -22,9 +24,14 @@ class BlocModule {
   @lazySingleton
   AuthenticationBloc get auth => AuthenticationBloc(_useCase.auth);
 
+  /// nav
   @lazySingleton
-  HomeBottomNavCubit get nav => HomeBottomNavCubit();
+  HomeBottomNavCubit get homeBottomNav => HomeBottomNavCubit();
 
-  @injectable
+  /// create media
+  @lazySingleton
+  DisplayFeedBloc get displayFeed => DisplayFeedBloc(_useCase.feed);
+
+  @lazySingleton
   CreateFeedBloc get createFeed => CreateFeedBloc(_useCase.feed);
 }

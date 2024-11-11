@@ -23,8 +23,8 @@ class FeedEntity extends BaseEntity {
   factory FeedEntity.from(FetchFeedDto dto) {
     return FeedEntity(
       id: dto.id,
-      createdAt: dto.created_at,
-      updatedAt: dto.updated_at,
+      createdAt: DateTime.tryParse(dto.created_at),
+      updatedAt: DateTime.tryParse(dto.updated_at),
       content: dto.content,
       hashtags: dto.hashtags,
       captions: dto.captions,

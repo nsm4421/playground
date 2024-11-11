@@ -2,8 +2,8 @@ part of 'abstract.dart';
 
 abstract class BaseEntity {
   final String? id;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   BaseEntity({this.id, this.createdAt, this.updatedAt});
 }
