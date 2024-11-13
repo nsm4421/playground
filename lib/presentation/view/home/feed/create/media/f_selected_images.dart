@@ -1,6 +1,7 @@
 part of '../index.dart';
 
-class SelectedImagesFragment extends StatelessWidget implements PreferredSizeWidget {
+class SelectedImagesFragment extends StatelessWidget
+    implements PreferredSizeWidget {
   const SelectedImagesFragment({super.key});
 
   static const double _height = 150;
@@ -11,6 +12,7 @@ class SelectedImagesFragment extends StatelessWidget implements PreferredSizeWid
       builder: (context, state) {
         return Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// 선택한 이미지 목록
             AnimatedContainer(

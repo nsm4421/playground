@@ -7,6 +7,7 @@ class CurrentAssetFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxImageNum = context.read<CreateFeedBloc>().maxImageNum;
     return BlocBuilder<CreateFeedBloc, CreateFeedState>(
       builder: (context, state) {
         final isSelected = state.images.contains(state.currentAsset);
@@ -27,18 +28,18 @@ class CurrentAssetFragment extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       color: CustomPalette.darkGrey),
                   child: Text(
-                    'selected',
+                    '${state.index + 1}/$maxImageNum',
                     style: context.textTheme.labelLarge
                         ?.copyWith(color: CustomPalette.white),
                   ),
                 ),
               ),
-            if (!isSelected)
+            if (!isSelected && state.images.length < maxImageNum)
               Positioned(
                 bottom: 8,
                 right: 8,
                 child: RoundedIconWidget(
-                  iconData: Icons.check,
+                  iconData: Icons.add,
                   size: _iconSize,
                   onTap: () {
                     context

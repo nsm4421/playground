@@ -5,6 +5,7 @@ import 'package:travel/domain/entity/auth/presence.dart';
 class FeedEntity extends BaseEntity {
   final String content;
   late final List<String> hashtags;
+  late final List<String> images;
   late final List<String> captions;
   final PresenceEntity author;
 
@@ -14,9 +15,11 @@ class FeedEntity extends BaseEntity {
       super.updatedAt,
       this.content = '',
       List<String>? hashtags,
+      List<String>? images,
       List<String>? captions,
       required this.author}) {
     this.hashtags = hashtags ?? [];
+    this.images = images ?? [];
     this.captions = captions ?? [];
   }
 
@@ -27,6 +30,7 @@ class FeedEntity extends BaseEntity {
       updatedAt: DateTime.tryParse(dto.updated_at),
       content: dto.content,
       hashtags: dto.hashtags,
+      images: dto.images,
       captions: dto.captions,
       author: PresenceEntity(
         id: dto.author_id,

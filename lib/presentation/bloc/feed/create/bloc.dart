@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +17,10 @@ part 'event.dart';
 class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
     with CustomLogger {
   final FeedUseCase _useCase;
+
+  static const int _maxImageNum = 5;
+
+  int get maxImageNum => _maxImageNum;
 
   CreateFeedBloc(this._useCase)
       : super(CreateFeedState(id: const Uuid().v4())) {
@@ -62,9 +65,15 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   Future<void> _onSelect(
       SelectImageEvent event, Emitter<CreateFeedState> emit) async {
     try {
-      emit(state.copyWith(
-          selected: [...state.images, event.asset],
-          captions: [...state.captions, '']));
+      if (state.images.length >= _maxImageNum) {
+        emit(state.copyWith(
+            status: Status.error,
+            message: "the number of image can't exceed $_maxImageNum}"));
+      } else {
+        emit(state.copyWith(
+            selected: [...state.images, event.asset],
+            captions: [...state.captions, '']));
+      }
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
