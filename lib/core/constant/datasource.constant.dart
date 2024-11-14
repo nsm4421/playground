@@ -1,11 +1,14 @@
 part of 'constant.dart';
 
 enum Tables {
-  feeds;
+  feeds,
+  reels;
 }
 
 enum RpcFns {
-  fetchFeeds('fetch_feeds');
+  fetchFeeds('fetch_feeds'),
+  fetchReels('fetch_reels'),
+  ;
 
   final String name;
 
@@ -13,5 +16,7 @@ enum RpcFns {
 }
 
 enum Buckets {
-  avatars, feeds;
+  avatars,
+  feeds,
+  reels;
 }

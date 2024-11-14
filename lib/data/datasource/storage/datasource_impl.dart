@@ -5,6 +5,9 @@ class StorageDataSourceImpl with CustomLogger implements StorageDataSource {
 
   StorageDataSourceImpl(this._supabaseClient);
 
+  // 파일 확장자
+  String _getExt(File file) => file.path.split('.').last;
+
   @override
   Future<String> uploadAvatarAndReturnPublicUrl(File avatar) async {
     final bucket = _supabaseClient.storage.from(Buckets.avatars.name);
@@ -30,8 +33,21 @@ class StorageDataSourceImpl with CustomLogger implements StorageDataSource {
     return await Future.wait(futures);
   }
 
-  // 파일 확장자
-  String _getExt(File file) {
-    return file.path.split('.').last;
+  @override
+  Future<String> uploadReelsAndReturnPublicUrl(File video) async {
+    final bucket = _supabaseClient.storage.from(Buckets.avatars.name);
+    final ext = _getExt(video);
+    final contentType = switch (ext) {
+      'mp4' => 'video/mp4',
+      'mov' => 'video/quicktime',
+      'avi' => 'video/x-msvideo',
+      'mkv' => 'video/x-matroska',
+      (_) => 'application/octet-stream'
+    };
+    final path = '${const Uuid().v4()}.$ext';
+    await bucket.uploadBinary(path, await video.readAsBytes(),
+        fileOptions: FileOptions(
+            contentType: contentType, cacheControl: '3600', upsert: true));
+    return bucket.getPublicUrl(path);
   }
 }

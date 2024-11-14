@@ -21,7 +21,6 @@ class FeedDataSourceImpl with CustomLogger implements FeedDataSource {
   @override
   Future<Iterable<FetchFeedDto>> fetch(
       {required String beforeAt, int take = 20}) async {
-    // TODO : RPC함수 구현
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchFeeds.name, params: {
       '_before_at': beforeAt,
