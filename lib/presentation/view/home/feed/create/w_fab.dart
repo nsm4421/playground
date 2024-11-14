@@ -33,7 +33,7 @@ class CurrentAssetFabWidget extends StatelessWidget {
                   },
                 ).then((res) {
                   if (res == null) return;
-                  context.read<CreateFeedBloc>().add(EditCaptionEvent(res));
+                  context.read<CreateFeedBloc>().add(EditContentEvent(res));
                 });
               },
             ),

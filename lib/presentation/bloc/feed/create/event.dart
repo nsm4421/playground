@@ -34,10 +34,10 @@ final class SelectImageEvent extends CreateFeedEvent {
   SelectImageEvent(this.asset);
 }
 
-final class EditCaptionEvent extends CreateFeedEvent {
+final class EditContentEvent extends CreateFeedEvent {
   final String content;
 
-  EditCaptionEvent(this.content);
+  EditContentEvent(this.content);
 }
 
 final class UnSelectImageEvent extends CreateFeedEvent {}

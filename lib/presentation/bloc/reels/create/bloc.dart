@@ -7,49 +7,36 @@ import 'package:travel/core/abstract/abstract.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/logger/logger.dart';
-import 'package:travel/domain/usecase/feed/usecase.dart';
+import 'package:travel/domain/usecase/reels/usecase.dart';
 import 'package:uuid/uuid.dart';
 
 part 'state.dart';
 
 part 'event.dart';
 
-class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
+class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState>
     with CustomLogger {
-  final FeedUseCase _useCase;
+  static final Duration _maxDuration = 3.min;
+  final ReelsUseCase _useCase;
 
-  static const int _maxImageNum = 5;
-
-  int get maxImageNum => _maxImageNum;
-
-  CreateFeedBloc(this._useCase)
-      : super(CreateFeedState(id: const Uuid().v4())) {
+  CreateReelsBloc(this._useCase)
+      : super(CreateReelsState(id: const Uuid().v4())) {
     on<InitEvent>(_onInit);
     on<AskPermissionEvent>(_onAsk);
     on<OnMountEvent>(_onMount);
-    on<OnTapImageEvent>(_onTap);
+    on<SelectVideoEvent>(_onSelect);
     on<ChangeAssetPathEvent>(_onChangePath);
-    on<SelectImageEvent>(_onSelect);
-    on<EditContentEvent>(_onEdit);
-    on<UnSelectImageEvent>(_onUnSelect);
+    on<EditCaptionEvent>(_onEdit);
     on<SubmitEvent>(_onSubmit);
   }
 
-  Future<void> _onInit(InitEvent event, Emitter<CreateFeedState> emit) async {
+  Future<void> _onInit(InitEvent event, Emitter<CreateReelsState> emit) async {
     emit(state.copyWith(
-        status: event.status,
-        message: event.message,
-        content: event.content,
-        hashtags: event.hashtags));
-  }
-
-  Future<void> _onTap(
-      OnTapImageEvent event, Emitter<CreateFeedState> emit) async {
-    emit(state.copyWith(currentImage: event.asset));
+        status: event.status, message: event.message, caption: event.caption));
   }
 
   Future<void> _onAsk(
-      AskPermissionEvent event, Emitter<CreateFeedState> emit) async {
+      AskPermissionEvent event, Emitter<CreateReelsState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
       final isAuth = await PhotoManager.requestPermissionExtend()
@@ -63,17 +50,9 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   }
 
   Future<void> _onSelect(
-      SelectImageEvent event, Emitter<CreateFeedState> emit) async {
+      SelectVideoEvent event, Emitter<CreateReelsState> emit) async {
     try {
-      if (state.images.length >= _maxImageNum) {
-        emit(state.copyWith(
-            status: Status.error,
-            message: "the number of image can't exceed $_maxImageNum}"));
-      } else {
-        emit(state.copyWith(
-            selected: [...state.images, event.asset],
-            captions: [...state.captions, '']));
-      }
+      emit(state.copyWith(video: event.video));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
@@ -81,29 +60,9 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   }
 
   Future<void> _onEdit(
-      EditContentEvent event, Emitter<CreateFeedState> emit) async {
+      EditCaptionEvent event, Emitter<CreateReelsState> emit) async {
     try {
-      emit(state.copyWith(
-          captions: List.generate(
-              state.captions.length,
-              (index) => index == state.index
-                  ? event.content
-                  : state.captions[index])));
-    } catch (error) {
-      logger.e(error);
-      emit(state.copyWith(status: Status.error, message: 'error occurs'));
-    }
-  }
-
-  Future<void> _onUnSelect(
-      UnSelectImageEvent event, Emitter<CreateFeedState> emit) async {
-    try {
-      final temp = state.index;
-      List<AssetEntity> selected = [...state.images];
-      List<String> captions = [...state.captions];
-      selected.removeAt(temp);
-      captions.removeAt(temp);
-      emit(state.copyWith(selected: selected, captions: captions));
+      emit(state.copyWith(caption: event.caption));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
@@ -111,7 +70,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   }
 
   Future<void> _onChangePath(
-      ChangeAssetPathEvent event, Emitter<CreateFeedState> emit) async {
+      ChangeAssetPathEvent event, Emitter<CreateReelsState> emit) async {
     try {
       if (event.assetPath == state.currentAssetPath) return;
       emit(state.copyWith(status: Status.loading, assetPath: event.assetPath));
@@ -119,9 +78,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
           await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100);
       await Future.delayed(500.ms, () {
         emit(state.copyWith(
-            assets: assets,
-            currentImage: assets.first,
-            status: Status.initial));
+            assets: assets, video: assets.first, status: Status.initial));
       });
     } catch (error) {
       logger.e(error);
@@ -130,7 +87,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   }
 
   Future<void> _onMount(
-      OnMountEvent event, Emitter<CreateFeedState> emit) async {
+      OnMountEvent event, Emitter<CreateReelsState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
       // 권한 검사하기
@@ -147,13 +104,15 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
               onlyAll: false,
               type: RequestType.image,
               filterOption: FilterOptionGroup(
-                  imageOption: const FilterOption(
-                      sizeConstraint: SizeConstraint(maxWidth: 10000))))
+                  videoOption: FilterOption(
+                      durationConstraint:
+                          DurationConstraint(max: _maxDuration))))
           .then(
               (res) => emit(state.copyWith(album: res, assetPath: res.first)));
       // assets 가져오기
-      await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100).then(
-          (res) => emit(state.copyWith(assets: res, currentImage: res.first)));
+      await state.currentAssetPath!
+          .getAssetListPaged(page: 0, size: 100)
+          .then((res) => emit(state.copyWith(assets: res, video: res.first)));
       emit(state.copyWith(status: Status.initial, isAuth: true));
     } catch (error) {
       logger.e(error);
@@ -163,26 +122,19 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   }
 
   Future<void> _onSubmit(
-      SubmitEvent event, Emitter<CreateFeedState> emit) async {
+      SubmitEvent event, Emitter<CreateReelsState> emit) async {
     try {
-      if (state.images.isEmpty) {
+      emit(state.copyWith(status: Status.loading));
+      final video = await state.video?.file;
+      if (video == null) {
         emit(state.copyWith(
-            status: Status.error, message: 'picture is not selected'));
-      } else if (state.content.isEmpty) {
-        emit(
-            state.copyWith(status: Status.error, message: 'body is not given'));
+            status: Status.error, message: 'error occurs on submitting'));
       } else {
-        emit(state.copyWith(status: Status.loading));
         await _useCase
             .create(
                 id: state.id,
-                content: state.content,
-                hashtags: state.hashtags,
-                captions: state.captions,
-                images: state.images.isEmpty
-                    ? []
-                    : await Future.wait(state.images
-                        .map((item) async => (await item.originFile as File))))
+                caption: state.caption.isEmpty ? null : state.caption,
+                video: video)
             .then((res) => res.fold(
                 (l) => emit(
                     state.copyWith(status: Status.error, message: l.message)),

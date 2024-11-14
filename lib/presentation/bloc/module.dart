@@ -5,6 +5,7 @@ import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
 import 'package:travel/presentation/bloc/feed/create/bloc.dart';
 import 'package:travel/presentation/bloc/feed/display/bloc.dart';
+import 'package:travel/presentation/bloc/reels/create/bloc.dart';
 
 import 'auth/sign_up/cubit.dart';
 
@@ -28,10 +29,14 @@ class BlocModule {
   @lazySingleton
   HomeBottomNavCubit get homeBottomNav => HomeBottomNavCubit();
 
-  /// create media
+  /// feed
   @lazySingleton
   DisplayFeedBloc get displayFeed => DisplayFeedBloc(_useCase.feed);
 
   @lazySingleton
   CreateFeedBloc get createFeed => CreateFeedBloc(_useCase.feed);
+
+  /// reels
+  @lazySingleton
+  CreateReelsBloc get createReels => CreateReelsBloc(_useCase.reels);
 }
