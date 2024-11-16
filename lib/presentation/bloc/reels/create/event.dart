@@ -3,7 +3,11 @@ part of 'bloc.dart';
 @sealed
 final class CreateReelsEvent {}
 
-final class OnMountEvent extends CreateReelsEvent {}
+final class OnMountEvent extends CreateReelsEvent {
+  final int take;
+
+  OnMountEvent({this.take = 20});
+}
 
 final class AskPermissionEvent extends CreateReelsEvent {}
 
@@ -31,6 +35,12 @@ final class EditCaptionEvent extends CreateReelsEvent {
   final String caption;
 
   EditCaptionEvent(this.caption);
+}
+
+final class FetchMoreAssetEvent extends CreateReelsEvent {
+  final int take;
+
+  FetchMoreAssetEvent({this.take = 20});
 }
 
 final class SubmitEvent extends CreateReelsEvent {}

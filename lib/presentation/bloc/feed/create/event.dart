@@ -3,7 +3,11 @@ part of 'bloc.dart';
 @sealed
 final class CreateFeedEvent {}
 
-final class OnMountEvent extends CreateFeedEvent {}
+final class OnMountEvent extends CreateFeedEvent {
+  final int take;
+
+  OnMountEvent({this.take = 20});
+}
 
 final class AskPermissionEvent extends CreateFeedEvent {}
 
@@ -17,9 +21,17 @@ final class InitEvent extends CreateFeedEvent {
 }
 
 final class ChangeAssetPathEvent extends CreateFeedEvent {
+  final int take;
+
   final AssetPathEntity assetPath;
 
-  ChangeAssetPathEvent(this.assetPath);
+  ChangeAssetPathEvent(this.assetPath, {int this.take = 20});
+}
+
+final class FetchMoreAssetEvent extends CreateFeedEvent {
+  final int take;
+
+  FetchMoreAssetEvent({this.take = 20});
 }
 
 final class OnTapImageEvent extends CreateFeedEvent {

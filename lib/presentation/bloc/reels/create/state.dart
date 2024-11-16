@@ -8,6 +8,7 @@ class CreateReelsState extends BaseState {
   late final List<AssetEntity> assets; // 현재 보여주고 있는 비디오 목록
   final AssetEntity? video; // 선택한 비디오
   final bool isAuth;
+  final bool isEnd;
 
   CreateReelsState(
       {required this.id,
@@ -18,7 +19,8 @@ class CreateReelsState extends BaseState {
       this.currentAssetPath,
       List<AssetEntity>? assets,
       this.video,
-      this.isAuth = false}) {
+      this.isAuth = false,
+      this.isEnd = false}) {
     this.album = album ?? [];
     this.assets = assets ?? [];
   }
@@ -32,16 +34,19 @@ class CreateReelsState extends BaseState {
       AssetPathEntity? assetPath,
       List<AssetEntity>? assets,
       AssetEntity? video,
-      bool? isAuth}) {
+      bool? isAuth,
+      bool? isEnd}) {
     return CreateReelsState(
       id: id,
       status: status ?? this.status,
       message: message ?? this.message,
+      caption: caption ?? this.caption,
       album: album ?? this.album,
       currentAssetPath: assetPath ?? currentAssetPath,
       assets: assets ?? this.assets,
       video: video ?? this.video,
       isAuth: isAuth ?? this.isAuth,
+      isEnd: isEnd ?? this.isEnd,
     );
   }
 }

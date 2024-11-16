@@ -29,6 +29,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
     on<OnMountEvent>(_onMount);
     on<OnTapImageEvent>(_onTap);
     on<ChangeAssetPathEvent>(_onChangePath);
+    on<FetchMoreAssetEvent>(_onFetch);
     on<SelectImageEvent>(_onSelect);
     on<EditContentEvent>(_onEdit);
     on<UnSelectImageEvent>(_onUnSelect);
@@ -115,13 +116,32 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
     try {
       if (event.assetPath == state.currentAssetPath) return;
       emit(state.copyWith(status: Status.loading, assetPath: event.assetPath));
-      final assets =
-          await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100);
+      final assets = await state.currentAssetPath!
+          .getAssetListPaged(page: 0, size: event.take);
       await Future.delayed(500.ms, () {
         emit(state.copyWith(
             assets: assets,
             currentImage: assets.first,
-            status: Status.initial));
+            status: Status.initial,
+            isEnd: assets.length < event.take));
+      });
+    } catch (error) {
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, message: 'error occurs'));
+    }
+  }
+
+  Future<void> _onFetch(
+      FetchMoreAssetEvent event, Emitter<CreateFeedState> emit) async {
+    try {
+      emit(state.copyWith(status: Status.loading));
+      final fetched = await state.currentAssetPath!.getAssetListRange(
+          start: state.assets.length, end: state.assets.length + event.take);
+      await Future.delayed(500.ms, () {
+        emit(state.copyWith(
+            assets: [...state.assets, ...fetched],
+            status: Status.initial,
+            isEnd: fetched.length < event.take));
       });
     } catch (error) {
       logger.e(error);
@@ -152,8 +172,12 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
           .then(
               (res) => emit(state.copyWith(album: res, assetPath: res.first)));
       // assets 가져오기
-      await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100).then(
-          (res) => emit(state.copyWith(assets: res, currentImage: res.first)));
+      await state.currentAssetPath!
+          .getAssetListPaged(page: 0, size: event.take)
+          .then((fetched) => emit(state.copyWith(
+              assets: fetched,
+              currentImage: fetched.first,
+              isEnd: fetched.length < event.take)));
       emit(state.copyWith(status: Status.initial, isAuth: true));
     } catch (error) {
       logger.e(error);

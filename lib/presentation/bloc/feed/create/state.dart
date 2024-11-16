@@ -11,6 +11,7 @@ class CreateFeedState extends BaseState {
   final AssetEntity? currentAsset; // 현재 보여주고 있는 asset
   late final List<AssetEntity> images;
   final bool isAuth;
+  final bool isEnd; // 현재 asset path에서 이미지를 다 가져왔는지 여부
 
   CreateFeedState(
       {required this.id,
@@ -24,7 +25,8 @@ class CreateFeedState extends BaseState {
       List<AssetEntity>? assets,
       this.currentAsset,
       List<AssetEntity>? selected,
-      this.isAuth = false}) {
+      this.isAuth = false,
+      this.isEnd = false}) {
     this.hashtags = hashtags ?? [];
     this.captions = captions ?? [];
     this.album = album ?? [];
@@ -44,21 +46,22 @@ class CreateFeedState extends BaseState {
       AssetPathEntity? assetPath,
       List<AssetEntity>? assets,
       AssetEntity? currentImage,
-      bool? isAuth}) {
+      bool? isAuth,
+      bool? isEnd}) {
     return CreateFeedState(
-      id: id,
-      status: status ?? this.status,
-      message: message ?? this.message,
-      content: content ?? this.content,
-      captions: captions ?? this.captions,
-      hashtags: hashtags ?? this.hashtags,
-      selected: selected ?? this.images,
-      album: album ?? this.album,
-      currentAsset: currentImage ?? this.currentAsset,
-      currentAssetPath: assetPath ?? this.currentAssetPath,
-      assets: assets ?? this.assets,
-      isAuth: isAuth ?? this.isAuth,
-    );
+        id: id,
+        status: status ?? this.status,
+        message: message ?? this.message,
+        content: content ?? this.content,
+        captions: captions ?? this.captions,
+        hashtags: hashtags ?? this.hashtags,
+        selected: selected ?? this.images,
+        album: album ?? this.album,
+        currentAsset: currentImage ?? this.currentAsset,
+        currentAssetPath: assetPath ?? this.currentAssetPath,
+        assets: assets ?? this.assets,
+        isAuth: isAuth ?? this.isAuth,
+        isEnd: isEnd ?? this.isEnd);
   }
 
   int get index => images.indexOf(currentAsset!);

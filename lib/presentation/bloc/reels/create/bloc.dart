@@ -25,6 +25,7 @@ class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState>
     on<AskPermissionEvent>(_onAsk);
     on<OnMountEvent>(_onMount);
     on<SelectVideoEvent>(_onSelect);
+    on<FetchMoreAssetEvent>(_onFetch);
     on<ChangeAssetPathEvent>(_onChangePath);
     on<EditCaptionEvent>(_onEdit);
     on<SubmitEvent>(_onSubmit);
@@ -76,9 +77,27 @@ class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState>
       emit(state.copyWith(status: Status.loading, assetPath: event.assetPath));
       final assets =
           await state.currentAssetPath!.getAssetListPaged(page: 0, size: 100);
-      await Future.delayed(500.ms, () {
+      await Future.delayed(500.ms, () async {
         emit(state.copyWith(
             assets: assets, video: assets.first, status: Status.initial));
+      });
+    } catch (error) {
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, message: 'error occurs'));
+    }
+  }
+
+  Future<void> _onFetch(
+      FetchMoreAssetEvent event, Emitter<CreateReelsState> emit) async {
+    try {
+      emit(state.copyWith(status: Status.loading));
+      final fetched = await state.currentAssetPath!.getAssetListRange(
+          start: state.assets.length, end: state.assets.length + event.take);
+      await Future.delayed(500.ms, () async {
+        emit(state.copyWith(
+            assets: [...state.assets, ...fetched],
+            status: Status.initial,
+            isEnd: fetched.length < event.take));
       });
     } catch (error) {
       logger.e(error);
@@ -102,7 +121,7 @@ class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState>
       await PhotoManager.getAssetPathList(
               hasAll: true,
               onlyAll: false,
-              type: RequestType.image,
+              type: RequestType.video,
               filterOption: FilterOptionGroup(
                   videoOption: FilterOption(
                       durationConstraint:
@@ -111,8 +130,11 @@ class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState>
               (res) => emit(state.copyWith(album: res, assetPath: res.first)));
       // assets 가져오기
       await state.currentAssetPath!
-          .getAssetListPaged(page: 0, size: 100)
-          .then((res) => emit(state.copyWith(assets: res, video: res.first)));
+          .getAssetListPaged(page: 0, size: event.take)
+          .then((fetched) async => emit(state.copyWith(
+              assets: fetched,
+              video: fetched.first,
+              isEnd: fetched.length < event.take)));
       emit(state.copyWith(status: Status.initial, isAuth: true));
     } catch (error) {
       logger.e(error);
@@ -125,16 +147,15 @@ class CreateReelsBloc extends Bloc<CreateReelsEvent, CreateReelsState>
       SubmitEvent event, Emitter<CreateReelsState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
-      final video = await state.video?.file;
-      if (video == null) {
+      if (state.caption.isEmpty) {
         emit(state.copyWith(
-            status: Status.error, message: 'error occurs on submitting'));
+            status: Status.error, message: 'caption is not given'));
       } else {
         await _useCase
             .create(
                 id: state.id,
-                caption: state.caption.isEmpty ? null : state.caption,
-                video: video)
+                caption: state.caption,
+                video: (await state.video!.file) as File)
             .then((res) => res.fold(
                 (l) => emit(
                     state.copyWith(status: Status.error, message: l.message)),
