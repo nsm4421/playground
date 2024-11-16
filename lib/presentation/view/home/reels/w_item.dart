@@ -37,11 +37,19 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
     _controller.dispose();
   }
 
+  // TODO : 아이콘 클릭 이벤트 구현하기
   _handleLike() {}
 
   _handleComment() {}
 
   _handleDM() {}
+
+  _handleNavigateToCreatePage() async {
+    context.read<HomeBottomNavCubit>().switchVisible(false);
+    await context.push(Routes.createReels.path).whenComplete(() {
+      context.read<HomeBottomNavCubit>().switchVisible(true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,46 +95,47 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 child: CachedCircularImageWidget(
                   widget.reels.author.avatarUrl,
                   radius: (_iconSize + 10) / 2,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: IconButton(
-                  onPressed: _handleLike,
-                  icon: const Icon(
-                    Icons.favorite_border,
-                    color: CustomPalette.white,
-                    size: _iconSize,
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: ShadowedIconButton(
+                  onTap: _handleLike,
+                  iconData: Icons.favorite_border,
+                  iconSize: _iconSize,
+                  iconColor: CustomPalette.white,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: IconButton(
-                  onPressed: _handleComment,
-                  icon: const Icon(
-                    Icons.chat_bubble_outline,
-                    color: CustomPalette.white,
-                    size: _iconSize,
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: ShadowedIconButton(
+                  onTap: _handleComment,
+                  iconData: Icons.chat_bubble_outline,
+                  iconSize: _iconSize,
+                  iconColor: CustomPalette.white,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: IconButton(
-                  onPressed: _handleDM,
-                  icon: Transform.rotate(
-                    angle: -0.45,
-                    child: const Icon(
-                      Icons.send_outlined,
-                      color: CustomPalette.white,
-                      size: _iconSize,
-                    ),
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: ShadowedIconButton(
+                  angle: -0.45,
+                  onTap: _handleDM,
+                  iconData: Icons.send_outlined,
+                  iconSize: _iconSize,
+                  iconColor: CustomPalette.white,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: ShadowedIconButton(
+                  onTap: _handleNavigateToCreatePage,
+                  iconData: Icons.add_circle_outline,
+                  iconSize: _iconSize,
+                  iconColor: CustomPalette.white,
                 ),
               ),
             ],

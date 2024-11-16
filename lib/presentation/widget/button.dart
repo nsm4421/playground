@@ -32,3 +32,50 @@ class RoundedIconWidget extends StatelessWidget {
     );
   }
 }
+
+class ShadowedIconButton extends StatelessWidget {
+  const ShadowedIconButton(
+      {super.key,
+      this.onTap,
+      required this.iconData,
+      this.iconSize,
+      this.iconColor,
+      this.shadowColor,
+      this.angle});
+
+  final void Function()? onTap;
+  final IconData iconData;
+  final double? iconSize;
+  final Color? iconColor;
+  final Color? shadowColor;
+  final double? angle;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Transform.rotate(
+        angle: angle ?? 0,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 4,
+              left: 4,
+              child: Icon(
+                iconData,
+                size: iconSize ?? 30,
+                color: shadowColor ?? CustomPalette.shadow.withOpacity(0.5),
+              ),
+            ),
+            // 실제 아이콘
+            Icon(
+              iconData,
+              size: iconSize ?? 30,
+              color: iconColor ?? CustomPalette.white,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

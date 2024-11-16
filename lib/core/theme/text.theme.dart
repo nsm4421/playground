@@ -3,24 +3,32 @@ part of 'theme.dart';
 class CustomTextTheme extends TextTheme {
   @override
   TextStyle? get displayLarge => const TextStyle(
-      fontSize: 72, fontWeight: FontWeight.w800, height: (72 + 12) / 72);
+      fontSize: 72,
+      fontWeight: FontWeight.w800,
+      height: (72 + 12) / 72,
+      decorationThickness: 0);
 
   @override
   TextStyle? get displayMedium => const TextStyle(
-      fontSize: 66, fontWeight: FontWeight.w800, height: (66 + 12) / 66);
+      fontSize: 66,
+      fontWeight: FontWeight.w800,
+      height: (66 + 12) / 66,
+      decorationThickness: 0);
 
   @override
   TextStyle? get displaySmall => const TextStyle(
       fontSize: 60,
       fontWeight: FontWeight.w800,
       letterSpacing: -0.5,
-      height: (60 + 12) / 60);
+      height: (60 + 12) / 60,
+      decorationThickness: 0);
 
   @override
   TextStyle? get headlineLarge => const TextStyle(
         fontSize: 52,
         fontWeight: FontWeight.w700,
         height: (52 + 8) / 52,
+        decorationThickness: 0,
       );
 
   @override
@@ -28,6 +36,7 @@ class CustomTextTheme extends TextTheme {
         fontSize: 44,
         fontWeight: FontWeight.w700,
         height: (44 + 8) / 44,
+        decorationThickness: 0,
       );
 
   @override
@@ -44,6 +53,7 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w600,
         letterSpacing: -0.2,
         height: (30 + 5) / 30,
+        decorationThickness: 0,
       );
 
   @override
@@ -52,6 +62,7 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w600,
         letterSpacing: 0.1,
         height: (24 + 5) / 24,
+        decorationThickness: 0,
       );
 
   @override
@@ -60,6 +71,7 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w600,
         letterSpacing: 0.12,
         height: (18 + 5) / 18,
+        decorationThickness: 0,
       );
 
   @override
@@ -68,6 +80,7 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
         height: (24 + 4) / 24,
+        decorationThickness: 0,
       );
 
   @override
@@ -76,6 +89,7 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w500,
         letterSpacing: 0.25,
         height: (18 + 4) / 18,
+        decorationThickness: 0,
       );
 
   @override
@@ -92,6 +106,7 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w400,
         letterSpacing: 0.5,
         height: (15 + 3) / 15,
+        decorationThickness: 0,
       );
 
   @override
@@ -108,5 +123,6 @@ class CustomTextTheme extends TextTheme {
         fontWeight: FontWeight.w400,
         letterSpacing: 0.25,
         height: (11 + 3) / 11,
+        decorationThickness: 0,
       );
 }

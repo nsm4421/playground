@@ -10,6 +10,7 @@ import 'package:travel/presentation/view/auth/sign_up/index.dart';
 import 'package:travel/presentation/view/home/feed/create/index.dart';
 import 'package:travel/presentation/view/home/feed/index.dart';
 import 'package:travel/presentation/view/home/index.dart';
+import 'package:travel/presentation/view/home/reels/create/index.dart';
 import 'package:travel/presentation/view/home/reels/index.dart';
 import 'package:travel/presentation/view/home/setting/index.dart';
 
@@ -65,6 +66,12 @@ class CustomRouter with CustomLogger {
                               path: Routes.createFeed.subPath ?? 'create',
                               builder: (context, state) =>
                                   const CreateFeedPage()),
+                        ],
+                      HomeBottomNavItem.reels => [
+                          GoRoute(
+                              path: Routes.createReels.subPath ?? 'create',
+                              builder: (context, state) =>
+                                  const CreateReelsPage()),
                         ],
                       (_) => [],
                     },

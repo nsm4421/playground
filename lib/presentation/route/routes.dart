@@ -9,6 +9,7 @@ enum Routes {
   createFeed('/home/feed/create', subPath: 'create'),
   search('/home/search', subPath: 'search'),
   reels('/home/reels', subPath: 'reels'),
+  createReels('/home/reels/create', subPath: 'create'),
   setting('/home/setting', subPath: 'setting');
 
   final String path;
