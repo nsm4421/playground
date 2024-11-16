@@ -17,24 +17,37 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(Assets.video.test1)
-      ..initialize().then(
-        (value) {
-          setState(
-            () {
-              _controller
-                ..setLooping(true)
-                ..play();
+    _controller =
+        VideoPlayerController.networkUrl(Uri.parse(widget.reels.video))
+          ..initialize().then(
+            (value) {
+              setState(
+                () {
+                  _controller
+                    ..setLooping(true)
+                    ..play();
+                },
+              );
             },
           );
-        },
-      );
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
+  }
+
+  _handleTap() async {
+    log('reels tapped|current:${_controller.value.isPlaying}');
+    if (!_controller.value.isInitialized) {
+      return;
+    } else if (_controller.value.isPlaying) {
+      await _controller.pause();
+    } else {
+      await _controller.play();
+    }
+    setState(() {});
   }
 
   // TODO : 아이콘 클릭 이벤트 구현하기
@@ -53,16 +66,29 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        /// 동영상
-        Positioned.fill(child: VideoPlayer(_controller)),
+    return GestureDetector(
+      onTap: _handleTap,
+      child: Stack(
+        children: [
+          /// 동영상
+          Positioned.fill(child: VideoPlayer(_controller)),
 
-        /// 캡션
-        if (widget.reels.caption != null)
+          /// 일시정지 아이콘
+          if (!_controller.value.isPlaying)
+            const Align(
+              alignment: Alignment.center,
+              child: ShadowedIconButton(
+                iconData: Icons.pause,
+                iconColor: CustomPalette.lightGrey,
+                iconSize: 50,
+              ),
+            ),
+
+          /// 캡션
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
+              alignment: Alignment.bottomLeft,
               padding: const EdgeInsets.only(
                   bottom: 20, right: _iconSize + 50, left: 12),
               decoration: BoxDecoration(
@@ -76,7 +102,7 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
                 ),
               ),
               child: Text(
-                widget.reels.caption!,
+                widget.reels.caption,
                 maxLines: 3,
                 style: context.textTheme.bodyMedium?.copyWith(
                   color: CustomPalette.white,
@@ -87,61 +113,62 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
             ),
           ),
 
-        /// 아이콘
-        Positioned(
-          right: 12,
-          bottom: 20,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: CachedCircularImageWidget(
-                  widget.reels.author.avatarUrl,
-                  radius: (_iconSize + 10) / 2,
+          /// 아이콘
+          Positioned(
+            right: 12,
+            bottom: 20,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: CachedCircularImageWidget(
+                    widget.reels.author.avatarUrl,
+                    radius: (_iconSize + 10) / 2,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: ShadowedIconButton(
-                  onTap: _handleLike,
-                  iconData: Icons.favorite_border,
-                  iconSize: _iconSize,
-                  iconColor: CustomPalette.white,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: ShadowedIconButton(
+                    onTap: _handleLike,
+                    iconData: Icons.favorite_border,
+                    iconSize: _iconSize,
+                    iconColor: CustomPalette.white,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: ShadowedIconButton(
-                  onTap: _handleComment,
-                  iconData: Icons.chat_bubble_outline,
-                  iconSize: _iconSize,
-                  iconColor: CustomPalette.white,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: ShadowedIconButton(
+                    onTap: _handleComment,
+                    iconData: Icons.chat_bubble_outline,
+                    iconSize: _iconSize,
+                    iconColor: CustomPalette.white,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: ShadowedIconButton(
-                  angle: -0.45,
-                  onTap: _handleDM,
-                  iconData: Icons.send_outlined,
-                  iconSize: _iconSize,
-                  iconColor: CustomPalette.white,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: ShadowedIconButton(
+                    angle: -0.45,
+                    onTap: _handleDM,
+                    iconData: Icons.send_outlined,
+                    iconSize: _iconSize,
+                    iconColor: CustomPalette.white,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: ShadowedIconButton(
-                  onTap: _handleNavigateToCreatePage,
-                  iconData: Icons.add_circle_outline,
-                  iconSize: _iconSize,
-                  iconColor: CustomPalette.white,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: ShadowedIconButton(
+                    onTap: _handleNavigateToCreatePage,
+                    iconData: Icons.add_circle_outline,
+                    iconSize: _iconSize,
+                    iconColor: CustomPalette.white,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        )
-      ],
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

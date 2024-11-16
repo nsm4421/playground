@@ -4,7 +4,7 @@ import 'package:travel/domain/entity/auth/presence.dart';
 
 class ReelsEntity extends BaseEntity {
   final String video;
-  final String? caption;
+  final String caption;
   final PresenceEntity author;
 
   ReelsEntity(
@@ -12,7 +12,7 @@ class ReelsEntity extends BaseEntity {
       super.createdAt,
       super.updatedAt,
       required this.video,
-      this.caption,
+      required this.caption,
       required this.author});
 
   factory ReelsEntity.from(FetchReelsDto dto) {

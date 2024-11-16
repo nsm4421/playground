@@ -9,7 +9,7 @@ part 'fetch.g.dart';
 class FetchReelsDto with _$FetchReelsDto {
   const factory FetchReelsDto({
     @Default('') String id,
-    String? caption,
+    @Default('') caption,
     @Default('') String video,
     // 작성자
     @Default('') String author_id,

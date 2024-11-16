@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:travel/data/model/error/error_response.dart';
+import 'package:travel/domain/entity/reels/reels.dart';
 import 'package:travel/domain/repository/repository.dart';
 
 part 'create.dart';
