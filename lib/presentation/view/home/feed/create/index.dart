@@ -10,7 +10,6 @@ import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
-import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
 import 'package:travel/presentation/bloc/feed/create/bloc.dart';
 import 'package:travel/presentation/bloc/module.dart';
 import 'package:travel/presentation/widget/widget.dart';
@@ -39,7 +38,7 @@ part './detail/f_carousel.dart';
 
 part './detail/f_hashtag.dart';
 
-part 'w_fab.dart';
+part 'w_button.dart';
 
 class CreateFeedPage extends StatelessWidget {
   const CreateFeedPage({super.key});

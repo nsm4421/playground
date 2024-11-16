@@ -4,6 +4,7 @@ class SelectedImagesFragment extends StatelessWidget
     implements PreferredSizeWidget {
   const SelectedImagesFragment({super.key});
 
+  static const double _horizontalPadding = 40;
   static const double _height = 150;
 
   @override

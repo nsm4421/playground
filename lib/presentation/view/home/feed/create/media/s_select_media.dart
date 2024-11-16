@@ -7,17 +7,29 @@ class SelectMediaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const SelectedImagesFragment(),
-      body: const Column(
-        children: [
-          CurrentAssetFragment(),
-          SelectAssetPathWidget(),
-          Expanded(child: DisplayAssetFragment()),
-        ],
-      ),
-      floatingActionButton: NavigateFabWidget(onTap: handleJumpPage),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    return Stack(
+      children: [
+        const Scaffold(
+          appBar: SelectedImagesFragment(),
+          body: Column(
+            children: [
+              CurrentAssetFragment(),
+              SelectAssetPathWidget(),
+              Expanded(child: DisplayAssetFragment()),
+            ],
+          ),
+        ),
+        Positioned(
+          top: context.viewPadding.top,
+          left: 12,
+          child: const PopButtonWidget(),
+        ),
+        Positioned(
+          top: context.viewPadding.top,
+          right: 12,
+          child: JumpButtonWidget(handleJumpPage),
+        ),
+      ],
     );
   }
 }

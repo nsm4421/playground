@@ -13,7 +13,6 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
   late PageController _controller;
   late int _currentIndex;
 
-  bool _showCaption = false;
   static final Duration _duration = 300.ms;
 
   @override
@@ -154,19 +153,20 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
             ),
 
             /// indicator
-            SmoothPageIndicator(
-              controller: _controller,
-              count: widget.feed.images.length,
-              onDotClicked: _handleJump,
-              effect: SlideEffect(
-                  spacing: 8,
-                  dotWidth: 12,
-                  dotHeight: 13,
-                  paintStyle: PaintingStyle.stroke,
-                  strokeWidth: 1.5,
-                  dotColor: CustomPalette.lightGrey,
-                  activeDotColor: context.colorScheme.primary),
-            ),
+            if (widget.feed.images.length >= 2)
+              SmoothPageIndicator(
+                controller: _controller,
+                count: widget.feed.images.length,
+                onDotClicked: _handleJump,
+                effect: SlideEffect(
+                    spacing: 8,
+                    dotWidth: 12,
+                    dotHeight: 13,
+                    paintStyle: PaintingStyle.stroke,
+                    strokeWidth: 1.5,
+                    dotColor: CustomPalette.lightGrey,
+                    activeDotColor: context.colorScheme.primary),
+              ),
           ],
         ),
       ],
