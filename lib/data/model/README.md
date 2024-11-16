@@ -62,6 +62,39 @@ WITH CHECK (AUTH.UID() = CREATED_BY);
 CREATE POLICY "PERMIT DELETE OWN DATA TO AUTHENTICATED"  
 ON FEEDS FOR DELETE TO AUTHENTICATED 
 USING (AUTH.UID() = CREATED_BY);
+
+------------------------------------------------------
+
+CREATE TABLE PUBLIC.REELS (
+    ID UUID NOT NULL,
+    CAPTION TEXT,
+    VIDEO TEXT NOT NULL, 
+    -- meta data
+    CREATED_BY UUID NOT NULL DEFAULT AUTH.UID(),
+    CREATED_AT TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    UPDATED_AT TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    DELETED_AT TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    CONSTRAINT REELS_PKEY PRIMARY KEY (ID),
+    CONSTRAINT REELS_FKEY FOREIGN KEY (CREATED_BY) 
+    REFERENCES PUBLIC.ACCOUNTS (ID) ON UPDATE CASCADE ON DELETE CASCADE
+) TABLESPACE PG_DEFAULT;
+
+ALTER TABLE PUBLIC.REELS ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "PERMIT SELECT TO AUTHENTICATED" 
+ON REELS FOR SELECT USING (TRUE);
+
+CREATE POLICY "PERMIT INSERT OWN DATA TO AUTHENTICATED" 
+ON REELS FOR INSERT TO AUTHENTICATED 
+WITH CHECK (AUTH.UID() = CREATED_BY);
+
+CREATE POLICY "PERMIT UPDATE OWN DATA TO AUTHENTICATED"  
+ON REELS FOR UPDATE TO AUTHENTICATED 
+WITH CHECK (AUTH.UID() = CREATED_BY);
+
+CREATE POLICY "PERMIT DELETE OWN DATA TO AUTHENTICATED"  
+ON REELS FOR DELETE TO AUTHENTICATED 
+USING (AUTH.UID() = CREATED_BY);
 ```
 
 # Bucket
@@ -85,4 +118,14 @@ for select using (bucket_id = 'feeds');
 
 create policy "permit insert feed media for all" on storage.objects
 for insert with check (bucket_id = 'feeds');
+------------------------------------------------------
+
+insert into storage.buckets (id, name)
+values ('reels', 'reels');
+
+create policy "permit reels media for all" on storage.objects
+for select using (bucket_id = 'reels');
+
+create policy "permit insert reels media for all" on storage.objects
+for insert with check (bucket_id = 'reels');
 ```

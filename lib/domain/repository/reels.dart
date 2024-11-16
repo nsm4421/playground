@@ -5,7 +5,7 @@ abstract interface class ReelsRepository {
       {required String beforeAt, int take = 20});
 
   Future<Either<ErrorResponse, void>> create(
-      {required String id, String? caption, required File video});
+      {required String id, required String caption, required File video});
 
   Future<Either<ErrorResponse, void>> edit(
       {required String id, String? caption});

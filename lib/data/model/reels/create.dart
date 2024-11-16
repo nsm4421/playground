@@ -7,8 +7,10 @@ part 'create.g.dart';
 
 @freezed
 class CreateReelsDto with _$CreateReelsDto {
-  const factory CreateReelsDto({String? caption, @Default('') String video}) =
-      _CreateReelsDto;
+  const factory CreateReelsDto({
+    @Default('') String caption,
+    @Default('') String video,
+  }) = _CreateReelsDto;
 
   factory CreateReelsDto.fromJson(Map<String, dynamic> json) =>
       _$CreateReelsDtoFromJson(json);

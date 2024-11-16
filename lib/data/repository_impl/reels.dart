@@ -13,7 +13,9 @@ class ReelsRepositoryImpl with CustomLogger implements ReelsRepository {
 
   @override
   Future<Either<ErrorResponse, void>> create(
-      {required String id, String? caption, required File video}) async {
+      {required String id,
+      required String caption,
+      required File video}) async {
     try {
       return await _reelsDataSource
           .create(

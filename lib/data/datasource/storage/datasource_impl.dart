@@ -35,7 +35,7 @@ class StorageDataSourceImpl with CustomLogger implements StorageDataSource {
 
   @override
   Future<String> uploadReelsAndReturnPublicUrl(File video) async {
-    final bucket = _supabaseClient.storage.from(Buckets.avatars.name);
+    final bucket = _supabaseClient.storage.from(Buckets.reels.name);
     final ext = _getExt(video);
     final contentType = switch (ext) {
       'mp4' => 'video/mp4',
