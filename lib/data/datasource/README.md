@@ -69,6 +69,7 @@ as $$
             FEEDS
         WHERE
             CREATED_AT < _before_at
+            AND DELETED_AT IS NULL
         ORDER BY CREATED_AT DESC
         LIMIT(_take)
         ) T1

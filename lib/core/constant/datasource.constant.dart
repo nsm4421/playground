@@ -2,12 +2,15 @@ part of 'constant.dart';
 
 enum Tables {
   feeds,
-  reels;
+  reels,
+  emotions,
+  comments;
 }
 
 enum RpcFns {
   fetchFeeds('fetch_feeds'),
   fetchReels('fetch_reels'),
+  fetchComments('fetch_comments'),
   ;
 
   final String name;

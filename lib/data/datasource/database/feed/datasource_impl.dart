@@ -13,8 +13,8 @@ class FeedDataSourceImpl with CustomLogger implements FeedDataSource {
       ...dto.toJson(),
       'id': id,
       'created_by': _supabaseClient.auth.currentUser!.id,
-      'created_at': DateTime.now().toUtc().toIso8601String(),
-      'updated_at': DateTime.now().toUtc().toIso8601String(),
+      'created_at': now,
+      'updated_at': now,
     });
   }
 
@@ -35,12 +35,14 @@ class FeedDataSourceImpl with CustomLogger implements FeedDataSource {
       if (dto.hashtags != null) 'hashtags': dto.hashtags,
       if (dto.captions != null) 'captions': dto.captions,
       if (dto.images != null) 'images': dto.images,
-      'updated_at': DateTime.now().toUtc().toIso8601String(),
+      'updated_at': now,
     });
   }
 
   @override
   Future<void> delete(String id) async {
-    await _supabaseClient.rest.from(_table).delete().eq('id', id);
+    await _supabaseClient.rest
+        .from(_table)
+        .update({'deleted_at': now}).eq('id', id);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:travel/data/datasource/auth/datasource.dart';
+import 'package:travel/data/datasource/database/comment/datasource.dart';
+import 'package:travel/data/datasource/database/emotion/datasource.dart';
 import 'package:travel/data/datasource/database/feed/datasource.dart';
 import 'package:travel/data/datasource/database/reels/datasource.dart';
 import 'package:travel/data/datasource/storage/datasource.dart';
@@ -20,4 +22,10 @@ abstract class DataSourceModule {
 
   @lazySingleton
   ReelsDataSource get reels => ReelsDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  CommentDataSource get comment => CommentDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  EmotionDataSource get emotion => EmotionDataSourceImpl(_supabaseClient);
 }

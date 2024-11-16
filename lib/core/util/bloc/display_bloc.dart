@@ -14,7 +14,7 @@ abstract class CustomDisplayBloc<T extends BaseEntity>
     on<FetchEvent<T>>(onFetch);
   }
 
-  DateTime get now => DateTime.now().toUtc();
+  DateTime get currentDt => DateTime.now().toUtc();
 
   Future<void> onInit(
       InitDisplayEvent<T> event, Emitter<CustomDisplayState<T>> emit) async {

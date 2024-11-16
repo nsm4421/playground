@@ -10,4 +10,6 @@ mixin class CustomLogger {
           printEmojis: true));
 
   Logger get logger => _logger;
+  
+  String get now => DateTime.now().toUtc().toIso8601String();
 }

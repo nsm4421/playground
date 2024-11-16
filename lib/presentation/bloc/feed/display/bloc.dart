@@ -17,7 +17,7 @@ class DisplayFeedBloc extends CustomDisplayBloc<FeedEntity> with CustomLogger {
       emit(state.copyWith(status: Status.loading));
       await _useCase.fetch
           .call(
-              beforeAt: event.refresh ? now : state.beforeAt, take: event.take)
+              beforeAt: event.refresh ? currentDt : state.beforeAt, take: event.take)
           .then((res) => res.fold(
               (l) => emit(state.copyWith(
                   status: Status.error, errorMessage: l.message)),

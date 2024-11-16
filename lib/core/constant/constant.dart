@@ -5,3 +5,5 @@ part 'status.constant.dart';
 part 'datasource.constant.dart';
 
 part 'bottom_nav.dart';
+
+part 'emotion.constant.dart';
