@@ -156,7 +156,7 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.only(top: 12),
                   child: ShadowedIconButton(
                     onTap: _handleNavigateToCreatePage,
                     iconData: Icons.add_circle_outline,

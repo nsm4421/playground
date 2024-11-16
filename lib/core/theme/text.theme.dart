@@ -94,7 +94,7 @@ class CustomTextTheme extends TextTheme {
 
   @override
   TextStyle? get bodySmall => const TextStyle(
-        fontSize: 12,
+        fontSize: 15,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.4,
         height: (12 + 4) / 12,

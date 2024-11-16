@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -10,6 +11,7 @@ import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/bloc/display_bloc.dart';
+import 'package:travel/core/util/debounce/mixin.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
 import 'package:travel/domain/entity/feed/feed.dart';

@@ -21,8 +21,6 @@ part 'f_form.dart';
 
 part 'f_avatar.dart';
 
-part 'w_button.dart';
-
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
 

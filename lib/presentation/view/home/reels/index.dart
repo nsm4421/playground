@@ -8,6 +8,7 @@ import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/bloc/display_bloc.dart';
+import 'package:travel/core/util/debounce/mixin.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
 import 'package:travel/domain/entity/reels/reels.dart';

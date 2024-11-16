@@ -5,6 +5,26 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.logout,
+              color: context.colorScheme.primary,
+            ),
+            onPressed: () {
+              context.read<AuthenticationBloc>().add(SignOutEvent());
+            },
+          ),
+        ],
+        title: const Text("Setting"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [ProfileFragment()],
+        ),
+      ),
+    );
   }
 }

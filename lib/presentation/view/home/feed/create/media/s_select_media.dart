@@ -7,29 +7,39 @@ class SelectMediaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Scaffold(
-          appBar: SelectedImagesFragment(),
-          body: Column(
-            children: [
-              CurrentAssetFragment(),
-              SelectAssetPathWidget(),
-              Expanded(child: DisplayAssetFragment()),
-            ],
+    return BlocBuilder<CreateFeedBloc, CreateFeedState>(
+        builder: (context, state) {
+      return Stack(
+        children: [
+          Scaffold(
+            appBar: const SelectedImagesFragment(),
+            body: state.currentAsset == null
+                ? const Center(child: CircularProgressIndicator())
+                : const Column(
+                    children: [
+                      CurrentAssetFragment(),
+                      SelectAssetPathWidget(),
+                      Expanded(child: DisplayAssetFragment()),
+                    ],
+                  ),
           ),
-        ),
-        Positioned(
-          top: context.viewPadding.top,
-          left: 12,
-          child: const PopButtonWidget(),
-        ),
-        Positioned(
-          top: context.viewPadding.top,
-          right: 12,
-          child: JumpButtonWidget(handleJumpPage),
-        ),
-      ],
-    );
+
+          /// 닫기 버튼
+          Positioned(
+            top: context.viewPadding.top,
+            left: 12,
+            child: const PopButtonWidget(),
+          ),
+
+          /// 다음 페이지로
+          if (state.images.isNotEmpty)
+            Positioned(
+              top: context.viewPadding.top,
+              right: 12,
+              child: JumpButtonWidget(handleJumpPage),
+            ),
+        ],
+      );
+    });
   }
 }

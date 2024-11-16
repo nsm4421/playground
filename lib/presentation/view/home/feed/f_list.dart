@@ -1,7 +1,9 @@
 part of 'index.dart';
 
 class FeedListFragment extends StatelessWidget {
-  const FeedListFragment({super.key});
+  const FeedListFragment(this._controller, {super.key});
+
+  final ScrollController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +14,7 @@ class FeedListFragment extends StatelessWidget {
             context.read<DisplayFeedBloc>().add(FetchEvent(refresh: true));
           },
           child: ListView.separated(
+            controller: _controller,
             itemCount: state.data.length,
             itemBuilder: (context, index) {
               return FeedItemWidget(state.data[index]);

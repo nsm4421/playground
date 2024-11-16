@@ -60,6 +60,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// 헤더
         Padding(
@@ -100,26 +101,27 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                   },
                 ),
               ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: CustomPalette.darkGrey,
-                  ),
-                  child: Text(
-                    '${_currentIndex + 1}/${widget.feed.images.length}',
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: CustomPalette.white,
+              if (widget.feed.images.length > 1)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: CustomPalette.darkGrey,
+                    ),
+                    child: Text(
+                      '${_currentIndex + 1}/${widget.feed.images.length}',
+                      style: context.textTheme.labelLarge?.copyWith(
+                        color: CustomPalette.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -137,7 +139,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                   children: [
                     IconButton(
                       onPressed: _handleLike,
-                      icon: Icon(Icons.favorite_border),
+                      icon: const Icon(Icons.favorite_border),
                     ),
                     IconButton(
                       onPressed: _handleShowComment,
@@ -169,6 +171,17 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               ),
           ],
         ),
+
+        /// 본문
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          child: Text(
+            widget.feed.content,
+            maxLines: 1,
+            style: context.textTheme.bodySmall
+                ?.copyWith(overflow: TextOverflow.ellipsis),
+          ),
+        )
       ],
     );
   }

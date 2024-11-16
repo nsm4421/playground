@@ -20,22 +20,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
         ),
         title: const Text('Sign Up'),
+        actions: [
+          GestureDetector(
+            onTap: () async {
+              FocusScope.of(context).unfocus();
+              await Future.delayed(200.ms, () async {
+                await context.read<SignUpCubit>().signUp(); // 회원가입 요청
+              });
+            },
+            child: Text(
+              "Submit",
+              style: context.textTheme.titleMedium
+                  ?.copyWith(color: context.colorScheme.secondary),
+            ),
+          )
+        ],
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
-            (80.0).h,
-            SelectAvatarWidget(),
-            (20.0).h,
-            SignUpFormFragment(),
+            Padding(
+              padding: EdgeInsets.only(top: 80),
+              child: SelectAvatarWidget(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: SignUpFormFragment(),
+            ),
           ],
         ),
       ),
-      floatingActionButton: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: SubmitButtonWidget(),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

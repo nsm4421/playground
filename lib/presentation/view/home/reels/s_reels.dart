@@ -7,16 +7,9 @@ class ReelsScreen extends StatefulWidget {
   State<ReelsScreen> createState() => _ReelsScreenState();
 }
 
-class _ReelsScreenState extends State<ReelsScreen> {
-  Timer? _timer;
-
-  void _debounce(VoidCallback callback) {
-    if (_timer?.isActive ?? false) _timer?.cancel();
-    _timer = Timer(300.ms, callback);
-  }
-
+class _ReelsScreenState extends State<ReelsScreen> with DebounceMixIn {
   _handleChangePage(int index) {
-    _debounce(() {
+    debounce(() {
       if (!context.read<DisplayReelsBloc>().state.isEnd &&
           context.read<DisplayReelsBloc>().state.status != Status.loading &&
           index >= context.read<DisplayReelsBloc>().state.data.length - 1) {

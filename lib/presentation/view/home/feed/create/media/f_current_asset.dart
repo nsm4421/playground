@@ -11,48 +11,51 @@ class CurrentAssetFragment extends StatelessWidget {
     return BlocBuilder<CreateFeedBloc, CreateFeedState>(
       builder: (context, state) {
         final isSelected = state.images.contains(state.currentAsset);
-        return Stack(
-          children: [
-            SizedBox(
-              width: context.width,
-              height: context.width,
-              child: AssetEntityImage(state.currentAsset!, fit: BoxFit.cover),
-            ),
-            if (isSelected)
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: CustomPalette.darkGrey),
-                  child: Text(
-                    '${state.index + 1}/$maxImageNum',
-                    style: context.textTheme.labelLarge
-                        ?.copyWith(color: CustomPalette.white),
+        return state.currentAsset == null
+            ? const CircularProgressIndicator()
+            : Stack(
+                children: [
+                  SizedBox(
+                    width: context.width,
+                    height: context.width,
+                    child: AssetEntityImage(state.currentAsset!,
+                        fit: BoxFit.cover),
                   ),
-                ),
-              ),
-            if (!isSelected && state.images.length < maxImageNum)
-              Positioned(
-                bottom: 8,
-                right: 8,
-                child: RoundedIconWidget(
-                  iconData: Icons.add,
-                  size: _iconSize,
-                  onTap: () {
-                    context
-                        .read<CreateFeedBloc>()
-                        .add(SelectImageEvent(state.currentAsset!));
-                  },
-                ),
-              ),
-            if (isSelected)
-              const Positioned(
-                  bottom: 8, right: 8, child: CurrentAssetFabWidget())
-          ],
-        );
+                  if (isSelected)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: CustomPalette.darkGrey),
+                        child: Text(
+                          '${state.index + 1}/$maxImageNum',
+                          style: context.textTheme.labelLarge
+                              ?.copyWith(color: CustomPalette.white),
+                        ),
+                      ),
+                    ),
+                  if (!isSelected && state.images.length < maxImageNum)
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: RoundedIconWidget(
+                        iconData: Icons.add,
+                        size: _iconSize,
+                        onTap: () {
+                          context
+                              .read<CreateFeedBloc>()
+                              .add(SelectImageEvent(state.currentAsset!));
+                        },
+                      ),
+                    ),
+                  if (isSelected)
+                    const Positioned(
+                        bottom: 8, right: 8, child: CurrentAssetFabWidget())
+                ],
+              );
       },
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
 import 'package:travel/core/theme/theme.dart';

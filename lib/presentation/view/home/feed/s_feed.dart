@@ -8,7 +8,30 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  // TODO : 스크롤 방향에 따라 앱바, naviagation바를 보여줄지 말지 결정하기
+  bool _exposeAppBar = true;
+
+  late ScrollController _controller;
+
+  @override
+  initState() {
+    super.initState();
+    _controller = ScrollController()..addListener(_handleControllerListener);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _controller
+      ..removeListener(_handleControllerListener)
+      ..dispose();
+  }
+
+  _handleControllerListener() {
+    setState(() {
+      _exposeAppBar =
+          _controller.position.userScrollDirection != ScrollDirection.reverse;
+    });
+  }
 
   _handleNavigateCreatePage() async {
     context.read<HomeBottomNavCubit>().switchVisible(false);
@@ -22,19 +45,21 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Feed'),
-        actions: [
-          IconButton(
-            onPressed: _handleNavigateCreatePage,
-            icon: Icon(
-              Icons.edit,
-              color: context.colorScheme.primary,
-            ),
-          )
-        ],
-      ),
-      body: const FeedListFragment(),
+      appBar: _exposeAppBar
+          ? AppBar(
+              title: const Text('Feed'),
+              actions: [
+                IconButton(
+                  onPressed: _handleNavigateCreatePage,
+                  icon: Icon(
+                    Icons.edit,
+                    color: context.colorScheme.primary,
+                  ),
+                )
+              ],
+            )
+          : null,
+      body: FeedListFragment(_controller),
     );
   }
 }
