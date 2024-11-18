@@ -7,7 +7,6 @@ part 'create.g.dart';
 @freezed
 class CreateFeedDto with _$CreateFeedDto {
   const factory CreateFeedDto({
-    @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
     @Default(<String>[]) List<String> captions,
     @Default(<String>[]) List<String> images,

@@ -14,7 +14,6 @@ class FeedRepositoryImpl with CustomLogger implements FeedRepository {
   @override
   Future<Either<ErrorResponse, void>> create(
       {required String id,
-      required String content,
       required List<String> hashtags,
       required List<String> captions,
       required List<File> images}) async {
@@ -23,7 +22,6 @@ class FeedRepositoryImpl with CustomLogger implements FeedRepository {
           .create(
               id: id,
               dto: CreateFeedDto(
-                  content: content,
                   hashtags: hashtags,
                   captions: captions,
                   images: images.isEmpty
@@ -64,7 +62,6 @@ class FeedRepositoryImpl with CustomLogger implements FeedRepository {
           .edit(
               id: id,
               dto: UpdateFeedDto(
-                  content: content,
                   hashtags: hashtags,
                   captions: captions,
                   images: (images == null || images.isEmpty)

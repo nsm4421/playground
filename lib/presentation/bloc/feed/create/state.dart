@@ -2,7 +2,6 @@ part of 'bloc.dart';
 
 class CreateFeedState extends BaseState {
   final String id;
-  final String content;
   late final List<String> hashtags;
   late final List<String> captions;
   late final List<AssetPathEntity> album;
@@ -17,7 +16,6 @@ class CreateFeedState extends BaseState {
       {required this.id,
       super.status,
       super.message,
-      this.content = '',
       List<String>? hashtags,
       List<String>? captions,
       List<AssetPathEntity>? album,
@@ -38,7 +36,6 @@ class CreateFeedState extends BaseState {
   CreateFeedState copyWith(
       {Status? status,
       String? message,
-      String? content,
       List<String>? captions,
       List<String>? hashtags,
       List<AssetEntity>? selected,
@@ -52,7 +49,6 @@ class CreateFeedState extends BaseState {
         id: id,
         status: status ?? this.status,
         message: message ?? this.message,
-        content: content ?? this.content,
         captions: captions ?? this.captions,
         hashtags: hashtags ?? this.hashtags,
         selected: selected ?? this.images,

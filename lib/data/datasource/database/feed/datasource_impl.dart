@@ -31,7 +31,6 @@ class FeedDataSourceImpl with CustomLogger implements FeedDataSource {
   @override
   Future<void> edit({required String id, required UpdateFeedDto dto}) async {
     await _supabaseClient.rest.from(_table).insert({
-      if (dto.content != null) 'content': dto.content,
       if (dto.hashtags != null) 'hashtags': dto.hashtags,
       if (dto.captions != null) 'captions': dto.captions,
       if (dto.images != null) 'images': dto.images,

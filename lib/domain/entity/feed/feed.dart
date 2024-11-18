@@ -3,7 +3,6 @@ import 'package:travel/data/model/feed/fetch.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
 class FeedEntity extends BaseEntity {
-  final String content;
   late final List<String> hashtags;
   late final List<String> images;
   late final List<String> captions;
@@ -13,7 +12,6 @@ class FeedEntity extends BaseEntity {
       {super.id,
       super.createdAt,
       super.updatedAt,
-      this.content = '',
       List<String>? hashtags,
       List<String>? images,
       List<String>? captions,
@@ -28,7 +26,6 @@ class FeedEntity extends BaseEntity {
       id: dto.id,
       createdAt: DateTime.tryParse(dto.created_at),
       updatedAt: DateTime.tryParse(dto.updated_at),
-      content: dto.content,
       hashtags: dto.hashtags,
       images: dto.images,
       captions: dto.captions,

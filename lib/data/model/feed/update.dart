@@ -8,7 +8,6 @@ part 'update.g.dart';
 @freezed
 class UpdateFeedDto with _$UpdateFeedDto {
   const factory UpdateFeedDto({
-    String? content,
     List<String>? hashtags,
     List<String>? captions,
     List<String>? images,

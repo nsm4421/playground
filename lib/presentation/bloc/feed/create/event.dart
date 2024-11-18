@@ -46,10 +46,11 @@ final class SelectImageEvent extends CreateFeedEvent {
   SelectImageEvent(this.asset);
 }
 
-final class EditContentEvent extends CreateFeedEvent {
-  final String content;
+final class EditCaptionEvent extends CreateFeedEvent {
+  final int index;
+  final String caption;
 
-  EditContentEvent(this.content);
+  EditCaptionEvent({required this.caption, required this.index});
 }
 
 final class UnSelectImageEvent extends CreateFeedEvent {}

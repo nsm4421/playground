@@ -28,10 +28,10 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
     on<AskPermissionEvent>(_onAsk);
     on<OnMountEvent>(_onMount);
     on<OnTapImageEvent>(_onTap);
+    on<EditCaptionEvent>(_onEdit);
     on<ChangeAssetPathEvent>(_onChangePath);
     on<FetchMoreAssetEvent>(_onFetch);
     on<SelectImageEvent>(_onSelect);
-    on<EditContentEvent>(_onEdit);
     on<UnSelectImageEvent>(_onUnSelect);
     on<SubmitEvent>(_onSubmit);
   }
@@ -40,7 +40,6 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
     emit(state.copyWith(
         status: event.status,
         message: event.message,
-        content: event.content,
         hashtags: event.hashtags));
   }
 
@@ -82,13 +81,13 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
   }
 
   Future<void> _onEdit(
-      EditContentEvent event, Emitter<CreateFeedState> emit) async {
+      EditCaptionEvent event, Emitter<CreateFeedState> emit) async {
     try {
       emit(state.copyWith(
           captions: List.generate(
               state.captions.length,
               (index) => index == state.index
-                  ? event.content
+                  ? event.caption
                   : state.captions[index])));
     } catch (error) {
       logger.e(error);
@@ -192,15 +191,11 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
       if (state.images.isEmpty) {
         emit(state.copyWith(
             status: Status.error, message: 'picture is not selected'));
-      } else if (state.content.isEmpty) {
-        emit(
-            state.copyWith(status: Status.error, message: 'body is not given'));
       } else {
         emit(state.copyWith(status: Status.loading));
         await _useCase
             .create(
                 id: state.id,
-                content: state.content,
                 hashtags: state.hashtags,
                 captions: state.captions,
                 images: state.images.isEmpty
