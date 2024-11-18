@@ -52,8 +52,26 @@ class CurrentAssetFragment extends StatelessWidget {
                       ),
                     ),
                   if (isSelected)
-                    const Positioned(
-                        bottom: 8, right: 8, child: CurrentAssetFabWidget())
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
+                          child: RoundedIconWidget(
+                            iconData: Icons.clear,
+                            size: 30,
+                            onTap: () {
+                              context
+                                  .read<CreateFeedBloc>()
+                                  .add(UnSelectImageEvent());
+                            },
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               );
       },

@@ -43,6 +43,7 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
     context.read<HomeBottomNavCubit>().switchVisible(false);
     await showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (context) {
           return FeedDetailScreen(widget.feed);
         }).whenComplete(() {
@@ -171,17 +172,6 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
               ),
           ],
         ),
-
-        /// 본문
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          child: Text(
-            widget.feed.content,
-            maxLines: 1,
-            style: context.textTheme.bodySmall
-                ?.copyWith(overflow: TextOverflow.ellipsis),
-          ),
-        )
       ],
     );
   }

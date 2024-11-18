@@ -9,6 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
+import 'package:travel/core/generated/assets.gen.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/bloc/display_bloc.dart';
 import 'package:travel/core/util/debounce/mixin.dart';
@@ -28,6 +29,8 @@ part 's_detail.dart';
 part 'f_list.dart';
 
 part 'w_item.dart';
+
+part 'w_feed_detail.dart';
 
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});

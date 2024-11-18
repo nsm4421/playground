@@ -12,13 +12,13 @@ class _CarouselFragmentState extends State<CarouselFragment> {
   int _currentPage = 1;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     _controller = PageController();
   }
 
   @override
-  void dispose() {
+  dispose() async {
     super.dispose();
     _controller.dispose();
   }
@@ -33,6 +33,21 @@ class _CarouselFragmentState extends State<CarouselFragment> {
       _currentPage = index + 1;
     });
   }
+
+  _handleNavigateEditCaptionPage(int index) => () async {
+        await showModalBottomSheet(
+            context: context,
+            builder: (_) {
+              return EditCaptionFragment(
+                  context.read<CreateFeedBloc>().state.captions[index]);
+            }).then((res) {
+          if (res != null) {
+            context
+                .read<CreateFeedBloc>()
+                .add(EditCaptionEvent(caption: res, index: index));
+          }
+        });
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -53,54 +68,52 @@ class _CarouselFragmentState extends State<CarouselFragment> {
                     itemBuilder: (context, index) {
                       final asset = state.images[index];
                       final caption = state.captions[index];
-                      return Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetEntityImageProvider(asset),
-                                  fit: BoxFit.cover),
+                      return GestureDetector(
+                        onTap: _handleNavigateEditCaptionPage(index),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetEntityImageProvider(asset),
+                                    fit: BoxFit.cover),
+                              ),
                             ),
-                          ),
-                          if (caption.isNotEmpty)
-                            Positioned(
-                              bottom: 12,
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: context.width,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                    color: CustomPalette.darkGrey
-                                        .withOpacity(0.8)),
+                            if (caption.isNotEmpty)
+                              Align(
                                 child: Text(
                                   caption,
                                   softWrap: true,
                                   style: context.textTheme.bodyLarge?.copyWith(
                                     color: CustomPalette.white,
                                     fontWeight: FontWeight.w600,
-                                    overflow: TextOverflow.ellipsis,
+                                    shadows: [
+                                      const Shadow(
+                                          offset: Offset(2, 2),
+                                          blurRadius: 4.0,
+                                          color: CustomPalette.mediumGrey)
+                                    ],
                                   ),
                                 ),
                               ),
-                            ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 6),
-                              decoration: BoxDecoration(
-                                  color: CustomPalette.darkGrey,
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Text(
-                                '$_currentPage/${state.images.length}',
-                                style: context.textTheme.bodyMedium
-                                    ?.copyWith(color: CustomPalette.white),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: CustomPalette.darkGrey,
+                                    borderRadius: BorderRadius.circular(16)),
+                                child: Text(
+                                  '$_currentPage/${state.images.length}',
+                                  style: context.textTheme.bodyMedium
+                                      ?.copyWith(color: CustomPalette.white),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),

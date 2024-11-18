@@ -112,7 +112,7 @@ class _HashtagFragmentState extends State<HashtagFragment> {
                   state.hashtags.length,
                   (index) => InkWell(
                     child: Container(
-                      margin: const EdgeInsets.only(right: 8, top: 8),
+                      margin: const EdgeInsets.only(right: 8, bottom: 8),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 6),
                       decoration: BoxDecoration(
@@ -122,8 +122,9 @@ class _HashtagFragmentState extends State<HashtagFragment> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          (8.0).w,
                           Text(state.hashtags[index],
-                              style: context.textTheme.labelLarge?.copyWith(
+                              style: context.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: context.colorScheme.onSecondary,
                               )),

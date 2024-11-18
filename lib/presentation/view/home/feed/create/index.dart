@@ -21,7 +21,7 @@ part 's_un_authorized.dart';
 
 part './media/s_select_media.dart';
 
-part './media/f_edit_caption.dart';
+part 'detail/f_edit_caption.dart';
 
 part './media/f_selected_images.dart';
 
@@ -31,11 +31,9 @@ part './media/f_current_asset.dart';
 
 part './media/w_asset_path.dart';
 
-part './detail/s_edit_detail.dart';
+part 'detail/s_edit_caption.dart';
 
-part './detail/f_content.dart';
-
-part './detail/f_carousel.dart';
+part 'detail/f_carousel.dart';
 
 part './detail/f_hashtag.dart';
 
