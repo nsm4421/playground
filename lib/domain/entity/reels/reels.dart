@@ -6,6 +6,8 @@ class ReelsEntity extends BaseEntity {
   final String video;
   final String caption;
   final PresenceEntity author;
+  final bool isLike;
+  final int likeCount;
 
   ReelsEntity(
       {super.id,
@@ -13,7 +15,9 @@ class ReelsEntity extends BaseEntity {
       super.updatedAt,
       required this.video,
       required this.caption,
-      required this.author});
+      required this.author,
+      this.isLike = false,
+      this.likeCount = 0});
 
   factory ReelsEntity.from(FetchReelsDto dto) {
     return ReelsEntity(
@@ -27,6 +31,8 @@ class ReelsEntity extends BaseEntity {
         username: dto.author_username,
         avatarUrl: dto.author_avatar_url,
       ),
+      isLike: dto.is_like,
+      likeCount: dto.like_count,
     );
   }
 }

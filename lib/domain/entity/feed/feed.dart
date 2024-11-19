@@ -7,6 +7,9 @@ class FeedEntity extends BaseEntity {
   late final List<String> images;
   late final List<String> captions;
   final PresenceEntity author;
+  final bool isLike;
+  final int likeCount;
+  final String? latestComment;
 
   FeedEntity(
       {super.id,
@@ -15,7 +18,10 @@ class FeedEntity extends BaseEntity {
       List<String>? hashtags,
       List<String>? images,
       List<String>? captions,
-      required this.author}) {
+      required this.author,
+      this.isLike = false,
+      this.likeCount = 0,
+      this.latestComment}) {
     this.hashtags = hashtags ?? [];
     this.images = images ?? [];
     this.captions = captions ?? [];
@@ -34,6 +40,9 @@ class FeedEntity extends BaseEntity {
         username: dto.author_username,
         avatarUrl: dto.author_avatar_url,
       ),
+      isLike: dto.is_like,
+      likeCount: dto.like_count,
+      latestComment: dto.latest_comment
     );
   }
 }
