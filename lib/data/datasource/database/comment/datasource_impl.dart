@@ -26,18 +26,49 @@ class CommentDataSourceImpl with CustomLogger implements CommentDataSource {
   }
 
   @override
-  Future<Iterable<FetchCommentDto>> fetch(
+  Future<Iterable<FetchCommentDto>> fetchParents(
       {required String beforeAt,
       required String referenceId,
       required String referenceTable,
       int take = 20}) async {
-    // TODO : RPC함수 정의
-    return await _supabaseClient
-        .rpc<List<Map<String, dynamic>>>(RpcFns.fetchReels.name, params: {
-      '_before_at': beforeAt,
-      '_reference_id': referenceId,
-      '_reference_table': referenceTable,
-      '_take': take
-    }).then((res) => res.map(FetchCommentDto.fromJson));
+    return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
+        RpcFns.fetchParentComments.name,
+        params: {
+          '_before_at': beforeAt,
+          '_reference_id': referenceId,
+          '_reference_table': referenceTable,
+          '_take': take
+        }).then((res) => res
+        .map((json) => {
+              ...json,
+              'reference_id': referenceId,
+              'reference_table': referenceTable
+            })
+        .map(FetchCommentDto.fromJson));
+  }
+
+  @override
+  Future<Iterable<FetchCommentDto>> fetchChildren(
+      {required String beforeAt,
+      required String referenceId,
+      required String referenceTable,
+      required String parentId,
+      int take = 20}) async {
+    return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
+        RpcFns.fetchParentComments.name,
+        params: {
+          '_before_at': beforeAt,
+          '_reference_id': referenceId,
+          '_reference_table': referenceTable,
+          '_parent_id': parentId,
+          '_take': take
+        }).then((res) => res
+        .map((json) => {
+              ...json,
+              'parent_id': parentId,
+              'reference_id': referenceId,
+              'reference_table': referenceTable
+            })
+        .map(FetchCommentDto.fromJson));
   }
 }

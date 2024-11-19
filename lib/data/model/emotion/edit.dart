@@ -13,7 +13,6 @@ class EditEmotionDto with _$EditEmotionDto {
     @Default(Emotions.like) Emotions emotion,
   }) = _EditEmotionDto;
 
-
   factory EditEmotionDto.fromJson(Map<String, dynamic> json) =>
       _$EditEmotionDtoFromJson(json);
 }

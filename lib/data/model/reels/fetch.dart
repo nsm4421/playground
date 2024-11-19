@@ -18,6 +18,8 @@ class FetchReelsDto with _$FetchReelsDto {
     // 메타정보
     @Default('') String created_at,
     @Default('') String updated_at,
+    @Default(false) bool is_like,
+    @Default(0) int like_count,
   }) = _FetchReelsDto;
 
   factory FetchReelsDto.fromJson(Map<String, dynamic> json) =>

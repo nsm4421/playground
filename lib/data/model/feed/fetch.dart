@@ -20,6 +20,11 @@ class FetchFeedDto with _$FetchFeedDto {
     // 메타정보
     @Default('') String created_at,
     @Default('') String updated_at,
+    // 좋아요
+    @Default(false) bool is_like,
+    @Default(0) int like_count,
+    // 최근댓글
+    String? latest_comment,
   }) = _FetchFeedDto;
 
   factory FetchFeedDto.fromJson(Map<String, dynamic> json) =>

@@ -10,7 +10,8 @@ enum Tables {
 enum RpcFns {
   fetchFeeds('fetch_feeds'),
   fetchReels('fetch_reels'),
-  fetchComments('fetch_comments'),
+  fetchParentComments('fetch_parent_comments'),
+  fetchChildComments('fetch_child_comments'),
   ;
 
   final String name;

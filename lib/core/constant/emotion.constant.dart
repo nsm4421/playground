@@ -1,6 +1,12 @@
 part of 'constant.dart';
 
 enum Emotions {
-  like,
-  hate;
+  like('LIKE'),
+  hate('HATE'),
+  none('NONE')
+  ;
+
+  final String name;
+
+  const Emotions(this.name);
 }

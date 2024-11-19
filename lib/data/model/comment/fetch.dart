@@ -9,13 +9,20 @@ part 'fetch.g.dart';
 class FetchCommentDto with _$FetchCommentDto {
   const factory FetchCommentDto({
     @Default('') String id,
-    String? parent_id,
+    @Default('') String content,
     @Default('') String reference_id,
     @Default('') String reference_table,
-    @Default('') String content,
-    @Default('') String author_uid,
+    String? parent_id,
+    @Default('') String created_at,
+    @Default('') String updated_at,
+    @Default(0) int child_count,
+    // 작성자
+    @Default('') String author_id,
     @Default('') String author_username,
     @Default('') String author_avatar_url,
+    // 좋아요
+    @Default(false) bool is_like,
+    @Default(0) int like_count,
   }) = _FetchCommentDto;
 
   factory FetchCommentDto.fromJson(Map<String, dynamic> json) =>
