@@ -1,10 +1,13 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/entity/comment/comment.dart';
 import 'package:travel/domain/entity/feed/feed.dart';
 import 'package:travel/domain/entity/reels/reels.dart';
 import 'package:travel/domain/usecase/module.dart';
 import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
+import 'package:travel/presentation/bloc/comment/create/cubit.dart';
+import 'package:travel/presentation/bloc/comment/display/bloc.dart';
 import 'package:travel/presentation/bloc/emotion/cubit.dart';
 import 'package:travel/presentation/bloc/feed/create/bloc.dart';
 import 'package:travel/presentation/bloc/feed/display/bloc.dart';
@@ -40,6 +43,18 @@ class BlocModule {
   @lazySingleton
   CreateFeedBloc get createFeed => CreateFeedBloc(_useCase.feed);
 
+  @injectable
+  EmotionCubit<FeedEntity> feedEmotion(FeedEntity feed) =>
+      EmotionCubit<FeedEntity>(feed, useCase: _useCase.emotion);
+
+  @injectable
+  CreateCommentCubit<FeedEntity> createFeedComment(FeedEntity feed) =>
+      CreateCommentCubit<FeedEntity>(feed, useCase: _useCase.comment);
+
+  @injectable
+  DisplayCommentBloc<FeedEntity> displayFeedComment(FeedEntity feed) =>
+      DisplayCommentBloc<FeedEntity>(feed, useCase: _useCase.comment);
+
   /// reels
   @lazySingleton
   DisplayReelsBloc get displayReels => DisplayReelsBloc(_useCase.reels);
@@ -47,12 +62,15 @@ class BlocModule {
   @lazySingleton
   CreateReelsBloc get createReels => CreateReelsBloc(_useCase.reels);
 
-  /// emotion
-  @injectable
-  EmotionCubit<FeedEntity> feedEmotion(FeedEntity feed) =>
-      EmotionCubit<FeedEntity>(feed, useCase: _useCase.emotion);
-
   @injectable
   EmotionCubit<ReelsEntity> reelsEmotion(ReelsEntity feed) =>
       EmotionCubit<ReelsEntity>(feed, useCase: _useCase.emotion);
+
+  @injectable
+  DisplayCommentBloc<ReelsEntity> displayReelsComment(ReelsEntity reels) =>
+      DisplayCommentBloc<ReelsEntity>(reels, useCase: _useCase.comment);
+
+  @injectable
+  CreateCommentCubit<ReelsEntity> createReelsComment(ReelsEntity reels) =>
+      CreateCommentCubit<ReelsEntity>(reels, useCase: _useCase.comment);
 }

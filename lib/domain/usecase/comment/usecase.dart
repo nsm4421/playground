@@ -18,20 +18,10 @@ class CommentUseCase {
   CommentUseCase(this._repository);
 
   @lazySingleton
-  CreateFeedCommentUseCase get createOnFeed =>
-      CreateFeedCommentUseCase(_repository);
+  CreateCommentUseCase get create => CreateCommentUseCase(_repository);
 
   @lazySingleton
-  CreateReelsCommentUseCase get createOnReels =>
-      CreateReelsCommentUseCase(_repository);
-
-  @lazySingleton
-  FetchCommentOnFeedUseCase get fetchOnFeed =>
-      FetchCommentOnFeedUseCase(_repository);
-
-  @lazySingleton
-  FetchCommentOnReelsUseCase get fetchOnReels =>
-      FetchCommentOnReelsUseCase(_repository);
+  FetchCommentUseCase get fetch => FetchCommentUseCase(_repository);
 
   @lazySingleton
   DeleteCommentUseCase get delete => DeleteCommentUseCase(_repository);

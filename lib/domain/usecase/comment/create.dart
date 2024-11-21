@@ -1,35 +1,21 @@
 part of 'usecase.dart';
 
-class CreateFeedCommentUseCase {
+class CreateCommentUseCase {
   final CommentRepository _repository;
 
-  CreateFeedCommentUseCase(this._repository);
+  CreateCommentUseCase(this._repository);
 
   Future<Either<ErrorResponse, void>> call(
       {required String id,
-      required String feedId,
+      String? parentId,
+      required String referenceId,
+      required String referenceTable,
       required String content}) async {
     return await _repository.create(
         id: id,
-        referenceId: feedId,
-        referenceTable: Tables.feeds.name,
-        content: content);
-  }
-}
-
-class CreateReelsCommentUseCase {
-  final CommentRepository _repository;
-
-  CreateReelsCommentUseCase(this._repository);
-
-  Future<Either<ErrorResponse, void>> call(
-      {required String id,
-      required String reelsId,
-      required String content}) async {
-    return await _repository.create(
-        id: id,
-        referenceId: reelsId,
-        referenceTable: Tables.reels.name,
+        referenceId: referenceId,
+        parentId: parentId,
+        referenceTable: referenceTable,
         content: content);
   }
 }
