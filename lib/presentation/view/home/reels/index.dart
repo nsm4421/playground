@@ -13,6 +13,7 @@ import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
 import 'package:travel/domain/entity/reels/reels.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
+import 'package:travel/presentation/bloc/emotion/cubit.dart';
 import 'package:travel/presentation/bloc/module.dart';
 import 'package:travel/presentation/bloc/reels/display/bloc.dart';
 import 'package:travel/presentation/route/routes.dart';
@@ -22,6 +23,8 @@ import 'package:video_player/video_player.dart';
 part 's_reels.dart';
 
 part 'w_item.dart';
+
+part 'w_like.dart';
 
 class ReelsPage extends StatelessWidget {
   const ReelsPage({super.key});

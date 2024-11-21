@@ -51,9 +51,6 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
     });
   }
 
-  // TODO : 아이콘 기능 구현하기
-  _handleLike() {}
-
   _handleShowComment() {}
 
   _handleShare() {}
@@ -86,7 +83,6 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
         /// 이미지
         GestureDetector(
           onTap: _handleShowDetail,
-          onDoubleTap: _handleLike,
           child: Stack(
             children: [
               SizedBox(
@@ -138,16 +134,18 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      onPressed: _handleLike,
-                      icon: const Icon(Icons.favorite_border),
-                    ),
+                    // 좋아요 아이콘
+                    LikeButtonWidget(widget.feed),
+
+                    // 댓글 아이콘
                     IconButton(
                       onPressed: _handleShowComment,
                       icon: Icon(Icons.chat_bubble_outline),
                     ),
                   ],
                 ),
+
+                // 공유 아이콘
                 IconButton(
                   onPressed: _handleShare,
                   icon: const Icon(Icons.share),

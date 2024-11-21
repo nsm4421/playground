@@ -1,22 +1,19 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:travel/core/constant/constant.dart';
 import 'package:travel/core/di/dependency_injection.dart';
-import 'package:travel/core/generated/assets.gen.dart';
 import 'package:travel/core/theme/theme.dart';
 import 'package:travel/core/util/bloc/display_bloc.dart';
-import 'package:travel/core/util/debounce/mixin.dart';
 import 'package:travel/core/util/extension/extension.dart';
 import 'package:travel/core/util/snackbar/snackbar.dart';
 import 'package:travel/domain/entity/feed/feed.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
+import 'package:travel/presentation/bloc/emotion/cubit.dart';
 import 'package:travel/presentation/bloc/feed/display/bloc.dart';
 import 'package:travel/presentation/bloc/module.dart';
 import 'package:travel/presentation/route/routes.dart';
@@ -31,6 +28,8 @@ part 'f_list.dart';
 part 'w_item.dart';
 
 part 'w_feed_detail.dart';
+
+part 'w_like.dart';
 
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});

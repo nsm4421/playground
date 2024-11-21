@@ -50,9 +50,6 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
     setState(() {});
   }
 
-  // TODO : 아이콘 클릭 이벤트 구현하기
-  _handleLike() {}
-
   _handleComment() {}
 
   _handleDM() {}
@@ -129,11 +126,9 @@ class _ReelsItemWidgetState extends State<ReelsItemWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: ShadowedIconButton(
-                    onTap: _handleLike,
-                    iconData: Icons.favorite_border,
+                  child: LikeButtonWidget(
+                    widget.reels,
                     iconSize: _iconSize,
-                    iconColor: CustomPalette.white,
                   ),
                 ),
                 Padding(
