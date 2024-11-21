@@ -34,7 +34,6 @@ class ReelsDataSourceImpl with CustomLogger implements ReelsDataSource {
   @override
   Future<Iterable<FetchReelsDto>> fetch(
       {required String beforeAt, int take = 20}) async {
-    // TODO : RPC 함수 정의하기
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchReels.name, params: {
       '_before_at': beforeAt,

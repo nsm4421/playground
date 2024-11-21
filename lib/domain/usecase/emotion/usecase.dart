@@ -4,7 +4,7 @@ import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/error/error_response.dart';
 import 'package:travel/domain/repository/repository.dart';
 
-part 'feed.dart';
+part 'crud.dart';
 
 @lazySingleton
 class EmotionUseCase {
@@ -13,9 +13,8 @@ class EmotionUseCase {
   EmotionUseCase(this._repository);
 
   @lazySingleton
-  SendLikeOnFeedUseCase get likeFeed => SendLikeOnFeedUseCase(_repository);
+  SendLikeOnUseCase get like => SendLikeOnUseCase(_repository);
 
   @lazySingleton
-  CancelLikeOnFeedUseCase get cancelFeed =>
-      CancelLikeOnFeedUseCase(_repository);
+  CancelLikeOnUseCase get cancel => CancelLikeOnUseCase(_repository);
 }

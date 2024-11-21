@@ -1,8 +1,11 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/entity/feed/feed.dart';
+import 'package:travel/domain/entity/reels/reels.dart';
 import 'package:travel/domain/usecase/module.dart';
 import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/bloc/bottom_nav/cubit.dart';
+import 'package:travel/presentation/bloc/emotion/cubit.dart';
 import 'package:travel/presentation/bloc/feed/create/bloc.dart';
 import 'package:travel/presentation/bloc/feed/display/bloc.dart';
 import 'package:travel/presentation/bloc/reels/create/bloc.dart';
@@ -43,4 +46,13 @@ class BlocModule {
 
   @lazySingleton
   CreateReelsBloc get createReels => CreateReelsBloc(_useCase.reels);
+
+  /// emotion
+  @injectable
+  EmotionCubit<FeedEntity> feedEmotion(FeedEntity feed) =>
+      EmotionCubit<FeedEntity>(feed, useCase: _useCase.emotion);
+
+  @injectable
+  EmotionCubit<ReelsEntity> reelsEmotion(ReelsEntity feed) =>
+      EmotionCubit<ReelsEntity>(feed, useCase: _useCase.emotion);
 }
