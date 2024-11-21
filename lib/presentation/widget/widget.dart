@@ -13,3 +13,5 @@ part 'loading.dart';
 part 'button.dart';
 
 part 'image.dart';
+
+part 'text.dart';

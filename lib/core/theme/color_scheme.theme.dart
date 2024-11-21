@@ -7,6 +7,8 @@ class CustomColorScheme extends ColorScheme {
     super.onPrimary = CustomPalette.onPrimary,
     super.secondary = CustomPalette.secondary,
     super.onSecondary = CustomPalette.onSecondary,
+    super.tertiary = CustomPalette.tertiary,
+    super.onTertiary = CustomPalette.onTertiary,
     super.error = CustomPalette.error,
     super.onError = CustomPalette.onError,
     super.surface = CustomPalette.surface,

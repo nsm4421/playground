@@ -45,13 +45,24 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return FeedDetailScreen(widget.feed);
+          return FeedDetailPage(widget.feed);
         }).whenComplete(() {
       context.read<HomeBottomNavCubit>().switchVisible(true);
     });
   }
 
-  _handleShowComment() {}
+  _handleShowComment() async {
+    context.read<HomeBottomNavCubit>().switchVisible(false);
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        showDragHandle: true,
+        builder: (context) {
+          return FeedCommentPage(widget.feed);
+        }).whenComplete(() {
+      context.read<HomeBottomNavCubit>().switchVisible(true);
+    });
+  }
 
   _handleShare() {}
 
@@ -140,7 +151,10 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
                     // 댓글 아이콘
                     IconButton(
                       onPressed: _handleShowComment,
-                      icon: Icon(Icons.chat_bubble_outline),
+                      icon: Icon(
+                        Icons.chat_bubble_outline,
+                        color: context.colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),

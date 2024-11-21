@@ -13,6 +13,10 @@ class CustomPalette {
 
   static const onSecondary = Color(0xFFFFFFFF);
 
+  static const tertiary = Color(0xFF2C9988);
+
+  static const onTertiary = Color(0xFFFFFFFF);
+
   static const error = Color(0xFFFF5645);
 
   static const onError = Color(0xFFFFFFFF);

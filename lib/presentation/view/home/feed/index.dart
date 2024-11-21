@@ -17,17 +17,15 @@ import 'package:travel/presentation/bloc/emotion/cubit.dart';
 import 'package:travel/presentation/bloc/feed/display/bloc.dart';
 import 'package:travel/presentation/bloc/module.dart';
 import 'package:travel/presentation/route/routes.dart';
+import 'package:travel/presentation/view/home/feed/comment/index.dart';
+import 'package:travel/presentation/view/home/feed/detail/index.dart';
 import 'package:travel/presentation/widget/widget.dart';
 
 part 's_feed.dart';
 
-part 's_detail.dart';
-
 part 'f_list.dart';
 
 part 'w_item.dart';
-
-part 'w_feed_detail.dart';
 
 part 'w_like.dart';
 

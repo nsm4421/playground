@@ -54,9 +54,22 @@ class _FeedDetailWidgetState extends State<FeedDetailWidget> {
                     children: [
                       CachedSquareImageWidget(widget.feed.images[index]),
                       if (widget.feed.captions[index].isNotEmpty)
-                        Text(
-                          widget.feed.captions[index],
-                          softWrap: true,
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            widget.feed.captions[index],
+                            softWrap: true,
+                            style: context.textTheme.bodyLarge?.copyWith(
+                              color: CustomPalette.white,
+                              fontWeight: FontWeight.w600,
+                              shadows: [
+                                const Shadow(
+                                    offset: Offset(2, 2),
+                                    blurRadius: 4.0,
+                                    color: CustomPalette.mediumGrey)
+                              ],
+                            ),
+                          ),
                         )
                     ],
                   );
