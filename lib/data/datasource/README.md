@@ -1,38 +1,37 @@
 ```
-create or replace function public.on_sign_up()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-    begin
-    insert into public.accounts (
-        id,
-        email, 
-        username, 
-        avatar_url
+CREATE OR REPLACE FUNCTION PUBLIC."ON_SIGN_UP"()
+RETURNS TRIGGER
+LANGUAGE PLPGSQL
+SECURITY DEFINER SET SEARCH_PATH = PUBLIC
+AS $$
+    BEGIN
+    INSERT INTO PUBLIC."ACCOUNTS" (
+        ID,
+        EMAIL, 
+        USERNAME, 
+        AVATAR_URL
     )
-    values (
-        new.id, 
-        new.email,
-        new.raw_user_meta_data->>'username', 
-        new.raw_user_meta_data->>'avatar_url'
+    VALUES (
+        NEW.ID, 
+        NEW.EMAIL,
+        NEW.RAW_USER_META_DATA->>'username', 
+        NEW.RAW_USER_META_DATA->>'avatar_url'
     );
-    return new;
-    end;
+    RETURN NEW;
+    END;
 $$;
 
 -----------------------------------------------------
 
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute procedure public.on_sign_up();
+CREATE TRIGGER ON_AUTH_USER_CREATED
+AFTER INSERT ON AUTH.USERS
+FOR EACH ROW EXECUTE PROCEDURE PUBLIC."ON_SIGN_UP"();
 
 -----------------------------------------------------
 
 CREATE OR REPLACE FUNCTION fetch_feeds(_before_at timestamptz, _take int)
 RETURNS TABLE(
     ID UUID,
-    CONTENT TEXT,
     HASHTAGS TEXT[],
     IMAGES TEXT[],
     CAPTIONS TEXT[],
@@ -49,7 +48,6 @@ language sql
 as $$
     select
         T1.ID ID, 
-        T1.CONTENT CONTENT, 
         T1.HASHTAGS HASHTAGS, 
         T1.IMAGES IMAGES, 
         T1.CAPTIONS CAPTIONS, 
@@ -64,7 +62,6 @@ as $$
     FROM (
         SELECT
             ID,
-            CONTENT,
             HASHTAGS,
             IMAGES,
             CAPTIONS,
@@ -72,20 +69,20 @@ as $$
             UPDATED_AT,
             CREATED_BY
         FROM
-            FEEDS
+            PUBLIC."FEEDS"
         WHERE
             CREATED_AT < _before_at
             AND DELETED_AT IS NULL
         ORDER BY CREATED_AT DESC
         LIMIT(_take)
         ) T1
-    LEFT JOIN PUBLIC.ACCOUNTS T2 
+    LEFT JOIN PUBLIC."ACCOUNTS" T2 
         ON T1.CREATED_BY = T2.ID
     LEFT JOIN (
         SELECT 
             REFERENCE_ID,
             EMOTION
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'FEEDS'
             AND EMOTION = 'LIKES'
             AND CREATED_BY = AUTH.UID()
@@ -94,7 +91,7 @@ as $$
         SELECT
             REFERENCE_ID,
             COUNT(1) LIKE_COUNT
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'FEEDS'
             AND EMOTION = 'LIKES'
         GROUP BY REFERENCE_ID
@@ -111,7 +108,7 @@ as $$
                 PARTITION BY REFERENCE_ID 
                 ORDER BY CREATED_AT DESC
             ) AS RANK
-          FROM PUBLIC.COMMENTS
+          FROM PUBLIC."COMMENTS"
           WHERE REFERENCE_TABLE = 'FEEDS'
             AND PARENT_ID IS NULL
         ) TT5
@@ -122,7 +119,7 @@ $$
 
 -----------------------------------------------------
 
-CREATE OR REPLACE FUNCTION fetch_reels(_before_at timestamptz, _take int)
+CREATE OR REPLACE FUNCTION FETCH_REELS(_BEFORE_AT TIMESTAMPTZ, _TAKE INT)
 RETURNS TABLE(
     ID UUID,
     CAPTION TEXT,
@@ -135,9 +132,9 @@ RETURNS TABLE(
     IS_LIKE BOOLEAN,
     IKE_COUNT INT
 )
-language sql
-as $$
-    select
+LANGUAGE SQL
+AS $$
+    SELECT
         T1.ID ID, 
         T1.CAPTION CAPTION, 
         T1.VIDEO VIDEO, 
@@ -157,20 +154,20 @@ as $$
             UPDATED_AT,
             CREATED_BY            
         FROM
-            REELS
+            PUBLIC."REELS"
         WHERE
-            CREATED_AT < _before_at
+            CREATED_AT < _BEFORE_AT
             AND DELETED_AT IS NULL
         ORDER BY CREATED_AT DESC
-        LIMIT(_take)
+        LIMIT(_TAKE)
         ) T1
-    LEFT JOIN PUBLIC.ACCOUNTS T2
+    LEFT JOIN PUBLIC."ACCOUNTS" T2
         ON T1.CREATED_BY = T2.ID
     LEFT JOIN (
         SELECT 
             REFERENCE_ID,
             EMOTION
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'REELS'
             AND EMOTION = 'LIKES'
             AND CREATED_BY = AUTH.UID()
@@ -179,7 +176,7 @@ as $$
         SELECT
             REFERENCE_ID,
             COUNT(1) LIKE_COUNT
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'REELS'
             AND EMOTION = 'LIKES'
         GROUP BY REFERENCE_ID
@@ -189,11 +186,11 @@ $$
 
 -----------------------------------------------------
 
-CREATE OR REPLACE FUNCTION fetch_parent_comments(
-    _before_at timestamptz, 
-    _reference_id uuid,
-    _reference_table text,
-    _take int
+CREATE OR REPLACE FUNCTION FETCH_PARENT_COMMENTS(
+    _BEFORE_AT TIMESTAMPTZ, 
+    _REFERENCE_ID UUID,
+    _REFERENCE_TABLE TEXT,
+    _TAKE INT
 )
 RETURNS TABLE(
     ID UUID,
@@ -207,8 +204,8 @@ RETURNS TABLE(
     LIKE_COUNT INT,
     CHILD_COUNT INT
 )
-language sql
-as $$
+LANGUAGE SQL
+AS $$
     SELECT
         T1.ID ID,
         T1.CONTENT CONTENT,
@@ -228,23 +225,23 @@ as $$
             UPDATED_AT,
             CREATED_BY
         FROM
-            PUBLIC.COMMENTS
+            PUBLIC."COMMENTS"
         WHERE
-            CREATED_AT < _before_at
+            CREATED_AT < _BEFORE_AT
             AND DELETED_AT IS NULL
-            AND REFERENCE_ID = _reference_id
-            AND REFERENCE_TABLE = _reference_table
+            AND REFERENCE_ID = _REFERENCE_ID
+            AND REFERENCE_TABLE = _REFERENCE_TABLE
             AND PARENT_ID IS NULL
         ORDER BY CREATED_AT DESC
-        LIMIT(_take)
+        LIMIT(_TAKE)
         ) T1
-    LEFT JOIN PUBLIC.ACCOUNTS T2 
+    LEFT JOIN PUBLIC."ACCOUNTS" T2 
         ON T1.CREATED_BY = T2.ID
     LEFT JOIN (
         SELECT 
             REFERENCE_ID,
             EMOTION
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'COMMENTS'
             AND EMOTION = 'LIKES'
             AND CREATED_BY = AUTH.UID()
@@ -253,7 +250,7 @@ as $$
         SELECT
             REFERENCE_ID,
             COUNT(1) LIKE_COUNT
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'COMMENTS'
             AND EMOTION = 'LIKES'
         GROUP BY REFERENCE_ID
@@ -262,11 +259,11 @@ as $$
         SELECT
             PARENT_ID,
             COUNT(1) CHILD_COUNT
-        FROM PUBLIC.COMMENTS
+        FROM PUBLIC."COMMENTS"
         WHERE PARENT_ID IS NOT NULL
             AND DELETED_AT IS NULL
-            AND REFERENCE_ID = _reference_id
-            AND REFERENCE_TABLE = _reference_table
+            AND REFERENCE_ID = _REFERENCE_ID
+            AND REFERENCE_TABLE = _REFERENCE_TABLE
         GROUP BY PARENT_ID
     ) T5 ON T1.ID = T5.PARENT_ID
 ;
@@ -274,12 +271,12 @@ $$
 
 -----------------------------------------------------
 
-CREATE OR REPLACE FUNCTION fetch_child_comments(
-    _before_at timestamptz, 
-    _reference_id uuid,
-    _reference_table text,
-    _parent_id uuid,
-    _take int
+CREATE OR REPLACE FUNCTION FETCH_CHILD_COMMENTS(
+    _BEFORE_AT TIMESTAMPTZ, 
+    _REFERENCE_ID UUID,
+    _REFERENCE_TABLE TEXT,
+    _PARENT_ID UUID,
+    _TAKE INT
 )
 RETURNS TABLE(
     ID UUID,
@@ -292,8 +289,8 @@ RETURNS TABLE(
     IS_LIKE BOOLEAN,
     LIKE_COUNT INT
 )
-language sql
-as $$
+LANGUAGE SQL
+AS $$
     SELECT
         T1.ID ID,
         T1.CONTENT CONTENT,
@@ -312,22 +309,22 @@ as $$
             UPDATED_AT,
             CREATED_BY
         FROM
-            PUBLIC.COMMENTS
+            PUBLIC."COMMENTS"
         WHERE
-            CREATED_AT < _before_at
+            CREATED_AT < _BEFORE_AT
             AND DELETED_AT IS NULL
-            AND REFERENCE_ID = _reference_id
-            AND REFERENCE_TABLE = _reference_table
+            AND REFERENCE_ID = _REFERENCE_ID
+            AND REFERENCE_TABLE = _REFERENCE_TABLE
         ORDER BY CREATED_AT DESC
-        LIMIT(_take)
+        LIMIT(_TAKE)
         ) T1
-    LEFT JOIN PUBLIC.ACCOUNTS T2 
+    LEFT JOIN PUBLIC."ACCOUNTS" T2 
         ON T1.CREATED_BY = T2.ID
     LEFT JOIN (
         SELECT 
             REFERENCE_ID,
             EMOTION
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'COMMENTS'
             AND EMOTION = 'LIKES'
             AND CREATED_BY = AUTH.UID()
@@ -336,7 +333,7 @@ as $$
         SELECT
             REFERENCE_ID,
             COUNT(1) LIKE_COUNT
-        FROM PUBLIC.EMOTIONS
+        FROM PUBLIC."EMOTIONS"
         WHERE REFERENCE_TABLE = 'COMMENTS'
             AND EMOTION = 'LIKES'
         GROUP BY REFERENCE_ID

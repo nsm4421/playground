@@ -10,7 +10,7 @@ class EditEmotionDto with _$EditEmotionDto {
   const factory EditEmotionDto({
     @Default('') String reference_id,
     @Default('') String reference_table,
-    @Default(Emotions.like) Emotions emotion,
+    @Default('') String emotion,
   }) = _EditEmotionDto;
 
   factory EditEmotionDto.fromJson(Map<String, dynamic> json) =>

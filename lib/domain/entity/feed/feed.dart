@@ -1,4 +1,5 @@
 import 'package:travel/core/abstract/abstract.dart';
+import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/feed/fetch.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
@@ -45,4 +46,7 @@ class FeedEntity extends BaseEntity {
       latestComment: dto.latest_comment
     );
   }
+
+  @override
+  Tables get table => Tables.feeds;
 }

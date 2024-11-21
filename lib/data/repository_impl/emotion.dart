@@ -16,7 +16,7 @@ class EmotionRepositoryImpl with CustomLogger implements EmotionRepository {
           .edit(EditEmotionDto(
               reference_id: referenceId,
               reference_table: referenceTable,
-              emotion: emotion))
+              emotion: emotion.name))
           .then(Right.new);
     } catch (error) {
       logger.e(error);

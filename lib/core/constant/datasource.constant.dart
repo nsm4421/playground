@@ -1,10 +1,14 @@
 part of 'constant.dart';
 
 enum Tables {
-  feeds,
-  reels,
-  emotions,
-  comments;
+  feeds("FEEDS"),
+  reels("REELS"),
+  emotions("EMOTIONS"),
+  comments("COMMENTS");
+
+  final String name;
+
+  const Tables(this.name);
 }
 
 enum RpcFns {

@@ -40,13 +40,15 @@ class _CarouselFragmentState extends State<CarouselFragment> {
             builder: (_) {
               return EditCaptionFragment(
                   context.read<CreateFeedBloc>().state.captions[index]);
-            }).then((res) {
-          if (res != null) {
-            context
-                .read<CreateFeedBloc>()
-                .add(EditCaptionEvent(caption: res, index: index));
-          }
-        });
+            }).then(
+          (res) {
+            if (res != null) {
+              context
+                  .read<CreateFeedBloc>()
+                  .add(EditCaptionEvent(caption: res, index: index));
+            }
+          },
+        );
       };
 
   @override

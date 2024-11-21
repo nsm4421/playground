@@ -1,14 +1,19 @@
+import 'package:travel/core/constant/constant.dart';
+
 import '../../../core/abstract/abstract.dart';
 import '../../../data/model/auth/auth_user.dart';
 
-class PresenceEntity extends BaseEntity {
+class PresenceEntity {
+  final String? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final String username;
   final String avatarUrl;
 
   PresenceEntity(
-      {super.id,
-      super.createdAt,
-      super.updatedAt,
+      {this.id,
+      this.createdAt,
+      this.updatedAt,
       this.username = '',
       this.avatarUrl = ''});
 

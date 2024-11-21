@@ -6,4 +6,6 @@ abstract class BaseEntity {
   final DateTime? updatedAt;
 
   BaseEntity({this.id, this.createdAt, this.updatedAt});
+
+  Tables get table;
 }

@@ -1,4 +1,5 @@
 import 'package:travel/core/abstract/abstract.dart';
+import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/reels/fetch.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
@@ -35,4 +36,7 @@ class ReelsEntity extends BaseEntity {
       likeCount: dto.like_count,
     );
   }
+
+  @override
+  Tables get table => Tables.reels;
 }

@@ -1,4 +1,5 @@
 import 'package:travel/core/abstract/abstract.dart';
+import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/comment/fetch.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
@@ -43,4 +44,7 @@ class CommentEntity extends BaseEntity {
         likeCount: dto.like_count,
         childCount: dto.child_count);
   }
+
+  @override
+  Tables get table => Tables.comments;
 }

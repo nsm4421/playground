@@ -86,7 +86,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState>
       emit(state.copyWith(
           captions: List.generate(
               state.captions.length,
-              (index) => index == state.index
+              (index) => index == event.index
                   ? event.caption
                   : state.captions[index])));
     } catch (error) {
