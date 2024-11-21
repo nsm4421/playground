@@ -12,7 +12,9 @@ class BottomNavigationFragment extends StatelessWidget with CustomLogger {
         return (state.visible)
             ? BottomNavigationBar(
                 elevation: 0,
-                selectedItemColor: Theme.of(context).colorScheme.primary,
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: context.colorScheme.primary,
+                unselectedItemColor: context.colorScheme.shadow,
                 showSelectedLabels: true,
                 showUnselectedLabels: false,
                 currentIndex: _navigationShell.currentIndex,

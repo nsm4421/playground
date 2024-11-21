@@ -1,16 +1,18 @@
-part of 'index.dart';
+part of '../widget.dart';
 
-class EditCommentWidget extends StatefulWidget {
-  const EditCommentWidget({super.key});
+class EditCommentWidget<RefEntity extends BaseEntity> extends StatefulWidget {
+  const EditCommentWidget({super.key, this.maxLength = 500, this.maxLines = 3});
+
+  final int maxLength;
+  final int maxLines;
 
   @override
-  State<EditCommentWidget> createState() => _EditCommentWidgetState();
+  State<EditCommentWidget<RefEntity>> createState() =>
+      _EditCommentWidgetState<RefEntity>();
 }
 
-class _EditCommentWidgetState extends State<EditCommentWidget> {
-  static const int _maxLength = 500;
-  static const int _maxLines = 3;
-
+class _EditCommentWidgetState<RefEntity extends BaseEntity>
+    extends State<EditCommentWidget<RefEntity>> {
   int _textLength = 0;
   late TextEditingController _controller;
   late FocusNode _focusNode;
@@ -21,7 +23,7 @@ class _EditCommentWidgetState extends State<EditCommentWidget> {
     super.initState();
     _controller = TextEditingController();
     _focusNode = FocusNode()..addListener(_handleFocus);
-    _commentId = context.read<CreateCommentCubit<FeedEntity>>().commentId;
+    _commentId = context.read<CreateCommentCubit<RefEntity>>().commentId;
   }
 
   @override
@@ -36,7 +38,7 @@ class _EditCommentWidgetState extends State<EditCommentWidget> {
   _handleFocus() {
     if (!_focusNode.hasFocus) {
       context
-          .read<CreateCommentCubit<FeedEntity>>()
+          .read<CreateCommentCubit<RefEntity>>()
           .handleContent(_controller.text);
     }
   }
@@ -52,40 +54,40 @@ class _EditCommentWidgetState extends State<EditCommentWidget> {
     FocusScope.of(context).unfocus();
     await Future.delayed(200.ms, () async {
       await context
-          .read<CreateCommentCubit<FeedEntity>>()
+          .read<CreateCommentCubit<RefEntity>>()
           .handleSubmitParentComment();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateCommentCubit<FeedEntity>,
-        CreateCommentState<FeedEntity>>(
+    return BlocListener<CreateCommentCubit<RefEntity>,
+        CreateCommentState<RefEntity>>(
       listener: (context, state) async {
         if (state.status == Status.success) {
           _controller.clear();
           // TODO : 댓글 추가
-          _commentId = context.read<CreateCommentCubit<FeedEntity>>().commentId;
+          _commentId = context.read<CreateCommentCubit<RefEntity>>().commentId;
         } else if (state.status == Status.error) {
           getIt<CustomSnackBar>()
               .error(title: 'Error', description: state.message);
           await Future.delayed(200.ms, () {
             context
-                .read<CreateCommentCubit<FeedEntity>>()
+                .read<CreateCommentCubit<RefEntity>>()
                 .initState(status: Status.initial, message: '');
           });
         }
       },
-      child: BlocBuilder<CreateCommentCubit<FeedEntity>,
-          CreateCommentState<FeedEntity>>(
+      child: BlocBuilder<CreateCommentCubit<RefEntity>,
+          CreateCommentState<RefEntity>>(
         builder: (context, state) {
           return TextField(
             onChanged: _handleOnChange,
             focusNode: _focusNode,
             controller: _controller,
-            maxLength: _maxLength,
+            maxLength: widget.maxLength,
             minLines: 1,
-            maxLines: _maxLines,
+            maxLines: widget.maxLines,
             decoration: InputDecoration(
               label: RichText(
                 text: TextSpan(
@@ -95,7 +97,7 @@ class _EditCommentWidgetState extends State<EditCommentWidget> {
                       style: context.textTheme.bodyMedium,
                     ),
                     TextSpan(
-                      text: '($_textLength/$_maxLength)',
+                      text: '($_textLength/${widget.maxLength})',
                       style: context.textTheme.labelLarge,
                     )
                   ],

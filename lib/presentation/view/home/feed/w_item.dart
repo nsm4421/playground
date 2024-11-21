@@ -56,9 +56,11 @@ class _FeedItemWidgetState extends State<FeedItemWidget> {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        showDragHandle: true,
         builder: (context) {
-          return FeedCommentPage(widget.feed);
+          return FeedCommentPage(
+            widget.feed,
+            showAppBar: true,
+          );
         }).whenComplete(() {
       context.read<HomeBottomNavCubit>().switchVisible(true);
     });

@@ -12,6 +12,7 @@ import 'package:travel/presentation/view/home/feed/index.dart';
 import 'package:travel/presentation/view/home/index.dart';
 import 'package:travel/presentation/view/home/reels/create/index.dart';
 import 'package:travel/presentation/view/home/reels/index.dart';
+import 'package:travel/presentation/view/home/search/index.dart';
 import 'package:travel/presentation/view/home/setting/index.dart';
 
 import 'util.dart';
@@ -50,12 +51,14 @@ class CustomRouter with CustomLogger {
                   GoRoute(
                     path: switch (item) {
                       HomeBottomNavItem.feed => Routes.feed.path,
+                      HomeBottomNavItem.search => Routes.search.path,
                       HomeBottomNavItem.reels => Routes.reels.path,
                       HomeBottomNavItem.setting => Routes.setting.path,
                     },
                     pageBuilder: _pageBuilder(
                       switch (item) {
                         HomeBottomNavItem.feed => const FeedPage(),
+                        HomeBottomNavItem.search => const SearchPage(),
                         HomeBottomNavItem.reels => const ReelsPage(),
                         HomeBottomNavItem.setting => const SettingPage(),
                       },

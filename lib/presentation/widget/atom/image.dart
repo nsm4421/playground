@@ -1,4 +1,4 @@
-part of 'widget.dart';
+part of '../widget.dart';
 
 class CachedCircularImageWidget extends StatelessWidget {
   const CachedCircularImageWidget(this.imageUrl, {super.key, this.radius});

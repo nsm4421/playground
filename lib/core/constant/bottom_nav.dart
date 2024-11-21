@@ -2,8 +2,8 @@ part of 'constant.dart';
 
 enum HomeBottomNavItem {
   feed(activeIcon: Icons.home_filled, icon: Icons.home_outlined, label: 'Feed'),
-  // search(
-  //     activeIcon: Icons.search, icon: Icons.search_outlined, label: 'Search'),
+  search(
+      activeIcon: Icons.search, icon: Icons.search_outlined, label: 'Search'),
   reels(
       activeIcon: Icons.video_collection,
       icon: Icons.video_collection_outlined,
