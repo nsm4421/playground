@@ -10,13 +10,13 @@ part 'display_event.dart';
 abstract class CustomDisplayBloc<T extends BaseEntity>
     extends Bloc<CustomDisplayEvent<T>, CustomDisplayState<T>> {
   CustomDisplayBloc() : super(CustomDisplayState<T>()) {
-    on<InitDisplayEvent<T>>(onInit);
+    on<InitDisplayEvent<T>>(_onInit);
     on<FetchEvent<T>>(onFetch);
   }
 
   DateTime get currentDt => DateTime.now().toUtc();
 
-  Future<void> onInit(
+  Future<void> _onInit(
       InitDisplayEvent<T> event, Emitter<CustomDisplayState<T>> emit) async {
     emit(
       state.copyWith(
