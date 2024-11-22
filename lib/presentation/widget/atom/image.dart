@@ -20,12 +20,13 @@ class CachedCircularImageWidget extends StatelessWidget {
 
 class CachedSquareImageWidget extends StatelessWidget {
   const CachedSquareImageWidget(this.imageUrl,
-      {super.key, this.width, this.height, this.boxFit});
+      {super.key, this.width, this.height, this.boxFit, this.borderRound});
 
   final String imageUrl;
   final double? width;
   final double? height;
   final BoxFit? boxFit;
+  final double? borderRound;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class CachedSquareImageWidget extends StatelessWidget {
         height: height ?? context.width,
         decoration: BoxDecoration(
           color: context.colorScheme.tertiary,
+          borderRadius: BorderRadius.circular(borderRound ?? 0),
           image: DecorationImage(
             fit: boxFit ?? BoxFit.cover,
             image: provider,
