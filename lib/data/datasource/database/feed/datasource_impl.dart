@@ -19,13 +19,11 @@ class FeedDataSourceImpl with CustomLogger implements FeedDataSource {
   }
 
   @override
-  Future<Iterable<FetchFeedDto>> fetch(
-      {required String beforeAt, int take = 20}) async {
+  Future<Iterable<FetchFeedResDto>> fetch(FetchFeedReqDto dto) async {
     return await _supabaseClient
         .rpc<List<Map<String, dynamic>>>(RpcFns.fetchFeeds.name, params: {
-      '_before_at': beforeAt,
-      '_take': take
-    }).then((res) => res.map(FetchFeedDto.fromJson));
+      ...dto.rpcParam
+    }).then((res) => res.map(FetchFeedResDto.fromJson));
   }
 
   @override

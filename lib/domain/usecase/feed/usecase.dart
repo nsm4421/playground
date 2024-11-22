@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/error/error_response.dart';
 import 'package:travel/domain/entity/feed/feed.dart';
 import 'package:travel/domain/repository/repository.dart';
@@ -25,6 +27,9 @@ class FeedUseCase {
 
   @lazySingleton
   FetchFeedUseCase get fetch => FetchFeedUseCase(_feedRepository);
+
+  @lazySingleton
+  SearchFeedUseCase get search => SearchFeedUseCase(_feedRepository);
 
   @lazySingleton
   EditFeedUseCase get edit => EditFeedUseCase(_feedRepository);

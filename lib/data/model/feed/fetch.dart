@@ -6,8 +6,27 @@ part 'fetch.freezed.dart';
 part 'fetch.g.dart';
 
 @freezed
-class FetchFeedDto with _$FetchFeedDto {
-  const factory FetchFeedDto({
+class FetchFeedReqDto with _$FetchFeedReqDto {
+  const factory FetchFeedReqDto({
+    String? search_field,
+    String? search_text,
+    @Default('') String before_at,
+    @Default(20) int take,
+  }) = _FetchFeedReqDto;
+}
+
+extension FetchFeedReqDtoExt on FetchFeedReqDto {
+  Map<String, dynamic> get rpcParam => Map<String, dynamic>.of({
+        '_search_field': search_field,
+        '_search_text': search_text,
+        '_before_at': before_at,
+        '_take': take,
+      });
+}
+
+@freezed
+class FetchFeedResDto with _$FetchFeedResDto {
+  const factory FetchFeedResDto({
     @Default('') String id,
     @Default('') String content,
     @Default(<String>[]) List<String> hashtags,
@@ -25,8 +44,8 @@ class FetchFeedDto with _$FetchFeedDto {
     @Default(0) int like_count,
     // 최근댓글
     String? latest_comment,
-  }) = _FetchFeedDto;
+  }) = _FetchFeedResDto;
 
-  factory FetchFeedDto.fromJson(Map<String, dynamic> json) =>
-      _$FetchFeedDtoFromJson(json);
+  factory FetchFeedResDto.fromJson(Map<String, dynamic> json) =>
+      _$FetchFeedResDtoFromJson(json);
 }

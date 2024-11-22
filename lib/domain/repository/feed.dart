@@ -1,8 +1,12 @@
 part of 'repository.dart';
 
 abstract interface class FeedRepository {
-  Future<Either<ErrorResponse, List<FeedEntity>>> fetch(
-      {required String beforeAt, int take = 20});
+  Future<Either<ErrorResponse, List<FeedEntity>>> fetch({
+    required String beforeAt,
+    String? searchField,
+    String? searchText,
+    int take = 20,
+  });
 
   Future<Either<ErrorResponse, void>> create(
       {required String id,

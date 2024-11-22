@@ -10,8 +10,7 @@ part 'datasource_impl.dart';
 abstract interface class FeedDataSource {
   Future<void> create({required String id, required CreateFeedDto dto});
 
-  Future<Iterable<FetchFeedDto>> fetch(
-      {required String beforeAt, int take = 20});
+  Future<Iterable<FetchFeedResDto>> fetch(FetchFeedReqDto dto);
 
   Future<void> edit({required String id, required UpdateFeedDto dto});
 

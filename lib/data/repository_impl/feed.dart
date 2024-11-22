@@ -37,11 +37,24 @@ class FeedRepositoryImpl with CustomLogger implements FeedRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, List<FeedEntity>>> fetch(
-      {required String beforeAt, int take = 20}) async {
+  Future<Either<ErrorResponse, List<FeedEntity>>> fetch({
+    required String beforeAt,
+    String? searchField,
+    String? searchText,
+    int take = 20,
+  }) async {
     try {
+      assert((searchField == null && searchText == null) ||
+          (searchField != null && searchText != null && searchText.isNotEmpty));
+      final req = FetchFeedReqDto(
+        before_at: beforeAt,
+        search_field: searchField,
+        search_text: searchText,
+        take: take,
+      );
+      logger.t(req.toString());
       return await _feedDataSource
-          .fetch(beforeAt: beforeAt, take: take)
+          .fetch(req)
           .then((res) => res.map(FeedEntity.from).toList())
           .then(Right.new);
     } catch (error) {

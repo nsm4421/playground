@@ -29,7 +29,12 @@ FOR EACH ROW EXECUTE PROCEDURE PUBLIC."ON_SIGN_UP"();
 
 -----------------------------------------------------
 
-CREATE OR REPLACE FUNCTION fetch_feeds(_before_at timestamptz, _take int)
+CREATE OR REPLACE FUNCTION fetch_feeds(
+    _search_field text,
+    _search_text text,
+    _before_at timestamptz, 
+    _take int
+)
 RETURNS TABLE(
     ID UUID,
     HASHTAGS TEXT[],
@@ -73,6 +78,27 @@ as $$
         WHERE
             CREATED_AT < _before_at
             AND DELETED_AT IS NULL
+            AND (
+                _search_field IS NULL OR (
+                    _search_field = 'HASHTAGS' AND (
+                        exists (
+                            SELECT 1
+                            FROM UNNEST("FEEDS".HASHTAGS) AS TAG
+                            WHERE TAG LIKE '%' || _search_text || '%'
+                        )
+                    )
+                ) OR (
+                    _search_field = 'CAPTIONS' AND (
+                        exists (
+                            SELECT 1
+                            FROM UNNEST("FEEDS".CAPTIONS) AS CAP
+                            WHERE CAP LIKE '%' || _search_text || '%'
+                        )
+                    )
+                ) OR (
+                    _search_field = 'USER' AND "FEEDS".CREATED_BY::TEXT = _search_text
+                )
+            )
         ORDER BY CREATED_AT DESC
         LIMIT(_take)
         ) T1

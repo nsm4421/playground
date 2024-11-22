@@ -15,6 +15,7 @@ import 'package:travel/data/model/emotion/delete.dart';
 import 'package:travel/data/model/emotion/edit.dart';
 import 'package:travel/data/model/error/error_response.dart';
 import 'package:travel/data/model/feed/create.dart';
+import 'package:travel/data/model/feed/fetch.dart';
 import 'package:travel/data/model/feed/update.dart';
 import 'package:travel/data/model/reels/create.dart';
 import 'package:travel/domain/entity/auth/presence.dart';

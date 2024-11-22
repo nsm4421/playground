@@ -3,6 +3,8 @@ import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/feed/fetch.dart';
 import 'package:travel/domain/entity/auth/presence.dart';
 
+part 'search.dart';
+
 class FeedEntity extends BaseEntity {
   late final List<String> hashtags;
   late final List<String> images;
@@ -28,7 +30,7 @@ class FeedEntity extends BaseEntity {
     this.captions = captions ?? [];
   }
 
-  factory FeedEntity.from(FetchFeedDto dto) {
+  factory FeedEntity.from(FetchFeedResDto dto) {
     return FeedEntity(
       id: dto.id,
       createdAt: DateTime.tryParse(dto.created_at),
