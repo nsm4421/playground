@@ -14,10 +14,17 @@ class ProfileFragment extends StatelessWidget {
             style: context.textTheme.titleMedium,
           ),
           trailing: IconButton(
-            onPressed: () {
-              // TODO : 프로필 수정
+            onPressed: () async {
+              // 프로필 수정 페이지로
+              context.read<HomeBottomNavCubit>().switchVisible(false);
+              await context.push(Routes.editProfile.path).whenComplete(() {
+                context.read<HomeBottomNavCubit>().switchVisible(true);
+              });
             },
-            icon: Icon(Icons.edit),
+            icon: Icon(
+              Icons.edit,
+              color: context.colorScheme.primary,
+            ),
           ),
         );
       },

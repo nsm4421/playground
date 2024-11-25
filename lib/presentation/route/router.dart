@@ -14,6 +14,7 @@ import 'package:travel/presentation/view/home/reels/create/index.dart';
 import 'package:travel/presentation/view/home/reels/index.dart';
 import 'package:travel/presentation/view/home/search/index.dart';
 import 'package:travel/presentation/view/home/setting/index.dart';
+import 'package:travel/presentation/view/home/setting/profile/index.dart';
 
 import 'util.dart';
 import 'routes.dart';
@@ -75,6 +76,13 @@ class CustomRouter with CustomLogger {
                               path: Routes.createReels.subPath ?? 'create',
                               builder: (context, state) =>
                                   const CreateReelsPage()),
+                        ],
+                      HomeBottomNavItem.setting => [
+                          GoRoute(
+                              path:
+                                  Routes.editProfile.subPath ?? 'edit-profile',
+                              builder: (context, state) =>
+                                  const EditProfilePage()),
                         ],
                       (_) => [],
                     },

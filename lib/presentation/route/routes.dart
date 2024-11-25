@@ -10,7 +10,9 @@ enum Routes {
   search('/home/search', subPath: 'search'),
   reels('/home/reels', subPath: 'reels'),
   createReels('/home/reels/create', subPath: 'create'),
-  setting('/home/setting', subPath: 'setting');
+  setting('/home/setting', subPath: 'setting'),
+  editProfile('/home/setting/edit-profile', subPath: 'edit-profile'),
+  ;
 
   final String path;
   final String? subPath;
