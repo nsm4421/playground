@@ -1,5 +1,6 @@
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:travel/core/constant/constant.dart';
 
 import '../../../core/util/logger/logger.dart';
 import '../../model/auth/auth_user.dart';

@@ -29,17 +29,13 @@ class AuthRepositoryImpl with CustomLogger implements AuthRepository {
       if (username == null && profileImage == null) {
         throw Exception('nothing to update');
       }
-      PresenceEntity? res;
-      res = await _authDataSource
-          .editProfile(username: username)
-          .then(PresenceEntity.from);
-      if (profileImage != null) {
-        res = await _authDataSource
-            .editProfile(
-                avatarUrl: await _uploadImageAndReturnPublicUrl(profileImage))
-            .then(PresenceEntity.from);
-      }
-      return Right(res);
+      final avatarUrl = profileImage == null
+          ? null
+          : await _uploadImageAndReturnPublicUrl(profileImage);
+      return await _authDataSource
+          .editProfile(username: username, avatarUrl: avatarUrl)
+          .then(PresenceEntity.from)
+          .then(Right.new);
     } on Exception catch (error) {
       logger.e(error);
       return Left(ErrorResponse.from(error));
@@ -94,6 +90,7 @@ class AuthRepositoryImpl with CustomLogger implements AuthRepository {
   }
 
   Future<String> _uploadImageAndReturnPublicUrl(File profileImage) async {
-    return await _storageDataSource.uploadAvatarAndReturnPublicUrl(profileImage);
+    return await _storageDataSource
+        .uploadAvatarAndReturnPublicUrl(profileImage);
   }
 }

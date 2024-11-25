@@ -13,6 +13,8 @@ part 'sign_up.dart';
 
 part 'sign_out.dart';
 
+part 'edit.dart';
+
 @lazySingleton
 class AuthUseCase {
   final AuthRepository _authRepository;
@@ -33,6 +35,9 @@ class AuthUseCase {
   @lazySingleton
   SignInWithEmailAndPasswordUseCase get signIn =>
       SignInWithEmailAndPasswordUseCase(_authRepository);
+
+  @lazySingleton
+  EditProfileUseCase get editProfile => EditProfileUseCase(_authRepository);
 
   @lazySingleton
   SignOutUseCase get signOut => SignOutUseCase(_authRepository);

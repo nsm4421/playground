@@ -67,14 +67,17 @@ class AuthDataSourceImpl with CustomLogger implements AuthDataSource {
   @override
   Future<AuthUserModel?> editProfile(
       {String? username, String? avatarUrl}) async {
-    // on_edit_profile이라는 RPC함수를 미리 선언
-    // auth.users 테이블이 수정되면, public.accounts도 수정됨
-    return await _supabaseClient.auth
+    final user = await _supabaseClient.auth
         .updateUser(UserAttributes(data: {
           if (username != null) 'username': username,
           if (avatarUrl != null) 'avatar_url': avatarUrl
         }))
         .then((res) => res.user)
         .then((user) => user == null ? null : AuthUserModel.from(user));
+    await _supabaseClient.rest.from('ACCOUNTS').update({
+      if (username != null) 'username': username,
+      if (avatarUrl != null) 'avatar_url': avatarUrl
+    }).eq('id', currentUid!);
+    return user;
   }
 }

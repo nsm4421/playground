@@ -1,7 +1,9 @@
 import 'package:injectable/injectable.dart';
+import 'package:travel/domain/entity/auth/presence.dart';
 import 'package:travel/domain/entity/feed/feed.dart';
 import 'package:travel/domain/entity/reels/reels.dart';
 import 'package:travel/domain/usecase/module.dart';
+import 'package:travel/presentation/bloc/auth/edit_profile/cubit.dart';
 import 'package:travel/presentation/bloc/auth/presence/bloc.dart';
 import 'package:travel/presentation/bloc/auth/sign_in/cubit.dart';
 import 'package:travel/presentation/bloc/auth/sign_up/cubit.dart';
@@ -30,6 +32,10 @@ class BlocModule {
 
   @lazySingleton
   AuthenticationBloc get auth => AuthenticationBloc(_useCase.auth);
+
+  @lazySingleton
+  EditProfileCubit editProfile(PresenceEntity currentUser) =>
+      EditProfileCubit(currentUser, useCase: _useCase.auth);
 
   /// nav
   @lazySingleton
