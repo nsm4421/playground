@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:travel/core/constant/constant.dart';
 import 'package:travel/data/model/error/error_response.dart';
 import 'package:travel/domain/entity/comment/comment.dart';
 import 'package:travel/domain/repository/repository.dart';

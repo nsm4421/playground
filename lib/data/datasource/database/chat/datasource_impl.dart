@@ -10,37 +10,49 @@ class PrivateChatDataSourceImpl
   String get _table => Tables.privateChats.name;
 
   @override
-  Future<void> create(
+  Future<String?> getChatId(String opponentId) async {
+    return await _supabaseClient.rest
+        .from(_table)
+        .select("id")
+        .eq("opponent_id", opponentId)
+        .eq("user_id", _supabaseClient.auth.currentUser!.id)
+        .not('deleted_at', '=', null)
+        .then((res) => res.isEmpty ? null : res.first['id']) as String?;
+  }
+
+  @override
+  Future<String> create(
       {required String chatId, required CreatePrivateChatDto dto}) async {
     return await _supabaseClient.rest.from(_table).insert({
       ...dto.toJson(),
       'id': chatId,
-      'user_id': _supabaseClient.auth.currentUser!.id,
       'created_at': now,
       'updated_at': now,
+      'last_seen': now,
       'deleted_at': null
-    });
+    }).then((_) => chatId);
   }
 
   @override
   Future<Iterable<FetchPrivateChatDto>> fetch(
       {required String beforeAt, int take = 20}) async {
     return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
-        // TODO : RPC 함수 구현하기
         RpcFns.fetchPrivateChats.name,
         params: {
           '_before_at': beforeAt,
           '_take': take,
-          '_id': _supabaseClient.auth.currentUser!.id
+          '_user_id': _supabaseClient.auth.currentUser!.id
         }).then((res) => res.map(FetchPrivateChatDto.fromJson));
   }
 
   @override
   Future<void> update(
-      {required String chatId, required String lastMessage}) async {
+      {required String chatId, String? lastMessage, String? lastSeen}) async {
+    assert((lastMessage != null) || (lastSeen != null));
     return await _supabaseClient.rest.from(_table).update({
-      'last_message': lastMessage,
+      if (lastMessage != null) 'last_message': lastMessage,
       'updated_at': now,
+      if (lastSeen != null) 'last_seen': lastSeen
     }).eq('id', chatId);
   }
 
@@ -48,7 +60,7 @@ class PrivateChatDataSourceImpl
   Future<void> delete(String chatId) async {
     return await _supabaseClient.rest
         .from(_table)
-        .update({'deleted_at': now}).eq('id', chatId);
+        .update({'deleted_at': now, 'updated_at': now}).eq('id', chatId);
   }
 }
 
@@ -63,10 +75,10 @@ class PrivateMessageDataSourceImpl
 
   @override
   Future<void> create(
-      {required String id, required CreatePrivateMessageDto dto}) async {
+      {required String messageId, required CreatePrivateMessageDto dto}) async {
     return await _supabaseClient.rest.from(_table).insert({
       ...dto.toJson(),
-      'id': id,
+      'id': messageId,
       'sender_id': _supabaseClient.auth.currentUser!.id,
       'created_at': now,
       'updated_at': now,
@@ -78,8 +90,7 @@ class PrivateMessageDataSourceImpl
   Future<Iterable<FetchPrivateMessageDto>> fetch(
       {required String beforeAt, required String chatId, int take = 20}) async {
     return await _supabaseClient.rpc<List<Map<String, dynamic>>>(
-        // TODO : RPC 함수 구현하기
-        RpcFns.fetchPrivateChats.name,
+        RpcFns.fetchPrivateMessages.name,
         params: {
           '_before_at': beforeAt,
           '_take': take,
@@ -91,6 +102,6 @@ class PrivateMessageDataSourceImpl
   Future<void> delete(String messageId) async {
     return await _supabaseClient.rest
         .from(_table)
-        .update({'deleted_at': now}).eq('id', messageId);
+        .update({'deleted_at': now, 'updated_at': now}).eq('id', messageId);
   }
 }

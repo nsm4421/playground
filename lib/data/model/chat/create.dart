@@ -9,8 +9,9 @@ part 'create.g.dart';
 @freezed
 class CreatePrivateChatDto with _$CreatePrivateChatDto {
   const factory CreatePrivateChatDto({
+    @Default('') String user_id,
     @Default('') String opponent_id,
-    @Default('') last_message,
+    String? last_message,
   }) = _CreatePrivateChatDto;
 
   factory CreatePrivateChatDto.fromJson(Map<String, dynamic> json) =>

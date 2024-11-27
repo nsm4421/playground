@@ -17,6 +17,8 @@ class FetchPrivateChatDto with _$FetchPrivateChatDto {
     @Default('') String created_at,
     @Default('') String updated_at,
     String? deleted_at,
+    @Default('') String last_seen,
+    @Default(0) int un_read_cnt,
   }) = _FetchPrivateChatDto;
 
   factory FetchPrivateChatDto.fromJson(Map<String, dynamic> json) =>

@@ -366,4 +366,132 @@ AS $$
     ) T4 ON T1.ID = T4.REFERENCE_ID
 ;
 $$
+
+-----------------------------------------------------
+
+CREATE OR REPLACE FUNCTION FETCH_PRIVATE_CHATS(
+    _BEFORE_AT TIMESTAMPTZ, 
+    _TAKE INT,
+    _USER_ID UUID
+)
+RETURNS TABLE(
+    ID UUID,
+    OPPONENT_ID UUID,
+    OPPONENT_USERNAME TEXT,
+    OPPONENT_AVATAR_URL TEXT,
+    LAST_MESSAGE TEXT,
+    CREATED_AT TIMESTAMPTZ,
+    UPDATED_AT TIMESTAMPTZ,
+    DELETED_AT TIMESTAMPTZ,
+    LAST_SEEN TIMESTAMPTZ,
+    UN_READ_CNT INT
+)
+LANGUAGE SQL
+AS $$
+    SELECT
+        T1.ID,
+        T1.OPPONENT_ID,
+        T2.USERNAME OPPONENT_USERNAME,
+        T2.AVATAR_URL OPPONENT_AVATAR_URL,
+        T1.LAST_MESSAGE,
+        T1.CREATED_AT,
+        T1.UPDATED_AT,
+        T1.DELETED_AT,
+        T1.LAST_SEEN,
+        T3.UN_READ_CNT UN_READ_CNT
+    FROM (
+        SELECT
+            ID,
+            USER_ID,
+            OPPONENT_ID,
+            LAST_MESSAGE,
+            CREATED_AT,
+            UPDATED_AT,
+            DELETED_AT,
+            LAST_SEEN
+        FROM
+            PUBLIC."PRIVATE_CHATS"
+        WHERE
+            CREATED_AT < _BEFORE_AT
+            AND DELETED_AT IS NULL
+            AND USER_ID = AUTH.UID()
+        ORDER BY CREATED_AT DESC
+        LIMIT(_TAKE)
+        ) T1
+    LEFT JOIN PUBLIC."ACCOUNTS" T2 
+        ON T1.USER_ID = T2.ID
+    LEFT JOIN (
+        SELECT
+            CHAT_ID,
+            COUNT(1) UN_READ_CNT
+        FROM PUBLIC."PRIVATE_MESSAGES"
+        WHERE 
+            CREATED_AT < _BEFORE_AT
+            AND DELETED_AT IS NOT NULL
+        GROUP BY CHAT_ID
+    ) T3 ON T1.ID = T3.CHAT_ID
+;
+$$
+
+-----------------------------------------------------
+
+CREATE OR REPLACE FUNCTION FETCH_PRIVATE_MESSAGES(
+    _BEFORE_AT TIMESTAMPTZ, 
+    _TAKE INT,
+    _CHAT_ID UUID
+)
+RETURNS TABLE(
+    ID UUID,
+    CHAT_ID UUID,
+    SENDER_ID UUID,
+    SENDER_USERNAME TEXT,
+    SENDER_AVATAR_URL TEXT,
+    RECEIVER_ID UUID,
+    RECEIVER_USERNAME TEXT,
+    RECEIVER_AVATAR_URL TEXT,
+    TYPE TEXT,
+    CONTENT TEXT,
+    CREATED_AT TIMESTAMPTZ,
+    DELETED_AT TIMESTAMPTZ
+)
+LANGUAGE SQL
+AS $$
+    SELECT
+        T1.ID,
+        T1.CHAT_ID,
+        T1.SENDER_ID,
+        T2.USERNAME SENDER_USERNAME,
+        T2.AVATAR_URL SENDER_AVATAR_URL,
+        T1.RECEIVER_ID,
+        T3.USERNAME RECEIVER_USERNAME,
+        T3.AVATAR_URL RECEIVER_AVATAR_URL,
+        T1.TYPE,
+        T1.CONTENT,
+        T1.CREATED_AT,
+        T1.DELETED_AT
+    FROM (
+        SELECT
+            ID,
+            CHAT_ID,
+            SENDER_ID,
+            RECEIVER_ID,
+            TYPE,
+            CONTENT,
+            CREATED_AT,
+            DELETED_AT
+        FROM
+            PUBLIC."PRIVATE_MESSAGES"
+        WHERE
+            CREATED_AT < _BEFORE_AT
+            AND CHAT_ID = _CHAT_ID
+            AND DELETED_AT IS NULL
+        ORDER BY CREATED_AT DESC
+        LIMIT(_TAKE)
+        ) T1
+    LEFT JOIN PUBLIC."ACCOUNTS" T2
+        ON T1.SENDER_ID = T2.ID
+    LEFT JOIN PUBLIC."ACCOUNTS" T3
+        ON T1.RECEIVER_ID = T3.ID
+;
+$$
 ```

@@ -7,20 +7,24 @@ import 'package:travel/data/model/chat/fetch.dart';
 part 'datasource_impl.dart';
 
 abstract class PrivateChatDataSource {
-  Future<void> create(
-      {required String chatId, required CreatePrivateChatDto dto});
+  Future<String?> getChatId(String opponentId);
 
-  Future<Iterable<FetchPrivateChatDto>> fetch({required String beforeAt, int take = 20});
+  Future<String> create(
+      {required String chatId,
+      required CreatePrivateChatDto dto});
+
+  Future<Iterable<FetchPrivateChatDto>> fetch(
+      {required String beforeAt, int take = 20});
 
   Future<void> update(
-      {required String chatId, required String lastMessage});
+      {required String chatId, String? lastMessage, String? lastSeen});
 
   Future<void> delete(String chatId);
 }
 
 abstract class PrivateMessageDataSource {
   Future<void> create(
-      {required String id, required CreatePrivateMessageDto dto});
+      {required String messageId, required CreatePrivateMessageDto dto});
 
   Future<Iterable<FetchPrivateMessageDto>> fetch(
       {required String beforeAt, required String chatId, int take = 20});
