@@ -2,6 +2,12 @@ server/node_modules
 server/package-lock.json
 server/dist
 
+pubspec.lock
+lib/*/*/export.**.dart
+lib/core/export.core.dart
+**.g.dart
+**.config.dart
+
 # Miscellaneous
 *.class
 *.log
