@@ -7,6 +7,7 @@ lib/*/*/export.**.dart
 lib/core/export.core.dart
 **.g.dart
 **.config.dart
+**.freezed.dart
 
 # Miscellaneous
 *.class
