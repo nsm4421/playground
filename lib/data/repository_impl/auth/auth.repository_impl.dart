@@ -24,8 +24,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
       }
       return Right(SuccessResponse(payload: UserEntity.from(fetched)));
     } catch (error) {
-      logger.e(error);
-      return Left(ErrorResponse.from(error));
+      return Left(ErrorResponse.from(error, logger: logger));
     }
   }
 
@@ -38,8 +37,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
       await _localDataSource.save(user);
       return Right(SuccessResponse(payload: UserEntity.from(user)));
     } catch (error) {
-      logger.e(error);
-      return Left(ErrorResponse.from(error));
+      return Left(ErrorResponse.from(error, logger: logger));
     }
   }
 
@@ -49,8 +47,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
       await _localDataSource.delete();
       return Right(SuccessResponse(payload: null));
     } catch (error) {
-      logger.e(error);
-      return Left(ErrorResponse.from(error));
+      return Left(ErrorResponse.from(error, logger: logger));
     }
   }
 
@@ -64,8 +61,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
           email: email, password: password, username: username);
       return Right(SuccessResponse(payload: null));
     } catch (error) {
-      logger.e(error);
-      return Left(ErrorResponse.from(error));
+      return Left(ErrorResponse.from(error, logger: logger));
     }
   }
 }

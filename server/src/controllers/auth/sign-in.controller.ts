@@ -68,6 +68,6 @@ export default async function onSignIn(
       },
     });
   } catch (error: any) {
-    handleError(error);
+    handleError({ error, res });
   }
 }

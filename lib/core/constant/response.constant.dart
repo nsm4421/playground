@@ -35,30 +35,43 @@ class ErrorResponse {
 
   ErrorResponse({required this.code, this.message = 'error', this.description});
 
-  factory ErrorResponse.from(Object error) {
+  factory ErrorResponse.from(Object error, {Logger? logger}) {
     if (error is DioException) {
       // On Dio Exception
       final errorData = error.response?.data;
-      final isParsable =
-          errorData is Map<String, dynamic> && errorData.containsKey('code');
-      final errorCode = isParsable
-          ? (StatusCode.values
-                  .where((item) => item.name == errorData['code'])
-                  .firstOrNull ??
-              StatusCode.internalServerError)
-          : StatusCode.internalServerError;
+      final parsedErrorCode =
+          (errorData is Map<String, dynamic> && errorData.containsKey('code'))
+              ? (StatusCode.values
+                      .where((item) => item.name == errorData['code'])
+                      .firstOrNull ??
+                  StatusCode.internalServerError)
+              : StatusCode.internalServerError;
+      final parsedErrorMessage = (errorData is Map<String, dynamic> &&
+              errorData.containsKey('message'))
+          ? (errorData['message'])
+          : error.message;
+      if (logger != null) {
+        logger.e(
+            '[CustomError]code:$parsedErrorCode|message:$parsedErrorMessage');
+      }
       return ErrorResponse(
-          code: errorCode,
-          message: error.message ?? 'server error occurs',
-          description: error.error.toString());
+          code: parsedErrorCode,
+          message: parsedErrorMessage ?? error.message,
+          description: error.message);
     } else if (error is Exception) {
       // On Client exception
+      if (logger != null) {
+        logger.e(error);
+      }
       return ErrorResponse(
           code: StatusCode.clientError,
           message: 'exception occurs',
           description: error.toString());
     } else {
       // On Client Error
+      if (logger != null) {
+        logger.e(error);
+      }
       return ErrorResponse(
           code: StatusCode.clientError,
           message: 'exception occurs',
