@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: dev_db_container
+    restart: always
+    environment:
+      POSTGRES_USER: karma
+      POSTGRES_PASSWORD: 1221
+      POSTGRES_DB: dev_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  postgres_data: {}
