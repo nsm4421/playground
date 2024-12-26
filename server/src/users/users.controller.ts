@@ -34,10 +34,12 @@ export class UsersController {
     @Body() dto: SignInReqDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const jwt = await this.userService.signIn(dto);
-    response.cookie('jwt', jwt, { httpOnly: true });
+    const res = await this.userService.signIn(dto);
+    response.cookie('jwt', res.jwt, { httpOnly: true });
+    const { jwt, ...payload } = res;
     return {
       message: 'sign-in success',
+      payload,
     };
   }
 

@@ -5,11 +5,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
   final AuthUseCase _useCase;
 
   late Stream<UserEntity?> _authStream;
-  bool _authenticated = false;
 
   Stream<UserEntity?> get authStream => _authStream;
-
-  bool get authenticated => _authenticated;
 
   AuthBloc(this._useCase) : super(AuthState()) {
     on<InitEvent>(_onInit);
@@ -17,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     on<SignUpEvent>(_onSignUp);
     on<SignInEvent>(_onSignIn);
     on<SignOutEvent>(_onSignOut);
+    _authStream = _useCase.authStream;
   }
 
   @override
@@ -40,8 +38,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'Fails'));
-    } finally {
-      _authenticated = state.user != null;
     }
   }
 
@@ -79,8 +75,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'Sign In Fails'));
-    } finally {
-      _authenticated = state.user != null;
     }
   }
 
@@ -91,13 +85,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
           (l) => emit(state.copyWith(status: Status.error, message: l.message)),
           (r) => emit(state
               .copyWith(
-                  status: Status.success, message: 'Sign Out Successfullly')
+                  status: Status.initial, message: 'Sign Out Successfully')
               .copyWithUser(null))));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'Sign Out Fails'));
-    } finally {
-      _authenticated = state.user != null;
     }
   }
 }

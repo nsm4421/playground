@@ -11,19 +11,28 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> signIn(
       {required String email, required String password}) async {
-    return await _dio
-        .post(
-          ApiEndPoint.signIn,
-          data: SignInReqDto(
-            email: email,
-            password: password,
-          ).toJson(),
-        )
-        .then((res) => SignInSuccessResDto.fromJson(res.data))
-        .then((dto) {
-      _logger.d(dto);
-      return dto.payload;
-    });
+    // sign in request
+    final res = await _dio.post(
+      ApiEndPoint.signIn,
+      data: {"email": email, "password": password},
+    );
+
+    // parse jwt from cookie
+    final cookies = res.headers.map['set-cookie'];
+    if (cookies == null) {
+      throw CustomException(
+          code: StatusCode.invalidCrendential, message: 'cookie not found');
+    }
+    final token =
+        cookies.firstWhere((item) => item.startsWith("jwt="), orElse: () => '');
+    if (token.isEmpty) {
+      throw CustomException(
+          code: StatusCode.invalidCrendential,
+          message: 'jwt not found in cookie');
+    }
+
+    final payload = SignInSuccessResDto.fromJson(res.data).payload;
+    return UserModel.from(dto: payload, token: token);
   }
 
   @override

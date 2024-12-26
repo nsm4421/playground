@@ -5,7 +5,7 @@ abstract class AuthLocalDataSource {
 
   Future<UserModel?> get();
 
-  Future<void> save(UserModel model);
+  Future<void> save(UserModel user);
 
   Future<void> delete();
 }
@@ -16,5 +16,6 @@ abstract class AuthRemoteDataSource {
       required String password,
       required String username});
 
-  Future<UserModel> signIn({required String email, required String password});
+  Future<UserModel> signIn(
+      {required String email, required String password});
 }

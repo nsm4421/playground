@@ -58,22 +58,28 @@ export class UsersService {
    * 로그인
    * @param email
    * @param password
-   * @returns jwt
+   * @returns id, username, email, jwt
    */
-  async signIn({ email, password }: SignInProps): Promise<string> {
+  async signIn({ email, password: rawPassword }: SignInProps) {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) {
       throw new BadRequestException('Invalid Crendential');
     }
 
-    const isPasswordMatch = await compare(password, user.password);
+    const isPasswordMatch = await compare(rawPassword, user.password);
     if (!isPasswordMatch) {
       throw new BadRequestException('Invalid Crendential');
     }
 
-    return await this.jwtService.signAsync({
+    const jwt = await this.jwtService.signAsync({
       id: user.id,
     });
+
+    const { password, ...res } = user;
+    return {
+      ...res,
+      jwt,
+    };
   }
 
   /**

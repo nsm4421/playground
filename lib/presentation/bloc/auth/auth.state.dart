@@ -7,6 +7,8 @@ class AuthState {
 
   AuthState({this.status = Status.initial, this.user, this.message = ''});
 
+  bool get isAuth => user != null;
+
   AuthState copyWith({Status? status, String? message}) {
     return AuthState(
         status: status ?? this.status, message: message ?? this.message);

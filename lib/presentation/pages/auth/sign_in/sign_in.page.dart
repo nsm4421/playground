@@ -11,12 +11,7 @@ class SignInPage extends StatelessWidget {
       listenWhen: (prev, curr) =>
           (curr.status == Status.success) || (curr.status == Status.error),
       listener: (context, state) {
-        if (state.status == Status.success) {
-          Timer(_duration, () {
-            context.read<AuthBloc>().add(InitEvent(status: Status.initial));
-            context.replace(Routes.home.path);
-          });
-        } else if (state.status == Status.error) {
+        if (state.status == Status.error) {
           Timer(_duration, () {
             context.read<AuthBloc>().add(InitEvent(status: Status.initial));
             // TODO : 에러 메세지 띄우기
