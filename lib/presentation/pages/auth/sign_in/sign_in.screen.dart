@@ -8,17 +8,17 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  static const _maxEmailLength = 30;
-  static const _maxPasswordLength = 30;
+  static const _maxUsernameLength = 50;
+  static const _maxPasswordLength = 50;
 
-  late TextEditingController _emailController;
+  late TextEditingController _usernameController;
   late TextEditingController _passwordController;
   late GlobalKey<FormState> _formKey;
 
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
+    _usernameController = TextEditingController();
     _passwordController = TextEditingController();
     _formKey = GlobalKey<FormState>();
   }
@@ -26,34 +26,39 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     super.dispose();
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
   }
 
-  String? _handleValidateEmail(String? text) {
+  String? _handleValidateUsername(String? text) {
     if (text == null || text.isEmpty) {
-      return "Email is not given";
+      return "Username is not given";
+    } else if (text.length > _maxUsernameLength) {
+      return "Too long username";
     }
-    // TODO : 이메일 검사
+    // TODO : 유저명 검사
     return null;
   }
 
   String? _handleValidatePassword(String? text) {
     if (text == null || text.isEmpty) {
       return "Password is not given";
+    } else if (text.length > _maxPasswordLength) {
+      return "Too long username";
     }
     // TODO : 패스워드 검사
     return null;
   }
 
   _handleSignIn() async {
+    _formKey.currentState?.save();
     final ok = _formKey.currentState?.validate();
     if (ok == null || !ok) {
       log('input is not valid');
       return;
     }
     context.read<AuthBloc>().add(SignInEvent(
-        email: _emailController.text.trim(),
+        username: _usernameController.text.trim(),
         password: _passwordController.text.trim()));
   }
 
@@ -72,13 +77,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    controller: _emailController,
-                    maxLength: _maxEmailLength,
-                    validator: _handleValidateEmail,
+                    controller: _usernameController,
+                    maxLength: _maxUsernameLength,
+                    validator: _handleValidateUsername,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Email(~$_maxEmailLength character)',
-                        prefixIcon: Icon(Icons.email_outlined),
+                        hintText: 'Username(~$_maxUsernameLength character)',
+                        prefixIcon: Icon(Icons.account_box_outlined),
                         counterText: ''),
                   ),
                 ),

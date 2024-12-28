@@ -17,27 +17,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     _authStream = _useCase.authStream;
   }
 
-  @override
-  Future<void> close() async {
-    await _useCase.signOut.call(); // auth bloc이 닫힐 때 자동으로 로그아웃
-    await super.close();
-  }
-
   Future<void> _onInit(InitEvent event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: event.status, message: event.message));
   }
 
   Future<void> _onGetUser(GetUserEvent event, Emitter<AuthState> emit) async {
     try {
+      emit(state.copyWith(status: Status.loading));
       await _useCase.getUser.call().then((res) => res.fold(
-          (l) => emit(state.copyWith(status: Status.error, message: l.message)),
+          (l) => emit(state.copyWith(
+              status: event.isOnMount ? Status.initial : Status.error,
+              message: l.message)),
           (r) => emit(state
-              .copyWith(
-                  status: Status.success, message: 'Getting User Succcess')
+              .copyWith(status: Status.initial, message: 'Getting User Success')
               .copyWithUser(r.payload))));
     } catch (error) {
       logger.e(error);
-      emit(state.copyWith(status: Status.error, message: 'Fails'));
+      emit(state.copyWith(
+          status: event.isOnMount ? Status.initial : Status.error,
+          message: 'Fails'));
     }
   }
 
@@ -48,7 +46,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
           .call(
               email: event.email,
               password: event.password,
-              username: event.username)
+              username: event.username,
+              nickname: event.nickname)
           .then((res) => res.fold(
               (l) => emit(
                   state.copyWith(status: Status.error, message: l.message)),
@@ -64,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     try {
       emit(state.copyWith(status: Status.loading));
       await _useCase.signIn
-          .call(email: event.email, password: event.password)
+          .call(username: event.username, password: event.password)
           .then((res) => res.fold(
               (l) => emit(
                   state.copyWith(status: Status.error, message: l.message)),

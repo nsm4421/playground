@@ -8,8 +8,7 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
-      listenWhen: (prev, curr) =>
-          (curr.status == Status.success) || (curr.status == Status.error),
+      listenWhen: (prev, curr) => (curr.status == Status.error),
       listener: (context, state) {
         if (state.status == Status.error) {
           Timer(_duration, () {

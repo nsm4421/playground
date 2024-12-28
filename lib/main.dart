@@ -4,8 +4,6 @@ import 'package:my_app/core/di/dependency_injection.dart';
 import 'package:my_app/presentation/bloc/export.bloc.dart';
 import 'package:my_app/presentation/router/router.dart';
 
-import 'presentation/pages/export.pages.dart';
-
 void main() async {
   configureDependencies(); // dependency injection
 
@@ -18,9 +16,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthBloc>()..add(InitEvent()),
+      create: (_) => getIt<AuthBloc>()..add(GetUserEvent(isOnMount: true)),
       child: MaterialApp.router(
-        routerConfig: routerConfig,
+        routerConfig: getIt<CustomRouter>().config,
         title: 'FullStackApp',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
