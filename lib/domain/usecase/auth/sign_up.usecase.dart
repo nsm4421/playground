@@ -8,8 +8,12 @@ class SignUpUseCase {
   Future<Either<ErrorResponse, SuccessResponse<void>>> call(
       {required String email,
       required String password,
-      required String username}) async {
+      required String username,
+      required String nickname}) async {
     return await _repository.signUp(
-        email: email, password: password, username: username);
+        email: email,
+        password: password,
+        username: username,
+        nickname: nickname);
   }
 }

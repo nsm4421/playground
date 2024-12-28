@@ -6,6 +6,6 @@ class GetUserUseCase {
   GetUserUseCase(this._repository);
 
   Future<Either<ErrorResponse, SuccessResponse<UserEntity>>> call() async {
-    return await _repository.getUser();
+    return await _repository.getCurrentUser();
   }
 }

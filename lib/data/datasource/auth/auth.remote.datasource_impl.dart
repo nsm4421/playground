@@ -9,43 +9,47 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         _logger = logger;
 
   @override
-  Future<UserModel> signIn(
-      {required String email, required String password}) async {
-    // sign in request
+  Future<String> signIn(
+      {required String username, required String password}) async {
     final res = await _dio.post(
       ApiEndPoint.signIn,
-      data: {"email": email, "password": password},
-    );
-
-    // parse jwt from cookie
-    final cookies = res.headers.map['set-cookie'];
-    if (cookies == null) {
-      throw CustomException(
-          code: StatusCode.invalidCrendential, message: 'cookie not found');
-    }
-    final token =
-        cookies.firstWhere((item) => item.startsWith("jwt="), orElse: () => '');
-    if (token.isEmpty) {
-      throw CustomException(
-          code: StatusCode.invalidCrendential,
-          message: 'jwt not found in cookie');
-    }
-
-    final payload = SignInSuccessResDto.fromJson(res.data).payload;
-    return UserModel.from(dto: payload, token: token);
+      data: {"username": username, "password": password},
+    ).then((res) => SignInSuccessResDto.fromJson(res.data));
+    _logger.d(res.message);
+    return res.payload.access_token;
   }
 
   @override
-  Future<void> signUp(
-      {required String email,
-      required String password,
-      required String username}) async {
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String username,
+    required String nickname,
+  }) async {
     await _dio.post(ApiEndPoint.signUp, data: {
       "email": email,
       "password": password,
-      "username": username
+      "username": username,
+      "nickname": nickname,
     }).then((res) {
       _logger.d(res.data);
     });
+  }
+
+  @override
+  Future<UserModel> getUser(String accessToken) async {
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        options.headers['Authorization'] = 'Bearer $accessToken';
+        return handler.next(options);
+      },
+      onError: (DioError e, handler) {
+        _dio.options.headers['Authorization'] = '';
+        return handler.next(e);
+      },
+    ));
+    return await _dio
+        .get(ApiEndPoint.getUser)
+        .then((res) => GetUserDto.fromJson(res.data).payload);
   }
 }

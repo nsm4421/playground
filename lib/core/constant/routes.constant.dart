@@ -5,6 +5,8 @@ enum Routes {
   signIn('/auth/sign-in', subPath: 'sign-in'),
   signUp('/auth/sign-up', subPath: 'sign-up'),
   home('/home'),
+  chat('/chat'),
+  chatRoom('/chat/room' , subPath: 'room'),
   ;
 
   final String path;

@@ -1,21 +1,24 @@
 part of '../export.datasource.dart';
 
-abstract class AuthLocalDataSource {
-  Stream<UserModel?> get authStream;
+abstract interface class AuthLocalDataSource {
+  Stream<String?> get tokenStream;
 
-  Future<UserModel?> get();
+  Future<String?> getToken();
 
-  Future<void> save(UserModel user);
+  Future<void> saveToken(String accessToken);
 
-  Future<void> delete();
+  Future<void> deleteToken();
 }
 
-abstract class AuthRemoteDataSource {
-  Future<void> signUp(
-      {required String email,
-      required String password,
-      required String username});
+abstract interface class AuthRemoteDataSource {
+  Future<void> signUp({
+    required String email,
+    required String username,
+    required String password,
+    required String nickname,
+  });
 
-  Future<UserModel> signIn(
-      {required String email, required String password});
+  Future<String> signIn({required String username, required String password});
+
+  Future<UserModel> getUser(String accessToken);
 }
