@@ -59,13 +59,21 @@ class CustomRouter {
             path: Routes.home.path,
             builder: (context, state) => const HomePage()),
         GoRoute(
+            path: Routes.feed.path,
+            builder: (context, state) => const DisplayFeedPage(),
+            routes: [
+              GoRoute(
+                  path: Routes.createFeed.subPath!,
+                  builder: (context, state) => const CreateFeedPage())
+            ]),
+        GoRoute(
             path: Routes.chat.path,
             builder: (context, state) => const ChatPage(),
             routes: [
               GoRoute(
                   path: Routes.chatRoom.subPath ?? 'room',
                   builder: (context, state) {
-                    return ChatRoomPage(chatId: 'test');
+                    return const ChatRoomPage(chatId: 'test');
                   }),
             ])
       ];
@@ -76,10 +84,7 @@ class CustomRouter {
       initialLocation: _initialLocation,
       redirect: _redirect,
       refreshListenable: _isAuth,
-      routes: [
-        _unAuthenticatedRouter,
-        ..._authenticatedRouters
-      ],
+      routes: [_unAuthenticatedRouter, ..._authenticatedRouters],
     );
   }
 }
