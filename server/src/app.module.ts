@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entity/user.entity';
+import { FeedModule } from './feed/feed.module';
+import { StorageService } from './storage/storage.service';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { User } from './auth/entity/user.entity';
       entities: [User],
     }),
     AuthModule,
+    FeedModule,
+    StorageModule,
   ],
+  providers: [StorageService],
 })
 export class AppModule {}

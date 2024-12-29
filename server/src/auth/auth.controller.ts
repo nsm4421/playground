@@ -10,7 +10,6 @@ import {
 import { AuthService } from './auth.service';
 import { SignUpReqDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from './guard/local.guard';
-import { JwtStrategy } from './strategy/jwt.strategy';
 import { JwtAuthGuard } from './guard/jwt.guard';
 
 @Controller('api/auth')
@@ -42,7 +41,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async currentUser(@Request() request) {
-    const id = request.user.id;
+    const id = request.user.sub;
     return {
       message: 'fetching current user info success',
       payload: {
