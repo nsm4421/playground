@@ -16,4 +16,8 @@ abstract class DataSource with LoggerUtil {
   @lazySingleton
   AuthRemoteDataSource get authRemote =>
       AuthRemoteDataSourceImpl(dio: _dio, logger: logger);
+
+  @lazySingleton
+  FeedRemoteDataSource get feedRemote =>
+      FeedRemoteDataSourceImpl(dio: _dio, logger: logger);
 }
