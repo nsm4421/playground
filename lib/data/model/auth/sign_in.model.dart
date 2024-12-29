@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/data/model/auth/get_user.model.dart';
 
 part 'sign_in.model.freezed.dart';
 

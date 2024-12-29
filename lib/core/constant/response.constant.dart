@@ -7,10 +7,10 @@ enum ErrorType {
 
 enum StatusCode {
   success("SUCCESS", null),
-  invalidParams("INAVLID_PARAMETER", ErrorType.server),
+  invalidParams("INVALID_PARAMETER", ErrorType.server),
   duplicated("DUPLICATED_ENTITY", ErrorType.server),
   notFound("NOT_FOUND", ErrorType.server),
-  invalidCrendential("INVALID_CREDENTIAL", ErrorType.server),
+  invalidCredential("INVALID_CREDENTIAL", ErrorType.server),
   internalServerError("INTERNAL_SERVER_ERROR", ErrorType.server),
   clientError("CLIENT_ERROR", ErrorType.client);
 

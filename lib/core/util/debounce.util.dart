@@ -6,7 +6,11 @@ mixin class DebounceMixIn {
   Timer? _timer;
 
   void debounce(VoidCallback callback) {
-    if (_timer?.isActive ?? false) _timer?.cancel();
+    if (_timer?.isActive ?? false) cancelTimer();
     _timer = Timer(_debounceDuration, callback);
+  }
+
+  cancelTimer(){
+    _timer?.cancel();
   }
 }
