@@ -14,8 +14,8 @@ import {
 } from '@nestjs/common';
 import { FeedService } from './feed.service';
 import { CreateFeedDto, ModifyFeedDto } from './dto/edit-feed.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { genMultiFileMulterOption } from 'src/utils/upload.util';
 
 @Controller('api/feed')
 @UseGuards(JwtAuthGuard)
@@ -32,7 +32,13 @@ export class FeedController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('files'))
+  @UseInterceptors(
+    genMultiFileMulterOption({
+      fileKey: 'files',
+      destination: './upload/feed',
+      maxFileNum: 5,
+    }),
+  )
   async create(
     @Body() { content, hashtags }: CreateFeedDto,
     @Request() request,
@@ -43,14 +49,22 @@ export class FeedController {
       payload: await this.feedService.create({
         content,
         hashtags: hashtags.split('|'),
-        files: files ?? [],
+        images: files
+          ? files.map((file) => `/upload/feed/${file.filename}`)
+          : [],
         createdBy: request.user.sub,
       }),
     };
   }
 
   @Put()
-  @UseInterceptors(FileInterceptor('files'))
+  @UseInterceptors(
+    genMultiFileMulterOption({
+      fileKey: 'files',
+      destination: './upload/feed',
+      maxFileNum: 5,
+    }),
+  )
   async modify(
     @Body() { id, content, hashtags }: ModifyFeedDto,
     @Request() request,
@@ -62,7 +76,9 @@ export class FeedController {
         id,
         content,
         hashtags: hashtags.split('|'),
-        files: files ?? [],
+        images: files
+          ? files.map((file) => `/upload/feed/${file.filename}`)
+          : [],
         createdBy: request.user.sub,
       }),
     };

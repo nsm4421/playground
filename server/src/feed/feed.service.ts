@@ -6,7 +6,6 @@ import {
 import { LessThan, Repository } from 'typeorm';
 import { Feed } from './entity/feed.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StorageService } from 'src/storage/storage.service';
 import { fetchWithPagination } from 'src/utils/pageable.util';
 
 interface FetchProps {
@@ -18,7 +17,7 @@ interface FetchProps {
 interface CreateProps {
   content: string;
   hashtags: string[];
-  files: Express.Multer.File[];
+  images: string[];
   createdBy: string;
 }
 
@@ -31,7 +30,6 @@ export class FeedService {
   constructor(
     @InjectRepository(Feed)
     private readonly feedRepository: Repository<Feed>,
-    private readonly storageService: StorageService,
   ) {}
 
   async fetch({ page, pageSize, lastId }: FetchProps) {
@@ -48,16 +46,16 @@ export class FeedService {
     });
   }
 
-  async create({ content, hashtags, files, createdBy }: CreateProps) {
+  async create({ content, hashtags, images, createdBy }: CreateProps) {
     return await this.feedRepository.save({
       content,
       hashtags,
-      images: files ? await this.saveImagesAndReturnPaths(files) : [],
+      images,
       author: { id: createdBy },
     });
   }
 
-  async modify({ id, content, hashtags, files, createdBy }: EditProps) {
+  async modify({ id, content, hashtags, images, createdBy }: EditProps) {
     const feed = await this.feedRepository.findOneBy({ id });
     if (feed.author.id !== createdBy) {
       throw new BadRequestException('can modify only own data');
@@ -66,23 +64,11 @@ export class FeedService {
     }
     feed.content = content;
     feed.hashtags = hashtags;
-    feed.images = files ? await this.saveImagesAndReturnPaths(files) : [];
+    feed.images = images;
     return await this.feedRepository.save(feed);
   }
 
   async delete({ id }) {
     return await this.feedRepository.softDelete({ id });
-  }
-
-  private async saveImagesAndReturnPaths(files: Express.Multer.File[]) {
-    console.debug(files);
-    const imagePaths: string[] = [];
-    if (files.length > 0) {
-      for (const f of files) {
-        const path = await this.storageService.handleUploadedFile(f);
-        imagePaths.push(path);
-      }
-    }
-    return imagePaths;
   }
 }
