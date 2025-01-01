@@ -7,7 +7,7 @@ class CreateFeedScreen extends StatefulWidget {
   State<CreateFeedScreen> createState() => _CreateFeedScreenState();
 }
 
-class _CreateFeedScreenState extends State<CreateFeedScreen> {
+class _CreateFeedScreenState extends State<CreateFeedScreen> with ImageUtil {
   static const int _contentMaxLength = 1000;
   static const int _hashtagMaxLength = 30;
 
@@ -16,6 +16,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   late GlobalKey<FormState> _contentFormKey;
   late GlobalKey<FormState> _hashtagFormKey;
 
+  List<XFile> _images = [];
   List<String> _hashtags = [];
 
   static const int _maxHashtagNum = 5;
@@ -65,7 +66,15 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     });
   }
 
-  _handleSubmit() {
+  _handleSelectImages() async {
+    await onSelectMultiImage((data) async {
+      setState(() {
+        _images = data.toList();
+      });
+    });
+  }
+
+  _handleSubmit() async {
     _contentFormKey.currentState?.save();
     final ok = _contentFormKey.currentState?.validate();
     if (ok == null || !ok) {
@@ -75,7 +84,10 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     context.read<CreateFeedCubit>().submit(
         content: _contentController.text.trim(),
         hashtags: _hashtags,
-        files: [] // TODO : 파일선택 기능
+        files: _images
+            .map((item) => item.path)
+            .map(File.new)
+            .toList() // TODO : 파일선택 기능
         );
   }
 
@@ -88,6 +100,14 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            ElevatedButton(
+                onPressed: _handleSelectImages, child: Text("Select")),
+            ..._images.map((item) => Image.file(
+                  File(item!.path),
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.cover,
+                )),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               child: Form(

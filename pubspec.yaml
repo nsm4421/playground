@@ -50,6 +50,8 @@ dependencies:
   freezed: ^2.5.2
   either_dart: ^1.0.0
   bloc: ^8.1.4
+  image_picker: ^1.1.2
+  flutter_image_compress: ^2.3.0
 
 dev_dependencies:
   flutter_test:

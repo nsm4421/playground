@@ -20,7 +20,7 @@ class CreateFeedDto with _$CreateFeedDto {
 extension CreateFeedDtoExtension on CreateFeedDto {
   FormData toFormData({List<MultipartFile>? multiPartFile}) =>
       FormData.fromMap({
-        'file': multiPartFile ?? [],
+        'files': multiPartFile ?? [],
         'content': content,
         'hashtags': hashtags.join('|')
       });
@@ -42,7 +42,7 @@ extension ModifyFeedDtoExtension on ModifyFeedDto {
   FormData toFormData({List<MultipartFile>? multiPartFile}) =>
       FormData.fromMap({
         'id': id,
-        'file': multiPartFile ?? [],
+        'files': multiPartFile ?? [],
         'content': content,
         'hashtags': hashtags.join('|')
       });
