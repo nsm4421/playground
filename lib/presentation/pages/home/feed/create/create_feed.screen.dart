@@ -1,5 +1,15 @@
 part of '../../../export.pages.dart';
 
+enum CreateFeedStep {
+  selectMedia(iconData: Icons.enhance_photo_translate_outlined),
+  editContent(iconData: Icons.edit_outlined),
+  editMeta(iconData: Icons.tag);
+
+  final IconData iconData;
+
+  const CreateFeedStep({required this.iconData});
+}
+
 class CreateFeedScreen extends StatefulWidget {
   const CreateFeedScreen({super.key});
 
@@ -7,163 +17,86 @@ class CreateFeedScreen extends StatefulWidget {
   State<CreateFeedScreen> createState() => _CreateFeedScreenState();
 }
 
-class _CreateFeedScreenState extends State<CreateFeedScreen> with ImageUtil {
-  static const int _contentMaxLength = 1000;
-  static const int _hashtagMaxLength = 30;
-
-  late TextEditingController _contentController;
-  late TextEditingController _hashtagController;
-  late GlobalKey<FormState> _contentFormKey;
-  late GlobalKey<FormState> _hashtagFormKey;
-
-  List<XFile> _images = [];
-  List<String> _hashtags = [];
-
-  static const int _maxHashtagNum = 5;
+class _CreateFeedScreenState extends State<CreateFeedScreen> {
+  static const double _stepBarHeight = 80;
+  late PageController _controller;
+  late CreateFeedStep _currentStep;
 
   @override
   void initState() {
     super.initState();
-    _contentController = TextEditingController();
-    _hashtagController = TextEditingController();
-    _contentFormKey = GlobalKey<FormState>(debugLabel: 'content key');
-    _hashtagFormKey = GlobalKey<FormState>(debugLabel: 'hashtag key');
+    _controller = PageController();
+    _currentStep = CreateFeedStep.values.first;
   }
 
   @override
   void dispose() {
     super.dispose();
-    _contentController.dispose();
-    _hashtagController.dispose();
+    _controller.dispose();
   }
 
-  String? _handleValidateContent(String? text) {
-    if (text == null || text.isEmpty) {
-      return 'text is not given';
-    }
-    return null;
-  }
-
-  String? _handleValidateHashtag(String? text) {
-    // TODO : 특수문자 못쓰게 막기
-    if (text == null || text.isEmpty) {
-      return 'hashtag is not given';
-    } else if (_hashtags.length >= _maxHashtagNum) {
-      return 'too many hashtag';
-    } else {
-      return null;
-    }
-  }
-
-  _handleAddHashtag() {
-    _hashtagFormKey.currentState?.save();
-    final ok = _hashtagFormKey.currentState?.validate();
-    if (ok == null || !ok) {
-      return;
-    }
+  _onTapStepper(int index) async {
     setState(() {
-      _hashtags.add(_hashtagController.text.trim());
+      _currentStep = CreateFeedStep.values[index];
     });
+    await _controller.animateToPage(index,
+        duration: 500.ms, curve: Curves.easeInSine);
   }
 
-  _handleSelectImages() async {
-    await onSelectMultiImage((data) async {
-      setState(() {
-        _images = data.toList();
-      });
-    });
-  }
-
-  _handleSubmit() async {
-    _contentFormKey.currentState?.save();
-    final ok = _contentFormKey.currentState?.validate();
-    if (ok == null || !ok) {
-      return;
-    }
-    FocusScope.of(context).unfocus();
-    context.read<CreateFeedCubit>().submit(
-        content: _contentController.text.trim(),
-        hashtags: _hashtags,
-        files: _images
-            .map((item) => item.path)
-            .map(File.new)
-            .toList() // TODO : 파일선택 기능
-        );
+  _handleGoBack() {
+    context.pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Feed"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ElevatedButton(
-                onPressed: _handleSelectImages, child: Text("Select")),
-            ..._images.map((item) => Image.file(
-                  File(item!.path),
-                  width: 300,
-                  height: 300,
-                  fit: BoxFit.cover,
-                )),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-              child: Form(
-                key: _contentFormKey,
-                child: TextFormField(
-                  controller: _contentController,
-                  validator: _handleValidateContent,
-                  maxLength: _contentMaxLength,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText:
-                          "content on here(max $_contentMaxLength characters)",
-                      labelText: "CONTENT"),
-                ),
-              ),
+        leading:
+            IconButton(onPressed: _handleGoBack, icon: const Icon(Icons.clear)),
+        title: const Text('Create Feed'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(_stepBarHeight),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 80),
+            child: Stepper(
+              type: StepperType.horizontal,
+              currentStep: _currentStep.index,
+              onStepTapped: (index) {
+                _onTapStepper(index);
+              },
+              controlsBuilder: (context, details) => const SizedBox.shrink(),
+              steps: List.generate(CreateFeedStep.values.length, (index) {
+                final item = CreateFeedStep.values[index];
+
+                return Step(
+                    title: _currentStep.index == index
+                        ? Icon(item.iconData,
+                            color: context.colorScheme.primary)
+                        : const SizedBox.shrink(),
+                    content: const SizedBox.shrink(),
+                    isActive: _currentStep.index == index,
+                    state: _currentStep.index > index
+                        ? StepState.complete
+                        : StepState.indexed);
+              }).toList(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-              child: Form(
-                key: _hashtagFormKey,
-                child: TextFormField(
-                  controller: _hashtagController,
-                  validator: _handleValidateHashtag,
-                  maxLength: _hashtagMaxLength,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText:
-                          "content on here(max $_hashtagMaxLength characters)",
-                      labelText: "HASHTAG",
-                      suffixIcon: IconButton(
-                          onPressed: _handleAddHashtag, icon: Icon(Icons.add))),
-                ),
-              ),
-            ),
-            Wrap(
-              children: _hashtags
-                  .map((item) => Container(
-                        margin: const EdgeInsets.only(right: 12, top: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.tag),
-                            8.width,
-                            Text(item),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            ),
-            ElevatedButton(
-                onPressed: _handleSubmit, child: const Text("Submit"))
-          ],
+          ),
         ),
       ),
+      body: PageView.builder(
+          controller: _controller,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: CreateFeedStep.values.length,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return const SelectImageFragment();
+              case 1:
+                return const EditContentFragment();
+              default:
+                return const EditMetaDataFragment();
+            }
+          }),
     );
   }
 }
