@@ -1,22 +1,33 @@
 part of '../export.bloc.dart';
 
-@lazySingleton
-class CreateFeedCubit extends SimpleCubit with LoggerUtil {
+@injectable
+class CreateFeedCubit extends Cubit<EditFeedState> with LoggerUtil {
   final FeedUseCase _useCase;
 
-  CreateFeedCubit(this._useCase) : super();
+  CreateFeedCubit(this._useCase) : super(EditFeedState());
 
-  Future<void> submit(
-      {required String content,
-      required List<String> hashtags,
-      required List<File> files}) async {
+  initState({Status? status, String? errorMessage}) {
+    emit(state.copyWith(status: status, errorMessage: errorMessage));
+  }
+
+  updateContent(String content) => emit(state.copyWith(content: content));
+
+  updateFiles(List<File> files) => emit(state.copyWith(files: files));
+
+  updateHashtags(List<String> hashtags) =>
+      emit(state.copyWith(hashtags: hashtags));
+
+  Future<void> submit() async {
+    if (!state.canSubmit) {
+      return;
+    }
     try {
       emit(state.copyWith(status: Status.loading));
       await _useCase
           .createFeed(
-            content: content,
-            hashtags: hashtags,
-            files: files,
+            content: state.content,
+            hashtags: state.hashtags,
+            files: state.files,
           )
           .then((res) => res.fold(
               (l) => emit(state.copyWith(
@@ -40,18 +51,18 @@ class ModifyFeedCubit extends CreateFeedCubit {
       : super(useCase);
 
   @override
-  Future<void> submit(
-      {required String content,
-      required List<String> hashtags,
-      required List<File> files}) async {
+  Future<void> submit() async {
     try {
+      if (!state.canSubmit) {
+        return;
+      }
       emit(state.copyWith(status: Status.loading));
       await _useCase
           .modifyFeed(
             id: _id,
-            content: content,
-            hashtags: hashtags,
-            files: files,
+            content: state.content,
+            hashtags: state.hashtags,
+            files: state.files,
           )
           .then((res) => res.fold(
               (l) => emit(state.copyWith(
