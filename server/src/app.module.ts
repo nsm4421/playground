@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entity/user.entity';
 import { FeedModule } from './feed/feed.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FeedModule } from './feed/feed.module';
     }),
     AuthModule,
     FeedModule,
+    ChatModule,
   ],
   providers: [],
 })
