@@ -52,7 +52,7 @@ class _EditMetaDataFragmentState extends State<EditMetaDataFragment> {
     context.read<CreateFeedCubit>().updateHashtags(_hashtags);
   }
 
-  _handleDeleteHashtag(int index) => () {
+  void Function() _handleDeleteHashtag(int index) => () {
         setState(() {
           _hashtags.removeAt(index);
         });
@@ -102,25 +102,9 @@ class _EditMetaDataFragmentState extends State<EditMetaDataFragment> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 12),
-                    child: Wrap(
-                      children: List.generate(_hashtags.length, (index) {
-                        final text = _hashtags[index];
-                        return Container(
-                          margin: const EdgeInsets.only(left: 8, top: 8),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(text),
-                              (6.width),
-                              IconButton(
-                                  onPressed: _handleDeleteHashtag(index),
-                                  icon: const Icon(Icons.delete_outline))
-                            ],
-                          ),
-                        );
-                      }),
+                    child: HashtagListWidget(
+                      hashtags: _hashtags,
+                      handleDelete: _handleDeleteHashtag,
                     ),
                   )
               ],

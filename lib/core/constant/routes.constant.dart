@@ -6,6 +6,7 @@ enum Routes {
   signUp('/auth/sign-up', subPath: 'sign-up'),
   home('/home'),
   chat('/chat'),
+  createChat('/chat/create', subPath: 'create'),
   chatRoom('/chat/room', subPath: 'room'),
   feed('/feed'),
   createFeed('/feed/create', subPath: 'create'),

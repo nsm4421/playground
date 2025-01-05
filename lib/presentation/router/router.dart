@@ -71,6 +71,11 @@ class CustomRouter {
             builder: (context, state) => const ChatPage(),
             routes: [
               GoRoute(
+                  path: Routes.createChat.subPath ?? 'create',
+                  builder: (context, state) {
+                    return const CreateChatPage();
+                  }),
+              GoRoute(
                   path: Routes.chatRoom.subPath ?? 'room',
                   builder: (context, state) {
                     return const ChatRoomPage(chatId: 'test');
