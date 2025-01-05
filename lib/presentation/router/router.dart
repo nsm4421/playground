@@ -71,15 +71,23 @@ class CustomRouter {
             builder: (context, state) => const ChatPage(),
             routes: [
               GoRoute(
-                  path: Routes.createChat.subPath ?? 'create',
+                  path: Routes.groupChat.subPath ?? 'group',
                   builder: (context, state) {
-                    return const CreateChatPage();
-                  }),
-              GoRoute(
-                  path: Routes.chatRoom.subPath ?? 'room',
-                  builder: (context, state) {
-                    return const ChatRoomPage(chatId: 'test');
-                  }),
+                    return const Text('Group Chat');
+                  },
+                  routes: [
+                    GoRoute(
+                        path: Routes.createGroupChat.subPath ?? 'create',
+                        builder: (context, state) {
+                          return const CreateGroupChatPage();
+                        }),
+                    GoRoute(
+                        path: Routes.groupChatRoom.subPath ?? 'room',
+                        builder: (context, state) {
+                          // TODO : chatId 사용해서 라우팅하기
+                          return const GroupChatRoomPage('test');
+                        }),
+                  ]),
             ])
       ];
 

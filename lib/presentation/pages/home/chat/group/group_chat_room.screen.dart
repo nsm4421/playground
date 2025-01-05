@@ -1,37 +1,46 @@
 part of '../../../export.pages.dart';
 
-class ChatRoomPage extends StatefulWidget {
-  const ChatRoomPage({super.key, required this.chatId});
+class ChatRoomScreen extends StatefulWidget {
+  const ChatRoomScreen({super.key, required this.chatId});
 
   final String chatId;
 
   @override
-  State<ChatRoomPage> createState() => _ChatRoomPageState();
+  State<ChatRoomScreen> createState() => _ChatRoomScreenState();
 }
 
-class _ChatRoomPageState extends State<ChatRoomPage> with DebounceMixIn {
+class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
   late GlobalKey<ScaffoldState> _scaffoldKey;
-  late TextEditingController _textController;
+  late TextEditingController _textEditingController;
   late ScrollController _scrollController;
+  late StreamSubscription<MessageEntity> _subscription;
 
   bool _showJumpButton = false;
+
+  List<MessageEntity> _messages = [];
 
   @override
   void initState() {
     super.initState();
     _scaffoldKey = GlobalKey<ScaffoldState>();
-    _textController = TextEditingController();
+    _textEditingController = TextEditingController();
     _scrollController = ScrollController()
       ..addListener(_handleScrollController);
+    _subscription = context.read<GroupChatBloc>().messageStream.listen((data) {
+      setState(() {
+        _messages.add(data);
+      });
+    });
   }
 
   @override
   dispose() {
     super.dispose();
-    _textController.dispose();
+    _textEditingController.dispose();
     _scrollController
       ..removeListener(_handleScrollController)
       ..dispose();
+    _subscription.cancel();
     cancelTimer();
   }
 
@@ -39,7 +48,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> with DebounceMixIn {
     _scaffoldKey.currentState?.openEndDrawer();
   }
 
-  _handleSendMessage() {}
+  _handleSendMessage() {
+    final text = _textEditingController.text.trim();
+    if (text.isNotEmpty) {
+      context.read<GroupChatBloc>().add(SendMessageEvent(text));
+      _textEditingController.clear();
+    }
+  }
 
   _handleScrollController() {
     final currentPosition = _scrollController.position.pixels;
@@ -94,7 +109,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with DebounceMixIn {
                     flex: 1,
                   ),
                   CircleAvatar(), // TODO : 프사
-                  Spacer(
+                  const Spacer(
                     flex: 1,
                   ),
                 ],
@@ -135,45 +150,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> with DebounceMixIn {
       body: ListView.builder(
         controller: _scrollController,
         shrinkWrap: true,
-        itemCount: 1000,
+        itemCount: _messages.length,
         reverse: true,
         itemBuilder: (context, index) {
-          return Align(
-            alignment: Alignment.centerRight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: context.colorScheme.primaryContainer),
-                  child: Text(
-                    "Sender",
-                    style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, bottom: 8),
-                  child: Text(
-                    'message created at',
-                    style: context.textTheme.labelLarge
-                        ?.copyWith(color: Colors.blueGrey),
-                  ),
-                )
-              ],
-            ),
-          );
+          final item = _messages[index];
+          return Text(item.message);
         },
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: context.viewInsets.bottom),
         child: TextField(
+          controller: _textEditingController,
           decoration: InputDecoration(
               border: OutlineInputBorder(),
               suffixIcon: IconButton(

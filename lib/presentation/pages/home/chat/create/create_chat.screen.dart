@@ -1,13 +1,13 @@
 part of '../../../export.pages.dart';
 
-class CreateChatScreen extends StatefulWidget {
-  const CreateChatScreen({super.key});
+class CreateGroupChatScreen extends StatefulWidget {
+  const CreateGroupChatScreen({super.key});
 
   @override
-  State<CreateChatScreen> createState() => _CreateChatScreenState();
+  State<CreateGroupChatScreen> createState() => _CreateGroupChatScreenState();
 }
 
-class _CreateChatScreenState extends State<CreateChatScreen> {
+class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
   static const int _titleMinLength = 3;
   static const int _titleMaxLength = 50;
   static const int _hashtagMaxLength = 30;

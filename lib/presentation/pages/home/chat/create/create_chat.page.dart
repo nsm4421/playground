@@ -1,7 +1,7 @@
 part of '../../../export.pages.dart';
 
-class CreateChatPage extends StatelessWidget {
-  const CreateChatPage({super.key});
+class CreateGroupChatPage extends StatelessWidget {
+  const CreateGroupChatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class CreateChatPage extends StatelessWidget {
             return LoadingOverLayWidget(
                 isLoading: state.status == Status.loading ||
                     state.status == Status.success,
-                child: const CreateChatScreen());
+                child: const CreateGroupChatScreen());
           },
         ),
       ),
