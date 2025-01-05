@@ -9,7 +9,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
   Stream<UserEntity?> get authStream => _authStream;
 
   AuthBloc(this._useCase) : super(AuthState()) {
-    on<InitEvent>(_onInit);
+    on<InitAuthEvent>(_onInit);
     on<GetUserEvent>(_onGetUser);
     on<SignUpEvent>(_onSignUp);
     on<SignInEvent>(_onSignIn);
@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     _authStream = _useCase.authStream;
   }
 
-  Future<void> _onInit(InitEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onInit(InitAuthEvent event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: event.status, message: event.message));
   }
 

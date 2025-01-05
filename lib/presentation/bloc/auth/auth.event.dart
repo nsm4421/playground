@@ -2,11 +2,11 @@ part of '../export.bloc.dart';
 
 final class AuthEvent {}
 
-final class InitEvent extends AuthEvent {
+final class InitAuthEvent extends AuthEvent {
   final Status? status;
   final String? message;
 
-  InitEvent({this.status, this.message});
+  InitAuthEvent({this.status, this.message});
 }
 
 final class GetUserEvent extends AuthEvent {

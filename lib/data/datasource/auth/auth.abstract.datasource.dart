@@ -3,11 +3,7 @@ part of '../export.datasource.dart';
 abstract interface class AuthLocalDataSource {
   Stream<String?> get tokenStream;
 
-  Future<String?> getToken();
-
-  Future<void> saveToken(String accessToken);
-
-  Future<void> deleteToken();
+  void addData(String? accessToken);
 }
 
 abstract interface class AuthRemoteDataSource {

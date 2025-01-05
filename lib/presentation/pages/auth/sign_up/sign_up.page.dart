@@ -14,13 +14,13 @@ class SignUpPage extends StatelessWidget {
         if (state.status == Status.success) {
           Timer(_duration, () {
             // TODO : 성공 메세지 띄우기
-            context.read<AuthBloc>().add(InitEvent(status: Status.initial));
+            context.read<AuthBloc>().add(InitAuthEvent(status: Status.initial));
             context.replace(Routes.auth.path);
           });
         } else if (state.status == Status.error) {
           Timer(_duration, () {
             // TODO : 에러 메세지 띄우기
-            context.read<AuthBloc>().add(InitEvent(status: Status.initial));
+            context.read<AuthBloc>().add(InitAuthEvent(status: Status.initial));
           });
         }
       },
