@@ -9,9 +9,12 @@ abstract class DataSource with LoggerUtil {
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 3)));
 
+  final _socket = io(ApiEndPoint.socketUrl,
+      OptionBuilder().setTransports(['websocket']).disableAutoConnect().build())
+    ..connect();
+
   @lazySingleton
-  AuthLocalDataSource get authLocal =>
-      AuthLocalDataSourceImpl(storage: _storage, logger: logger);
+  AuthLocalDataSource get authLocal => AuthLocalDataSourceImpl();
 
   @lazySingleton
   AuthRemoteDataSource get authRemote =>
@@ -20,4 +23,16 @@ abstract class DataSource with LoggerUtil {
   @lazySingleton
   FeedRemoteDataSource get feedRemote =>
       FeedRemoteDataSourceImpl(dio: _dio, logger: logger);
+
+  @lazySingleton
+  ChatRemoteDataSource get chatRemote =>
+      ChatRemoteDataSourceImpl(dio: _dio, logger: logger);
+
+  @lazySingleton
+  SocketRemoteDataSource get socketRemote =>
+      SocketRemoteDataSourceImpl(socket: _socket, logger: logger);
+
+  @lazySingleton
+  StorageLocalDataSource get storageLocal =>
+      StorageLocalDataSourceImpl(storage: _storage, logger: logger);
 }
