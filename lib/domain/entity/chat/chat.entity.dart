@@ -1,18 +1,15 @@
 part of '../export.entity.dart';
 
-class ChatEntity {
-  final String id;
+class ChatEntity extends IntIdEntity {
   final String title;
   late final List<String> hashtags;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   ChatEntity(
-      {required this.id,
+      {required super.id,
       required this.title,
       List<String>? hashtags,
-      required this.createdAt,
-      required this.updatedAt}) {
+      super.createdAt,
+      super.updatedAt}) {
     this.hashtags = hashtags ?? [];
   }
 }

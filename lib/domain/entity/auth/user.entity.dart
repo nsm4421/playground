@@ -1,13 +1,13 @@
 part of '../export.entity.dart';
 
-class UserEntity {
-  final String id;
+class UserEntity extends UuidIdEntity {
+
   final String email;
   final String username;
   final String nickname;
 
   UserEntity(
-      {required this.id,
+      {required super.id,
       required this.email,
       required this.username,
       required this.nickname});

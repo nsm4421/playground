@@ -1,4 +1,6 @@
-class MessageEntity {
+part of '../export.entity.dart';
+
+class MessageEntity extends Entity{
   final String chatId;
   final String message;
   final String sender;
