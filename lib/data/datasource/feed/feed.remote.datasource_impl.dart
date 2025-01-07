@@ -9,6 +9,20 @@ class FeedRemoteDataSourceImpl implements FeedRemoteDataSource {
         _logger = logger;
 
   @override
+  Future<Pageable<FeedDto>> fetch(
+      {required int page, int pageSize = 20, int? lastId}) async {
+    return await _dio
+        .get(ApiEndPoint.fetchFeed, queryParameters: {
+          "page": page,
+          "pageSize": pageSize,
+          if (lastId != null) "lastId": lastId
+        })
+        .then((res) => res.data as Map<String, dynamic>)
+        .then((json) =>
+            Pageable<FeedDto>.fromJson(json: json, callback: FeedDto.fromJson));
+  }
+
+  @override
   Future<void> create(
       {required List<File> files, required CreateFeedDto dto}) async {
     final multiPartFile = await Future.wait(

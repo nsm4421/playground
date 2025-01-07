@@ -7,7 +7,20 @@ class FeedRepositoryImpl with LoggerUtil implements FeedRepository {
   FeedRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Either<ErrorResponse, SuccessResponse<void>>> createFeed(
+  Future<Either<ErrorResponse, SuccessResponse<Pageable<FeedEntity>>>> fetch(
+      {required int page, int pageSize = 20, int? lastId}) async {
+    try {
+      final data = await _remoteDataSource
+          .fetch(page: page, pageSize: pageSize, lastId: lastId)
+          .then((res) => res.convert<FeedEntity>(FeedEntity.from));
+      return Right(SuccessResponse(payload: data));
+    } catch (error) {
+      return Left(ErrorResponse.from(error, logger: logger));
+    }
+  }
+
+  @override
+  Future<Either<ErrorResponse, SuccessResponse<void>>> create(
       {required List<File> files,
       required String content,
       required List<String> hashtags}) async {
@@ -22,8 +35,7 @@ class FeedRepositoryImpl with LoggerUtil implements FeedRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, SuccessResponse<void>>> deleteFeed(
-      int id) async {
+  Future<Either<ErrorResponse, SuccessResponse<void>>> delete(int id) async {
     try {
       await _remoteDataSource.delete(id);
       return Right(SuccessResponse(payload: null));
@@ -33,7 +45,7 @@ class FeedRepositoryImpl with LoggerUtil implements FeedRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, SuccessResponse<void>>> modifyFeed(
+  Future<Either<ErrorResponse, SuccessResponse<void>>> modify(
       {required int id,
       required List<File> files,
       required String content,

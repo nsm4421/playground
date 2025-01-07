@@ -6,6 +6,8 @@ class FeedUseCase {
 
   FeedUseCase(this._repository);
 
+  FetchFeedUseCase get fetchFeed => FetchFeedUseCase(_repository);
+
   CreateFeedUseCase get createFeed => CreateFeedUseCase(_repository);
 
   ModifyFeedUseCase get modifyFeed => ModifyFeedUseCase(_repository);

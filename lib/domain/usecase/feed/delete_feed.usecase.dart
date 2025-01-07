@@ -7,6 +7,6 @@ class DeleteFeedUseCase {
 
   Future<Either<ErrorResponse, SuccessResponse<void>>> call(
       {required int id}) async {
-    return await _repository.deleteFeed(id);
+    return await _repository.delete(id);
   }
 }

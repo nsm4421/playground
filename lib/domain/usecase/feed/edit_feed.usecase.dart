@@ -9,7 +9,7 @@ class CreateFeedUseCase {
       {required List<File> files,
       required String content,
       required List<String> hashtags}) async {
-    return await _repository.createFeed(
+    return await _repository.create(
         files: files, content: content, hashtags: hashtags);
   }
 }
@@ -24,7 +24,7 @@ class ModifyFeedUseCase {
       required List<File> files,
       required String content,
       required List<String> hashtags}) async {
-    return await _repository.modifyFeed(
+    return await _repository.modify(
         id: id, files: files, content: content, hashtags: hashtags);
   }
 }
