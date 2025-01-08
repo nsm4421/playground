@@ -12,7 +12,7 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
     try {
       emit(state.copyWith(status: Status.loading, isMounted: false));
       await _useCase
-          .fetchFeed(page: 0, pageSize: event.pageSize ?? 20)
+          .fetchFeed(page: 1, pageSize: event.pageSize ?? 20)
           .then((res) => res.fold((l) {
                 logger.e(l.description);
                 emit(state.copyWith(status: Status.error, message: l.message));

@@ -28,6 +28,7 @@ export class FeedController {
     @Query('pageSize') pageSize?: number,
     @Query('lastId') lastId?: number,
   ) {
+    console.debug(`page:${page}|pageSize:${pageSize}|lastId:${lastId}`);
     return await this.feedService.fetch({ page, pageSize, lastId });
   }
 

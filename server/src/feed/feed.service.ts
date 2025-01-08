@@ -11,7 +11,7 @@ import { fetchWithPagination } from 'src/utils/pageable.util';
 interface FetchProps {
   page: number;
   pageSize?: number;
-  lastId: number;
+  lastId?: number;
 }
 
 interface CreateProps {
@@ -33,11 +33,11 @@ export class FeedService {
   ) {}
 
   async fetch({ page, pageSize, lastId }: FetchProps) {
-    fetchWithPagination({
+    return await fetchWithPagination({
       repository: this.feedRepository,
       page,
       pageSize,
-      where: {
+      where: lastId && {
         id: LessThan(lastId),
       },
       order: {
