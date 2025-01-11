@@ -26,10 +26,9 @@ export class FeedController {
   async fetch(
     @Query('page') page: number,
     @Query('pageSize') pageSize?: number,
-    @Query('lastId') lastId?: number,
   ) {
-    console.debug(`page:${page}|pageSize:${pageSize}|lastId:${lastId}`);
-    return await this.feedService.fetch({ page, pageSize, lastId });
+    console.debug(`page:${page}|pageSize:${pageSize}`);
+    return await this.feedService.fetch({ page, pageSize });
   }
 
   @Post()

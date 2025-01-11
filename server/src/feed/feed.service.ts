@@ -3,15 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { LessThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Feed } from './entity/feed.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { fetchWithPagination } from 'src/utils/pageable.util';
 
 interface FetchProps {
   page: number;
   pageSize?: number;
-  lastId?: number;
 }
 
 interface CreateProps {
@@ -32,18 +30,22 @@ export class FeedService {
     private readonly feedRepository: Repository<Feed>,
   ) {}
 
-  async fetch({ page, pageSize, lastId }: FetchProps) {
-    return await fetchWithPagination({
-      repository: this.feedRepository,
-      page,
+  async fetch({ page, pageSize }: FetchProps) {
+    const [data, totalCount] = await this.feedRepository
+      .createQueryBuilder('feed')
+      .leftJoinAndSelect('feed.author', 'user')
+      .select(['feed', 'user.id', 'user.username'])
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .orderBy('feed.createdAt', 'DESC')
+      .getManyAndCount();
+    return {
+      data,
+      totalCount,
       pageSize,
-      where: lastId && {
-        id: LessThan(lastId),
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
   }
 
   async create({ content, hashtags, images, createdBy }: CreateProps) {
