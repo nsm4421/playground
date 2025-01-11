@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../auth/author.model.dart';
+
 part 'fetch_feed.model.freezed.dart';
 
 part 'fetch_feed.model.g.dart';
@@ -19,12 +21,4 @@ class FeedDto with _$FeedDto {
 
   factory FeedDto.fromJson(Map<String, dynamic> json) =>
       _$FeedDtoFromJson(json);
-}
-
-@freezed
-class AuthorDto with _$AuthorDto {
-  const factory AuthorDto({@Default('') String id}) = _AuthorDto;
-
-  factory AuthorDto.fromJson(Map<String, dynamic> json) =>
-      _$AuthorDtoFromJson(json);
 }

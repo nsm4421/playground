@@ -11,7 +11,7 @@ class FeedRepositoryImpl with LoggerUtil implements FeedRepository {
       {required int page, int pageSize = 20, int? lastId}) async {
     try {
       final data = await _remoteDataSource
-          .fetch(page: page, pageSize: pageSize, lastId: lastId)
+          .fetch(page: page, pageSize: pageSize)
           .then((res) => res.convert<FeedEntity>(FeedEntity.from));
       return Right(SuccessResponse(payload: data));
     } catch (error) {

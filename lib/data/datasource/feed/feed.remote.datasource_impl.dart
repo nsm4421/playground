@@ -10,12 +10,11 @@ class FeedRemoteDataSourceImpl implements FeedRemoteDataSource {
 
   @override
   Future<Pageable<FeedDto>> fetch(
-      {required int page, int pageSize = 20, int? lastId}) async {
+      {required int page, int pageSize = 20}) async {
     return await _dio
         .get(ApiEndPoint.fetchFeed, queryParameters: {
           "page": page,
           "pageSize": pageSize,
-          if (lastId != null) "lastId": lastId
         })
         .then((res) => res.data as Map<String, dynamic>)
         .then((json) =>

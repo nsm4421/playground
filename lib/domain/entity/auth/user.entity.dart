@@ -1,16 +1,26 @@
 part of '../export.entity.dart';
 
-class UserEntity extends UuidIdEntity {
-
-  final String email;
+class AuthorEntity {
+  final String id;
   final String username;
+
+  AuthorEntity({required this.id, required this.username});
+
+  factory AuthorEntity.from(AuthorDto dto) {
+    return AuthorEntity(id: dto.id, username: dto.username);
+  }
+}
+
+class UserEntity extends AuthorEntity {
+  final String email;
   final String nickname;
 
-  UserEntity(
-      {required super.id,
-      required this.email,
-      required this.username,
-      required this.nickname});
+  UserEntity({
+    required super.id,
+    required super.username,
+    required this.email,
+    required this.nickname,
+  });
 
   factory UserEntity.from(UserModel model) {
     return UserEntity(

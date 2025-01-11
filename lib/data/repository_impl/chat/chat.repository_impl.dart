@@ -19,6 +19,19 @@ class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
   }
 
   @override
+  Future<Either<ErrorResponse, SuccessResponse<Pageable<GroupChatEntity>>>> fetch(
+      {required int page, int pageSize = 20}) async{
+    try {
+      final data = await _chatRemoteDataSource
+          .fetch(page: page, pageSize: pageSize)
+          .then((res) => res.convert<GroupChatEntity>(GroupChatEntity.from));
+      return Right(SuccessResponse(payload: data));
+    } catch (error) {
+      return Left(ErrorResponse.from(error, logger: logger));
+    }
+  }
+
+  @override
   Stream<MessageEntity> get messageStream => _messageController.stream;
 
   @override

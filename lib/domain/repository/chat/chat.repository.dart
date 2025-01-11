@@ -3,6 +3,9 @@ part of '../export.repository.dart';
 abstract interface class ChatRepository {
   Stream<MessageEntity> get messageStream;
 
+  Future<Either<ErrorResponse, SuccessResponse<Pageable<GroupChatEntity>>>> fetch(
+      {required int page, int pageSize = 20});
+
   Either<ErrorResponse, SuccessResponse<void>> joinChat(String chatId);
 
   Either<ErrorResponse, SuccessResponse<void>> sendMessage(

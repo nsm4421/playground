@@ -18,4 +18,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       _logger.d(res.data);
     });
   }
+
+  @override
+  Future<Pageable<GroupChatDto>> fetch(
+      {required int page, int pageSize = 20}) async {
+    return await _dio
+        .get(ApiEndPoint.fetchChat, queryParameters: {
+          "page": page,
+          "pageSize": pageSize,
+        })
+        .then((res) => res.data as Map<String, dynamic>)
+        .then((json) => Pageable<GroupChatDto>.fromJson(
+            json: json, callback: GroupChatDto.fromJson));
+  }
 }

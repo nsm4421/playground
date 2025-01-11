@@ -13,4 +13,6 @@ class ChatUseCase {
   JoinChatUseCase get joinChat => JoinChatUseCase(_repository);
 
   SendMessageUseCase get sendMessage => SendMessageUseCase(_repository);
+
+  FetchGroupChatUseCase get fetchChats => FetchGroupChatUseCase(_repository);
 }
