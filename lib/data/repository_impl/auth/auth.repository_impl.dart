@@ -89,6 +89,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
       }
       // 토큰을 사용해 서버로부터 유저정보 가져오기
       final user = await _authRemoteDataSource.getUser(accessToken);
+      _authLocalDataSource.addData(accessToken);
       return Right(SuccessResponse(payload: UserEntity.from(user)));
     } catch (error) {
       return Left(ErrorResponse.from(error, logger: logger));

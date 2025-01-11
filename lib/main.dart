@@ -16,7 +16,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthBloc>()..add(GetUserEvent(isOnMount: true)),
+      create: (_) => getIt<AuthBloc>(),
       child: MaterialApp.router(
         routerConfig: getIt<CustomRouter>().config,
         title: 'FullStackApp',

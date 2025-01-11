@@ -1,7 +1,18 @@
 part of '../export.pages.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(GetUserEvent(isOnMount: true));
+  }
 
   @override
   Widget build(BuildContext context) {

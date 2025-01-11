@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
               status: event.isOnMount ? Status.initial : Status.error,
               message: l.message)),
           (r) => emit(state
-              .copyWith(status: Status.initial, message: 'Getting User Success')
+              .copyWith(status: Status.success, message: 'Getting User Success')
               .copyWithUser(r.payload))));
     } catch (error) {
       logger.e(error);
