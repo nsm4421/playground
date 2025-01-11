@@ -1,6 +1,6 @@
 part of '../export.bloc.dart';
 
-@lazySingleton
+@injectable
 class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
   final FeedUseCase _useCase;
 
@@ -18,9 +18,15 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
                 emit(state.copyWith(status: Status.error, message: l.message));
               }, (r) {
                 emit(state.from(r.payload).copyWith(
-                    status: Status.success,
-                    message: r.message,
-                    isMounted: true));
+                      status: Status.success,
+                      message: r.message,
+                      isMounted: true,
+                      data: r.payload.data,
+                      totalCount: r.payload.totalCount,
+                      currentPage: r.payload.currentPage,
+                      totalPages: r.payload.totalPages,
+                      pageSize: r.payload.pageSize,
+                    ));
               }));
     } catch (error) {
       logger.e(error);
@@ -35,17 +41,21 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
       if (state.isEnd) return;
       emit(state.copyWith(status: Status.loading));
       await _useCase
-          .fetchFeed(
-              page: state.pageSize + 1,
-              pageSize: state.pageSize,
-              lastId: state.lastId)
+          .fetchFeed(page: state.pageSize + 1, pageSize: state.pageSize)
           .then((res) => res.fold((l) {
                 logger.e(l.description);
                 emit(state.copyWith(status: Status.error, message: l.message));
               }, (r) {
+                final data = r.payload.data.where((fetched) => !state.data
+                    .map((item) => item.id)
+                    .contains(fetched.id)); // 중복 제거
                 emit(state.from(r.payload).copyWith(
                     status: Status.success,
-                    data: [...state.data, ...r.payload.data],
+                    data: [...state.data, ...data],
+                    totalCount: r.payload.totalCount,
+                    currentPage: r.payload.currentPage,
+                    totalPages: r.payload.totalPages,
+                    pageSize: r.payload.pageSize,
                     message: r.message));
               }));
     } catch (error) {

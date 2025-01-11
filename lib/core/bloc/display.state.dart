@@ -1,6 +1,6 @@
 part of '../export.core.dart';
 
-class DisplayState<T extends IntIdEntity> extends Pageable<T> {
+class DisplayState<T extends Entity> extends Pageable<T> {
   final Status status;
   final bool isMounted;
   final bool isEnd;
@@ -17,9 +17,6 @@ class DisplayState<T extends IntIdEntity> extends Pageable<T> {
     this.isEnd = false,
     this.message = '',
   });
-
-  int get lastId =>
-      data.map((item) => item.id).reduce((v, e) => math.min(v, e));
 
   @override
   DisplayState<T> copyWith({

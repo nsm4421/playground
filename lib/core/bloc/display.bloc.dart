@@ -1,18 +1,12 @@
 part of '../export.core.dart';
 
-abstract class DisplayBloc<T extends IntIdEntity>
+abstract class DisplayBloc<T extends Entity>
     extends Bloc<DisplayEvent, DisplayState<T>> {
   DisplayBloc() : super(DisplayState<T>()) {
     on<InitDisplayEvent>(onInit);
     on<MountEvent>(onMount);
     on<FetchEvent>(onFetch);
   }
-
-  int get minId =>
-      state.data.map((item) => item.id).reduce((v, e) => math.min(v, e));
-
-  int get maxId =>
-      state.data.map((item) => item.id).reduce((v, e) => math.max(v, e));
 
   Future<void> onInit(
       InitDisplayEvent event, Emitter<DisplayState<T>> emit) async {

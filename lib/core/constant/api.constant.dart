@@ -1,7 +1,8 @@
 part of '../export.core.dart';
 
 class ApiEndPoint {
-  static const baseUrl = "http://10.0.2.2:3000/api";
+  static const domain = "http://10.0.2.2:3000";
+  static const baseUrl = "$domain/api";
 
   /// auth
   static String signUp = "/auth/sign-up";
@@ -16,6 +17,7 @@ class ApiEndPoint {
 
   /// chat
   static String createChat = "/chat";
+  static String fetchChat = "/chat";
   static const socketUrl = "http://10.0.2.2:3001";
 }
 

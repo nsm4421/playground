@@ -55,7 +55,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
             IconButton(onPressed: _handleGoBack, icon: const Icon(Icons.clear)),
         title: const Text('Create Feed'),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(_stepBarHeight),
+          preferredSize: const Size.fromHeight(_stepBarHeight),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 80),
             child: Stepper(
