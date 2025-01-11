@@ -8,12 +8,14 @@ import 'package:my_app/domain/entity/export.entity.dart';
 import 'package:my_app/domain/usecase/export.usecase.dart';
 import 'package:my_app/presentation/pages/export.pages.dart';
 
-@lazySingleton
+@injectable
 class CustomRouter {
   final AuthUseCase _useCase;
   late ValueNotifier<bool> _isAuth;
   late Stream<UserEntity?> _authStream;
   late StreamSubscription<UserEntity?> _authSubscription;
+
+  late final GlobalKey<NavigatorState> _rootNavigatorKey;
 
   CustomRouter(this._useCase) {
     _isAuth = ValueNotifier(false);
@@ -21,6 +23,7 @@ class CustomRouter {
     _authSubscription = _authStream.listen((data) {
       _isAuth.value = (data != null);
     });
+    _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
   }
 
   String get _initialLocation => Routes.auth.path;
@@ -32,14 +35,14 @@ class CustomRouter {
             .map((item) => item.path)
             .contains(state.matchedLocation);
         if (_isAuth.value && isInAuthPage) {
-          return Routes.home.path;
+          return HomeBottomNavItems.values.first.route.path;
         } else if (!_isAuth.value && !isInAuthPage) {
           return Routes.auth.path;
         }
         return null;
       };
 
-  GoRoute get _unAuthenticatedRouter => GoRoute(
+  GoRoute get _authRouter => GoRoute(
         path: Routes.auth.path,
         builder: (context, state) => const AuthPage(),
         routes: [
@@ -54,50 +57,78 @@ class CustomRouter {
         ],
       );
 
-  Iterable<GoRoute> get _authenticatedRouters => [
-        GoRoute(
-            path: Routes.home.path,
-            builder: (context, state) => const HomePage()),
-        GoRoute(
-            path: Routes.feed.path,
-            builder: (context, state) => const DisplayFeedPage(),
-            routes: [
-              GoRoute(
-                  path: Routes.createFeed.subPath!,
-                  builder: (context, state) => const CreateFeedPage())
-            ]),
-        GoRoute(
-            path: Routes.chat.path,
-            builder: (context, state) => const ChatPage(),
-            routes: [
-              GoRoute(
-                  path: Routes.groupChat.subPath ?? 'group',
-                  builder: (context, state) {
-                    return const Text('Group Chat');
-                  },
-                  routes: [
+  StatefulShellRoute get _homeRouter => StatefulShellRoute.indexedStack(
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state, navigationShell) {
+        return NoTransitionPage(child: HomePage(navigationShell));
+      },
+      branches: HomeBottomNavItems.values
+          .map((item) => switch (item) {
+                /// feed
+                HomeBottomNavItems.feed => StatefulShellBranch(routes: [
                     GoRoute(
-                        path: Routes.createGroupChat.subPath ?? 'create',
-                        builder: (context, state) {
-                          return const CreateGroupChatPage();
-                        }),
-                    GoRoute(
-                        path: Routes.groupChatRoom.subPath ?? 'room',
-                        builder: (context, state) {
-                          // TODO : chatId 사용해서 라우팅하기
-                          return const GroupChatRoomPage('test');
-                        }),
+                      path: Routes.feed.path,
+                      pageBuilder: (context, state) {
+                        return const NoTransitionPage(child: DisplayFeedPage());
+                      },
+                    )
                   ]),
-            ])
+
+                /// chat
+                HomeBottomNavItems.chat => StatefulShellBranch(
+                    routes: [
+                      GoRoute(
+                        path: Routes.chat.path,
+                        pageBuilder: (context, state) {
+                          return const NoTransitionPage(
+                              child: DisplayGroupChatPage());
+                        },
+                      )
+                    ],
+                  ),
+
+                /// setting
+                HomeBottomNavItems.setting => StatefulShellBranch(routes: [
+                    GoRoute(
+                        path: Routes.setting.path,
+                        pageBuilder: (context, state) {
+                          return const NoTransitionPage(child: SettingPage());
+                        })
+                  ])
+              })
+          .toList());
+
+  Iterable<RouteBase> get _routes => [
+        GoRoute(
+            path: Routes.createFeed.path,
+            pageBuilder: (context, state) {
+              return const NoTransitionPage(child: CreateFeedPage());
+            }),
+        GoRoute(
+            path: Routes.createGroupChat.path,
+            pageBuilder: (context, state) {
+              return const NoTransitionPage(child: CreateGroupChatPage());
+            }),
+        GoRoute(
+          path: Routes.groupChatRoom.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage(
+              child: GroupChatRoomPage(
+                state.extra as String,
+              ),
+            );
+          },
+        ),
       ];
 
   @lazySingleton
   GoRouter get config {
     return GoRouter(
       initialLocation: _initialLocation,
+      navigatorKey: _rootNavigatorKey,
       redirect: _redirect,
       refreshListenable: _isAuth,
-      routes: [_unAuthenticatedRouter, ..._authenticatedRouters],
+      routes: [_authRouter, _homeRouter, ..._routes],
     );
   }
 }
