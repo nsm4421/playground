@@ -1,6 +1,6 @@
 part of '../../export.pages.dart';
 
-class DisplayFeedPage extends StatelessWidget {
+class DisplayFeedPage extends StatelessWidget{
   const DisplayFeedPage({super.key});
 
   @override
@@ -10,6 +10,7 @@ class DisplayFeedPage extends StatelessWidget {
       child: BlocListener<DisplayFeedBloc, DisplayState<FeedEntity>>(
         listener: (context, state) async {
           if (state.status == Status.error) {
+            context.showErrorSnackBar(description: state.message);
             Timer(1.sec, () {
               context
                   .read<DisplayFeedBloc>()

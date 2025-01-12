@@ -11,6 +11,8 @@ class SignInPage extends StatelessWidget {
       listenWhen: (prev, curr) => (curr.status == Status.error),
       listener: (context, state) {
         if (state.status == Status.error) {
+          context.showErrorSnackBar(
+              message: 'Sign In Fails', description: state.message);
           Timer(_duration, () {
             context.read<AuthBloc>().add(InitAuthEvent(status: Status.initial));
             // TODO : 에러 메세지 띄우기

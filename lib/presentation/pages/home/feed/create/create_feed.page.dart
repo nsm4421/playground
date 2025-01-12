@@ -26,12 +26,14 @@ class CreateFeedPage extends StatelessWidget {
         return BlocListener<CreateFeedCubit, EditFeedState>(
           listener: (context, state) {
             if (state.status == Status.error) {
+              context.showErrorSnackBar(description: state.errorMessage);
               Timer(1.sec, () {
                 context
                     .read<CreateFeedCubit>()
                     .initState(status: Status.initial, errorMessage: '');
               });
             } else if (state.status == Status.success) {
+              context.showSuccessSnackBar();
               Timer(1.sec, () {
                 context.pop();
               });

@@ -12,14 +12,15 @@ class SignUpPage extends StatelessWidget {
           (curr.status == Status.success) || (curr.status == Status.error),
       listener: (context, state) {
         if (state.status == Status.success) {
+          context.showSuccessSnackBar(message: 'Sign Up Success');
           Timer(_duration, () {
-            // TODO : 성공 메세지 띄우기
             context.read<AuthBloc>().add(InitAuthEvent(status: Status.initial));
             context.replace(Routes.auth.path);
           });
         } else if (state.status == Status.error) {
+          context.showErrorSnackBar(
+              message: 'Sign Up Fails', description: state.message);
           Timer(_duration, () {
-            // TODO : 에러 메세지 띄우기
             context.read<AuthBloc>().add(InitAuthEvent(status: Status.initial));
           });
         }

@@ -1,16 +1,16 @@
 part of '../../../export.pages.dart';
 
 class GroupChatRoomPage extends StatelessWidget {
-  const GroupChatRoomPage(this._chatId, {super.key});
+  const GroupChatRoomPage(this._chat, {super.key});
 
-  final String _chatId;
+  final GroupChatEntity _chat;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          getIt<GroupChatBloc>(param1: _chatId)..add(JoinGroupChatEvent()),
-      child: ChatRoomScreen(chatId: _chatId),
+          getIt<GroupChatBloc>(param1: _chat.id)..add(JoinGroupChatEvent()),
+      child: ChatRoomScreen(_chat),
     );
   }
 }
