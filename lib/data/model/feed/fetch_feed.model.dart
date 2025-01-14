@@ -14,7 +14,7 @@ class FeedDto with _$FeedDto {
     @Default('') String content,
     @Default(<String>[]) List<String> images,
     @Default(<String>[]) List<String> hashtags,
-    @Default(AuthorDto()) AuthorDto author,
+    @Default(AuthorDto()) AuthorDto creator,
     @Default('') String createdAt,
     @Default('') String updatedAt,
   }) = _FeedDto;

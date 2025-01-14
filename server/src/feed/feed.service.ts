@@ -33,7 +33,7 @@ export class FeedService {
   async fetch({ page, pageSize }: FetchProps) {
     const [data, totalCount] = await this.feedRepository
       .createQueryBuilder('feed')
-      .leftJoinAndSelect('feed.author', 'user')
+      .leftJoinAndSelect('feed.creator', 'user')
       .select(['feed', 'user.id', 'user.username'])
       .skip((page - 1) * pageSize)
       .take(pageSize)
@@ -53,13 +53,13 @@ export class FeedService {
       content,
       hashtags,
       images,
-      author: { id: createdBy },
+      creator: { id: createdBy },
     });
   }
 
   async modify({ id, content, hashtags, images, createdBy }: EditProps) {
     const feed = await this.feedRepository.findOneBy({ id });
-    if (feed.author.id !== createdBy) {
+    if (feed.creator.id !== createdBy) {
       throw new BadRequestException('can modify only own data');
     } else if (feed.deletedAt !== null) {
       throw new NotFoundException('already deleted data');

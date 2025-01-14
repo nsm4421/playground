@@ -1,16 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Chat } from './entity/chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Chat } from './entity/chat.entity';
+import { Message } from './entity/message.entity';
 
-interface FetchProps {
+interface FetchChatsProps {
   page: number;
   pageSize?: number;
 }
 
-interface CreateProps {
+interface CreateChatProps {
   title: string;
   hashtags: string[];
+  createdBy: string;
+}
+
+interface CreateMessageProps {
+  content: string;
+  chatId: string;
   createdBy: string;
 }
 
@@ -19,12 +26,14 @@ export class ChatService {
   constructor(
     @InjectRepository(Chat)
     private readonly chatRepository: Repository<Chat>,
+    @InjectRepository(Message)
+    private readonly messageRepository: Repository<Message>,
   ) {}
 
-  async fetch({ page, pageSize }: FetchProps) {
+  async fetchChats({ page, pageSize }: FetchChatsProps) {
     const [data, totalCount] = await this.chatRepository
       .createQueryBuilder('chat')
-      .leftJoinAndSelect('chat.author', 'user')
+      .leftJoinAndSelect('chat.creator', 'user')
       .select(['chat', 'user.id', 'user.username'])
       .skip((page - 1) * pageSize)
       .take(pageSize)
@@ -39,7 +48,7 @@ export class ChatService {
     };
   }
 
-  async create({ title, hashtags, createdBy }: CreateProps) {
+  async createChat({ title, hashtags, createdBy }: CreateChatProps) {
     return await this.chatRepository.save({
       title,
       hashtags,

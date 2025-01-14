@@ -20,7 +20,7 @@ class GroupChatEntity extends UuidIdEntity {
       id: dto.id,
       title: dto.title,
       hashtags: dto.hashtags,
-      author: AuthorEntity.from(dto.creater),
+      author: AuthorEntity.from(dto.creator),
       createdAt: DateTime.tryParse(dto.createdAt),
       updatedAt: DateTime.tryParse(dto.updatedAt),
     );

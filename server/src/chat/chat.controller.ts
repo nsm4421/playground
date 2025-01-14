@@ -17,23 +17,26 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Get()
-  async fetch(
+  async fetchChats(
     @Query('page') page: number,
     @Query('pageSize') pageSize?: number,
   ) {
     console.debug(`chat|page:${page}|pageSize:${pageSize}`);
-    return await this.chatService.fetch({ page, pageSize });
+    return await this.chatService.fetchChats({ page, pageSize });
   }
 
   @Post()
-  async create(@Request() request, @Body() { title, hashtags }: CreateChatDto) {
+  async createChat(
+    @Request() request,
+    @Body() { title, hashtags }: CreateChatDto,
+  ) {
     const data = {
       title,
       hashtags,
       createdBy: request.user.sub,
     };
     console.table(data);
-    return await this.chatService.create({
+    return await this.chatService.createChat({
       title,
       hashtags,
       createdBy: request.user.sub,

@@ -23,7 +23,7 @@ export class Chat {
 
   @ManyToOne(() => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: 'createdBy' })
-  author: User;
+  creator: User;
 
   @CreateDateColumn()
   createdAt: string;

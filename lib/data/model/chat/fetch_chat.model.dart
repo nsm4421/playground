@@ -14,7 +14,7 @@ class GroupChatDto with _$GroupChatDto {
     @Default(<String>[]) List<String> hashtags,
     @Default('') String createdAt,
     @Default('') String updatedAt,
-    @Default(AuthorDto()) AuthorDto creater
+    @Default(AuthorDto()) AuthorDto creator
   }) = _GroupChatDto;
 
   factory GroupChatDto.fromJson(Map<String, dynamic> json) =>

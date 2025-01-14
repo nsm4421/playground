@@ -24,7 +24,7 @@ class FeedEntity extends IntIdEntity {
       id: dto.id,
       createdAt: DateTime.tryParse(dto.createdAt),
       updatedAt: DateTime.tryParse(dto.updatedAt),
-      author: AuthorEntity.from(dto.author),
+      author: AuthorEntity.from(dto.creator),
       content: dto.content,
       hashtags: dto.hashtags,
       images: dto.images,
