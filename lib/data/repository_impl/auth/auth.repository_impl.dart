@@ -21,12 +21,11 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
   Stream<UserEntity?> get authStream =>
       _authLocalDataSource.tokenStream.asyncMap((token) async {
         try {
-          logger.d('token:$token');
           return token == null
               ? null
               : await _authRemoteDataSource
-                  .getUser(token)
-                  .then(UserEntity.from);
+              .getUser(token)
+              .then(UserEntity.from);
         } catch (error) {
           logger.e(error);
           return null;
@@ -77,7 +76,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
 
   @override
   Future<Either<ErrorResponse, SuccessResponse<UserEntity>>>
-      getCurrentUser() async {
+  getCurrentUser() async {
     try {
       // 로컬 스토리지에서 토큰 찾기
       final accessToken = await _storageLocalDataSource.get(_key);

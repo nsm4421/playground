@@ -73,7 +73,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
       return;
     }
     await context
-        .read<CreateChatCubit>()
+        .read<CreateGroupChatCubit>()
         .submit(title: title, hashtags: _hashtags);
   }
 

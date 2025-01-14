@@ -36,9 +36,8 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly chatService: ChatService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   async handleConnection(client: Socket) {
-    console.debug('user connected', client.id, client.handshake.auth);
+    console.debug('user connected', client.id);
   }
 
   async handleDisconnect(client: Socket) {

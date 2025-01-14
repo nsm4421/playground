@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -112,11 +113,21 @@ class CustomRouter {
         GoRoute(
           path: Routes.groupChatRoom.path,
           pageBuilder: (context, state) {
-            return NoTransitionPage(
-              child: GroupChatRoomPage(
-                state.extra as String,
-              ),
-            );
+            try {
+              return NoTransitionPage(
+                child: GroupChatRoomPage(
+                  state.extra as GroupChatEntity,
+                ),
+              );
+            } catch (error) {
+              log(error.toString());
+              return NoTransitionPage(
+                child: Text(
+                  "Chat Room Not Founded",
+                  style: context.textTheme.displayLarge,
+                ),
+              );
+            }
           },
         ),
       ];

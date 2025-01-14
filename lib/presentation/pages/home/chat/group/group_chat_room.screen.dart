@@ -1,19 +1,19 @@
 part of '../../../export.pages.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  const ChatRoomScreen({super.key, required this.chatId});
+  const ChatRoomScreen(this._chat, {super.key});
 
-  final String chatId;
+  final GroupChatEntity _chat;
 
   @override
   State<ChatRoomScreen> createState() => _ChatRoomScreenState();
 }
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
-  late GlobalKey<ScaffoldState> _scaffoldKey;
   late TextEditingController _textEditingController;
   late ScrollController _scrollController;
   late StreamSubscription<MessageEntity> _subscription;
+  late String _currentUid;
 
   bool _showJumpButton = false;
 
@@ -22,15 +22,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
   @override
   void initState() {
     super.initState();
-    _scaffoldKey = GlobalKey<ScaffoldState>();
     _textEditingController = TextEditingController();
     _scrollController = ScrollController()
       ..addListener(_handleScrollController);
     _subscription = context.read<GroupChatBloc>().messageStream.listen((data) {
       setState(() {
-        _messages.add(data);
+        _messages = [data, ..._messages];
       });
     });
+    _currentUid = context.read<AuthBloc>().state.user!.id;
   }
 
   @override
@@ -44,14 +44,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
     cancelTimer();
   }
 
-  _handleOpenEndDrawer() {
-    _scaffoldKey.currentState?.openEndDrawer();
-  }
-
   _handleSendMessage() {
     final text = _textEditingController.text.trim();
     if (text.isNotEmpty) {
-      context.read<GroupChatBloc>().add(SendMessageEvent(text));
+      context
+          .read<GroupChatBloc>()
+          .add(SendMessageEvent(content: text, currentUid: _currentUid));
       _textEditingController.clear();
     }
   }
@@ -83,78 +81,68 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Oppoent Username"),
-        actions: [
-          DrawerButton(
-            onPressed: _handleOpenEndDrawer,
-          )
-        ],
-      ),
-      endDrawer: Drawer(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DrawerHeader(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Conversation",
-                    style: context.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  CircleAvatar(), // TODO : 프사
-                  const Spacer(
-                    flex: 1,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 500,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        radius: 20,
-                      ),
-                      title: Text("Username $index"),
-                    );
-                  }),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.star_outline),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.exit_to_app),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.notification_important_outlined),
-                ),
-              ],
-            ),
-          ],
+        title: Text(
+          widget._chat.title,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
       body: ListView.builder(
         controller: _scrollController,
         shrinkWrap: true,
-        itemCount: _messages.length,
         reverse: true,
+        itemCount: _messages.length,
         itemBuilder: (context, index) {
           final item = _messages[index];
-          return Text(item.message);
+          final isMine = _currentUid == item.sender.id;
+          return Container(
+            alignment: isMine ? Alignment.topRight : Alignment.topLeft,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment:
+                  isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                if (!isMine)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 6),
+                    child: CircleAvatar(),
+                  ), // TODO : 프로필 사진
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!isMine)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8, left: 8),
+                        child: Text(item.sender.username,
+                            style: context.textTheme.labelMedium),
+                      ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 2),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: isMine
+                                ? context.colorScheme.primaryContainer
+                                : context.colorScheme.tertiaryContainer),
+                        child: Text(
+                          item.content,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                              color: isMine
+                                  ? context.colorScheme.onPrimaryContainer
+                                  : context
+                                      .colorScheme.onTertiaryContainer),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         },
       ),
       bottomNavigationBar: Padding(
@@ -162,7 +150,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
         child: TextField(
           controller: _textEditingController,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               suffixIcon: IconButton(
                 onPressed: _handleSendMessage,
                 icon: Icon(

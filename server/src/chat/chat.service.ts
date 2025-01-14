@@ -52,7 +52,7 @@ export class ChatService {
     return await this.chatRepository.save({
       title,
       hashtags,
-      creater: { id: createdBy },
+      creator: { id: createdBy },
     });
   }
 

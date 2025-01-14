@@ -30,12 +30,6 @@ export class ChatController {
     @Request() request,
     @Body() { title, hashtags }: CreateChatDto,
   ) {
-    const data = {
-      title,
-      hashtags,
-      createdBy: request.user.sub,
-    };
-    console.table(data);
     return await this.chatService.createChat({
       title,
       hashtags,
