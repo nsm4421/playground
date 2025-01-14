@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -10,6 +10,9 @@ import {
 } from '@nestjs/websockets';
 
 import { Server, Socket } from 'socket.io';
+import { ChatService } from './chat.service';
+import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 interface JoinChatProps {
   uid: string;
@@ -18,18 +21,24 @@ interface JoinChatProps {
 
 interface SendMessageProps {
   chatId: string;
-  message: string;
+  token: string;
+  content: string;
 }
 
 const port = Number(process.env.CHAT_PORT) || 3001;
 
-// TODO : 인증기능 검사
 @WebSocketGateway(port, { cors: true })
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
-  async handleConnection(client: Socket, ...args: any[]) {
-    console.debug('new user connected', client.id);
+  constructor(
+    private readonly authService: AuthService,
+    private readonly chatService: ChatService,
+  ) {}
+
+  @UseGuards(JwtAuthGuard)
+  async handleConnection(client: Socket) {
+    console.debug('user connected', client.id, client.handshake.auth);
   }
 
   async handleDisconnect(client: Socket) {
@@ -47,18 +56,35 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('send-message')
-  handleSendMessage(
+  async handleSendMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() { chatId, message }: SendMessageProps,
+    @MessageBody() { chatId, content, token }: SendMessageProps,
   ) {
-    console.debug(`chat-id:${chatId}|message:${message}`);
-    const isIn = client.rooms.has(chatId);
-    if (!isIn) {
-      throw new BadRequestException('not in this chat room');
+    console.debug(`chat-id:${chatId}|content:${content}`);
+    try {
+      // 현재 채팅방에 있는 유저인지 체크
+      const isIn = client.rooms.has(chatId);
+      if (!isIn) {
+        throw new BadRequestException('not in this chat room');
+      }
+
+      // 토큰으로 부터 유저 id, 유저명 가져오기
+      const decoded = await this.authService.decodeToken(token);
+
+      // 채팅방에 메세지 저장
+      const message = await this.chatService.createMessage({
+        content,
+        chatId,
+        createdBy: decoded.sub,
+      });
+
+      // 채팅방에 있는 유저들에게 메세지 정보 보내기
+      this.server.to(chatId).emit('receive-message', {
+        ...message,
+        creator: { id: decoded.sub, username: decoded.username },
+      });
+    } catch (error) {
+      console.error(error);
     }
-    // TODO : sender
-    this.server
-      .to(chatId)
-      .emit('receive-message', { sender: 'test', chatId, message });
   }
 }

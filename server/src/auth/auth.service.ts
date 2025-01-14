@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { compare, hash } from 'bcrypt';
 import { User } from './entity/user.entity';
@@ -13,6 +17,13 @@ interface ValidateProps {
 interface SignUpProps extends ValidateProps {
   nickname: string;
   email: string;
+}
+
+interface DecodedToken {
+  username: string;
+  sub: string;
+  lat: number;
+  exp: number;
 }
 
 @Injectable()
@@ -72,5 +83,19 @@ export class AuthService {
     const user = await this.authRepository.findOneBy({ username });
     const isValid = user && (await compare(password, user.password));
     return isValid ? user : null;
+  }
+
+  /** 토큰 decoding
+   * @param token
+   */
+  async decodeToken(token: string): Promise<DecodedToken> {
+    try {
+      return await this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET ?? '1221',
+      });
+    } catch (error) {
+      console.error(error);
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

@@ -55,4 +55,16 @@ export class ChatService {
       creater: { id: createdBy },
     });
   }
+
+  async createMessage({ content, chatId, createdBy }: CreateMessageProps) {
+    return await this.messageRepository.save({
+      content,
+      creator: {
+        id: createdBy,
+      },
+      chat: {
+        id: chatId,
+      },
+    });
+  }
 }
