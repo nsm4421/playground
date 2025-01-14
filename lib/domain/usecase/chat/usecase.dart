@@ -6,6 +6,8 @@ class ChatUseCase {
 
   ChatUseCase(this._repository);
 
+  String? get clientId => _repository.clientId;
+
   Stream<MessageEntity> get messageStream => _repository.messageStream;
 
   CreateChatUseCase get create => CreateChatUseCase(_repository);

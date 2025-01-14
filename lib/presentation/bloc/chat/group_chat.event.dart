@@ -12,7 +12,8 @@ final class InitGroupChatEvent extends GroupChatEvent {
 final class JoinGroupChatEvent extends GroupChatEvent {}
 
 final class SendMessageEvent extends GroupChatEvent {
-  final String message;
+  final String content;
+  final String currentUid;
 
-  SendMessageEvent(this.message);
+  SendMessageEvent({required this.content, required this.currentUid});
 }

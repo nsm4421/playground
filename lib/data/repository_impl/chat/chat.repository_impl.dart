@@ -4,23 +4,30 @@ part of '../export.repository_impl.dart';
 class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
   final ChatRemoteDataSource _chatRemoteDataSource;
   final SocketRemoteDataSource _socketRemoteDataSource;
+  final AuthLocalDataSource _authLocalDataSource;
   late StreamController<MessageEntity> _messageController; // 메세지 수신할 controller
 
   ChatRepositoryImpl(
       {required ChatRemoteDataSource chatRemoteDataSource,
-      required SocketRemoteDataSource socketRemoteDataSource})
+      required SocketRemoteDataSource socketRemoteDataSource,
+      required AuthLocalDataSource authLocalDataSource})
       : _chatRemoteDataSource = chatRemoteDataSource,
-        _socketRemoteDataSource = socketRemoteDataSource {
+        _socketRemoteDataSource = socketRemoteDataSource,
+        _authLocalDataSource = authLocalDataSource {
     _messageController = StreamController<MessageEntity>.broadcast();
     _socketRemoteDataSource.onEvent(
         event: EventNames.receiveMessage,
-        callback: (json) =>
-            _messageController.add(MessageEntity.fromJson(json)));
+        callback: (json) {
+          _messageController.add(MessageEntity.from(MessageDto.fromJson(json)));
+        });
   }
 
   @override
-  Future<Either<ErrorResponse, SuccessResponse<Pageable<GroupChatEntity>>>> fetch(
-      {required int page, int pageSize = 20}) async{
+  String? get clientId => _socketRemoteDataSource.socket.id;
+
+  @override
+  Future<Either<ErrorResponse, SuccessResponse<Pageable<GroupChatEntity>>>>
+      fetch({required int page, int pageSize = 20}) async {
     try {
       final data = await _chatRemoteDataSource
           .fetch(page: page, pageSize: pageSize)
@@ -58,12 +65,15 @@ class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
 
   @override
   Either<ErrorResponse, SuccessResponse<void>> sendMessage(
-      {required String chatId, required String message}) {
+      {required String chatId,
+      required String content,
+      required String currentUid}) {
     try {
-      // TODO : 서버에 메세지 내용 저장하기
-      _socketRemoteDataSource.emit(
-          event: EventNames.sendMessage,
-          json: {'chatId': chatId, 'message': message});
+      _socketRemoteDataSource.emit(event: EventNames.sendMessage, json: {
+        'chatId': chatId,
+        'content': content,
+        'token': _authLocalDataSource.token
+      });
       return Right(SuccessResponse(payload: null));
     } catch (error) {
       return Left(ErrorResponse.from(error, logger: logger));

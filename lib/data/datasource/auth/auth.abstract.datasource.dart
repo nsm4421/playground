@@ -1,6 +1,8 @@
 part of '../export.datasource.dart';
 
 abstract interface class AuthLocalDataSource {
+  String? get token;
+
   Stream<String?> get tokenStream;
 
   void addData(String? accessToken);

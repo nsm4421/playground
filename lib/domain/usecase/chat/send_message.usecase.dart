@@ -6,7 +6,10 @@ class SendMessageUseCase {
   SendMessageUseCase(this._repository);
 
   Either<ErrorResponse, SuccessResponse<void>> call(
-      {required String chatId, required String message}) {
-    return _repository.sendMessage(chatId: chatId, message: message);
+      {required String chatId,
+      required String content,
+      required String currentUid}) {
+    return _repository.sendMessage(
+        chatId: chatId, content: content, currentUid: currentUid);
   }
 }

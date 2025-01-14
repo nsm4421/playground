@@ -3,10 +3,10 @@ import 'package:my_app/core/export.core.dart';
 import 'package:my_app/domain/usecase/export.usecase.dart';
 
 @injectable
-class CreateChatCubit extends SimpleCubit with LoggerUtil {
+class CreateGroupChatCubit extends SimpleCubit with LoggerUtil {
   final ChatUseCase _useCase;
 
-  CreateChatCubit(this._useCase):super();
+  CreateGroupChatCubit(this._useCase):super();
 
   Future<void> submit(
       {required String title, required List<String> hashtags}) async {
