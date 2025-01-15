@@ -21,6 +21,9 @@ export class User {
   @Column({ unique: true, nullable: false, length: 50 })
   email: string;
 
+  @Column({ nullable: false, length: 300 })
+  profileImage: string;
+
   @Exclude({ toPlainOnly: true })
   @Column({ nullable: false, length: 255 })
   password: string;

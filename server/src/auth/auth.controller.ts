@@ -6,11 +6,17 @@ import {
   UseGuards,
   Request,
   Get,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpReqDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from './guard/local.guard';
 import { JwtAuthGuard } from './guard/jwt.guard';
+import {
+  genMultiFileMulterOption,
+  genSingleFileMulterOption,
+} from 'src/utils/upload.util';
 
 @Controller('api/auth')
 export class AuthController {
@@ -18,11 +24,23 @@ export class AuthController {
 
   @HttpCode(201)
   @Post('sign-up')
-  async signUp(@Body() dto: SignUpReqDto) {
+  @UseInterceptors(
+    genSingleFileMulterOption({
+      fileKey: 'file',
+      destination: './upload/auth',
+    }),
+  )
+  async signUp(
+    @Body() dto: SignUpReqDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return {
       message: 'sign up success',
       payload: {
-        user: await this.authService.signUp(dto),
+        user: await this.authService.signUp({
+          ...dto,
+          profileImage: `/upload/auth/${file.filename}`,
+        }),
       },
     };
   }

@@ -17,6 +17,7 @@ interface ValidateProps {
 interface SignUpProps extends ValidateProps {
   nickname: string;
   email: string;
+  profileImage: string;
 }
 
 interface DecodedToken {

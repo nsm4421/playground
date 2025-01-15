@@ -7,6 +7,6 @@ export class SignUpReqDto extends SignInReqDto {
   email: string;
 
   @IsString()
-  @Length(3, 50)
+  @Length(3, 30)
   nickname: string;
 }
