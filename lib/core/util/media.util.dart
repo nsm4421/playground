@@ -5,6 +5,22 @@ mixin class ImageUtil {
 
   ImagePicker get picker => _imagePicker;
 
+  onSelectSingleImage(Future<void> Function(XFile) cb,
+      {ImageSource source = ImageSource.gallery,
+      int imageQuality = 80,
+      int compressQuality = 80}) async {
+    try {
+      final selected = await _imagePicker.pickImage(
+          source: source, imageQuality: imageQuality);
+      if (selected == null) return;
+      final compressed =
+          await _compressImage(selected, quality: compressQuality);
+      await cb(compressed!);
+    } catch (error) {
+      log(error.toString());
+    }
+  }
+
   onSelectMultiImage(Future<void> Function(Iterable<XFile>) cb,
       {int? imageQuality, int compressQuality = 80, int? limit}) async {
     try {
@@ -15,8 +31,8 @@ mixin class ImageUtil {
       }
       final List<XFile> images = [];
       for (final file in selected) {
-        final image = await _compressImage(file, quality: compressQuality);
-        images.add(image!);
+        final compressed = await _compressImage(file, quality: compressQuality);
+        images.add(compressed!);
       }
       await cb(images);
     } catch (error) {
