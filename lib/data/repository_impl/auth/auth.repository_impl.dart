@@ -36,15 +36,17 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
   Future<Either<ErrorResponse, SuccessResponse<void>>> signUp({
     required String email,
     required String username,
-    required String nickname,
     required String password,
+    required String nickname,
+    required File profileImage,
   }) async {
     try {
       await _authRemoteDataSource.signUp(
         email: email,
         username: username,
-        nickname: nickname,
         password: password,
+        nickname: nickname,
+        profileImage: profileImage,
       );
       return Right(SuccessResponse(payload: null));
     } catch (error) {

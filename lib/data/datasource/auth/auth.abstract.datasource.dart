@@ -14,6 +14,7 @@ abstract interface class AuthRemoteDataSource {
     required String username,
     required String password,
     required String nickname,
+    required File profileImage,
   });
 
   Future<String> signIn({required String username, required String password});

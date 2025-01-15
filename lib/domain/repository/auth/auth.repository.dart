@@ -5,11 +5,13 @@ abstract interface class AuthRepository {
 
   Stream<UserEntity?> get authStream;
 
-  Future<Either<ErrorResponse, SuccessResponse<void>>> signUp(
-      {required String email,
-      required String username,
-      required String nickname,
-      required String password});
+  Future<Either<ErrorResponse, SuccessResponse<void>>> signUp({
+    required String email,
+    required String username,
+    required String password,
+    required String nickname,
+    required File profileImage,
+  });
 
   Future<Either<ErrorResponse, SuccessResponse<String>>> signIn(
       {required String username, required String password});

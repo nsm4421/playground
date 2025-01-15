@@ -15,19 +15,6 @@ final class GetUserEvent extends AuthEvent {
   GetUserEvent({this.isOnMount = false});
 }
 
-final class SignUpEvent extends AuthEvent {
-  final String email;
-  final String password;
-  final String username;
-  final String nickname;
-
-  SignUpEvent(
-      {required this.email,
-      required this.password,
-      required this.username,
-      required this.nickname});
-}
-
 final class SignInEvent extends AuthEvent {
   final String username;
   final String password;

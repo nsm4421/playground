@@ -25,15 +25,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required String username,
     required String nickname,
+    required File profileImage,
   }) async {
-    await _dio.post(ApiEndPoint.signUp, data: {
-      "email": email,
-      "password": password,
-      "username": username,
-      "nickname": nickname,
-    }).then((res) {
-      _logger.d(res.data);
-    });
+    await _dio
+        .post(ApiEndPoint.signUp,
+            data: SignUpReqDto(
+              email: email,
+              password: password,
+              username: username,
+              nickname: nickname,
+            ).toFormData(await MultipartFile.fromFile(profileImage.path)))
+        .then((res) => res.data)
+        .then(_logger.d);
   }
 
   @override
