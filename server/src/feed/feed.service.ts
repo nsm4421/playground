@@ -34,7 +34,7 @@ export class FeedService {
     const [data, totalCount] = await this.feedRepository
       .createQueryBuilder('feed')
       .leftJoinAndSelect('feed.creator', 'user')
-      .select(['feed', 'user.id', 'user.username'])
+      .select(['feed', 'user.id', 'user.username', 'user.profileImage'])
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .orderBy('feed.createdAt', 'DESC')

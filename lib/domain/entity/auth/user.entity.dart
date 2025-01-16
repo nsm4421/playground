@@ -3,11 +3,16 @@ part of '../export.entity.dart';
 class AuthorEntity {
   final String id;
   final String username;
+  final String profileImage;
 
-  AuthorEntity({required this.id, required this.username});
+  AuthorEntity(
+      {required this.id, required this.username, required this.profileImage});
 
   factory AuthorEntity.from(AuthorDto dto) {
-    return AuthorEntity(id: dto.id, username: dto.username);
+    return AuthorEntity(
+        id: dto.id,
+        username: dto.username,
+        profileImage: '${ApiEndPoint.domain}${dto.profileImage}');
   }
 }
 
@@ -20,6 +25,7 @@ class UserEntity extends AuthorEntity {
     required super.username,
     required this.email,
     required this.nickname,
+    required super.profileImage,
   });
 
   factory UserEntity.from(UserModel model) {
@@ -27,6 +33,7 @@ class UserEntity extends AuthorEntity {
         id: model.id,
         email: model.email,
         username: model.username,
-        nickname: model.nickname);
+        nickname: model.nickname,
+        profileImage: '${ApiEndPoint.domain}${model.profileImage}');
   }
 }

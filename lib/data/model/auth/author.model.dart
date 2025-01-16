@@ -10,6 +10,7 @@ class AuthorDto with _$AuthorDto {
   const factory AuthorDto({
     @Default('') String id,
     @Default('') String username,
+    @Default('') String profileImage,
   }) = _AuthorDto;
 
   factory AuthorDto.fromJson(Map<String, dynamic> json) =>

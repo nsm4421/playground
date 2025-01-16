@@ -27,7 +27,7 @@ class FeedEntity extends IntIdEntity {
       author: AuthorEntity.from(dto.creator),
       content: dto.content,
       hashtags: dto.hashtags,
-      images: dto.images,
+      images: dto.images.map((item) => '${ApiEndPoint.domain}$item').toList(),
     );
   }
 }

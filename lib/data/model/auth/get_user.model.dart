@@ -17,10 +17,11 @@ class GetUserDto with _$GetUserDto {
 @freezed
 class UserModel with _$UserModel {
   factory UserModel({
-    required String id,
-    required String email,
-    required String username,
-    required String nickname,
+    @Default('') String id,
+    @Default('') String email,
+    @Default('') String username,
+    @Default('') String nickname,
+    @Default('') String profileImage,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
