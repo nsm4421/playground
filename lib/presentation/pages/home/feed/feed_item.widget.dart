@@ -16,25 +16,21 @@ class FeedItemWidget extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    const CircleAvatar(),
-                    (12.width),
-                    Text(_feed.author.username),
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.more_vert))
-                  ],
-                ),
-                (12.height),
-                Text(_feed.content),
+                CustomCircleAvatarWidget(_feed.author.profileImage),
+                (12.width),
+                Text(_feed.author.username),
+                const Spacer(),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
               ],
             ),
           ),
           if (_feed.images.isNotEmpty) CarouselWidget(_feed.images),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: Text(_feed.content),
+          ),
           Row(
             children: [
               IconButton(

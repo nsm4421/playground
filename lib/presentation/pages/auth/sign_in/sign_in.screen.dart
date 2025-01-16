@@ -15,6 +15,8 @@ class _SignInScreenState extends State<SignInScreen> {
   late TextEditingController _passwordController;
   late GlobalKey<FormState> _formKey;
 
+  bool _isPasswordVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -30,33 +32,22 @@ class _SignInScreenState extends State<SignInScreen> {
     _passwordController.dispose();
   }
 
-  String? _handleValidateUsername(String? text) {
-    if (text == null || text.isEmpty) {
-      return "Username is not given";
-    } else if (text.length > _maxUsernameLength) {
-      return "Too long username";
-    }
-    // TODO : 유저명 검사
-    return null;
-  }
+  String? Function(String?) get _handleValidateUsername =>
+      Regex.username.validate;
 
-  String? _handleValidatePassword(String? text) {
-    if (text == null || text.isEmpty) {
-      return "Password is not given";
-    } else if (text.length > _maxPasswordLength) {
-      return "Too long username";
-    }
-    // TODO : 패스워드 검사
-    return null;
-  }
+  String? Function(String?) get _handleValidatePassword =>
+      Regex.password.validate;
 
-  _handleSignIn() async {
+  void _handleClearUsername() => _usernameController.clear();
+
+  void _switchPasswordVisibility() => setState(() {
+        _isPasswordVisible = !_isPasswordVisible;
+      });
+
+  void _handleSubmit() {
     _formKey.currentState?.save();
     final ok = _formKey.currentState?.validate();
-    if (ok == null || !ok) {
-      log('input is not valid');
-      return;
-    }
+    if (ok == null || !ok) return;
     context.read<AuthBloc>().add(SignInEvent(
         username: _usernameController.text.trim(),
         password: _passwordController.text.trim()));
@@ -65,49 +56,93 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(title: const Text("Sign In")),
       body: Column(
         children: [
-          const Spacer(flex: 1),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: TextFormField(
-                    controller: _usernameController,
-                    maxLength: _maxUsernameLength,
-                    validator: _handleValidateUsername,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Username(~$_maxUsernameLength character)',
-                        prefixIcon: Icon(Icons.account_box_outlined),
-                        counterText: ''),
+          const Spacer(
+            flex: 1,
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: context.colorScheme.primaryContainer.withOpacity(0.5)),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Username",
+                          style: context.textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        6.height,
+                        TextFormField(
+                          controller: _usernameController,
+                          maxLength: _maxUsernameLength,
+                          validator: _handleValidateUsername,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.account_box_outlined),
+                            suffixIcon: IconButton(
+                              onPressed: _handleClearUsername,
+                              icon: const Icon(Icons.clear),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    maxLength: _maxPasswordLength,
-                    validator: _handleValidatePassword,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Password(~$_maxPasswordLength character)',
-                        prefixIcon: Icon(Icons.key_outlined),
-                        counterText: ''),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Password",
+                          style: context.textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        6.height,
+                        TextFormField(
+                          controller: _passwordController,
+                          maxLength: _maxPasswordLength,
+                          validator: _handleValidatePassword,
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.password),
+                            suffixIcon: IconButton(
+                              onPressed: _switchPasswordVisibility,
+                              icon: Icon(_isPasswordVisible
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          25.height,
-          ElevatedButton(onPressed: _handleSignIn, child: const Text("SUBMIT")),
-          const Spacer(flex: 3),
+          const Spacer(
+            flex: 2,
+          ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: _handleSubmit,
+        child: const Icon(Icons.check),
       ),
     );
   }
