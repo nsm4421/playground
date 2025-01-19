@@ -33,10 +33,7 @@ class FeedItemWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.favorite_border),
-              ),
+              LikeIconWidget(_feed),
               IconButton(
                 onPressed: () {},
                 icon: Icon(Icons.message_outlined),
