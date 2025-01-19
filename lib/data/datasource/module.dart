@@ -29,6 +29,10 @@ abstract class DataSource with LoggerUtil {
       ChatRemoteDataSourceImpl(dio: _dio, logger: logger);
 
   @lazySingleton
+  ReactionRemoteDataSource get reactionRemote =>
+      ReactionRemoteDataSourceImpl(dio: _dio, logger: logger);
+
+  @lazySingleton
   SocketRemoteDataSource get socketRemote =>
       SocketRemoteDataSourceImpl(socket: _socket, logger: logger);
 
