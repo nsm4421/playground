@@ -6,9 +6,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { FeedReaction } from './feed_reaction.entity';
 
 @Entity('feeds')
 export class Feed {
@@ -27,6 +29,9 @@ export class Feed {
   @ManyToOne(() => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: 'createdBy' })
   creator: User;
+
+  @OneToMany(() => FeedReaction, (reaction) => reaction.feed)
+  reactions: FeedReaction[];
 
   @CreateDateColumn()
   createdAt: Date;

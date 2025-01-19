@@ -22,13 +22,18 @@ import { genMultiFileMulterOption } from 'src/utils/upload.util';
 export class FeedController {
   constructor(private readonly feedService: FeedService) {}
 
+  /// feed
   @Get()
   async fetch(
+    @Request() request,
     @Query('page') page: number,
     @Query('pageSize') pageSize?: number,
   ) {
-    console.debug(`page:${page}|pageSize:${pageSize}`);
-    return await this.feedService.fetch({ page, pageSize });
+    return await this.feedService.fetchFeeds({
+      page,
+      pageSize,
+      currentUid: request.user.sub,
+    });
   }
 
   @Post()
@@ -46,7 +51,7 @@ export class FeedController {
   ) {
     return {
       message: 'feed created',
-      payload: await this.feedService.create({
+      payload: await this.feedService.createFeed({
         content,
         hashtags: hashtags.split('|'),
         images: files
@@ -72,7 +77,7 @@ export class FeedController {
   ) {
     return {
       message: 'feed created',
-      payload: await this.feedService.modify({
+      payload: await this.feedService.modifyFeed({
         id,
         content,
         hashtags: hashtags.split('|'),
@@ -86,6 +91,30 @@ export class FeedController {
 
   @Delete(':id')
   async delete(@Param('id') id: number) {
-    return await this.feedService.delete({ id });
+    return await this.feedService.deleteFeed(id);
+  }
+
+  /// feed reaction
+  @Get('reaction')
+  async countLike(@Query('id') feedId: number) {
+    return await this.feedService.countLike(feedId);
+  }
+
+  @Post('reaction')
+  async createLike(@Request() request, @Query('id') feedId: number) {
+    const data = await this.feedService.createLike({
+      feedId,
+      currentUid: request.user.sub,
+    });
+    console.table(data);
+    return data;
+  }
+
+  @Delete('reaction/:id')
+  async deleteLike(@Request() request, @Param('id') feedId: number) {
+    return await this.feedService.deleteLike({
+      feedId,
+      currentUid: request.user.sub,
+    });
   }
 }

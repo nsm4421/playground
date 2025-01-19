@@ -6,21 +6,28 @@ import {
 import { Repository } from 'typeorm';
 import { Feed } from './entity/feed.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FeedReaction } from './entity/feed_reaction.entity';
 
-interface FetchProps {
+interface FetchFeedsProps {
   page: number;
   pageSize?: number;
+  currentUid: string;
 }
 
-interface CreateProps {
+interface CreateFeedProps {
   content: string;
   hashtags: string[];
   images: string[];
   createdBy: string;
 }
 
-interface EditProps extends CreateProps {
+interface EditFeedProps extends CreateFeedProps {
   id: number;
+}
+
+interface EditLikeProps {
+  feedId: number;
+  currentUid: string;
 }
 
 @Injectable()
@@ -28,17 +35,29 @@ export class FeedService {
   constructor(
     @InjectRepository(Feed)
     private readonly feedRepository: Repository<Feed>,
+    @InjectRepository(FeedReaction)
+    private readonly feedReactionRepository: Repository<FeedReaction>,
   ) {}
 
-  async fetch({ page, pageSize }: FetchProps) {
+  async fetchFeeds({ page, pageSize, currentUid }: FetchFeedsProps) {
     const [data, totalCount] = await this.feedRepository
       .createQueryBuilder('feed')
-      .leftJoinAndSelect('feed.creator', 'user')
-      .select(['feed', 'user.id', 'user.username', 'user.profileImage'])
+      // 유저 테이블 조인
+      .leftJoin('feed.creator', 'user')
+      .addSelect(['user.username', 'user.profileImage'])
+      // 좋아요 테이블 조인
+      .leftJoin(
+        'feed.reactions',
+        'reaction',
+        `reaction.createdBy = '${currentUid}'`,
+      )
+      .addSelect(['reaction.id', 'reaction.createdAt'])
+      // pagining
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .orderBy('feed.createdAt', 'DESC')
       .getManyAndCount();
+
     return {
       data,
       totalCount,
@@ -48,7 +67,7 @@ export class FeedService {
     };
   }
 
-  async create({ content, hashtags, images, createdBy }: CreateProps) {
+  async createFeed({ content, hashtags, images, createdBy }: CreateFeedProps) {
     return await this.feedRepository.save({
       content,
       hashtags,
@@ -57,7 +76,13 @@ export class FeedService {
     });
   }
 
-  async modify({ id, content, hashtags, images, createdBy }: EditProps) {
+  async modifyFeed({
+    id,
+    content,
+    hashtags,
+    images,
+    createdBy,
+  }: EditFeedProps) {
     const feed = await this.feedRepository.findOneBy({ id });
     if (feed.creator.id !== createdBy) {
       throw new BadRequestException('can modify only own data');
@@ -70,7 +95,31 @@ export class FeedService {
     return await this.feedRepository.save(feed);
   }
 
-  async delete({ id }) {
-    return await this.feedRepository.softDelete({ id });
+  async deleteFeed(feedId: number) {
+    return await this.feedRepository.softDelete({ id: feedId });
+  }
+
+  async countLike(feedId: number) {
+    return await this.feedReactionRepository.countBy({
+      feed: {
+        id: feedId,
+      },
+    });
+  }
+
+  async createLike({ feedId, currentUid }: EditLikeProps) {
+    return await this.feedReactionRepository.save({
+      feedId,
+      creator: {
+        id: currentUid,
+      },
+    });
+  }
+
+  async deleteLike({ feedId, currentUid }: EditLikeProps) {
+    return await this.feedReactionRepository.delete({
+      feed: { id: feedId },
+      creator: { id: currentUid },
+    });
   }
 }

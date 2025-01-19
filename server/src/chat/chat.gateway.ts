@@ -1,4 +1,4 @@
-import { BadRequestException, UseGuards } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -11,7 +11,6 @@ import {
 
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
-import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
 import { AuthService } from 'src/auth/auth.service';
 
 interface JoinChatProps {
