@@ -55,6 +55,10 @@ class CustomRouter {
             path: Routes.signIn.subPath ?? 'sign-in',
             builder: (context, state) => const SignInPage(),
           ),
+          GoRoute(
+            path: Routes.passwordRecovery.subPath ?? 'password-recovery',
+            builder: (context, state) => const PasswordRecoveryPage(),
+          ),
         ],
       );
 
@@ -94,7 +98,16 @@ class CustomRouter {
                         path: Routes.setting.path,
                         pageBuilder: (context, state) {
                           return const NoTransitionPage(child: SettingPage());
-                        })
+                        },
+                        routes: [
+                          GoRoute(
+                              path:
+                                  Routes.editProfile.subPath ?? 'edit-profile',
+                              pageBuilder: (context, state) {
+                                return const NoTransitionPage(
+                                    child: EditProfilePage());
+                              })
+                        ])
                   ])
               })
           .toList());

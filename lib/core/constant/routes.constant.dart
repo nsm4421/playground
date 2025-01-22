@@ -5,6 +5,7 @@ enum Routes {
   auth('/auth'),
   signIn('/auth/sign-in', subPath: 'sign-in'),
   signUp('/auth/sign-up', subPath: 'sign-up'),
+  passwordRecovery('/auth/password-recovery', subPath: 'password-recovery'),
 
   /// chat
   chat('/chat'),
@@ -23,6 +24,7 @@ enum Routes {
 
   /// setting
   setting('/setting'),
+  editProfile('/setting/edit-profile', subPath: 'edit-profile'),
   ;
 
   final String path;
