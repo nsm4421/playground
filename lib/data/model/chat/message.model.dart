@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/data/model/auth/author.model.dart';
+import 'package:my_app/data/model/auth/get_user.model.dart';
+import 'package:my_app/data/model/auth/get_user.model.dart';
 import 'package:my_app/data/model/chat/fetch_chat.model.dart';
+
+import '../auth/user.model.dart';
 
 part 'message.model.freezed.dart';
 
@@ -12,7 +15,7 @@ class MessageDto with _$MessageDto {
   const factory MessageDto({
     @Default('') String id,
     @Default('') String content,
-    @Default(AuthorDto()) AuthorDto creator,
+    @Default(UserModel()) UserModel creator,
     @Default(GroupChatDto()) GroupChatDto chat,
     @Default('') String createdAt,
     @Default('') String updatedAt,

@@ -44,7 +44,7 @@ export class FeedService {
       .createQueryBuilder('feed')
       // 유저 테이블 조인
       .leftJoin('feed.creator', 'user')
-      .addSelect(['user.username', 'user.profileImage'])
+      .addSelect(['user.nickname', 'user.profileImage'])
       // 좋아요 테이블 조인
       .leftJoin(
         'feed.reactions',

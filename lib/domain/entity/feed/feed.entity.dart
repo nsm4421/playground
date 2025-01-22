@@ -1,7 +1,7 @@
 part of '../export.entity.dart';
 
 class FeedEntity extends IntIdEntity {
-  final AuthorEntity author;
+  final UserEntity author;
   final String content;
   late final List<String> hashtags;
   late final List<String> images;
@@ -25,7 +25,7 @@ class FeedEntity extends IntIdEntity {
         id: dto.id,
         createdAt: DateTime.tryParse(dto.createdAt),
         updatedAt: DateTime.tryParse(dto.updatedAt),
-        author: AuthorEntity.from(dto.creator),
+        author: UserEntity.from(dto.creator),
         content: dto.content,
         hashtags: dto.hashtags,
         images: dto.images.map((item) => '${ApiEndPoint.domain}$item').toList(),

@@ -34,7 +34,7 @@ export class ChatService {
     const [data, totalCount] = await this.chatRepository
       .createQueryBuilder('chat')
       .leftJoinAndSelect('chat.creator', 'user')
-      .select(['chat', 'user.id', 'user.username', 'user.profileImage'])
+      .select(['chat', 'user.id', 'user.nickname', 'user.profileImage'])
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .orderBy('chat.updatedAt', 'DESC')

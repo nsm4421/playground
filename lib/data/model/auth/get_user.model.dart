@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'user.model.dart';
+
 part 'get_user.model.freezed.dart';
 
 part 'get_user.model.g.dart';
@@ -14,16 +16,3 @@ class GetUserDto with _$GetUserDto {
       _$GetUserDtoFromJson(json);
 }
 
-@freezed
-class UserModel with _$UserModel {
-  factory UserModel({
-    @Default('') String id,
-    @Default('') String email,
-    @Default('') String username,
-    @Default('') String nickname,
-    @Default('') String profileImage,
-  }) = _UserModel;
-
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
-}

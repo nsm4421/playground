@@ -3,7 +3,7 @@ part of '../export.entity.dart';
 class GroupChatEntity extends UuidIdEntity {
   final String title;
   late final List<String> hashtags;
-  final AuthorEntity author;
+  final UserEntity author;
 
   GroupChatEntity(
       {required super.id,
@@ -20,7 +20,7 @@ class GroupChatEntity extends UuidIdEntity {
       id: dto.id,
       title: dto.title,
       hashtags: dto.hashtags,
-      author: AuthorEntity.from(dto.creator),
+      author: UserEntity.from(dto.creator),
       createdAt: DateTime.tryParse(dto.createdAt),
       updatedAt: DateTime.tryParse(dto.updatedAt),
     );
