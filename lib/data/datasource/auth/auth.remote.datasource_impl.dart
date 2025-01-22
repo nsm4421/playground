@@ -55,4 +55,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .get(ApiEndPoint.getUser)
         .then((res) => GetUserDto.fromJson(res.data).payload);
   }
+
+  @override
+  Future<void> editProfile(
+      {required String nickname, File? profileImage}) async {
+    await _dio
+        .post(ApiEndPoint.editProfile,
+            data: FormData.fromMap({
+              if (profileImage != null)
+                'file': await MultipartFile.fromFile(profileImage.path),
+              'nickname': nickname
+            }))
+        .then((res) => res.data)
+        .then(_logger.d);
+  }
 }

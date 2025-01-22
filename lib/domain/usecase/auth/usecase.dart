@@ -15,4 +15,6 @@ class AuthUseCase {
   SignInUseCase get signIn => SignInUseCase(_repository);
 
   SignOutUseCase get signOut => SignOutUseCase(_repository);
+
+  EditProfileUseCase get editProfile => EditProfileUseCase(_repository);
 }

@@ -17,6 +17,11 @@ abstract interface class AuthRemoteDataSource {
     required File profileImage,
   });
 
+  Future<void> editProfile({
+    required String nickname,
+    File? profileImage,
+  });
+
   Future<String> signIn({required String username, required String password});
 
   Future<UserModel> getUser(String accessToken);

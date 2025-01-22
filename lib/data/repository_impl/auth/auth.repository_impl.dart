@@ -24,8 +24,8 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
           return token == null
               ? null
               : await _authRemoteDataSource
-              .getUser(token)
-              .then(UserEntity.from);
+                  .getUser(token)
+                  .then(UserEntity.from);
         } catch (error) {
           logger.e(error);
           return null;
@@ -78,7 +78,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
 
   @override
   Future<Either<ErrorResponse, SuccessResponse<UserEntity>>>
-  getCurrentUser() async {
+      getCurrentUser() async {
     try {
       // 로컬 스토리지에서 토큰 찾기
       final accessToken = await _storageLocalDataSource.get(_key);
@@ -105,6 +105,19 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
         // 로그아웃 처리
         _authLocalDataSource.addData(null);
       });
+      return Right(SuccessResponse(payload: null));
+    } catch (error) {
+      return Left(ErrorResponse.from(error, logger: logger));
+    }
+  }
+
+  @override
+  Future<Either<ErrorResponse, SuccessResponse<void>>> editProfile(
+      {required String nickname, File? profileImage}) async {
+    try {
+      await _authRemoteDataSource
+          .editProfile(nickname: nickname, profileImage: profileImage)
+          .then((_) => Right(SuccessResponse(payload: null)));
       return Right(SuccessResponse(payload: null));
     } catch (error) {
       return Left(ErrorResponse.from(error, logger: logger));

@@ -7,6 +7,7 @@ class ApiEndPoint {
   /// auth
   static String signUp = "/auth/sign-up";
   static String signIn = "/auth/sign-in";
+  static String editProfile = "/auth/edit-profile";
   static String getUser = "/auth";
 
   /// feed

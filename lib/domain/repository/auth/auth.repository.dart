@@ -17,4 +17,9 @@ abstract interface class AuthRepository {
       {required String username, required String password});
 
   Future<Either<ErrorResponse, SuccessResponse<void>>> signOut();
+
+  Future<Either<ErrorResponse, SuccessResponse<void>>> editProfile({
+    required String nickname,
+    File? profileImage,
+  });
 }
