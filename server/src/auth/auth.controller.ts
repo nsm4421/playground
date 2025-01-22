@@ -13,10 +13,8 @@ import { AuthService } from './auth.service';
 import { SignUpReqDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from './guard/local.guard';
 import { JwtAuthGuard } from './guard/jwt.guard';
-import {
-  genMultiFileMulterOption,
-  genSingleFileMulterOption,
-} from 'src/utils/upload.util';
+import { genSingleFileMulterOption } from 'src/utils/upload.util';
+import { EditProfileReqDto } from './dto/edit-profile.dto';
 
 @Controller('api/auth')
 export class AuthController {
@@ -64,6 +62,31 @@ export class AuthController {
       message: 'fetching current user info success',
       payload: {
         ...(await this.authService.get(id)),
+      },
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    genSingleFileMulterOption({
+      fileKey: 'file',
+      destination: './upload/auth',
+    }),
+  )
+  @Post('edit-profile')
+  async editProfile(
+    @Body() { nickname }: EditProfileReqDto,
+    @Request() request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return {
+      message: 'profile edited successfully',
+      payload: {
+        user: await this.authService.editProfile({
+          id: request.user.sub,
+          nickname,
+          ...(file && { profileImage: `/upload/auth/${file.filename}` }),
+        }),
       },
     };
   }

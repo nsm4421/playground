@@ -20,6 +20,12 @@ interface SignUpProps extends ValidateProps {
   profileImage: string;
 }
 
+interface EditProfileProps {
+  id: string;
+  nickname: string;
+  profileImage?: string;
+}
+
 interface DecodedToken {
   username: string;
   sub: string;
@@ -98,5 +104,28 @@ export class AuthService {
       console.error(error);
       throw new UnauthorizedException('Invalid token');
     }
+  }
+
+  /** 회원가입
+   * @param props
+   * - nickname
+   * - profileImage
+   * @returns 업데이트된 유저정보
+   */
+  async editProfile({ id, nickname, profileImage }: EditProfileProps) {
+    const user = await this.authRepository.findOneBy({
+      id,
+    });
+    await this.authRepository.update(
+      {
+        id: id,
+      },
+      {
+        nickname,
+        ...(profileImage && { profileImage }),
+      },
+    );
+    const { password, ...payload } = user;
+    return payload;
   }
 }
