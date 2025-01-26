@@ -1,47 +1,51 @@
 part of '../export.repository_impl.dart';
 
-@LazySingleton(as: ReactionRepository)
-class ReactionRepositoryImpl with LoggerUtil implements ReactionRepository {
-  final ReactionRemoteDataSource _remoteDataSource;
+@LazySingleton(as: FeedReactionRepository)
+class FeedReactionRepositoryImpl
+    with LoggerUtil
+    implements FeedReactionRepository {
+  final FeedReactionRemoteDataSource _remoteDataSource;
 
-  ReactionRepositoryImpl(this._remoteDataSource);
+  FeedReactionRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Either<ErrorResponse, SuccessResponse<int>>> count(
-      {required int id, required ReactionReference ref}) async {
+  Future<Either<ErrorResponse, SuccessResponse<int>>> count(int feedId) async {
     try {
       return await _remoteDataSource
-          .count(id: id, ref: ref)
+          .count(feedId)
           .then((res) => SuccessResponse(payload: res))
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
 
   @override
   Future<Either<ErrorResponse, SuccessResponse<ReactionEntity>>> create(
-      {required int id, required ReactionReference ref}) async {
+      int feedId) async {
     try {
       return await _remoteDataSource
-          .create(id: id, ref: ref)
+          .create(feedId)
           .then(ReactionEntity.from)
           .then((entity) => SuccessResponse(payload: entity))
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
 
   @override
   Future<Either<ErrorResponse, SuccessResponse<void>>> delete(
-      {required int id, required ReactionReference ref}) async {
+      int feedId) async {
     try {
       return await _remoteDataSource
-          .delete(id: id, ref: ref)
+          .delete(feedId)
           .then((_) => SuccessResponse(payload: null))
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
