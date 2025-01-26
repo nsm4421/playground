@@ -5,20 +5,13 @@ class ApiEndPoint {
   static const baseUrl = "$domain/api";
 
   /// auth
-  static String signUp = "/auth/sign-up";
-  static String signIn = "/auth/sign-in";
-  static String editProfile = "/auth/edit-profile";
-  static String getUser = "/auth";
+  static String auth = "/auth";
 
   /// feed
-  static String fetchFeed = "/feed";
-  static String createFeed = "/feed";
-  static String modifyFeed = "/feed";
-  static String deleteFeed = "/feed";
+  static String feed = "/feed";
 
   /// chat
-  static String createChat = "/chat";
-  static String fetchChat = "/chat";
+  static String chat = "/chat";
   static const socketUrl = "http://10.0.2.2:3001";
 }
 
@@ -26,4 +19,20 @@ class EventNames {
   static const joinChat = "join-chat";
   static const sendMessage = "send-message";
   static const receiveMessage = "receive-message";
+}
+
+enum ReactionReference {
+  feeds("/feed/reaction");
+
+  final String endPoint;
+
+  const ReactionReference(this.endPoint);
+}
+
+enum CommentReference {
+  feeds("/feed/comment");
+
+  final String endPoint;
+
+  const CommentReference(this.endPoint);
 }

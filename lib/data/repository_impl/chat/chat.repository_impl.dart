@@ -29,11 +29,13 @@ class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
   Future<Either<ErrorResponse, SuccessResponse<Pageable<GroupChatEntity>>>>
       fetch({required int page, int pageSize = 20}) async {
     try {
-      final data = await _chatRemoteDataSource
+      return await _chatRemoteDataSource
           .fetch(page: page, pageSize: pageSize)
-          .then((res) => res.convert<GroupChatEntity>(GroupChatEntity.from));
-      return Right(SuccessResponse(payload: data));
+          .then((res) => res.convert<GroupChatEntity>(GroupChatEntity.from))
+          .then((data) => SuccessResponse(payload: data))
+          .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
@@ -45,9 +47,13 @@ class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
   Future<Either<ErrorResponse, SuccessResponse<void>>> create(
       {required String title, required List<String> hashtags}) async {
     try {
-      await _chatRemoteDataSource.create(title: title, hashtags: hashtags);
-      return Right(SuccessResponse(payload: null));
+      return await _chatRemoteDataSource
+          .create(title: title, hashtags: hashtags)
+          .then((data) => SuccessResponse(payload: null))
+          .then(Right.new);
+      ;
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
@@ -59,6 +65,7 @@ class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
           .emit(event: EventNames.joinChat, json: {'chatId': chatId});
       return Right(SuccessResponse(payload: null));
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }

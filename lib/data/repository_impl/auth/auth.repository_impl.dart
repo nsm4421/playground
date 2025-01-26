@@ -41,15 +41,18 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
     required File profileImage,
   }) async {
     try {
-      await _authRemoteDataSource.signUp(
-        email: email,
-        username: username,
-        password: password,
-        nickname: nickname,
-        profileImage: profileImage,
-      );
-      return Right(SuccessResponse(payload: null));
+      return await _authRemoteDataSource
+          .signUp(
+            email: email,
+            username: username,
+            password: password,
+            nickname: nickname,
+            profileImage: profileImage,
+          )
+          .then((res) => SuccessResponse(payload: null))
+          .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
@@ -72,6 +75,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
 
       return Right(SuccessResponse(payload: accessToken));
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
@@ -93,6 +97,7 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
       _authLocalDataSource.addData(accessToken);
       return Right(SuccessResponse(payload: UserEntity.from(user)));
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
@@ -100,13 +105,16 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
   @override
   Future<Either<ErrorResponse, SuccessResponse<void>>> signOut() async {
     try {
-      // 로컬 스토리지에서 토큰 지우기
-      await _storageLocalDataSource.delete(_key).then((_) {
-        // 로그아웃 처리
-        _authLocalDataSource.addData(null);
-      });
-      return Right(SuccessResponse(payload: null));
+      return await _storageLocalDataSource
+          .delete(_key) // 로컬 스토리지에서 토큰 지우기
+          .then((_) {
+            // 로그아웃 처리
+            _authLocalDataSource.addData(null);
+          })
+          .then((_) => SuccessResponse(payload: null))
+          .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
@@ -115,11 +123,12 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
   Future<Either<ErrorResponse, SuccessResponse<void>>> editProfile(
       {required String nickname, File? profileImage}) async {
     try {
-      await _authRemoteDataSource
+      return await _authRemoteDataSource
           .editProfile(nickname: nickname, profileImage: profileImage)
-          .then((_) => Right(SuccessResponse(payload: null)));
-      return Right(SuccessResponse(payload: null));
+          .then((_) => SuccessResponse(payload: null))
+          .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
