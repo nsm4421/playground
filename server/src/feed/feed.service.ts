@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Feed } from './entity/feed.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FeedReaction } from './entity/feed_reaction.entity';
+import { FeedComment } from './entity/feed_comment.entity';
 
 interface FetchFeedsProps {
   page: number;
@@ -30,11 +31,36 @@ interface EditLikeProps {
   currentUid: string;
 }
 
+interface FetchCommentsProps {
+  page: number;
+  pageSize?: number;
+  feedId: number;
+}
+
+interface CreateCommentProps {
+  feedId: number;
+  currentUid: string;
+  content: string;
+}
+
+interface ModifyCommentProps {
+  commentId: number;
+  currentUid: string;
+  content: string;
+}
+
+interface DeleteCommentProps {
+  commentId: number;
+  currentUid: string;
+}
+
 @Injectable()
 export class FeedService {
   constructor(
     @InjectRepository(Feed)
     private readonly feedRepository: Repository<Feed>,
+    @InjectRepository(FeedComment)
+    private readonly feedCommentRepository: Repository<FeedComment>,
     @InjectRepository(FeedReaction)
     private readonly feedReactionRepository: Repository<FeedReaction>,
   ) {}
@@ -84,10 +110,10 @@ export class FeedService {
     createdBy,
   }: EditFeedProps) {
     const feed = await this.feedRepository.findOneBy({ id });
-    if (feed.creator.id !== createdBy) {
-      throw new BadRequestException('can modify only own data');
-    } else if (feed.deletedAt !== null) {
+    if (!feed || feed.deletedAt) {
       throw new NotFoundException('already deleted data');
+    } else if (feed.creator.id !== createdBy) {
+      throw new BadRequestException('can modify only own data');
     }
     feed.content = content;
     feed.hashtags = hashtags;
@@ -121,5 +147,65 @@ export class FeedService {
       feed: { id: feedId },
       creator: { id: currentUid },
     });
+  }
+
+  async fetchComments({ page, pageSize, feedId }: FetchCommentsProps) {
+    const [data, totalCount] = await this.feedCommentRepository
+      .createQueryBuilder('feed_comment')
+      // 피드 아이디로 필터링
+      .where('feed_comment.feedId = :feedId', { feedId })
+      // 유저 테이블 조인
+      .leftJoin('feed_comment.creator', 'user')
+      .addSelect(['user.nickname', 'user.profileImage'])
+      // pagining
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .orderBy('feed_comment.createdAt', 'DESC')
+      .getManyAndCount();
+
+    return {
+      data,
+      totalCount,
+      pageSize,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
+  }
+
+  async createComment({ feedId, currentUid, content }: CreateCommentProps) {
+    return await this.feedCommentRepository.save({
+      feed: { id: feedId },
+      content,
+      creator: { id: currentUid },
+    });
+  }
+
+  async modifyComment({ currentUid, content, commentId }: ModifyCommentProps) {
+    const comment = await this.feedCommentRepository.findOneBy({
+      id: commentId,
+    });
+    if (!comment || comment.deletedAt) {
+      throw new NotFoundException('comment not found');
+    } else if (comment.creator.id !== currentUid) {
+      throw new BadRequestException('only author can edit comment');
+    }
+    return await this.feedCommentRepository.update(
+      { id: commentId },
+      {
+        content,
+      },
+    );
+  }
+
+  async deleteComment({ commentId, currentUid }: DeleteCommentProps) {
+    const comment = await this.feedCommentRepository.findOneBy({
+      id: commentId,
+    });
+    if (!comment || comment.deletedAt) {
+      throw new NotFoundException('comment not found');
+    } else if (comment.creator.id !== currentUid) {
+      throw new BadRequestException('only author can edit comment');
+    }
+    return await this.feedCommentRepository.softDelete({ id: commentId });
   }
 }

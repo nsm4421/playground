@@ -16,6 +16,10 @@ import { FeedService } from './feed.service';
 import { CreateFeedDto, ModifyFeedDto } from './dto/edit-feed.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
 import { genMultiFileMulterOption } from 'src/utils/upload.util';
+import {
+  CreateFeedCommentDto,
+  ModifyFeedCommentDto,
+} from './dto/edit-comment.dto';
 
 @Controller('api/feed')
 @UseGuards(JwtAuthGuard)
@@ -102,18 +106,54 @@ export class FeedController {
 
   @Post('reaction')
   async createLike(@Request() request, @Query('id') feedId: number) {
-    const data = await this.feedService.createLike({
+    return await this.feedService.createLike({
       feedId,
       currentUid: request.user.sub,
     });
-    console.table(data);
-    return data;
   }
 
   @Delete('reaction/:id')
   async deleteLike(@Request() request, @Param('id') feedId: number) {
     return await this.feedService.deleteLike({
       feedId,
+      currentUid: request.user.sub,
+    });
+  }
+
+  /// feed comment
+  @Get('comment/:feedId')
+  async fetchComments(
+    @Param('feedId') feedId: number,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize?: number,
+  ) {
+    return await this.feedService.fetchComments({
+      page,
+      pageSize,
+      feedId,
+    });
+  }
+
+  @Post('comment')
+  async createComment(@Request() request, @Body() dto: CreateFeedCommentDto) {
+    return await this.feedService.createComment({
+      ...dto,
+      currentUid: request.user.sub,
+    });
+  }
+
+  @Put('comment')
+  async modifyComment(@Request() request, @Body() dto: ModifyFeedCommentDto) {
+    return await this.feedService.modifyComment({
+      ...dto,
+      currentUid: request.user.sub,
+    });
+  }
+
+  @Delete('comment/:id')
+  async deleteComment(@Request() request, @Param('id') commentId: number) {
+    return await this.feedService.deleteComment({
+      commentId,
       currentUid: request.user.sub,
     });
   }
