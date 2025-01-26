@@ -20,13 +20,18 @@ class FeedItemWidget extends StatelessWidget {
               children: [
                 CustomCircleAvatarWidget(_feed.author.profileImage),
                 (12.width),
-                Text(_feed.author.username),
+                Text(_feed.author.nickname),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
               ],
             ),
           ),
-          if (_feed.images.isNotEmpty) CarouselWidget(_feed.images),
+          if (_feed.images.isNotEmpty)
+            CarouselWidget(
+              _feed.images,
+              showIndicator:
+                  _feed.images.length > 1, // 이미지가 여러개인 경우만 indicator 보여기주기
+            ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             child: Text(_feed.content),
@@ -34,10 +39,7 @@ class FeedItemWidget extends StatelessWidget {
           Row(
             children: [
               LikeIconWidget(_feed),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.message_outlined),
-              ),
+              CommentIconWidget(_feed),
               IconButton(
                 onPressed: () {},
                 icon: Icon(Icons.share),
