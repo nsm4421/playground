@@ -40,7 +40,7 @@ class Pageable<T> {
       totalCount: totalCount ?? this.totalCount,
       pageSize: pageSize ?? this.pageSize,
       currentPage: currentPage ?? this.currentPage,
-      totalPages: totalCount ?? this.totalCount,
+      totalPages: totalPages ?? this.totalPages,
     );
   }
 
@@ -51,7 +51,7 @@ class Pageable<T> {
       totalCount: totalCount,
       pageSize: pageSize,
       currentPage: currentPage,
-      totalPages: totalCount,
+      totalPages: totalPages,
     );
   }
 }

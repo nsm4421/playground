@@ -25,6 +25,7 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
                       totalCount: r.payload.totalCount,
                       currentPage: r.payload.currentPage,
                       totalPages: r.payload.totalPages,
+                      isEnd: r.payload.currentPage == r.payload.totalPages,
                       pageSize: r.payload.pageSize,
                     ));
               }));
@@ -55,6 +56,7 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
                     totalCount: r.payload.totalCount,
                     currentPage: r.payload.currentPage,
                     totalPages: r.payload.totalPages,
+                    isEnd: r.payload.currentPage == r.payload.totalPages,
                     pageSize: r.payload.pageSize,
                     message: r.message));
               }));

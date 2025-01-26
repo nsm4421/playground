@@ -42,7 +42,7 @@ class DisplayGroupChatBloc extends DisplayBloc<GroupChatEntity>
       if (state.isEnd) return;
       emit(state.copyWith(status: Status.loading));
       await _useCase
-          .fetchChats(page: state.pageSize + 1, pageSize: state.pageSize)
+          .fetchChats(page: state.currentPage + 1, pageSize: state.pageSize)
           .then((res) => res.fold((l) {
                 logger.e(l.description);
                 emit(state.copyWith(status: Status.error, message: l.message));
@@ -56,6 +56,7 @@ class DisplayGroupChatBloc extends DisplayBloc<GroupChatEntity>
                     totalCount: r.payload.totalCount,
                     currentPage: r.payload.currentPage,
                     totalPages: r.payload.totalPages,
+                    isEnd: r.payload.currentPage == r.payload.totalPages,
                     pageSize: r.payload.pageSize,
                     message: r.message));
               }));
