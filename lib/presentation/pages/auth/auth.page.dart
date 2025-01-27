@@ -31,34 +31,73 @@ class _AuthPageState extends State<AuthPage> {
                   color: context.colorScheme.primary,
                   fontWeight: FontWeight.bold),
             ),
-            25.height,
 
             /// sign in button
-            Text(
-              "To start, need to login first",
-              style: context.textTheme.labelLarge?.copyWith(
-                  color: context.colorScheme.primary,
-                  fontWeight: FontWeight.w600),
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "To start, need to login first",
+                    style: context.textTheme.labelLarge?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.push(Routes.signIn.path);
+                      },
+                      child: const Text("Sign In")),
+                ],
+              ),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  context.push(Routes.signIn.path);
-                },
-                child: const Text("Sign In")),
-            25.height,
 
             /// sign up button
-            Text(
-              "If you don't have account",
-              style: context.textTheme.labelLarge?.copyWith(
-                  color: context.colorScheme.primary,
-                  fontWeight: FontWeight.w600),
+            Padding(
+              padding: EdgeInsets.only(top: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "If you don't have account",
+                    style: context.textTheme.labelLarge?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.push(Routes.signUp.path);
+                      },
+                      child: const Text("Sign Up")),
+                ],
+              ),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  context.push(Routes.signUp.path);
-                },
-                child: const Text("Sign Up")),
+
+            /// Password Recovery
+            Padding(
+              padding: EdgeInsets.only(top: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Did you forgot password?",
+                    style: context.textTheme.labelLarge?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.push(Routes.passwordRecovery.path);
+                      },
+                      child: const Text("Find Password")),
+                ],
+              ),
+            ),
+
             const Spacer(
               flex: 2,
             )

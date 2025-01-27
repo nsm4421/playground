@@ -27,3 +27,27 @@ class LikeIconWidget extends StatelessWidget {
     );
   }
 }
+
+class CommentIconWidget extends StatelessWidget {
+  const CommentIconWidget(this._feed, {super.key});
+
+  final FeedEntity _feed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () async {
+        context.read<HomeBottomNavCubit>().handleVisibility(false);
+        await showModalBottomSheet(
+                isScrollControlled: true,
+                showDragHandle: true,
+                context: context,
+                builder: (_) => SafeArea(child: FeedCommentPage(_feed)))
+            .whenComplete(() {
+          context.read<HomeBottomNavCubit>().handleVisibility(true);
+        });
+      },
+      icon: const Icon(Icons.message_outlined),
+    );
+  }
+}

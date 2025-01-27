@@ -1,10 +1,11 @@
 part of 'export.components.dart';
 
 class CarouselWidget extends StatefulWidget {
-  const CarouselWidget(this._urls, {super.key, this.maxHeight});
+  const CarouselWidget(this._urls, {super.key, this.maxHeight ,this.showIndicator = true});
 
   final List<String> _urls;
   final double? maxHeight;
+  final bool showIndicator ;
 
   @override
   State<CarouselWidget> createState() => _CarouselWidgetState();
@@ -39,6 +40,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 CustomCachedImageWidget(widget._urls[index]),
           ),
         ),
+        if (widget.showIndicator)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: SmoothPageIndicator(

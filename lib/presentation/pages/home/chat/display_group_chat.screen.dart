@@ -54,7 +54,8 @@ class _DisplayGroupChatScreenState extends State<DisplayGroupChatScreen> {
                     InkWell(
                       onTap: _handleRoute(item),
                       child: ListTile(
-                        leading: CustomCircleAvatarWidget(item.author.profileImage),
+                        leading:
+                            CustomCircleAvatarWidget(item.author.profileImage),
                         title: Text(
                           item.title,
                           style: context.textTheme.titleMedium
@@ -62,16 +63,13 @@ class _DisplayGroupChatScreenState extends State<DisplayGroupChatScreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
-                          item.author.username,
+                          item.author.nickname,
                           overflow: TextOverflow.ellipsis,
                           style: context.textTheme.titleSmall
                               ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                         trailing: isMine
-                            ? IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: _handleTapMoreIcon,
-                              )
+                            ? ChatMoreButtonWidget(item)
                             : const SizedBox.shrink(),
                       ),
                     ),

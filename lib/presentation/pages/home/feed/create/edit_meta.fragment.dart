@@ -60,6 +60,7 @@ class _EditMetaDataFragmentState extends State<EditMetaDataFragment> {
       };
 
   _handleSubmit() async {
+    FocusScope.of(context).unfocus();
     final futures = context
         .read<SelectMediaCubit>()
         .state

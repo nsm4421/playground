@@ -15,7 +15,6 @@ class SignInPage extends StatelessWidget {
               message: 'Sign In Fails', description: state.message);
           Timer(_duration, () {
             context.read<AuthBloc>().add(InitAuthEvent(status: Status.initial));
-            // TODO : 에러 메세지 띄우기
           });
         }
       },

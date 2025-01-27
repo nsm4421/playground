@@ -114,7 +114,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
                     if (!isMine)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8, left: 8),
-                        child: Text(item.sender.username,
+                        child: Text(item.sender.nickname,
                             style: context.textTheme.labelMedium),
                       ),
                     ConstrainedBox(
