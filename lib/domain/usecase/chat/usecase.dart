@@ -12,6 +12,8 @@ class ChatUseCase {
 
   CreateChatUseCase get create => CreateChatUseCase(_repository);
 
+  DeleteChatUseCase get delete => DeleteChatUseCase(_repository);
+
   JoinChatUseCase get joinChat => JoinChatUseCase(_repository);
 
   SendMessageUseCase get sendMessage => SendMessageUseCase(_repository);

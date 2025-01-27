@@ -5,8 +5,7 @@ class DeleteFeedUseCase {
 
   DeleteFeedUseCase(this._repository);
 
-  Future<Either<ErrorResponse, SuccessResponse<void>>> call(
-      {required int id}) async {
+  Future<Either<ErrorResponse, SuccessResponse<void>>> call(int id) async {
     return await _repository.delete(id);
   }
 }

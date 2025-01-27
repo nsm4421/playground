@@ -49,4 +49,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           return data;
         });
   }
+
+  @override
+  Future<void> delete(String chatId) async {
+    if (_showLog) {
+      _logger.t('delete|chatId:$chatId');
+    }
+    await _dio
+        .delete('$_endPointPrefix/$chatId')
+        .then((res) => res.data)
+        .then((data) {
+      if (_showLog) _logger.t(data);
+    });
+  }
 }

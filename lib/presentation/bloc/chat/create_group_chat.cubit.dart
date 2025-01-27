@@ -1,6 +1,4 @@
-import 'package:injectable/injectable.dart';
-import 'package:my_app/core/export.core.dart';
-import 'package:my_app/domain/usecase/export.usecase.dart';
+part of '../export.bloc.dart';
 
 @injectable
 class CreateGroupChatCubit extends SimpleCubit with LoggerUtil {

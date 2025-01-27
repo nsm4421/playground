@@ -67,7 +67,7 @@ class FeedRemoteDataSourceImpl implements FeedRemoteDataSource {
   Future<void> delete(int id) async {
     if (_showLog) _logger.t('delete|id:$id');
     return await _dio
-        .delete(_endPointPrefix)
+        .delete('$_endPointPrefix/$id')
         .then((res) => res.data)
         .then((data) {
       if (_showLog) _logger.t(data);

@@ -17,4 +17,6 @@ abstract interface class ChatRepository {
 
   Future<Either<ErrorResponse, SuccessResponse<void>>> create(
       {required String title, required List<String> hashtags});
+
+  Future<Either<ErrorResponse, SuccessResponse<void>>> delete(String chatId);
 }

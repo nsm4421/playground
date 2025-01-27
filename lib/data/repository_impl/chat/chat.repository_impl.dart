@@ -86,4 +86,15 @@ class ChatRepositoryImpl with LoggerUtil implements ChatRepository {
       return Left(ErrorResponse.from(error, logger: logger));
     }
   }
+
+  @override
+  Future<Either<ErrorResponse, SuccessResponse<void>>> delete(String chatId) async{
+    try {
+      return await _chatRemoteDataSource.delete(chatId)
+      .then((res)=> SuccessResponse(payload: null))
+      .then(Right.new);
+    } catch (error) {
+      return Left(ErrorResponse.from(error, logger: logger));
+    }
+  }
 }
