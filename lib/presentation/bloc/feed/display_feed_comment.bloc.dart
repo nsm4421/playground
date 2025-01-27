@@ -32,7 +32,7 @@ class DisplayFeedCommentBloc extends DisplayBloc<CommentEntity>
                     totalCount: r.payload.totalCount,
                     currentPage: r.payload.currentPage,
                     totalPages: r.payload.totalPages,
-                    isEnd: r.payload.currentPage == r.payload.totalPages,
+                    isEnd: r.payload.currentPage >= r.payload.totalPages,
                     pageSize: r.payload.pageSize));
               }));
     } catch (error) {
@@ -65,7 +65,7 @@ class DisplayFeedCommentBloc extends DisplayBloc<CommentEntity>
                     totalCount: r.payload.totalCount,
                     currentPage: r.payload.currentPage,
                     totalPages: r.payload.totalPages,
-                    isEnd: r.payload.currentPage == r.payload.totalPages,
+                    isEnd: r.payload.currentPage >= r.payload.totalPages,
                     pageSize: r.payload.pageSize,
                     message: r.message));
               }));

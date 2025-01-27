@@ -5,7 +5,9 @@ class DisplayGroupChatBloc extends DisplayBloc<GroupChatEntity>
     with LoggerUtil {
   final ChatUseCase _useCase;
 
-  DisplayGroupChatBloc(this._useCase);
+  DisplayGroupChatBloc(this._useCase) {
+    on<DeleteDisplayDataEvent<GroupChatEntity>>(_onDelete);
+  }
 
   @override
   Future<void> onMount(
@@ -60,6 +62,23 @@ class DisplayGroupChatBloc extends DisplayBloc<GroupChatEntity>
                     pageSize: r.payload.pageSize,
                     message: r.message));
               }));
+    } catch (error) {
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, message: 'error occurs'));
+    }
+  }
+
+  Future<void> _onDelete(DeleteDisplayDataEvent<GroupChatEntity> event,
+      Emitter<DisplayState<GroupChatEntity>> emit) async {
+    try {
+      await _useCase.delete.call(event.e.id).then((res) => res.fold(
+          (l) => emit(state.copyWith(status: Status.error, message: l.message)),
+          (r) => emit(state.copyWith(
+              status: Status.success,
+              message: r.message,
+              data: state.data
+                  .where((item) => item.id != event.e.id)
+                  .toList()))));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'error occurs'));

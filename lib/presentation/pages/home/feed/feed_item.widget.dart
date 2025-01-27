@@ -7,6 +7,7 @@ class FeedItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMine = _feed.author.id == context.read<AuthBloc>().state.user!.id;
     return Container(
       decoration: BoxDecoration(
           color: context.colorScheme.primaryContainer.withOpacity(0.3),
@@ -22,7 +23,9 @@ class FeedItemWidget extends StatelessWidget {
                 (12.width),
                 Text(_feed.author.nickname),
                 const Spacer(),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+                // 더보기 버튼
+                if (isMine)
+                  FeedMoreButtonWidget(_feed)
               ],
             ),
           ),

@@ -4,7 +4,9 @@ part of '../export.bloc.dart';
 class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
   final FeedUseCase _useCase;
 
-  DisplayFeedBloc(this._useCase);
+  DisplayFeedBloc(this._useCase) {
+    on<DeleteDisplayDataEvent<FeedEntity>>(_onDelete);
+  }
 
   @override
   Future<void> onMount(
@@ -25,7 +27,7 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
                       totalCount: r.payload.totalCount,
                       currentPage: r.payload.currentPage,
                       totalPages: r.payload.totalPages,
-                      isEnd: r.payload.currentPage == r.payload.totalPages,
+                      isEnd: r.payload.currentPage >= r.payload.totalPages,
                       pageSize: r.payload.pageSize,
                     ));
               }));
@@ -56,10 +58,26 @@ class DisplayFeedBloc extends DisplayBloc<FeedEntity> with LoggerUtil {
                     totalCount: r.payload.totalCount,
                     currentPage: r.payload.currentPage,
                     totalPages: r.payload.totalPages,
-                    isEnd: r.payload.currentPage == r.payload.totalPages,
+                    isEnd: r.payload.currentPage >= r.payload.totalPages,
                     pageSize: r.payload.pageSize,
                     message: r.message));
               }));
+    } catch (error) {
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, message: 'error occurs'));
+    }
+  }
+
+  Future<void> _onDelete(DeleteDisplayDataEvent<FeedEntity> event,
+      Emitter<DisplayState<FeedEntity>> emit) async {
+    try {
+      await _useCase.deleteFeed(event.e.id).then((res) => res.fold(
+          (l) => emit(state.copyWith(status: Status.error, message: l.message)),
+          (r) => emit(state.copyWith(
+              status: Status.success,
+              data: state.data
+                  .where((item) => item.id != event.e.id)
+                  .toList()))));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, message: 'error occurs'));
