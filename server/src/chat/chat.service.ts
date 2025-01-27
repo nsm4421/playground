@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entity/chat.entity';
@@ -12,13 +16,18 @@ interface FetchChatsProps {
 interface CreateChatProps {
   title: string;
   hashtags: string[];
-  createdBy: string;
+  currentUid: string;
+}
+
+interface DeleteChatProps {
+  currentUid: string;
+  id: string;
 }
 
 interface CreateMessageProps {
   content: string;
   chatId: string;
-  createdBy: string;
+  currentUid: string;
 }
 
 @Injectable()
@@ -48,19 +57,32 @@ export class ChatService {
     };
   }
 
-  async createChat({ title, hashtags, createdBy }: CreateChatProps) {
+  async createChat({ title, hashtags, currentUid }: CreateChatProps) {
     return await this.chatRepository.save({
       title,
       hashtags,
-      creator: { id: createdBy },
+      creator: { id: currentUid },
     });
   }
 
-  async createMessage({ content, chatId, createdBy }: CreateMessageProps) {
+  async deleteChat({ id, currentUid }: DeleteChatProps) {
+    const chat = await this.chatRepository.findOne({
+      where: { id },
+      relations: ['creator'],
+    });
+    if (!chat) {
+      throw new NotFoundException(`chat id ${id} not founded`);
+    } else if (chat.creator.id !== currentUid) {
+      throw new BadRequestException('only creator can delete chat');
+    }
+    return await this.chatRepository.softDelete({ id });
+  }
+
+  async createMessage({ content, chatId, currentUid }: CreateMessageProps) {
     return await this.messageRepository.save({
       content,
       creator: {
-        id: createdBy,
+        id: currentUid,
       },
       chat: {
         id: chatId,

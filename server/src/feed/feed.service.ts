@@ -26,6 +26,11 @@ interface EditFeedProps extends CreateFeedProps {
   id: number;
 }
 
+interface DeleteFeedProps {
+  id: number;
+  currentUid: string;
+}
+
 interface EditLikeProps {
   feedId: number;
   currentUid: string;
@@ -65,12 +70,13 @@ export class FeedService {
     private readonly feedReactionRepository: Repository<FeedReaction>,
   ) {}
 
+  /// 피드
   async fetchFeeds({ page, pageSize, currentUid }: FetchFeedsProps) {
     const [data, totalCount] = await this.feedRepository
       .createQueryBuilder('feed')
       // 유저 테이블 조인
       .leftJoin('feed.creator', 'user')
-      .addSelect(['user.nickname', 'user.profileImage'])
+      .addSelect(['user.id', 'user.nickname', 'user.profileImage'])
       // 좋아요 테이블 조인
       .leftJoin(
         'feed.reactions',
@@ -109,7 +115,10 @@ export class FeedService {
     images,
     createdBy,
   }: EditFeedProps) {
-    const feed = await this.feedRepository.findOneBy({ id });
+    const feed = await this.feedRepository.findOne({
+      where: { id },
+      relations: ['creator'],
+    });
     if (!feed || feed.deletedAt) {
       throw new NotFoundException('already deleted data');
     } else if (feed.creator.id !== createdBy) {
@@ -121,10 +130,21 @@ export class FeedService {
     return await this.feedRepository.save(feed);
   }
 
-  async deleteFeed(feedId: number) {
-    return await this.feedRepository.softDelete({ id: feedId });
+  async deleteFeed({ id, currentUid }: DeleteFeedProps) {
+    const feed = await this.feedRepository.findOne({
+      where: { id },
+      relations: ['creator'],
+    });
+    if (!feed || feed.deletedAt) {
+      throw new NotFoundException('already deleted data');
+    } else if (feed.creator.id !== currentUid) {
+      throw new BadRequestException('can delete only own data');
+    }
+
+    return await this.feedRepository.softDelete({ id });
   }
 
+  /// 좋아요
   async countLike(feedId: number) {
     return await this.feedReactionRepository.countBy({
       feed: {
@@ -149,6 +169,7 @@ export class FeedService {
     });
   }
 
+  /// 댓글
   async fetchComments({ page, pageSize, feedId }: FetchCommentsProps) {
     const [data, totalCount] = await this.feedCommentRepository
       .createQueryBuilder('feed_comment')
@@ -156,7 +177,7 @@ export class FeedService {
       .where('feed_comment.feedId = :feedId', { feedId })
       // 유저 테이블 조인
       .leftJoin('feed_comment.creator', 'user')
-      .addSelect(['user.nickname', 'user.profileImage'])
+      .addSelect(['user.id', 'user.nickname', 'user.profileImage'])
       // pagining
       .skip((page - 1) * pageSize)
       .take(pageSize)
@@ -198,8 +219,9 @@ export class FeedService {
   }
 
   async deleteComment({ commentId, currentUid }: DeleteCommentProps) {
-    const comment = await this.feedCommentRepository.findOneBy({
-      id: commentId,
+    const comment = await this.feedCommentRepository.findOne({
+      where: { id: commentId },
+      relations: ['creator'],
     });
     if (!comment || comment.deletedAt) {
       throw new NotFoundException('comment not found');

@@ -73,7 +73,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
       const message = await this.chatService.createMessage({
         content,
         chatId,
-        createdBy: decoded.sub,
+        currentUid: decoded.sub,
       });
 
       // 채팅방에 있는 유저들에게 메세지 정보 보내기

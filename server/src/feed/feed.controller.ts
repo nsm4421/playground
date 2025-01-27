@@ -94,8 +94,11 @@ export class FeedController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
-    return await this.feedService.deleteFeed(id);
+  async delete(@Request() request, @Param('id') id: number) {
+    return await this.feedService.deleteFeed({
+      id,
+      currentUid: request.user.sub,
+    });
   }
 
   /// feed reaction
