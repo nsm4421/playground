@@ -9,19 +9,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Chat } from './chat.entity';
 
-@Entity('messages')
-export class Message {
+@Entity('group_chats')
+export class GroupChat {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false, length: 1000 })
-  content: string;
+  @Column({ nullable: false, length: 50 })
+  title: string;
 
-  @ManyToOne(() => Chat, (chat) => chat.id, { nullable: false })
-  @JoinColumn({ name: 'chatId' })
-  chat: Chat;
+  @Column('text', { array: true, default: [] })
+  hashtags: string[];
 
   @ManyToOne(() => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: 'createdBy' })

@@ -9,14 +9,14 @@ import {
   Delete,
   Param,
 } from '@nestjs/common';
-import { ChatService } from './chat.service';
+import { GroupChatService } from './group_chat.service';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
-import { CreateChatDto } from './dto/create-chat.dto';
+import { CreateGroupChatDto } from './dto/create-group-chat.dto';
 
-@Controller('api/chat')
+@Controller('api/group-chat')
 @UseGuards(JwtAuthGuard)
-export class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+export class GroupChatController {
+  constructor(private readonly chatService: GroupChatService) {}
 
   @Get()
   async fetchChats(
@@ -30,7 +30,7 @@ export class ChatController {
   @Post()
   async createChat(
     @Request() request,
-    @Body() { title, hashtags }: CreateChatDto,
+    @Body() { title, hashtags }: CreateGroupChatDto,
   ) {
     return await this.chatService.createChat({
       title,

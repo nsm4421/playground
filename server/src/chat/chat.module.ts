@@ -1,19 +1,22 @@
 import { Module } from '@nestjs/common';
-import { ChatController } from './chat.controller';
-import { ChatService } from './chat.service';
+import { GroupChatController } from './group_chat.controller';
+import { GroupChatService } from './group_chat.service';
 import { ChatGateWay } from './chat.gateway';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Chat } from './entity/chat.entity';
-import { Message } from './entity/message.entity';
+import { GroupChat } from './entity/group_chat.entity';
+import { GroupChatMessage } from './entity/group_chat_message.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { PrivateChatMessage } from './entity/private_chat_message.entity';
+import { PrivateChatService } from './private_chat.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Chat]),
-    TypeOrmModule.forFeature([Message]),
+    TypeOrmModule.forFeature([GroupChat]),
+    TypeOrmModule.forFeature([GroupChatMessage]),
+    TypeOrmModule.forFeature([PrivateChatMessage]),
     AuthModule,
   ],
-  controllers: [ChatController],
-  providers: [ChatService, ChatGateWay],
+  controllers: [GroupChatController],
+  providers: [GroupChatService, PrivateChatService, ChatGateWay],
 })
 export class ChatModule {}

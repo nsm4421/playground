@@ -1,6 +1,6 @@
 import { IsArray, IsString, Length } from 'class-validator';
 
-export class CreateChatDto {
+export class CreateGroupChatDto {
   @Length(3, 50)
   @IsString()
   title: string;

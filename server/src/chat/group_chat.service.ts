@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat } from './entity/chat.entity';
-import { Message } from './entity/message.entity';
+import { GroupChat } from './entity/group_chat.entity';
+import { GroupChatMessage } from './entity/group_chat_message.entity';
 
 interface FetchChatsProps {
   page: number;
@@ -31,22 +31,22 @@ interface CreateMessageProps {
 }
 
 @Injectable()
-export class ChatService {
+export class GroupChatService {
   constructor(
-    @InjectRepository(Chat)
-    private readonly chatRepository: Repository<Chat>,
-    @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>,
+    @InjectRepository(GroupChat)
+    private readonly chatRepository: Repository<GroupChat>,
+    @InjectRepository(GroupChatMessage)
+    private readonly messageRepository: Repository<GroupChatMessage>,
   ) {}
 
   async fetchChats({ page, pageSize }: FetchChatsProps) {
     const [data, totalCount] = await this.chatRepository
-      .createQueryBuilder('chat')
-      .leftJoinAndSelect('chat.creator', 'user')
-      .select(['chat', 'user.id', 'user.nickname', 'user.profileImage'])
+      .createQueryBuilder('group_chat')
+      .leftJoinAndSelect('group_chat.creator', 'user')
+      .select(['group_chat', 'user.id', 'user.nickname', 'user.profileImage'])
       .skip((page - 1) * pageSize)
       .take(pageSize)
-      .orderBy('chat.updatedAt', 'DESC')
+      .orderBy('group_chat.updatedAt', 'DESC')
       .getManyAndCount();
     return {
       data,
