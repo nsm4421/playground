@@ -1,17 +1,17 @@
 part of '../export.datasource.dart';
 
-class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
+class GroupChatRemoteDataSourceImpl implements GroupChatRemoteDataSource {
   final Dio _dio;
   final Logger _logger;
   final bool _showLog;
 
-  ChatRemoteDataSourceImpl(
+  GroupChatRemoteDataSourceImpl(
       {required Dio dio, required Logger logger, required bool showLog})
       : _dio = dio,
         _logger = logger,
         _showLog = showLog;
 
-  String get _endPointPrefix => ApiEndPoint.chat;
+  String get _endPointPrefix => ApiEndPoint.groupChat;
 
   @override
   Future<void> create(

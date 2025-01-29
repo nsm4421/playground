@@ -3,25 +3,25 @@ part of '../export.bloc.dart';
 @injectable
 class GroupChatBloc extends Bloc<GroupChatEvent, GroupChatState>
     with LoggerUtil {
-  final ChatUseCase _useCase;
+  final GroupChatUseCase _useCase;
   final String _chatId;
 
-  late Stream<MessageEntity> _messageStream;
+  late Stream<GroupChatMessageEntity> _messageStream;
   late String _clientId;
 
-  Stream<MessageEntity> get messageStream => _messageStream;
+  Stream<GroupChatMessageEntity> get messageStream => _messageStream;
 
   String get clientId => _clientId;
 
-  GroupChatBloc(@factoryParam this._chatId, {required ChatUseCase useCase})
+  GroupChatBloc(@factoryParam this._chatId, {required GroupChatUseCase useCase})
       : _useCase = useCase,
         super(GroupChatState()) {
     _messageStream =
         _useCase.messageStream.where((item) => item.chatId == _chatId);
-    _clientId = _useCase.clientId!;
     on<InitGroupChatEvent>(_onInit);
     on<JoinGroupChatEvent>(_onJoin);
     on<SendMessageEvent>(_sendMessage);
+    _clientId = _useCase.clientId!;
   }
 
   Future<void> _onInit(
@@ -34,7 +34,7 @@ class GroupChatBloc extends Bloc<GroupChatEvent, GroupChatState>
       JoinGroupChatEvent event, Emitter<GroupChatState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
-      _useCase.joinChat(chatId: _chatId).fold(
+      _useCase.join(_chatId).fold(
           (l) => emit(
               state.copyWith(status: Status.error, errorMessage: l.message)),
           (r) =>
@@ -49,16 +49,11 @@ class GroupChatBloc extends Bloc<GroupChatEvent, GroupChatState>
       SendMessageEvent event, Emitter<GroupChatState> emit) async {
     try {
       emit(state.copyWith(status: Status.loading));
-      _useCase.sendMessage
-          .call(
-              chatId: _chatId,
-              content: event.content,
-              currentUid: event.currentUid)
-          .fold(
-              (l) => emit(state.copyWith(
-                  status: Status.error, errorMessage: l.message)),
-              (r) => emit(
-                  state.copyWith(status: Status.success, errorMessage: '')));
+      _useCase.sendMessage.call(chatId: _chatId, content: event.content).fold(
+          (l) => emit(
+              state.copyWith(status: Status.error, errorMessage: l.message)),
+          (r) =>
+              emit(state.copyWith(status: Status.success, errorMessage: '')));
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(

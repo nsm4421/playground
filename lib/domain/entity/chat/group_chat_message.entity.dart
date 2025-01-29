@@ -1,11 +1,11 @@
 part of '../export.entity.dart';
 
-class MessageEntity extends UuidIdEntity {
+class GroupChatMessageEntity extends UuidIdEntity {
   final String chatId;
   final String content;
   final UserEntity sender;
 
-  MessageEntity(
+  GroupChatMessageEntity(
       {required super.id,
       required this.sender,
       required this.chatId,
@@ -13,8 +13,8 @@ class MessageEntity extends UuidIdEntity {
       super.createdAt,
       super.updatedAt});
 
-  factory MessageEntity.from(MessageDto dto) {
-    return MessageEntity(
+  factory GroupChatMessageEntity.from(GroupChatMessageDto dto) {
+    return GroupChatMessageEntity(
       id: dto.id,
       sender: UserEntity.from(dto.creator),
       chatId: dto.chat.id,

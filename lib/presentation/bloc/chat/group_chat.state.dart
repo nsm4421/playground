@@ -2,19 +2,19 @@ part of '../export.bloc.dart';
 
 class GroupChatState {
   final Status status;
-  late final List<MessageEntity> data;
+  late final List<GroupChatMessageEntity> data;
   final String errorMessage;
 
   GroupChatState(
       {this.status = Status.initial,
-      List<MessageEntity>? data,
+      List<GroupChatMessageEntity>? data,
       this.errorMessage = ''}) {
     this.data = data ?? [];
   }
 
   GroupChatState copyWith({
     Status? status,
-    List<MessageEntity>? data,
+    List<GroupChatMessageEntity>? data,
     String? errorMessage,
   }) {
     return GroupChatState(

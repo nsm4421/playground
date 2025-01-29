@@ -2,7 +2,7 @@ part of '../export.bloc.dart';
 
 @injectable
 class CreateGroupChatCubit extends SimpleCubit with LoggerUtil {
-  final ChatUseCase _useCase;
+  final GroupChatUseCase _useCase;
 
   CreateGroupChatCubit(this._useCase):super();
 

@@ -17,15 +17,22 @@ class HomePage extends StatelessWidget {
                   ? BottomNavigationBar(
                       onTap: context.read<HomeBottomNavCubit>().handleIndex,
                       currentIndex: state.item.index,
+                      selectedItemColor: Colors.white,
+                      unselectedItemColor: Colors.white.withOpacity(0.5),
                       elevation: 0,
                       showSelectedLabels: true,
                       showUnselectedLabels: false,
                       items: HomeBottomNavItems.values
                           .map(
                             (item) => BottomNavigationBarItem(
+                              backgroundColor: Colors.transparent,
                               label: item.label,
-                              icon: Icon(item.iconData),
-                              activeIcon: Icon(item.activeIconData),
+                              icon: Icon(
+                                item.iconData,
+                              ),
+                              activeIcon: Icon(
+                                item.activeIconData,
+                              ),
                             ),
                           )
                           .toList(),

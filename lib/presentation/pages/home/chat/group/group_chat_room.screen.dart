@@ -12,12 +12,12 @@ class ChatRoomScreen extends StatefulWidget {
 class _ChatRoomScreenState extends State<ChatRoomScreen> with DebounceMixIn {
   late TextEditingController _textEditingController;
   late ScrollController _scrollController;
-  late StreamSubscription<MessageEntity> _subscription;
+  late StreamSubscription<GroupChatMessageEntity> _subscription;
   late String _currentUid;
 
   bool _showJumpButton = false;
 
-  List<MessageEntity> _messages = [];
+  List<GroupChatMessageEntity> _messages = [];
 
   @override
   void initState() {
