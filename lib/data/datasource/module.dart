@@ -10,10 +10,6 @@ abstract class DataSource with LoggerUtil {
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 3)));
 
-  final _socket = io(ApiEndPoint.socketUrl,
-      OptionBuilder().setTransports(['websocket']).disableAutoConnect().build())
-    ..connect();
-
   final _showLog = true; // on debug
 
   /// auth
@@ -42,13 +38,19 @@ abstract class DataSource with LoggerUtil {
 
   /// chat
   @lazySingleton
-  ChatRemoteDataSource get chatRemote =>
-      ChatRemoteDataSourceImpl(dio: _dio, logger: logger, showLog: _showLog);
+  GroupChatRemoteDataSource get groupChatRemote =>
+      GroupChatRemoteDataSourceImpl(
+          dio: _dio, logger: logger, showLog: _showLog);
+
+  @lazySingleton
+  PrivateChatRemoteDataSource get privateChatRemote =>
+      PrivateChatRemoteDataSourceImpl(
+          dio: _dio, logger: logger, showLog: _showLog);
 
   /// socket
   @lazySingleton
-  SocketRemoteDataSource get socketRemote => SocketRemoteDataSourceImpl(
-      socket: _socket, logger: logger, showLog: _showLog);
+  SocketRemoteDataSource get socketRemote =>
+      SocketRemoteDataSourceImpl(logger: logger, showLog: _showLog);
 
   /// local storage
   @lazySingleton

@@ -7,14 +7,17 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
   final AuthLocalDataSource _authLocalDataSource;
   final AuthRemoteDataSource _authRemoteDataSource;
   final StorageLocalDataSource _storageLocalDataSource;
+  final SocketRemoteDataSource _socketRemoteDataSource;
 
   AuthRepositoryImpl({
     required AuthLocalDataSource authLocalDataSource,
     required AuthRemoteDataSource authRemoteDataSource,
     required StorageLocalDataSource storageLocalDataSource,
+    required SocketRemoteDataSource socketRemoteDataSource,
   })  : _authLocalDataSource = authLocalDataSource,
         _authRemoteDataSource = authRemoteDataSource,
-        _storageLocalDataSource = storageLocalDataSource;
+        _storageLocalDataSource = storageLocalDataSource,
+        _socketRemoteDataSource = socketRemoteDataSource;
 
   // 로컬 스토리지에 토큰이 상태가 변경될 때마다 서버로부터 유저정보를 다시 가져오는 Stream
   @override
@@ -131,5 +134,10 @@ class AuthRepositoryImpl with LoggerUtil implements AuthRepository {
       logger.e(error);
       return Left(ErrorResponse.from(error, logger: logger));
     }
+  }
+
+  @override
+  void initSocket() {
+    _socketRemoteDataSource.init(_authLocalDataSource.token!);
   }
 }

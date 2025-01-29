@@ -22,4 +22,6 @@ abstract interface class AuthRepository {
     required String nickname,
     File? profileImage,
   });
+
+  void initSocket();
 }

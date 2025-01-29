@@ -1,18 +1,36 @@
 part of '../export.datasource.dart';
 
 class SocketRemoteDataSourceImpl implements SocketRemoteDataSource {
-  final Socket _socket;
+  late Socket _socket;
   final Logger _logger;
   final bool _showLog;
+  bool _initialized = false;
+  String? _token;
 
-  SocketRemoteDataSourceImpl(
-      {required Socket socket, required Logger logger, required bool showLog})
-      : _socket = socket,
-        _logger = logger,
+  SocketRemoteDataSourceImpl({required Logger logger, required bool showLog})
+      : _logger = logger,
         _showLog = showLog;
 
   @override
   Socket get socket => _socket;
+
+  @override
+  bool get initialized => _initialized;
+
+  @override
+  void init(String token) {
+    if (_initialized && token == _token) return;
+    _initialized = true;
+    _token = token;
+    _socket = io(
+        ApiEndPoint.socketUrl,
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setExtraHeaders({'Authorization': _token})
+            .build());
+    if (_showLog) _logger.t('socket initialized');
+  }
 
   @override
   void connect() {

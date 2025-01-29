@@ -17,4 +17,6 @@ class AuthUseCase {
   SignOutUseCase get signOut => SignOutUseCase(_repository);
 
   EditProfileUseCase get editProfile => EditProfileUseCase(_repository);
+
+  InitSocketUseCase get initSocket => InitSocketUseCase(_repository);
 }

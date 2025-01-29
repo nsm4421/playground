@@ -5,6 +5,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
   final AuthUseCase _useCase;
 
   late Stream<UserEntity?> _authStream;
+  late StreamSubscription<UserEntity?> _authSubscription;
 
   Stream<UserEntity?> get authStream => _authStream;
 
@@ -14,6 +15,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtil {
     on<SignInEvent>(_onSignIn);
     on<SignOutEvent>(_onSignOut);
     _authStream = _useCase.authStream;
+    _authSubscription = _authStream.listen((data) {
+      if (data != null) {
+        _useCase.initSocket();
+      }
+    });
   }
 
   Future<void> _onInit(InitAuthEvent event, Emitter<AuthState> emit) async {

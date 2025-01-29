@@ -3,10 +3,11 @@ part of '../export.bloc.dart';
 @injectable
 class DisplayGroupChatBloc extends DisplayBloc<GroupChatEntity>
     with LoggerUtil {
-  final ChatUseCase _useCase;
+  final GroupChatUseCase _useCase;
 
   DisplayGroupChatBloc(this._useCase) {
     on<DeleteDisplayDataEvent<GroupChatEntity>>(_onDelete);
+    _useCase.init();
   }
 
   @override
