@@ -24,7 +24,7 @@ class PrivateChatRemoteDataSourceImpl implements PrivateChatRemoteDataSource {
 
   @override
   Future<Pageable<PrivateChatMessageDto>> fetchMessages({
-    required int lastMessageId,
+    int? lastMessageId,
     required String opponentUid,
     required int page,
     int pageSize = 20,
@@ -34,8 +34,8 @@ class PrivateChatRemoteDataSourceImpl implements PrivateChatRemoteDataSource {
           'fetch|page:$page/pageSize:$pageSize/opponentUid:$opponentUid/lastMessageId:$lastMessageId');
     }
     return await _dio
-        .get(_endPointPrefix, queryParameters: {
-          "lastMessageId": lastMessageId,
+        .get('$_endPointPrefix/message', queryParameters: {
+          if(lastMessageId!=null) "lastMessageId": lastMessageId,
           "opponentUid": opponentUid,
           "page": page,
           "pageSize": pageSize,
@@ -44,7 +44,7 @@ class PrivateChatRemoteDataSourceImpl implements PrivateChatRemoteDataSource {
         .then((json) => Pageable<PrivateChatMessageDto>.fromJson(
             json: json, callback: PrivateChatMessageDto.fromJson))
         .then((data) {
-          if (_showLog) _logger.t(data);
+          if (_showLog) _logger.t(data.data.isEmpty? []:data.data.first);
           return data;
         });
   }

@@ -13,7 +13,7 @@ interface FetchChatsProps {
 
 interface FetchMessagesProps extends FetchChatsProps {
   opponentUid: string;
-  lastMessageId: number;
+  lastMessageId?: number;
   page: number;
   pageSize?: number;
 }
@@ -86,7 +86,9 @@ export class PrivateChatService {
         'message.senderId = :opponentUid OR message.receiverId = :currentUid',
         { currentUid, opponentUid },
       )
-      .andWhere('id < :lastMessageId', { lastMessageId })
+      .andWhere(lastMessageId ? 'id < :lastMessageId' : '1=1', {
+        lastMessageId,
+      })
       .leftJoin('message.sender', 'sender')
       .addSelect(['sender.id', 'sender.nickname', 'sender.profileImage'])
       .leftJoin('message.receiver', 'receiver')
@@ -125,7 +127,7 @@ export class PrivateChatService {
   async findMessageById({ messageId, currentUid }: FindMessageProps) {
     const message = await this.messageRepository.findOne({
       where: { id: messageId },
-      relations: ['sender', 'receiver', 'chat'],
+      relations: ['sender', 'receiver'],
     });
     if (
       message.sender.id !== currentUid &&

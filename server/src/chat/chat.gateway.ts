@@ -149,7 +149,9 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
           profileImage: user.profileImage,
         },
       };
-      this.server.to(chatId).emit('receive-group-chat-message', payload);
+      this.server
+        .to(chatId)
+        .emit(EventNames.receivePrivateChatMessage, payload);
     } catch (error) {
       console.error(error);
     }
@@ -186,9 +188,12 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
         currentUid: user.id,
       });
 
-      // receiver에게 메세지 알리기
+      // 메세지 알리기
+      console.debug(
+        `${EventNames.receivePrivateChatMessage}|to ${receiverId} ${user.id}`,
+      );
       this.server
-        .to(receiverId)
+        .to([receiverId, user.id])
         .emit(EventNames.receivePrivateChatMessage, message);
     } catch (error) {
       console.error(error);
@@ -227,7 +232,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
       // receiver에게 메세지가 삭제되었음 알리기
       this.server
-        .to(message.receiver.id)
+        .to([message.receiver.id, user.id])
         .emit(EventNames.deletePrivatChatMessage, {
           ...message,
           deletedAt: Date.now().toLocaleString(),

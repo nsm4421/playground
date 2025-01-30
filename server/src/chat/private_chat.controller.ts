@@ -18,10 +18,10 @@ export class PrivateChatController {
   @Get('message')
   async fetchMessages(
     @Request() request,
-    @Query('lastMessageId') lastMessageId: number,
     @Query('opponentUid') opponentUid: string,
     @Query('page') page: number,
     @Query('pageSize') pageSize?: number,
+    @Query('lastMessageId') lastMessageId?: number,
   ) {
     console.debug(
       `fetchMessage|lastMessageId:${lastMessageId}|opponentUid:${opponentUid}|page:${page}|pageSize:${pageSize}`,

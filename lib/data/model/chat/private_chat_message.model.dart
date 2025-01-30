@@ -10,7 +10,7 @@ part 'private_chat_message.model.g.dart';
 @freezed
 class PrivateChatMessageDto with _$PrivateChatMessageDto {
   const factory PrivateChatMessageDto({
-    @Default('') String id,
+    @Default(0) int id,
     @Default('') String content,
     @Default(UserModel()) UserModel sender,
     @Default(UserModel()) UserModel receiver,

@@ -32,6 +32,7 @@ class PrivateChatRepositoryImpl
       ..onEvent(
           event: EventNames.receivePrivateChatMessage,
           callback: (json) {
+            logger.t('${EventNames.receivePrivateChatMessage}|${json}');
             _messageController.add(PrivateChatMessageEntity.from(
                 PrivateChatMessageDto.fromJson(json)));
           })
@@ -39,6 +40,7 @@ class PrivateChatRepositoryImpl
       ..onEvent(
           event: EventNames.deletePrivateChatMessage,
           callback: (json) {
+            logger.t('${EventNames.deletePrivateChatMessage}|${json}');
             _messageController.add(PrivateChatMessageEntity.from(
                 PrivateChatMessageDto.fromJson(json)));
           });
@@ -66,7 +68,7 @@ class PrivateChatRepositoryImpl
   Future<
       Either<ErrorResponse,
           SuccessResponse<Pageable<PrivateChatMessageEntity>>>> fetchMessages({
-    required int lastMessageId,
+    int? lastMessageId,
     required String opponentUid,
     required int page,
     int pageSize = 20,
@@ -77,7 +79,7 @@ class PrivateChatRepositoryImpl
               lastMessageId: lastMessageId,
               opponentUid: opponentUid,
               page: page,
-              pageSize: page)
+              pageSize: pageSize)
           .then((res) => res
               .convert<PrivateChatMessageEntity>(PrivateChatMessageEntity.from))
           .then((data) => SuccessResponse(payload: data))
@@ -108,8 +110,7 @@ class PrivateChatRepositoryImpl
   }
 
   @override
-  Future<Either<ErrorResponse, SuccessResponse<void>>> deleteMessage(
-      String messageId) async {
+  Either<ErrorResponse, SuccessResponse<void>> deleteMessage(String messageId) {
     try {
       _socketRemoteDataSource
           .emit(event: EventNames.sendPrivateChatMessage, json: {

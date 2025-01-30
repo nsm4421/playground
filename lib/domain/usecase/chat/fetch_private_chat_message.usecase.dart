@@ -19,7 +19,7 @@ class FetchPrivateChatMessagesUseCase {
   Future<
       Either<ErrorResponse,
           SuccessResponse<Pageable<PrivateChatMessageEntity>>>> call(
-      {required int lastMessageId,
+      {int? lastMessageId,
       required String opponentUid,
       required int page,
       int pageSize = 20}) async {
