@@ -65,7 +65,9 @@ export class AuthService {
    */
   async signIn(user: any) {
     const payload = { username: user.username, sub: user.id };
-    return await this.jwtService.signAsync(payload, { secret: '1221' }); // TODO : inject secret by .env file
+    return await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET ?? '1221',
+    });
   }
 
   /** 유저 가져오기
@@ -87,7 +89,10 @@ export class AuthService {
    * @returns 올바른 인증정보가 주어진 경우 유저객체를, 아니면 null을 반환
    */
   async validate({ username, password }: ValidateProps): Promise<User> {
-    const user = await this.authRepository.findOneBy({ username });
+    const user = await this.authRepository.findOne({
+      where: { username },
+      select: ['username', 'password', 'id'],
+    });
     const isValid = user && (await compare(password, user.password));
     return isValid ? user : null;
   }

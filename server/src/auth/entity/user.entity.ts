@@ -24,8 +24,7 @@ export class User {
   @Column({ nullable: false, length: 300 })
   profileImage: string;
 
-  @Exclude({ toPlainOnly: true })
-  @Column({ nullable: false, length: 255 })
+  @Column({ nullable: false, length: 255, select: false })
   password: string;
 
   @CreateDateColumn()
