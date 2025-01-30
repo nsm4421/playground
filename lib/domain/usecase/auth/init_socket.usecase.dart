@@ -1,9 +1,22 @@
 part of '../export.usecase.dart';
 
 class InitSocketUseCase {
-  final AuthRepository _repository;
+  final AuthRepository _authRepository;
+  final GroupChatRepository _groupChatRepository;
 
-  InitSocketUseCase(this._repository);
+  final PrivateChatRepository _privateChatRepository;
 
-  void call() => _repository.initSocket();
+  InitSocketUseCase(
+      {required AuthRepository authRepository,
+      required GroupChatRepository groupChatRepository,
+      required PrivateChatRepository privateChatRepository})
+      : _authRepository = authRepository,
+        _groupChatRepository = groupChatRepository,
+        _privateChatRepository = privateChatRepository;
+
+  void call() {
+    _authRepository.initSocket();
+    _groupChatRepository.init();
+    _privateChatRepository.init();
+  }
 }

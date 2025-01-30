@@ -11,7 +11,7 @@ abstract interface class PrivateChatRepository {
   Future<
       Either<ErrorResponse,
           SuccessResponse<Pageable<PrivateChatMessageEntity>>>> fetchMessages({
-    required int lastMessageId,
+    int? lastMessageId,
     required String opponentUid,
     required int page,
     int pageSize = 20,
@@ -22,6 +22,5 @@ abstract interface class PrivateChatRepository {
   Either<ErrorResponse, SuccessResponse<void>> createMessage(
       {required String content, required String receiverId});
 
-  Future<Either<ErrorResponse, SuccessResponse<void>>> deleteMessage(
-      String messageId);
+  Either<ErrorResponse, SuccessResponse<void>> deleteMessage(String messageId);
 }
