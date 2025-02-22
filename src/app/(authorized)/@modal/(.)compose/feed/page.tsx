@@ -1,6 +1,6 @@
 "use client";
 
-import ClearIconButton from "@/components/icon/clear-button";
+import ClearIconButton from "@/components/button/clear-button";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
