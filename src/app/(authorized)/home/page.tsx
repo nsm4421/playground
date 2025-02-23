@@ -14,7 +14,8 @@ export default function HomePage() {
               id: `${i}`,
               user: {
                 id: "1",
-                usernmae: "test1",
+                username: "test1",
+                image: "https://picsum.photos/200",
                 createdAt: Date.now().toLocaleString(),
               },
               content: "test content",

@@ -1,5 +1,4 @@
-import { handlers } from "@/mocks/handlers";
-import { SetupWorker } from "msw/browser";
+import { handlers } from "@/lib/mocks/handlers";
 import { ReactNode, Suspense, use } from "react";
 
 interface Props {
@@ -17,7 +16,7 @@ export default function MSWProvider({ children }: Props) {
 function MSWProviderWrapper({ children }: Props) {
   const promise =
     typeof window !== "undefined"
-      ? import("@/mocks/browser").then(async ({ default: worker }) => {
+      ? import("@/lib/mocks/browser").then(async ({ default: worker }) => {
           if (process.env.NODE_ENV == "production") {
             return;
           }

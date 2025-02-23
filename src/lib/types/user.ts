@@ -1,6 +1,6 @@
 export type User = {
   id: string;
-  usernmae: string;
+  username: string;
   image: string;
   createdAt?: string;
 };

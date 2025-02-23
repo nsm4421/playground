@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import FollowRecommendSection from "./follow-recommend";
 import TrendSection from "./trend";
-import { RoutePaths } from "@/constant/route";
+import { RoutePaths } from "@/lib/constant/route";
 import SearchFilter from "./search-filter";
 
 export default function RightSideBar() {

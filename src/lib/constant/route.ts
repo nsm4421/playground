@@ -8,8 +8,8 @@ export enum RoutePaths {
   home = "/home",
   search = "/search",
   messages = "/messages",
-  composeFeed = "compose/feed",
-  profile = "profile",
+  composeFeed = "/compose/feed",
+  profile = "/profile",
 }
 
 type ApiRoute = {
@@ -20,14 +20,14 @@ type ApiRoute = {
 export const ApiRoutes = {
   signIn: {
     method: "POST",
-    path: "/api/sign-in",
+    path: "/api/auth/sign-in",
   } as ApiRoute,
   signUp: {
     method: "POST",
-    path: "/api/sign-up",
+    path: "/api/auth/sign-up",
   } as ApiRoute,
   signOut: {
     method: "POST",
-    path: "/api/sign-out",
+    path: "/api/auth/sign-out",
   } as ApiRoute,
 };

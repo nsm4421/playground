@@ -1,7 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Feed } from "@/types/feed";
+import { Feed } from "@/lib/types/feed";
 import { useState } from "react";
 
 export default function FeedIcons(feed: Feed) {

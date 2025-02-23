@@ -4,7 +4,7 @@ import HomeIcon from "@/components/icon/home-icon";
 import MessageIcon from "@/components/icon/message-icon";
 import ProfileIcon from "@/components/icon/profile-icon";
 import SearchIcon from "@/components/icon/search-icon";
-import { RoutePaths } from "@/constant/route";
+import { RoutePaths } from "@/lib/constant/route";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { ReactNode } from "react";

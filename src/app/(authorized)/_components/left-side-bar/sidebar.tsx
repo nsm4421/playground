@@ -1,6 +1,6 @@
 import Logo from "../logo";
 import HomeNav from "./home-nav";
-import LogoutButton from "./logout-button";
+import LogoutButton from "../../../../components/button/logout-button";
 
 export default function LeftSideBar() {
   return (

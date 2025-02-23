@@ -1,4 +1,4 @@
-import { Feed } from "@/types/feed";
+import { Feed } from "@/lib/types/feed";
 import FeedItem from "./item";
 
 interface Props {

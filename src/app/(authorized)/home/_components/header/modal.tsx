@@ -1,4 +1,4 @@
-import { RoutePaths } from "@/constant/route";
+import { RoutePaths } from "@/lib/constant/route";
 import Link from "next/link";
 
 export default function OpenComposeFeedModalButton() {
