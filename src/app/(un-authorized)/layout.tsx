@@ -1,3 +1,6 @@
+import { auth } from "@/auth";
+import { RoutePaths } from "@/lib/constant/route";
+import { redirect, RedirectType } from "next/navigation";
 import { ReactNode } from "react";
 
 interface Props {
@@ -12,6 +15,12 @@ interface Props {
  * @InterceptRoute "auth" 경로에 컴퍼넌트 렌더링하지 않고, "@modal/(.auth) 경로의 컴퍼넌트 먼저 렌더링. 단, 새로고침 시에 "auth" 경로의 컴퍼넌트 렌더링
  */
 export default async function EntryPageLayout({ children, modal }: Props) {
+  const session = await auth();
+
+  if (session?.user) {
+    redirect(RoutePaths.home, RedirectType.replace);
+  }
+
   return (
     <>
       {children}

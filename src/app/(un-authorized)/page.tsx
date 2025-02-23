@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { RoutePaths } from "@/constant/route";
+import { RoutePaths } from "@/lib/constant/route";
 import Link from "next/link";
 
-export default function EntryPage() {
+export default async function EntryPage() {
   return (
     <div className="flex h-screen w-screen">
       <main className="container mx-auto my-auto flex flex-col">

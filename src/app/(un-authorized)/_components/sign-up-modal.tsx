@@ -7,14 +7,33 @@ import PasswordIcon from "@/components/icon/password-icon";
 import AvatarIcon from "@/components/icon/avatar-icon";
 import Form from "next/form";
 import ClearIcon from "@/components/icon/clear-icon";
-import onSignUp from "../_lib/sign-up-action";
-import { RoutePaths } from "@/constant/route";
+import onSignUp from "../../../lib/action/sign-up-action";
+import { RoutePaths } from "@/lib/constant/route";
 import { useFormStatus } from "react-dom";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/lib/hooks/use-toast";
 
 export default function SignUpModal() {
-  const [state, formAction] = useActionState(onSignUp, { message: null });
+  const router = useRouter();
+  const [state, formAction] = useActionState(onSignUp, {
+    message: null,
+    isSuccess: false,
+  });
   const { pending } = useFormStatus();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    console.log(`sign up request ${state.isSuccess ? "success" : "fail"}`);
+    if (state.isSuccess) {
+      toast({
+        title: "success",
+        description: "Sign Up Success",
+        duration: 1500,
+      });
+      router.replace(RoutePaths.signIn);
+    }
+  }, [state.isSuccess]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">

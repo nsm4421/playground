@@ -1,41 +1,32 @@
 "use server";
 
-import { ApiRoutes, RoutePaths } from "@/constant/route";
-import { redirect } from "next/navigation";
+import { ApiRoutes } from "@/lib/constant/route";
 
 export default async function onSignUp(
-  prevState: { message: string | null },
+  prevState: { message: string | null; isSuccess: boolean },
   formData: FormData
 ) {
-  let isSuccess = false;
   const validation = validate(formData);
   if (validation) {
-    return validation;
+    return { ...validation, isSuccess: false };
   }
   try {
-    const endPoint = `${process.env.NEXT_PUBLIC_BASE_URL}/${ApiRoutes.signUp.path}`;
+    const endPoint = `${process.env.NEXT_PUBLIC_BASE_URL}${ApiRoutes.signUp.path}`;
+    console.debug(`[onSignUp]end-point:${endPoint}`);
     const res = await fetch(endPoint, {
       method: ApiRoutes.signUp.method,
       body: formData,
       credentials: "include",
     });
-    console.debug(
-      `sign-up request status code:${res.status}(${res.statusText})`
-    );
+    console.debug(`[onSignUp]status-code:${res.status}(${res.statusText}`);
     if (res.status === 403) {
-      return { message: "username already exists" };
+      return { message: "username already exists", isSuccess: false };
     }
-    isSuccess = true;
-    const json = await res.json();
-    console.debug(json);
+    return { message: null, isSuccess: true };
   } catch (error) {
     console.error(error);
-    return { message: "sign up fails" };
+    return { message: "sign up fails", isSuccess: false };
   }
-  if (isSuccess) {
-    redirect(RoutePaths.home);
-  }
-  return { message: null };
 }
 
 function validate(formData: FormData) {

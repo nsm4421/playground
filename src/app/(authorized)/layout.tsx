@@ -1,13 +1,22 @@
 import { ReactNode } from "react";
 import LeftSideBar from "./_components/left-side-bar/sidebar";
 import RightSideBar from "./_components/right-side-bar/sidebar";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import { RoutePaths } from "@/lib/constant/route";
 
 interface Props {
   children: ReactNode;
   modal: ReactNode;
 }
 
-export default function HomeLayout({ children, modal }: Props) {
+export default async function HomeLayout({ children, modal }: Props) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect(RoutePaths.signIn);
+  }
+
   return (
     <div className="w-full h-screen grid grid-cols-[350px_minmax(500px,_1fr)_350px] gap-2 py-2 overflow-y-hidden">
       <LeftSideBar />

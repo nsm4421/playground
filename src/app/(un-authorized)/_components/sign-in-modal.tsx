@@ -1,19 +1,38 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import PasswordIcon from "@/components/icon/password-icon";
 import IdIcon from "@/components/icon/id-icon";
 import Form from "next/form";
 import ClearIcon from "@/components/icon/clear-icon";
-import onSingIn from "../_lib/sign-in-action";
-import { RoutePaths } from "@/constant/route";
+import onSingIn from "../../../lib/action/sign-in-action";
+import { RoutePaths } from "@/lib/constant/route";
 import { useFormStatus } from "react-dom";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/lib/hooks/use-toast";
 
 export default function SignInModal() {
-  const [state, formAction] = useActionState(onSingIn, { message: null });
+  const router = useRouter();
+  const [state, formAction] = useActionState(onSingIn, {
+    message: null,
+    isSuccess: false,
+  });
   const { pending } = useFormStatus();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    console.debug(`sign in request ${state.isSuccess ? "success" : "fail"}`);
+    if (state.isSuccess) {
+      toast({
+        title: "success",
+        description: "Sign In Success",
+        duration: 1500,
+      });
+      router.replace(RoutePaths.home);
+    }
+  }, [state.isSuccess]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
