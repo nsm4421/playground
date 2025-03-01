@@ -15,6 +15,7 @@ export enum RoutePaths {
 type ApiRoute = {
   method: "GET" | "POST" | "PUT" | "DELETE";
   path: string;
+  queryKeys?: string[];
 };
 
 export const ApiRoutes = {
@@ -29,5 +30,10 @@ export const ApiRoutes = {
   signOut: {
     method: "POST",
     path: "/api/auth/sign-out",
+  } as ApiRoute,
+  fetchFeedRecommends: {
+    method: "GET",
+    path: "/api/feed/recommends",
+    queryKeys: ["feed", "recommends"],
   } as ApiRoute,
 };
