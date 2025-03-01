@@ -1,17 +1,10 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import MSWProvider from "@/components/provider/msw";
-import AuthProvider from "@/components/provider/auth";
-import { ToastProvider } from "@/components/ui/toast";
-
-if (
-  process.env.NEXT_RUNTIME === "nodejs" &&
-  process.env.NODE_ENV !== "production"
-) {
-  const { server } = require("@/lib/mocks/http");
-  server.listen();
-}
+import { ToastProvider } from "@/lib/ui/toast";
+import { ThemeProvider } from "@/app/_provider/theme";
+import MSWProvider from "./_provider/msw";
+import ReactQueryProvider from "./_provider/react-query";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,15 +27,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ToastProvider>
-          <AuthProvider>
-            <MSWProvider>{children}</MSWProvider>
-          </AuthProvider>
-        </ToastProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ToastProvider>
+            <MSWProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
+            </MSWProvider>
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

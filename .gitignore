@@ -1,9 +1,10 @@
 public/
 package-lock.json
-src/components/ui
+src/lib/ui
 .env
 .env.development
 .env/production
+lib/utils/asset.ts
 
 # dependencies
 /node_modules
