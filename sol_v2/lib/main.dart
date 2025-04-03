@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sol_v2/visualization_summary/presentation/visualization_summary.screen.dart';
 
-import 'visualization_summary/presentation/visualization_summary.screen.dart';
 import 'visualization_summary/domain/entity/product_info.entity.dart';
 
 void main() {
@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: VisualizationSummaryScreen(dummyProduct),
+      home: VisualizationSummaryScreen(),
     );
   }
 }

@@ -12,6 +12,6 @@ class ProductInfo {
 
 final dummyProduct = ProductInfo(
   productCode: '6XXXX',
-  productName: '[TEST]무배당 OOO 상해보험',
+  productName: '[TEST]무배당 내Mom같은 어린이보험',
   productCategory: '상해보험',
 );
