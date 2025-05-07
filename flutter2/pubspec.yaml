@@ -1,0 +1,99 @@
+name: travel
+description: "Flutter App For Traveler"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # media
+  image_picker: ^1.1.2
+  photo_manager: ^3.6.1
+  photo_manager_image_provider: ^2.2.0
+  shimmer: ^3.0.0
+  flutter_image_compress: ^2.3.0
+  cached_network_image: ^3.4.1
+  video_player: ^2.4.6
+  chewie: ^1.8.5
+
+  # supabase
+  supabase_flutter: ^2.6.0
+
+  # animation
+  rive: ^0.13.15
+
+  # local database
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # google ml kit
+  google_mlkit_text_recognition: ^0.13.1
+  google_mlkit_translation: ^0.11.1
+
+  # 의존성 주입
+  injectable: ^2.4.4
+  get_it: ^7.7.0
+
+  # 모델 정의
+  freezed: ^2.5.2
+  freezed_annotation: ^2.4.4
+  build_runner: ^2.4.11
+
+  # 로깅
+  logger: ^2.4.0
+
+  # reponse wrapper
+  either_dart: ^1.0.0
+
+  # 라우팅
+  go_router: ^14.2.7
+
+  # 상태관리(bloc)
+  flutter_bloc: ^8.1.6
+
+  # 환경변수
+  envied: ^0.5.4+1
+
+  # 기타
+  smooth_page_indicator: ^1.2.0+3
+  uuid: ^4.5.0
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  country_picker: ^2.0.4
+  table_calendar: ^3.1.2
+  flutter_svg: ^2.0.11
+  pausable_timer: ^3.1.0+3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_gen_runner: ^5.7.0
+  injectable_generator: ^2.1.6
+  json_serializable: ^6.7.1
+  envied_generator: ^0.5.4+1
+  hive_generator: ^2.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
+    - assets/video/
+    - assets/image/
+    - assets/font/
+    - assets/rive/
+    - assets/svg/
+
+flutter_gen:
+  assets:
+    enabled: true
+  output: lib/core/generated
+  line_length: 80
+  integrations:
+    flutter_svg: true
